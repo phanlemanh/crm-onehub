@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-eval verify, run_id minted at execution
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d1169481ca205c2bc33df75493ae6ac9655bfc6c
+verified_commit: 8a8825cf5414ca488f01eaca85209dfc394168c0
 run_id: s4r2-20260907T091421Z-14559
 human_signoff: Manh Phan 2026-09-07
 ---
@@ -138,3 +138,7 @@ phép đo nào: cây đã đổi ngoài `_acceptance/`, nên mọi thứ đo l�
 | `lint` | s4r2-20260907T091421Z-14559-suite-lint | 0 |
 | `lint-slop` | s4r2-20260907T091421Z-14559-suite-lint-slop | 0 |
 | `build` | s4r2-20260907T091421Z-14559-suite-build | 0 |
+
+### Re-pin lần 1 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
+run_id: repin-20261023T123327Z-52490
+sha: 8a8825cf5414ca488f01eaca85209dfc394168c0 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
