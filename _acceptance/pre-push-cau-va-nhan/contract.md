@@ -5,7 +5,7 @@ slug: pre-push-cau-va-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-22T03:31:55Z
 design_doc: docs/superpowers/specs/2026-10-22-pre-push-cau-va-nhan-design.md
@@ -65,3 +65,6 @@ Không có ngưỡng: vòng không đi từ Cổng Đáng (không có `opportuni
 - Hồ sơ `pre-push-phan-rieng-pr` và `pre-push-t1` ghim lại trong cùng PR. Ô E9 (judgment `vi_sao`) của
   `pre-push-phan-rieng-pr` bị chạm bởi câu mới: E1 của hồ sơ này chấm lại đúng câu hỏi đó, thêm ý vế đầu từ xa (Hỏi ở
   Cổng Phạm vi: có cần thêm một lượt chấm lại riêng cho hồ sơ cũ không).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-23:
+  - Ngoài-1: Bộ phân loại chép lại luật nhận diện thư mục .github thay vì lấy từ chỗ CI dùng; dòng báo đúng hôm nay, chỉ lệch nếu luật đổi ở một nơi mà nơi kia không theo.
+  - Ngoài-2: Bước đối chiếu với bản cũ trong phép đo ca sập chỉ có kiểm tra phủ định, nên có thể báo đạt nếu bản cũ chạy hỏng sớm; phép đo bản mới vẫn ghim chặt.
