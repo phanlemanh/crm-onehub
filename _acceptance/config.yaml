@@ -3456,6 +3456,8 @@ executors:
     ttp_quet: bun _acceptance/truong-tep/rang/quet-kieu.mjs
     ttp_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tep/rang/do-man.mjs"'
     otdt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/o-tep-dien-thoai/rang/do-man.mjs"'
+    ctc_man: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chi-tiet-cong-ty-hai-cot/rang/do-bo-cuc.mjs"
+    ctc_man_do: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chi-tiet-cong-ty-hai-cot/rang/do-bo-cuc.mjs --chi-do"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
