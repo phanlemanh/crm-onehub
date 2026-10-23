@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e6692ecc23cbecae6db7bf61c320d53378833de1
+verified_commit: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f
 human_signoff: Phan Le Manh 2026-10-21 — ký lại Cổng Bằng chứng trên vòng chấm 4 (delta sau chữ ký, PASS, 9/9 eval, 7/7 suite; khung khớp hàng công cụ sau thanh bên khu theo V2-16 a; rang nhận /okr/bo-okr theo V2-15 i). Ngoài-1, 2, 6–9, 12–15 ghi Known limits; Ngoài-3, 4, 11 mở hợp đồng mới; Ngoài-5, 10 chấp nhận, không sửa; đồng ý cắt; Treo phê hết.
 ---
 
@@ -186,3 +186,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 4: tất cả chín eval và bảy lệnh suite đạt trên cây e6692ecc23cbecae6db7bf61c320d53378833de1. Các round trước: xem lịch sử trong run-log.jsonl và các bản report cũ.
+
+### Re-pin lần 1 — 2026-10-23, do hoá cũ do so-do-toan-vung (VK6) — thước sửa tại chỗ theo V3-25 A, V3-27 B, V3-30; AC-10 chứng ở bước ghim lại
+run_id: repin-20261023T053547Z-88592
+sha: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

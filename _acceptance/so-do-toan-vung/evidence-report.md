@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bec6e513bcba5d99128c41ef39621d6fee47a98b
+verified_commit: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f
 human_signoff: Phan Le Manh 2026-10-22
 ---
 
@@ -198,3 +198,7 @@ Round 1: lich su chi tiet nam o ban round truoc, khong chep lai o day (nhat ky g
 Round 2: E1–E10 xanh, 7 lenh suite xanh; E11 BLOCKED vi giu-ho-so.mjs vuot thoi luong khai (long_running) va chua tra dong ma thoat. Cach go: chay lai E11 voi tool timeout dai hon, khong can sua code.
 Round 3: E1–E10 xanh; 6 trong 7 lenh suite xanh, `bunx turbo run lint --force` do (khong gan eval); E11 BLOCKED lan nua vi lenh bi SIGTERM sau 201 phut, nguon chua ro. Can nguoi quyet cach chay lai E11 va xem nhat ky lint day du.
 Round 4: E1–E10 xanh (E10 co 6 anh, 0 loi console); ca 7 lenh suite xanh, gom lint va build; E11 khong chay theo ho so. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-23, do hoá cũ do so-do-toan-vung (VK6) — thước sửa tại chỗ theo V3-25 A, V3-27 B, V3-30; AC-10 chứng ở bước ghim lại
+run_id: repin-20261023T053547Z-88592
+sha: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E11 · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
