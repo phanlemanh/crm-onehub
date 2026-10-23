@@ -117,3 +117,6 @@ phải ngưỡng nghiệm thu.
   - Ngoài-3: Phép đo lịch sử chưa tách ca bộ phân loại sập khỏi ca nó cho nặng đúng; lượt đo 21/10 không có ca nào sập.
   - Ngoài-4: Cùng chỗ với Ngoài-1 — câu giải thích tả sai vế so ở đầu nhánh từ xa, có thể làm người đọc hiểu nhầm.
   - Ngoài-5: Răng hồ sơ cũ chỉ kiểm dòng 6 của E1 cũ không còn ghi «chạy đủ», chưa ghim nội dung lời hứa mới; hành vi ca 6 vẫn được bài kiểm chạy thật.
+- Ngoài-1 tới Ngoài-4 dọn ở hồ sơ `pre-push-cau-va-nhan` (22/10). Câu `t1Only.vi_sao` mới chạm vật đo của E9: E9 ở
+  đây không chấm lại; câu mới được chấm bằng E1 của `pre-push-cau-va-nhan` (cùng câu hỏi, thêm ý vế đầu từ xa) — theo
+  Hỏi-1 Manh Phan duyệt ở Cổng Phạm vi của hồ sơ đó.
