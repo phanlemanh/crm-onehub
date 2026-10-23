@@ -23,19 +23,33 @@ if (git("cat-file", "-e", `${CAP_GOP}^{commit}`).status !== 0) {
 	process.exit(2);
 }
 
-function xacThuc() {
-	let auth;
-	let cfg;
+const TRAN_LAM_MOI_MS = 120_000;
+
+function docXacThuc() {
 	try {
-		auth = JSON.parse(readFileSync(join(NEN, "auth.json"), "utf8"));
-		cfg = JSON.parse(readFileSync(join(NEN, "config.json"), "utf8"));
+		return {
+			auth: JSON.parse(readFileSync(join(NEN, "auth.json"), "utf8")),
+			cfg: JSON.parse(readFileSync(join(NEN, "config.json"), "utf8")),
+		};
 	} catch (e) {
 		console.error(`MA 2: khong doc duoc cau hinh Vercel CLI — ${e.message}`);
 		process.exit(2);
 	}
+}
+
+function conHan(auth) {
 	const han = Number(auth.expiresAt);
 	const hanMs = han > 0 && han < 1e12 ? han * 1000 : han;
-	if (!auth.token || (hanMs > 0 && hanMs < Date.now())) {
+	return Boolean(auth.token) && !(hanMs > 0 && hanMs < Date.now());
+}
+
+function xacThuc() {
+	let { auth, cfg } = docXacThuc();
+	if (!conHan(auth) && auth.refreshToken) {
+		spawnSync("bunx", ["vercel", "whoami"], { encoding: "utf8", timeout: TRAN_LAM_MOI_MS });
+		({ auth, cfg } = docXacThuc());
+	}
+	if (!conHan(auth)) {
 		console.error(HET_HAN);
 		process.exit(2);
 	}
