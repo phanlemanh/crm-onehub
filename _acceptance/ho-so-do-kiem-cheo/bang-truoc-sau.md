@@ -17,6 +17,12 @@ Máy sinh bằng `rang/bang.mjs` từ danh-sach.json, do-lai-nen.json (mốc n�
 KHONG DO DUOC: khong tim thay merge dua ho so len onehub
 ```
 
+Trước (`expected`): "exit 0; _acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs tự chọn neo theo khuôn của K3 (_acceptance/kara-gop-y-luot-2/rang/ranh-gioi.mjs): nhánh còn mở → merge-base(HEAD, origin/onehub)..HEAD; hồ sơ đã lên onehub → diff của merge đưa nó lên. Mỗi tệp khớp ranh giới hàng K3b (đọc hang-viec.json của đợt nếu có, không thì hằng chép) hoặc danh sách chạm tệp khai trong tệp (design doc, kế hoạch, PRODUCT-MAP.md, LO-TRINH.html); _acceptance/config.yaml chỉ dòng '+'. In 'ranh-gioi: <n> tep, 0 ngoai (neo <kieu>)'. Chiều đỏ: --them apps/app/lib/x.ts → exit 1 'ngoai-ranh-gioi:apps/app/lib/x.ts'."
+
+Sau (`expected`): "exit 0; _acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs neo cố định vào merge đưa hồ sơ lên onehub (PR #365, GOP=e7afcb8b782566381cb119e514415c5bea12047b): diff merge-base(GOP^1, GOP^2)..GOP^2; GOP không có (git cat-file -e) → exit 2 'KHONG DO DUOC'. Mỗi tệp khớp ranh giới hàng K3b (đọc hang-viec.json của đợt nếu có, không thì hằng chép) hoặc danh sách chạm tệp khai trong tệp (design doc, kế hoạch, PRODUCT-MAP.md, LO-TRINH.html); _acceptance/config.yaml chỉ dòng '+'. In 'ranh-gioi: <n> tep, 0 ngoai (neo gop e7afcb8b7)'. Chiều đỏ: --them apps/app/lib/x.ts → exit 1 'ngoai-ranh-gioi:apps/app/lib/x.ts'."
+
+Đột biến `them-tep-ngoai-ranh-gioi` — thông điệp ghim «ngoai-ranh-gioi:apps/app/lib/x.ts»
+
 ### bang-thanh-vien-giu-hang:E1
 
 - Xử lý: `sua-rang`
@@ -40,6 +46,8 @@ phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4685 · api http
 $ bun scripts/dev-session.ts ada@trycomp.ai
 phien-do: xong — mã 2
 ```
+
+Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
 
 ### bang-thanh-vien-giu-hang:E2
 
@@ -65,6 +73,8 @@ $ bun scripts/dev-session.ts ada@trycomp.ai
 phien-do: xong — mã 2
 ```
 
+Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
+
 ### bang-thanh-vien-giu-hang:E3
 
 - Xử lý: `sua-rang`
@@ -88,6 +98,8 @@ phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4570 · api http
 $ bun scripts/dev-session.ts ada@trycomp.ai
 phien-do: xong — mã 2
 ```
+
+Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
 
 ### bang-thanh-vien-giu-hang:E4
 
@@ -113,6 +125,8 @@ $ bun scripts/dev-session.ts ada@trycomp.ai
 phien-do: xong — mã 2
 ```
 
+Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
+
 ### bang-thanh-vien-giu-hang:E5
 
 - Xử lý: `sua-rang`
@@ -136,6 +150,25 @@ phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4360 · api http
 $ bun scripts/dev-session.ts ada@trycomp.ai
 phien-do: xong — mã 2
 ```
+
+Trước (`expected`): Mo /<slug>/settings/members?q=ttv-khong-ai-trung-tu-nay o 1440: "DUNG 1440: tim khong ra
+ai thi thay «Không ai khớp với bộ lọc này.» (cao >=16px, trong khung true, khong bi che
+true)". Cau lay tu thanhVienMessages("vi").bang.trong.
+CHIEU DO (ma chua sua): "SAI 1440: tim khong ra ai ... (cao 64px, trong khung false,
+khong bi che false)", ma 1. Pha-thu sau khi sua: bo chieu cao toi thieu cua vo bang o
+bien the content trong data-table.tsx -> "trong khung false", ma 1.
+
+Sau (`expected`): Mo /<slug>/settings/members?q=ttv-khong-ai-trung-tu-nay o 1440: "DUNG 1440: tim khong ra
+ai thi thay «Không có kết quả nào khớp bộ lọc» (cao >=16px, trong khung true, khong bi che
+true)" va "DUNG 1440: tim khong ra ai thi co nut «Bỏ lọc» trong vo bang (true)". Tu
+datatable-loc-ro (fb486420a) bang dang loc ma rong noi cau chung cua DataTable: cau lay tu
+messages("vi").table.noMatch cua packages/ui (tieu de [data-slot=empty-title], do chinh
+dong chu chu khong do khung lop phu), nut lay tu messages("vi").table.resetFilters.
+CHIEU DO (ma chua sua): "SAI 1440: tim khong ra ai ... (cao 64px, trong khung false,
+khong bi che false)", ma 1. Pha-thu sau khi sua: bo chieu cao toi thieu cua vo bang o
+bien the content trong data-table.tsx -> "trong khung false", ma 1.
+
+Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
 
 ### bang-thanh-vien-giu-hang:E6
 
@@ -161,6 +194,8 @@ $ bun scripts/dev-session.ts ada@trycomp.ai
 phien-do: xong — mã 2
 ```
 
+Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
+
 ### bang-thanh-vien-giu-hang:E7
 
 - Xử lý: `sua-rang`
@@ -185,6 +220,8 @@ $ bun scripts/dev-session.ts ada@trycomp.ai
 phien-do: xong — mã 2
 ```
 
+Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
+
 ### bo-dung-khong-ket:E9
 
 - Xử lý: `neo-co-dinh`
@@ -204,6 +241,35 @@ HEAD cho re du tep (thieu: khong): dat
 merge-base truot 0 dieu: khong dieu nao (sai)
 tai-lieu khong dat
 ```
+
+Trước (`expected`): Script suy goc kho tu vi tri cua no. Doc docs/agent.md o HEAD va o
+git merge-base HEAD origin/onehub.
+Muc "Team-agent builder and runner" (cat bang tieu de) phai co: "SESSION_LIMITS",
+"128k" hoac "128 000"/"128.000", "500k"/"500.000", "session-limit", va
+"outputSchema".
+Danh sach "Chỗ rẽ có tên với bản của hãng": moi tep ma git diff --name-only
+origin/release...HEAD cham VA ton tai o origin/release phai co ten trong muc do
+(chi xet tep ma nhanh nay sua, tinh tu merge-base voi origin/onehub).
+Ban merge-base phai TRUOT it nhat mot dieu kien (in dieu kien truot). In
+"tai-lieu ok" va exit 0 khi HEAD dat va ban goc truot; nguoc lai exit 1 va in
+dieu kien vi pham.
+
+Sau (`expected`): Script suy goc kho tu vi tri cua no. Doc docs/agent.md o HEAD va o
+ban goc co dinh cua PR #178 (gop 8176bb2ef4086be290bbe8ed8df75ce9b845b6ad):
+13477d5f8f8b75555120f438a5095e8f2940935c, khong theo merge-base dong; sha neo
+khong co (git cat-file -e) -> exit 2 "KHONG DO DUOC".
+Muc "Team-agent builder and runner" (cat bang tieu de) phai co: "SESSION_LIMITS",
+"128k" hoac "128 000"/"128.000", "500k"/"500.000", "session-limit", va
+"outputSchema".
+Danh sach "Chỗ rẽ có tên với bản của hãng": moi tep ma git diff --name-only
+origin/release...HEAD cham VA ton tai o origin/release phai co ten trong muc do
+(chi xet tep ma PR #178 sua: git diff --name-only
+13477d5f8f8b75555120f438a5095e8f2940935c..ac6a3ab36239260dac1773e33c86e5d3843e32b4).
+Ban goc co dinh do phai TRUOT it nhat mot dieu kien (in dieu kien truot). In
+"tai-lieu ok" va exit 0 khi HEAD dat va ban goc truot; nguoc lai exit 1 va in
+dieu kien vi pham.
+
+Đột biến `bo-outputSchema` — thông điệp ghim «HEAD outputSchema: khong dat»
 
 ### bo-xuong-kara:E10
 
@@ -229,6 +295,12 @@ OK  mo-coi ma 0, CHET (0)
 DO: 3 muc sai
 ```
 
+Trước (`expected`): "exit 0; rang/ai-elements.mjs (đường suy từ vị trí script): (a) artifact.tsx và task.tsx có trong packages/ui/src/components/ai-elements; tool.tsx và code-block.tsx không có; (b) hai tệp không chứa '//' đầu dòng hay '/*', không import 'lucide-react', và mọi chữ hiển thị tiếng Anh (thuộc tính sr-only, chuỗi giữa thẻ) đi qua useMessages — dò bằng danh sách cho phép đóng như rang-chat của packages/ui; (c) _acceptance/nen-chat-ai-elements/so-lech-chuan.md có một mục tiêu đề nêu artifact.tsx và một mục nêu task.tsx (tách mục theo tiêu đề, không grep cả tệp); (d) chạy node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs: mã 0, dòng MIEN TRU (2) liệt đúng artifact.tsx và task.tsx, mỗi lý do chứa 'K1' và mỗi hạn chứa 'K2'; CHET (0). In từng mục. Chiều đỏ ghim: chạy trên bản sao thư mục ai-elements có thêm một dòng chú thích trong task.tsx phải in 'co chu thich: task.tsx' và mã 1; bản sao mo-coi.mjs bỏ mục miễn trừ task.tsx phải làm bước (d) in 'MO COI: task.tsx' và mã 1."
+
+Sau (`expected`): "exit 0; rang/ai-elements.mjs (đường suy từ vị trí script): (a) artifact.tsx và task.tsx có trong packages/ui/src/components/ai-elements; tool.tsx và code-block.tsx không có; (b) hai tệp không chứa '//' đầu dòng hay '/*', không import 'lucide-react', và mọi chữ hiển thị tiếng Anh (thuộc tính sr-only, chuỗi giữa thẻ) đi qua useMessages — dò bằng danh sách cho phép đóng như rang-chat của packages/ui; (c) _acceptance/nen-chat-ai-elements/so-lech-chuan.md có một mục tiêu đề nêu artifact.tsx và một mục nêu task.tsx (tách mục theo tiêu đề, không grep cả tệp); (d) chạy node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs: mã 0, artifact.tsx và task.tsx nằm trong khối SONG và dòng của mỗi tệp nêu cầu 'kara/' (K2 gỡ miễn trừ K1, fc691046d) — hoặc, khi còn miễn trừ, nằm trong MIEN TRU với lý do chứa 'K1' và hạn chứa 'K2'; CHET (0). Không chạy răng vân tay so-lech-chuan.mjs của nen-chat-ai-elements (nó so với ai-elements@latest qua mạng); bước (c) chỉ kiểm sổ có mục. In từng mục. Chiều đỏ ghim: chạy trên bản sao thư mục ai-elements có thêm một dòng chú thích trong task.tsx phải in 'co chu thich: task.tsx' và mã 1; bản sao mo-coi.mjs bỏ cầu kara/ phải làm bước (d) in 'MO COI: task.tsx' và mã 1."
+
+Đột biến `bo-cau-kara` — thông điệp ghim «SAI MO COI: task.tsx»
+
 ### ca-chap-chon-cach-ly:E5
 
 - Xử lý: `sua-rang`
@@ -241,6 +313,8 @@ DO: 3 muc sai
 ```
 moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1
 ```
+
+Đột biến `moc-don-cu` — thông điệp ghim «moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1»
 
 ### ca-chap-chon-cach-ly:E7
 
@@ -255,6 +329,8 @@ moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1
 moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1
 ```
 
+Đột biến `a-mo-coi-moc-cu` — thông điệp ghim «moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1»
+
 ### ca-chap-chon-con-lai:E6
 
 - Xử lý: `neo-co-dinh`
@@ -267,6 +343,12 @@ moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1
 ```
 diff rong
 ```
+
+Trước (`expected`): "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải là apps/agent/test/tasks.integration.spec.ts, apps/agent-okr/test/support/gieo.ts, apps/agent-okr/test/goi-soan.integration.spec.ts, apps/agent-okr/agent/lib/goi-soan.ts, _acceptance/ca-chap-chon-con-lai/**, docs/superpowers/**, PRODUCT-MAP.md, LO-TRINH.html hoặc _acceptance/config.yaml; config.yaml không có dòng bỏ; với gieo.ts, dòng TIEN_TO và mọi export khác ngoài ma giữ nguyên (diff -U0 không bỏ dòng nào khác dòng khai báo ma); goi-soan.integration.spec.ts không có dòng bỏ; goi-soan.ts chỉ được đổi khi evals.yaml còn E8; trong tasks.integration.spec.ts, mọi dòng expect( của hai ca thật (retireExhausted/claimDue) và hai dòng toHaveLength(rows) của hai ca đối chứng không bị bỏ; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng trong cùng lệnh: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/tasks.ts → «ngoai ranh gioi: apps/agent/agent/lib/tasks.ts»; một dòng bỏ ở dòng TIEN_TO của gieo.ts → «gieo.ts: doi ngoai ma»."
+
+Sau (`expected`): "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi của cặp neo cố định PR #340 (gộp 2d7c489816ae6452b4f73322b4db1401902bb20c): từ a9e8bc75a04f04a9a250eb2ff7fc4fadbe0f4747 tới 16e80f31d62a56195253f1566b38284f8e0b4e66, không theo HEAD; sha neo không có (git cat-file -e) → mã 2 «KHONG DO DUOC»; mọi tên phải là apps/agent/test/tasks.integration.spec.ts, apps/agent-okr/test/support/gieo.ts, apps/agent-okr/test/goi-soan.integration.spec.ts, apps/agent-okr/agent/lib/goi-soan.ts, _acceptance/ca-chap-chon-con-lai/**, docs/superpowers/**, PRODUCT-MAP.md, LO-TRINH.html hoặc _acceptance/config.yaml; config.yaml không có dòng bỏ; với gieo.ts, dòng TIEN_TO và mọi export khác ngoài ma giữ nguyên (diff -U0 không bỏ dòng nào khác dòng khai báo ma); goi-soan.integration.spec.ts không có dòng bỏ; goi-soan.ts chỉ được đổi khi evals.yaml còn E8; trong tasks.integration.spec.ts, mọi dòng expect( của hai ca thật (retireExhausted/claimDue) và hai dòng toHaveLength(rows) của hai ca đối chứng không bị bỏ; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng trong cùng lệnh: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/tasks.ts → «ngoai ranh gioi: apps/agent/agent/lib/tasks.ts»; một dòng bỏ ở dòng TIEN_TO của gieo.ts → «gieo.ts: doi ngoai ma»."
+
+Đột biến `diff-cham-tasks.ts` — thông điệp ghim «ngoai ranh gioi: apps/agent/agent/lib/tasks.ts»
 
 ### cai-dat-chung-chi-quan-tri:E8
 
@@ -292,10 +374,33 @@ KET LUAN: 28 DUNG, 3 SAI — ma thoat 1
 Ran 43 tests across 1 file. [49.00ms]
 ```
 
+Trước (`expected`): Chay toan bo apps/app/test/onboarding-gate.spec.ts sau khi bo dung researchKey gia mang
+canManage (mac dinh true — hinh that cua tra loi); roi rang khang-dinh-cu-nguyen-ven.mjs
+lay tep do o sha CO DINH a8572437 (dinh onehub da gop vao nhanh, gom #129; git show, khong
+merge-base), cat moi khoi
+it(/test( den dong dong cung muc thut, va doi moi khoi cu phai co NGUYEN VAN trong tep
+hien tai. Ma tran toan phan: so khoi cat duoc = so dong mo khoi cua tep goc (30), khong
+khop thi ma 2. Dong cuoi "KET LUAN: n DUNG, m SAI — ma thoat X".
+CHIEU DO: sua .toBe cua ca "sends an onboarded rep with no key" (dong rieng) -> SAI goi
+ten ca, ma 1; doi mot it( thut mot tab thanh it.skip( -> SAI goi ten ca; NEO hong -> ma 2.
+
+Sau (`expected`): Chay toan bo apps/app/test/onboarding-gate.spec.ts sau khi bo dung researchKey gia mang
+canManage (mac dinh true — hinh that cua tra loi); roi rang khang-dinh-cu-nguyen-ven.mjs
+lay tep do o sha CO DINH c895e5bff (cap gop #184 phien-chet-ve-dang-nhap, them hetPhien:false
+vao khang dinh cu; truoc do a8572437 gom #129; git show, khong merge-base; sha khong co
+trong kho -> ma 2 "KHONG DO DUOC"), cat moi khoi
+it(/test( den dong dong cung muc thut, va doi moi khoi cu phai co NGUYEN VAN trong tep
+hien tai. Ma tran toan phan: so khoi cat duoc = so dong mo khoi cua tep goc (42), khong
+khop thi ma 2. Dong cuoi "KET LUAN: n DUNG, m SAI — ma thoat X".
+CHIEU DO: sua .toBe cua ca "sends an onboarded rep with no key" (dong rieng) -> SAI goi
+ten ca, ma 1; doi mot it( thut mot tab thanh it.skip( -> SAI goi ten ca; NEO hong -> ma 2.
+
+Đột biến `dao-het-phien` — thông điệp ghim «SAI khoi cu con nguyen: it("says the viewer is out when the API names no role for them"»
+
 ### cap-nhat-tuan-okr:E7
 
 - Xử lý: `khai-not-run`
-- Lý do: cua-toi-ba-phan AC-2 lật lời hứa phiên mở lúc tải màn entry=tab
+- Lý do: cua-toi-ba-phan AC-2 (ký 15/10) lật lời hứa «mở /okr/cap-nhat-tuan là sinh một phiên entry=tab lúc tải màn»: bảng cập nhật chỉ mở khi bấm, entry «cua-toi»; ô mang superseded_by cua-toi-ba-phan#AC-2, hồ sơ thay tự nêu thẻ cap-nhat-tuan-okr/E7 ở design doc của nó.
 - Căn cứ: `_acceptance/cua-toi-ba-phan/contract.md:31` — - AC-2: Given phần 1 có KR thiếu số, When bấm «Cập nhật N KR», điền số và tự tin rồi gửi, Then bảng cập nhật mở ngay trong phần 1 (đường dẫn vẫn là `/okr`, không chuyển trang), có đủ ô số, tự tin, ghi chú và thanh gửi như bảng cũ; gửi xong phần 1 hiện «đã gửi» và danh sách làm mới; máy chủ có đúng một dòng `okrCheckInSession` mới mang `entry = "cua-toi"`, `submittedAt` khác rỗng và một `okrCheckIn` cho mỗi KR đã gửi; tải trang Của tôi mà không bấm thì không sinh dòng phiên nào. (cross-layer)
 - Sửa: status not-run
 
@@ -315,6 +420,10 @@ $ bun scripts/dev-session.ts "unja0gvw@thu.test"
 $ bun scripts/dev-session.ts "dinja0gvw@thu.test"
 phien-do: xong — mã 1
 ```
+
+Trước (`status`): (trống)
+
+Sau (`status`): not-run
 
 ### cap-nhat-tuan-okr:E14
 
@@ -340,6 +449,12 @@ $ bun scripts/dev-session.ts "dinja13e4@thu.test"
 phien-do: xong — mã 1
 ```
 
+Trước (`cmd`): config:executors.script.cnt_man_chrome
+
+Sau (`cmd`): PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} CHI=E13,E14 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+
+Đột biến `CN-1 phần 1 bỏ đọc ?tu=` — thông điệp ghim «E14: entry cua phien C phai viec-cua-toi, thay cua-toi»
+
 ### cap-nhat-tuan-okr:E19
 
 - Xử lý: `sua-rang`
@@ -364,6 +479,12 @@ $ bun scripts/dev-session.ts "dinja1l0p@thu.test"
 phien-do: xong — mã 1
 ```
 
+Trước (`cmd`): config:executors.script.cnt_man_chrome
+
+Sau (`cmd`): PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} CHI=E18,E19 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+
+Đột biến `mentionUserIds rỗng` — thông điệp ghim «E19: binh luan moi co mention M»
+
 ### chan-lai-component-ra-man:E1
 
 - Xử lý: `sua-rang`
@@ -380,6 +501,22 @@ dong trong bang gioi han vong truoc: 9
 tep git theo doi duoi goc: 1113
 DO: neo mac_dinh ghim 129 nhung do duoc 132
 ```
+
+Trước (`expected`): Xanh: cac neo khop dia — 389 file · 129 gia tri mac dinh la chuoi co chu (neo doi 93 -> 129 theo d-20261004T123511Z-22) · 10
+dong trong bang gioi han cua vong truoc (neo DOC LAP, ghim trong contract) · so
+phan tu TUNG nhom sau khi phan (chu-nguoi-doc va ky thuat), khong chi tong.
+Chieu do da chay: doi mot neo trong ban khai -> ma 1, neu ten neo lech va ca hai
+con so.
+Tap rong (khong doc duoc cay nguon) -> ma 2, KHONG xanh.
+
+Sau (`expected`): Xanh: cac neo khop dia — 389 file · 132 gia tri mac dinh la chuoi co chu (neo doi 93 -> 129 theo d-20261004T123511Z-22, 129 -> 132 theo c1d11fd4b) · 10
+dong trong bang gioi han cua vong truoc (neo DOC LAP, ghim trong contract) · so
+phan tu TUNG nhom sau khi phan (chu-nguoi-doc va ky thuat), khong chi tong.
+Chieu do da chay: doi mot neo trong ban khai -> ma 1, neu ten neo lech va ca hai
+con so.
+Tap rong (khong doc duoc cay nguon) -> ma 2, KHONG xanh.
+
+Đột biến `neo-lech-mot label=Save` — thông điệp ghim «DO: neo mac_dinh ghim 132 nhung do duoc 133»
 
 ### chan-lai-component-ra-man:E2
 
@@ -398,6 +535,34 @@ tong: 132 · neo: 129
 DO: tong ba nhom 132 khac neo 129
 ```
 
+Trước (`expected`): Xanh: moi gia tri mac dinh duoc xep nhom bang cach MOUNT component o CA HAI
+trang thai — dong, va mo voi moi component co trang thai mo — roi doc tap
+chu-nguoi-doc cua ban ve.
+MA TRAN TOI THIEU viet TRUOC (5 dong ghim ten trong contract AC-2): combobox
+placeholder · combobox empty · date-picker placeholder · command title ·
+async-action errorLabel — ca nam PHAI roi vao nhom chu-nguoi-doc. Sai mot dong
+la ma 1, neu ten dong.
+In ra so phan tu TUNG nhom, khong chi tong; tong bang 129 (neo mac_dinh cua lai-ra-man.mjs).
+Component nao khong mount duoc phai khai trong so ca kem ly do; so khong-mount
+duoc + so mount duoc = so component co gia tri mac dinh.
+Chieu do da chay: mount CHI trang thai dong -> nam dong ma tran roi sang nhom ky
+thuat -> ma 1. Day dung la ca hong ma phep mount-mot-trang-thai sinh ra.
+
+Sau (`expected`): Xanh: moi gia tri mac dinh duoc xep nhom bang cach MOUNT component o CA HAI
+trang thai — dong, va mo voi moi component co trang thai mo — roi doc tap
+chu-nguoi-doc cua ban ve.
+MA TRAN TOI THIEU viet TRUOC (5 dong ghim ten trong contract AC-2): combobox
+placeholder · combobox empty · date-picker placeholder · command title ·
+async-action errorLabel — ca nam PHAI roi vao nhom chu-nguoi-doc. Sai mot dong
+la ma 1, neu ten dong.
+In ra so phan tu TUNG nhom, khong chi tong; tong bang 132 (neo mac_dinh cua lai-ra-man.mjs).
+Component nao khong mount duoc phai khai trong so ca kem ly do; so khong-mount
+duoc + so mount duoc = so component co gia tri mac dinh.
+Chieu do da chay: mount CHI trang thai dong -> nam dong ma tran roi sang nhom ky
+thuat -> ma 1. Day dung la ca hong ma phep mount-mot-trang-thai sinh ra.
+
+Đột biến `them-mac-dinh-separator` — thông điệp ghim «DO: tong ba nhom 133 khac neo 132»
+
 ### chan-lai-component-ra-man:E7
 
 - Xử lý: `sua-rang`
@@ -414,6 +579,8 @@ dong trong bang gioi han vong truoc: 9
 tep git theo doi duoi goc: 1113
 DO: neo mac_dinh ghim 129 nhung do duoc 132
 ```
+
+Đột biến `neo-lech-mot` — thông điệp ghim «DO: neo mac_dinh ghim 132 nhung do duoc 133»
 
 ### chan-trung-khoa-ban-nhap:E3
 
@@ -439,6 +606,8 @@ Ran 1 test across 1 file. [59.00ms]
 error: script "test" exited with code 1
 ```
 
+Đột biến `chan-khoa-luon-qua` — thông điệp ghim «don-vi: ca sai chieu: trung-khoa (a)»
+
 ### chan-trung-khoa-ban-nhap:E4
 
 - Xử lý: `sua-rang`
@@ -463,6 +632,8 @@ Ran 1 test across 1 file. [63.00ms]
 error: script "test" exited with code 1
 ```
 
+Đột biến `go-superRefine` — thông điệp ghim «KHONG DO DUOC: okr-cuoc-soan.ts: moc xuat hien 0 lan, can 1: .superRefine(chanKhoaTrung)»
+
 ### chu-cuoi-cung-tien-de:E5
 
 - Xử lý: `neo-co-dinh`
@@ -477,6 +648,12 @@ chu-la --chan pham-vi · goc 058bb75f
 diff 058bb75f...HEAD: 13918 tep, ngoai pham vi: 2751
 RANG DO: diff cham tep ngoai pham vi: .claude/settings.json, .env.example, .githooks/gate-shape.json, .githooks/pre-push, .github/scripts/phan-loai.mjs, .github/scripts/t1-ma-doc.mjs, .github/scripts/test/phan-loai.test.mjs, .github/workflo
 ```
+
+Trước (`expected`): "exit 0; git diff 058bb75f...HEAD ngoai _acceptance/** va tep T1 chi gom apps/api/test/workspace-thanh-vien.spec.ts; danh sach mau co apps/api/src/workspace/workspace.service.ts thi ham kiem goi ten dung tep do"
+
+Sau (`expected`): "exit 0; git diff của cặp neo cố định PR #89 (gộp 46a52ade5b9fb48f823288f8063ec13141935d48): 5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b...2aff077d0cb4966a90d014a9a70c91a45d5c8f6a, không theo HEAD (sha neo không có → exit 2 'KHONG DO DUOC'), ngoai _acceptance/** va tep T1 chi gom apps/api/test/workspace-thanh-vien.spec.ts; danh sach mau co apps/api/src/workspace/workspace.service.ts thi ham kiem goi ten dung tep do"
+
+Đột biến `PV-tu-goc-cu` — thông điệp ghim «RANG DO: diff cham tep ngoai pham vi»
 
 ### chu-mac-dinh-thu-vien-ngoai:E3
 
@@ -501,6 +678,18 @@ neo ghim:  76 · 37 · 21
    boc: calendar.tsx <- lucide-react
 ```
 
+Trước (`expected`): exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 76 component .tsx trong
+packages/ui · 37 boc thu vien ngoai · 16 doc kho chuoi dung chung. Lech la thoat
+ma 2 kem diff ten file. Danh sach "boc thu vien" sinh tu cau lenh nhap trong file,
+KHONG go tay ten goi.
+
+Sau (`expected`): exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 120 component .tsx trong
+packages/ui · 43 boc thu vien ngoai · 39 doc kho chuoi dung chung (neo doi 76·37·21 -> 120·43·39 theo 3f99c7055). Lech la thoat
+ma 2 kem diff ten file. Danh sach "boc thu vien" sinh tu cau lenh nhap trong file,
+KHONG go tay ten goi.
+
+Đột biến `them-component-boc-gia` — thông điệp ghim «LECH: component — do duoc 121, neo ghim 120»
+
 ### chu-mac-dinh-thu-vien-ngoai:E4
 
 - Xử lý: `sua-rang`
@@ -519,6 +708,8 @@ bang: 26 dong · chan dem tu dia: 28 component boc-ma-khong-doc
 KHONG DO DUOC: bang lech voi dia — in ca hai danh sach o tren.
 ```
 
+Đột biến `khai-nguyen-ban-sai-radio-group` — thông điệp ghim «HONG: radio-group.tsx khai boc CircleIcon (lucide-react) ma tren dia khong thay»
+
 ### chu-mac-dinh-thu-vien-ngoai:E9
 
 - Xử lý: `sua-rang`
@@ -534,11 +725,13 @@ bang gioi han: 9 dong · chan dem tu dia: 10 component boc-ma-khong-doc thuoc lo
 KHONG DO DUOC: bang lech voi dia — mot bang khai mot dong khong duoc di qua nhu mot bang da ke het.
 ```
 
+Đột biến `go-context-menu-khoi-bang` — thông điệp ghim «THIEU: context-menu.tsx»
+
 ### cron-theo-ban-khai:E8
 
-- Xử lý: `khai-not-run`
-- Lý do: cần bản triển khai production READY dựng từ đúng sha HEAD + token Vercel CLI; nhánh vòng không bao giờ lên production
-- Căn cứ: `_acceptance/cron-theo-ban-khai/contract.md:119` — Không đọc được bản triển khai → mã 2, không phải mã 0.
+- Xử lý: `sua-rang`
+- Lý do: Chủ kho chọn Hỏi-4: ô đòi bản triển khai production READY mà cặp gộp vòng cron (147b47a33) là tổ tiên, thay vì đúng sha HEAD; token Vercel CLI hết hạn → mã 2 kèm câu nhắc vercel login.
+- Căn cứ: `147b47a33` — 147b47a33 Merge vòng T2: lịch chạy nền theo bản khai, bốn việc im lặng nay chạy / build-func.mjs ghim cứng một dòng cron, đè lên năm dòng của apps/api/vercel.json. Nay script đọc bản khai; vắng file, vắng khoá, hay mảng rỗng đều làm lượt dựng DỪNG. AC-8 đo trên bản dựng thật của nền tảng chứ không dừng ở file trên đĩa. Ký ở Cổng 2 bởi Manh Phan 2026-09-07.
 - Sửa: status not-run
 
 Đầu ra đỏ ở mốc nền:
@@ -547,11 +740,44 @@ KHONG DO DUOC: bang lech voi dia — mot bang khai mot dong khong duoc di qua nh
 MA 2: khong doc duoc danh sach ban trien khai — HTTP 403
 ```
 
+Trước (`expected`): Do tren BAN TRIEN KHAI THAT, khong do file tren dia:
+doc khoi `crons` cua ban triem khai production moi nhat cua `crm-onehub-api`
+qua API cua nen tang — DUNG dung cu da lap neo "mot cron" truoc vong.
+Xanh: dung NAM muc, va tung cap `path` + `schedule` khop `apps/api/vercel.json`.
+Lech mot muc -> ma 1, in ca hai danh sach.
+Khong doc duoc ban trien khai (het han xac thuc, khong co ban nao) -> ma 2,
+KHONG phai ma 0.
+Vi sao eval nay bat buoc: moi eval khac dung o mot file tren dia. Mot luot dung
+ghi dung nam dong vao `.vercel/output` ma nen tang van dang ky lich cu la ca
+hong ma ca bay eval kia deu xanh — dung lop loi vong nay tuyen dong.
+GHI CHU: eval nay chi chay duoc SAU khi vong len production.
+
+Sau (`expected`): Do tren BAN TRIEN KHAI THAT, khong do file tren dia:
+doc khoi `crons` cua ban triem khai production moi nhat cua `crm-onehub-api`
+qua API cua nen tang — DUNG dung cu da lap neo "mot cron" truoc vong.
+Ban do la ban production READY moi nhat; sha commit cua no phai CHUA cap gop
+cron 147b47a33 (Merge vong T2, git merge-base --is-ancestor) — khong doi dung
+sha HEAD, vi nhanh vong khong bao gio len production. Khong chua -> ma 1
+"khong chua cap gop cron". Sha cap gop hay sha ban production khong co trong
+kho -> ma 2 "KHONG DO DUOC".
+Xanh: dung NAM muc, va tung cap `path` + `schedule` khop `apps/api/vercel.json`.
+Lech mot muc -> ma 1, in ca hai danh sach.
+Token Vercel CLI het han (auth.json expiresAt da qua, hay API tra 401/403) ->
+in "token Vercel CLI het han — chay vercel login" va ma 2. Khong doc duoc ban
+trien khai (khong co ban nao) -> ma 2, KHONG phai ma 0. Co `--gia <tep.json>`
+de chay logic tren du lieu gia (chieu do da thu).
+Vi sao eval nay bat buoc: moi eval khac dung o mot file tren dia. Mot luot dung
+ghi dung nam dong vao `.vercel/output` ma nen tang van dang ky lich cu la ca
+hong ma ca bay eval kia deu xanh — dung lop loi vong nay tuyen dong.
+GHI CHU: eval nay chi chay duoc SAU khi vong len production.
+
+Đột biến `production-khong-chua-cap-gop` — thông điệp ghim «khong chua cap gop cron f148b2bb1»
+
 ### cron-theo-ban-khai:E7
 
 - Xử lý: `sua-rang`
 - Lý do: spawnSync ENOBUFS; sau sửa còn ghim lint 3 vs 36 (HỎI)
-- Căn cứ: `_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs:16` — const r = spawnSync(lenh, doi, { cwd: GOC, encoding: "utf8" });
+- Căn cứ: `147b47a33` — 147b47a33 Merge vòng T2: lịch chạy nền theo bản khai, bốn việc im lặng nay chạy / build-func.mjs ghim cứng một dòng cron, đè lên năm dòng của apps/api/vercel.json. Nay script đọc bản khai; vắng file, vắng khoá, hay mảng rỗng đều làm lượt dựng DỪNG. AC-8 đo trên bản dựng thật của nền tảng chứ không dừng ở file trên đĩa. Ký ở Cổng 2 bởi Manh Phan 2026-09-07.
 - Sửa: stdio inherit + maxBuffer
 
 Đầu ra đỏ ở mốc nền:
@@ -559,6 +785,22 @@ MA 2: khong doc duoc danh sach ban trien khai — HTTP 403
 ```
 MA 2: khong chay duoc `test` — spawnSync bun ENOBUFS (stdout or stderr buffer reached maxBuffer size limit)
 ```
+
+Trước (`expected`): Chay `bun run test`, `check-types`, `lint`, `lint:slop`, `build`, in ma tung lenh.
+Xanh: ca nam ma 0, VA `apps/app` ra dung ba canh bao lint — so ba la con so GHIM
+cua kho, lech hai chieu deu la do.
+Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
+
+Sau (`expected`): Chay `bun run test`, `check-types`, `lint`, `lint:slop`, `build`, in ma tung lenh
+(dau ra cua nam lenh di thang ra man, khong gom vao bo dem).
+Xanh: ca nam ma 0, VA `apps/app` ra dung ba canh bao lint — so ba la con so GHIM
+cua kho, lech hai chieu deu la do. Con so ghim do o CAY CUA CAP GOP vong cron
+(cha thu hai cua 147b47a33, Merge vong T2), khong o HEAD: cay tam dung bang
+`git worktree add --detach` trong tmpdir, noi node_modules, go khi xong. Sha cap
+gop khong co trong kho -> ma 2 "KHONG DO DUOC".
+Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
+
+Đột biến `canh-bao-ghim-lech` — thông điệp ghim «DO: apps/app ra 3 canh bao lint, ghim la 4.»
 
 ### danh-sach-keo-chung:E13
 
@@ -576,6 +818,20 @@ tu-thu: bat duoc tep gia; doi chung sach
 KET LUAN: khong co tep giao dien trong diff — khong do duoc
 ```
 
+Trước (`expected`): rang/san-thiet-ke.mjs rut danh sach tep tu git diff --name-only --diff-filter=AM $(git merge-base HEAD
+origin/onehub), loc *.tsx duoi apps/app va packages/ui/src (bo test/), in "<n> tep" va ten tung tep, roi chay
+design-gate.mjs --mode static cho tung tep: khong P0. Danh sach rong -> thoat 2 ("khong co tep giao dien
+trong diff" — khong xanh gia). --tu-thu: mot tep tam co className doi mau tren Button -> thoat 1 va goi ten tep.
+
+Sau (`expected`): rang/san-thiet-ke.mjs rut danh sach tep tu git diff --name-only --diff-filter=AM cua cap neo co dinh PR #311
+(gop 45d4fde524b049b17b6887292b641585a914b754): 591bc8fb63a6505a888f80ccde43fc498e4eed2a..a33a0d62424150945bf2dc482d050dfbaaeccb6e,
+khong theo HEAD; sha neo khong co (git cat-file -e) -> thoat 2 "KHONG DO DUOC". Loc *.tsx duoi apps/app va
+packages/ui/src (bo test/), in "<n> tep" va ten tung tep, roi chay design-gate.mjs --mode static cho tung tep: khong P0.
+Danh sach rong -> thoat 2 ("khong co tep giao dien trong diff" — khong xanh gia). --tu-thu: mot tep tam co className
+doi mau tren Button -> thoat 1 va goi ten tep.
+
+Đột biến `rang-mu-p0` — thông điệp ghim «tu-thu: BO LOT tep gia»
+
 ### to-chuc-danh-sach-chi-tiet:E21
 
 - Xử lý: `neo-co-dinh`
@@ -589,6 +845,27 @@ KET LUAN: khong co tep giao dien trong diff — khong do duoc
 so tep giao dien vong nay cham: 0
 KHONG DO DUOC: khong tep giao dien nao trong diff — khong co gi de soi
 ```
+
+Trước (`expected`): Danh sach tep giao dien RUT TU git diff voi base_commit (*.tsx duoi apps/app), khong viet tay;
+moi tep chay design-gate --mode static exit 0. Quet cac tep duoi settings/organization: khong
+thuoc tinh className tren BAT KY phan tu JSX nao co ten viet hoa (thanh phan) — the HTML trần
+viet thuong chi duoc className bo cuc (flex, grid, gap, p-, m-, w-, min-w-, truncate).
+git diff duoi packages/ui chi cham tep da khai trong ke hoach (rut dong khai tu plan).
+CHIEU DO: tep tam trong ban guong co <Button className="justify-start"> duoi settings/
+organization -> exit 1 voi "className tren Button".
+
+Sau (`expected`): Danh sach tep giao dien RUT TU git diff cua cap neo co dinh PR #128 (gop 472e888085bd07c2ef47f02ecd946e7693785027):
+36f6bdb8e61cbaf23254a7fd92c34a01fe097e53..a7808bfbefc77a9bbe07468cc5b8e3b8081e7792, khong theo HEAD, khong lay
+cay lam viec hay tep chua track; sha neo khong co (git cat-file -e) -> exit 2 "KHONG DO DUOC"
+(*.tsx duoi apps/app), khong viet tay;
+moi tep chay design-gate --mode static exit 0. Quet cac tep duoi settings/organization: khong
+thuoc tinh className tren BAT KY phan tu JSX nao co ten viet hoa (thanh phan) — the HTML trần
+viet thuong chi duoc className bo cuc (flex, grid, gap, p-, m-, w-, min-w-, truncate).
+git diff duoi packages/ui (cung cap neo) chi cham tep da khai trong ke hoach (rut dong khai tu plan).
+CHIEU DO: them className="justify-start" vao mot <Button> cua settings/organization/chi-tiet-goc.tsx
+(tep thuoc diff cua cap neo) -> exit 1 voi "className tren Button".
+
+Đột biến `className-tren-Button` — thông điệp ghim «className tren Button»
 
 ### toan-canh-okr:E3
 
@@ -614,6 +891,8 @@ $ bun scripts/dev-session.ts "otjby1dn@thu.test"
 phien-do: xong — mã 1
 ```
 
+Đột biến `TC-1 danhSach không kèm loc` — thông điệp ghim «E3: sau khi chon nguoi co loi goi okr.danhSach voi loc.phuTrach = [k]»
+
 ### toan-canh-okr:E28
 
 - Xử lý: `sua-rang`
@@ -637,6 +916,8 @@ $ bun scripts/dev-session.ts "ktjc2oty@thu.test"
 $ bun scripts/dev-session.ts "otjc2oty@thu.test"
 phien-do: xong — mã 1
 ```
+
+Đột biến `TC-2 vết mo-hop-tuan thiếu tuan` — thông điệp ghim «E28: dong mo-hop-tuan dung hinh»
 
 ### toan-canh-okr:E29
 
@@ -662,11 +943,13 @@ $ bun scripts/dev-session.ts "otjc6gpt@thu.test"
 phien-do: xong — mã 1
 ```
 
+Đột biến `TC-3 prefetch toanCanh bằng currentId` — thông điệp ghim «E29: co it nhat 1 loi goi okr.toanCanh sau khi chon ky va moi loi goi mang cycleId cua»
+
 ### tro-ly-okr-nen:E4
 
 - Xử lý: `sua-rang`
 - Lý do: phụ thuộc thứ tự: đòi tổng kết E9
-- Căn cứ: `_acceptance/tro-ly-okr-nen/rang/doi-soat-that.mjs:16` — if (!existsSync(TONG_KET)) {
+- Căn cứ: `_acceptance/tro-ly-okr-nen/rang/doi-soat-that.mjs:16` — process.exit(2);
 - Sửa: cach-ly-dau-cuoi ghi sha; doi-soat tự chạy E9 khi thiếu/khác sha
 
 Đầu ra đỏ ở mốc nền:
@@ -674,6 +957,12 @@ phien-do: xong — mã 1
 ```
 chua co tong ket cua E9 — chay cach-ly-dau-cuoi.mjs truoc
 ```
+
+Trước (`expected`): "exit 0; rang/doi-soat-that.mjs đọc tệp tổng kết mà E9 (cách ly đầu-cuối) ghi ra .acceptance-runs/tro-ly-okr-nen/ (khung giờ UTC bắt đầu–kết thúc, id các phiên, tổng sổ của các phiên đó từ kho đo) — không chạy model lần hai. Chờ tối đa 15 phút cho báo cáo Gateway (gateway.getSpendReport, groupBy day, datePart hour, apiKeyId self) phủ khung giờ đó, rồi so: |sổ − Gateway| / Gateway ≤ 0,10. In cả hai số, số yêu cầu Gateway và số bước trong sổ. Khung giờ có chi tiêu ngoài lượt đo (Gateway > sổ quá 10% và số yêu cầu Gateway > số bước sổ) thì in 'khung do bi lan' và mã 3 — không nhận là xanh. Chiều đỏ trên cùng số: bỏ các dòng phiên con khỏi tổng sổ (bản tính thứ hai trong cùng lần chạy, in ra) phải ra lệch > 10% — chứng thước phân biệt được sổ thiếu phiên con."
+
+Sau (`expected`): "exit 0; rang/doi-soat-that.mjs đọc tệp tổng kết mà E9 (cách ly đầu-cuối) ghi ra .acceptance-runs/tro-ly-okr-nen/ (khung giờ UTC bắt đầu–kết thúc, id các phiên, tổng sổ của các phiên đó từ kho đo) cùng sha E9 ghi kèm (e9-tong-ket.jsonl.sha: sha HEAD, cộng vân tay của git diff HEAD trên apps/agent, packages/db, packages/validation, rang/ khi cây có sửa) — không chạy model lần hai khi sha khớp cây đang đo. Tổng kết thiếu hay ghi sha khác thì tự chạy cach-ly-dau-cuoi.mjs --lan 3 trước (không phụ thuộc thứ tự E4/E9); E9 đỏ → mã 2 'E9 khong xanh'; sau lượt chạy mà sha vẫn khác → mã 2. Lệch > 10% in 'so lech gateway qua 10%' và mã 1. Chờ tối đa 15 phút cho báo cáo Gateway (gateway.getSpendReport, groupBy day, datePart hour, apiKeyId self) phủ khung giờ đó, rồi so: |sổ − Gateway| / Gateway ≤ 0,10. In cả hai số, số yêu cầu Gateway và số bước trong sổ. Khung giờ có chi tiêu ngoài lượt đo (Gateway > sổ quá 10% và số yêu cầu Gateway > số bước sổ) thì in 'khung do bi lan' và mã 3 — không nhận là xanh. Chiều đỏ trên cùng số: bỏ các dòng phiên con khỏi tổng sổ (bản tính thứ hai trong cùng lần chạy, in ra) phải ra lệch > 10% — chứng thước phân biệt được sổ thiếu phiên con."
+
+Đột biến `so-chi-phi-gap-doi` — thông điệp ghim «so lech gateway qua 10%»
 
 ### tro-ly-okr-nen:E17
 
@@ -699,6 +988,12 @@ thieu cot: notificationPreference.dongTroLyOkr
 model moi khong nam cuoi schema: DuAnVet,DuAnMoc,DuAnMocCho,ViecPhuThuoc,NgayNghi,GoiYKeHoach
 ```
 
+Trước (`expected`): "exit 0; rang/migration-chi-them.mjs (khuôn của so-okr-tu-chay, gốc suy từ vị trí script): mọi migration mới so với merge-base với origin/onehub chỉ có CREATE TABLE, CREATE INDEX trên bảng mới, ALTER TABLE … ADD COLUMN có DEFAULT trên okrProgramConfig và notificationPreference; không DROP, không ALTER COLUMN, không chỉ mục nào trên agentTask; schema có đủ sáu bảng và bảy cột kể tên; các model mới nằm sau khối OKR. Thêm một lần chạy prisma migrate diff từ schema gốc tới schema mới trên kho dùng-một-lần: không lệnh phá. Chiều đỏ trên cùng bộ đọc: một bản sao migration có 'DROP COLUMN' → thông điệp ghim 'migration khong chi them: DROP'; thêm '@@index' trên AgentTask trong bản sao schema → 'chi muc moi tren agentTask'."
+
+Sau (`expected`): "exit 0; rang/migration-chi-them.mjs (khuôn của so-okr-tu-chay, gốc suy từ vị trí script): sha neo CỐ ĐỊNH NEN=e3dd799ad (cha thứ nhất của cặp gộp) và GOP=1bb45ac78 (cặp gộp #182 feat/tro-ly-okr-nen), không merge-base; sha không có trong kho → mã 2 'KHONG DO DUOC'. Mọi migration cặp gộp thêm (có ở GOP, không có ở NEN; nội dung đọc từ đĩa của cây đang xét, thư mục mất → đỏ) chỉ có CREATE TABLE, CREATE INDEX trên bảng mới, ALTER TABLE … ADD COLUMN có DEFAULT trên okrProgramConfig và notificationPreference; không DROP, không ALTER COLUMN, không chỉ mục nào trên agentTask (model AgentTask của schema hiện tại bằng của NEN); có đủ sáu bảng và bảy cột kể tên; trong schema của GOP sáu model mới liền một khối đúng thứ tự (không đòi nằm cuối tệp — model của hàng ký sau được thêm sau). Thêm một lần chạy prisma migrate diff từ schema NEN tới schema GOP: không lệnh phá. Chiều đỏ trên cùng bộ đọc: một bản sao migration có 'DROP COLUMN' → thông điệp ghim 'migration khong chi them: DROP'; thêm '@@index' trên AgentTask trong bản sao schema → 'chi muc moi tren agentTask'."
+
+Đột biến `DROP COLUMN` — thông điệp ghim «migration khong chi them: DROP COLUMN»
+
 ### tro-ly-okr-nen:E22
 
 - Xử lý: `neo-co-dinh`
@@ -723,6 +1018,12 @@ model moi khong nam cuoi schema: DuAnVet,DuAnMoc,DuAnMocCho,ViecPhuThuoc,NgayNgh
 Node.js v24.22.0
 ```
 
+Trước (`expected`): "exit 0; rang/tien-do-da-doi.mjs: apps/api/src/okr/tien-do.ts không còn; không tệp nào (trừ tài liệu lịch sử) nhập './tien-do' hay 'okr/tien-do' từ apps/api; packages/db/package.json khai export ./okr-tien-do và ./okr-can-chinh; thân ba hàm chonChuKyHienTai, kyVongTheoNgay, tienDoMucTieu trong tệp mới giống thân cũ ở merge-base (so sau khi bỏ khoảng trắng). Chiều đỏ trên cùng bộ đọc: bản sao có một tệp còn nhập đường cũ → 'con nhap duong cu: <tep>'."
+
+Sau (`expected`): "exit 0; rang/tien-do-da-doi.mjs: apps/api/src/okr/tien-do.ts không còn; không tệp nào (trừ tài liệu lịch sử) nhập './tien-do' hay 'okr/tien-do' từ apps/api; packages/db/package.json khai export ./okr-tien-do và ./okr-can-chinh; thân ba hàm chonChuKyHienTai, kyVongTheoNgay, tienDoMucTieu trong tệp mới giống thân cũ ở sha CỐ ĐỊNH c1e37b730 (merge-base hai cha của cặp gộp #182 1bb45ac78, nơi tien-do.ts còn ở apps/api; không tính merge-base với origin/onehub lúc chạy) (so sau khi bỏ khoảng trắng); sha không có trong kho → mã 2 'KHONG DO DUOC'. Chiều đỏ trên cùng bộ đọc: bản sao có một tệp còn nhập đường cũ → 'con nhap duong cu: <tep>'."
+
+Đột biến `nhap-duong-cu` — thông điệp ghim «con nhap duong cu: apps/api/src/okr/okr-xem.service.ts»
+
 ### tro-ly-okr-nen:E23
 
 - Xử lý: `sua-rang`
@@ -736,6 +1037,12 @@ Node.js v24.22.0
 tu dien lech: Trợ lý OKR
 tu dien lech: Tóm tắt tuần
 ```
+
+Trước (`expected`): "exit 0; rang/tu-dien-luat.mjs đọc khối «Bốn mục từ điển mới» của _acceptance/tro-ly-okr-nen/opportunity.md và so từng mục (sau khi gộp xuống dòng) với mục cùng tên trong CONTEXT.md — bằng nhau; câu luật ZDR có mặt trong CẢ docs/agent.md §What may be read VÀ apps/agent/agent/skills/data-boundaries.md; docs/api.md §OKR có câu OkrDeXuat/OkrTomTat ngoài luật vết; docs/agent.md có mục chỗ rẽ liệt kê từng tệp của mục 10 thiết kế. Chiều đỏ trên cùng bộ đọc: bản sao CONTEXT.md sửa một chữ trong mục Đề xuất → 'tu dien lech: Đề xuất'."
+
+Sau (`expected`): "exit 0; rang/tu-dien-luat.mjs đọc khối «Bốn mục từ điển mới» của _acceptance/tro-ly-okr-nen/opportunity.md và so từng mục (sau khi gộp xuống dòng) với mục cùng tên trong CONTEXT.md — bằng nhau; hai mục hồ sơ ký sau đã đổi có chủ đích (Tóm tắt tuần — #226 e5c369cc6; Trợ lý OKR — #230 923f57173) so với CONTEXT.md ở sha CỐ ĐỊNH của cặp gộp 1bb45ac78 (git show; không đọc được → mã 2 'KHONG DO DUOC'), hai mục còn lại so với CONTEXT.md hiện tại; câu luật ZDR có mặt trong CẢ docs/agent.md §What may be read VÀ apps/agent/agent/skills/data-boundaries.md; docs/api.md §OKR có câu OkrDeXuat/OkrTomTat ngoài luật vết; docs/agent.md có mục chỗ rẽ liệt kê từng tệp của mục 10 thiết kế. Chiều đỏ trên cùng bộ đọc: bản sao CONTEXT.md sửa một chữ trong mục Đề xuất → 'tu dien lech: Đề xuất'."
+
+Đột biến `sua-tom-tat` — thông điệp ghim «tu dien lech: Tóm tắt tuần»
 
 ### tro-ly-okr-nen:E25
 
@@ -752,115 +1059,11 @@ phien con khong ghi so: con_khong_so (doi chung, dung ky vong)
 con_tro_ly: tinhNang okr.chuyen-tiep, can okr.de-xuat
 ```
 
-### so-okr-tu-chay:E8
+Trước (`expected`): "exit 0; rang/so-phien-con-that.mjs chạy eve eval trên agent mẫu của E8 (mockModel, không gọi model thật) trên kho dùng-một-lần: gốc mẫu uỷ việc cho ba phiên con có hook sổ chi phí là CHÍNH tệp hook của tro_ly_okr, agent_runner, agent_builder (tệp hook của agent mẫu chỉ re-export, không chép). Đọc db.aiChiPhi sau lượt: dòng phiên gốc có tinhNang theo purpose mẫu; ba phiên con có đúng okr.de-xuat, crm.tac-nhan, crm.dung-tac-nhan và phienCha bằng id phiên gốc; không dòng nào 'khac'. Ghi lại sự kiện step.completed và HookContext thật của từng phiên ra .acceptance-runs/tro-ly-okr-nen/fixture-so-chi-phi.json — tệp này là fixture của E2. Chiều đỏ trên cùng lượt: một phiên con mẫu thứ tư không có hook → 0 dòng cho phiên đó, bài in 'phien con khong ghi so: <ten>' và vẫn xanh chỉ khi đúng phiên đó thiếu (đối chứng rằng bài đếm theo phiên)."
 
-- Xử lý: `sua-rang`
-- Lý do: 18 vi phạm trong .eve snapshots (gitignore); 2 ở okr-mau/nap.ts do bo-okr-mau AC-3/AC-8 đòi
-- Căn cứ: `_acceptance/bo-okr-mau/contract.md:37` — - AC-8: Given bộ mẫu đã nạp cùng hàng ngoài bộ mẫu, và sau khi nạp dịch vụ thật đã ghi lên thực thể mẫu (mở họp tuần, `dev:session` của người mẫu, mở và gửi Cập nhật tuần), When chạy `bun run okr:mau --xoa`, Then thoát 0 và không model nào của schema còn hàng mang mã của thực thể mẫu hay trỏ tới thực thể mẫu, mọi hàng ngoài bộ mẫu đọc lại không đổi; nạp lại sau đúng chuỗi đó cũng thoát 0; And một thoả thuận ngoài bộ mẫu giao cho người mẫu làm `--xoa` thoát mã 5 với câu ghim nêu bảng đang giữ, 0 hàng đổi; `--xoa` trên kho chưa có bộ mẫu thoát 0 và báo không có gì để xoá.
-- Sửa: rang/soi-ma.mjs: lấy tệp từ git ls-files; miễn trừ có tên nap.ts
+Sau (`expected`): "exit 0; rang/so-phien-con-that.mjs chạy eve eval trên agent mẫu của E8 (mockModel, không gọi model thật) trên kho dùng-một-lần: gốc mẫu uỷ việc cho ba phiên con có hook sổ chi phí là CHÍNH tệp hook của tro_ly_okr, agent_runner, agent_builder (tệp hook của agent mẫu chỉ re-export, không chép). Đọc db.aiChiPhi sau lượt: dòng phiên gốc có tinhNang theo purpose mẫu; ba phiên con có đúng okr.chuyen-tiep (phiên con trợ lý chưa mang việc, theo tro-ly-okr-tom-tat 853f07bd2), crm.tac-nhan, crm.dung-tac-nhan và phienCha bằng id phiên gốc; không dòng nào 'khac'. Ghi lại sự kiện step.completed và HookContext thật của từng phiên ra .acceptance-runs/tro-ly-okr-nen/fixture-so-chi-phi.json — tệp này là fixture của E2. Chiều đỏ trên cùng lượt: một phiên con mẫu thứ tư không có hook → 0 dòng cho phiên đó, bài in 'phien con khong ghi so: <ten>' và vẫn xanh chỉ khi đúng phiên đó thiếu (đối chứng rằng bài đếm theo phiên)."
 
-Đầu ra đỏ ở mốc nền:
-
-```
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvjbmpwh-a1e23281-d772-4435-9e59-1de2d42beb3d/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvj9l5s0-ac4c00c3-8b1d-4402-a023-cb542216791d/source/packages/db/src/okr-chi-so.ts:446 (createMany trong chupKrCrm)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvj9l5s0-ac4c00c3-8b1d-4402-a023-cb542216791d/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvj9kfew-6d6237d6-765f-49da-abe3-811f11a510b6/source/packages/db/src/okr-chi-so.ts:446 (createMany trong chupKrCrm)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvj9kfew-6d6237d6-765f-49da-abe3-811f11a510b6/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvja9svk-2e96fc40-024b-4ba0-a95f-e081d9f34b69/source/packages/db/src/okr-chi-so.ts:446 (createMany trong chupKrCrm)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvja9svk-2e96fc40-024b-4ba0-a95f-e081d9f34b69/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvjcc4xf-04f86c4b-1222-46e2-ba79-433533c9ee07/source/packages/db/src/okr-chi-so.ts:446 (createMany trong chupKrCrm)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvjcc4xf-04f86c4b-1222-46e2-ba79-433533c9ee07/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)
-HONG okrSoChup bị sửa: apps/api/scripts/okr-mau/nap.ts:217 (deleteMany)
-HONG okrSoChup tạo ngoài chỗ được phép: apps/api/scripts/okr-mau/nap.ts:656 (createMany trong napTrong)
-vi pham: 20
-```
-
-### so-okr-tu-chay:E12
-
-- Xử lý: `sua-rang`
-- Lý do: ngan-kr-mot-cho: so-kr → kr:, mục so-nguon
-- Căn cứ: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: rang/man-so-tu-chay.mjs record kr:, [data-muc-ngan=so-nguon] [data-so-kr-noi-dung]
-
-Đầu ra đỏ ở mốc nền:
-
-```
-  HONG: E19 buoc 4: chon muc Vua -> nut Gui bat: het 30000ms van chua thay
-  HONG: khong thay [data-nut='gui'] de bam
-  HONG: E19 buoc 4: gui -> thanh cong: het 30000ms van chua thay
-  HONG: E19 buoc 4: okrCheckIn cua KR crm: het 30000ms (cuoi: null)
-  HONG: E19 buoc 4: DB ghi KR crm gia tri 3, tu tin vua (thay null)
--- tiền đề làn đo: đã dọn contextDevApiKey
--- tiền đề làn đo: đã dọn ảnh đại diện
-phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4413 · api http://localhost:4131
-$ bun scripts/dev-session.ts "asjcym9j@thu.test"
-$ bun scripts/dev-session.ts "tsjcym9j@thu.test"
-$ bun scripts/dev-session.ts "osjcym9j@thu.test"
-phien-do: xong — mã 1
-```
-
-### so-okr-tu-chay:E14
-
-- Xử lý: `sua-rang`
-- Lý do: /okr/cap-nhat-tuan về /okr; moHopSua không chờ nút menu
-- Căn cứ: `9203b9ca2` — 9203b9ca2 feat(okr): đường cũ cập nhật tuần chuyển về Của tôi (sống lâu dài), tin nhắc và liên kết trỏ /okr / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: man-so-tu-chay.mjs:1879,1892 /okr?tu=viec-cua-toi; chờ nút trước bam dòng 1290
-
-Đầu ra đỏ ở mốc nền:
-
-```
-  HONG: E19 buoc 4: chon muc Vua -> nut Gui bat: het 30000ms van chua thay
-  HONG: khong thay [data-nut='gui'] de bam
-  HONG: E19 buoc 4: gui -> thanh cong: het 30000ms van chua thay
-  HONG: E19 buoc 4: okrCheckIn cua KR crm: het 30000ms (cuoi: null)
-  HONG: E19 buoc 4: DB ghi KR crm gia tri 3, tu tin vua (thay null)
--- tiền đề làn đo: đã dọn contextDevApiKey
--- tiền đề làn đo: đã dọn ảnh đại diện
-phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4859 · api http://localhost:4203
-$ bun scripts/dev-session.ts asjdcsgz@thu.test
-$ bun scripts/dev-session.ts tsjdcsgz@thu.test
-$ bun scripts/dev-session.ts osjdcsgz@thu.test
-phien-do: xong — mã 1
-```
-
-### so-okr-tu-chay:E23
-
-- Xử lý: `neo-co-dinh`
-- Lý do: origin/onehub...HEAD rỗng; áp vao-f28-so-okr-tu-chay.patch (chủ kho F8: b1)
-- Căn cứ: `f2acca7f1ae619abdadbb09e3db29be65841ce87` — f2acca7f1 Merge pull request #162 from phanlemanh/feat/so-okr-tu-chay / Số OKR tự chảy — KR lấy số từ chỉ số CRM, chụp mỗi ngày, bấm ra bản ghi, nhận số qua khoá API và Google Sheets (lượt 6)
-- Sửa: git apply _acceptance/neo-thuoc-het-han/vao-f28-so-okr-tu-chay.patch
-
-Đầu ra đỏ ở mốc nền:
-
-```
-dai so sanh: origin/onehub...HEAD (--no-renames)
-tep giao dien apps/app (0):
-tep ma doi soi chu thich tren dong them (0):
-tep moi soi Record / useEffect (0):
-tep okr moi soi so tran (0):
-cho nhap CopyValue tu @crm/ui: 5
-co tu truoc ngoai okr, dong cu khong tinh: googleapis.com trong apps/api/src/mailbox/mailbox-token.service.ts
-co tu truoc ngoai okr, dong cu khong tinh: googleapis.com trong apps/api/src/google/gmail.client.ts
-co tu truoc ngoai okr, dong cu khong tinh: googleapis.com trong apps/api/src/google/calendar.client.ts
-tep apps/api/src soi googleapis.com: 333 (okr: ca tep; ngoai okr: dong diff them)
-bien GOOGLE_SHEETS_EMAIL, GOOGLE_SHEETS_KHOA soi trong: .env.example, apps/api/src/config/env.validation.ts
-KHONG DO DUOC: diff khong co tep giao dien apps/app nao
-```
-
-### so-okr-tu-chay:E25
-
-- Xử lý: `neo-co-dinh`
-- Lý do: không migration mới so onehub; cùng bản vá
-- Căn cứ: `f2acca7f1ae619abdadbb09e3db29be65841ce87` — f2acca7f1 Merge pull request #162 from phanlemanh/feat/so-okr-tu-chay / Số OKR tự chảy — KR lấy số từ chỉ số CRM, chụp mỗi ngày, bấm ra bản ghi, nhận số qua khoá API và Google Sheets (lượt 6)
-- Sửa: cùng bản vá
-
-Đầu ra đỏ ở mốc nền:
-
-```
-goc so sanh: origin/onehub (6be0bb68) · migration moi: (khong co) · so cau lenh: 0
-KHONG DO DUOC: khong co migration moi nao so voi origin/onehub
-```
+Đột biến `tro-ly-ve-de-xuat` — thông điệp ghim «con_tro_ly: tinhNang okr.de-xuat, can okr.chuyen-tiep»
 
 ### zalo-gui-hong-ghi-ly-do:E7
 
@@ -876,6 +1079,12 @@ doi chung: diff rong -> ma 2
 doi chung: ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts
 diff rong
 ```
+
+Trước (`expected`): "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải nằm trong danh sách Ranh giới ở ## Notes của contract.md (script đọc danh sách từ chính contract.md, không chép tay); _acceptance/config.yaml chỉ có dòng thêm; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng cùng lệnh qua chính hàm kiểm: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/nhac-ke-hoach.ts → «ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts»."
+
+Sau (`expected`): "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi của cặp neo cố định PR #324 (gộp 0b62cebb90f12b700681cafae45f35a66816667f): từ 0422d7976508e31d81923db5f8609fe5464d695d tới 1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed, không theo HEAD; sha neo không có (git cat-file -e) → mã 2 «KHONG DO DUOC»; mọi tên phải nằm trong danh sách Ranh giới ở ## Notes của contract.md (script đọc danh sách từ chính contract.md, không chép tay); _acceptance/config.yaml chỉ có dòng thêm; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng cùng lệnh qua chính hàm kiểm: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/nhac-ke-hoach.ts → «ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts»."
+
+Đột biến `diff-cham-tep-la` — thông điệp ghim «ngoai ranh gioi: apps/app/lib/x.ts»
 
 ## Hồ sơ hoàn lại
 
@@ -977,6 +1186,58 @@ phien-do: xong — mã 1
 ```
 
 - Tín hiệu F1-28: tong-quan-va-khung-noi-tieng-viet E7: nhãn giai đoạn ở Tổng quan bọc lang=en mà không translate=no
+
+### so-okr-tu-chay:E12
+
+- Xử lý: `san-pham-hong`
+- Lý do: Sau khi sửa bộ chọn theo ngăn KR một chỗ, mọi khẳng định E12 đạt nhưng lượt đỏ vì lỗi hydrat ở trang Của tôi (PhanDonViDan › TheDonVi › CardDescription: máy chủ trả khung xương, trình duyệt dựng span data-so-tom-tat) và mất ngày đang xem sau «Quay lại» (record-stack.ts:68 giuNgaySo chỉ giữ ngaySo khi còn ngăn so-kr, đã gỡ ở 5b6be6129); ngăn KR không còn hiện định nghĩa chỉ số (cần làn chủ phán).
+- Căn cứ: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+Đầu ra đỏ ở mốc nền:
+
+```
+  HONG: E19 buoc 4: chon muc Vua -> nut Gui bat: het 30000ms van chua thay
+  HONG: khong thay [data-nut='gui'] de bam
+  HONG: E19 buoc 4: gui -> thanh cong: het 30000ms van chua thay
+  HONG: E19 buoc 4: okrCheckIn cua KR crm: het 30000ms (cuoi: null)
+  HONG: E19 buoc 4: DB ghi KR crm gia tri 3, tu tin vua (thay null)
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4413 · api http://localhost:4131
+$ bun scripts/dev-session.ts "asjcym9j@thu.test"
+$ bun scripts/dev-session.ts "tsjcym9j@thu.test"
+$ bun scripts/dev-session.ts "osjcym9j@thu.test"
+phien-do: xong — mã 1
+```
+
+### so-okr-tu-chay:E14
+
+- Xử lý: `san-pham-hong`
+- Lý do: Cùng lượt đo và cùng lỗi hydrat ở trang Của tôi như E12; mọi khẳng định riêng của E14 đạt sau khi sửa đường /okr?tu=viec-cua-toi và chờ nút thao tác.
+- Căn cứ: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+Đầu ra đỏ ở mốc nền:
+
+```
+  HONG: E19 buoc 4: chon muc Vua -> nut Gui bat: het 30000ms van chua thay
+  HONG: khong thay [data-nut='gui'] de bam
+  HONG: E19 buoc 4: gui -> thanh cong: het 30000ms van chua thay
+  HONG: E19 buoc 4: okrCheckIn cua KR crm: het 30000ms (cuoi: null)
+  HONG: E19 buoc 4: DB ghi KR crm gia tri 3, tu tin vua (thay null)
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4859 · api http://localhost:4203
+$ bun scripts/dev-session.ts asjdcsgz@thu.test
+$ bun scripts/dev-session.ts tsjdcsgz@thu.test
+$ bun scripts/dev-session.ts osjdcsgz@thu.test
+phien-do: xong — mã 1
+```
+
+- Tín hiệu F1-30: so-okr-tu-chay E12 E14: lỗi hydrat ở trang Của tôi khi mở ngăn mục tiêu
+
+- Tín hiệu F1-31: so-okr-tu-chay E12: mất ngày đang xem sau «Quay lại»
+
+- Tín hiệu F1-32: so-okr-tu-chay E12: ngăn KR không còn hiện tên chỉ số, phạm vi, khoảng ngày
 
 ## Sửa cú pháp YAML
 
