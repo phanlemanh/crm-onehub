@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: dfe14fe184fd6e7d73602f45b7eb92672300af67
+verified_commit: 4875dc608a1bd88c3f38d7847bee225e77270ba5
 human_signoff: Manh Phan 2026-10-23
 ---
 
@@ -167,3 +167,7 @@ sha: bc7ab3fee267b74f163451bfe5645bfd0b781bc3 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-22, do khai E7c (chiều máy chủ của AC-7) sau chữ ký
 run_id: repin-20261022T222652Z-81796
 sha: dfe14fe184fd6e7d73602f45b7eb92672300af67 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-23, do kho tạm bỏ hook toàn cục (F-131)
+run_id: repin-20261023T005845Z-33439
+sha: 4875dc608a1bd88c3f38d7847bee225e77270ba5 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

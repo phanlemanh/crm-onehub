@@ -41,6 +41,8 @@ const TRANG_THAI_HO_SO = {
 	"da-giao": "signed-off",
 } as const satisfies Record<TrangThaiHangMau, string | null>;
 
+const GIT_KHO_TAM = ["git", "-c", "core.hooksPath=/dev/null"];
+
 function chay(lenh: string[], cwd: string): string {
 	const kq = Bun.spawnSync(lenh, { cwd, stdout: "pipe", stderr: "pipe" });
 	if (kq.exitCode !== 0)
@@ -131,11 +133,11 @@ export function dungTepMau(vao: DauVaoKit): string {
 		);
 	vietBanGom(goc, vao);
 	vietLoTrinh(goc, vao);
-	chay(["git", "init", "-q"], goc);
-	chay(["git", "add", "-A"], goc);
+	chay([...GIT_KHO_TAM, "init", "-q"], goc);
+	chay([...GIT_KHO_TAM, "add", "-A"], goc);
 	chay(
 		[
-			"git",
+			...GIT_KHO_TAM,
 			"-c",
 			"user.email=mau@crm.test",
 			"-c",
