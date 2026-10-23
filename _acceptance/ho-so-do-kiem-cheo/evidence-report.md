@@ -2,151 +2,149 @@
 schema_version: 2
 feature_slug: ho-so-do-kiem-cheo
 verdict: BLOCKED
-failed_evals: ["E1"]
-reason: "E3 (bun _acceptance/ho-so-do-kiem-cheo/rang/chieu-do.mjs) chạy quá 30 phút chưa xong — chưa khai long_running: 30 cho eval (không khai trong evals.yaml, mặc định vàng 30 phút). Lệnh vẫn chạy nền (ID bexrxhegc), chưa có dòng kết thúc; không suy ra PASS hay FAIL. Không phải bị công cụ giết. Cách xử lý là chạy lại với trần thời gian dài hơn, không phải sửa mã."
-blocked:
-  - cmd: "bun _acceptance/ho-so-do-kiem-cheo/rang/chieu-do.mjs"
-    reason: "lenh chay qua 30 phut chua xong — khai long_running: 30 cho eval (khong khai trong evals.yaml, mac dinh vang 30 phut). Lenh van chay nen (ID bexrxhegc), chua co dong __EXIT=; khong suy ra PASS/FAIL. Khong phai bi cong cu giet."
+failed_evals: []
+reason: "E1: vuot thoi luong khai (long_running) — lenh `bun _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs --tai-lap` cho tra __QUA_HAN, chua co dong __EXIT=. Khong phai loi ma: can chay lai voi tran thoi gian cong cu dai hon."
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bdc3e8460b3efc2a785ce68c12c7945092bc2725
+verified_commit: 9755fdc366db0702704930d13c0d72aabfa59097
 human_signoff:
 ---
 
 # Evidence Report: ho-so-do-kiem-cheo
 
+Vòng 2. Lệnh của E1 (`--tai-lap`) quá thời lượng đã khai, chưa có dòng kết thúc, nên không suy ra đạt hay không đạt. Năm eval máy còn lại đạt, bảy lệnh suite xanh, E6 (hội đồng) chưa ai chốt. Không có lệnh nào ngoài eval bị lỗi.
+
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
-| E1 | AC-1 | script | FAIL |
+| E1 | AC-1 | script | BLOCKED |
 | E2 | AC-2 | script | PASS |
-| E3 | AC-3 | script | BLOCKED |
+| E3 | AC-3 | script | PASS |
 | E4 | AC-4 | script | PASS |
 | E5 | AC-5 | script | PASS |
-| E6 | AC-6 | judgment | chờ người quyết ở Cổng 2 (hội đồng đề xuất FAIL) |
+| E6 | AC-6 | judgment | UNCERTAIN |
 | E7 | AC-7 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-ho-so-do-kiem-cheo-E1-r1
-  exit_code: 1
+  run_id: minted-ho-so-do-kiem-cheo-E1-r2
+  cannot_run: true
   baseline: n-a
   verifier: config:executors.script.hsdk_danh_sach
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
+  reason: vuot thoi luong khai (long_running) — lenh cho tra __QUA_HAN, chua co dong __EXIT=
   output: |
-    Lệnh: bun _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs --tai-lap
-    Phần tái lập (taiLap, danh-sach.mjs dòng 104) đọc tệp tai-lap.json trong thư mục tạm hsdk-tai-lap-* nhưng tệp không tồn tại.
-    ENOENT: no such file or directory, open '/var/folders/6x/1dlzszm51wzbt20dn5y1lgzh0000gn/T/hsdk-tai-lap-5pDYtS/tai-lap.json'
-    at taiLap (/Users/manhphan/dev/crm/.claude/worktrees/epic-panini-3db124/_acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs:104:25)
-    Bun v1.3.10 (macOS arm64)
+    tro-ly-okr-nen E9 exit=0 ky=0
+    tro-ly-okr-nen E10 exit=0 ky=0
+    tro-ly-okr-nen E11 exit=0 ky=0
+    (lenh bi dung giua chung, cho tra __QUA_HAN; khong co dong tong «tai-lap: ...»)
 
 - eval: E2
-  run_id: minted-ho-so-do-kiem-cheo-E2-r1
+  run_id: minted-ho-so-do-kiem-cheo-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_khai_du
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
   output: |
     khai-du: 93 tệp đổi ngoài hồ sơ này, 23 eval đổi, mọi thay đổi có dòng danh sách
 
 - eval: E3
-  run_id: minted-ho-so-do-kiem-cheo-E3-r1
-  exit_code: n-a (lệnh chưa kết thúc, chưa có dòng thoát)
+  run_id: minted-ho-so-do-kiem-cheo-E3-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_chieu_do
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
   output: |
-    Lệnh bị chuyển xuống nền sau 600 giây (ID: bexrxhegc), đầu ra ghi vào /private/tmp/claude-501/-Users-manhphan-dev-crm/4df2b426-00f0-47ad-823c-b1b7d376e68e/tasks/bexrxhegc.output.
-    Theo dõi hơn 30 phút (23:06 đến 23:36, 2026-10-23): tệp đầu ra vẫn rỗng, chưa có dòng kết thúc.
-    Không suy ra PASS hay FAIL.
+    chieu-do: 38 đột biến, 38 bắt đúng
 
 - eval: E4
-  run_id: minted-ho-so-do-kiem-cheo-E4-r1
+  run_id: minted-ho-so-do-kiem-cheo-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_ghim_xanh
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
   output: |
     ghim-xanh: 21/21 hồ sơ
 
 - eval: E5
-  run_id: minted-ho-so-do-kiem-cheo-E5-r1
+  run_id: minted-ho-so-do-kiem-cheo-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_yaml_chuan
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
   output: |
     yaml-chuan: 5/5 hồ sơ đạt
 
 - eval: E7
-  run_id: minted-ho-so-do-kiem-cheo-E7-r1
+  run_id: minted-ho-so-do-kiem-cheo-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_loi_ra
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
   output: |
     loi-ra: 4 hồ sơ hoàn lại, 0 lỗi
+
+- eval: E6
+  judged_by: judge panel đề xuất (domain-correctness, operational-feasibility, spec-alignment), fresh context
+  verdict: UNCERTAIN
+  rationale: Cả ba góc nhìn đều thấy phần lớn dòng khai-not-run, sua-rang và neo-co-dinh khớp loại (a), (b) hoặc (c) và không dòng nào hạ ô khi đầu ra sau còn đỏ, nhưng còn một số dòng chưa đủ căn cứ trong hai tệp hội đồng đọc (danh-sach.json và bang-truoc-sau.md) để phán; không góc nhìn nào nâng lên mức không đạt.
+  votes:
+    - domain-correctness: UNCERTAIN — Phần lớn các dòng khai-not-run, sua-rang và neo-co-dinh khớp loại (a), (b) hoặc (c) với đầu ra nền đỏ đúng nguyên nhân đã nêu. Ba chỗ chưa đủ căn cứ trong hai tệp này để phán. Một là tong-quan-va-khung-noi-tieng-viet:E7 xếp san-pham-hong chỉ bằng đọc mã, trong khi AC-7 đã ký loại nhãn lang="en" khỏi yêu cầu translate="no". Hai là so-okr-tu-chay:E12 và E14 gán lỗi sản phẩm cho ô mà khẳng định riêng đều đạt. Ba là cron-theo-ban-khai:E7 đo ghim lint ở cây cũ khi HEAD ra 36 cảnh báo, khác ghim 3.
+    - operational-feasibility: UNCERTAIN — Phần lớn dòng `dong` (neo-co-dinh loại (b), sua-rang loại (a)/(c), khai-not-run của cap-nhat-tuan-okr:E7) có căn cứ trích được và không dòng nào hạ ô khi đầu ra sau còn đỏ. Nhưng hai nhóm chưa đủ căn cứ để chấm PASS: các dòng `sua_san` trong `hoan_lai` không có `ly_do` thuộc loại (a)–(d), và hai dòng san-pham-hong còn hở ở vế «vì sao không quyết định đã ký nào cho phép»: tong-quan-va-khung-noi-tieng-viet:E7 và bo-dung-chung-nhan-chuoi:E4.
+    - spec-alignment: UNCERTAIN — Phần lớn dòng có căn cứ rõ. Nhóm neo cặp gộp thuộc loại (b), cap-nhat-tuan-okr:E7 khai-not-run kèm trích AC-2, toan-canh-okr, chan-lai-component-ra-man và bo-dung-chung-nhan-chuoi:E4 đều đủ. Nhưng bốn dòng chưa đủ để duyệt: so-okr-tu-chay:E12 và E14, tong-quan-va-khung-noi-tieng-viet:E7 (cả ba dòng san-pham-hong), và chu-mac-dinh-thu-vien-ngoai:E3 (sua-rang). Ba dòng san-pham-hong thiếu tệp lỗi, thiếu đầu ra đỏ hoặc có chữ AC bị cắt, nên không phân biệt được lỗi sản phẩm với loại (a). Dòng chu-mac-dinh-thu-vien-ngoai:E3 chưa dẫn được căn cứ loại (a) cho phần lớn 44 component mới. Không dòng nào hạ ô một cách rõ ràng trong khi sản phẩm hỏng, nên chưa tới mức không đạt. Hai dòng còn lại chỉ ghi chú, vì theo dõi thêm cũng không đổi kết luận: cron-theo-ban-khai:E7 đo ghim ở cây cũ nên ô không còn canh 33 cảnh báo lint thêm (3 thành 36), và hạ ô này do chủ kho chọn ở Hỏi-3 (chính dòng ghi nhận); bang-thanh-vien-giu-hang:E1-E4, E6, E7 dùng chung một lý do cho cả sáu ô mà không nói là chung lượt chạy.
+  required_evidence:
+    - "[domain-correctness] tong-quan-va-khung-noi-tieng-viet:E7. Cần đầu ra một lượt E7 chạy trên HEAD sau khi áp sửa răng sua_san.E1 (bỏ nhập apps/app/lib/deal-stage.ts, lấy giai đoạn từ giaiDoan.list). Lệnh là man-that.mjs của hồ sơ này qua tien-de.mjs, đính log. Log phải cho thấy E7 có đỏ vì nhãn giai đoạn ở sales-dashboard.tsx:204-208 thiếu translate=\"no\" hay không. Kèm một dòng sổ hay AC đã ký trong _acceptance/tong-quan-va-khung-noi-tieng-viet hoặc _acceptance/giai-doan-thoa-thuan nói rõ nhãn giai đoạn ở Tổng quan phải mang translate=\"no\", để vượt chữ AC-7 (contract.md:49) đang loại nhãn lang=\"en\". Nếu E7 xanh sau sửa răng và không có dòng sổ đó thì dòng này không đứng được như san-pham-hong."
+    - "[domain-correctness] so-okr-tu-chay:E12 và E14. Cần hai lượt chạy tách ô: EVAL=E12 và EVAL=E14 (hoặc EVAL=E11 và EVAL=E13) với bản vá sua-san/so-okr-tu-chay.patch, log đi kèm. Log chỉ ra ô nào thật sự đỏ bởi khẳng định riêng của nó, để khoá <hồ sơ>:<eval> của san-pham-hong gắn đúng ô (lý do hiện tự nhận mọi khẳng định riêng của E12 đạt). Cần thêm toàn văn _acceptance/ngan-kr-mot-cho/contract.md:40 (AC-3), vì phần trích trong danh-sach.json bị cắt trước chữ «Số và nguồn» và «nội dung ngăn số hôm nay». Cần một lượt chạy lỗi hydrat (pageerror ở PhanDonViDan/TheDonVi/CardDescription) trên cây ở mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f, để chứng nó không do bản vá răng sinh ra. Nền hiện chỉ có dòng E19 đỏ."
+    - "[domain-correctness] cron-theo-ban-khai:E7. Cần chỉ ra một chốt khác còn canh số cảnh báo lint apps/app ở HEAD (36 so với ghim 3), hoặc một dòng sổ của chủ kho nói rõ ô E7 sau sửa không còn canh HEAD. Nguồn là _acceptance/ho-so-do-kiem-cheo/decisions.jsonl dòng 13, 16, 21 và config.yaml hoặc evals.yaml của cron-theo-ban-khai. Dòng sổ này phải có trường decided_by, vì d-20261022T104414Z-13 không mang trường đó, còn d-20261023T005230Z-21 thì có. Không có chốt nào như vậy thì E7 là nới neo trong khi đầu ra sau cho thấy HEAD đã tăng 33 cảnh báo."
+    - "[operational-feasibility] tong-quan-va-khung-noi-tieng-viet:E7 — chưa có đầu ra đo nào cho thấy hỏng: đầu ra đỏ ở mốc nền chỉ là ERR_MODULE_NOT_FOUND của răng, chỗ hỏng chứng bằng đọc mã (sales-dashboard.tsx:204-208). Bảng ghi sẵn «lượt thử không lưu log». Cần log lượt man-that.mjs sau khi áp sửa răng E1 (bỏ import lib/deal-stage.ts, lấy giai đoạn từ giaiDoan.list), cho thấy nhãn giai đoạn ở Tổng quan thiếu translate=\"no\". Lệnh: `bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs\"`, cây 3ee639d7c trở đi, kèm dòng khẳng định hỏng."
+    - "[operational-feasibility] tong-quan-va-khung-noi-tieng-viet:E7 — chính ly_do tự nhận AC-7 (_acceptance/tong-quan-va-khung-noi-tieng-viet/contract.md:49) loại «nhãn mang lang=en» khỏi tập ứng viên. Cần một dòng sổ đã niêm trong _acceptance/giai-doan-thoa-thuan/decisions.jsonl, hoặc một đoạn của _acceptance/giai-doan-thoa-thuan/contract.md, nêu rõ AC-7 của Tổng quan không còn che nhãn giai đoạn sau ecb9448b4. Không có thì «không quyết định đã ký nào miễn» chưa đứng được."
+    - "[operational-feasibility] bo-dung-chung-nhan-chuoi:E4 — ly_do chỉ nêu vi phạm AC-4 (contract.md:53), thiếu vế vì sao không quyết định đã ký nào cho phép. Cần câu xác nhận kèm cách kiểm: `grep -n \"Locale\" _acceptance/*/contract.md _acceptance/*/decisions.jsonl` không ra dòng nào cho phép bài test khai lại type Locale. Tệp lấy ở danh-sach.json, mục hoan_lai của bo-dung-chung-nhan-chuoi."
+    - "[operational-feasibility] hoan_lai.sua_san — các dòng sua-rang và neo-co-dinh của cai-dat-con-lai-noi-tieng-viet (E1, E3, E6, E10, E11, E12, E14, E15, E17), tong-quan-va-khung-noi-tieng-viet (E1, E2, E4, E8, E10–E15, E21) và so-okr-tu-chay (E8, E23, E25) chỉ có `sua` và `can_cu` là một sha hoặc «E15,E3», không có `ly_do` phân loại (a)–(d). Cần ly_do và căn cứ trích được cho từng dòng, nhất là các dòng nới ngoại lệ hoặc neo: «giu_nguyen … Sign out failed» ở tong-quan E4, `route_khong_dung_duoc /settings/notifications` ở cai-dat-con-lai E1 (lượt nền ghi route đứng ở /reminders), miễn trừ nap.ts ở so-okr-tu-chay E8, `lat-cai-dat-2.json neo.file 36→44` ở cai-dat-con-lai E12. Có thể thêm trường ly_do vào danh-sach.json rồi để rang/bang.mjs vẽ lại thành khối trong bang-truoc-sau.md."
+    - "[operational-feasibility] cap-nhat-tuan-okr:E14 — đuôi đầu ra đỏ ở mốc nền chỉ có các dòng `dev-session` và «mã 1», không dòng lỗi nào của E14; cũng không có khối «Đầu ra sau khi sửa» cho CHI=E13,E14. Cần log đầy đủ lượt nền cho thấy khẳng định E14 hỏng vì đường /okr/cap-nhat-tuan, và log lượt `CHI=E13,E14 bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs\"` đạt ở 730af844a, như đã làm cho E19."
+    - "[operational-feasibility] chu-mac-dinh-thu-vien-ngoai:E3 — nới neo 76·37·21 lên 120·44·39 nhưng ly_do chỉ gọi tên 6 tệp bọc và 3 tệp đọc kho chuỗi; còn khoảng 38 tệp component thêm và 15 tệp đọc kho chuỗi không có hồ sơ ký nào nêu tên. Ba tệp radio-group, markdown-reader, stat-card tự nhận «CHƯA được đo». Cần danh sách tệp (`git diff --name-status 3f99c7055..HEAD -- packages/ui/src/components`) ghép từng tệp với một hồ sơ đã ký, và một lượt đo chữ mặc định trên màn của ba tệp đó."
+    - "[spec-alignment] so-okr-tu-chay:E12. Dòng AC-3 đầy đủ ở _acceptance/ngan-kr-mot-cho/contract.md:40 (bản trích trong bang-truoc-sau.md bị cắt sau «Tiến độ kèm kỳ vọng»). Cần thấy AC-3 có hứa mục «Số và nguồn» chứa tên chỉ số, phạm vi, khoảng ngày thì mới xếp là lỗi sản phẩm. Lấy bằng `sed -n 40p _acceptance/ngan-kr-mot-cho/contract.md`. Nếu AC-3 không hứa các mục đó thì dòng này thuộc loại (a) và phải đổi thành sửa răng hoặc superseded_by."
+    - "[spec-alignment] so-okr-tu-chay:E14. Đường dẫn tệp chứa chỗ hydrat lệch (PhanDonViDan, TheDonVi, CardDescription với span data-so-tom-tat so với skeleton). Danh sách chỉ nêu tên component, không nêu tệp, trong khi dòng san-pham-hong phải nêu tệp và hành vi. Lấy bằng `grep -rn \"data-so-tom-tat\" apps/app`, ghi tệp:dòng vào can_cu."
+    - "[spec-alignment] tong-quan-va-khung-noi-tieng-viet:E7. Đầu ra một lượt E7 chạy sau khi áp sửa răng sua_san E1 (bỏ nhập apps/app/lib/deal-stage.ts), ở HEAD, thấy E7 đỏ vì nhãn giai đoạn ở sales-dashboard.tsx:204-208 thiếu translate=\"no\". Hiện đầu ra nền chỉ là ERR_MODULE_NOT_FOUND và dòng ghi «lượt thử không lưu log». Nếu sau sửa răng E7 xanh thì không phải lỗi sản phẩm. Nếu đỏ thì phải trả lời thêm vì sao AC-7, vốn loại nhãn lang=\"en\" khỏi tập ứng viên, không phải quyết định đã ký cho phép chỗ này."
+    - "[spec-alignment] chu-mac-dinh-thu-vien-ngoai:E3. Bảng gán từng tệp component mới trong packages/ui giữa 3f99c7055 và HEAD với hồ sơ đã ký đã thêm nó (mã hồ sơ cùng AC hoặc dòng sổ). Hiện chỉ sáu tệp bọc thư viện ngoài và stat-card được nêu tên, còn phần lớn trong 44 component mới (từ 76 lên 120) và 18 lần đọc kho chuỗi mới (từ 21 lên 39) chưa được gán. Lấy bằng `git diff --name-status 3f99c7055..HEAD -- packages/ui/src/components` rồi đối chiếu `git log` từng tệp."
+  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
 
 - cmd: bun run lint:slop
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_lint_slop-r1
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-23T16:02:37Z
+  verified_at: 2026-10-23T17:09:21Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-23T16:02:37Z
-
-### Judgment (đề xuất của hội đồng, chờ người)
-
-- eval: E6
-  judged_by: hội đồng ba lens (fresh context)
-  proposal: FAIL
-  votes:
-    - domain-correctness: FAIL — Phần lớn dòng đạt: các dòng neo-co-dinh thuộc (b); chan-trung-khoa-ban-nhap E3/E4 và tro-ly-okr-nen:E4 thuộc (c); cap-nhat-tuan-okr:E7 thuộc (a). Nhưng cap-nhat-tuan-okr:E19 có lý do «kéo theo E7; chưa từng chạy», cách sửa «chạy lại xem» và đầu ra nền không có dòng lỗi nào, nên không thuộc loại nào trong (a)-(d). cron-theo-ban-khai:E7 còn «(HỎI)» chưa đóng và dời điểm đo ghim lint khỏi HEAD mà ly_do không nói. Các dòng san-pham-hong của cai-dat-con-lai-noi-tieng-viet (E8, E13), tong-quan-va-khung-noi-tieng-viet:E7 và so-okr-tu-chay (E12, E14) thiếu phần «vì sao không quyết định đã ký nào cho phép».
-    - operational-feasibility: FAIL — Phần lớn dòng neo-co-dinh, sua-rang và khai-not-run (ví dụ ban-gieo-gop-y-sau-nop:E4, cap-nhat-tuan-okr:E7, bang-thanh-vien-giu-hang:E1-E7) thuộc loại (a), (b) hoặc (c) và có căn cứ trích được. Nhưng có dòng mà lý do không thuộc loại nào, hoặc căn cứ tự mâu thuẫn, hoặc dòng san-pham-hong không có đủ chỗ hỏng và quyết định đã ký.
-    - spec-alignment: FAIL — Phần lớn dòng sua-rang, neo-co-dinh và cap-nhat-tuan-okr:E7 (khai-not-run) rơi đúng loại (a), (b) hoặc (c) và có căn cứ trích được. Nhưng nhóm san-pham-hong không nói vì sao không quyết định đã ký nào cho phép: so-okr-tu-chay:E12 tự ghi «cần làn chủ phán» và nêu 5b6be6129, chính là commit mà các dòng toan-canh-okr:E3/E28/E29 coi là thay đổi có chủ đích (ngan-kr-mot-cho AC-1). Đầu ra đỏ ở mốc nền của E12 và E14 chỉ là lỗi E19 bước 4, không phải lỗi hydrat hay mất ngày đang xem mà lý do khai. Ngoài ra cron-theo-ban-khai:E8 bị hạ về not-run bằng một quyết định của chủ kho cộng token hết hạn, không thuộc bốn loại. cap-nhat-tuan-okr:E19 chỉ ghi «chưa từng chạy… chạy lại xem».
-  required_evidence:
-    - "cap-nhat-tuan-okr:E19: nguyên nhân gốc của lượt đỏ ở mốc nền. Lấy từ dòng lỗi thật (HONG/SAI) trong đầu ra của `bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs\"` với CHI=E18,E19 chạy ở mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f, cộng một AC hoặc dòng sổ của hồ sơ đã ký sau (cua-toi-ba-phan hoặc vo-khu-muc-tieu) làm đổi hành vi mà E19 kiểm; hoặc đổi xu_ly sang khai-not-run kèm superseded_by trỏ AC cụ thể. Cần nêu E19 phụ thuộc E7 ở chỗ nào, và kết quả «chạy lại» của E19 trên cây đã sửa."
-    - "cron-theo-ban-khai:E7: câu trả lời cho «(HỎI)» ghim lint 3 so với 36 — quyết định của chủ kho trong sổ quyết định của hồ sơ, hoặc số cảnh báo lint apps/app thật ở HEAD (`bun run lint`). Cần chứng minh 36 cảnh báo không phải hồi quy sản phẩm đang bị che khi chuyển điểm đo sang cây của cặp gộp 147b47a33."
-    - "cron-theo-ban-khai:E8: nói rõ ô đã đổi sang not-run hay chỉ đổi expected (cột `sua` ghi «status not-run» nhưng bang-truoc-sau.md chỉ cho thấy expected đổi). Cần văn bản quyết định «Hỏi-4» của chủ kho; nếu chọn loại (d) thì chứng minh máy đo không bao giờ có token Vercel production, đối chiếu commit 8a8825cf5; thống nhất nhãn sua-rang với status not-run."
-    - "bo-xuong-kara:E10: bằng chứng rằng lệch vân tay confirmation.tsx (sổ 5695b450b02078b9 so với đo được dbfa031b680e2d02) là do ai-elements@latest đổi, không phải tệp trong kho đổi. Ví dụ `git log -p -- packages/ui/src/components/ai-elements/confirmation.tsx` kèm so-lech-chuan.md. Cột `sua` («ghim phiên bản ai-elements») đang mâu thuẫn với expected («không chạy răng vân tay»)."
-    - "chu-mac-dinh-thu-vien-ngoai:E3: thống nhất con số neo bọc thư viện ngoài (cột `sua` ghi 120·43·39, expected sau ghi 120·44·39 theo 57c51b2e4 mà 57c51b2e4 không có trong can_cu_them; can_cu_them còn mảnh rác «(neo», «06/09);»). Cần hồ sơ ký sau thêm 44 component, nêu tên và AC hoặc dòng sổ, và chứng cứ 6 bọc mới không để chuỗi mặc định lên màn."
-    - "chu-mac-dinh-thu-vien-ngoai:E9: chứng minh context-menu do một hồ sơ đã ký sau thêm vào. Căn cứ 29a101a4c là proto du-an-gantt, commit tự ghi «Cổng Phạm vi từ chối thì gỡ cùng bản mẫu». Cần AC hoặc thẻ Cổng Phạm vi đã ký của du-an-gantt."
-    - "chan-lai-component-ra-man:E1, E2, E7: can_cu c1d11fd4b có tiêu đề «mỏ neo 128 → 129», không chứng được bước 129→132; cần sha và dòng AC của từng hồ sơ ký sau đã thêm 4 mục kỹ thuật, và tên mục bị mất (lấy bằng `git log -S` trên lai-ra-man.mjs)."
-    - "so-okr-tu-chay:E12 và E14: lỗi hydrat (PhanDonViDan › TheDonVi › CardDescription, span data-so-tom-tat) và F1-31/F1-32 chưa có chứng cứ trong đầu ra nền, vì đầu ra nền chỉ có lỗi «E19 buoc 4» (nút Gửi không hiện, DB không ghi). Cần đầu ra lượt đo sau khi sửa răng có dòng hydrat, AC của ngan-kr-mot-cho cho biết việc gỡ giuNgaySo và định nghĩa chỉ số có được phép hay không (hàng đang ghi «cần làn chủ phán»), và giải thích lỗi E19 bước 4 là lỗi sản phẩm hay lỗi thước."
-    - "toan-canh-okr:E3, E28, E29: đầu ra đỏ nền là «hien [data-hang-toan-canh]: het 30000ms van chua thay» và «E23 buoc 4 … thay []». Cần dòng AC nêu `[data-hang-toan-canh]` hay hàng phòng ban đã được chuyển có chủ đích, kèm đầu ra lượt chạy sau sửa cho thấy phần tử đó hiện lại."
-    - "cai-dat-con-lai-noi-tieng-viet:E8 và E13, tong-quan-va-khung-noi-tieng-viet:E7: đầu ra đỏ trích trong bang-truoc-sau.md không chứa dòng chỉ ra chỗ hỏng đã khai (fields-list.tsx:407-409/519; sales-dashboard.tsx:204-209). Lượt tong-quan:E7 ở mốc nền chỉ là ERR_MODULE_NOT_FOUND của deal-stage.ts, tức lỗi răng. Cần đầu ra lượt đo sau khi sửa răng có dòng tương ứng, và AC cụ thể buộc translate=no hoặc không cắt chữ ở 360px mà không quyết định đã ký nào miễn (chứng minh truong-chuan-o-cai-dat 6634d64c1 không có AC cho phép truncate)."
-  verified_at: 2026-10-23T16:02:37Z
-  human_override:  # chi nguoi ghi
+  verified_at: 2026-10-23T17:09:21Z
 
 ## Known limits
 
@@ -156,7 +154,10 @@ human_signoff:
 
 baseline: BLOCKED ha tang — dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
 
-Baseline khong do:
+Moi field baseline ghi n-a; danh sach eval khong-phan-biet ben duoi KHONG do duoc o round nay.
+
+### Baseline khong do
+
 - bun _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs --tai-lap: BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
 - bun _acceptance/ho-so-do-kiem-cheo/rang/khai-du.mjs: BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
 - bun _acceptance/ho-so-do-kiem-cheo/rang/chieu-do.mjs: BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
@@ -164,9 +165,7 @@ Baseline khong do:
 - bun _acceptance/ho-so-do-kiem-cheo/rang/yaml-chuan.mjs: BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
 - bun _acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs: BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
 
-Lệnh fail không gắn eval: không có. Lệnh tái lập của E1 (bun _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs --tai-lap) đã gắn eval E1 và thất bại.
-
-none — moi eval feature deu red tren baseline (co phan biet)
+none — moi eval feature deu red tren baseline (co phan biet). Luu y: baseline khong do duoc o round nay nen ket luan nay chua duoc chung minh bang so lieu.
 
 ## Variance
 
@@ -174,4 +173,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E1 failed — phần tái lập của danh-sach.mjs đọc tệp tai-lap.json không tồn tại trong thư mục tạm (ENOENT, dòng 104). E3 BLOCKED — chieu-do.mjs chạy quá 30 phút chưa xong, chưa khai long_running. E6 hội đồng đề xuất FAIL, chờ người quyết ở Cổng 2. Returned to implementation.
+Round 1: E1 tái lập hỏng, E3 quá trần 30 phút, E6 hội đồng không đạt — trả về thi công (S4-r1).
+Round 2: E2, E3, E4, E5, E7 đạt và bảy lệnh suite xanh; E1 quá thời lượng đã khai nên BLOCKED (cần chạy lại với trần thời gian cộng cụ dài hơn); E6 còn mục chưa chốt cho người ở Cổng 2.
