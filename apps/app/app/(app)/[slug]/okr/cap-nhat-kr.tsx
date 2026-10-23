@@ -6,6 +6,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { HopThoaiCapNhatKr, krCapNhatTuSheet } from "./hop-thoai-cap-nhat-kr";
 import type { KetQua } from "./kieu";
+import { lanTruocTuVet } from "./lan-truoc-kr";
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
 
@@ -56,6 +57,7 @@ export function useCapNhatKr(): CapNhatKr {
 		<HopThoaiCapNhatKr
 			key={hop.lan}
 			kr={krCapNhatTuSheet(hop.mt, hop.kr)}
+			lanTruoc={lanTruocTuVet(hop.mt.trail, hop.kr.id)}
 			chuTen={hop.kr.owner.name}
 			ghiHo={!hop.kr.laCuaToi}
 			sessionId={hop.sessionId}
