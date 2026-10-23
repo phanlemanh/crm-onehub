@@ -84,6 +84,7 @@ function ChuongMau({ chuaDoc }: { chuaDoc: boolean }) {
 				dangDocHet={false}
 				homNay={homNay}
 				hrefTatCa={HREF_CHAT}
+				hrefCaiDat="#loai-thong-bao"
 				onDocHet={() => {}}
 				onMo={() => {}}
 				onOpenChange={setMo}

@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { LOCALES } from "@crm/ui/lib/locale";
-import { LOAI_THONG_BAO } from "@crm/validation/thong-bao";
+import {
+	LOAI_SU_KIEN,
+	LOAI_THONG_BAO,
+	type NoiDungThongBao,
+} from "@crm/validation/thong-bao";
+import { cauSuKienVi, laNoiDungSuKien } from "@crm/validation/thong-bao-cau";
 import {
 	KHOA_CHO_TIN_HIEU,
 	type KhoaChoTinHieu,
@@ -123,6 +128,28 @@ describe("ttts-cau", () => {
 					"cau may viet mang ma noi bo",
 				).not.toMatch(/crm-\d|gom|[0-9a-f]{7,}|\{|undefined/);
 			}
+		}
+	});
+});
+
+describe("tbk-cau", () => {
+	test("tbk-cau: cau chuong tieng Viet trung cau tin Zalo/Slack cho moi loai su kien", () => {
+		const mau = LOAI_SU_KIEN.flatMap((loai): NoiDungThongBao[] => {
+			const goc = MAU[loai];
+			if (goc.loai === "tin-hieu-doi-cho") {
+				return KHOA_CHO_TIN_HIEU.map((khoa) => ({ ...goc, khoa }));
+			}
+			return [goc, { ...goc, ten: "   " }];
+		});
+		console.log(
+			`tbk-cau: so loai ${LOAI_SU_KIEN.length} · so mau ${mau.length}`,
+		);
+		for (const nd of mau) {
+			if (!laNoiDungSuKien(nd))
+				throw new Error(`mau khong phai su kien: ${nd.loai}`);
+			expect(cauThongBao("vi", nd), `cau chuong lech cau tin: ${nd.loai}`).toBe(
+				cauSuKienVi(nd),
+			);
 		}
 	});
 });

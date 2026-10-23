@@ -1,0 +1,245 @@
+schema_version: 1
+slug: thong-bao-mot-nguon-nhieu-kenh
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tbk_muc
+    paths:
+      - "packages/validation/src/thong-bao.ts"
+      - "packages/validation/test/thong-bao-muc.spec.ts"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/app/test/thong-bao-ten-loai.spec.ts"
+    expected: |
+      packages/validation/test/thong-bao-muc.spec.ts describe "tbk-muc": bang ky vong VIET TRUOC trong tep test (26 dong, chep tu
+      bang muc cua tep thiet ke: loai -> muc, mac dinh kenh ngoai). Assert: (1) tap khoa cua MUC_THONG_BAO == tap LOAI_THONG_BAO
+      (in ra so loai == LOAI_THONG_BAO.length); (2) moi loai: muc == bang ky vong; (3) moi loai: macDinhDayRa == true khi loai
+      thuoc nhac buoi sang (rut tu THU_TU_NHAC cua @crm/db/onboarding-nhac, khong viet tay), false cho bon loai su kien.
+      apps/app/test/thong-bao-ten-loai.spec.ts describe "tbk-ten": moi loai trong LOAI_THONG_BAO co ten khac rong o ca vi va en.
+      (4) tap loai nhac sang (THU_TU_NHAC) va tap bon loai su kien roi nhau va hop lai == LOAI_THONG_BAO (in ra hai so dem).
+      (5) kiem kieu: test chep packages/validation ra thu muc tam (duong suy tu import.meta.dir, khong ghim ROOT), them gia tri
+      "loai-thu-moi" vao LOAI_THONG_BAO, chay tsc --noEmit tren ban chep -> ma khac 0 va stderr chua "loai-thu-moi"; DOI
+      CHUNG DUONG: ban chep nguyen ven qua tsc ma 0.
+      CHIEU DO: ban sao doi muc cua "okr-duoc-giao" sang can-lam -> (2) do voi thong diep ghim "muc lech bang thiet ke:
+      okr-duoc-giao"; ban sao xoa ten en cua "tin-hieu-doi-cho" -> tbk-ten do voi thong diep ghim "thieu ten loai en:
+      tin-hieu-doi-cho"; ban sao dat mac dinh bat cho "tac-nhan-xong" -> (3) do voi thong diep ghim "loai su kien mac dinh day
+      ra: tac-nhan-xong"; ban sao bang muc khai Partial<Record<...>> -> (5) do voi thong diep ghim "loai moi khong bi kiem
+      kieu chan: loai-thu-moi".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbk_mac_dinh
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/thong-bao-day.ts"
+      - "apps/agent/agent/schedules/dispatch.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json"
+      - "apps/agent/test/thong-bao-kenh.integration.spec.ts"
+    expected: |
+      apps/agent/test/thong-bao-kenh.integration.spec.ts describe "tbk-mac-dinh" tren kho thu cua luot, dong ho gia 08:30 gio Viet
+      Nam. Gieo bang duong ghi that (test/support/nhac-gieo) ba nguoi Z (Zalo), S (Slack), K (khong kenh), KHONG hang
+      CaiDatThongBao nao; moi nguoi du moi loai muc nhac co the gieo. Zalo/Slack gia theo dung hop dong deps hien co, ghi lai moi
+      tin da gui. Ma tran viet truoc:
+        0 tap loai cua fixture tin-nhac-truoc-tb1.json == tap THU_TU_NHAC (lech thi do va in ten loai thieu)
+        a voi MOI loai muc trong fixture tin-nhac-truoc-tb1.json: tin Z va tin S giong tung byte tin trong fixture (so loai so
+          sanh == so loai trong fixture, in ra)
+        b moi muc cua Z, S, K co thong bao trong chuong (tap khoa == payload.mucTinh.khoa)
+        c ghi thong bao su kien tac-nhan-xong (qua ghiThongBaoTacNhan) va tin-hieu-doi-cho (qua ham ghi that cua lo-trinh hoac
+          noiDung parse qua noiDungThongBao) cho Z, S; chay dayThongBaoSuKien hai nhip -> 0 tin gui them, dayLuc rong
+      CHIEU DO: ban sao dat mac dinh dayRa=false cho "okr-duoc-giao" -> (a) do voi thong diep ghim "tin sang lech ban chup:
+      okr-duoc-giao"; ban sao dat mac dinh dayRa=true cho "tac-nhan-xong" -> (c) do voi thong diep ghim "thong bao su kien bi
+      day khi chua bat: tac-nhan-xong"; ban sao fixture bo mot loai -> (0) do voi thong diep ghim "fixture thieu loai:
+      <loai>".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbk_loc
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/thong-bao-day.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/agent/test/thong-bao-kenh.integration.spec.ts"
+    expected: |
+      describe "tbk-loc", nguoi Z (Zalo) va S (Slack), moi nguoi co muc cua ba loai A, B, C (A, B, C rut tu THU_TU_NHAC, khong
+      viet tay). Cai dat qua thu tuc luu that cua dich vu (khong chen thang bang). Ma tran viet truoc:
+        a tat A -> tin sang khong co dong cua A; cac dong B, C giong tung byte tin khi chua tat; thong bao cua A, B, C deu co
+          trong chuong; payload.daGuiKhoa == khoa cua B, C
+        b tat A, B, C (tat ca muc hom nay) -> 0 tin gui; ket qua luot "da-tat-het"; thong bao A, B, C van ghi
+        c bat lai A, sang sau -> tin co dong A
+        d ca a lam voi ca Z va S (2 kenh x 3 o = 6 assert cho a, b, c)
+      CHIEU DO: ban sao loc truoc ghiThongBao -> (a) do voi thong diep ghim "muc da tat mat khoi chuong"; ban sao bo nhanh
+      da-tat-het (gui tin rong) -> (b) do voi thong diep ghim "tat het van gui tin"; ban sao ghi daGuiKhoa tu mucTinh -> (a) do
+      voi thong diep ghim "daGuiKhoa gom muc da tat".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbk_su_kien
+    paths:
+      - "apps/agent/agent/lib/thong-bao-day.ts"
+      - "apps/agent/agent/schedules/dispatch.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "packages/validation/src/thong-bao-cau.ts"
+      - "apps/app/lib/thong-bao/cau.ts"
+      - "apps/app/test/thong-bao-cau.spec.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/agent/test/thong-bao-kenh.integration.spec.ts"
+    expected: |
+      describe "tbk-su-kien". Ma tran viet truoc, bon loai su kien (rut tu bang muc: loai co macDinhDayRa=false) x hai kenh
+      (Z, S) = 8 o, moi o: nguoi bat loai do qua thu tuc luu that; ghi thong bao loai do bang duong ghi that cua nguon (tac nhan:
+      ghiThongBaoTacNhan; tin hieu: ham ghi cua lo-trinh hoac noiDung parse qua noiDungThongBao); chay dayThongBaoSuKien ->
+      dung 1 tin qua dung kenh; noi dung tin == cau tieng Viet cua cung thong bao dung bang ham dung cau ma chuong dung
+      (cung module, khong viet tay chuoi ky vong) + "\n" + duong dan tuyet doi ket thuc bang duongDan cua thong bao; dayLuc,
+      dayKenh duoc ghi. Them:
+        e thong bao ghi TRUOC luc bat (doiLuc sau taoLuc) -> 0 tin
+        f thong bao taoLuc 31 phut truoc (dong ho gia) -> 0 tin; 29 phut -> 1 tin
+        g nguoi bat nhung khong kenh dung duoc -> 0 tin, khong nem, dayKenh rong
+        h moi o: thong bao trong chuong khong doi docLuc, moLuc, noiDung
+      apps/app/test/thong-bao-cau.spec.ts describe "tbk-cau": voi moi loai trong bon loai su kien, mot noiDung mau parse qua
+      noiDungThongBao -> cau ma chuong cua app hien (ham dung cau cua apps/app/lib/thong-bao/cau.ts, locale vi) == cau cua
+      module chung ma tac nhan dung (so bang nhau, 4 assert, in ra so loai).
+      CHIEU DO: ban sao bo dieu kien taoLuc >= doiLuc -> (e) do voi thong diep ghim "thong bao cu bi day khi vua bat"; ban sao
+      doi cua so 30 phut thanh 60 -> (f) do voi thong diep ghim "thong bao qua cua so van day"; ban sao dung cau en -> o noi
+      dung do voi thong diep ghim "cau tin khac cau chuong"; ban sao sua mot khuon trong cau.ts cua app -> tbk-cau do voi
+      thong diep ghim "cau chuong lech cau tin: <loai>".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbk_hong
+    paths:
+      - "apps/agent/agent/lib/thong-bao-day.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/agent/test/thong-bao-kenh.integration.spec.ts"
+    expected: |
+      describe "tbk-hong", nguoi Z uu tien ZALO, co ca Slack khop; bat tac-nhan-xong; mot thong bao du dieu kien. Ma tran viet truoc:
+        a hai loi goi dayThongBaoSuKien dong thoi (Promise.all) -> dung 1 tin
+        b goi lai lan ba sau khi da gui -> van 1 tin
+        c Zalo gia nem loi -> 0 tin Slack; dayLoi khac rong; dayLan == 1
+        d Zalo nem o nhip 1, thanh cong o nhip 2 -> dung 1 tin, dayLoi rong sau nhip 2
+        e Zalo nem ba nhip lien -> nhip bon khong goi Zalo; dayLan == 3
+        f moi o: thong bao van ton tai, docLuc khong doi
+      CHIEU DO: ban sao bo cap nhat co dieu kien khi giu cho -> (a) do voi thong diep ghim "day trung khi hai nhip chong"; ban
+      sao doi sang Slack khi Zalo loi -> (c) do voi thong diep ghim "zalo loi doi sang slack"; ban sao bo tran 3 lan -> (e) do
+      voi thong diep ghim "thu lai qua tran".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbk_api
+    paths:
+      - "apps/api/src/thong-bao/**"
+      - "packages/validation/src/thong-bao.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/thong-bao-cai-dat.spec.ts"
+    expected: |
+      apps/api/test/thong-bao-cai-dat.spec.ts describe "tbk-api", hai nguoi A, B, mot nguoi vai chi OKR C, goi qua router that.
+      Ma tran viet truoc:
+        a A doc caiDat -> moi loai cua LOAI_THONG_BAO dung mot lan, nhom theo muc dung bang muc, dayRa == mac dinh, macDinh == true
+        b A luu (okr-duoc-giao, false) -> A doc lai dayRa false, macDinh false; B doc van mac dinh
+        c A luu lai (okr-duoc-giao, true) -> hang cai dat cua A cho loai do bi xoa (dem trong kho), doc lai macDinh true
+        d A luu loai "khong-co" -> BAD_REQUEST; khong thu tuc nao nhan doi chuong (input khong co truong do -> bi tu choi)
+        e ma tran viet truoc 5 o theo truc kenh (in ra so o == 5): khong kenh | Zalo (ZaloLink + bot bat) | Slack | uu tien ZALO
+          nhung chi Slack dung duoc (lech) | ZaloLink nhung xuong chua bat bot — moi o: caiDat.kenh == kenhSeDungCua(cung
+          nguoi).kenh, va lyDo khac rong khi kenh null
+        f chua dang nhap -> UNAUTHORIZED; C doc va luu duoc va doc lai thay gia tri da luu
+        g hang CaiDatThongBao loai "loai-da-bo" gieo cho A -> doc van tra du LOAI_THONG_BAO, khong nem
+      CHIEU DO: ban sao bo loc userId o luu -> (b) do voi thong diep ghim "luu doi cai dat nguoi khac"; ban sao khong xoa hang
+      khi trung mac dinh -> (c) do voi thong diep ghim "hang mac dinh con trong kho"; ban sao parse that bai nem -> (g) do voi
+      thong diep ghim "loai la lam hong thu tuc doc"; ban sao doc kenh chi tu ZaloLink -> o "xuong chua bat bot" do voi thong
+      diep ghim "kenh cai dat lech kenh gui".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tbk_man
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/app/(app)/[slug]/reminders/page.tsx"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/app/test/thong-bao-cai-dat.dom.tsx"
+    expected: |
+      apps/app/test/thong-bao-cai-dat.dom.tsx describe "tbk-man", tRPC gia theo dung khuon output cua router. Ma tran viet truoc:
+        a hai o kenh zalo va kenh slack, du lieu mac dinh -> hai nhom "Cần làm", "Để biết"; so dong moi nhom == so loai cua muc
+          do; tieu de cot == ten kenh cua o ("Zalo" | "Slack"); moi cong tac Chuong checked + disabled
+        b bam cong tac kenh cua mot dong -> goi luuCaiDat dung (loai, dayRa); thanh cong -> toast "Đã lưu"
+        c luuCaiDat tra loi -> cong tac tro ve gia tri cu; toast bao chua luu
+        d kenh null -> moi cong tac cot kenh disabled; mot dong noi vi sao
+        e dang tai -> khung xuong; caiDat loi -> VungTaiLoi co Thu lai
+        f o bat ra cua chuong co lien ket "Cài đặt thông báo" toi /<slug>/reminders#loai-thong-bao
+      CHIEU DO: ban sao bo hoan gia tri khi loi -> (c) do voi thong diep ghim "cong tac khong tro ve khi luu hong"; ban sao bo
+      disabled o cot Chuong -> (a) do voi thong diep ghim "chuong tat duoc"; ban sao viet cung ten cot "Zalo" -> o slack cua (a) do
+      voi thong diep ghim "ten cot khong theo kenh".
+
+  - id: E8
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tbk_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/thong-bao-mot-nguon-nhieu-kenh/evidence dat tuong minh: lenh cua tbk_do_man (tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/thong-bao-mot-nguon-nhieu-kenh/evidence/
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/app/(app)/[slug]/reminders/page.tsx"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "_acceptance/thong-bao-mot-nguon-nhieu-kenh/rang/do-man.mjs"
+    expected: |
+      Nguoi do vai member co ZaloLink (bot bat). Ma tran viet truoc 7 o, moi o mot dong DUNG/SAI va mot anh evidence/<canh>.png:
+        vao-1280: mo chuong, bam "Cài đặt thông báo" -> URL ket thuc /reminders#loai-thong-bao, muc "Loại thông báo" trong khung nhin
+        bang-1280: hai the "Cần làm", "Để biết"; cot ten "Zalo"; so dong == so loai doc tu API caiDat cua chinh phien
+        tat-1280: tat dong "okr-duoc-giao" o cot Zalo -> toast; tai lai trang -> cong tac van tat; API caiDat cua phien tra dayRa false
+        bang-375: o 375px moi loai la mot dong, trang khong cuon ngang (scrollWidth <= clientWidth)
+        khong-kenh-1280: go ZaloLink qua duong that, tai lai -> moi cong tac cot kenh disabled, dong ly do hien
+        toi-1280, toi-375: nen toi, bang doc duoc
+      Anh: bang o hai kho, ca khong kenh.
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbk_doi_chieu
+    paths:
+      - "apps/agent/agent/lib/thong-bao-doi-chieu.ts"
+      - "apps/agent/scripts/thong-bao-doi-chieu.ts"
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/thong-bao-day.ts"
+      - "apps/agent/test/thong-bao-doi-chieu.integration.spec.ts"
+    expected: |
+      apps/agent/test/thong-bao-doi-chieu.integration.spec.ts describe "tbk-doi-chieu". Du lieu sinh bang chayNhac va
+      dayThongBaoSuKien THAT qua hai ngay (dong ho gia), Zalo/Slack gia: ngay 1 Z nhan 3 muc qua Zalo, S nhan 2 muc qua Slack,
+      Z nhan 1 thong bao su kien; ngay 2 tuong tu, mot nguoi doi cai dat. Ma tran viet truoc: moi ngay assert dong in ra co
+      so muc qua Zalo, qua Slack, so su kien da day, so co thong bao, so lech == 0, so nguoi khac mac dinh — moi so doc lai tu
+      kho bang truy van rieng trong test (khong viet tay so). Ca lech: xoa mot thong bao da gui (qua prisma, sau khi sinh) ->
+      lenh thoat ma 1 va dong lech goi dung khoa da xoa.
+      CHIEU DO: ban sao dem lech tu mucTinh thay vi daGuiKhoa -> ca lech do voi thong diep ghim "doi chieu khong goi ten muc da
+      gui ma mat"; ban sao bo khoi su kien -> dong ngay do voi thong diep ghim "thieu so su kien da day".
+
+  - id: E10
+    criterion: AC-9
+    executor: judgment
+    inputs:
+      - CONTEXT.md
+      - docs/superpowers/specs/2026-10-23-thong-bao-mot-nguon-nhieu-kenh-design.md
+    question: |
+      Doc cac muc ve thong bao trong CONTEXT.md. (a) Co muc «Cần làm» va «Để biết» noi do la muc cua thong bao, dinh nghia khop
+      luat chia trong tep thiet ke, va noi ro khac «việc cần làm» (tu da cam cho Viec) o dau? (b) Muc «Thông báo» co noi Zalo hay
+      Slack chi chuyen tiep thong bao theo cai dat cua nguoi nhan, chuong luon nhan du? (c) Co cau nao noi nguoc (vi du Zalo la
+      duong rieng, hay chuong tat duoc)? Trich nguyen cau neu vi pham.
+    expected: |
+      PASS khi (a) va (b) dung va (c) khong co cau nao noi nguoc. FAIL kem cau trich neu khong.
