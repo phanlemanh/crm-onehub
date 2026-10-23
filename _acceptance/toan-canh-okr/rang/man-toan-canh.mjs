@@ -1556,8 +1556,8 @@ async function buocToanCanh() {
 		),
 	);
 	kiem(
-		`E10 buoc 2: bon the so (thay ${await demSel(o, "[data-slot='stat-card']")})`,
-		(await demSel(o, "[data-slot='stat-card']")) === 4,
+		`E10 buoc 2: bon the so cua toan canh cong o KR truot cua moi-kr-ca-cong-ty AC-1 (thay ${await demSel(o, "[data-slot='stat-card']")})`,
+		(await demSel(o, "[data-slot='stat-card']")) === 5,
 	);
 	kiem(
 		"E10 buoc 2: thanh tien do trung tinh, khong bg-primary",
