@@ -101,7 +101,7 @@ function chay(slugs, thuMucLog, boMayChu) {
 	return { sha, ngay: new Date().toISOString(), ho_so: hoSo };
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url))) {
 	const thamSo = process.argv.slice(2);
 	const ra = thamSo.indexOf("--ra");
 	if (ra < 0 || !thamSo[ra + 1]) {

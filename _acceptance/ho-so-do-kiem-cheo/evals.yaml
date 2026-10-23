@@ -6,6 +6,7 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.hsdk_danh_sach
+    long_running: 90
     paths:
       - "_acceptance/ho-so-do-kiem-cheo/rang/**"
       - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
@@ -28,6 +29,7 @@ evals:
     criterion: AC-3
     executor: script
     cmd: config:executors.script.hsdk_chieu_do
+    long_running: 240
     paths:
       - "_acceptance/ho-so-do-kiem-cheo/rang/**"
       - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
