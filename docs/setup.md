@@ -172,6 +172,41 @@ bỏ qua vì là OKR thật của công ty — đã vào lịch sử git thì kh
 đo đó cũng nằm ngoài git (xem trên). Điều kiện bật góp ý đọc từ con số của lượt đo đó, đặt cạnh
 con số của bộ `mau/`.
 
+## Bộ hợp đồng mẫu
+
+```
+bun run hop-dong:mau
+```
+
+Lệnh gắn sáu hợp đồng mẫu vào ô Tệp «Hợp đồng» của các thoả thuận mẫu, để Kara có hợp đồng
+mà đọc khi chưa phòng ban nào tải hợp đồng thật lên. Nó tạo một công ty «Công ty Đối tác Mẫu A
+· mẫu», bảy thoả thuận «HĐ mẫu … · mẫu» (sáu cái có tệp, một cái không có để thử bộ lọc «Chưa có
+tệp»), trường «Hợp đồng» kiểu Tệp trên Thoả thuận nếu chưa có, và một người dùng mẫu
+`hop-dong@mau.onehub.test` (quản trị) đứng tên tải tệp. Mọi thứ đi qua service thật và đường
+tải lên của ô Tệp — xin chữ ký, PUT lên kho tệp, ghi nhận — như trình duyệt làm; chỉ người dùng
+mẫu được ghi thẳng vào bảng, vì kho không có đường tạo người ngoài đăng nhập.
+
+**Cần trước:** workspace đã có (đăng nhập một lần, hoặc `cd apps/api && bun run dev:session <thư>`),
+`TEP_BAN_GHI_BLOB_TOKEN` trong `.env` (kho Blob riêng tư của ô Tệp), và kho đã có kiểu trường Tệp
+(`bun run db:migrate`). Thiếu thứ nào thì lệnh dừng với câu nói cách sửa và không ghi gì: mã 6
+khi kho tệp chưa bật, mã 4 khi thiếu workspace hay trường «Hợp đồng» đã có với kiểu khác.
+
+**Chạy lại an toàn:** byte của sáu tệp cố định, và ô Tệp gặp lại đúng tệp thì trả tệp cũ, nên chạy
+lại không nhân đôi tệp, bản ghi hay trường; dòng in của mỗi tệp đổi từ «đã gắn» sang «đã có».
+Lần chạy bị ngắt giữa chừng thì chạy lại là đủ: tệp tải dở được lượt dọn hằng ngày xoá sau hạn
+phiếu.
+
+**Không bao giờ chạy trên production:** lệnh dùng cùng bộ chặn với `okr:mau` — từ chối với mã 2
+khi `NODE_ENV=production`, `VERCEL_ENV` là `production` hay `preview`, hay cơ sở dữ liệu không ở
+máy cục bộ (kể cả qua `?host=`), trước khi chạm kho hay kho tệp; không cờ nào vượt được.
+
+**Đáp án cho Kara:** sáu tệp và đáp án nằm ở `packages/db/mau/hop-dong/`. `dap-an.json` ghi cho mỗi
+tệp ngày ký, ngày hết hạn và giá trị (đồng), đoạn chữ đúng như viết trong tệp, và tệp có đọc được
+chữ không (bản quét HD5 thì không). Đọc bằng `boHopDongMau()` của `@crm/validation/hop-dong-mau`.
+Hai chỗ cố ý làm khó: hết hạn của HD2 phải suy («ngày ký + 12 tháng − 1 ngày»), và phụ lục HD6 nhắc
+ngày ký của HD1. Sửa nội dung thì sửa `apps/agent/scripts/sinh-hop-dong-mau.ts` rồi dựng lại trên
+máy có phông Arial (`cd apps/agent && bun scripts/sinh-hop-dong-mau.ts`), commit cả byte lẫn đáp án.
+
 ## Google Cloud
 
 - **Enable the Gmail API and the Google Calendar API** on the project.
