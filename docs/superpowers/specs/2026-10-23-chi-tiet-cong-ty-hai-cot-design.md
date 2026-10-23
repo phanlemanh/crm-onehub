@@ -39,6 +39,10 @@ chỉ còn đoạn giới thiệu.
 
 Không đổi: dữ liệu, API, quyền, thứ tự trường, hành vi tải/mở/xoá tệp, phiếu Liên hệ và Thoả thuận.
 
+Va chạm đã biết (23/10): PR #547 `fix/o-tep-dien-thoai` sửa cùng dòng của vùng kéo thả theo cùng hướng (`basis-52`) và cho
+ô Tệp xếp nhãn trên giá trị dưới `md`. Gộp #547 vào nhánh này trước đường nền và S4; xung đột ở vùng kéo thả lấy bản #547.
+Bộ đo không phụ thuộc con số bề rộng nền.
+
 <!-- <<<UX-SPEC-TEMPLATE -->
 ## Đặc tả UX
 
