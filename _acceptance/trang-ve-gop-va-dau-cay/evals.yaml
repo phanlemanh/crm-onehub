@@ -62,15 +62,16 @@ evals:
       - "packages/ui/test/trang-ve-gop.spec.ts"
     expected: |
       bun test -t "gop-tu-dong|gop-xung-dot". Kho tam voi bo ve gia (scripts/product-map.mjs gia: ghi PRODUCT-MAP.md va
-      LO-TRINH.html = danh sach thu muc _acceptance/* da sap), hook that cua vong, .gitattributes that. Ma tran viet truoc 6 ca:
-        gop-tu-dong (a) hai nhanh them hai ho so khac nhau -> merge 0; HEAD:PRODUCT-MAP.md == "a\nb\n"; HEAD^1, HEAD^2 la
+      LO-TRINH.html = dong dem so ho so roi danh sach thu muc _acceptance/* da sap — dong dem lam ban tron cua union sai,
+      nhu so dem tren trang that), hook that cua vong, .gitattributes that. Ma tran viet truoc 6 ca:
+        gop-tu-dong (a) hai nhanh them hai ho so khac nhau -> merge 0; HEAD:PRODUCT-MAP.md == "3\na\nb\nz" (ban tron cua union la "2\na\nb\nz"); HEAD^1, HEAD^2 la
             hai dau; status rong.
         gop-tu-dong (b) loi commit gop tu viet (-m "gop thu") va tac gia GIT_AUTHOR_NAME=x giu nguyen sau khi viet lai.
         gop-tu-dong (c) trang da khop sau gop (chi mot nhanh doi nguon) -> HEAD khong doi (bang sha git tao), khong in dong
             viet lai.
         gop-xung-dot (a) xung dot o src.txt -> chi src.txt trong diff-filter=U; giai roi `git commit --no-edit` -> trang
-            trong HEAD == "a\nb\n".
-        gop-xung-dot (b) `git merge --no-commit` roi `git commit -m x` -> trang trong HEAD == "a\nb\n".
+            trong HEAD == "3\na\nb\nz".
+        gop-xung-dot (b) `git merge --no-commit` roi `git commit -m x` -> trang trong HEAD == "3\na\nb\nz".
         gop-xung-dot (c) commit thuong (khong MERGE_HEAD) -> bo ve gia khong chay (tep dem lan chay khong doi).
       Chieu do: E12 (b) bo khoi viet lai HEAD cua post-merge -> gop-tu-dong (a) do voi thong diep gom «PRODUCT-MAP.md».
 
@@ -126,7 +127,7 @@ evals:
       - "packages/ui/test/trang-ve-gop.spec.ts"
     expected: |
       bun test -t an-toan, 6 ca viet truoc:
-        (a) thu muc _acceptance/c/ chua commit trong cay lam viec -> HEAD:PRODUCT-MAP.md == "a\nb\n" (khong co «c»).
+        (a) thu muc _acceptance/c/ chua commit trong cay lam viec -> HEAD:PRODUCT-MAP.md == "3\na\nb\nz" (ban tron cua union la "2\na\nb\nz") (khong co «c»).
         (b) bo ve gia thoat 1 -> merge thoat 0, stderr co dung mot dong bat dau «trang-ve:» chua
             «node scripts/product-map.mjs --root .»; HEAD la commit git tao.
         (c) bo ve gia thoat 1 o duong pre-commit -> `git commit` thoat 0.

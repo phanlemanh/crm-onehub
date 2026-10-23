@@ -27,7 +27,8 @@ const LENH_TAY = "node scripts/product-map.mjs --root .";
 const BO_VE_GIA = `import { appendFileSync, readdirSync, writeFileSync } from "node:fs";
 if (process.env.SO_VE) appendFileSync(process.env.SO_VE, "ve\\n");
 if (process.env.VE_HONG) process.exit(1);
-const ds = readdirSync("_acceptance").filter((d) => !d.startsWith(".")).sort().join("\\n") + "\\n";
+const ho = readdirSync("_acceptance").filter((d) => !d.startsWith(".")).sort();
+const ds = ho.length + "\\n" + ho.join("\\n") + "\\n";
 writeFileSync("PRODUCT-MAP.md", ds);
 writeFileSync("LO-TRINH.html", ds);
 `;
@@ -216,8 +217,8 @@ describe("gop-tu-dong", () => {
 		];
 		const r = gop(k);
 		expect(r.ma).toBe(0);
-		expect(trangHead(k)).toBe("a\nb\nz");
-		expect(git(k.goc, "show", "HEAD:LO-TRINH.html")).toBe("a\nb\nz");
+		expect(trangHead(k)).toBe("3\na\nb\nz");
+		expect(git(k.goc, "show", "HEAD:LO-TRINH.html")).toBe("3\na\nb\nz");
 		expect(
 			git(k.goc, "rev-list", "--parents", "-n", "1", "HEAD")
 				.split(" ")
@@ -237,7 +238,7 @@ describe("gop-tu-dong", () => {
 		expect(git(k.goc, "log", "-1", "--format=%B")).toBe("gop thu");
 		expect(git(k.goc, "log", "-1", "--format=%an <%ae>")).toBe("x <x@x>");
 		expect(git(k.goc, "log", "-1", "--format=%cn <%ce>")).toBe("t <t@t>");
-		expect(trangHead(k)).toBe("a\nb\nz");
+		expect(trangHead(k)).toBe("3\na\nb\nz");
 	});
 
 	test("gop-tu-dong (c): trang da khop thi khong viet lai", () => {
@@ -253,7 +254,7 @@ describe("gop-tu-dong", () => {
 		expect(git(k.goc, "reflog", "-1", "--format=%gs")).toContain(
 			"Merge made by",
 		);
-		expect(trangHead(k)).toBe("a\nz");
+		expect(trangHead(k)).toBe("2\na\nz");
 	});
 });
 
@@ -275,7 +276,7 @@ describe("gop-xung-dot", () => {
 		git(k.goc, "add", "src.txt");
 		const r = chay(k.goc, ["commit", "--no-edit"], { SO_VE: k.soVe });
 		expect(r.ma).toBe(0);
-		expect(trangHead(k)).toBe("a\nb\nz");
+		expect(trangHead(k)).toBe("3\na\nb\nz");
 		expect(
 			git(k.goc, "rev-list", "--parents", "-n", "1", "HEAD").split(" ").length,
 		).toBe(3);
@@ -287,7 +288,7 @@ describe("gop-xung-dot", () => {
 		expect(gop(k, {}, "--no-commit").ma).toBe(0);
 		const r = chay(k.goc, ["commit", "-m", "x"], { SO_VE: k.soVe });
 		expect(r.ma).toBe(0);
-		expect(trangHead(k)).toBe("a\nb\nz");
+		expect(trangHead(k)).toBe("3\na\nb\nz");
 	});
 
 	test("gop-xung-dot (c): commit thuong khong goi bo ve", () => {
@@ -307,7 +308,7 @@ describe("an-toan", () => {
 		haiNhanh(k);
 		ghi(k.goc, "_acceptance/c/contract.md", "c\n");
 		expect(gop(k).ma).toBe(0);
-		expect(trangHead(k)).toBe("a\nb\nz");
+		expect(trangHead(k)).toBe("3\na\nb\nz");
 	});
 
 	test("an-toan (b): bo ve hong khong chan gop", () => {
@@ -375,6 +376,6 @@ describe("an-toan", () => {
 		haiNhanh(k);
 		const r = gop(k);
 		expect(`${r.ra}${r.loi}`).not.toContain("hook cu");
-		expect(trangHead(k)).toBe("a\nb\nz");
+		expect(trangHead(k)).toBe("3\na\nb\nz");
 	});
 });
