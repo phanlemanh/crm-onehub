@@ -77,6 +77,8 @@ import {
 const DUONG = "/proto/hop-tuan-mo-dung-bo";
 
 const ST = {
+	cuaToi: "ST-htmb-cua-toi",
+	theOkr: "ST-htmb-the-okr",
 	boOkrToiDan: "ST-htmb-bo-okr-toi-dan",
 	homNay: "ST-htmb-hom-nay",
 	coDuLieu: "ST-htmb-co-du-lieu",
@@ -91,7 +93,7 @@ const den = (state: string) => `${DUONG}?state=${state}`;
 
 const THE_CON = ["OKR", "Họp tuần", "Việc", "Sơ đồ góp vào"] as const;
 
-function ThanhBen() {
+function ThanhBen({ mucMo }: { mucMo: "cua-toi" | "bo-okr" }) {
 	return (
 		<AreaSidebar
 			header={
@@ -103,22 +105,20 @@ function ThanhBen() {
 			label="Mục tiêu"
 		>
 			<AreaSidebarGroup>
-				<AreaSidebarItem asChild>
-					<Link href={den(ST.coDuLieu)}>Của tôi</Link>
+				<AreaSidebarItem active={mucMo === "cua-toi"} asChild>
+					<Link href={den(ST.cuaToi)}>Của tôi</Link>
 				</AreaSidebarItem>
 			</AreaSidebarGroup>
 			<AreaSidebarGroup label="OKR">
-				<AreaSidebarItem active asChild>
+				<AreaSidebarItem active={mucMo === "bo-okr"} asChild>
 					<Link href={den(ST.boOkrToiDan)}>Bộ OKR</Link>
 				</AreaSidebarItem>
-				<AreaSidebarItem asChild>
-					<Link href={den(ST.coDuLieu)}>Lấy ý kiến</Link>
-				</AreaSidebarItem>
+				<AreaSidebarItem disabled>Lấy ý kiến</AreaSidebarItem>
 			</AreaSidebarGroup>
 			<AreaSidebarGroup label="Báo cáo">
 				{["Sức khoẻ", "Mọi KR", "Sơ đồ"].map((nhan) => (
-					<AreaSidebarItem asChild key={nhan}>
-						<Link href={den(ST.coDuLieu)}>{nhan}</Link>
+					<AreaSidebarItem disabled key={nhan}>
+						{nhan}
 					</AreaSidebarItem>
 				))}
 			</AreaSidebarGroup>
@@ -126,22 +126,138 @@ function ThanhBen() {
 	);
 }
 
-function TheCon() {
+const DICH_THE: Record<(typeof THE_CON)[number], string | null> = {
+	OKR: ST.theOkr,
+	"Họp tuần": ST.coDuLieu,
+	Việc: null,
+	"Sơ đồ góp vào": null,
+};
+
+function TheCon({ dangMo }: { dangMo: (typeof THE_CON)[number] }) {
 	return (
-		<Tabs value="Họp tuần">
+		<Tabs value={dangMo}>
 			<TabsList variant="line">
-				{THE_CON.map((the) => (
-					<TabsTrigger asChild key={the} value={the}>
-						<Link
-							aria-current={the === "Họp tuần" ? "page" : undefined}
-							href={den(ST.coDuLieu)}
-						>
-							{the}
-						</Link>
-					</TabsTrigger>
-				))}
+				{THE_CON.map((the) => {
+					const dich = DICH_THE[the];
+					if (!dich)
+						return (
+							<TabsTrigger disabled key={the} value={the}>
+								{the}
+							</TabsTrigger>
+						);
+					return (
+						<TabsTrigger asChild key={the} value={the}>
+							<Link
+								aria-current={the === dangMo ? "page" : undefined}
+								data-the-con={the}
+								href={den(dich)}
+							>
+								{the}
+							</Link>
+						</TabsTrigger>
+					);
+				})}
 			</TabsList>
 		</Tabs>
+	);
+}
+
+const MUC_TIEU_OKR = [
+	{
+		ten: "Mở rộng mạng lưới đối tác miền Bắc",
+		kr: [DANG_BAN[0], DANG_BAN[1]],
+	},
+	{
+		ten: "Giữ chân đối tác hiện có",
+		kr: [DANG_BAN[2], ...CON_LAI],
+	},
+];
+
+const COT_OKR: SimpleTableColumn[] = [
+	{ id: "kr", header: "Mục tiêu và KR" },
+	{
+		id: "tien-do",
+		header: "Tiến độ",
+		width: "w-[26%]",
+		className: "hidden md:table-cell",
+	},
+	{
+		id: "phu-trach",
+		header: "Phụ trách",
+		width: "w-[18%]",
+		className: "hidden lg:table-cell",
+	},
+];
+
+function TheOkr() {
+	return (
+		<div className="flex flex-col gap-3" data-trang-thai={ST.theOkr}>
+			<SimpleTable columns={COT_OKR} surface="page">
+				{MUC_TIEU_OKR.flatMap((mt) => [
+					<SimpleTableRow key={mt.ten}>
+						<TableCell
+							className="px-3 py-3 font-medium whitespace-normal"
+							colSpan={3}
+						>
+							<span translate="no">{mt.ten}</span>
+						</TableCell>
+					</SimpleTableRow>,
+					...mt.kr.map((kr) => (
+						<SimpleTableRow key={kr.id}>
+							<TableCell className="px-3 py-3 align-top whitespace-normal">
+								<span className="flex gap-3 ps-4">
+									<span className="flex min-w-0 flex-1 flex-col gap-1">
+										<span className="text-sm" translate="no">
+											{kr.tieuDe}
+										</span>
+										<span className="md:hidden">
+											<TienDo dong={kr} />
+										</span>
+									</span>
+									<Button
+										data-nut="cap-nhat-dong-kr"
+										size="sm"
+										variant="outline"
+									>
+										Cập nhật
+									</Button>
+								</span>
+							</TableCell>
+							<TableCell className="hidden px-3 py-3 align-top md:table-cell">
+								<TienDo dong={kr} />
+							</TableCell>
+							<TableCell className="hidden px-3 py-3 align-top text-sm lg:table-cell">
+								<span translate="no">{kr.chuTen}</span>
+							</TableCell>
+						</SimpleTableRow>
+					)),
+				])}
+			</SimpleTable>
+			<p className="text-muted-foreground text-xs">
+				Nút «Cập nhật» trên từng dòng KR đã có ở bản thật (người sửa được KR mới
+				thấy). Bấm thẻ con «Họp tuần» để sang bảng họp của bộ này.
+			</p>
+		</div>
+	);
+}
+
+function CuaToi() {
+	return (
+		<div className="flex flex-col gap-3" data-trang-thai={ST.cuaToi}>
+			<p className="font-medium text-sm">Đơn vị bạn dẫn</p>
+			<ItemGroup className="gap-2">
+				<Item asChild variant="outline">
+					<Link data-don-vi-dan="" href={den(ST.theOkr)}>
+						<ItemContent>
+							<ItemTitle translate="no">{PHONG_BAN}</ItemTitle>
+							<ItemDescription>
+								Phòng ban · 3 mục tiêu · đã cập nhật 3/5 KR tuần này
+							</ItemDescription>
+						</ItemContent>
+					</Link>
+				</Item>
+			</ItemGroup>
+		</div>
 	);
 }
 
@@ -403,7 +519,7 @@ function DanhSachToiDan() {
 			<ItemGroup className="gap-2">
 				{BO_TOI_DAN.map((bo) => (
 					<Item asChild key={bo.ten} variant="outline">
-						<Link href={den(ST.coDuLieu)}>
+						<Link data-bo={bo.ten} href={den(ST.theOkr)}>
 							<ItemContent>
 								<ItemTitle translate="no">{bo.ten}</ItemTitle>
 								<ItemDescription>
@@ -416,8 +532,8 @@ function DanhSachToiDan() {
 				))}
 			</ItemGroup>
 			<p className="text-muted-foreground text-xs">
-				Bấm bộ để mở trang của bộ, rồi bấm thẻ con «Họp tuần» — như mở plan của
-				đội trên Tability. Bản mẫu nhảy thẳng tới thẻ Họp tuần.
+				Bấm bộ để mở trang của bộ ở thẻ OKR, rồi bấm thẻ con «Họp tuần» — như mở
+				plan của đội trên Tability.
 			</p>
 		</div>
 	);
@@ -434,11 +550,17 @@ function XemMoiBo() {
 type Canh = {
 	bo: string;
 	danhSach?: boolean;
+	cuaToi?: boolean;
+	the?: (typeof THE_CON)[number];
 	than: ReactNode;
 };
 
 function canhCua(state: string): Canh {
 	switch (state) {
+		case ST.cuaToi:
+			return { bo: "Của tôi", danhSach: true, cuaToi: true, than: <CuaToi /> };
+		case ST.theOkr:
+			return { bo: PHONG_BAN, the: "OKR", than: <TheOkr /> };
 		case ST.boOkrToiDan:
 			return { bo: "Mục tiêu", danhSach: true, than: <DanhSachToiDan /> };
 		case ST.homNay:
@@ -550,14 +672,16 @@ export function HopTuanMoDungBoMau({ state }: { state: string }) {
 	return (
 		<LocaleProvider locale="vi">
 			<div className="flex min-h-svh flex-col md:flex-row">
-				<ThanhBen />
+				<ThanhBen mucMo={canh.cuaToi ? "cua-toi" : "bo-okr"} />
 				<PageShell>
 					<PageShellHeader>
 						<PageShellHeading>
 							<PageShellTitle translate="no">{canh.bo}</PageShellTitle>
 							<PageShellDescription>
 								{canh.danhSach
-									? "Mỗi đơn vị một bộ OKR trong chu kỳ."
+									? canh.cuaToi
+										? "Việc của bạn trong chu kỳ đang xem."
+										: "Mỗi đơn vị một bộ OKR trong chu kỳ."
 									: "Mục tiêu và KR của đơn vị trong chu kỳ đang xem."}
 							</PageShellDescription>
 						</PageShellHeading>
@@ -578,7 +702,7 @@ export function HopTuanMoDungBoMau({ state }: { state: string }) {
 										</BreadcrumbItem>
 									</BreadcrumbList>
 								</Breadcrumb>
-								<TheCon />
+								<TheCon dangMo={canh.the ?? "Họp tuần"} />
 							</div>
 						)}
 						{canh.than}

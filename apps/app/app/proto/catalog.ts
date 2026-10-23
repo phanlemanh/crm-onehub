@@ -1556,6 +1556,14 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		ten: "Họp tuần mở đúng bộ — bộ mình dẫn, hàng số của tuần, màn rỗng nói lý do",
 		states: [
 			{
+				id: "ST-htmb-cua-toi",
+				nhan: "Đường vào: Của tôi › đơn vị bạn dẫn",
+			},
+			{
+				id: "ST-htmb-the-okr",
+				nhan: "Bộ mình › thẻ OKR (nút Cập nhật từng KR)",
+			},
+			{
 				id: "ST-htmb-bo-okr-toi-dan",
 				nhan: "Đường vào: Bộ OKR › Tôi dẫn (như Tability)",
 			},
