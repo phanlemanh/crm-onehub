@@ -1,0 +1,35 @@
+{
+  "feature_plain": "Nhân viên mở phiếu một công ty thấy phần chi tiết trải hai cột như phiếu liên hệ, ô Tệp đủ rộng để đọc trọn tên tệp; vùng kéo thả tệp không còn bóp chữ thành mỗi dòng một chữ trên điện thoại.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đặt đoạn giới thiệu công ty lên đầu, rồi phần chi tiết trải hết bề ngang phiếu, các trường xếp hai cột — ở màn rộng và màn máy tính bảng."},
+    {"id": "AC-2", "p": "Sẽ cho ô Tệp chiếm trọn một hàng (rộng ít nhất 600px): tên tệp dài hiện đủ chữ, nút Mở và Xoá cùng hàng với tên, nút «Chọn tệp» cùng hàng với chữ «Kéo tệp vào đây»."},
+    {"id": "AC-3", "p": "Sẽ cho vùng kéo thả trên điện thoại đặt chữ xuống dưới nút «Chọn tệp», mỗi câu trọn dòng — ở cả phiếu công ty, liên hệ và thoả thuận."},
+    {"id": "AC-5", "p": "Sẽ giữ phiếu liên hệ và thoả thuận trên màn rộng y như hôm nay: hai cột, ô Tệp trọn hàng, nút và chữ vùng kéo thả cùng hàng."},
+    {"id": "AC-7", "p": "Sẽ giữ hộp thoại tải nguồn ở trang Tài liệu như hôm nay: nút «Chọn tệp» và chữ vẫn cùng hàng."}
+  ],
+  "wont_do": [
+    {"id": "AC-4", "p": "Sẽ KHÔNG để phiếu công ty trên điện thoại cuộn ngang hay có phần tử tràn ra ngoài."},
+    {"id": "AC-6", "p": "Sẽ KHÔNG hiện khung «Giới thiệu» rỗng khi công ty chưa có mô tả: phần chi tiết đứng đầu, dòng «Kara đang tra cứu» nằm ngay dưới, hoạt động web sau đó."},
+    {"id": "OOS-1", "p": "KHÔNG đổi khung phiếu liên hệ và thoả thuận — chỉ kiểm để chắc chúng không đổi."},
+    {"id": "OOS-2", "p": "KHÔNG đặt nhãn lên trên giá trị cho trường rộng trên điện thoại — xem Hỏi-3."},
+    {"id": "OOS-3", "p": "KHÔNG gộp hai trường «Phụ trách» và «Người phụ trách» đang cùng hiện trên phiếu công ty — có từ trước."},
+    {"id": "OOS-4", "p": "KHÔNG đụng cột Kara bên phải khung bản ghi — việc của thiết kế Kara."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Ba phiếu có ô Tệp — công ty, liên hệ, thoả thuận — đều được đo; đủ vì đó là ba nơi duy nhất gắn ô Tệp."},
+    {"i": 1, "p": "Ba khổ màn: điện thoại 375, máy tính bảng 768, máy tính 1440 — đúng ba ngưỡng làm bố cục phiếu đổi."},
+    {"i": 2, "p": "Năm vùng của tab Tổng quan: giới thiệu, chi tiết, ô Tệp, dòng Kara chờ, hoạt động web — đủ vì tab chỉ dựng năm vùng này."},
+    {"i": 3, "p": "Hai nơi dùng vùng kéo thả — ô Tệp và hộp thoại Tài liệu — vì sửa vùng kéo thả đổi cả hai."},
+    {"i": 4, "p": "Dữ liệu: công ty có và không có mô tả; tên tệp dài 60 ký tự như tệp trong ảnh anh gửi."},
+    {"i": 5, "p": "Phần làm ngay: bảy ô, mỗi ô một tiêu chí AC-1 tới AC-7."},
+    {"i": 6, "p": "Để sau: ô Tệp đầy 10 tệp; phiếu liên hệ và thoả thuận ở máy tính bảng (khung không đổi)."},
+    {"i": 7, "p": "Không làm: phiếu kế hoạch và KR (không có ô Tệp); cột Kara trong khung bản ghi."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Sổ ghi máy tự quyết bỏ bước dựng bản mẫu bấm được, trong khi còn hai điều mới cho người nhìn (thứ tự giới thiệu/chi tiết, chữ vùng kéo thả trên điện thoại). Đã sửa: thành câu Hỏi-2 cho anh, kèm hình so sánh hai thứ tự."},
+    {"i": 1, "p": "Sửa vùng kéo thả đổi luôn hộp thoại tải nguồn ở trang Tài liệu mà không có phép đo nào chạm nó, và câu dẫn luật chưa thật sự quyết. Đã sửa: dẫn câu luật quyết đúng việc, thêm tiêu chí AC-7 đo hộp thoại ấy."},
+    {"i": 2, "p": "Lối «nhãn lên trên giá trị cho trường rộng trên điện thoại» bị bỏ ngoài mà không ai hỏi anh, và các mục bỏ ngoài khác không có lý do ghi sổ. Đã sửa: thành câu Hỏi-3, ba mục còn lại có lý do."},
+    {"i": 3, "p": "Nhiều phép kiểm âm chưa từng được chứng là đỏ được, và tên tệp mẫu 56 ký tự thay vì 60 như hứa. Đã sửa: 13 lần phá thử, mỗi thông điệp lỗi một lần; mỗi bước đỏ khi đếm ra 0 phần tử; tên tệp kiểm đúng 60 ký tự."},
+    {"i": 4, "p": "Cách đo «chữ nằm một dòng» luôn ra đúng dù chữ gãy hai dòng. Đã sửa: đo theo từng dòng chữ thật, thêm một lần phá thử ép chữ hẹp."}
+  ]
+}
