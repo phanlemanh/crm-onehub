@@ -14,17 +14,18 @@ import {
 	ItemGroup,
 	ItemTitle,
 } from "@crm/ui/components/item";
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { SectionHeading } from "@crm/ui/components/section-heading";
 import {
 	SimpleTable,
 	SimpleTableCell,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { Switch } from "@crm/ui/components/switch";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { thongBaoMessages } from "@/lib/messages/thong-bao";
@@ -38,8 +39,6 @@ export type DongCaiDat = {
 	muc: MucLoai;
 	dayRa: boolean;
 };
-
-type ChuCaiDat = ReturnType<typeof thongBaoMessages>["caiDat"];
 
 function congTacCua({
 	ten,
@@ -77,15 +76,14 @@ export function BangLoaiThongBao({
 	dong,
 	tenKenh,
 	khoaKenh,
-	t,
 	onDoi,
 }: {
 	dong: DongCaiDat[];
 	tenKenh: string;
 	khoaKenh: (loai: string) => boolean;
-	t: ChuCaiDat;
 	onDoi: (loai: string, dayRa: boolean) => void;
 }) {
+	const t = thongBaoMessages(useLocale()).caiDat;
 	const nhom: { muc: MucLoai; ten: string; moTa: string }[] = [
 		{ muc: "can-lam", ten: t.canLam, moTa: t.canLamMoTa },
 		{ muc: "de-biet", ten: t.deBiet, moTa: t.deBietMoTa },
@@ -169,7 +167,7 @@ export function BangLoaiThongBao({
 	);
 }
 
-export function KhoiLoaiThongBao() {
+function NoiDungLoaiThongBao() {
 	const t = thongBaoMessages(useLocale());
 	const m = t.caiDat;
 	const trpc = useTRPC();
@@ -199,7 +197,19 @@ export function KhoiLoaiThongBao() {
 		}),
 	);
 
-	if (caiDat.isPending) return <KhungXuong hinh="the" />;
+	if (caiDat.isPending) {
+		return (
+			<div
+				aria-busy="true"
+				className="flex flex-col gap-3"
+				data-trang-thai="ST-cai-dat-cho-tai"
+			>
+				<Skeleton className="h-4 w-72" />
+				<Skeleton className="h-48 w-full" />
+				<Skeleton className="h-32 w-full" />
+			</div>
+		);
+	}
 	if (caiDat.isError || !caiDat.data) {
 		return (
 			<VungTaiLoi
@@ -250,9 +260,25 @@ export function KhoiLoaiThongBao() {
 					const l = du.loai.find((x) => x.loai === loai);
 					if (l) luu.mutate({ loai: l.loai, dayRa });
 				}}
-				t={m}
 				tenKenh={tenKenh}
 			/>
 		</div>
+	);
+}
+
+export function KhoiLoaiThongBao() {
+	const m = thongBaoMessages(useLocale()).caiDat;
+	const idTieuDe = useId();
+	return (
+		<section
+			aria-labelledby={idTieuDe}
+			className="flex scroll-mt-20 flex-col gap-3 border-t pt-5"
+			id="loai-thong-bao"
+		>
+			<SectionHeading id={idTieuDe} level={2}>
+				{m.tieuDe}
+			</SectionHeading>
+			<NoiDungLoaiThongBao />
+		</section>
 	);
 }

@@ -13,7 +13,6 @@ import {
 import { KhoiLoaiThongBao } from "@/components/thong-bao/khoi-loai-thong-bao";
 import { getLocale } from "@/lib/locale/server";
 import { nhacQuaZaloMessages } from "@/lib/messages/nhac-qua-zalo";
-import { thongBaoMessages } from "@/lib/messages/thong-bao";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -53,7 +52,6 @@ async function ThongBao() {
 	const t = nhacQuaZaloMessages(await getLocale());
 	const queryClient = getServerQueryClient();
 	const trpcMayChu = getServerTrpc();
-	const caiDat = thongBaoMessages(await getLocale()).caiDat;
 	await Promise.all([
 		queryClient.prefetchQuery(trpcMayChu.zalo.cuaToi.queryOptions()),
 		queryClient.prefetchQuery(trpcMayChu.thongBao.caiDat.queryOptions()),
@@ -78,16 +76,7 @@ async function ThongBao() {
 					<KhoiKenh />
 				</section>
 				<KhoiDongTroLyOkr />
-				<section
-					aria-labelledby="loai-thong-bao-tieu-de"
-					className="flex scroll-mt-20 flex-col gap-3 border-t pt-5"
-					id="loai-thong-bao"
-				>
-					<SectionHeading id="loai-thong-bao-tieu-de" level={2}>
-						{caiDat.tieuDe}
-					</SectionHeading>
-					<KhoiLoaiThongBao />
-				</section>
+				<KhoiLoaiThongBao />
 			</div>
 		</HydrateClient>
 	);

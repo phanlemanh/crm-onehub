@@ -184,10 +184,10 @@ const vi: ThongBaoMessages = {
 		cotLoai: "Loại",
 		cotChuong: "Chuông",
 		chuongLuonBat: "{loai} trong chuông, luôn bật",
-		congTacKenh: "{loai} qua {kenh}",
-		khongKenh: "Zalo hay Slack",
+		congTacKenh: "{loai} gửi qua {kenh}",
+		khongKenh: "Zalo hoặc Slack",
 		lyDoChuaNoi:
-			"Bạn chưa nối Zalo hay Slack nên các công tắc này đang khoá. Nối Zalo ở đầu trang này.",
+			"Bạn chưa nối Zalo hoặc Slack nên các công tắc này đang khoá. Nối Zalo ở đầu trang này.",
 		lyDoZaloTat: "Zalo chưa bật cho xưởng này nên chưa gửi được gì qua Zalo.",
 		daLuu: "Đã lưu",
 		luuLoi: "Chưa lưu được — thử lại.",

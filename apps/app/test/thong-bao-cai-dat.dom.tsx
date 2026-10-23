@@ -234,7 +234,9 @@ describe("tbk-man", () => {
 	test("tbk-man: e — dang tai la khung xuong, tai hong la vung loi co thu lai", async () => {
 		choMai = true;
 		await ve(<KhoiLoaiThongBao />);
-		expect(document.querySelector("[data-khung-xuong]")).not.toBeNull();
+		expect(
+			document.querySelector("[data-trang-thai=ST-cai-dat-cho-tai]"),
+		).not.toBeNull();
 		act(() => root?.unmount());
 		document.body.innerHTML = "";
 		choMai = false;
