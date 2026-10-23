@@ -3580,6 +3580,7 @@ risk_tiers:
     - "lib/eval-yaml.cjs"
     - "scripts/lo-trinh.mjs"
     - "scripts/product-map.mjs"
+    - ".github/workflows/ci.yml"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"

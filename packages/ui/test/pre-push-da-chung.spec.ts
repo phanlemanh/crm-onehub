@@ -367,8 +367,8 @@ describe("cay-ma", () => {
 			false,
 		],
 		[
-			"ci.yml",
-			(k) => commit(k.goc, [".github/workflows/ci.yml", "name: CI\n"]),
+			".github/ghi-chu.md",
+			(k) => commit(k.goc, [".github/ghi-chu.md", "ghi chu\n"]),
 			false,
 		],
 		[

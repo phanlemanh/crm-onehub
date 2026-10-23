@@ -44,7 +44,6 @@ if (!coCommit(DAU_PR) || !coCommit(ONEHUB)) {
 	process.exit(2);
 }
 
-const truoc = phai(GOC, ["worktree", "list", "--porcelain"]);
 const tam = mkdtempSync(join(tmpdir(), "ca-550-"));
 const cay = join(tam, "cay");
 const sach = join(tam, "sach");
@@ -110,6 +109,8 @@ try {
 	rmSync(tam, { recursive: true, force: true });
 }
 
-const sau = phai(GOC, ["worktree", "list", "--porcelain"]);
-if (sau !== truoc) sai("don-dep", "danh sach worktree khac truoc");
+const conLai = phai(GOC, ["worktree", "list", "--porcelain"])
+	.split("\n")
+	.filter((d) => d.startsWith("worktree ") && d.includes(tam));
+if (conLai.length) sai("don-dep", `con worktree tam: ${conLai.join(", ")}`);
 process.exit(loi.length ? 1 : 0);

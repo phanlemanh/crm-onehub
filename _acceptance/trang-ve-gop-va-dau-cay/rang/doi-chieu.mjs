@@ -45,7 +45,7 @@ const DOT_BIEN = [
 		ca: "(e) bo nhanh .github",
 		sua: [["scripts/pre-push-da-chung.mjs", "\t\tif (ds.some((t) => t.startsWith(THU_MUC_GITHUB))) continue;\n", ""]],
 		spec: SPEC_E,
-		test: "cay-ma: ci.yml -> khac",
+		test: "cay-ma: .github/ghi-chu.md -> khac",
 	},
 	{
 		ca: "(f) bo van tay moi truong",
@@ -100,6 +100,12 @@ const DOT_BIEN = [
 		sua: [["scripts/trang-ve-gop.mjs", "\tconst khoa = layKhoa(goc, env);", "\tconst khoa = join(tmpdir(), \"khong-khoa\");"]],
 		spec: SPEC_B,
 		test: "an-toan (h): khoa ve dang giu thi cho, khoa cu thi bo",
+	},
+	{
+		ca: "(l) ve lai ca khi tua nhanh",
+		sua: [["scripts/trang-ve-gop.mjs", "\tif (!truoc.ok || truoc.ra !== cha[0]) return;\n", ""], ["scripts/trang-ve-gop.mjs", "includes(TUA_NHANH)) return;", "includes(TUA_NHANH + \"x\")) return;"]],
+		spec: SPEC_B,
+		test: "an-toan (i): tua nhanh toi mot commit gop co san thi khong ve, khong viet lai",
 	},
 ];
 

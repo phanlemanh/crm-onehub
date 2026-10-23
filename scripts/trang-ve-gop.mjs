@@ -21,6 +21,7 @@ export const TRANG_VE = {
 };
 
 const KHONG_HOOK = ["-c", "core.hooksPath=/dev/null"];
+const TUA_NHANH = "Fast-forward";
 
 const DONG_THUOC_TINH = new RegExp(`^(\\S+)\\s.*\\bmerge=${TRANG_VE.driver}\\b`);
 
@@ -175,8 +176,11 @@ function khac(goc, commit, trangMoi, env) {
 
 function sauGop(goc) {
 	const env = envSach();
-	const cha = gitPhai(goc, ["rev-list", "--parents", "-n", "1", "HEAD"], env).split(" ").length - 1;
-	if (cha < 2) return;
+	const cha = gitPhai(goc, ["rev-list", "--parents", "-n", "1", "HEAD"], env).split(" ").slice(1);
+	if (cha.length < 2) return;
+	if (gitPhai(goc, ["reflog", "-1", "--format=%gs", "HEAD"], env).includes(TUA_NHANH)) return;
+	const truoc = chay("git", ["rev-parse", "-q", "--verify", "ORIG_HEAD"], { cwd: goc, env });
+	if (!truoc.ok || truoc.ra !== cha[0]) return;
 	const trang = docTrang(goc).filter((t) => blobCua(goc, "HEAD", t, env));
 	if (trang.length === 0) return;
 	if (process.env.CRM_SKIP_HOOKS) {

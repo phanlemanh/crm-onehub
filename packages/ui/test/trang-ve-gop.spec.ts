@@ -453,4 +453,28 @@ describe("an-toan", () => {
 		expect(trangHead(k2)).toBe("3\na\nb\nz");
 		expect(existsSync(khoa2)).toBe(false);
 	}, 60_000);
+	test("an-toan (i): tua nhanh toi mot commit gop co san thi khong ve, khong viet lai", () => {
+		const k = dungKho();
+		git(k.goc, "checkout", "-q", "-b", "nhanh");
+		git(k.goc, "checkout", "-q", "-b", "phu", "onehub");
+		commit(k, ["_acceptance/y/contract.md", "y\n"]);
+		git(k.goc, "checkout", "-q", "onehub");
+		commit(k, ["_acceptance/z/contract.md", "z\n"]);
+		chay(k.goc, [
+			"-c",
+			"core.hooksPath=/dev/null",
+			"merge",
+			"--no-edit",
+			"phu",
+		]);
+		const m = git(k.goc, "rev-parse", "onehub");
+		expect(git(k.goc, "show", "onehub:PRODUCT-MAP.md")).not.toBe("3\na\ny\nz");
+		git(k.goc, "checkout", "-q", "nhanh");
+		git(k.goc, "reset", "-q", "--hard", "onehub^1");
+		const r = gop(k);
+		expect(r.ma).toBe(0);
+		expect(git(k.goc, "rev-parse", "HEAD")).toBe(m);
+		expect(soLanVe(k)).toBe(0);
+		expect(r.loi).not.toContain("trang-ve:");
+	});
 });
