@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: thong-bao-mot-nguon-nhieu-kenh
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: f4a3feba5e38908ef913430a449a6fe48b1ee2ab
-human_signoff:
+human_signoff: Manh Phan 2026-10-23
 ---
 
 # Evidence Report: thong-bao-mot-nguon-nhieu-kenh
@@ -123,7 +123,7 @@ human_signoff:
     - domain-correctness: PASS — (a) CONTEXT.md có mục «Cần làm» (dòng 364-369) và «Để biết» (371-375), đều gọi là mức của một loại thông báo. Định nghĩa khớp luật chia L2 và bảng mức trong tệp thiết kế: Cần làm là chờ chính người nhận làm việc (duyệt, cập nhật, trả lời, quá hạn/sắp hạn, đối soát lệch), Để biết chỉ báo tin. Mục Cần làm còn nói rõ khác «việc cần làm» ở chỗ nào: «việc cần làm» đã bị cấm vì lẫn với Việc, còn «Cần làm» là mức của thông báo, không phải một bản ghi việc. (b) Mục «Thông báo» dòng 359 viết: «Zalo hay Slack chỉ chuyển tiếp thông báo theo cài đặt loại thông báo của người nhận; chuông luôn nhận đủ mọi loại, không tắt được.» (c) Không câu nào nói ngược: mục «Nhắc buổi sáng» dòng 348 viết mục bị tắt «vẫn có thông báo trong chuông». Mục «Bot Zalo» dòng 377 vẫn ghi «chỉ gửi nhắc buổi sáng…», hơi cũ so với việc Zalo nay chuyển tiếp cả thông báo sự kiện, nhưng câu này không bảo Zalo là đường riêng và không bảo chuông tắt được.
     - operational-feasibility: FAIL — Ý (a) và (b) đạt: mục «Cần làm», «Để biết» khớp luật chia L2 và nói rõ khác «việc cần làm»; mục «Thông báo» (dòng 359) ghi «Zalo hay Slack chỉ chuyển tiếp thông báo theo cài đặt loại thông báo của người nhận; chuông luôn nhận đủ mọi loại, không tắt được». Ý (c) trượt: mục «Bot Zalo» (dòng 377-378) còn ghi «tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi sáng, trả lời mã nối…». Câu này cho Zalo chỉ đi theo nhắc buổi sáng, nên nó nói ngược với tệp thiết kế (L7, L8, đường đẩy 2), nơi Zalo chuyển tiếp cả thông báo sự kiện qua guiZalo.
     - spec-alignment: PASS — (a) CONTEXT.md có đủ mục «Cần làm» (dòng 364-369) và «Để biết» (371-375), đều gọi là «mức của một loại thông báo». Định nghĩa và ví dụ khớp luật chia L2 và bảng mức trong tệp thiết kế. «Cần làm» nói rõ khác «việc cần làm» ở dòng 368: «việc cần làm» đã bị cấm vì lẫn với Việc, còn «Cần làm» là mức của thông báo, không phải một bản ghi việc. (b) Mục «Thông báo» (dòng 359) nói: «Zalo hay Slack chỉ chuyển tiếp thông báo theo cài đặt loại thông báo của người nhận; chuông luôn nhận đủ mọi loại, không tắt được.» (c) Tôi không thấy câu nào nói ngược. Mục Nhắc buổi sáng (dòng 348) nói loại bị tắt «vẫn có thông báo trong chuông». Chỉ có một điểm cũ: mục «Bot Zalo» (dòng 377) ghi «chỉ gửi nhắc buổi sáng», chưa nhắc việc chuyển tiếp thông báo sự kiện sau TB2. Câu này không nói Zalo là đường riêng, cũng không nói chuông tắt được, nên không tính là vi phạm.
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-10-23 — Đạt
 
 ### Lệnh suite (hồi quy)
 

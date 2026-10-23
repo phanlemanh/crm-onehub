@@ -5,7 +5,7 @@ slug: thong-bao-mot-nguon-nhieu-kenh
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-23T02:51:55Z
 design_doc: docs/superpowers/specs/2026-10-23-thong-bao-mot-nguon-nhieu-kenh-design.md
@@ -76,3 +76,11 @@ công tắc (trùng mặc định thì máy xoá hàng); người bị xoá thì
   mức — L2). Câu trả lời khác khuyến nghị thì máy sửa AC-1, AC-6, AC-7 rồi trình lại.
 - Tệp chạm ngoài vùng của làn: `apps/app/app/(app)/[slug]/reminders/page.tsx` (thêm một mục), `nhac-ke-hoach.ts`,
   `schedules/dispatch.ts` (thêm một bước) — đăng ở phanlemanh/crm-onehub#375 qua giám sát trước S3.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-23:
+  - Ngoài-1: Nếu một thông báo sự kiện bị ghi hỏng nội dung, trong tối đa 30 phút không ai nhận được tin đẩy qua Zalo hay Slack cho thông báo sự kiện; chuông vẫn đủ.
+  - Ngoài-4: Khi quản trị tắt đẩy qua Zalo hay Slack cho cảnh báo của trợ lý AI, cảnh báo đó vẫn hiện lại trong chuông mỗi sáng đến hết tháng, và bật lại giữa tháng thì tin cũ có thể gửi muộn nhiều ngày.
+  - Ngoài-5: Phần đếm thông báo lệch kênh của lệnh đối chiếu có thể hỏng mà bài kiểm vẫn xanh, nên con số lệch đó chưa được kiểm chứng chắc.
+  - Ngoài-6: Bài kiểm có thể vẫn xanh nếu mục Loại thông báo báo sai kênh đang dùng hay sai lý do không có kênh.
+  - Ngoài-7: Nếu ai sửa nhầm đường dẫn của nút «Cài đặt thông báo» trong chuông, bài kiểm vẫn xanh và người dùng có thể không tới đúng mục Loại thông báo.
+  - Ngoài-8: Chưa bài kiểm nào so tin Zalo và Slack buổi sáng thật sự gửi đi với bản chụp trước vòng, nên một đổi chữ nhẹ có thể không ai thấy ngay.
+  - Ngoài-9: Bài kiểm cho người không có kênh nào có thể xanh dù hệ thống chưa thật sự xét tới người đó.
