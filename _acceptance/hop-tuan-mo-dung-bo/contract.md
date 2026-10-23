@@ -172,5 +172,6 @@ rời».
   KR đọc từ `okr.toanCanh`; lý do rỗng tính ở màn. API đổi đúng một chỗ: `tuanDau` của bộ rỗng thành `false`.
 - Đường nền hạ tầng chưa chạy: phiên S1 ngoài dãy không giữ khoá `duong-nen` của đợt; dãy V2 chạy trước S4.
 - Hỏi-1 (quản trị kiêm trưởng), Hỏi-2 (đổi AC-7 của VK3 và hai thước của nó; thẻ con giữ bộ đang xem), Hỏi-3 (VK8
-  AC-3 và hàng số Họp tuần), Hỏi-4 (bỏ design-pass), Hỏi-5 (ô «Tự tin thấp») chờ chủ kho ở Cổng Phạm vi — xem
-  `decisions.jsonl`.
+  AC-3 và hàng số Họp tuần), Hỏi-4 (ô «Tự tin thấp») chờ chủ kho ở Cổng Phạm vi — xem `decisions.jsonl`.
+- Design-pass đã chạy theo lời chủ kho ở Cổng Phạm vi (24/10): bản mẫu `/proto/hop-tuan-mo-dung-bo`, sổ phiên
+  `design-pass.md`.

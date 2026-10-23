@@ -91,7 +91,7 @@ cùng hình. Lúc lỗi: giữ vùng lỗi `ST-hoptuan-loi` hôm nay (một vùn
 Gặp VK8: VK8 AC-3 viết «hàng số chỉ có ở thẻ OKR» (bốn ô của bộ: Ngày còn lại · Tiến độ · KR đã cập nhật · KR tự tin
 thấp). Hàng của Họp tuần là hàng khác — số của tuần, có «Đáng bàn», không có Tiến độ — nên mang dấu riêng
 `[data-hang-so-hop]`, không dùng dấu của VK8. Ai gộp sau dùng lại hàm ngày còn lại của người gộp trước (một luật, một
-hàm). Hỏi-3 xin chủ kho chốt lời AC-3 của VK8; Hỏi-5 xin chốt ô «Tự tin thấp» là một số.
+hàm). Hỏi-3 xin chủ kho chốt lời AC-3 của VK8; Hỏi-4 xin chốt ô «Tự tin thấp» là một số.
 
 ### 4. Màn rỗng nói đúng lý do (H2)
 

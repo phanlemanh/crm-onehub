@@ -32,7 +32,7 @@
     {"i": 9, "p": "Đối chiếu ngoài: Tability (chụp thật 22/10) mở đúng plan của đội và có ô số đầu plan."}
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Ba lựa chọn máy ghi là «đã có căn cứ» nhưng thật ra còn lối khác. Đã sửa: chọn ô «Tự tin thấp» thành câu hỏi cho anh (Hỏi-5); sửa câu sai «chưa có lần cập nhật» ngay ở máy chủ thay vì né; ghi lại căn cứ tính bộ ở trang."},
+    {"i": 0, "p": "Ba lựa chọn máy ghi là «đã có căn cứ» nhưng thật ra còn lối khác. Đã sửa: chọn ô «Tự tin thấp» thành câu hỏi cho anh (Hỏi-4); sửa câu sai «chưa có lần cập nhật» ngay ở máy chủ thay vì né; ghi lại căn cứ tính bộ ở trang."},
     {"i": 1, "p": "Không ảnh nào chụp danh sách «Đơn vị có KR» thật — đúng màn production 22/10. Đã sửa: dữ liệu mẫu thêm một chu kỳ mà OneHub rỗng còn các đơn vị có KR; thêm bốn ảnh và phép đo danh sách."},
     {"i": 2, "p": "Chưa đo số trên danh sách khớp với Họp tuần của đơn vị được bấm, và chưa tách «cập nhật tuần này» với «tuần trước». Đã sửa: đo quan hệ hai bên cho mọi đơn vị được liệt; thêm KR chỉ cập nhật tuần trước; bỏ ca dữ liệu không thể có."},
     {"i": 3, "p": "Đường đầu-cuối chỉ đăng nhập trưởng phòng; thành viên và quản trị chỉ được đo trên hàm. Đã sửa: đo thêm hai vai trên phiên thật, và đo khi đọc cây tổ chức lỗi thì trang báo lỗi chứ không mở OneHub."},

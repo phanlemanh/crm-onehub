@@ -19,6 +19,7 @@ import { GoTinHieuRacMau } from "./_modules/go-tin-hieu-rac";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
 import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
 import { HopThongBaoMau } from "./_modules/hop-thong-bao-tren-web";
+import { HopTuanMoDungBoMau } from "./_modules/hop-tuan-mo-dung-bo";
 import { KanbanViecMau } from "./_modules/kanban-viec";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
@@ -124,6 +125,7 @@ const BANG_GHEP = {
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
 	"cho-tac-nhan-lau": ChoTacNhanLauMau,
+	"hop-tuan-mo-dung-bo": HopTuanMoDungBoMau,
 	"ngan-kr-mot-cho": NganKrMotChoMau,
 } satisfies Record<string, ProtoComponent>;
 
