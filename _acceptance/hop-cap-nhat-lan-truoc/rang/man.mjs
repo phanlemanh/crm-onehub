@@ -104,14 +104,14 @@ async function suySlug(cookie) {
 		headers: { cookie: `${cookie.ten}=${cookie.gia}; lang=vi` },
 	});
 	const dich = res.headers.get("location");
-	if (!dich) return null;
+	if (!dich) return { slug: null, vi: `status ${res.status}, khong location` };
 	const dau = new URL(dich, APP).pathname
 		.replace(/^\/+|\/+$/g, "")
 		.split("/")[0];
 	return dau &&
 		!["onboarding", "sign-in", "het-quyen"].some((x) => dau.startsWith(x))
-		? dau
-		: null;
+		? { slug: dau, vi: dich }
+		: { slug: null, vi: `status ${res.status}, location ${dich}` };
 }
 
 async function doKho(tenKho, ca) {
@@ -299,8 +299,9 @@ try {
 	khongDo(`ghi lan cap nhat qua okr.guiCapNhat: ${loi?.message ?? loi}`);
 }
 dong.push(`GHI CA M=${ca.m} K=${ca.k} ghi chu ${ghiChu.length} ky tu`);
-const slug = await suySlug(cookie);
-if (!slug) khongDo(`${APP}/ khong chuyen toi trang chinh cua workspace`);
+const { slug, vi: viSlug } = await suySlug(cookie);
+if (!slug)
+	khongDo(`${APP}/ khong chuyen toi trang chinh cua workspace (${viSlug})`);
 const caKho = {
 	m: ca.m,
 	k: ca.k,
