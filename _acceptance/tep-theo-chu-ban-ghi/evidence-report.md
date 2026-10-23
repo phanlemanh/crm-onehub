@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 87439b570e2071dcbddb728d50d2cedbe6eebb2f
+verified_commit: bcd9be8310ec3b5ece2a5babdbebc5d53854aac2
 human_signoff: manh 2026-10-23 — ký Cổng Bằng chứng trên vòng chấm 2 (9/9 eval máy đạt, gồm E5b thêm sau lưới trước gộp; vòng 1 REJECT vì năm lỗ đo, đã sửa) và lượt ghim lại sau gộp onehub ee42c149e. Ngoài-1, 2, 3, 4, 7, 8 ghi Known limits; Ngoài-5 chấp nhận không sửa; Ngoài-6 mở hợp đồng mới; đồng ý phần cắt; phê hết các dòng treo.
 ---
 
@@ -174,3 +174,7 @@ Round 2: tám eval và bảy lệnh suite đều xanh trên commit 9dbd0eb5b46bf
 ### Re-pin lần 1 — 2026-10-22, do gộp onehub ee42c149e và thêm E5b cho AC-5
 run_id: repin-20261022T172926Z-14754
 sha: 87439b570e2071dcbddb728d50d2cedbe6eebb2f · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-23, do hoá cũ do gộp onehub 207a8ffc5 (package.json)
+run_id: repin-20261023T035904Z-95819
+sha: bcd9be8310ec3b5ece2a5babdbebc5d53854aac2 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · diff chạm vật đo ngoài làn máy: E7 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
