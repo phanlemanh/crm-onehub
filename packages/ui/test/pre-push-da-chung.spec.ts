@@ -51,10 +51,8 @@ const LENH_GHIM_LAI = [
 	"bun run lint:slop",
 	"bunx turbo run build --force",
 ];
-const MAU_CI = join(
-	NGUON,
-	"_acceptance/trang-ve-gop-va-dau-cay/rang/mau/check-runs-538.json",
-);
+const MAU_CI = join(import.meta.dir, "mau", "check-runs-538.json");
+const MAU_SO_CHAY = join(import.meta.dir, "mau", "so-chay-that.jsonl");
 
 const BUN_GIA = `#!/usr/bin/env node
 const { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } = require("node:fs");
@@ -301,18 +299,10 @@ type DongSoChay = {
 };
 
 function docSoChay(): DongSoChay[] {
-	const ra: DongSoChay[] = [];
-	for (const ten of readdirSync(join(NGUON, "_acceptance"))) {
-		const tep = join(NGUON, "_acceptance", ten, "run-log.jsonl");
-		if (!existsSync(tep)) continue;
-		for (const dong of readFileSync(tep, "utf8").split("\n")) {
-			if (!dong.startsWith("{")) continue;
-			try {
-				ra.push(JSON.parse(dong));
-			} catch {}
-		}
-	}
-	return ra;
+	return readFileSync(MAU_SO_CHAY, "utf8")
+		.split("\n")
+		.filter((d) => d.startsWith("{"))
+		.map((d) => JSON.parse(d));
 }
 
 function dongSoChayThat() {
@@ -613,26 +603,6 @@ describe("so-chay", () => {
 		commit(k.goc, ["_acceptance/h/run-log.jsonl", soChay(s4Du(s0))]);
 		expect(day(k).ma).toBe(0);
 		expect(soBun(k)).toEqual(NAM);
-	});
-
-	test("so-chay (g): moi dong lenh xanh cua so chay that duoc bo doc nhan", async () => {
-		const m = await import(join(NGUON, "scripts/pre-push-da-chung.mjs"));
-		let doc = 0;
-		let loc = 0;
-		for (const d of docSoChay()) {
-			if (!d || Array.isArray(d)) continue;
-			if (
-				d.cmd !== undefined &&
-				d.cmd !== null &&
-				/^[0-9a-f]{40}$/.test(String(d.sha)) &&
-				(d.exit_code === 0 || d.exit_code === "0") &&
-				d.kind !== "repin-do"
-			)
-				loc += 1;
-			if (m.lenhXanhCuaDong(d)) doc += 1;
-		}
-		expect(loc).toBeGreaterThan(0);
-		expect(doc).toBe(loc);
 	});
 });
 

@@ -199,10 +199,12 @@ evals:
       - "scripts/pre-push-da-chung.mjs"
       - ".githooks/da-chung.json"
       - "packages/ui/test/pre-push-da-chung.spec.ts"
+      - "packages/ui/test/mau/so-chay-that.jsonl"
+      - "_acceptance/trang-ve-gop-va-dau-cay/rang/so-chay-that.mjs"
     expected: |
-      bun test -t so-chay. Kho tam co _acceptance/config.yaml chep that (suite_keys bay lenh). Bo mau la dong CHEP NGUYEN
-      VAN tu sổ chạy that cua kho (mot dong S4 «kind» rong co cmd «bunx turbo run build --force»; mot dong `kind: repin`
-      ket_cuc xanh), chi thay sha:
+      bun test -t so-chay, roi node rang/so-chay-that.mjs. Kho tam co _acceptance/config.yaml chep that (suite_keys bay
+      lenh). Bo mau la packages/ui/test/mau/so-chay-that.jsonl: bay dong lenh S4 va mot dong `kind: repin` ket_cuc xanh,
+      CHEP NGUYEN VAN tu so chay that cua kho, chi thay sha khi dung kho tam:
         (a) dong S4 that cho du bay lenh (moi lenh mot dong chep tu kho, exit_code giu nguyen kieu cua ban ghi) -> chi
             «check-types» chay; dong stderr goi «sổ chạy S4».
         (b) dong repin that -> nhu (a), goi «sổ chạy ghim lại».
@@ -210,8 +212,11 @@ evals:
         (d) dong lint co exit_code khac 0 -> lint van chay.
         (e) dong repin ket_cuc «do» -> khong chung gi.
         (f) sha cua dong khac cay ma -> khong chung gi.
-        (g) quet kho that: moi dong cua moi _acceptance/*/run-log.jsonl o HEAD co cmd, sha 40 hex va exit_code 0 (so hay
-            chuoi) va kind khac repin-do -> bo doc nhan la lenh xanh (dem bo doc == dem loc doc lap, > 0).
+      rang/so-chay-that.mjs (doc so chay that, KHONG nam trong bun run test nen khong lam bai kiem phu thuoc so dang song):
+        (1) moi dong cua moi _acceptance/*/run-log.jsonl dang theo doi: bo loc doc lap (cmd chuoi, sha 40 hex, exit_code
+            0 hay "0", kind khong phai repin/repin-do) va lenhXanhCuaDong cho CUNG ket qua tung dong; so dong xanh > 0.
+        (2) moi dong cua tep mau co nguyen van trong mot so chay that.
+        Chieu do: bo doc pha (luon tra null) -> (1) bat dong lech; dong mau sua tay -> (2) bat.
       Chieu do: E12 (g) bo dieu kien phu goi test -> (c) do.
 
   - id: E11
@@ -222,9 +227,10 @@ evals:
       - "scripts/pre-push-da-chung.mjs"
       - ".githooks/da-chung.json"
       - "packages/ui/test/pre-push-da-chung.spec.ts"
+      - "packages/ui/test/mau/check-runs-538.json"
     expected: |
       bun test -t nguon-ci. Mau la dau ra that `gh api repos/phanlemanh/crm-onehub/commits/<dau #538>/check-runs` luu o
-      _acceptance/trang-ve-gop-va-dau-cay/rang/mau/check-runs-538.json; gh gia tren PATH in mau do (co the sua mot o),
+      packages/ui/test/mau/check-runs-538.json; gh gia tren PATH in mau do (co the sua mot o),
       remote url «https://github.com/x/y.git»:
         (a) mau nguyen ven -> khong buoc nao chay; dong stderr goi «CI».
         (b) «test (con-lai)» conclusion skipped -> chi test chay.

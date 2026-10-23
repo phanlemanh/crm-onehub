@@ -2125,7 +2125,7 @@ executors:
     tvg_an_toan: "cd packages/ui && bun test --timeout 300000 ./test/trang-ve-gop.spec.ts -t an-toan"
     tvg_cay_ma: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t cay-ma"
     tvg_dau_hook: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t dau-hook"
-    tvg_so_chay: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t so-chay"
+    tvg_so_chay: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t so-chay && node ../../_acceptance/trang-ve-gop-va-dau-cay/rang/so-chay-that.mjs"
     tvg_ci: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t nguon-ci"
     tvg_nhu_cu: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t 'nhu-cu|verify-da-chung' && bun test --timeout 120000 ./test/pre-push-t1.spec.ts ./test/t1-ma-doc.spec.ts ./test/push-ghim-lai-t1.spec.ts"
     tmd_phan_loai: node --test .github/scripts/test/phan-loai.test.mjs

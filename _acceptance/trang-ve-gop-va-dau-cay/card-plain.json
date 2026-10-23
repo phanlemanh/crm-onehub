@@ -1,39 +1,4 @@
 {
-  "feature_plain": "Gộp onehub vào một nhánh không còn dừng vì hai trang máy vẽ (bản đồ sản phẩm, trang lộ trình), và lần đẩy không chạy lại bộ kiểm nặng khi đúng phần mã ấy đã xanh.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ đánh dấu đúng hai trang mà bộ vẽ bản đồ sinh ra để khi gộp git giữ bản của nhánh, và `bun install` bật cách gộp này cho mọi worktree trên máy."},
-    {"id": "AC-2", "p": "Sẽ gộp lại ca thật 23/10 13:19 của #550 mà không dừng ở hai trang; commit gộp giữ nguyên cha, lời, tác giả, và hai trang khớp đúng bản vẽ lại mà CI đòi."},
-    {"id": "AC-5", "p": "Sẽ vẽ lại chỉ từ nội dung đã commit (hồ sơ soạn dở chưa commit không lọt vào trang), không bao giờ chặn lần gộp khi bộ vẽ hỏng, và không làm gì ở commit thường hay gộp tua nhanh."},
-    {"id": "AC-6", "p": "Sẽ coi hai commit là «cùng phần mã» khi chúng chỉ khác nhau ở tài liệu và sổ chạy; khác một tệp mã, trang lộ trình, tệp CI hay cấu hình nghiệm thu là khác."},
-    {"id": "AC-8", "p": "Sẽ bỏ các bước nặng mà lượt chấm S4 hay làn ghim lại đã chạy xanh trên cùng phần mã, và vẫn chạy bước nào chưa ai chứng (hôm nay: kiểm kiểu)."},
-    {"id": "AC-9", "p": "Sẽ bỏ các bước mà CI đã xanh trên một commit cùng phần mã; ô CI bị bỏ qua hay đỏ thì vẫn chạy, mạng hay GitHub hỏng thì đẩy như cũ."},
-    {"id": "AC-10", "p": "Sẽ giữ lần đẩy y như hôm nay khi chưa có dấu nào, giữ nguyên từng byte hook trước-đẩy và bản khai cổng, và không thêm đường tắt --no-verify nào."}
-  ],
-  "wont_do": [
-    {"id": "AC-3", "p": "Chặn việc git dừng ở hai trang khi lần gộp vướng xung đột ở tệp khác: người chỉ giải tệp thật, commit gộp tự mang trang đúng."},
-    {"id": "AC-4", "p": "Sẽ KHÔNG nới phép kiểm bản đồ ở CI: bỏ bước vẽ lại thì CI vẫn đỏ đúng hai trang."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG để dấu «đã xanh» của máy tự gia hạn hay dùng sai: dấu chỉ ghi bước thật sự chạy, hết hạn sau 14 ngày, mất khi đổi công cụ hay .env."},
-    {"id": "OOS-1", "p": "KHÔNG xử xung đột ở cấu hình nghiệm thu (tệp gộp tay nhiều nhất) và tệp sinh của tRPC — chúng không phải trang máy vẽ."},
-    {"id": "OOS-2", "p": "KHÔNG làm GitHub thôi báo «có xung đột»: PR vẫn cần một lần gộp trên máy rồi đẩy, chỉ là lần gộp ấy tự xong."},
-    {"id": "OOS-3", "p": "KHÔNG vẽ lại khi rebase hay cherry-pick; kho này dùng gộp, CI bắt nếu trang lệch."},
-    {"id": "OOS-4", "p": "Cách hiểu nguồn CI là câu hỏi cho anh ở cổng này (Hỏi-1)."},
-    {"id": "OOS-5", "p": "KHÔNG sửa hook trước-đẩy, bản khai cổng, phép kiểm bản đồ hay luật phân loại tệp nhẹ."}
-  ],
-  "scope_plain": "Ngoài vòng này:",
-  "coverage_plain": [
-    {"i": 0, "p": "Mọi kiểu gộp: tự động (AC-2), dừng vì xung đột tệp khác và gộp không commit (AC-3), tua nhanh (AC-5); rebase để ngoài."},
-    {"i": 1, "p": "Mọi cấu hình: có cách gộp mới (AC-2), máy chưa bật (AC-2 đối chứng), hook tắt (AC-4), bộ vẽ hỏng và hook cũ ở checkout chính (AC-5)."},
-    {"i": 2, "p": "Cây làm việc sạch (AC-2) và có hồ sơ chưa commit (AC-5)."},
-    {"i": 3, "p": "Mọi nguồn «đã xanh»: dấu của hook (AC-7), sổ chạy S4 và ghim lại (AC-8), CI (AC-9), không nguồn nào (AC-10)."},
-    {"i": 4, "p": "Mọi trạng thái của nguồn: đủ, một phần, đỏ hay bỏ qua, quá hạn, hỏng, môi trường khác (AC-7, AC-8, AC-9)."},
-    {"i": 5, "p": "Mọi loại tệp khác nhau giữa hai commit, kể cả diff quá lớn (AC-6)."},
-    {"i": 6, "p": "Đẩy nhiều nhánh một lần, và phiếu của lần đẩy cũ không bao giờ được dùng lại (AC-7, AC-10)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Việc nhận CI làm bằng chứng là đánh đổi rủi ro (CI chấm bản đã gộp onehub, không phải riêng nhánh) mà máy đã tự quyết — nay chuyển thành Hỏi-1 cho anh."},
-    {"i": 1, "p": "Phép kiểm «không thêm --no-verify» lẽ ra sẽ đỏ oan vì chính tệp tiêu chí chứa chữ đó — đã đổi sang chỉ soi tệp chạy được, có đối chứng hai chiều."},
-    {"i": 2, "p": "Dữ liệu mẫu của sổ chạy và của CI là viết tay — đã đổi sang chép từ sổ chạy thật và đầu ra GitHub thật của #538, thêm phép quét mọi sổ chạy của kho và so tên job với tệp CI."},
-    {"i": 3, "p": "Dấu của máy có thể tự gia hạn mãi và đổi bằng chứng CI thành «máy đã chạy» — đã đổi luật: dấu chỉ ghi bước thật sự chạy; thêm ca chuỗi ngày, đổi công cụ, nhiều nhánh."},
-    {"i": 4, "p": "Phần ngoài phạm vi chưa có dấu vết quyết định — đã ghi sổ, và hồ sơ nói rõ B cắt phần nào của 53 phút ở #550."}
-  ]
+  "feature_plain": "Gộp onehub vào một nhánh không còn dừng vì hai trang máy vẽ, và lần đẩy không chạy lại bộ kiểm nặng khi đúng phần mã ấy đã xanh.",
+  "analyst_plain": "Cả hai lượt đều đỏ ở cùng một chỗ: bộ quét «tệp T1 mà bài kiểm đọc» của kho bắt bài kiểm mới đọc sổ chạy thật của kho."
 }
