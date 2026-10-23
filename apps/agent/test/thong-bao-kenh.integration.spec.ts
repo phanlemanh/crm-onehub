@@ -604,9 +604,9 @@ describe("tbk-su-kien", () => {
 		);
 		const z = zaloGia();
 		await day(z, slackGia(), goc);
-		expect(tinZalo(z, chatId("zalo", n.id)).length).toBe(1);
 		const hCu = await db.thongBao.findUniqueOrThrow({ where: { id: cu } });
 		expect(hCu.dayLuc, "thong bao qua cua so van day").toBeNull();
+		expect(tinZalo(z, chatId("zalo", n.id)).length).toBe(1);
 		const hMoi = await db.thongBao.findUniqueOrThrow({ where: { id: moi } });
 		expect(hMoi.dayLuc).not.toBeNull();
 	});
