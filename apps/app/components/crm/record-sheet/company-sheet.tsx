@@ -37,7 +37,11 @@ import {
 	OTruongBang,
 	OTruongPhieu,
 } from "@/components/crm/fields/kieu-truong";
-import { FieldsCog, OTruongTuTao } from "@/components/crm/fields/record-fields";
+import {
+	FieldsCog,
+	nguCanhTepCua,
+	OTruongTuTao,
+} from "@/components/crm/fields/record-fields";
 import { mucChiTiet } from "@/components/crm/fields/truong-chuan";
 import { useBoTriTruong } from "@/components/crm/fields/use-bo-tri-truong";
 import { savingValue } from "@/components/crm/inline-field";
@@ -565,6 +569,7 @@ export function CompanyOverview({ company }: { company: Company }) {
 												saving={isSavingField}
 												onSave={saveFields}
 												nguoiDung={users.data}
+												nguCanhTep={nguCanhTepCua("COMPANY", company)}
 											/>
 										);
 									const mt = truongTheoKhoa.get(muc.key);

@@ -315,7 +315,7 @@ describe("ntl-api-tao-co-truong", () => {
 			{ kieu: "PHONE", gui: () => "0901234567" },
 			{ kieu: "USER", gui: () => chuId },
 		];
-		if (maTran.length !== FIELD_TYPES.length)
+		if (maTran.length !== FIELD_TYPES.filter((k) => k !== "FILE").length)
 			throw new Error(`ntl api tao co truong: thieu kieu ${maTran.length}`);
 
 		const fields: DauVao = {};

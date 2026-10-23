@@ -170,6 +170,7 @@ function congTy(soKeHoach: number, xuongCoKhuon: boolean) {
 		source: "MANUAL",
 		owner: null,
 		contacts: [],
+		tepTheoTruong: {},
 		fields: [],
 		queued: false,
 		createdAt: "2026-09-01T00:00:00.000Z",
@@ -435,6 +436,7 @@ function caNhan() {
 		enrichmentError: null,
 		owner: null,
 		company: null,
+		tepTheoTruong: {},
 		fields: [],
 		queued: false,
 		createdAt: "2026-09-01T00:00:00.000Z",
@@ -983,6 +985,7 @@ async function moSheetLech(
 	dat("companies.byId", () => ({
 		...congTy(0, false),
 		owner: chuSoHuu,
+		tepTheoTruong: {},
 		fields: [truongChon(chon)],
 		deals: [thoaThuan("d1", gia), thoaThuan("d2", null)],
 	}));

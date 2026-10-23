@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hỏi Cổng Phạm vi · pre-push-cau-va-nhan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 66ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình Cổng Phạm vi · pre-push-cau-va-nhan</p>
+    <h1>Hai chỗ người chọn nhánh trước khi chốt phạm vi</h1>
+    <p class="sub">Mỗi khối một câu hỏi và hai nhánh. Nhánh tô xanh là nhánh máy khuyên; chưa nhánh nào được chọn.</p>
+
+    <svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HỎI-1 · CÂU KHAI VÀ HỒ SƠ ĐÃ KÝ · AC-1</text>
+
+      <path d="M 280 136 L 300 136 A 8 8 0 0 0 308 128 L 308 112 A 8 8 0 0 1 316 104 L 336 104" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 280 168 L 300 168 A 8 8 0 0 1 308 176 L 308 192 A 8 8 0 0 0 316 200 L 336 200" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 720 104 L 776 104" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 720 200 L 776 200" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="40" y="104" width="240" height="96" rx="8" fill="#fafafa"/>
+      <rect x="40" y="104" width="240" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="148" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Câu khai mới chạm ô chấm</text>
+      <text x="160" y="168" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">câu khai của hồ sơ #536</text>
+
+      <rect x="336" y="72" width="384" height="64" rx="8" fill="#fafafa"/>
+      <rect x="336" y="72" width="384" height="64" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="348" y="84" width="56" height="14" rx="2" fill="transparent" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+      <text x="376" y="94" fill="#006B4F" font-size="7" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHUYÊN</text>
+      <text x="416" y="96" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Ghim lại hồ sơ cũ bằng máy</text>
+      <text x="348" y="122" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Vòng này chấm lại câu khai (E1)</text>
+
+      <rect x="336" y="168" width="384" height="64" rx="8" fill="#fafafa"/>
+      <rect x="336" y="168" width="384" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="348" y="204" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Chấm lại hồ sơ cũ riêng cho ô đó</text>
+
+      <rect x="776" y="72" width="384" height="64" rx="8" fill="#fafafa"/>
+      <rect x="776" y="72" width="384" height="64" rx="8" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="792" y="108" fill="#171717" font-size="12" font-weight="500" font-family="'Geist', sans-serif">PR này mang đủ bằng chứng</text>
+
+      <rect x="776" y="168" width="384" height="64" rx="8" fill="#fafafa"/>
+      <rect x="776" y="168" width="384" height="64" rx="8" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="792" y="196" fill="#171717" font-size="12" font-weight="500" font-family="'Geist', sans-serif">Thêm một lượt chấm</text>
+      <text x="792" y="216" fill="#575757" font-size="10" font-family="'Geist', sans-serif">và một lần ký lại Cổng Bằng chứng của #536</text>
+
+      <line x1="40" y1="264" x2="1160" y2="264" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <text x="40" y="300" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HỎI-2 · GIỚI HẠN CÒN LẠI · AC-1…AC-4</text>
+
+      <path d="M 280 392 L 300 392 A 8 8 0 0 0 308 384 L 308 368 A 8 8 0 0 1 316 360 L 336 360" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 280 424 L 300 424 A 8 8 0 0 1 308 432 L 308 448 A 8 8 0 0 0 316 456 L 336 456" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 720 360 L 776 360" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 720 456 L 776 456" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="40" y="360" width="240" height="96" rx="8" fill="#fafafa"/>
+      <rect x="40" y="360" width="240" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="404" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Năm giới hạn đã nhận</text>
+      <text x="160" y="424" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ở Cổng Bằng chứng 22/10</text>
+
+      <rect x="336" y="328" width="384" height="64" rx="8" fill="#fafafa"/>
+      <rect x="336" y="328" width="384" height="64" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="348" y="340" width="56" height="14" rx="2" fill="transparent" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+      <text x="376" y="350" fill="#006B4F" font-size="7" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHUYÊN</text>
+      <text x="416" y="352" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Dọn Ngoài-1 tới Ngoài-4</text>
+      <text x="348" y="378" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Câu khai, nhãn dòng nặng, ca sập</text>
+
+      <rect x="336" y="424" width="384" height="64" rx="8" fill="#fafafa"/>
+      <rect x="336" y="424" width="384" height="64" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="348" y="460" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Gộp cả Ngoài-5</text>
+
+      <rect x="776" y="328" width="384" height="64" rx="8" fill="#fafafa"/>
+      <rect x="776" y="328" width="384" height="64" rx="8" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="792" y="364" fill="#171717" font-size="12" font-weight="500" font-family="'Geist', sans-serif">Ngoài-5 còn ghi ở giới hạn đã biết</text>
+
+      <rect x="776" y="424" width="384" height="64" rx="8" fill="#fafafa"/>
+      <rect x="776" y="424" width="384" height="64" rx="8" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="792" y="460" fill="#171717" font-size="12" font-weight="500" font-family="'Geist', sans-serif">Thêm một tiêu chí, một ghim, một chiều đỏ</text>
+
+      <line x1="40" y1="528" x2="1160" y2="528" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="548" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="40" y="564" width="16" height="12" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="64" y="574" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh máy khuyên</text>
+      <rect x="200" y="564" width="16" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="224" y="574" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi, hoặc nhánh khác</text>
+      <rect x="384" y="564" width="16" height="12" rx="3" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="408" y="574" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Hệ quả của nhánh</text>
+      <text x="560" y="574" fill="#575757" font-size="9" font-style="italic" font-family="'Lora', Georgia, serif">Chưa nhánh nào được chọn, người quyết ở Cổng Phạm vi.</text>
+    </svg>
+
+    <footer>pre-push-cau-va-nhan · Cổng Phạm vi · Hỏi-1 AC-1 · Hỏi-2 AC-1…AC-4</footer>
+  </div>
+</body>
+</html>

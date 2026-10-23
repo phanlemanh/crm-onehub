@@ -147,30 +147,6 @@ describe("sk-duong", () => {
 		soO += 1;
 	});
 
-	test("Soạn khi chưa có cuộc: mở bản ghi soan trên Theo đơn vị, không rời trang", async () => {
-		await moKhung("pb:pb-1", { sanSang: SAN_SANG_BAT });
-		await bam(nut(m.nut.soan));
-		await cho(() => banGhiCuoi() !== null, "ghi record");
-		expect(banGhiCuoi()).toBe("soan:cuoc-1");
-		expect(`van day sang trang rieng: ${diTrang.length}`).toBe(
-			"van day sang trang rieng: 0",
-		);
-	});
-
-	test("Tiếp tục: mở đúng cuộc đang soạn", async () => {
-		await moKhung("pb:pb-1", {
-			sanSang: {
-				...SAN_SANG_BAT,
-				cuocDang: { ...CUOC, id: "cuoc-dang", soDongTong: 3, soDongNhan: 1 },
-				soCuocDaDung: 1,
-			},
-		});
-		await bam(nut(m.nut.tiep));
-		await cho(() => banGhiCuoi() !== null, "ghi record");
-		expect(banGhiCuoi()).toBe("soan:cuoc-dang");
-		expect(diTrang.length).toBe(0);
-	});
-
 	test("link cũ ?cuocSoan= thành record=soan bằng thay thế, bỏ cuocSoan", async () => {
 		await moKhung("pb:pb-1", {
 			sanSang: SAN_SANG_BAT,
@@ -213,7 +189,7 @@ describe("sk-duong", () => {
 	});
 
 	test("đếm ô sk-duong", () => {
-		expect(soO).toBe(5);
+		expect(soO).toBe(3);
 	});
 });
 

@@ -1,0 +1,93 @@
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.otdt_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/o-tep-dien-thoai/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/o-tep-dien-thoai/rang/do-man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này; kho Blob là máy chủ giả của _acceptance/truong-tep/rang/blob-gia.mjs."
+      - "Đọc dòng cuối: mã 0 kèm 'otdt man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'otdt man: …'."
+      - "Mở ảnh otdt-phieu-rong-375.png, đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/o-tep-dien-thoai/evidence/]
+    expected: |
+      Dữ liệu dựng qua API thật trong phiên đo: một công ty, hai thoả thuận T1 (chưa có tệp) và T2 (một tệp), một trường DEAL kiểu FILE nhãn «Hợp đồng (thử DA19 khổ hẹp)» tạo bằng fields.create. Phiếu T1 mở ở 375×812, cuộn tới [data-slot="o-tep"].
+      Răng đo hình học của [data-slot="nguon-keo-tha"] bằng getBoundingClientRect: (a) đáy nút ≤ đỉnh khối chữ + 1, khác thì thoát 1 'otdt man: phieu 375 nut canh chu'; (b) số dòng của «Kéo tệp vào đây» = round(cao / lineHeight) = 1, khác thì 'otdt man: phieu 375 nhan <n> dong'; (c) số dòng mô tả ≤ 2, khác thì 'otdt man: phieu 375 mo ta <n> dong'; (d) bề rộng khối chữ ≥ 0.75 × bề rộng trong của khung, khác thì 'otdt man: phieu 375 chu hep <px>'.
+      Ảnh: nhãn trường, «Chưa có tệp.», khung nét đứt với nút trên, hai dòng chữ dưới, không chữ nào đứng riêng một dòng.
+      Số dòng tính bằng cao / lineHeight với lineHeight quy ra px (computed «normal» thì lấy 1.2 × fontSize), không bao giờ NaN — NaN thì thoát 2 'KHONG DO DUOC: dong NaN'.
+      Chiều đỏ: trên onehub 830d82e1f (trước vòng) bước này thoát 1 'otdt man: phieu 375 nut canh chu' — khối chữ flex-1 đứng cạnh nút.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: [packages/ui/src/components/nguon-keo-tha.tsx, apps/app/components/crm/fields/o-tep.tsx, apps/app/components/detail-sheet.tsx, _acceptance/o-tep-dien-thoai/rang/**]
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.otdt_man
+    steps:
+      - "Cùng lượt chạy với E1."
+      - "Mở ảnh otdt-phieu-rong-375.png, đối chiếu nhãn trường với Expected."
+    inputs: [_acceptance/o-tep-dien-thoai/evidence/]
+    expected: |
+      Trên phiếu T1 ở 375: phần tử nhãn của hàng chứa [data-slot="o-tep"] có scrollWidth ≤ clientWidth + 1, khác thì thoát 1 'otdt man: phieu 375 nhan truong bi cat'; đáy nhãn ≤ đỉnh phần giá trị + 1, khác thì 'otdt man: phieu 375 nhan canh gia tri'; |trái nhãn − trái phần giá trị| ≤ 12px, khác thì 'otdt man: phieu 375 le lech <px>'.
+      Đối chứng dương cùng fixture: ở 1280 cùng nhãn ấy nằm bên trái phần giá trị (phải nhãn ≤ trái giá trị), khác thì 'otdt man: phieu 1280 nhan tren gia tri' (E4).
+      Ảnh: «Hợp đồng (thử DA19 khổ hẹp)» trọn chữ trên một dòng riêng, phía dưới là phần giá trị dùng trọn bề ngang.
+      Chiều đỏ: trên onehub 830d82e1f nhãn trong cột 6.5rem bị cắt, thoát 1 'otdt man: phieu 375 nhan truong bi cat'.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: [apps/app/components/detail-sheet.tsx, apps/app/components/crm/fields/o-tep.tsx, _acceptance/o-tep-dien-thoai/rang/**]
+
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.otdt_man
+    steps:
+      - "Cùng lượt chạy với E1."
+      - "Mở ảnh otdt-phieu-co-tep-375.png, đối chiếu với Expected."
+    inputs: [_acceptance/o-tep-dien-thoai/evidence/]
+    expected: |
+      T2 có một tệp tên dài «Hợp đồng hợp tác An Phú — bản ký chính thức có phụ lục giá năm 2026.pdf» gắn qua requestUpload → PUT lên kho Blob giả → complete thật trước khi mở phiếu. Phiếu T2 ở 375: document.documentElement.scrollWidth ≤ 375, khác thì thoát 1 'otdt man: phieu 375 cuon ngang <px>'; với mọi tổ tiên của [data-slot="o-tep"] có overflow-x auto hoặc scroll (vùng cuộn của phiếu), scrollWidth ≤ clientWidth + 1, khác thì 'otdt man: phieu 375 vung cuon tran <px>'; bốn phép (a)–(d) của E1 chạy lại trên khung của T2 với cùng lời ghim, tiền tố 'phieu 375 co tep'; phải của mọi [data-tep] và của [data-slot="nguon-keo-tha"] ≤ phải của phiếu + 1, khác thì 'otdt man: phieu 375 tran phieu'; đúng một [data-tep], khác thì 'otdt man: phieu 375 co tep <n>'.
+      Ảnh: dòng tệp với tên cắt bằng dấu …, cỡ, nút «Mở», «Xoá» ở hàng dưới; khung nét đứt xếp dọc dưới nó; không thanh cuộn ngang.
+      Chiều đỏ: bản sao cho khung nét đứt một bề rộng tối thiểu lớn hơn phiếu (min-w của thang vượt 375) thì bước này thoát 1 'otdt man: phieu 375 vung cuon tran'.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: [packages/ui/src/components/nguon-keo-tha.tsx, apps/app/components/crm/fields/o-tep.tsx, apps/app/components/detail-sheet.tsx, _acceptance/o-tep-dien-thoai/rang/**]
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.otdt_man
+    steps:
+      - "Cùng lượt chạy với E1."
+      - "Mở ảnh otdt-phieu-rong-1280.png, đối chiếu với Expected."
+    inputs: [_acceptance/o-tep-dien-thoai/evidence/]
+    expected: |
+      Phiếu T1 ở 1280×900: phải nhãn ≤ trái phần giá trị + 1, khác thì thoát 1 'otdt man: phieu 1280 nhan tren gia tri'; trong khung nét đứt khoảng dọc của nút và của khối chữ chồng nhau (đỉnh nút < đáy chữ và đỉnh chữ < đáy nút) và trái khối chữ ≥ phải nút, khác thì 'otdt man: phieu 1280 khung xep doc'.
+      Ảnh: như ttp-rong-1280.png của truong-tep — nhãn cột trái, nút «Chọn tệp» cạnh «Kéo tệp vào đây».
+      Chiều đỏ: bản sao với bề rộng nền của khối chữ trong NguonKeoTha nâng lên basis-full thì bước này thoát 1 'otdt man: phieu 1280 khung xep doc'.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: [packages/ui/src/components/nguon-keo-tha.tsx, apps/app/components/detail-sheet.tsx, apps/app/components/crm/fields/o-tep.tsx, _acceptance/o-tep-dien-thoai/rang/**]
+
+  - id: E5
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.otdt_man
+    steps:
+      - "Cùng lượt chạy với E1."
+      - "Mở hai ảnh otdt-nguon-1280.png và otdt-nguon-375.png, đối chiếu với Expected."
+    inputs: [_acceptance/o-tep-dien-thoai/evidence/]
+    expected: |
+      API của phiên đo chạy với KHO_TAI_LIEU_BLOB_TOKEN giả cạnh TEP_BAN_GHI_BLOB_TOKEN giả, nên taiLieuNguon.trangThai trả bat: true; khác thì thoát 2 'KHONG DO DUOC: kho nguon tat'. Mở /<slug>/tai-lieu, bấm [data-tai-nguon], chờ [data-hop-tai-nguon] [data-slot="nguon-keo-tha"].
+      Ở 1280: nút và khối chữ cùng hàng như E4, khác thì 'otdt man: nguon 1280 khung xep doc'. Ở 375: «Kéo tệp vào đây» một dòng, khác thì 'otdt man: nguon 375 nhan <n> dong'; mô tả ≤ 2 dòng, khác thì 'otdt man: nguon 375 mo ta <n> dong'; scrollWidth của hộp ≤ clientWidth + 1 và scrollWidth trang ≤ 375, khác thì 'otdt man: nguon 375 cuon ngang'.
+      Ảnh: hộp «Tải nguồn lên» với vùng kéo thả gọn ở cả hai khổ.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: [packages/ui/src/components/nguon-keo-tha.tsx, "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx", _acceptance/o-tep-dien-thoai/rang/**]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: unit
+    cmd: config:executors.test.otdt_dom
+    expected: "exit 0; bước đầu là git diff --exit-code <merge-base origin/onehub HEAD> HEAD trên đúng năm tệp bài dưới — có dòng đổi thì thoát 1 với 'otdt dom: bai cu bi sua'; chiều đỏ: bản sao sửa một dòng trong nguon-canh-nhau.dom.tsx thì bước này thoát 1 với lời ấy. Rồi năm bài DOM có từ trước vòng chạy nguyên: packages/ui/test/nguon-keo-tha.dom.tsx (nút chọn, đang kéo, khoá), packages/ui/test/nguon-canh-nhau.dom.tsx (nhãn, mô tả, chọn tệp, từ chối sai kiểu và quá cỡ, lỗi, tắt), apps/app/test/truong-tep.dom.tsx (ô Tệp, bảng, bộ lọc), apps/app/test/nguon-keo-tha-chu.dom.tsx và apps/app/test/tai-lieu-nguon.dom.tsx (hộp tải nguồn). Vòng không sửa bài nào trong năm tệp ấy; mỗi bài đã có chiều đỏ ghi ở hồ sơ sinh ra nó (truong-tep, nguon-keo-tha-reui, bo-chu-lap-keo-tha)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/ui/src/components/nguon-keo-tha.tsx, packages/ui/test/nguon-keo-tha.dom.tsx, packages/ui/test/nguon-canh-nhau.dom.tsx, apps/app/components/crm/fields/o-tep.tsx, apps/app/components/detail-sheet.tsx, apps/app/test/truong-tep.dom.tsx, apps/app/test/nguon-keo-tha-chu.dom.tsx, apps/app/test/tai-lieu-nguon.dom.tsx, "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx"]

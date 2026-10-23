@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hỏi-1 · quyền đi theo · tep-theo-chu-ban-ghi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .subtitle { color: var(--color-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem; }
+    .diagram { overflow-x: auto; }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <p class="eyebrow">Hỏi-1 · tep-theo-chu-ban-ghi · AC-1 · AC-2 · AC-7</p>
+    <h1>Quyền mở tệp đi theo người phụ trách mới</h1>
+    <p class="subtitle">Quyền tính lại ở mỗi lần gọi từ người phụ trách hiện tại. Chỗ hở duy nhất: URL đã cấp trước lúc đổi.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 1120 496" role="img" aria-labelledby="f1-title f1-desc" xmlns="http://www.w3.org/2000/svg">
+        <title id="f1-title">Quyền mở tệp đi theo người phụ trách mới</title>
+        <desc id="f1-desc">Dòng thời gian ba làn: A, B và máy chủ. A phụ trách và bấm Mở, nhận URL sống 300 giây. Q đổi Phụ trách sang B. Lời gọi kế: A bị từ chối, B mở được. Nhánh phụ: URL A đã cầm vẫn tải được tới hết 300 giây.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        </defs>
+
+        <rect width="1120" height="496" fill="#fafafa"/>
+
+        <rect x="592" y="72" width="480" height="328" fill="rgba(0,107,79,0.06)"/>
+        <line x1="592" y1="64" x2="1072" y2="64" stroke="#006B4F" stroke-width="1"/>
+        <line x1="592" y1="60" x2="592" y2="72" stroke="#006B4F" stroke-width="1"/>
+        <line x1="1072" y1="60" x2="1072" y2="72" stroke="#006B4F" stroke-width="1"/>
+        <text x="832" y="52" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cửa hở ≤ 300 giây</text>
+        <text x="596" y="52" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">0 giây</text>
+        <text x="1068" y="52" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">300 giây</text>
+
+        <line x1="40" y1="80" x2="1080" y2="80" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+        <line x1="40" y1="240" x2="1080" y2="240" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+        <line x1="40" y1="320" x2="1080" y2="320" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+        <line x1="40" y1="400" x2="1080" y2="400" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+        <line x1="176" y1="80" x2="176" y2="400" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+
+        <text x="56" y="156" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">A</text>
+        <text x="56" y="172" fill="#575757" font-size="10" font-family="'Geist', sans-serif">phụ trách cũ</text>
+        <text x="56" y="276" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">B</text>
+        <text x="56" y="292" fill="#575757" font-size="10" font-family="'Geist', sans-serif">phụ trách mới</text>
+        <text x="56" y="356" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">MÁY CHỦ</text>
+        <text x="56" y="372" fill="#575757" font-size="10" font-family="'Geist', sans-serif">tính quyền lúc gọi</text>
+
+        <path d="M356 124 H390" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M456 148 V352 Q456 360 464 360 H630" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M528 148 V188 Q528 196 536 196 H630" fill="none" stroke="#006B4F" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+        <path d="M772 336 V288 Q772 280 780 280 H850" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+        <rect x="196" y="100" width="160" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="276" y="128" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">A phụ trách — Mở bật</text>
+
+        <rect x="392" y="100" width="200" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="492" y="120" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">A bấm Mở, nhận URL</text>
+        <text x="492" y="136" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">(sống 300 giây)</text>
+
+        <rect x="632" y="172" width="432" height="48" rx="6" fill="#fafafa"/>
+        <rect x="632" y="172" width="432" height="48" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+        <text x="848" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">URL A đã cầm vẫn tải được tới hết 300 giây</text>
+        <text x="848" y="208" fill="#006B4F" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">(Hỏi-1, Known limits)</text>
+
+        <rect x="852" y="256" width="212" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="958" y="276" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lời gọi kế:</text>
+        <text x="958" y="292" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">A bị từ chối, B mở được</text>
+
+        <rect x="632" y="336" width="180" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="722" y="356" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Q đổi Phụ trách sang B</text>
+        <text x="722" y="372" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ownerId: A → B</text>
+
+        <line x1="40" y1="428" x2="1080" y2="428" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="40" y="448" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+        <rect x="40" y="464" width="16" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="64" y="474" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Bước</text>
+
+        <path d="M120 470 H148" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <text x="156" y="474" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Bước kế</text>
+
+        <rect x="240" y="464" width="16" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+        <text x="264" y="474" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Giới hạn đã biết, ghi Known limits</text>
+
+        <path d="M476 470 H504" fill="none" stroke="#006B4F" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+        <text x="512" y="474" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Nhánh phụ</text>
+
+        <rect x="600" y="464" width="16" height="12" rx="2" fill="rgba(0,107,79,0.06)"/>
+        <text x="624" y="474" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Vùng URL đã cấp còn sống</text>
+      </svg>
+    </div>
+  </main>
+</body>
+</html>

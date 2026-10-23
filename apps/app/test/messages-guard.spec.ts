@@ -486,6 +486,11 @@ const GHIM = {
 	"crm:truongKieu.trong": ["1 không được để trống.", "12 không được để trống."],
 	"crm:truongKieu.chuaLuu": ["Chưa lưu được 1.", "Chưa lưu được 12."],
 	"crm:truongKieu.sua": ["Sửa 1", "Sửa 12"],
+	"crm:tepTruong.mo": ["Mở 1", "Mở 12"],
+	"crm:tepTruong.xoa": ["Xoá 1", "Xoá 12"],
+	"crm:tepTruong.soTep": ["1 tệp", "12 tệp"],
+	"crm:tepTruong.taiBoi": ["bởi 1", "bởi 12"],
+	"crm:tepTruong.hoiXoa.tieuDe": ["Xoá tệp «1»?", "Xoá tệp «12»?"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 	"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
 	"auth:datMatKhau.description": [

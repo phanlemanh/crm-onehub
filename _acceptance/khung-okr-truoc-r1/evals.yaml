@@ -17,6 +17,8 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.r1a_nut_soan
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-7
     expected: "exit 0; apps/app/test/khung-okr-truoc-r1.dom.tsx -t nut-soan dựng TheoDonVi thật với tRPC giả (okr.soanSanSang parse bằng schema output thật của thủ tục, import từ apps/api) — ma trận viết trước 8 dạng {đang tải (truy vấn chưa trả), mở được, có cuộc đang soạn, chế độ ẩn, hết cuộc, tạm nghỉ, chưa có khoá, chưa cấu hình} × vai quản trị: trong [data-hang-nut] nhóm [data-nhom-soan] là phần tử con cuối, chứa ≤ 2 button; trong cả [data-don-vi] (thẻ đơn vị bao thanh) không có [data-slot=field-description] nào của nút soạn và textContent của thẻ trừ phần popover không chứa chuỗi phụ nào của dạng đó (lấy từ okrSoanMessages); ở dạng đang tải nhóm đã có mặt với nút soạn disabled cùng chữ «Soạn OKR cùng Trợ lý»; in 'so dang: 8'. Chiều đỏ ghim: bản sao nut-soan.tsx đặt lại FieldDescription dưới nút ở dạng có cuộc đang soạn phải làm bài đỏ 'chu phu tren thanh: nut-tiep'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/lib/messages/okr-soan.ts", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
@@ -38,6 +40,8 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.r1a_popover_soan
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-7
     expected: "exit 0; khung-okr-truoc-r1.dom.tsx -t popover-soan: ma trận viết trước 6 dạng có chữ phụ {có cuộc đang soạn, chế độ ẩn có cuộc đã dùng, mở được có cuộc đã dùng, hết cuộc, tạm nghỉ, chưa có khoá} — bấm [data-nut=thong-tin-soan] (chuột; rồi đóng; rồi focus + Enter) → [data-slot=popover-content] chứa đúng chuỗi lấy từ okrSoanMessages của dạng đó (tiepMoTa với ngày/lượt/dòng của dữ liệu giả, dsCuoc «N/3 cuộc», cheDoAn + cheDoAnMoTa, hetCuoc, tamNghi, lyDo chua-co-khoa-mo-hinh — so bằng hàm messages, không chuỗi gõ tay); bấm «N/3 cuộc» trong popover → URL có khoá dsCuoc; Esc → popover rời DOM và document.activeElement là nút «i»; ngoài popover, textContent của cả [data-don-vi] không chứa các chuỗi đó. In 'so dang: 6'. Chiều đỏ ghim: bản sao bỏ dsCuoc khỏi popover phải làm bài đỏ 'thieu chu phu: mo-co-cuoc'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/lib/messages/okr-soan.ts", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
@@ -46,6 +50,8 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.r1a_chua_cau_hinh
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-7
     expected: "exit 0; khung-okr-truoc-r1.dom.tsx -t chua-cau-hinh: TheoDonVi với cauNoi=false, pha lap-ke-hoach, soanSanSang trả dạng mở được — ma trận {quản trị, người sửa được không quản trị}: quản trị → [data-nhom-soan] có nút soạn disabled và popover của nút «i» chứa okrSoanMessages.nut.chuaCauHinh; người sửa được → không có [data-nhom-soan], không có [data-nut-soan], văn bản trang không chứa nut.chuaCauHinh. Chiều đỏ ghim: bản sao hiện nút khoá cho mọi người sửa được phải làm bài đỏ 'nguoi thuong thay nut chua cau hinh'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]

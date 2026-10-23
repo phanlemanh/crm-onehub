@@ -480,6 +480,7 @@ const THU_TUC_OKR_LUOT_HOI_DAP = [
 	"hoiTangLuot",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
+const THU_TUC_OKR_LUOT_MOI_KR = ["moiKr"].map((t) => `okr.${t}`);
 const THU_TUC_SUA_AN_CHU_KY = {
 	"okr.suaChuKy": suaChuKyInput,
 	"okr.goChuKy": goChuKyInput,
@@ -1625,6 +1626,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_TRANG_BO,
 				...THU_TUC_OKR_LUOT_HOI_DAP,
 				...THU_TUC_OKR_LUOT_HOI_Y,
+				...THU_TUC_OKR_LUOT_MOI_KR,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 				...Object.keys(THU_TUC_DON_OKR),
 			].sort(),
@@ -2163,6 +2165,12 @@ const THU_TU_DOC_OKR = {
 	},
 	"okr.thanhVien": { vao: () => undefined, K: "vang", khac: 200 },
 	"okr.toanCanh": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.moiKr": {
+		vao: (s: SanDoc) => ({ cycleId: s.ky, loc: {} }),
+		K: "chua-G",
+		dau: "tieuDeKr",
+		khac: 200,
+	},
 	"okr.transferPreview": {
 		vao: (_s, k) => ({ fromUserId: k }),
 		K: "vang",
