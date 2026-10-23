@@ -105,6 +105,7 @@ model User {
   tinHieuLuuTru     TinHieu[]         @relation("TinHieuLuuTru")
   tinHieuVet        TinHieuVet[]      @relation("TinHieuVetNguoi")
   thongBao          ThongBao[]        @relation("ThongBaoNguoiNhan")
+  caiDatThongBao    CaiDatThongBao[]
   viecGiao          Viec[]            @relation("ViecNguoiGiao")
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
   viecTao           Viec[]            @relation("ViecTaoBoi")
@@ -3218,12 +3219,29 @@ model ThongBao {
   thayNgay    String
   docLuc      DateTime?
   moLuc       DateTime?
+  dayLan      Int       @default(0)
+  dayLuc      DateTime?
+  dayKenh     String?
+  dayLoi      String?
 
   @@unique([nguoiNhanId, khoa, ngayDau])
   @@index([nguoiNhanId, taoLuc])
   @@index([nguoiNhanId, docLuc])
   @@index([taoLuc])
+  @@index([dayLuc, taoLuc])
   @@map("thongBao")
+}
+
+model CaiDatThongBao {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  loai   String
+  dayRa  Boolean
+  doiLuc DateTime @updatedAt
+
+  @@unique([userId, loai])
+  @@map("caiDatThongBao")
 }
 
 model ViecThuTu {

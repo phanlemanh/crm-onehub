@@ -1,0 +1,12 @@
+{
+  "feature_plain": "Mọi thông báo nằm đủ trong chuông; Zalo hay Slack chỉ chuyển tiếp những loại người dùng cho phép, và người dùng tự chọn từng loại trên trang Nhắc buổi sáng.",
+  "decisions": [
+    {
+      "id": "E10",
+      "q": "Từ điển giải thích đủ «Cần làm», «Để biết» và việc chuyển tiếp chưa?",
+      "why": "Hai trên ba người chấm nói đạt. Người thứ ba chỉ ra mục «Bot Zalo» vẫn ghi bot «chỉ gửi nhắc buổi sáng», trong khi giờ bot còn chuyển tiếp tin Kara và tín hiệu khi người dùng bật. Mục đó thuộc vùng của đội Mac Studio nên muốn sửa phải xin qua yêu cầu sửa tệp. Máy khuyên: đạt, và gửi yêu cầu sửa câu đó."
+    }
+  ],
+  "scope_plain": "Những gì để vòng sau, đã chốt ở Cổng Phạm vi:",
+  "decisions_plain": []
+}

@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>8 việc"]
+  GD --> B["Sắp mở vòng<br/>7 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>158 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>177 việc"] --> GG{"Cổng Giá trị"}
+  GB --> DG["Đã giao<br/>159 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>179 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -41,7 +41,6 @@ flowchart TD
 - Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho (`chu-thich-glob-md`)
 - Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu (`giai-doan-bo-mac-dinh`)
 - Các hồ sơ đã ký mà kiểm chéo gọi tên đỏ được đo lại, mỗi thước hỏng được sửa hoặc ghi lại có lý do (`ho-so-do-kiem-cheo`)
-- Người dùng CRM thấy thông báo nhận qua Zalo cũng nằm trong chuông, và tự chọn loại nào được đẩy qua kênh nào (`thong-bao-mot-nguon-nhieu-kenh`)
 - Đổi một tệp chữ khác không kéo hồ sơ giai-doan-thoa-thuan vào ghim lại: E15 chỉ theo dõi tệp chữ của màn giai đoạn (`thu-paths-e15-giai-doan`)
 - Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai (`thuoc-viec-cua-ban-do-duoc`)
 - Người dùng bàn phím hay trình đọc màn bấm «Giữ lại» hoặc gặp lỗi khi xoá tín hiệu vẫn đứng đúng dòng mình vừa thao tác, không phải dò lại từ đầu trang (`tieu-diem-sau-hop-xoa-tin-hieu`)
@@ -115,6 +114,7 @@ flowchart TD
 - «Hoàn tác hàng loạt đúng bản đã cất» — lưu trữ và khôi phục hàng loạt trả danh sách id thật sự đã đổi trạng thái; Hoàn tác chỉ khôi phục những bản đó, báo thật số bản không về được, toast không in câu lỗi máy chủ thô (`hoan-tac-loat-dung-id`)
 - Người đã nối Zalo nhắn một câu hỏi cho bot thì trợ lý AI của CRM trả lời bằng chữ, chỉ đọc, theo đúng cổng vai của người hỏi và trong ranh giới dữ liệu A; có trần theo người và theo xưởng (`hoi-crm-qua-zalo`)
 - Hỏi đáp OKR theo quyền — người dùng hỏi Kara về OKR trên web và nhận câu trả lời chỉ từ những Mục tiêu, KR mình xem được, mỗi câu có trích dẫn và con số do mã kiểm; vai «chỉ OKR» hỏi được OKR mà không chạm được dữ liệu đối tác (`hoi-dap-okr`)
+- Lệnh nạp mẫu tạo bộ hợp đồng mẫu PDF và DOCX có nhãn và gắn vào ô Tệp của bản ghi mẫu qua đường ghi thật (`hop-dong-mau`)
 - Người dùng CRM thấy mọi điều CRM muốn báo ở chuông trên đầu trang, biết số chưa đọc và bấm vào là tới đúng chỗ cần làm (`hop-thong-bao-tren-web`)
 - Tôi kéo việc giữa các cột Chưa làm, Đang làm, Chờ đánh giá, Xong, và tách một việc to thành việc con (`kanban-viec`)
 - Kara góp ý OKR lượt 2: vùng Kara dùng khung chung và không biến mất khi lỗi, không chờ mãi, Căn chỉnh có Hoàn tác, người phụ trách nhiều KR nhờ được Kara, chữ và ngày giờ nhất quán (`kara-gop-y-luot-2`)
@@ -192,6 +192,7 @@ flowchart TD
 - Thành viên vào đúng — quản trị đặt được tên miền nội bộ; cho phép một người đã là thành viên không sinh dòng treo; nút «Cho phép một địa chỉ» không mất sau lỗi; dựng lại thành viên theo luật «có dòng còn hiệu lực thì cho» (`thanh-vien-vao-dung`)
 - Thẻ góp ý của Trợ lý OKR — hộp sửa rộng hơn khi cột góp ý mở, mỗi đề xuất là thẻ xếp dọc trải hết bề ngang với hàng nút ở chân và đúng một nút chính, dựng trên Confirmation của AI Elements; gợi ý thông tin ở tab Tổng quan dùng cùng thẻ; chỉ giao diện (`the-gop-y-okr`)
 - Thêm bước ở kế hoạch báo đúng: danh sách bộ phận không tải được thì nói lý do; số việc quá hạn đếm theo một ngày; bộ phận không có thật trả cùng một lỗi như mọi chỗ khác (`them-buoc-bao-dung`)
+- Người dùng CRM thấy thông báo nhận qua Zalo cũng nằm trong chuông, và tự chọn loại nào được đẩy qua kênh nào (`thong-bao-mot-nguon-nhieu-kenh`)
 - Thử Haiku 5.5 cho Trợ lý OKR, và kho đo thôi chạy GLM 5.2 Fast (`thu-haiku-tro-ly-okr`)
 - Thước đo 7 ngày của ci-ma-tran-ba-o đọc đúng các lượt CI của PR vào onehub trong cửa sổ 7 ngày, chạy được bằng đúng lệnh ghi trong hồ sơ, và báo lỗi thay vì đoán khi không xếp được một job `cancelled` (`thuoc-7-ngay-loc-pr`)
 - Thước của hồ sơ đã ký không tự hết hạn — sửa paths chết để lưới trước-gộp bật lại bộ lọc hoá cũ ở 3 hồ sơ có thước còn sống, neo thước «vòng này» của ha-tran-thang-hoi-zalo vào cặp sha gộp, và kiểm kê phần còn lại (`thuoc-khong-tu-het-han`)
@@ -247,6 +248,7 @@ flowchart TD
 - Bản nháp OKR có hai Mục tiêu trùng khoá, hay hai KR trùng khoá dưới cùng một Mục tiêu, bị schema banNhap từ chối ở biên công cụ nop_ban_nhap — agent nhận lỗi nêu đúng ô và nộp lại (`chan-trung-khoa-ban-nhap`)
 - Chặn uỷ thác agent_builder ở lượt không mang CREATE_AGENT — hiện tại chốt quyền ném exception, con không có cửa ra, và hội thoại treo "đang chạy nền" vĩnh viễn không một thẻ lỗi (`chan-uy-thac-sai-luot`)
 - Hộp chèn liên kết tới trang không trả focus về trình soạn đã bị huỷ — hết lỗi chưa bắt khi gỡ trình soạn lúc hộp đang mở (`chen-lien-ket-khong-lac`)
+- Phiếu Công ty: chi tiết hai cột như Liên hệ, ô Tệp đủ rộng, vùng kéo thả xuống dòng khi hẹp (`chi-tiet-cong-ty-hai-cot`)
 - Đưa danh sách ai-được-vào CRM từ biến môi trường vào bảng lời cho phép, quản trên màn Members với hai khối tách bạch — gỡ thành viên là cắt quyền thật, rút lời cho phép chỉ chặn người chưa có tài khoản (`cho-phep-ai-vao-o-man-hinh`)
 - Ca «chủ cuối cùng» của api xanh bất kể trong workspace còn chủ lạ từ tệp khác — tiền đề «chu là chủ duy nhất» được lập tường minh trong ca và trả lại sau ca (`chu-cuoi-cung-tien-de`)
 - Chữ mặc định của thư viện ngoài — dựng thước cho lớp chữ mà mọi bộ quét tĩnh đều mù, rồi vá cái nó tìm ra (`chu-mac-dinh-thu-vien-ngoai`)

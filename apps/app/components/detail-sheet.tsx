@@ -263,7 +263,12 @@ export function DetailSheetTabs({
 					{danhSach}
 				</div>
 			) : (
-				danhSach
+				<div
+					data-tab-cuon-ngang
+					className="shrink-0 overflow-x-auto overflow-y-hidden"
+				>
+					{danhSach}
+				</div>
 			)}
 
 			{tabs.map((tab) => (
@@ -336,26 +341,6 @@ export function DetailSheetSection({
 			) : null}
 			{children}
 		</section>
-	);
-}
-
-export function DetailSheetSplit({ children }: { children: ReactNode }) {
-	return (
-		<div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-			{children}
-		</div>
-	);
-}
-
-export function DetailSheetMain({ children }: { children: ReactNode }) {
-	return <div className="flex min-w-0 flex-1 flex-col">{children}</div>;
-}
-
-export function DetailSheetRail({ children }: { children: ReactNode }) {
-	return (
-		<div className="flex w-full min-w-0 shrink-0 flex-col lg:w-80">
-			{children}
-		</div>
 	);
 }
 

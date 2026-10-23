@@ -75,6 +75,7 @@ export const nhacPayload = z
 	.object({
 		muc: z.array(mucNhac),
 		daGui: z.array(mucNhac).optional(),
+		daGuiKhoa: z.array(z.string()).optional(),
 		kenh: z.enum(["zalo", "slack"]).optional(),
 		lechKenh: z.boolean().optional(),
 		mucTinh: z

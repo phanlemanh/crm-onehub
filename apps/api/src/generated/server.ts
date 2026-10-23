@@ -60,8 +60,8 @@ import { ssoSignInOptionsOutput, ssoSettingsOutput, ssoProviderListInput, ssoPro
 import { taiLieuHoiInput, taiLieuHoiOutput, taiLieuHoiKetQuaInput, taiLieuHoiKetQuaOutput, taiLieuBaoSaiInput, taiLieuBaoSaiOutput, taiLieuDatXacMinhInput, taiLieuXuLyChuaTraLoiInput, taiLieuXuLyBaoSaiInput } from "../tai-lieu/tai-lieu-hoi.contracts";
 import { taiLieuNguonTrangThaiOutput, taiLieuNguonXinChoInput, taiLieuNguonXinChoOutput, taiLieuNguonNhanInput, taiLieuNguonNhanOutput, taiLieuNguonListOutput, taiLieuNguonIdInput, taiLieuNguonGetOutput, taiLieuNguonTaiVeOutput, taiLieuNguonOkOutput } from "../tai-lieu/tai-lieu-nguon.contracts";
 import { taiLieuSlugInput, taiLieuLichSuOutput, taiLieuPhienBanInput, taiLieuPhienBanOutput, taiLieuProposeOutput, taiLieuDeXuatTrangInput, taiLieuOkOutput, taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput } from "../tai-lieu/tai-lieu.contracts";
-import { chuongThongBaoOutput, danhSachThongBaoOutput, moThongBaoOutput, docHetThongBaoOutput } from "../thong-bao/thong-bao.contracts";
-import { danhSachThongBaoInput, moThongBaoInput } from "@crm/validation/thong-bao";
+import { chuongThongBaoOutput, danhSachThongBaoOutput, moThongBaoOutput, docHetThongBaoOutput, caiDatThongBaoOutput, luuCaiDatThongBaoOutput } from "../thong-bao/thong-bao.contracts";
+import { danhSachThongBaoInput, moThongBaoInput, luuCaiDatThongBaoInput } from "@crm/validation/thong-bao";
 import { keoVeOutput, guiTinHieuInput, luuTruTinHieuInput, khoiPhucTinHieuInput, xoaTinHieuInput } from "@crm/validation/tin-hieu";
 import { guiTinHieuOutput, tinHieuCuaToiOutput, tinHieuTatCaOutput, luuTruTinHieuOutput, khoiPhucTinHieuOutput, xoaTinHieuOutput } from "../tin-hieu/tin-hieu.contracts";
 import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgKhoiPhucOutput, orgDepartmentCreateInput, orgLuuTruXemTruocOutput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
@@ -1721,6 +1721,13 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     docHet: publicProcedure
       .output(docHetThongBaoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    caiDat: publicProcedure
+      .output(caiDatThongBaoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    luuCaiDat: publicProcedure
+      .input(luuCaiDatThongBaoInput)
+      .output(luuCaiDatThongBaoOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   tinHieuLich: t.router({

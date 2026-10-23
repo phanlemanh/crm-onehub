@@ -104,6 +104,7 @@ function ChuongMau({ canh }: { canh: CanhChuong }) {
 				dangDocHet={false}
 				homNay={homNay}
 				hrefTatCa={HREF_TRANG}
+				hrefCaiDat="#loai-thong-bao"
 				onDocHet={() => {
 					setHomNay(DA_DOC(homNay));
 					setSo(0);
