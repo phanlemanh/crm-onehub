@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f4a3feba5e38908ef913430a449a6fe48b1ee2ab
+verified_commit: 27b6f4d9563dd18e7a0662987ad2759f3cffb597
 human_signoff: Manh Phan 2026-10-23
 ---
 
@@ -187,3 +187,7 @@ none — every multi-run eval is uniform (mọi eval máy chạy một lần, x�
 ## Iterations
 
 Round 1: E1 đến E9 xanh; E10 (judgment) còn một lens bất đồng nên chờ người ở Cổng 2. Chưa có vòng trả về triển khai. Cột verified_at ghi theo ngày chạy (giờ không đo được từ kết quả máy).
+
+### Re-pin lần 1 — 2026-10-23, do hoá cũ sau gộp onehub 0e34c4302
+run_id: repin-20261023T102540Z-71943
+sha: 27b6f4d9563dd18e7a0662987ad2759f3cffb597 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
