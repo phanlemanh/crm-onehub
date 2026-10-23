@@ -23,6 +23,7 @@ const TEP_CONG_TY = "apps/app/components/crm/record-sheet/company-sheet.tsx";
 const TEP_PARTS = "apps/app/components/crm/record-sheet/record-parts.tsx";
 const TEP_O_TEP = "apps/app/components/crm/fields/o-tep.tsx";
 const TEP_KEO_THA = "packages/ui/src/components/nguon-keo-tha.tsx";
+const TEP_KHUNG = "apps/app/components/detail-sheet.tsx";
 
 const KHOI_CHU = /"flex min-w-0 flex-1 basis-\d+ flex-col gap-0\.5"/;
 const VUNG_GOC =
@@ -251,6 +252,18 @@ const CAY_DO = {
 		dauVet:
 			") : null}\n\n\t\t\t\t<DetailSheetSection\n\t\t\t\t\ttitle={m.company.details}",
 		ghim: /ctc-man: lien ket truoc kara cho/,
+	},
+	14: {
+		nhan: "ban sao hang the con bo khung cuon ngang",
+		tep: TEP_KHUNG,
+		chiBuoc: "4",
+		cam: (s) =>
+			s.replace(
+				'className="shrink-0 overflow-x-auto overflow-y-hidden"',
+				'className="shrink-0"',
+			),
+		dauVet: 'data-tab-cuon-ngang\n\t\t\t\t\tclassName="shrink-0"',
+		ghim: /ctc-man: tran ngang ngan button\[tabs-trigger\]/,
 	},
 };
 
@@ -710,7 +723,9 @@ const doTranNgan = (t) =>
 			)
 				tran.push(`cuon ngang ${ten(e)}`);
 		}
-		const boQuaTab = k.querySelector("[data-tab-dinh]") ? 1 : 0;
+		const boQuaTab = k.querySelector("[data-tab-dinh], [data-tab-cuon-ngang]")
+			? 1
+			: 0;
 		return { dem, tran: tran.slice(0, 5), so: tran.length, boQuaTab };
 	}, SEL_NGAN);
 
@@ -947,7 +962,7 @@ try {
 			if (n.loi) loi.push(`ctc-man: tran ngang ${n.loi}`);
 			else {
 				console.log(
-					`  do buoc 4: ${n.dem} phan tu trong ngan, tran ${n.so}, bo qua ${n.boQuaTab} hang the con cuon ngang co chu dich [data-tab-dinh]`,
+					`  do buoc 4: ${n.dem} phan tu trong ngan, tran ${n.so}, bo qua ${n.boQuaTab} hang the con trong khung cuon ngang [data-tab-dinh], [data-tab-cuon-ngang]`,
 				);
 				if (n.dem < PHAN_TU_NGAN_TOI_THIEU)
 					loi.push(`ctc-man: tran ngang do qua it phan tu ${n.dem}`);

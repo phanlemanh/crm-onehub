@@ -263,7 +263,12 @@ export function DetailSheetTabs({
 					{danhSach}
 				</div>
 			) : (
-				danhSach
+				<div
+					data-tab-cuon-ngang
+					className="shrink-0 overflow-x-auto overflow-y-hidden"
+				>
+					{danhSach}
+				</div>
 			)}
 
 			{tabs.map((tab) => (
