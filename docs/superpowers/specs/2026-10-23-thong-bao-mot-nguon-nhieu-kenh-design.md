@@ -31,10 +31,10 @@ hôm nay.
 | # | Chọn | Căn cứ |
 |---|---|---|
 | L1 | Mức của mỗi loại khai MỘT lần trong bảng ở `@crm/validation/thong-bao`, cạnh `LOAI_THONG_BAO`, cùng mặc định kênh ngoài của loại; kiểu `Record<LoaiThongBao, …>` để thêm loại mà quên khai thì không biên dịch | AGENTS.md «Constants belong in one file per area» |
-| L2 | **Cần làm** = thông báo chờ chính người nhận làm một việc (duyệt, cập nhật, trả lời, việc quá hạn/sắp hạn, đối soát lệch); **Để biết** = báo tin, không đòi việc gì | **Hỏi chủ kho** — Hỏi-2 (luật chia và bảng mức dưới) |
+| L2 | **Cần làm** = thông báo chờ chính người nhận làm một việc (duyệt, cập nhật, trả lời, việc quá hạn/sắp hạn, đối soát lệch); **Để biết** = báo tin, không đòi việc gì | **Hỏi chủ kho** — Hỏi-1 (luật chia và bảng mức dưới) |
 | L3 | Chuông luôn nhận mọi loại — không có công tắc tắt chuông | `pham-vi-vong-tin-hieu-1410.md` N4 «web luôn bật» |
 | L4 | Mặc định kênh ngoài: mọi loại của nhắc buổi sáng **bật**, bốn loại sự kiện (tác nhân xong / cần trả lời / hỏng, tín hiệu đổi chỗ) **tắt** — ai chưa đổi gì nhận đúng như hôm nay | Cổng Đáng: «hành vi Zalo hiện có không đổi» |
-| L5 | Cột kênh ngoài là MỘT cột mang tên kênh người đang dùng (Zalo hay Slack, do khối «Nhận nhắc việc qua» chọn), không phải hai cột Zalo và Slack | **Hỏi chủ kho** — Hỏi-1 |
+| L5 | Cột kênh ngoài là MỘT cột mang tên kênh người đang dùng (Zalo hay Slack, do khối «Nhận nhắc việc qua» chọn), không phải hai cột Zalo và Slack | **Hỏi chủ kho** — Hỏi-2 |
 | L6 | Nhắc buổi sáng vẫn gửi MỘT tin gộp; `chayNhac` bỏ khỏi tin các mục người đã tắt, thông báo của các mục ấy vẫn ghi; tắt hết thì không gửi tin, lượt đóng «đã tắt hết» | giữ nguyên byte tin cho người chưa đổi (L4); loại của nhắc sáng chỉ đi trong tin sáng — bật lại một loại thì sáng sau mới có, không gửi ngay |
 | L7 | Thông báo sự kiện (hai nguồn còn lại, và mọi nguồn sau này) rẽ ra kênh ngoài qua MỘT điểm: nhịp mỗi phút của tác nhân quét thông báo chưa đẩy, của loại người đã bật, ghi sau lúc người bật, trong 30 phút gần nhất | pham-vi N3 «rẽ từ cùng bản ghi thông báo»: kênh đọc chính bản ghi chuông; API không gọi Zalo/Slack |
 | L8 | Đẩy sự kiện ngay (trong một nhịp), không gom vào tin sáng hôm sau | «cần trả lời» chờ người, đợi tới sáng hôm sau là mất nghĩa |

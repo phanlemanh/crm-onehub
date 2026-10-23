@@ -47,7 +47,7 @@
 - Hiện mức Cần làm / Để biết trên chuông (lọc, nhóm).
 - Gộp «Dòng Trợ lý OKR» vào bảng loại thông báo.
 - Đổi tên trang «Nhắc buổi sáng» thành trang thông báo của người.
-- Chọn Zalo và Slack cùng lúc cho một loại (hai cột) — tuỳ Hỏi-1.
+- Chọn Zalo và Slack cùng lúc cho một loại (hai cột) — tuỳ Hỏi-2.
 
 ## Never
 - Tắt chuông theo loại — pham-vi N4 «web luôn bật».

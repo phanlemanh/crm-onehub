@@ -61,7 +61,7 @@ công tắc (trùng mặc định thì máy xoá hàng); người bị xoá thì
 
 - Công tắc cả mức (tắt hết một mức qua Zalo); gom nhiều thông báo sự kiện thành một tin; giờ yên lặng.
 - Hiện mức Cần làm / Để biết trên chuông hay trang Thông báo.
-- Chọn Zalo và Slack cùng lúc cho một loại — cột kênh là kênh người đang dùng (Hỏi-1).
+- Chọn Zalo và Slack cùng lúc cho một loại — cột kênh là kênh người đang dùng (Hỏi-2).
 - Gộp công tắc «Dòng Trợ lý OKR» vào bảng loại thông báo; đổi tên trang «Nhắc buổi sáng».
 - Tắt chuông theo loại; đẩy qua thư, trình duyệt, ứng dụng điện thoại.
 - Thông báo tức thời cho sự kiện chưa có thông báo (giao việc, nhắc tên lúc xảy ra) — nguồn mới là việc riêng; khi có,
@@ -72,7 +72,7 @@ công tắc (trùng mặc định thì máy xoá hàng); người bị xoá thì
 
 - Hạng T3: bảng `CaiDatThongBao` mới và bốn cột thêm vào `ThongBao`; migration chỉ thêm (`packages/db/prisma`).
 - Hằng số (30 phút, 3 lần thử) sống ở `THONG_BAO` của `@crm/validation/thong-bao`; tiêu chí đo theo hằng số.
-- Hai câu chờ chủ kho ở Cổng Phạm vi: Hỏi-1 (một cột kênh hay hai cột Zalo và Slack — L5), Hỏi-2 (luật chia và bảng
+- Hai câu chờ chủ kho ở Cổng Phạm vi: Hỏi-2 (một cột kênh hay hai cột Zalo và Slack — L5), Hỏi-1 (luật chia và bảng
   mức — L2). Câu trả lời khác khuyến nghị thì máy sửa AC-1, AC-6, AC-7 rồi trình lại.
 - Tệp chạm ngoài vùng của làn: `apps/app/app/(app)/[slug]/reminders/page.tsx` (thêm một mục), `nhac-ke-hoach.ts`,
   `schedules/dispatch.ts` (thêm một bước) — đăng ở phanlemanh/crm-onehub#375 qua giám sát trước S3.
