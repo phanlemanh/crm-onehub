@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f91b4721b353b24c36cac18e10f33321c8f697f8
+verified_commit: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (23/23 eval đạt, 0 phát hiện trong hợp đồng). Mười một mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 3, 4, 5, 7 ghi Known limits; Ngoài-6, 8, 9, 10, 11 chấp nhận không sửa. Hai phát hiện round 1 rơi khỏi thẻ (bài so-kr chỉ kiểm URL record, bài nut-them chỉ kiểm khoá URL) ghi Known limits. Phạm vi cắt/hoãn đồng ý cắt; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -342,3 +342,7 @@ sha: f28f4ba412ec6e954970c6eccbf75eb5e909a72e · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 11 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: eval thay bởi VK9, bàn đo qua hộp Thêm mục tiêu (V2-20 b2), thước Cài đặt theo hiện trạng (V2-21), sau gộp onehub
 run_id: repin-20261023T034523Z-32223
 sha: f91b4721b353b24c36cac18e10f33321c8f697f8 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E10 · thay bởi hồ sơ đã ký: E10→mot-nut-tao-muc-tieu#AC-8 · ngoài làn máy: E3, E11, E13, E18, E20 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 12 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: hoá cũ lại sau gộp onehub (#547)
+run_id: repin-20261023T043846Z-81133
+sha: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E10 · thay bởi hồ sơ đã ký: E10→mot-nut-tao-muc-tieu#AC-8 · ngoài làn máy: E3, E11, E13, E18, E20 · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · chập chờn (đỏ lần đầu, đạt khi chạy lại): khung-soan-chan-lien-ket E8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

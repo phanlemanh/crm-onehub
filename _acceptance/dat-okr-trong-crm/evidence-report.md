@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f28f4ba412ec6e954970c6eccbf75eb5e909a72e
+verified_commit: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -499,3 +499,7 @@ sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 25 — 2026-10-22, do VK9 mot-nut-tao-muc-tieu: khai superseded_by cho eval DOM gãy, bàn đo màn qua hộp Thêm mục tiêu (V2-20 b2)
 run_id: repin-20261022T224734Z-81705
 sha: f28f4ba412ec6e954970c6eccbf75eb5e909a72e · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 26 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: hoá cũ lại sau gộp onehub (#547)
+run_id: repin-20261023T043846Z-81133
+sha: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · chập chờn (đỏ lần đầu, đạt khi chạy lại): khung-soan-chan-lien-ket E8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
