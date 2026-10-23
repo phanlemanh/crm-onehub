@@ -11,11 +11,11 @@ const MA = `ccd${Date.now().toString(36)}`;
 const A = `${MA}-a`;
 const B = `${MA}-b`;
 
-const MAC_DINH: Record<string, boolean> = {
-	"okr-duoc-giao": true,
-	"tac-nhan-xong": false,
-};
-const macDinh: MacDinhDayRa = (l) => MAC_DINH[l] ?? null;
+const MAC_DINH = new Map([
+	["okr-duoc-giao", true],
+	["tac-nhan-xong", false],
+]);
+const macDinh: MacDinhDayRa = (l) => MAC_DINH.get(l) ?? null;
 
 beforeAll(async () => {
 	for (const id of [A, B]) {

@@ -38,7 +38,7 @@ type CaiDat = {
 async function trpc(
 	n: Nguoi | null,
 	thuTuc: string,
-	vao?: unknown,
+	vao?: { loai: string; dayRa: boolean; chuong?: boolean },
 ): Promise<{ status: number; data: unknown }> {
 	const goi =
 		vao === undefined

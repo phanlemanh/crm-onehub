@@ -1,6 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import { LOCALES } from "@crm/ui/lib/locale";
-import { LOAI_SU_KIEN, LOAI_THONG_BAO } from "@crm/validation/thong-bao";
+import {
+	LOAI_SU_KIEN,
+	LOAI_THONG_BAO,
+	type NoiDungThongBao,
+} from "@crm/validation/thong-bao";
 import { cauSuKienVi, laNoiDungSuKien } from "@crm/validation/thong-bao-cau";
 import {
 	KHOA_CHO_TIN_HIEU,
@@ -130,7 +134,7 @@ describe("ttts-cau", () => {
 
 describe("tbk-cau", () => {
 	test("tbk-cau: cau chuong tieng Viet trung cau tin Zalo/Slack cho moi loai su kien", () => {
-		const mau = LOAI_SU_KIEN.flatMap((loai) => {
+		const mau = LOAI_SU_KIEN.flatMap((loai): NoiDungThongBao[] => {
 			const goc = MAU[loai];
 			if (goc.loai === "tin-hieu-doi-cho") {
 				return KHOA_CHO_TIN_HIEU.map((khoa) => ({ ...goc, khoa }));

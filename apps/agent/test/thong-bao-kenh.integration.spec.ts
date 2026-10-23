@@ -410,10 +410,10 @@ describe("tbk-loc", () => {
 
 const PHUT_MS = 60 * 1000;
 
-const MAU_SU_KIEN: Record<LoaiSuKien, NoiDungThongBao> = {
+const MAU_SU_KIEN = {
 	...MUC_MAU_TAC_NHAN,
 	...MUC_MAU_TIN_HIEU,
-};
+} satisfies Record<LoaiSuKien, NoiDungThongBao>;
 
 async function ghiSuKien(
 	userId: string,
