@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
 
 const THU_MUC = join(GOC, "packages/ui/src/components");
-const NEO = { component: 120, boc: 43, doc_kho: 39 };
+const NEO = { component: 120, boc: 44, doc_kho: 39 };
 const NGOAI = /^(?!react|\.|@crm\/)[a-z@]/;
 
 export function docComponent() {

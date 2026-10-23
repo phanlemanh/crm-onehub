@@ -165,6 +165,12 @@
 			]
 		},
 		{
+			"component": "stat-card.tsx",
+			"nguyen_ban": [
+				"Slot (radix-ui)"
+			]
+		},
+		{
 			"component": "switch.tsx",
 			"nguyen_ban": [
 				"SwitchPrimitive (radix-ui)"

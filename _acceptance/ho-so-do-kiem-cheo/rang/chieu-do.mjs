@@ -6,6 +6,7 @@ import { docDanhSach, dungCayTam, evalMay, HO_SO_DIR, khoa, THU_MUC_CHAY, XU_LY_
 
 const TRAN_MS = 45 * 60_000;
 const MA_KHONG_DO = 2;
+const SO_DONG_DUOI = 6;
 const KET_QUA = join(THU_MUC_CHAY, "chieu-do.json");
 
 function chayLenh(cay, cmd) {
@@ -21,7 +22,7 @@ function apBanVa(cay, banVa) {
 
 function traCay(cay) {
 	spawnSync("git", ["checkout", "--", "."], { cwd: cay });
-	spawnSync("git", ["clean", "-fdq", "--", "_acceptance"], { cwd: cay });
+	spawnSync("git", ["clean", "-fdq"], { cwd: cay });
 }
 
 export function lenhCua(cay, d) {
@@ -56,7 +57,10 @@ export function chayDong(cay, d, chay = chayLenh) {
 		}
 		traCay(cay);
 	}
-	return { loi, nguyenVen: nv.ma, dotBien: db.ma, neo: neo?.ma ?? null, duoiDotBien: db.chu.split("\n").filter(Boolean).slice(-6) };
+	const duoi = (chu) => chu.split("\n").filter(Boolean).slice(-SO_DONG_DUOI);
+	const kq = { loi, nguyenVen: nv.ma, dotBien: db.ma, neo: neo?.ma ?? null, duoiDotBien: duoi(db.chu) };
+	if (nv.ma !== ev.kyVong) kq.duoiNguyenVen = duoi(nv.chu);
+	return kq;
 }
 
 function tuKiem(cay) {
@@ -94,7 +98,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 		if (!kq.loi.length) console.log(`${khoa(r)} nguyên vẹn ${kq.nguyenVen} · đột biến ${r.dot_bien.ten} ${kq.dotBien} · thông điệp có${kq.neo !== null ? ` · neo sai ${kq.neo}` : ""}`);
 	}
 	mkdirSync(THU_MUC_CHAY, { recursive: true });
-	if (!chi) writeFileSync(KET_QUA, `${JSON.stringify(ketQua, null, "\t")}\n`);
+	writeFileSync(chi ? join(THU_MUC_CHAY, `chieu-do-${chi}.json`) : KET_QUA, `${JSON.stringify(ketQua, null, "\t")}\n`);
 	for (const l of loiTong) console.log(l);
 	console.log(`chieu-do: ${dong.length} đột biến, ${dong.length - new Set(loiTong.map((l) => l.split(" ")[1])).size} bắt đúng`);
 	process.exit(loiTong.length ? 1 : 0);
