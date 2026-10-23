@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: aea13c2b91ce35d7e254a1f2c611de477c274ca0
+verified_commit: 5bff56c656828e4ffc38c160d9b6164f67543cb2
 human_signoff: Manh Phan 2026-10-22 — ký Cổng Bằng chứng trên vòng chấm 1 (10/10 eval đạt, hội đồng E9 đạt). Ngoài-1, Ngoài-2, Ngoài-3, Ngoài-4, Ngoài-5 ghi Known limits; đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -180,3 +180,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1 đến E10 đều đạt, không eval nào đỏ. Chờ người ký ở Cổng Bằng chứng.
+
+### Re-pin lần 1 — 2026-10-22, do pre-push-cau-va-nhan đổi câu vi_sao, nhãn dòng nặng và rang/lich-su.mjs
+run_id: repin-20261022T041829Z-30476
+sha: 5bff56c656828e4ffc38c160d9b6164f67543cb2 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
