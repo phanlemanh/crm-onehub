@@ -4,7 +4,6 @@ import { join } from "node:path";
 import { ClientError } from "eve/client";
 import { CUA_OKR } from "@/lib/cua-okr-config";
 import {
-	bam,
 	CUOC,
 	cho,
 	chu,
@@ -16,123 +15,17 @@ import {
 	datDanhSach,
 	datLai,
 	don,
-	goiCua,
 	m,
 	mo,
-	moKhung,
 	moMan,
-	nut,
 	q,
 	qa,
-	SAN_SANG_BAT,
-	type SanSangGia,
 	SOAN_UI,
 	soLanMoAgent,
 } from "./khung-soan-okr";
 
-const { HINH_NUT_TAT } = await import("@/app/(app)/[slug]/okr/soan/nut-soan");
-
 beforeEach(datLai);
 afterEach(don);
-
-const DON_PB1 = "pb:pb-1";
-const SAN_TOI_THIEU = 22;
-const TRAN = "3";
-
-const BAT: readonly (readonly [string, SanSangGia])[] = [
-	["bat-thuong", SAN_SANG_BAT],
-	[
-		"bat-co-cuoc-dang",
-		{ ...SAN_SANG_BAT, cuocDang: { ...CUOC, soLuot: 0 }, soCuocDaDung: 1 },
-	],
-	["nac-an", { ...SAN_SANG_BAT, nac: "an", soCuocDaDung: 1 }],
-];
-const MA = Object.keys(HINH_NUT_TAT);
-const O = [
-	...MA.map((lyDo) => [lyDo, { bat: false, lyDo }] as const),
-	...BAT,
-].flatMap(([ten, sanSang]) =>
-	[false, true].map((quanTri) => ({ ten, sanSang, quanTri })),
-);
-
-describe("nut-chua-cau-hinh", () => {
-	test("nut-chua-cau-hinh: bang nut bang tap ma ly do", () => {
-		expect([...MA].sort(), `bang nut lech union: ${MA.join(",")}`).toEqual(
-			Object.keys(m.lyDo).sort(),
-		);
-	});
-
-	test("nut-chua-cau-hinh: ma tran du o", () => {
-		if (O.length < SAN_TOI_THIEU) throw new Error("ma tran rong");
-		expect(O.length).toBe(SAN_TOI_THIEU);
-	});
-
-	for (const { ten, sanSang, quanTri } of O) {
-		test(`nut-chua-cau-hinh: ${ten} ${quanTri ? "quan-tri" : "nguoi-sua"}`, async () => {
-			await moKhung(DON_PB1, { sanSang, quanTri, cauNoi: true });
-			const homNayCo = q("[data-nut-soan]") !== null;
-			if (sanSang.bat && sanSang.soCuocDaDung > 0 && homNayCo) {
-				await bam(q('[data-nut="thong-tin-soan"]'));
-				expect(
-					q('[data-nut="ds-cuoc"]'),
-					`doi chung ds-cuoc: ${ten}`,
-				).not.toBeNull();
-			}
-			await don();
-			datLai();
-			await moKhung(DON_PB1, { sanSang, quanTri, cauNoi: false });
-			const co = qa("[data-nut-soan]").map((o) =>
-				o.getAttribute("data-nut-soan"),
-			);
-			if (!quanTri) {
-				expect(co, `nut mo khi chua cau hinh: ${ten}`).toEqual([]);
-				expect(document.body.textContent).not.toContain(m.nut.chuaCauHinh);
-				return;
-			}
-			expect(co, `nut mo khi chua cau hinh: ${ten}`).toEqual([
-				"nut-chua-cau-hinh",
-			]);
-			const n = q('[data-nut-soan="nut-chua-cau-hinh"] button');
-			expect(n?.hasAttribute("disabled")).toBe(true);
-			await bam(q('[data-nut="thong-tin-soan"]'));
-			expect(q("[data-thong-tin-soan]")?.textContent).toContain(
-				m.nut.chuaCauHinh,
-			);
-			expect(document.body.textContent).not.toContain(m.nut.tiep);
-			expect(
-				q('[data-nut="ds-cuoc"]'),
-				`nut ds-cuoc khi chua cau hinh: ${ten}`,
-			).toBeNull();
-			expect(goiCua("okr.soanMo").length).toBe(0);
-		});
-	}
-
-	test("nut-chua-cau-hinh: doi chung duong — da cau hinh, bam nut goi soanMo dung 1 lan", async () => {
-		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, cauNoi: true });
-		await bam(nut(m.nut.soan));
-		expect(goiCua("okr.soanMo").length).toBe(1);
-	});
-
-	for (const k of [0, 1, 2, 3]) {
-		test(`nut-chua-cau-hinh — so cuoc: k=${k}`, async () => {
-			await moKhung(DON_PB1, {
-				sanSang: { ...SAN_SANG_BAT, soCuocDaDung: k },
-				cauNoi: true,
-			});
-			if (k === 0) {
-				expect(
-					q('[data-nut="ds-cuoc"]'),
-					`so cuoc tren nut lech: ${k}`,
-				).toBeNull();
-				return;
-			}
-			await bam(q('[data-nut="thong-tin-soan"]'));
-			expect(chu('[data-nut="ds-cuoc"]'), `so cuoc tren nut lech: ${k}`).toBe(
-				m.nut.dsCuoc(String(k), TRAN),
-			);
-		});
-	}
-});
 
 describe("man-chua-cau-hinh", () => {
 	test("man-chua-cau-hinh: cuoc dang 0 luot, chua cau hinh -> trang trong, khong mo phien", async () => {

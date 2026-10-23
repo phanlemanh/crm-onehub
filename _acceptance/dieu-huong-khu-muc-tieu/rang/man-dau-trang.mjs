@@ -100,13 +100,10 @@ const CHIEU_DO = {
 		nhan: "ban sao mo hop nhap cho cap cong ty thay don vi dich",
 		tenCay: "dhk-chieu-do-nhap",
 		chiBuoc: "E16",
-		tep: `${OKR}/hanh-dong-khu.tsx`,
+		tep: `${OKR}/theo-don-vi/theo-don-vi.tsx`,
 		cam: (s) =>
-			s.replace(
-				"toi(q.dich.don, SEARCH_PARAM.okr.nhap)",
-				'toi({ loai: "goc" }, SEARCH_PARAM.okr.nhap)',
-			),
-		dauVet: 'toi({ loai: "goc" }, SEARCH_PARAM.okr.nhap)',
+			s.replace("			unit={unit}\n", '			unit={{ loai: "goc" }}\n'),
+		dauVet: '			unit={{ loai: "goc" }}\n',
 		ghim: /SAI AC-4: xem truoc nhap gui goc, mong phong-ban/,
 	},
 };
@@ -152,6 +149,7 @@ const MAU = JSON.parse(
 	readFileSync(join(GOC, "apps/api/scripts/okr-mau/cong-ty.json"), "utf8"),
 );
 const MIEN = "mau.onehub.test";
+const HOP = "[data-hop-chon-duong]";
 const idMau = (loai, ma) => `mau-okr-${loai}-${ma}`;
 const d = await lib.moDo();
 const sai = [];
@@ -258,6 +256,7 @@ try {
 			["suc-khoe", "/okr/toan-canh/suc-khoe"],
 			["hoi-y", "/okr/hoi-y"],
 		];
+		const TRANG_TAO = new Set(["cua-toi", "cap-nhat-tuan", "theo-don-vi"]);
 		for (const kho of [1440, 390]) {
 			const tD = await d.moTrang(QT, kho, "/deals");
 			await d.doi(
@@ -303,7 +302,10 @@ try {
 				const t = await d.moTrang(QT, kho, `${duong}?kyOkr=${kyLap}`);
 				await d.doi(
 					t,
-					() => document.querySelector("[data-nut=them-muc-tieu]") !== null,
+					(sel) => document.querySelector(sel) !== null,
+					TRANG_TAO.has(the)
+						? "[data-nut=them-muc-tieu]"
+						: "[data-slot=page-shell-actions] button, [data-slot=page-shell-actions] a",
 				);
 				await choMs(600);
 				const x = await doDau(t);
@@ -607,6 +609,7 @@ try {
 		await d.bamSel(t, "[data-nut=them-muc-tieu]");
 		let moNgan = true;
 		try {
+			await d.bamSel(t, `${HOP} [data-duong=tu-viet]`);
 			await d.choDuong(t, "/okr/bo-okr");
 			await d.doi(t, () => document.querySelector("[id$='-ten']") !== null);
 		} catch {
@@ -675,11 +678,24 @@ try {
 		await choMs(500);
 		const r = await t2.evaluate(() => {
 			const n = document.querySelector("[data-nut=them-muc-tieu]");
-			const a =
-				n?.tagName === "A" ? n : (n?.querySelector("a") ?? n?.closest("a"));
-			return { bat: n && !n.disabled, href: a?.getAttribute("href") ?? "" };
+			return { bat: Boolean(n && !n.disabled) };
 		});
-		const dich = new URL(r.href || "/", "http://x").searchParams.get("donOkr");
+		let dich = null;
+		if (r.bat) {
+			try {
+				await d.bamSel(t2, "[data-nut=them-muc-tieu]");
+				await d.bamSel(t2, `${HOP} [data-duong=tu-viet]`);
+				await d.choDuong(t2, "/okr/bo-okr");
+				await d.doi(
+					t2,
+					() =>
+						document.querySelector("[data-hop-thoai-muc-tieu=moi]") !== null,
+				);
+				dich = new URL(t2.url()).searchParams.get("donOkr");
+			} catch {
+				dich = "ngan tao khong mo";
+			}
+		}
 		dong(
 			r.bat && dich === `pb:${P1_ID}`,
 			`${r.bat && dich === `pb:${P1_ID}` ? "DUNG AC-3 di-ve: nut bat, dich phong-ban P1" : `AC-3 di-ve: nut ${r.bat ? "bat" : "khoa"}, dich ${dich}`}`,
@@ -783,7 +799,9 @@ try {
 	}
 
 	if (chay("E16")) {
-		console.log("== E16 (AC-4): «…» Nhap tu Cua toi gui dung don vi");
+		console.log(
+			"== E16 (AC-4): Them muc tieu › Tu bang tinh tu Cua toi gui dung don vi",
+		);
 		const t = await d.moTrang(TP1, 1440, "/okr");
 		const gui = [];
 		t.on("request", (r) => {
@@ -793,30 +811,47 @@ try {
 		await d.doi(
 			t,
 			() =>
-				document.querySelector("[data-nut=them-cach]:not([disabled])") !== null,
+				document.querySelector("[data-nut=them-muc-tieu]:not([disabled])") !==
+				null,
 		);
-		await d.bamSel(t, "[data-nut=them-cach]");
-		await d.bamSel(t, "[data-nut=nhap-bang-tinh]");
-		await d.choDuong(t, "/okr/bo-okr");
-		await d.doi(
-			t,
-			() => document.querySelector("[role=dialog] textarea") !== null,
-		);
-		await t.click("[role=dialog] textarea");
-		await t.keyboard.type(
-			`Mục tiêu nhập ${lib.MA}\tKR một\ttăng tới\t0\t10\tlần\t${P1.truong}@${MIEN}`,
-		);
-		await d.bamChu(t, "[role=dialog] button", M.nhap.xemTruoc);
-		for (let i = 0; i < 40 && gui.length === 0; i += 1) await choMs(250);
-		const than = gui.join(" ");
-		const dung = than.includes(P1_ID) && than.includes("pb");
-		dong(
-			dung,
-			dung
-				? "DUNG AC-4: xem truoc nhap gui don vi phong-ban P1"
-				: `AC-4: xem truoc nhap gui ${than.includes(P1_ID) ? "?" : "goc"}, mong phong-ban P1 — «${than.slice(0, 160)}»`,
-		);
-		await t.close();
+		await d.bamSel(t, "[data-nut=them-muc-tieu]");
+		let moNhap = true;
+		try {
+			await d.bamSel(t, `${HOP} [data-duong=bang-tinh]`);
+			await d.choDuong(t, "/okr/bo-okr");
+			await d.doi(
+				t,
+				() => document.querySelector("[role=dialog] textarea") !== null,
+			);
+		} catch {
+			moNhap = false;
+		}
+		if (
+			!dong(
+				moNhap,
+				moNhap
+					? "hop nhap mo tren Theo don vi"
+					: `AC-4: hop nhap khong mo sau khi chon Tu bang tinh o Cua toi (dung o ${new URL(t.url()).pathname})`,
+			)
+		) {
+			await t.close();
+		} else {
+			await t.click("[role=dialog] textarea");
+			await t.keyboard.type(
+				`Mục tiêu nhập ${lib.MA}\tKR một\ttăng tới\t0\t10\tlần\t${P1.truong}@${MIEN}`,
+			);
+			await d.bamChu(t, "[role=dialog] button", M.nhap.xemTruoc);
+			for (let i = 0; i < 40 && gui.length === 0; i += 1) await choMs(250);
+			const than = gui.join(" ");
+			const dung = than.includes(P1_ID) && than.includes("pb");
+			dong(
+				dung,
+				dung
+					? "DUNG AC-4: xem truoc nhap gui don vi phong-ban P1"
+					: `AC-4: xem truoc nhap gui ${than.includes(P1_ID) ? "?" : "goc"}, mong phong-ban P1 — «${than.slice(0, 160)}»`,
+			);
+			await t.close();
+		}
 	}
 } catch (e) {
 	await lib.cho(0);

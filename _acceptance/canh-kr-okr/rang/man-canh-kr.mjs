@@ -2199,29 +2199,24 @@ async function buocMauThanhVien() {
 	await d.close();
 }
 
+const NUT_THEM = "[data-slot=page-shell-actions] [data-nut='them-muc-tieu']";
+const DONG_TU_MAU = "[data-hop-chon-duong] [data-duong='tu-mau']";
+const DONG_TU_MAU_MO = `${DONG_TU_MAU}:not([aria-disabled='true'])`;
+
 async function moDatMucTieu(khoa, pb) {
 	const t = await moTrang(
 		khoa,
 		DO.rong,
 		`/okr/theo-don-vi?kyOkr=${QUY4}&donOkr=pb:${idMau("pb", pb)}`,
 	);
-	await coMat(
-		t,
-		"[data-nut='them-muc-tieu']",
-		`E16: nut Dat muc tieu cua ${pb}`,
-	);
-	await bam(t, "[data-nut='them-muc-tieu']");
-	await coMat(
-		t,
-		"[data-hop-thoai-muc-tieu='moi']",
-		`E16: hop Dat muc tieu cua ${pb}`,
-	);
+	await coMat(t, NUT_THEM, `E16: nut Dat muc tieu cua ${pb}`);
+	await bam(t, NUT_THEM);
+	await coMat(t, DONG_TU_MAU, `E16: hop chon duong Dat muc tieu cua ${pb}`);
 	await cho(DO.choKhongHienMs);
 	return t;
 }
 
 async function formTuMau(t, hop, form) {
-	await bam(t, `${hop} [data-nut='bat-dau-tu-mau']`);
 	await coMat(
 		t,
 		`${hop} [data-chon-mau='${K.mau}']`,
@@ -2324,14 +2319,11 @@ async function buocTuMau() {
 	const t = await moDatMucTieu("truong", PB.p1);
 	const hop = "[data-hop-thoai-muc-tieu='moi']";
 	const form = `[data-form-tu-mau='${K.mau}']`;
-	if (
-		await coMat(
-			t,
-			`${hop} [data-nut='bat-dau-tu-mau']`,
-			"E16 buoc 4: nut «Bắt đầu từ mẫu»",
-		)
-	)
-		await formTuMau(t, hop, form);
+	if (await coMat(t, DONG_TU_MAU_MO, "E16 buoc 4: dong «Từ mẫu»")) {
+		await bam(t, DONG_TU_MAU_MO);
+		if (await coMat(t, hop, `E16: hop Dat muc tieu cua ${PB.p1}`))
+			await formTuMau(t, hop, form);
+	}
 	const moMt = await doi(t, "E16 buoc 4: tao -> khung muc tieu nhap mo", () => {
 		const rec = new URL(location.href).searchParams.get("record") ?? "";
 		return (
@@ -2351,8 +2343,8 @@ async function buocMauNgoai() {
 	const t = await moDatMucTieu("truongNgoai", PB.ngoai);
 	const hop = "[data-hop-thoai-muc-tieu='moi']";
 	let mauHien = [];
-	if (await coSel(t, `${hop} [data-nut='bat-dau-tu-mau']`)) {
-		await bam(t, `${hop} [data-nut='bat-dau-tu-mau']`);
+	if (await coSel(t, DONG_TU_MAU_MO)) {
+		await bam(t, DONG_TU_MAU_MO);
 		await thayNgay(
 			t,
 			(h) => window.__tim(`${h} [data-chon-mau]`).length > 0,

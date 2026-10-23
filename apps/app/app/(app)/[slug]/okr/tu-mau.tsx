@@ -84,6 +84,7 @@ export function locMau(
 
 export function useTuMau({
 	tao,
+	batDau,
 	cap,
 	chu,
 	donVi,
@@ -91,6 +92,7 @@ export function useTuMau({
 	xong,
 }: {
 	tao: { cycleId: string; don: DonChonOkr } | null;
+	batDau?: "tay" | "mau";
 	cap: CapMucTieu;
 	chu: string;
 	donVi: DonViMucTieu | null;
@@ -98,7 +100,9 @@ export function useTuMau({
 	xong: (kq: KetQuaTao) => void;
 }): TuMau {
 	const trpc = useTRPC();
-	const [cheDo, setCheDo] = useState<CheDo>({ loai: "tay" });
+	const [cheDo, setCheDo] = useState<CheDo>({
+		loai: batDau === "mau" ? "chon" : "tay",
+	});
 	const cay = useQuery({
 		...trpc.org.tree.queryOptions(),
 		enabled: tao !== null && cap === "ca-nhan",
@@ -167,25 +171,6 @@ function soCua(o: ONhap): SoTuMau {
 	return { startValue: docSoOkr(o.khoi), targetValue: docSoOkr(o.dich) };
 }
 
-export function NutBatDauTuMau({ tuMau }: { tuMau: TuMau }) {
-	const t = okrCanhKrMessages(useLocale()).mau.tuMau;
-	if (tuMau.mauHop.length === 0) return null;
-	return (
-		<div>
-			<Button
-				type="button"
-				size="sm"
-				variant="outline"
-				data-nut="bat-dau-tu-mau"
-				onClick={tuMau.moChon}
-			>
-				<Icon icon={Template} data-icon="inline-start" />
-				{t.batDau}
-			</Button>
-		</div>
-	);
-}
-
 export function NutTaoTuMau({
 	tuMau,
 	id,
@@ -225,18 +210,20 @@ export function KhungTuMau({
 			) : (
 				<ChonMau mau={tuMau.mauHop} onChon={tuMau.chon} />
 			)}
-			<div>
-				<Button
-					type="button"
-					size="sm"
-					variant="ghost"
-					disabled={dangLuu}
-					data-nut={mau ? "chon-mau-khac" : "viet-tay"}
-					onClick={mau ? tuMau.moChon : tuMau.vietTay}
-				>
-					{mau ? t.chonKhac : t.vietTay}
-				</Button>
-			</div>
+			{mau ? (
+				<div>
+					<Button
+						type="button"
+						size="sm"
+						variant="ghost"
+						disabled={dangLuu}
+						data-nut="chon-mau-khac"
+						onClick={tuMau.moChon}
+					>
+						{t.chonKhac}
+					</Button>
+				</div>
+			) : null}
 		</div>
 	);
 }

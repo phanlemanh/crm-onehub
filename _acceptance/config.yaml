@@ -2200,6 +2200,18 @@ executors:
     vkm_chuyen_huong: "cd apps/app && bun test ./test/vo-khu-chuyen-huong.spec.ts -t vkm-chuyen-huong"
     vkm_don_vi_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-don-vi-dan-cay.dom.tsx -t vkm-don-vi-dan"
     vkm_loi_vao_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-ba-phan.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test ./test/okr-giai-ky-an.spec.ts ./test/okr-chuyen-huong-cap-nhat.spec.ts"
+    mnt_dau_trang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-dau-trang"
+    mnt_man_doc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-man-doc"
+    mnt_hop: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-hop"
+    mnt_tu_viet: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-tu-viet"
+    mnt_tu_mau: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-tu-mau"
+    mnt_bang_tinh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-bang-tinh"
+    mnt_soan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-soan"
+    mnt_khoa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-khoa"
+    mnt_api_muc_tieu: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t muc-tieu"'
+    mnt_api_tu_mau: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t tu-mau"'
+    mnt_api_nhap: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t nhap-bang-tinh"'
+    mnt_api_soan: 'bun run test -- "cd apps/api && bun test test/soan-okr-mo.spec.ts -t soan-mo"'
     mkc_o_truot: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-o-truot"
     mkc_duong_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-duong-dan"
     mkc_ngan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-ngan"
@@ -3421,6 +3433,7 @@ executors:
     tmc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-mot-cach-cu-xu/rang/do-man.mjs"'
     vkm_quet: bun _acceptance/vo-khu-muc-tieu/rang/quet-duong-cu.mjs
     vkm_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vo-khu-muc-tieu/rang/do-man.mjs"'
+    mnt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/mot-nut-tao-muc-tieu/rang/do-man.mjs"'
     mkc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"'
     ntl_quet: bun _acceptance/nhap-truong-luc-tao/rang/quet.mjs
     ntl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/nhap-truong-luc-tao/rang/do-man.mjs"'
