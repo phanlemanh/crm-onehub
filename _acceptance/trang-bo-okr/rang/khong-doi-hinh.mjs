@@ -23,6 +23,7 @@ const CHU_KHO = "Phan Le Manh";
 const MAU_DUONG = /okr\/bo-okr|okr\/theo-don-vi|data-view-switch|ViewSwitch/;
 const TRANG_THAI_DA_KY = new Set(["signed-off", "machine-cleared"]);
 const NGUONG_TEP_CHUNG = 5;
+const HO_SO_NAY = "trang-bo-okr";
 const THUOC_THEO_VONG = {
 	"ve-sinh-do-san-onehub#E17":
 		"soat diff merge-base..HEAD cua nhanh dang chay theo nhan vong ve-sinh-do-san-onehub (V1-25)",
@@ -87,6 +88,7 @@ function hoSoDaKy() {
 	return readdirSync(goc, { withFileTypes: true })
 		.filter((d) => d.isDirectory())
 		.map((d) => d.name)
+		.filter((slug) => slug !== HO_SO_NAY)
 		.filter((slug) => {
 			const hd = join(goc, slug, "contract.md");
 			if (!existsSync(hd) || !existsSync(join(goc, slug, "evals.yaml")))
