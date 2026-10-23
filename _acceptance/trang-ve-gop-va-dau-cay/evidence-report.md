@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a2446da33324db3f9baa860119850485ec81ea20
+verified_commit: 8630a13ef8c42d9adf8d0d65f336a53c88fdea5e
 human_signoff:
 ---
 
@@ -225,3 +225,7 @@ none — mọi eval chạy một lần và xác định; không eval nào có pa
 Round 1: E2, E6, E13 failed — E2 và E6 (cùng kịch bản `ca-550.mjs`): bước dọn worktree tạm báo danh sách worktree khác trước nên kịch bản thoát sớm. E13: bài quét cây thật của `t1-ma-doc.spec.ts` báo hai tệp thiếu khai (`.github/workflows/ci.yml`, `PRODUCT-MAP.md`). Returned to implementation.
 Round 2: E13 failed — hai tệp cũ đã được khai, nhưng bài quét cây thật báo thêm `_acceptance/trang-ve-gop-va-dau-cay/run-log.jsonl` là tệp T1 mà `pre-push-da-chung.spec.ts` đọc, chưa khai. E2 và E6 xanh sau khi sửa phạm vi bước dọn. Returned to implementation.
 Round 3: không eval nào đỏ — bài kiểm đọc dòng sổ chạy mẫu cố định, phép quét sổ thật chuyển sang `so-chay-that.mjs`; E8 đến E13 và bảy lệnh suite xanh, E1 đến E7 mang từ vòng trước.
+
+### Re-pin lần 1 — 2026-10-23, do sửa CI sau S4 lượt 3: bài kiểm E thôi đọc ci.yml và origin/onehub (8630a13ef)
+run_id: repin-20261023T190824Z-86275
+sha: 8630a13ef8c42d9adf8d0d65f336a53c88fdea5e · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
