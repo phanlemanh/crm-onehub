@@ -5,7 +5,7 @@
 	"version": "1.15.3",
 	"scripts": {
 		"viec:chep-cu": "bun packages/db/scripts/chep-viec-can-lam.ts",
-		"prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
+		"prepare": "git config core.hooksPath .githooks 2>/dev/null; git config merge.trang-ve.name \"giữ bản mình, vẽ lại sau gộp\" 2>/dev/null; git config merge.trang-ve.driver true 2>/dev/null || true",
 		"build": "turbo run build",
 		"dev": "turbo run dev",
 		"lint": "turbo run lint",

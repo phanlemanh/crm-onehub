@@ -171,13 +171,13 @@ evals:
         (c) day co BUN_HONG=test -> khong co tep dau cho sha do; day ke cung cay chay du nam.
         (d) lan day chi-T1 dau tien -> dau ghi dung ba buoc da chay (check-types, lint, lint:slop), khong co test, build.
         (e) chuoi ngay: dau ngay 0 (luc lui 13 ngay) -> day cung cay bo nam buoc, khong ghi dau moi; sua luc lui 15 ngay ->
-            chay du nam.
-        (f) .env doi noi dung sau day 1 -> chay du nam.
-        (g) bun gia in --version khac sau day 1 -> chay du nam; node khac (PATH tro node gia in phien ban khac) -> chay du nam.
-        (h) tep dau la «{» -> khong dung, khong hong, chay du nam.
-        (i) day hai ref deu cung cay da chung -> so bun rong; ref1 da chung nam buoc, ref2 chi co dau ba buoc (tu (d)) ->
-            chi test, build chay.
-        (j) lan day duoc CI chung (gh gia) -> lan ke cung cay: stderr khong co «đã xanh ở hook».
+            dau khong dung: lan day chi them docs chay ba buoc cua duong T1 (check-types, lint, lint:slop), khong phai rong.
+        (f) .env doi noi dung sau day 1 -> ba buoc nhu (e).
+        (g) bun gia in --version khac sau day 1 -> ba buoc; node khac (PATH tro node gia in phien ban khac) -> ba buoc.
+        (h) tep dau la «{» -> khong dung, khong hong, ba buoc.
+        (i) day hai ref deu cung cay da chung -> so bun rong; ref1 da chung nam buoc (dau hook), ref2 chi duoc so chay S4 chung lint:slop, test, build (thieu dong lint) ->
+            chi check-types, lint chay.
+        (j) lan day duoc CI chung (gh gia) -> lan ke cung cay voi gh hong: stderr khong co «đã xanh ở hook», ba buoc chay.
       Chieu do: E12 (f) bo kiem van tay moi truong -> (f) do; E12 (i) ghi dau ca buoc da chung -> (b) do vi co tep dau
       cho sha day 2.
 
