@@ -161,6 +161,7 @@ và trỏ AC dưới đây.
 | dieu-huong-khu-muc-tieu/E7 | 12 ô khoá kèm một dòng lý do | AC-8 | `mnt-khoa` |
 | soan-okr-song-lai/E1 | `NutSoan` khi Kara chưa cấu hình, 22 ô | AC-7 | `mnt-soan` ô chưa cấu hình |
 | soan-okr-song-lai/E7 | số cuộc trên nút danh sách cuộc | AC-7 | `mnt-hop` (f) |
+| khung-soan-chan-lien-ket/E6 | tệp kiểm khung soạn không đổi so merge-base và còn xanh | AC-7 | `mnt-soan`; `soan-okr-trong-khung` E1 còn chạy ba ô (chủ kho «V2-21», 23/10) |
 
 Eval vẫn chạy, chỉ bớt ca đo hành vi đã gỡ (không khai `not-run`, vì phần còn lại của chúng vẫn đo đúng lời hứa):
 
