@@ -1,0 +1,308 @@
+schema_version: 1
+slug: mot-nut-tao-muc-tieu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.mnt_dau_trang
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx"
+      - "apps/app/app/(app)/[slug]/okr/luoi-dau-trang.tsx"
+      - "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx"
+      - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
+    expected: |
+      Ca "mnt-dau-trang" dung DauTrangOkrTrang that voi tRPC gia (okr.danhSach, okr.access, okr.soanSanSang
+      parse bang schema output that cua okr.contracts) theo ma tran viet truoc 2 man (cua-toi, bo-okr) x 4 pha
+      chu ky (lap-ke-hoach, dang-chay, cham-diem, da-khep) x 2 vai (truong don vi, quan tri) = 16 o. Moi o:
+      trong [data-hang-hanh-dong] dem nut chinh = button[data-slot=button] co data-variant vang hoac "default"
+      -> dung 1, la [data-nut=them-muc-tieu] va la nut cuoi hang; 0 [data-nut=them-cach], 0
+      [data-nut=nhap-bang-tinh], 0 [data-nhom-soan], 0 [data-nut=thong-tin-soan]; ngoai nut chinh chi con nut
+      Hoi Kara. 16 khang dinh, moi khang dinh in ten o khi do. Them 2 o "quyen dang tai" (cua-toi, bo-okr; okr.access
+      va okr.danhSach treo): cho cua nut la khung cho ([data-slot=skeleton]), 0 [data-nut=them-muc-tieu] bam duoc.
+      CHIEU DO: ban sao de nut hien bam duoc khi quyen dang tai -> do "mnt-dau-trang: bo-okr/dang-tai nut bam
+      duoc"; ban sao tra lai MenuThem vao HanhDongKhu -> do "mnt-dau-trang: cua-toi/lap-ke-hoach/truong con
+      them-cach"; ban sao tra lai NutSoan o pha lap-ke-hoach -> do "mnt-dau-trang: bo-okr/lap-ke-hoach/truong
+      con nhom-soan".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.mnt_man_doc
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/**"
+      - "apps/app/app/(app)/[slug]/okr/toan-canh/**"
+      - "apps/app/app/(app)/[slug]/okr/so-do/**"
+      - "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/**"
+      - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
+    expected: |
+      Ca "mnt-man-doc" dung dau trang cua hai man doc phia client (lay-y-kien, suc-khoe) x 3 vai (quan tri,
+      truong don vi, thanh vien thuong) = 6 o, cong hai trang server so-do va quanh-muc-tieu moi trang 1 o
+      tinh (trang server khong doc vai hay quyen, nen truc vai khong ap; ghi o S4 vong 1), ma tran viet truoc.
+      Moi o: trong page-shell-actions
+      0 nut chinh (button[data-slot=button] data-variant vang hoac "default"), 0 [data-nut=them-muc-tieu], 0
+      [data-nut=them-cach], 0 [data-nut=nhap-bang-tinh], 0 [data-nhom-soan]. Them 2 o "quyen dang tai" (hai man
+      doc phia client, vai truong, okr.access va okr.danhSach treo): 0 khung cho trong page-shell-actions o cho nut chinh cu,
+      0 nut chinh. Doi chung duong cung ca: o
+      bo-okr/truong co dung 1 nut chinh (chung minh bo dem thay nut chinh khi no co).
+      CHIEU DO: ban sao de HanhDongKhu dung nut Them muc tieu cho tab toan-canh -> do "mnt-man-doc: suc-khoe/
+      truong co nut chinh"; ban sao cho tab hoi-y -> do "mnt-man-doc: lay-y-kien/quan-tri co nut chinh".
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.mnt_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/mot-nut-tao-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Ban do man tren phien do rieng cua cay (tien-de), dang nhap vai truong bo phan va vai quan tri, mo
+      /okr, /okr/bo-okr, /okr/lay-y-kien, /okr/suc-khoe, /okr/so-do o 1280x800. Moi man x vai in mot dong
+      "NUT CHINH <man> <vai> <so>": so = 1 o cua-toi va bo-okr, 0 o ba man con lai (10 dong, ma tran viet
+      truoc trong tep do). Dong lech in "SAI NUT CHINH <man> <vai> <so>" va thoat 1; khong dang nhap duoc hay
+      khong mo duoc man thi thoat 2 kem ly do. Doi chung duong: truoc khi dem, ban do kiem selector nut chinh
+      thay dung nut Them muc tieu o bo-okr (khong thay -> thoat 2 "bo dem mu").
+      CHIEU DO: EVAL=chieu-do chay ban do tren ban sao ma HanhDongKhu dung lai nut chinh o tab toan-canh -> in
+      "SAI NUT CHINH suc-khoe truong 1" va thoat 1.
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.mnt_hop
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-chon-duong*.tsx"
+      - "apps/app/lib/messages/okr*.ts"
+      - "apps/app/lib/search-param-keys.ts"
+      - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
+    expected: |
+      Ca "mnt-hop": (a) bo-okr?donOkr=pb:x, vai truong pb:x: bam [data-nut=them-muc-tieu] -> [role=dialog] mo,
+      ten hop la chu messages okr cua tieu de hop (rut tu messages, khong viet tay), mo ta chua ten don vi pb:x
+      lay tu okr.danhSach gia, tren phan tu mang translate="no"; dung 4 dong theo thu tu data-duong =
+      [tu-viet, tu-mau, bang-tinh, soan], moi dong la <button> co ItemTitle va ItemDescription khong rong;
+      dong soan chua dau Kara ([data-slot=kara-mark] hoac thanh phan KaraMark). (b) cua-toi, vai truong bo
+      phan bp:y: mo ta goi ten bp:y (don vi donDich chon). (c) URL: sau khi bam, tham so hop co tren duong dan
+      (nuqs); dung lai cay voi duong dan do -> hop mo ngay. (d) Esc -> hop dong, tham so bi go,
+      document.activeElement la [data-nut=them-muc-tieu]. (e) Moi khoa chu moi cua hop co o ca ban vi va en
+      cua messages (doc tu tep messages, so tap khoa hai ban bang nhau).
+      CHIEU DO: ban sao doi thu tu hai dong tu-mau va bang-tinh -> do "mnt-hop: thu tu duong"; ban sao bo
+      ghi tham so len duong dan -> do "mnt-hop: tai lai khong mo hop"; ban sao bo khoa en cua mo ta hop -> do
+      "mnt-hop: khoa thieu ban en".
+
+  - id: E5
+    criterion: AC-3
+    executor: judgment
+    inputs:
+      - apps/app/lib/messages/okr.ts
+      - _acceptance/mot-nut-tao-muc-tieu/contract.md
+      - docs/superpowers/specs/2026-10-21-mot-nut-tao-muc-tieu-design.md
+    paths:
+      - "apps/app/lib/messages/okr*.ts"
+    question: |
+      Trong tệp chữ `apps/app/lib/messages/okr.ts`, tìm các chuỗi của hộp chọn đường «Thêm mục tiêu» (tiêu đề,
+      câu đơn vị đích, tiêu đề và câu mô tả của bốn đường Tự viết · Từ mẫu · Từ bảng tính · Soạn cùng Kara,
+      «Tiếp cuộc đang soạn», câu lý do khoá của Từ mẫu và câu lý do pha của Soạn). Mỗi câu mô tả có nói người
+      sẽ làm gì ở đường đó bằng lời người dùng (không tên kỹ thuật, không «AI», gọi AI là «Kara»), qua được
+      phép thử «xoá một chữ mà người đứng ở màn vẫn hiểu đúng thì chữ đó thừa», và câu lý do khoá có nói khi
+      nào đường đó mở lại hoặc nên làm gì thay không? Bản tiếng Anh có cùng nghĩa không?
+    expected: |
+      PASS khi mọi chuỗi kể trên có mặt ở cả hai bản, câu mô tả nói việc người làm, không chữ thừa, không gọi
+      AI bằng tên khác Kara, câu lý do khoá có lối đi tiếp. FAIL nêu từng chuỗi lệch kèm khoá của nó.
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.mnt_tu_viet
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-chon-duong*.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/ngan-okr-url.tsx"
+      - "apps/app/app/(app)/[slug]/okr/tu-mau.tsx"
+      - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
+    expected: |
+      Ca "mnt-tu-viet": (a) bo-okr?donOkr=pb:x, mo hop, chon [data-duong=tu-viet] -> hop chon dong, ngan tao
+      muc tieu mo, o don vi hien pb:x; trong ngan 0 [data-nut=bat-dau-tu-mau]; dien ten "Muc tieu thu" va luu
+      -> tRPC gia ghi dung 1 lan goi okr.createObjective, dau vao parse bang schema input that, unitId = pb:x,
+      cycleId = chu ky dang xem. (b) cua-toi, truong bp:y: chon tu-viet -> dieu huong toi duong dan /okr/bo-okr
+      co donOkr=bp:y va tham so mo ngan tao (doc tu router gia), khong goi mutation nao.
+      CHIEU DO: ban sao de ngan giu NutBatDauTuMau -> do "mnt-tu-viet: ngan con bat-dau-tu-mau"; ban sao truyen
+      unitId cua don vi dan dau tien thay vi don vi dang xem -> do "mnt-tu-viet: unitId lech".
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mnt_api_muc_tieu
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/okr.spec.ts"
+    expected: |
+      exit 0. Bai API san co describe "muc-tieu" cua apps/api/test/okr.spec.ts: tao muc tieu bon cap qua
+      okr.createObjective tren co so du lieu rieng cua luot roi doc lai (36 o), tu choi 3 ca quyen. Vong nay
+      khong doi API; eval chung duong ghi nay van song. Khong phai phep do moi: chieu do cua no da ky o ho so
+      goc cua bai.
+
+  - id: E8
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.mnt_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/mot-nut-tao-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Phan "tu-viet" cua ban do man: vai truong bo phan mo /okr/bo-okr?donOkr=<bo phan cua minh>, bam Them muc
+      tieu, chon Tu viet, go ten "VK9-<nonce cua luot>", luu, tai lai trang; doc danh sach Bo OKR -> co dung mot
+      muc tieu mang ten do (du lieu tu may chu, sau tai lai). In "DUNG TU VIET <nonce>"; khong thay -> "SAI TU
+      VIET <nonce>" thoat 1. Muc tieu tao tren kho do rieng cua cay, khong vao kho chung. Them buoc tu Cua
+      toi (them sau khi ky 22/10, vi loi cua-toi dung yen o /okr lot qua bai DOM dung router gia): mo /okr, bam
+      Them muc tieu, chon Tu viet -> trang sang /okr/bo-okr voi ngan tao mo, in "DUNG TU VIET CUA TOI ..."; dung
+      yen -> "SAI TU VIET CUA TOI dung o <duong>" thoat 1.
+      CHIEU DO: EVAL=chieu-do bo buoc luu -> "SAI TU VIET" thoat 1; ban sao hop-chon-duong.tsx ghi URL tai cho
+      (nuqs) cung luc router.push -> "SAI TU VIET CUA TOI dung o .../okr" thoat 1.
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.mnt_tu_mau
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-chon-duong*.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/tu-mau.tsx"
+      - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
+    expected: |
+      Ca "mnt-tu-mau": (a) don vi dich cap phong ban co 2 mau (okr mau gia parse bang schema output that):
+      chon [data-duong=tu-mau] -> ngan mo thang buoc chon mau, liet 2 mau; chon mau 1, luu -> dung 1 lan goi
+      okr.taoTuMau, dau vao parse bang schema input that, id mau 1, don vi dich va cycleId = chu ky dang xem;
+      buoc mau co [data-nut=chon-mau-khac] va 0 nut "Viet muc tieu tay". (b) cap khong co mau: dong tu-mau mang
+      aria-disabled="true", ItemDescription la chu messages ly do chua co mau; bam dong -> khong ngan nao mo.
+      (c) cua-toi, truong bp:y: chon tu-mau -> dieu huong toi /okr/bo-okr co donOkr=bp:y va tham so mo ngan o
+      buoc chon mau (doc router gia), 0 mutation. Ma tran 3 o viet truoc.
+      CHIEU DO: ban sao an dong tu-mau khi khong co mau thay vi khoa -> do "mnt-tu-mau: dong khoa vang"; ban
+      sao mo ngan o buoc tu viet -> do "mnt-tu-mau: khong vao buoc chon mau"; ban sao truyen chu ky mac dinh
+      thay chu ky dang xem -> do "mnt-tu-mau: cycleId lech".
+
+  - id: E10
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mnt_api_tu_mau
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/okr-canh-kr.spec.ts"
+    expected: |
+      exit 0. Bai API san co describe "tu-mau" cua apps/api/test/okr-canh-kr.spec.ts: tao muc tieu tu mau qua
+      okr.taoTuMau tren co so du lieu rieng cua luot roi doc lai. Vong nay khong doi API.
+
+  - id: E11
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.mnt_bang_tinh
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-chon-duong*.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"
+      - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
+    expected: |
+      Ca "mnt-bang-tinh": (a) bo-okr?donOkr=pb:x: chon [data-duong=bang-tinh] -> hop chon dong, hop nhap OKR mo,
+      chu ky va don vi dien san pb:x; dan lo 2 dong, xem truoc -> 1 lan goi okr.previewImport voi unitId pb:x
+      (dau vao parse bang schema input that); ghi -> 1 lan goi okr.applyImport. (b) cua-toi, truong bp:y:
+      chon bang-tinh -> dieu huong toi /okr/bo-okr co donOkr=bp:y va tham so mo hop nhap.
+      CHIEU DO: ban sao de dong bang-tinh mo hop tao muc tieu -> do "mnt-bang-tinh: khong mo hop nhap".
+
+  - id: E12
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mnt_api_nhap
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/okr.spec.ts"
+    expected: |
+      exit 0. Bai API san co describe "nhap-bang-tinh" cua apps/api/test/okr.spec.ts: xem truoc roi ghi mot lo
+      qua okr.previewImport/okr.applyImport tren co so du lieu rieng cua luot, doc lai. Vong nay khong doi API.
+
+  - id: E13
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.mnt_soan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-chon-duong*.tsx"
+      - "apps/app/app/(app)/[slug]/okr/soan/**"
+      - "apps/app/lib/messages/okr*.ts"
+      - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
+    expected: |
+      Ca "mnt-soan", ma tran viet truoc 8 o tu okr.soanSanSang gia (parse bang schema output that):
+      (1) lap-ke-hoach, mo duoc, chua co cuoc -> dong soan mo duoc, chon -> 1 lan goi okr.soanMo, khung ban ghi
+      nhan {kind:"soan"}; (2) co cuoc dang mo -> tieu de dong la chu messages "Tiep cuoc dang soan", chon -> 0
+      lan goi okr.soanMo, khung ban ghi mo dung id cuoc do; (3) pha dang-chay; (4) het-cuoc; (5) het-tran;
+      (6) chua-khoa; (7) chua-cau-hinh; (8) khong-quyen -> moi o (3)-(8) dong soan mang aria-disabled="true",
+      ItemDescription bang dung chu messages cua ly do khoa do (rut tu messages, khong viet tay), bam -> 0 lan
+      goi okr.soanMo.
+      (9) phan hoi soanMo, ba o qua hop chon o Bo OKR pb:P2: soanMo tra {ok:false, cuocDang} -> dau vao
+      soanMo level phong-ban, departmentId P2, khung ban ghi mo dung cuocDang; tra {ok:false, cuocDang:null}
+      -> okr.soanSanSang hoi lai dung 1 lan, khong mo ban ghi; nem loi -> khong mo ban ghi, mo lai hop va
+      bam dong Soan thi soanMo duoc goi lan hai.
+      CHIEU DO: ban sao an dong soan ngoai pha lap-ke-hoach -> do "mnt-soan: dang-chay dong vang"; ban sao goi
+      soanMo khi co cuoc dang mo -> do "mnt-soan: mo cuoc moi khi dang co cuoc"; ban sao bo nhanh cuocDang
+      trong duong-soan.ts -> do "mnt-soan: con cuoc dang khong mo cuoc-cu"; bo refetch -> do "mnt-soan: tu
+      choi khong doc lai san sang"; loi mo ban ghi -> do "mnt-soan: loi van mo ban ghi".
+
+  - id: E14
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mnt_api_soan
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/soan-okr-mo.spec.ts"
+    expected: |
+      exit 0. Bai API san co describe "soan-mo" cua apps/api/test/soan-okr-mo.spec.ts: mo cuoc soan qua
+      okr.soanMo tren co so du lieu rieng cua luot, gioi han cuoc va trung cuoc dang mo. Vong nay khong doi API.
+
+  - id: E15
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.mnt_khoa
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-chon-duong*.tsx"
+      - "apps/app/app/(app)/[slug]/okr/ngan-okr-url.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"
+      - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
+    expected: |
+      Ca "mnt-khoa", ma tran viet truoc 2 man (cua-toi, bo-okr) x 2 vai (thanh vien thuong, nguoi khong dan don
+      vi nao) = 4 o: [data-nut=them-muc-tieu] disabled, aria-describedby tro toi dong ly do co chu messages
+      khoaTao tuong ung. Them 4 o duong dan mo thang (tham so hop chon, tham so mo ngan tao, tham so mo ngan o
+      buoc chon mau, nhapOkr=true) voi canCreate=false: 0 [role=dialog], tham so bi go khoi duong dan (doc router gia), 0 lan goi mutation ghi
+      nao (createObjective, taoTuMau, previewImport, applyImport, soanMo). Doi chung duong: cung duong dan voi
+      canCreate=true -> hop tuong ung mo.
+      CHIEU DO: ban sao bo BoKhoaUrl cua hop chon -> do "mnt-khoa: hop chon mo khi khong quyen".
+
+  - id: E16
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mnt_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, nguyen van: MNT_CHEP_ANH=1 EVAL= bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/mot-nut-tao-muc-tieu/rang/do-man.mjs\" (no tu dung phien do, chup anh va chi chep anh sang _acceptance/mot-nut-tao-muc-tieu/evidence/ khi co MNT_CHEP_ANH=1)"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo cac anh trong _acceptance/mot-nut-tao-muc-tieu/evidence/ va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/mot-nut-tao-muc-tieu/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "packages/ui/src/components/item.tsx"
+      - "packages/ui/src/components/dialog.tsx"
+      - "_acceptance/mot-nut-tao-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Anh cua-toi-dau-trang-1280, bo-okr-hop-1280, suc-khoe-dau-trang-1280, cua-toi-hop-375, bo-okr-hop-375.
+      O 1280: dau trang Cua toi co Hoi Kara va Them muc tieu, khong nut "…", khong nhom Soan; hop Them muc tieu
+      giua man, tieu de va cau goi ten don vi, bon dong Tu viet · Tu mau · Tu bang tinh · Soan cung Kara, dong
+      Soan co dau tia sang; dau trang Suc khoe khong co nut to mau. O 375: hop vua be ngang man, bon dong doc
+      tron khong cat chu, trang khong tran ngang. Ban do in "DUNG AC-9 <anh>: tran ngang 0, dong bi cat 0, vung
+      bam tron 4/4" cho moi anh hop (vung bam tron = elementFromPoint o goc trai va goc phai moi dong tra ve
+      chinh nut dong do). Thieu anh -> khong dat.
