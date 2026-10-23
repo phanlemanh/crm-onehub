@@ -5,7 +5,7 @@ slug: chi-tiet-cong-ty-hai-cot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-10-23T03:39:40Z
 design_doc: docs/superpowers/specs/2026-10-23-chi-tiet-cong-ty-hai-cot-design.md
