@@ -11,6 +11,8 @@ const NHANH_CHINH = "onehub";
 const DUOI = "CI phân loại PR theo cùng luật.";
 const TOI_DA_TEP_MA_DOC = 3;
 const LY_DO_CHI_NEN = "chi-cua-nen";
+const LY_DO_GITHUB = "cham-github";
+const THU_MUC_GITHUB = ".github/";
 
 function git(goc, ...args) {
 	const r = spawnSync("git", args, { cwd: goc, encoding: "utf8" });
@@ -131,8 +133,13 @@ function chay() {
 			const maDoc = tepMaDocDay(KHO, kq.tep);
 			const t1 = tepT1(docGlobT1(KHO), kq.tep);
 			const ngoai = kq.tep.filter((t) => !t1.has(t));
-			const ds = maDoc.length ? maDoc : ngoai.length ? ngoai : kq.tep;
-			const loai = maDoc.length ? "tệp T1 mà mã đọc" : "tệp ngoài T1";
+			const github = kq.tep.filter((t) => t.startsWith(THU_MUC_GITHUB));
+			const [loai, ds] =
+				kq.lyDo === LY_DO_GITHUB
+					? ["tệp dưới .github/", github]
+					: maDoc.length
+						? ["tệp T1 mà mã đọc", maDoc]
+						: ["tệp ngoài T1", ngoai];
 			process.stderr.write(
 				`pre-push: phần PR tự thêm (${n} tệp; ${k} tệp của ${NHANH_CHINH} không tính) có ${loai} (${rutGon(ds)}) — chạy đủ năm bước.\n`,
 			);

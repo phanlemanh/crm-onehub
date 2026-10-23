@@ -2,6 +2,8 @@ import type { Locale } from "@crm/ui/lib/locale";
 import type { NoiDungThongBao } from "@crm/validation/thong-bao";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { thongBaoMessages } from "@/lib/messages/thong-bao";
+import { tinHieuMessages } from "@/lib/messages/tin-hieu";
+import { nhanCuaCho } from "@/lib/tin-hieu/nhan";
 
 function dienCau(mau: string, nd: NoiDungThongBao): string {
 	switch (nd.loai) {
@@ -54,6 +56,8 @@ function dienCau(mau: string, nd: NoiDungThongBao): string {
 		case "tac-nhan-can-tra-loi":
 		case "tac-nhan-hong":
 			return dien(mau, { ten: nd.ten });
+		case "tin-hieu-doi-cho":
+			return dien(mau, { tieuDe: nd.tieuDe });
 	}
 }
 
@@ -64,6 +68,7 @@ const LOAI_TAC_NHAN = new Set<NoiDungThongBao["loai"]>([
 ]);
 
 export function tenKhongDich(nd: NoiDungThongBao): string | null {
+	if (nd.loai === "tin-hieu-doi-cho") return nd.tieuDe.trim() || null;
 	if (!LOAI_TAC_NHAN.has(nd.loai) || !("ten" in nd)) return null;
 	const ten = nd.ten.trim();
 	return ten.length > 0 ? ten : null;
@@ -71,6 +76,11 @@ export function tenKhongDich(nd: NoiDungThongBao): string | null {
 
 export function cauThongBao(locale: Locale, nd: NoiDungThongBao): string {
 	const m = thongBaoMessages(locale);
+	if (nd.loai === "tin-hieu-doi-cho")
+		return dien(m.cau[nd.loai], {
+			tieuDe: nd.tieuDe,
+			nhan: nhanCuaCho(nd.khoa, tinHieuMessages(locale)),
+		});
 	const ndDien =
 		LOAI_TAC_NHAN.has(nd.loai) && "ten" in nd && !tenKhongDich(nd)
 			? { ...nd, ten: m.chuong.tacNhanKhongTen }

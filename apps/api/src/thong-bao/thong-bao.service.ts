@@ -1,8 +1,22 @@
 import type { Db } from "@crm/db";
-import { parseNoiDungThongBao, THONG_BAO } from "@crm/validation/thong-bao";
+import {
+	docCaiDatThongBao,
+	luuCaiDatThongBao,
+} from "@crm/db/cai-dat-thong-bao";
+import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
+import {
+	LOAI_THONG_BAO,
+	type LoaiThongBao,
+	MUC_THONG_BAO,
+	macDinhDayRa,
+	parseNoiDungThongBao,
+	THONG_BAO,
+} from "@crm/validation/thong-bao";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type {
+	CaiDatLoaiRa,
+	CaiDatThongBaoOutput,
 	ChuongThongBaoOutput,
 	DanhSachThongBaoOutput,
 	DongThongBaoRa,
@@ -105,5 +119,51 @@ export class ThongBaoService {
 		});
 		this.logger.log({ message: "thong-bao.doc-het", userId, soDaDoc: count });
 		return { soDaDoc: count };
+	}
+
+	async caiDat(userId: string): Promise<CaiDatThongBaoOutput> {
+		const [kenh, doc] = await Promise.all([
+			kenhSeDungCua(this.db, userId, { coToken: true }),
+			docCaiDatThongBao(this.db, userId, macDinhDayRa),
+		]);
+		return {
+			kenh: kenh.kenh,
+			lyDo:
+				kenh.kenh !== null
+					? null
+					: kenh.zaloUserId !== null && !kenh.zaloBat
+						? "zalo-tat"
+						: "chua-noi",
+			loai: LOAI_THONG_BAO.map((loai) => {
+				const cd = doc(loai);
+				return {
+					loai,
+					muc: MUC_THONG_BAO[loai].muc,
+					dayRa: cd.dayRa,
+					macDinh: cd.macDinh,
+				};
+			}),
+		};
+	}
+
+	async luuCaiDat(
+		userId: string,
+		loai: LoaiThongBao,
+		dayRa: boolean,
+	): Promise<CaiDatLoaiRa> {
+		const cd = await luuCaiDatThongBao(
+			this.db,
+			userId,
+			loai,
+			dayRa,
+			macDinhDayRa,
+		);
+		this.logger.log({ message: "thong-bao.luu-cai-dat", userId, loai, dayRa });
+		return {
+			loai,
+			muc: MUC_THONG_BAO[loai].muc,
+			dayRa: cd.dayRa,
+			macDinh: cd.macDinh,
+		};
 	}
 }

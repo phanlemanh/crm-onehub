@@ -11,6 +11,9 @@
 		"./ly-do-can-chinh": "./src/ly-do-can-chinh.ts",
 		"./agent-manifest": "./src/agent-manifest.ts",
 		"./bo-tri-truong": "./src/bo-tri-truong.ts",
+		"./kieu-tep": "./src/kieu-tep.ts",
+		"./tep-truong": "./src/tep-truong.ts",
+		"./hop-dong-mau": "./src/hop-dong-mau.ts",
 		"./loi-truong": "./src/loi-truong.ts",
 		"./du-an-lich": "./src/du-an-lich.ts",
 		"./agent-transcript": "./src/agent-transcript.ts",
@@ -89,6 +92,8 @@
 		"./san-pham-lo-trinh": "./src/san-pham-lo-trinh.ts",
 		"./doc-du-lieu-lo-trinh": "./src/doc-du-lieu-lo-trinh.js",
 		"./tin-hieu": "./src/tin-hieu.ts",
+		"./tin-hieu-cho": "./src/tin-hieu-cho.ts",
+		"./thong-bao-cau": "./src/thong-bao-cau.ts",
 		"./thong-bao": "./src/thong-bao.ts",
 		"./bo-loc-truong": "./src/bo-loc-truong.ts"
 	},

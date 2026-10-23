@@ -31,6 +31,7 @@ model User {
   factDecisions  ContactFact[]       @relation("FactDecider")
   conversations  AgentConversation[] @relation("ConversationOwner")
   fieldValues    FieldValue[]        @relation("FieldValueUser")
+  fieldFiles     FieldFile[]         @relation("FieldFileUploader")
   savedViews     SavedView[]         @relation("SavedViewOwner")
 
   campaignsOwned   Campaign[]      @relation("CampaignOwner")
@@ -104,6 +105,7 @@ model User {
   tinHieuLuuTru     TinHieu[]         @relation("TinHieuLuuTru")
   tinHieuVet        TinHieuVet[]      @relation("TinHieuVetNguoi")
   thongBao          ThongBao[]        @relation("ThongBaoNguoiNhan")
+  caiDatThongBao    CaiDatThongBao[]
   viecGiao          Viec[]            @relation("ViecNguoiGiao")
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
   viecTao           Viec[]            @relation("ViecTaoBoi")
@@ -430,6 +432,7 @@ model Company {
   emailThreads   EmailThread[]
   calendarEvents CalendarEvent[]
   fieldValues    FieldValue[]
+  fieldFiles     FieldFile[]
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
 
@@ -497,6 +500,7 @@ model Contact {
   calendarEvents  CalendarEvent[]
   eventAttendance CalendarAttendee[]
   fieldValues     FieldValue[]
+  fieldFiles      FieldFile[]
   visitors        TrackedVisitor[]   @relation("VisitorContact")
   submissions     FormSubmission[]   @relation("SubmissionContact")
   createdAt       DateTime           @default(now())
@@ -1068,6 +1072,7 @@ model Deal {
   contacts    DealContact[]
   activities  Activity[]
   fieldValues FieldValue[]
+  fieldFiles  FieldFile[]
   viecGan     ViecGan[]
   goiYKeHoach GoiYKeHoach[]
   createdAt   DateTime      @default(now())
@@ -1134,6 +1139,7 @@ enum FieldType {
   EMAIL
   PHONE
   USER
+  FILE
 }
 
 model FieldDefinition {
@@ -1156,6 +1162,7 @@ model FieldDefinition {
 
   options FieldOption[]
   values  FieldValue[]
+  files   FieldFile[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1226,6 +1233,51 @@ model FieldValue {
   @@index([optionId])
   @@index([userId])
   @@map("fieldValue")
+}
+
+model FieldFile {
+  id      String          @id @default(cuid())
+  fieldId String
+  field   FieldDefinition @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId String?
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  dealId    String?
+  deal      Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  tenTep       String
+  kieu         String
+  kichThuoc    Int
+  sha256       String
+  blobPathname String   @unique
+  taiBoiId     String?
+  taiBoi       User?    @relation("FieldFileUploader", fields: [taiBoiId], references: [id], onDelete: SetNull)
+  taiLuc       DateTime @default(now())
+
+  @@unique([fieldId, companyId, sha256])
+  @@unique([fieldId, contactId, sha256])
+  @@unique([fieldId, dealId, sha256])
+  @@index([fieldId, companyId])
+  @@index([fieldId, contactId])
+  @@index([fieldId, dealId])
+  @@index([taiBoiId])
+  @@map("fieldFile")
+}
+
+model BlobChoXoa {
+  pathname String   @id
+  kho      String
+  taoLuc   DateTime @default(now())
+  xoaSau   DateTime
+  lanThu   Int      @default(0)
+  fieldId  String?
+  banGhiId String?
+  userId   String?
+
+  @@index([xoaSau])
+  @@map("blobChoXoa")
 }
 
 model SavedView {
@@ -3167,12 +3219,29 @@ model ThongBao {
   thayNgay    String
   docLuc      DateTime?
   moLuc       DateTime?
+  dayLan      Int       @default(0)
+  dayLuc      DateTime?
+  dayKenh     String?
+  dayLoi      String?
 
   @@unique([nguoiNhanId, khoa, ngayDau])
   @@index([nguoiNhanId, taoLuc])
   @@index([nguoiNhanId, docLuc])
   @@index([taoLuc])
+  @@index([dayLuc, taoLuc])
   @@map("thongBao")
+}
+
+model CaiDatThongBao {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  loai   String
+  dayRa  Boolean
+  doiLuc DateTime @updatedAt
+
+  @@unique([userId, loai])
+  @@map("caiDatThongBao")
 }
 
 model ViecThuTu {

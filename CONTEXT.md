@@ -345,6 +345,7 @@ Vì sao: "đăng ký" nghe như ghi danh vào phễu; theo dõi không đổi ai
 ngày, việc quá hạn và việc sắp hạn người đó thực hiện, việc đang chờ người đó đánh
 giá, gợi ý mở kế hoạch đang chờ người đó; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm kênh Zalo 2026-09-23,
 thêm Việc 2026-10-13.
+Loại người đó đã tắt ở mục «Loại thông báo» không vào tin; mục ấy vẫn có thông báo trong chuông (TB2, 2026-10-23).
 _Avoid_: thông báo, notification
 Vì sao: thông báo là từng mục nằm trong chuông của CRM (mục **Thông báo**); nhắc
 buổi sáng là một tin gom gửi ra Zalo hay Slack — gọi lẫn thì người dùng đi tìm
@@ -355,9 +356,23 @@ trên đầu trang và ở trang Thông báo; có đã đọc hay chưa, và b�
 làm. Mỗi mục của nhắc buổi sáng thành một thông báo cho mọi người — kể cả người chưa
 nối Zalo hay Slack. Khác **Nhắc buổi sáng**: nhắc là một tin gom gửi qua một kênh
 ngoài CRM; thông báo là từng mục, lưu lại trong CRM. Chốt 2026-10-14 (TB1).
+Zalo hay Slack chỉ chuyển tiếp thông báo theo cài đặt loại thông báo của người nhận; chuông luôn nhận đủ mọi loại, không tắt được. Mở rộng 2026-10-23 (TB2).
 _Avoid_: notification, tin báo
 Vì sao: chữ «nhắc» đã là tên của tin gom gửi ra Zalo hay Slack — một dòng trong chuông không gọi là nhắc; chuông cần một chữ
 riêng để người dùng biết dòng nào nằm trong CRM.
+
+**Cần làm**: mức của một loại thông báo khi nó chờ chính người nhận làm một việc —
+duyệt, cập nhật, trả lời, việc hay bước quá hạn hoặc sắp hạn, đối soát lệch. Dùng để
+xếp nhóm ở mục «Loại thông báo» trên trang Nhắc buổi sáng. Chốt 2026-10-23 (TB2).
+_Avoid_: việc cần làm, việc phải làm
+Vì sao: «việc cần làm» đã bị cấm vì lẫn với **Việc** (bản ghi giao cho người); «Cần
+làm» là mức của thông báo, không phải một bản ghi việc.
+
+**Để biết**: mức của một loại thông báo khi nó chỉ báo tin, không đòi người nhận làm
+gì — được giao mục tiêu, được ghi nhận, tóm tắt tuần, Kara dựng xong, tín hiệu đổi chỗ.
+Chốt 2026-10-23 (TB2).
+_Avoid_: thông tin, FYI
+Vì sao: «thông tin» quá rộng; «Để biết» nói thẳng người nhận chỉ cần nắm.
 
 **Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
 sáng, trả lời mã nối, nhận ra người đã nối, gửi tin thử khi người bấm «Gửi thử
@@ -475,6 +490,14 @@ _Avoid_: thuộc tính, property, custom field, trường tuỳ chỉnh
 Vì sao: màn Cài đặt hiện CẢ trường chuẩn lẫn trường tự tạo, nên thêm chữ "tự
 tạo" vào nhãn là nói hẹp hơn thứ người thấy; ba từ còn lại là tiếng của nhà khác,
 hoặc nửa Việt nửa Anh.
+
+**Tệp** (kiểu trường): kiểu trường giữ tệp tải lên — hợp đồng, bản quét, ảnh —
+gắn vào một thoả thuận, công ty hay liên hệ. Một ô Tệp giữ tối đa 10 tệp PDF, DOCX,
+PNG hay JPG. Ai thấy bản ghi cũng thấy tên và số tệp; mở hay tải tệp là việc của
+quản trị. Chốt 2026-10-21.
+_Avoid_: tệp đính kèm, attachment, file, tài liệu
+Vì sao: «tài liệu» đã là trang của Kho tài liệu; «đính kèm» gợi một thư gửi đi,
+còn ô này nằm trên bản ghi như mọi trường khác.
 
 **Bộ phận**: cấp trên của cây tổ chức OneHub; một bộ phận chứa nhiều phòng ban.
 Cây có đúng hai cấp cố định dưới gốc OneHub — bộ phận, rồi phòng ban — và là cây
@@ -1292,6 +1315,13 @@ hiệu của mình, nhãn «Đã lưu trữ», và vẫn tự xoá được. Kh�
 _Avoid_: gỡ (khi ý là lưu trữ), ẩn, xoá, đánh dấu rác
 Vì sao: «gỡ» và «ẩn» trong từ điển là chữ của quyền, liên kết và chu kỳ; «xoá» là mất thật — tín hiệu lưu trữ thì lấy
 lại được.
+
+**Đổi chỗ (tín hiệu)**: điều trang «Tín hiệu đã gửi» hiện cho một tín hiệu đổi khác — vào nhóm, đổi nhóm, thành việc,
+việc đổi trạng thái (chưa bắt đầu, đang làm, đã giao), để riêng, để sau, đã có việc lo. Lần đầu tín hiệu hiện ở «Đang
+xem xét» không phải đổi chỗ. Mỗi lần đổi chỗ người gửi nhận một thông báo trong chuông. Chốt 2026-10-22 tại bước thiết
+kế của `trang-thai-tin-hieu-song`.
+_Avoid_: đổi trạng thái (khi ý là cả nhóm lẫn việc), cập nhật tín hiệu
+Vì sao: «trạng thái» của một tín hiệu dễ đọc thành chỉ nhãn; «chỗ» gồm cả nhóm và việc mà người gửi theo dõi.
 
 **Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
 của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè

@@ -1,0 +1,242 @@
+schema_version: 1
+slug: trang-thai-tin-hieu-song
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttts_doc_ban_chup
+    paths:
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/app/lib/lo-trinh/chon-nguon.ts"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "packages/validation/src/tin-hieu-cho.ts"
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
+      - "apps/app/test/tin-hieu-nguon.spec.ts"
+      - "apps/app/test/support/khoi-tin-hieu-mau.ts"
+    expected: |
+      tin-hieu-nguon.spec.ts describe "ttts-doc-ban-chup" tren kho thu cua luot. Fixture KHONG sua tay tin_hieu: hai khoi
+      sinh bang bo ve that cua kit (dungKhoiMau trong apps/app/test/support/khoi-tin-hieu-mau.ts chep tin-hieu/crm,
+      tin-hieu/gom, docs/plan va _acceptance/config.yaml cua cay vao thu muc tam, them mot ban gom dat ma vao nhom
+      "TTTS-NHOM-<run>", chay scripts/product-map.mjs --root <tam> roi docDuLieu(LO-TRINH.html sinh ra)); ban "cu" co ma
+      o cho kit "chua-gom" (khoa CRM "cho-gom"), ban "moi" o "nhom-chua-cat"; ghi qua chinh ghiBanChupLoTrinh (@crm/db, ben viet hang that),
+      commitLuc sau gio dung tiem vao banDung; danh sach "cua toi" la mot dong {ma, daKeoVe: true} nhu tinHieu.cuaToi tra.
+        1 docNguonTinHieu (ham may chu cua hai trang) tra kieu "ban-chup" va du lieu co tin_hieu cua ban moi
+        2 trang "cua toi": docTrangThaiDu cho ma do tra khoa "nhom-chua-cat", nhan == tinHieuMessages(vi).nhan.daVaoNhom,
+          cau chua "TTTS-NHOM-<run>"
+        3 the "Tat ca": docNenTatCa cho cung ma tra cung khoa va cung cau
+        4 tep dong goi tren dia KHONG doi trong luot (doc lai bang hash truoc-sau) — ket qua den tu ban chup
+      CHIEU DO: ban sao nguon.ts luon tra ban dung -> dong 1 do voi thong diep ghim
+      "trang tin hieu khong doc ban chup"; ban sao doc qua phanTichLoTrinh (lot tin_hieu) -> dong 1 do voi thong diep ghim
+      "ban chup mat danh sach tin hieu khi doc".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ttts_khong_lui
+    paths:
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/app/lib/lo-trinh/chon-nguon.ts"
+      - "apps/app/test/tin-hieu-nguon.spec.ts"
+    expected: |
+      tin-hieu-nguon.spec.ts describe "ttts-khong-lui". Ma tran viet truoc 8 ca x 2 trang = 16 o, bo doc ban chup va
+      ban dung tiem vao:
+        cung-sha -> ban-chup · sau-gio-dung -> ban-chup · cu-hon -> ban-dung · mo-ho (commit truoc gio dung, khac sha)
+        -> ban-dung · preview -> ban-dung · chua-co -> ban-dung · kho-loi (bo doc nem) -> ban-dung · hang-hong (khong
+        qua khuon) -> ban-dung
+      Moi o: kieu nguon cua trang tin hieu == chonNguon(...) cua trang Lo trinh cho CUNG dau vao (so quan he voi ham
+      that, khong so chuoi viet tay), va khoa cua ma mau == khoa tinh tu dung du lieu cua nguon da chon. O kho-loi va
+      hang-hong: ham khong nem, banVe khac "hong" khi tep dong goi doc duoc, va dung mot dong canh bao ghi qua ghiCanhBao.
+      CHIEU DO: ban sao chon ban chup khi commitLuc cu hon -> o cu-hon do voi thong diep ghim
+      "trang tin hieu hien cho cu hon ban dang chay"; ban sao nem khi kho loi -> o kho-loi do voi thong diep ghim
+      "kho loi lam vo trang tin hieu".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttts_bao
+    paths:
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "packages/validation/src/tin-hieu-cho.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "apps/api/test/tin-hieu-doi-cho.spec.ts"
+      - "apps/app/test/support/khoi-tin-hieu-mau.ts"
+      - "scripts/tin-hieu.mjs"
+    expected: |
+      apps/api/test/tin-hieu-doi-cho.spec.ts describe "ttts-bao" tren kho thu cua luot, qua cau REST that
+      POST /rest/lo-trinh/ban-chup voi khoa «Đẩy lộ trình» tao bang taoKhoaDayLoTrinh (duong ghi that). Moi tin hieu tao
+      qua TinHieuService.gui cua mot nguoi gui rieng va keo ve qua TinHieuService.keoVe. Khoi cu va moi sinh bang bo ve
+      that cua kit (dungKhoiMau, xem E1): moi o la mot thay doi DAU VAO cua kit — ban gom (nhom, le, da phu), hang lo
+      trinh co phu nhom (thanh viec), hang doi muc (chua bat dau, dang lam, da giao), chan_troi — khong sua tay tin_hieu.
+      Mot bai so khuon trong cung describe: moi o, choTinHieu(khoi kit sinh).get(ma).khoa == khoa ky vong cua o
+      (bao ve ca khi kit doi ten truong).
+      Ma tran viet truoc 11 o (cu -> moi), moi o mot ma rieng:
+        vang->cho-gom KHONG bao · cho-gom->nhom-chua-cat · cho-gom->le · cho-gom->da-phu · cho-gom->chan-troi ·
+        nhom X->nhom Y · nhom-chua-cat->hang chua-bat-dau · chua-bat-dau->dang-lam · dang-lam->da-giao ·
+        hang A->hang B (cung trang thai) · khong doi KHONG bao
+      Luot 1 gui ban cu (co hang truoc do), luot 2 gui ban moi. Sau luot 2 doc ThongBao bang Prisma:
+        - o bao: dung MOT hang cho nguoiGuiId cua ma do, noiDung qua noiDungThongBao.parse, loai "tin-hieu-doi-cho",
+          ma == "crm-<so>", khoa == choTinHieu(ban moi).get(ma).khoa, sha == sha luot 2, duongDan "/tin-hieu",
+          nguon "tin-hieu"
+        - o KHONG bao: 0 hang
+        - tong so hang == so o bao (9) — khong ai nhan thong bao cua ma nguoi khac
+      CHIEU DO: ban sao so chi theo truong cho (bo hang va trang thai) -> o dang-lam->da-giao va hang A->hang B do voi
+      thong diep ghim "doi trang thai viec khong bao nguoi gui"; ban sao coi ma vang la doi cho -> o vang->cho-gom do voi
+      thong diep ghim "bao nham lan dau vao ban chup".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttts_khong_bao
+    paths:
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "apps/api/test/tin-hieu-doi-cho.spec.ts"
+      - "apps/app/test/support/khoi-tin-hieu-mau.ts"
+      - "scripts/tin-hieu.mjs"
+    expected: |
+      describe "ttts-khong-bao", cung duong ghi that va khoi kit sinh cua E3. Ma tran viet truoc
+      12 ca, moi ca mot ma doi cho that su (cho-gom -> nhom-chua-cat) giua ban cu va ban moi:
+        luu-tru (TinHieuService.luuTru truoc luot 2) · khong-nguoi-gui (xoa User nguoi gui -> nguoiGuiId null) ·
+        roi-khong-gian (go member) · ma-la (ma trong ban chup khong co hang TinHieu) · cung-sha gui lai luot 2 ·
+        cu-hon (commitLuc nho hon ban dang luu) · dau-tien (kho chua co hang BanChupLoTrinh, chi gui ban moi) ·
+        chay-dua (hai POST ban moi dong thoi bang Promise.all) · cu-vang (hang dang luu khong co khoa tin_hieu) ·
+        cu-hong (hang dang luu co tin_hieu khong qua parseDuongTinHieu) · moi-vang · moi-hong
+      Moi ca: so hang ThongBao loai tin-hieu-doi-cho cua ca do == 0; rieng chay-dua == 1 cho ma doi va ca hai POST tra
+      2xx (mot "nhan", mot "trung"). Bon ca vang/hong: POST tra "nhan", hang BanChupLoTrinh mang sha moi, va dung mot dong
+      nhat ky canh bao chua ma nguon va sha (bat qua Logger tiem). Doi chung duong trong CUNG luot: mot ma nguoi gui hop le doi cho -> dung 1 hang
+      (ca KHONG phai vi duong bao chet).
+      CHIEU DO: ban sao coi ban cu hong la rong -> ca cu-hong do voi thong diep ghim "bao hang loat khi ban truoc khong doc
+      duoc"; ban sao nem khi ban moi hong -> ca moi-hong do voi thong diep ghim "danh sach tin hieu hong chan ban chup";
+      ban sao bo loc archivedAt -> ca luu-tru do voi thong diep ghim "bao cho tin hieu da luu tru"; ban sao bo
+      FOR UPDATE va so cu-moi ngoai giao dich -> ca chay-dua do voi thong diep ghim "hai luot chay dua bao trung".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttts_giao_dich
+    paths:
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "apps/api/test/tin-hieu-doi-cho.spec.ts"
+      - "apps/app/test/support/khoi-tin-hieu-mau.ts"
+      - "scripts/tin-hieu.mjs"
+    expected: |
+      describe "ttts-giao-dich". Ghi thong bao hong tiem bang tham so ghiThongBao cua ghiBanChupVaBaoTinHieu (nem
+      Error "TTTS-LOI") — goi qua LoTrinhBanChupService dung module Nest that, khong goi ham db truc tiep:
+        1 thu tuc tra loi (khong phai ket qua nhan); hang BanChupLoTrinh doc lai co sha cu, duLieu cu deep-equal ban cu
+        2 0 hang ThongBao loai tin-hieu-doi-cho
+        3 goi lai cung ban moi voi ghiThongBao that -> "nhan", sha moi, va du so thong bao cua cac ma doi cho
+      CHIEU DO: ban sao ghi ban chup roi moi ghi thong bao ngoai giao dich -> dong 1 do voi thong diep ghim
+      "ban chup doi ma thong bao mat"; ban sao nuot loi ghi thong bao -> dong 1 do voi thong diep ghim
+      "loi ghi thong bao bi nuot, luot Actions xanh".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ttts_cau
+    paths:
+      - "apps/app/lib/thong-bao/**"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/lib/tin-hieu/trang-thai.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "packages/validation/src/tin-hieu-cho.ts"
+      - "apps/app/test/thong-bao-cau.spec.ts"
+    expected: |
+      thong-bao-cau.spec.ts describe "ttts-cau". Ma tran viet truoc 9 khoa (KHOA_CHO_TIN_HIEU, rut tu hang so that) x 2
+      ngon ngu = 18 o; moi o dung dongTuRa that voi noiDung tin-hieu-doi-cho tieuDe "TTTS «dài» <run>":
+        1 cau == dien(mau cua locale, { tieuDe, nhan }) voi nhan == tinHieuMessages(locale).nhan cua khoa do theo
+          CHINH bang anh xa trang Tin hieu da gui dung (so quan he voi ham cua trang, khong chuoi viet tay)
+        2 khongDich chua dung tieuDe
+        3 href == "/<slug>/tin-hieu"
+        4 cau khong khop /crm-\d|gom|[0-9a-f]{7,}|\{|undefined/
+      Bai co san cua tep (khoa fixture == LOAI_THONG_BAO) xanh voi loai moi.
+      CHIEU DO: ban sao cau tieng Anh dung nhan tieng Viet -> o en do voi thong diep ghim "nhan trong chuong khac nhan
+      tren trang"; ban sao bo tieuDe khoi tenKhongDich -> dong 2 do voi thong diep ghim "tieu de nguoi gui bi dich".
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ttts_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000: lenh cua ttts_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/trang-thai-tin-hieu-song/evidence/
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/lib/thong-bao/**"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
+      - "_acceptance/trang-thai-tin-hieu-song/rang/do-man.mjs"
+    expected: |
+      Kho do rieng (tien-de), nguoi gui la nguoi do. THU TU CO DINH, du lieu mau vao qua duong ghi that:
+        pha 1 — nguoi gui gui mot tin hieu tieu de dai "TTTS-<run> " + 80 ky tu qua tRPC tinHieu.gui; quan tri keo ve qua
+          REST /rest/tin-hieu/keo-ve; do-man tao khoa «Đẩy lộ trình» va POST ban chup thu nhat (khoi kit sinh bang
+          dungKhoiMau, ma do o cho kit chua-gom); nguoi gui mo «Tín hiệu đã gửi», quan tri mo «Tất cả» — ca hai hien
+          nhan «Đang xem xét» cho ma do (bo dem cua trang da co ban cu)
+        pha 2 — POST ban chup thu hai (khoi kit sinh, ma do vao nhom "TTTS-NHOM-<run>"), KHONG dung lai app:
+          a) chuong: trang cua nguoi gui de mo, KHONG tai lai; DUNG khi so chua doc hien trong <= THONG_BAO.hoiLaiMs (doc
+             tu tep that) + 30 s
+          b) hai trang tin hieu: tai lai moi 10 s; DUNG khi nhan «Đã vào nhóm» hien o CA HAI trang trong
+             <= LO_TRINH.nhipLamMoiMs (doc tu tep that) + 30 s
+        pha 3 — moi o 1280|375 x vi|en: mo chuong, chup; dong thong bao mang cau dung dongTuRa tinh cho o do (do-man
+          tinh ky vong bang ham that), tieu de co translate="no"; scrollWidth <= clientWidth cua trang
+        pha 4 — mo chuong tu trang Lo trinh (khong phai trang dich), bam dong thong bao bang chuot that, cho URL ket
+          thuc "/tin-hieu"; khong thay dong de bam la SAI; dong cua ma do hien nhan
+          tinHieuMessages(locale).nhan.daVaoNhom va cau chua "TTTS-NHOM-<run>"; chup
+      CHIEU DO: ban sao khong goi ghi thong bao -> pha 2a SAI voi thong diep ghim "doi cho khong len chuong";
+      ban sao bo cacheLife cua bo doc ban chup tho -> pha 2b SAI voi thong diep ghim "trang tin hieu giu ban chup cu";
+      ban sao trang doc tep dong goi -> pha 4 SAI voi thong diep ghim "bam vao thay cho cu".
+
+  - id: E7c
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttts_bao
+    paths:
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
+      - "packages/validation/src/tin-hieu-cho.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "apps/api/test/tin-hieu-doi-cho.spec.ts"
+    expected: |
+      Chieu may chu cua AC-7, cung lenh voi E3 (chay mot lan): khi CRM nhan mot ban chup doi cho qua cau REST that
+      POST /rest/lo-trinh/ban-chup, hang ThongBao loai tin-hieu-doi-cho duoc ghi cho dung nguoi gui, duongDan
+      "/tin-hieu", noiDung qua noiDungThongBao.parse — chinh du lieu ma chuong va trang Thong bao cua E7 doc. Ma tran,
+      doi chung va chieu do nhu E3.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ttts_do
+    paths:
+      - "scripts/tin-hieu/do-bao-doi-cho.ts"
+      - "scripts/tin-hieu/test/do-bao-doi-cho.spec.ts"
+      - "packages/validation/src/tin-hieu-cho.ts"
+    expected: |
+      scripts/tin-hieu/test/do-bao-doi-cho.spec.ts describe "ttts-do". Kho git tam dung bang lenh git that: 6 commit
+      first-parent doi LO-TRINH.html (commit dau truoc --tu), moi tep do bo ve that cua kit sinh (dungTepMau);
+      thong bao doc tu kho thu cua luot, ghi qua chinh ghiBanChupVaBaoTinHieu cho cac commit "da day" (khong chen thang
+      bang). Ma tran viet truoc 6 lan doi:
+        da-bao-dung-sha (tre 5 phut) · bi-the-cho (commit doi cho khong day; lan day ke tiep mang sha cua mot commit
+        CHI cham tep khac, khong cham LO-TRINH.html — nhu chay lai tay hay push nhieu commit — trong 2 gio -> phu) · thieu (khong
+        thong bao) · tre (thong bao 26 gio sau) · luu-tru (khong in dong) · khong-doi (khong in dong)
+      Mong doi: dung 4 dong lan doi, moi dong mang ma, cho moi, gio commit, gio thong bao, tre; co "thieu" o dong thieu,
+      co "qua mot ngay" o dong tre; dong ket luan "khong dat" va ma thoat 1. Bo ban thu hai chi co hai lan da-bao va
+      bi-the-cho -> dong ket luan "dat", ma thoat 0.
+      CHIEU DO: ban sao coi lan bi the cho la thieu -> bo thu hai do voi thong diep ghim "lan bi the cho tinh la thieu";
+      ban sao bo nguong 1 ngay -> dong tre khong co co, do voi thong diep ghim "tre qua mot ngay khong bi co".

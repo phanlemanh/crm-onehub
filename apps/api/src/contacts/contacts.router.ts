@@ -11,6 +11,7 @@ import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
+import { docPhamViYeuCau } from "../trpc/pham-vi-yeu-cau";
 import {
 	bulkResultOutput,
 	contactBasicOutput,
@@ -53,8 +54,11 @@ export class ContactsRouter {
 		output: contactByIdOutput,
 		meta: restMeta("GET", "/contacts/{id}", ["Contacts"]),
 	})
-	async byId(@Input("id") id: string) {
-		return this.contacts.byId(id);
+	async byId(@Ctx() ctx: AuthedTrpcContext, @Input("id") id: string) {
+		return this.contacts.byId(id, {
+			id: ctx.user.id,
+			role: docPhamViYeuCau(ctx).role,
+		});
 	}
 
 	@Mutation({

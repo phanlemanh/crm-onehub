@@ -183,3 +183,16 @@ export const GOM_DO = {
 	dat: "đạt",
 	chuaDat: "chưa đạt",
 } as const;
+
+export const BAO_DOI_CHO_DO = {
+	nhanh: "onehub",
+	tep: "LO-TRINH.html",
+	cuaSoMs: 24 * GIO_MS,
+	muiGio: "+07:00",
+	loai: "tin-hieu-doi-cho",
+	thieu: "thiếu thông báo",
+	quaMotNgay: "quá một ngày",
+	dat: "đạt",
+	khongDat: "không đạt",
+	khongCo: "không có lần đổi chỗ nào có người nhận trong khoảng đo",
+} as const;

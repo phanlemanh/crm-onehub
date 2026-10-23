@@ -274,9 +274,7 @@ const vi = {
 			daKhoiPhuc: "Đã khôi phục mẫu.",
 		},
 		tuMau: {
-			batDau: "Bắt đầu từ mẫu",
 			chonTieuDe: "Mẫu của đơn vị",
-			vietTay: "Viết mục tiêu tay",
 			chonKhac: "Chọn mẫu khác",
 			moTa: "Bắt đầu từ mẫu «{ten}». Điền số của đơn vị rồi tạo bản nháp.",
 			mucTieu: "Mục tiêu",
@@ -571,9 +569,7 @@ const en: OkrCanhKrMessages = {
 			daKhoiPhuc: "Template restored.",
 		},
 		tuMau: {
-			batDau: "Start from a template",
 			chonTieuDe: "Templates for this unit",
-			vietTay: "Write the objective yourself",
 			chonKhac: "Pick another template",
 			moTa: "Starting from the template “{ten}”. Fill in your unit's numbers, then create the draft.",
 			mucTieu: "Objective",
