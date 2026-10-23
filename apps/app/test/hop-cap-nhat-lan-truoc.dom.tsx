@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { GHI_CHU_TOI_DA, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
+import {
+	GHI_CHU_TOI_DA,
+	type GuiCapNhatInput,
+	guiCapNhatInput,
+} from "@crm/validation/okr-cap-nhat";
 import { useQuery } from "@tanstack/react-query";
 import { act } from "react";
 import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
@@ -261,6 +265,8 @@ describe("hct-khoi", () => {
 				const gio = tieuDe.match(/\d{2}:\d{2}/)?.[0] ?? "";
 				if (!tieuDe.includes("15/10, 09:30"))
 					loi.push(`hct-khoi: ngay gio lech (${gio}, can 09:30)`);
+				if (!(h.textContent ?? "").includes(ml.tieuDe))
+					loi.push(`hct-khoi: hop thieu tieu de khoi (${ca.ten})`);
 				const so = qs("[data-lan-truoc-so]", b)?.textContent ?? null;
 				const soMong = giaTri(k, Number(ca.so), "vi");
 				if (so !== soMong)
@@ -528,25 +534,39 @@ describe("hct-sau-gui", () => {
 		const lucCu = "2026-10-20T02:00:00.000Z";
 		const lucMoi = "2026-10-21T03:00:00.000Z";
 		const tuanNay = "2026-10-19";
-		let daGui = false;
+		let daGui: Pick<
+			GuiCapNhatInput["items"][number],
+			"value" | "confidence" | "note"
+		> | null = null;
 		const mtCu = mtCua(id, { ...ca, hienTai: 40 }, [
 			vet("v1", id, lucCu, 40, "cao"),
-		]);
-		const mtMoi = mtCua(id, { ...ca, hienTai: 60 }, [
-			vet("v1", id, lucCu, 40, "cao"),
-			vet("v2", id, lucMoi, 60, "thap"),
 		]);
 		kho.rieng.set("okr.dienBien", () =>
 			dienBien(ca, [
 				daGui
-					? { tuan: tuanNay, giaTri: 60, tuTin: "thap", ghiChu: "Moi" }
+					? {
+							tuan: tuanNay,
+							giaTri: daGui.value,
+							tuTin: daGui.confidence,
+							ghiChu: daGui.note,
+						}
 					: { tuan: tuanNay, giaTri: 40, tuTin: "cao", ghiChu: "A" },
 			]),
 		);
 		kho.ghiRieng.set("okr.guiCapNhat", async (vao) => {
-			guiCapNhatInput.parse(vao);
-			daGui = true;
-			kho.chiTiet = () => mtMoi;
+			const muc = guiCapNhatInput.parse(vao).items[0];
+			if (!muc) throw new Error("hct-sau-gui: gui khong co muc nao");
+			const gui = {
+				value: muc.value,
+				confidence: muc.confidence,
+				note: muc.note,
+			};
+			daGui = gui;
+			kho.chiTiet = () =>
+				mtCua(id, { ...ca, hienTai: gui.value }, [
+					vet("v1", id, lucCu, 40, "cao"),
+					vet("v2", id, lucMoi, gui.value, gui.confidence),
+				]);
 			return { id: "ok", canhBao: null };
 		});
 		const k = await moHop(mtCu);
@@ -562,7 +582,8 @@ describe("hct-sau-gui", () => {
 			await u.type(o, "60");
 			await u.click(nut(mo.capNhat.mucTuTin.thap, hop() ?? document.body));
 			const g = qs<HTMLInputElement>(`[id="${id}-ghi-chu"]`);
-			if (g) await u.type(g, "Moi");
+			if (!g) throw new Error("hct-sau-gui: thieu o ghi chu");
+			await u.type(g, "Moi");
 		});
 		const docTruoc = {
 			dienBien: docCua("okr.dienBien").length,

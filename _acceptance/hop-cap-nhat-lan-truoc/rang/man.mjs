@@ -166,15 +166,44 @@ async function doKho(tenKho, ca) {
 			const khoi = hopEl?.querySelector("[data-lan-truoc]");
 			const gc = khoi?.querySelector("[data-ghi-chu-truoc]");
 			const tran = (el) => (el ? el.scrollWidth > el.clientWidth + 1 : true);
+			const vuot = (el) => {
+				if (!el || !hopEl) return true;
+				const a = el.getBoundingClientRect();
+				const b = hopEl.getBoundingClientRect();
+				return a.left < b.left - 1 || a.right > b.right + 1;
+			};
 			return {
 				ghiChu: gc?.textContent ?? null,
 				khongDich: gc?.closest('[translate="no"]') !== null,
 				hopTran: tran(hopEl),
-				khoiTran: tran(khoi),
-				gcTran: tran(gc),
+				khoiTran: vuot(khoi),
+				gcTran: vuot(gc),
 				goiY: hopEl?.querySelectorAll("[data-cau-goi-y]").length ?? 0,
 			};
 		}, hop);
+		const doiChungHop = await p.evaluate(
+			(h, rongChen) => {
+				const hopEl = document.querySelector(h);
+				const khoi = hopEl?.querySelector("[data-lan-truoc]");
+				if (!hopEl || !khoi) return { bao: false, vi: "khong thay hop" };
+				const tran = (el) => el.scrollWidth > el.clientWidth + 1;
+				const vuot = (el) => {
+					const a = el.getBoundingClientRect();
+					const b = hopEl.getBoundingClientRect();
+					return a.left < b.left - 1 || a.right > b.right + 1;
+				};
+				const rong = document.createElement("div");
+				rong.style.width = rongChen;
+				rong.style.height = "1px";
+				khoi.appendChild(rong);
+				const vi = `hop tran ${tran(hopEl)}, khoi vuot mep hop ${vuot(khoi)}`;
+				const bao = tran(hopEl) && vuot(khoi);
+				rong.remove();
+				return { bao, vi };
+			},
+			hop,
+			MAN.rongChen,
+		);
 		kiem(
 			`${tenKho}: ghi chu 200 ky tu nguyen van (${doc.ghiChu?.length ?? 0})`,
 			doc.ghiChu === ca.ghiChu,
@@ -182,8 +211,12 @@ async function doKho(tenKho, ca) {
 		kiem(`${tenKho}: ghi chu khong bi dich`, doc.khongDich);
 		kiem(`${tenKho}: hop khong tran ngang`, doc.hopTran === false);
 		kiem(
-			`${tenKho}: khoi va ghi chu khong tran ngang`,
+			`${tenKho}: khoi va ghi chu nam trong mep hop`,
 			doc.khoiTran === false && doc.gcTran === false,
+		);
+		kiem(
+			`${tenKho}: doi chung do — chen khoi rong vao khoi lan truoc thi hop va khoi bao tran (${doiChungHop.vi})`,
+			doiChungHop.bao,
 		);
 		kiem(`${tenKho}: ba cau goi y (${doc.goiY})`, doc.goiY === 3);
 		const t = await p.evaluate(doTran, MAN.rongChen);
