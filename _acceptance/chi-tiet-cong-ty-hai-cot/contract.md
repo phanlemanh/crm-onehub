@@ -5,7 +5,7 @@ slug: chi-tiet-cong-ty-hai-cot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-23T03:39:40Z
 design_doc: docs/superpowers/specs/2026-10-23-chi-tiet-cong-ty-hai-cot-design.md
@@ -73,3 +73,7 @@ Quét theo khuôn test-matrix của `morphological-scan` (`coverage-scan.md`).
 
 - Lý do giữ Giới thiệu đứng đầu: commit fc236a253 của hãng tách cột vì «tám hàng trường đứng trên đoạn giới thiệu, người
   dùng cuộn qua trường mới tới phần chữ». Câu Hỏi-1 trên thẻ.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-23:
+  - Ngoài-1: Bộ đo bố cục tự đếm số chiều đỏ từ chính danh sách của nó, nên xoá nhầm một chiều thì vẫn báo xanh.
+  - Ngoài-2: Vài vế của phép đo (dòng Kara chờ, dòng mô tả vùng kéo thả, trang cuộn ngang) chưa được phá thử để chứng là báo đỏ được.
+  - Ngoài-3: Thứ tự mục Hoạt động trên website sau dòng Kara chờ chưa được đo vì không gieo được khách truy cập đã nhận diện.
