@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 8630a13ef8c42d9adf8d0d65f336a53c88fdea5e
-human_signoff:
+human_signoff: Manh Phan 2026-10-24 — ký Cổng Bằng chứng trên vòng chấm 3 (PASS) và lần ghim lại sau sửa CI (8630a13ef). Ngoài-1, 2, 6, 7, 9, 10, 11, 13, 14 ghi Known limits; Ngoài-3, 5 mở hợp đồng mới; Ngoài-4, 8, 12, 15 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: trang-ve-gop-va-dau-cay

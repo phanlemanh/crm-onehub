@@ -5,7 +5,7 @@ slug: trang-ve-gop-va-dau-cay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-23T09:40:32Z
 design_doc: docs/superpowers/specs/2026-10-23-trang-ve-gop-va-dau-cay-design.md
@@ -103,3 +103,13 @@ cho một PR hai lần đẩy) nằm trong design doc để so sau khi gộp, kh
 
 - Hồ sơ đã ký có `paths` chạm `scripts/pre-push-t1.mjs`, `scripts/verify-gate-shape.mjs` hay
   `packages/ui/test/**` hoá cũ và được ghim lại trong cùng PR bằng một làn.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-24:
+  - Ngoài-1: Phép kiểm sổ chạy thật không báo khi bộ kit đổi cách ghi dòng sổ; khi đó lần đẩy lặng lẽ thôi được bỏ bước nặng (mọi bước vẫn chạy).
+  - Ngoài-2: Phép quét sổ chạy thật so hai bản chép tay của cùng một quy tắc nhận dòng, chưa chứng quy tắc ấy hiểu đúng ý phía ghi sổ.
+  - Ngoài-6: Bước kiểm dọn worktree của ca thật #550 không bao giờ đỏ được, nên một worktree tạm bị sót sẽ không bị bắt.
+  - Ngoài-7: Đột biến (l) gỡ cùng lúc hai điều kiện chặn tua nhanh, nên chưa chứng riêng từng điều kiện.
+  - Ngoài-9: Dấu «đã xanh» của hook ghi cho mọi sha được đẩy dù năm bước chạy trên cây làm việc; đẩy một nhánh khác hay khi còn sửa dở có thể ghi dấu nhầm.
+  - Ngoài-10: Nguồn CI coi check-run xanh trên đỉnh PR là chứng cho cây của đỉnh, dù CI chạy trên bản đã gộp onehub.
+  - Ngoài-11: Phép so tên job khai với workflow từng chỉ kiểm tập con; bản sửa sau lượt 3 đã chuyển sang so bằng nhau ở răng ten-job.
+  - Ngoài-13: Ma trận «như cũ» không chạy mẫu «gộp onehub chỉ T1» như eval khai.
+  - Ngoài-14: Bộ đếm lần chạy của bộ vẽ giả chỉ được kiểm bằng 0, chưa có ca chứng nó đếm được.
