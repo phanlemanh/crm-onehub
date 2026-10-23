@@ -63,6 +63,8 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.dhk_hanh_dong
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-1
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-dau-trang-khu.dom.tsx"
@@ -121,6 +123,8 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.dhk_menu_soan
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-6
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-dau-trang-khu.dom.tsx"
@@ -140,6 +144,8 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.dhk_khoa_ly_do
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-8
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/lib/messages/okr.ts"
