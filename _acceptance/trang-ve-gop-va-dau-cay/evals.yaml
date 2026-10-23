@@ -1,0 +1,304 @@
+schema_version: 1
+slug: trang-ve-gop-va-dau-cay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tvg_khai
+    paths:
+      - ".gitattributes"
+      - "package.json"
+      - "scripts/product-map.mjs"
+      - "scripts/trang-ve-gop.mjs"
+      - "packages/ui/test/trang-ve-gop.spec.ts"
+    expected: |
+      bun test -t khai, ba ca xanh:
+        (a) «khai: trang mang merge=union dung bang tep bo ve dung lai» — worktree tach roi tam cua HEAD, xoa moi tep
+            mang merge=union trong .gitattributes, chay that node scripts/product-map.mjs --root .; tap tep duoc dung
+            lai == tap mang merge=union (toEqual ["LO-TRINH.html","PRODUCT-MAP.md"]); git diff --name-only HEAD sau do
+            chi gom hai trang (khong tep dang theo doi nao khac doi).
+        (b) «khai: khong can cau hinh git» — kho tam khong khai merge.* nao (git config --get-regexp '^merge\.' rong),
+            hai nhanh cung sua PRODUCT-MAP.md, hook tat -> git merge thoat 0, khong tep nao trong diff-filter=U.
+        (c) «khai: khong thuoc tinh thi xung dot» — cung ca (b) nhung xoa .gitattributes -> thoat 1, PRODUCT-MAP.md trong
+            `git diff --name-only --diff-filter=U`.
+      Chieu do: E12 (a) bo dong LO-TRINH.html khoi .gitattributes -> ca (a) do.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tvg_ca_that
+    paths:
+      - ".gitattributes"
+      - ".githooks/post-merge"
+      - ".githooks/pre-commit"
+      - "scripts/trang-ve-gop.mjs"
+      - "scripts/product-map.mjs"
+      - "_acceptance/trang-ve-gop-va-dau-cay/rang/ca-550.mjs"
+    expected: |
+      node rang/ca-550.mjs, ma 0. Dung hai worktree tach roi tam: A = bcf7ecdf9 + mot commit chep bo cong cu cua vong
+      (.gitattributes, .githooks/post-merge, .githooks/pre-commit, scripts/trang-ve-gop.mjs tu HEAD), B = 084ec4d12 + cung
+      commit do. Ba lan gop B vao A, moi lan tu A sach:
+        (1) doi-chung: hai commit goc (khong .gitattributes cua vong), hook tat -> merge thoat 1, tep xung dot dung
+            ["LO-TRINH.html","PRODUCT-MAP.md"];
+            in «dat doi-chung».
+        (2) co-hook: core.hooksPath=.githooks cua cay A, khong -c merge.* nao -> merge thoat 0; HEAD co dung hai cha [A, B]; loi commit,
+            tac gia, nguoi commit bang cua commit gop git tao truoc khi hook viet lai (doc tu reflog HEAD@{1});
+            `git status --porcelain` rong; trong mot worktree sach cua HEAD, product-map.mjs --check thoat 0;
+            in «dat co-hook».
+        (3) tat-hook: nhu (2) voi CRM_SKIP_HOOKS=1 -> merge thoat 0, --check thoat 1 va stderr co «PRODUCT-MAP.md lệch» va
+            «LO-TRINH.html lệch»; in «dat tat-hook» (phuc vu AC-4).
+      Don het worktree tam (git worktree list nhu truoc). Thieu bcf7ecdf9 thi thu `git fetch origin pull/550/head` mot lan;
+      van thieu bcf7ecdf9 hay 084ec4d12 -> «khong co ca that», ma 2.
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tvg_gop
+    paths:
+      - ".githooks/post-merge"
+      - ".githooks/pre-commit"
+      - "scripts/trang-ve-gop.mjs"
+      - "packages/ui/test/trang-ve-gop.spec.ts"
+    expected: |
+      bun test -t "gop-tu-dong|gop-xung-dot". Kho tam voi bo ve gia (scripts/product-map.mjs gia: ghi PRODUCT-MAP.md va
+      LO-TRINH.html = dong dem so ho so roi danh sach thu muc _acceptance/* da sap — dong dem lam ban tron cua union sai,
+      nhu so dem tren trang that), hook that cua vong, .gitattributes that. Ma tran viet truoc 6 ca:
+        gop-tu-dong (a) hai nhanh them hai ho so khac nhau -> merge 0; HEAD:PRODUCT-MAP.md == "3\na\nb\nz" (ban tron cua union la "2\na\nb\nz"); HEAD^1, HEAD^2 la
+            hai dau; status rong.
+        gop-tu-dong (b) loi commit gop tu viet (-m "gop thu") va tac gia GIT_AUTHOR_NAME=x giu nguyen sau khi viet lai.
+        gop-tu-dong (c) trang da khop sau gop (chi mot nhanh doi nguon) -> HEAD khong doi (bang sha git tao), khong in dong
+            viet lai.
+        gop-xung-dot (a) xung dot o src.txt -> chi src.txt trong diff-filter=U; giai roi `git commit --no-edit` -> trang
+            trong HEAD == "3\na\nb\nz".
+        gop-xung-dot (b) `git merge --no-commit` roi `git commit -m x` -> trang trong HEAD == "3\na\nb\nz".
+        gop-xung-dot (c) commit thuong (khong MERGE_HEAD) -> bo ve gia khong chay (tep dem lan chay khong doi).
+      Chieu do: E12 (b) bo khoi viet lai HEAD cua post-merge -> gop-tu-dong (a) do voi thong diep gom «PRODUCT-MAP.md».
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tvg_gop
+    paths:
+      - ".githooks/pre-commit"
+      - "scripts/trang-ve-gop.mjs"
+      - "packages/ui/test/trang-ve-gop.spec.ts"
+    expected: |
+      Cung lenh voi E3; AC-3 duoc do o ba ca gop-xung-dot (a), (b) va gop-tu-dong khong bao gio de trang trong
+      diff-filter=U. Chieu do: E12 (c) pre-commit bo dieu kien MERGE_HEAD thanh luon thoat som -> gop-xung-dot (a) do.
+
+  - id: E5
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tvg_khong_doi
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - "_acceptance/trang-ve-gop-va-dau-cay/rang/khong-doi.mjs"
+    expected: |
+      node rang/khong-doi.mjs, ma 0. Goc = merge-base(HEAD, refs/remotes/origin/onehub). (1) buoc co dong
+      «run: node scripts/product-map.mjs --root . --check» cua acceptance.yml o HEAD bang tung byte ban o goc (khoi tu
+      «- name: Product map» toi «- name:» ke); (2) .githooks/pre-push va .githooks/gate-shape.json bang tung byte ban o
+      goc; (3) moi dong them (+) cua `git diff goc HEAD` trong tep duoi .githooks/, scripts/, .github/ hay package.json
+      khong chua «--no-verify». In «dat (1)»…«dat (3)». Chieu do tren ban sao: them «#» vao cuoi hook -> «BAT (2)»;
+      chen dong «git push --no-verify» vao mot tep scripts/*.mjs gia -> «BAT (3)»; doi «--check» trong buoc -> «BAT (1)».
+      Doi chung am cua (3): chuoi «--no-verify» chi nam trong _acceptance/trang-ve-gop-va-dau-cay/evals.yaml (co that o
+      cay nay) va trong docs/*.md -> van «dat (3)».
+
+  - id: E6
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tvg_ca_that
+    paths:
+      - "scripts/trang-ve-gop.mjs"
+      - "_acceptance/trang-ve-gop-va-dau-cay/rang/ca-550.mjs"
+    expected: |
+      Cung lenh voi E2; AC-4 duoc do o lan gop (3) tat-hook: --check thoat 1 va goi ten ca hai trang.
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tvg_an_toan
+    paths:
+      - ".githooks/post-merge"
+      - ".githooks/pre-commit"
+      - "scripts/trang-ve-gop.mjs"
+      - "packages/ui/test/trang-ve-gop.spec.ts"
+    expected: |
+      bun test -t an-toan, 9 ca viet truoc:
+        (a) thu muc _acceptance/c/ chua commit trong cay lam viec -> HEAD:PRODUCT-MAP.md == "3\na\nb\nz" (ban tron cua union la "2\na\nb\nz") (khong co «c»).
+        (b) bo ve gia thoat 1 -> merge thoat 0, stderr co dung mot dong bat dau «trang-ve:» chua
+            «node scripts/product-map.mjs --root .»; HEAD la commit git tao.
+        (c) bo ve gia thoat 1 o duong pre-commit -> `git commit` thoat 0.
+        (d) sau (a), (b), (c): `git worktree list --porcelain` chi con cay chinh.
+        (e) gop tua nhanh -> bo ve gia khong chay, stdout+stderr cua hook rong.
+        (f) core.hooksPath tro .githooks cua mot «checkout chinh» co post-merge cu (in «hook cu») -> dau ra khong co
+            «hook cu», trang van ve lai (hook cua cay chay).
+        (g) GIT_CONFIG_GLOBAL tro mot cau hinh co core.hooksPath toan cuc chan (post-checkout, pre-commit, post-merge in
+            «hook toan cuc» roi exit 1), kho khong dat core.hooksPath, gop bang `git -c core.hooksPath=.githooks merge`
+            -> thoat 0, dau ra khong co «hook toan cuc» lan «không vẽ lại được», trang dung.
+        (h) thu muc khoa .git/crm-trang-ve.lock moi tao -> sau 2,5 giay bo ve gia chua chay; go khoa -> gop thoat 0,
+            stderr co «chờ một lần vẽ khác trên máy», trang dung, khoa da go; khoa cu 16 phut -> gop thang, khoa bi bo.
+        (i) tua nhanh toi mot commit gop co san mang trang cu (nhanh dung o cha thu nhat cua no) -> HEAD bang dung commit
+            do, bo ve gia khong chay, stderr khong co «trang-ve:».
+      Moi lenh git cua hai spec chay voi GIT_CONFIG_NOSYSTEM=1 va GIT_CONFIG_GLOBAL tro tep rong (khong dinh cau hinh
+      toan cuc cua may).
+      Chieu do: E12 (d) bo ve trong cay lam viec thay vi cay tam -> (a) do voi «c» trong trang; E12 (j) bo
+      -c core.hooksPath=/dev/null khi dung cay tam -> (g) do; E12 (k) bo khoa -> (h) do; E12 (l) bo kiem tua nhanh -> (i) do.
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tvg_cay_ma
+    paths:
+      - "scripts/pre-push-da-chung.mjs"
+      - ".githooks/da-chung.json"
+      - "packages/ui/test/pre-push-da-chung.spec.ts"
+    expected: |
+      bun test -t cay-ma. Ma tran viet truoc 8 ca tren mot kho tam (config.yaml chep that), moi ca hai commit a, b:
+        docs/x.md -> cung; _acceptance/h/run-log.jsonl -> cung; LO-TRINH.html -> khac; apps/api/a.ts -> khac;
+        .github/ghi-chu.md (T1 thuong duoi .github/) -> khac; _acceptance/config.yaml -> khac; 301 tep docs/*.md (vuot nguong 300) -> khac;
+        khong khac tep nao -> cung. Ca dem: so ca == 8. Chieu do: E12 (e) bo nhanh .github -> ca .github/ghi-chu.md do.
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tvg_dau_hook
+    paths:
+      - "scripts/pre-push-da-chung.mjs"
+      - "scripts/pre-push-t1.mjs"
+      - "scripts/verify-gate-shape.mjs"
+      - ".githooks/da-chung.json"
+      - "packages/ui/test/pre-push-da-chung.spec.ts"
+    expected: |
+      bun test -t dau-hook. Kho tam nhu pre-push-t1.spec.ts (bun gia, remote tran), hook that .githooks/pre-push:
+        (a) day 1 sua apps/api/a.ts -> so bun ghi du nam buoc; ton tai <common>/crm-pre-push/da-chung/<sha>.json voi
+            buoc toEqual nam buoc.
+        (b) day 2 them docs/x.md (cung cay ma) -> so bun rong; stderr co dung mot dong
+            «pre-push: cây mã của <sha9 day 2> đã xanh ở hook (<sha9 day 1>, …) — bỏ check-types, lint, lint:slop, test, build.»;
+            ma 0; verify in «gate matches its shape»; khong co tep dau cho sha day 2 (khong tu gia han).
+        (c) day co BUN_HONG=test -> khong co tep dau cho sha do; day ke cung cay chay du nam.
+        (d) lan day chi-T1 dau tien -> dau ghi dung ba buoc da chay (check-types, lint, lint:slop), khong co test, build.
+        (e) chuoi ngay: dau ngay 0 (luc lui 13 ngay) -> day cung cay bo nam buoc, khong ghi dau moi; sua luc lui 15 ngay ->
+            dau khong dung: lan day chi them docs chay ba buoc cua duong T1 (check-types, lint, lint:slop), khong phai rong.
+        (f) .env doi noi dung sau day 1 -> ba buoc nhu (e).
+        (g) bun gia in --version khac sau day 1 -> ba buoc; node khac (PATH tro node gia in phien ban khac) -> ba buoc.
+        (h) tep dau la «{» -> khong dung, khong hong, ba buoc.
+        (i) day hai ref deu cung cay da chung -> so bun rong; ref1 da chung nam buoc (dau hook), ref2 chi duoc so chay S4 chung lint:slop, test, build (thieu dong lint) ->
+            chi check-types, lint chay.
+        (j) lan day duoc CI chung (gh gia) -> lan ke cung cay voi gh hong: stderr khong co «đã xanh ở hook», ba buoc chay.
+      Chieu do: E12 (f) bo kiem van tay moi truong -> (f) do; E12 (i) ghi dau ca buoc da chung -> (b) do vi co tep dau
+      cho sha day 2.
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.tvg_so_chay
+    paths:
+      - "scripts/pre-push-da-chung.mjs"
+      - ".githooks/da-chung.json"
+      - "packages/ui/test/pre-push-da-chung.spec.ts"
+      - "packages/ui/test/mau/so-chay-that.jsonl"
+      - "_acceptance/trang-ve-gop-va-dau-cay/rang/so-chay-that.mjs"
+    expected: |
+      bun test -t so-chay, roi node rang/so-chay-that.mjs. Kho tam co _acceptance/config.yaml chep that (suite_keys bay
+      lenh). Bo mau la packages/ui/test/mau/so-chay-that.jsonl: bay dong lenh S4 va mot dong `kind: repin` ket_cuc xanh,
+      CHEP NGUYEN VAN tu so chay that cua kho, chi thay sha khi dung kho tam:
+        (a) dong S4 that cho du bay lenh (moi lenh mot dong chep tu kho, exit_code giu nguyen kieu cua ban ghi) -> chi
+            «check-types» chay; dong stderr goi «sổ chạy S4».
+        (b) dong repin that -> nhu (a), goi «sổ chạy ghim lại».
+        (c) chi ba lenh test (thieu --filter=agent-okr …) xanh -> test van chay.
+        (d) dong lint co exit_code khac 0 -> lint van chay.
+        (e) dong repin ket_cuc «do» -> khong chung gi.
+        (f) sha cua dong khac cay ma -> khong chung gi.
+      rang/so-chay-that.mjs (doc so chay that, KHONG nam trong bun run test nen khong lam bai kiem phu thuoc so dang song):
+        (1) moi dong cua moi _acceptance/*/run-log.jsonl dang theo doi: bo loc doc lap (cmd chuoi, sha 40 hex, exit_code
+            0 hay "0", kind khong phai repin/repin-do) va lenhXanhCuaDong cho CUNG ket qua tung dong; so dong xanh > 0.
+        (2) moi dong cua tep mau co nguyen van trong mot so chay that.
+        Chieu do: bo doc pha (luon tra null) -> (1) bat dong lech; dong mau sua tay -> (2) bat.
+      Chieu do: E12 (g) bo dieu kien phu goi test -> (c) do.
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tvg_ci
+    paths:
+      - "scripts/pre-push-da-chung.mjs"
+      - ".githooks/da-chung.json"
+      - "packages/ui/test/pre-push-da-chung.spec.ts"
+      - "packages/ui/test/mau/check-runs-538.json"
+    expected: |
+      bun test -t nguon-ci. Mau la dau ra that `gh api repos/phanlemanh/crm-onehub/commits/<dau #538>/check-runs` luu o
+      packages/ui/test/mau/check-runs-538.json; gh gia tren PATH in mau do (co the sua mot o),
+      remote url «https://github.com/x/y.git»:
+        (a) mau nguyen ven -> khong buoc nao chay; dong stderr goi «CI».
+        (b) «test (con-lai)» conclusion skipped -> chi test chay.
+        (c) gh thoat 1 -> du nam buoc chay, ma day 0.
+        (d) gh ngu 30 giay (giay_gh 2 trong tep khai cua kho tam) -> du nam, lan day xong duoi 20 giay.
+        (e) remote la duong dan tran (khong github) -> gh khong duoc goi (tep dem cua gh gia khong ton tai).
+      Roi node rang/ten-job.mjs (doc .github/workflows/*.yml, nam ngoai bun run test): tap ten trong khoa ci cua
+      .githooks/da-chung.json BANG DUNG tap job kiem dung tu ci.yml («check-types, lint», «test (<ten>)» voi moi
+      matrix.o.ten) va acceptance.yml («lệnh dựng»), moi ten co trong mau; chieu do: them mot ten la hay bot mot o test
+      -> in «BAT».
+      Chieu do: E12 (h) coi «skipped» la xanh -> (b) do.
+
+  - id: E12
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.tvg_doi_chieu
+    paths:
+      - "scripts/trang-ve-gop.mjs"
+      - "scripts/pre-push-da-chung.mjs"
+      - "scripts/verify-gate-shape.mjs"
+      - "scripts/pre-push-t1.mjs"
+      - ".githooks/post-merge"
+      - ".githooks/pre-commit"
+      - ".gitattributes"
+      - "packages/ui/test/trang-ve-gop.spec.ts"
+      - "packages/ui/test/pre-push-da-chung.spec.ts"
+      - "_acceptance/trang-ve-gop-va-dau-cay/rang/doi-chieu.mjs"
+    expected: |
+      node rang/doi-chieu.mjs, ma 0: ban sao nguon o os.tmpdir() (khuon dot-bien.mjs cua pre-push-phan-rieng-pr), chay
+      spec voi bien nguon tro ban sao. Doi chung duong: ban sao lanh -> hai spec xanh, «dat doi-chung». Muoi hai dot bien viet
+      truoc (a)–(l) trong cac eval tren, moi dot bien: neo «tu» xuat hien dung mot lan o tep that, va dung ca test da
+      khai do, in «BAT <ca>: <test>». Thieu mot BAT -> ma 1.
+
+  - id: E13
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.tvg_nhu_cu
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - "scripts/verify-gate-shape.mjs"
+      - "scripts/pre-push-da-chung.mjs"
+      - ".githooks/da-chung.json"
+      - "packages/ui/test/pre-push-da-chung.spec.ts"
+    expected: |
+      bun test -t "nhu-cu|verify-da-chung":
+        nhu-cu (a) ba kho mau (docs; ma; docs va ma) khong co dau: stdout, stderr cua bo phan loai va so bun toEqual chinh
+            chung khi chay ban truoc vong cua bo phan loai va verify (packages/ui/test/mau/truoc-vong/*.txt, chep tu goc
+            vong 6adaf11e0) trong cung kho.
+        nhu-cu (b) xoa .githooks/da-chung.json, co dau hook cung cay -> du nam buoc chay.
+        verify-da-chung (a) --bo-qua «check-types lint lint:slop test build» khong phieu -> do «does not match» kieu cu.
+        verify-da-chung (b) phieu cua lan day nay, tep khai thieu vi_sao -> do «vi_sao».
+        verify-da-chung (c) phieu khai «lint» da chung nhung so chay co lint -> do «declared … but it ran».
+        verify-da-chung (d) phieu khai «format» (khong phai checker) -> do «not a declared checker».
+        verify-da-chung (e) phieu cu hon --runs-before -> bi bo qua (nhu (a)).
+      Lenh con chay tiep pre-push-t1.spec.ts, t1-ma-doc.spec.ts, push-ghim-lai-t1.spec.ts — xanh, khong sua ca nao.
+      Chieu do: nhu-cu (a) tu mang doi chung (ban origin/onehub cung kho); verify-da-chung (a), (e) la chieu do cua phieu.
+
+  - id: E14
+    criterion: AC-10
+    executor: judgment
+    paths:
+      - ".githooks/da-chung.json"
+    inputs:
+      - ".githooks/da-chung.json"
+      - "docs/superpowers/specs/2026-10-23-trang-ve-gop-va-dau-cay-design.md"
+    question: |
+      Cau vi_sao va cac khoa cua .githooks/da-chung.json co noi dung luat cua design doc muc «E» khong: (1) cung cay ma =
+      moi tep khac la T1 thuong, .github va t1_ma_doc tinh vao cay ma; (2) ba nguon va tap buoc moi nguon chung (dau hook:
+      ca nam, co van tay moi truong va han; so chay: theo lenh, test can phu du goi; CI: theo job, o bo qua khong xanh);
+      (3) khong co dau thi chay nhu cu, xoa tep thi moi lan day chay du; (4) .githooks/pre-push va gate-shape.json khong
+      doi. Co cau nao NOI SAI so voi design doc khong? PASS khi ca bon y co va khong cau nao sai.
