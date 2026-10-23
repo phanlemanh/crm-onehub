@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 400e252a06fd2476e7a6f2b00a23639c43e0f890
+verified_commit: 7081c03f51e03057973d27e8ca74c9edc05b88b9
 human_signoff: Manh Phan 2026-09-28
 ---
 
@@ -329,3 +329,7 @@ sha: 65a5ccf2e2f1939b72cb2a20ac7f3444ae6ecc59 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-28, do hoá cũ do gộp onehub lần hai (kho tài liệu) và dời mốc migration
 run_id: repin-20260928T020558Z-42336
 sha: 400e252a06fd2476e7a6f2b00a23639c43e0f890 · suites: 4 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · ngoài làn máy: E15, E24 · diff chạm vật đo ngoài làn máy: E24 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 3 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
+run_id: repin-20261023T154415Z-24385
+sha: 7081c03f51e03057973d27e8ca74c9edc05b88b9 · suites: 7 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · ngoài làn máy: E15, E24 · diff chạm vật đo ngoài làn máy: E15, E24 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
