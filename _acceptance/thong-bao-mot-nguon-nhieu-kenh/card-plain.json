@@ -1,38 +1,12 @@
 {
   "feature_plain": "Mọi thông báo nằm đủ trong chuông; Zalo hay Slack chỉ chuyển tiếp những loại người dùng cho phép, và người dùng tự chọn từng loại trên trang Nhắc buổi sáng.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ xếp mỗi loại thông báo vào đúng một mức Cần làm hoặc Để biết, có tên tiếng Việt và tiếng Anh, có sẵn lựa chọn mặc định cho Zalo/Slack."},
-    {"id": "AC-2", "p": "Sẽ giữ nguyên từng chữ tin Zalo/Slack buổi sáng cho người chưa đổi gì, và chưa gửi tin nào về Kara hay tín hiệu qua Zalo/Slack khi họ chưa bật."},
-    {"id": "AC-3", "p": "Sẽ bỏ khỏi tin buổi sáng các loại người dùng đã tắt, trong khi chuông vẫn nhận đủ; tắt hết thì sáng đó không gửi tin."},
-    {"id": "AC-6", "p": "Sẽ cho mỗi người xem và đổi cài đặt của chính mình, kể cả người chỉ dùng OKR; không ai tắt được chuông."},
-    {"id": "AC-7", "p": "Sẽ có mục «Loại thông báo» trên trang Nhắc buổi sáng, mở được từ chuông, lưu ngay khi bật tắt, dùng được trên điện thoại."},
-    {"id": "AC-8", "p": "Sẽ có lệnh đếm cho chủ kho: mỗi tin đã ra Zalo/Slack có bản trong chuông không, lệch thì gọi tên."}
+  "decisions": [
+    {
+      "id": "E10",
+      "q": "Từ điển giải thích đủ «Cần làm», «Để biết» và việc chuyển tiếp chưa?",
+      "why": "Hai trên ba người chấm nói đạt. Người thứ ba chỉ ra mục «Bot Zalo» vẫn ghi bot «chỉ gửi nhắc buổi sáng», trong khi giờ bot còn chuyển tiếp tin Kara và tín hiệu khi người dùng bật. Mục đó thuộc vùng của đội Mac Studio nên muốn sửa phải xin qua yêu cầu sửa tệp. Máy khuyên: đạt, và gửi yêu cầu sửa câu đó."
+    }
   ],
-  "wont_do": [
-    {"id": "AC-4", "p": "Sẽ KHÔNG gửi lại thông báo cũ khi người vừa bật một loại; chỉ thông báo mới (trong 30 phút, sau lúc bật) mới ra Zalo/Slack, trong vòng khoảng hai phút."},
-    {"id": "AC-5", "p": "Sẽ KHÔNG gửi một thông báo hai lần, và Zalo hỏng thì KHÔNG đổi sang Slack; thử lại tối đa ba lần."},
-    {"id": "OOS-1", "p": "Không làm nút tắt cả mức, gom nhiều tin sự kiện thành một, hay giờ yên lặng."},
-    {"id": "OOS-2", "p": "Chuông và trang Thông báo chưa hiện mức Cần làm / Để biết."},
-    {"id": "OOS-3", "p": "Chưa cho chọn Zalo và Slack cùng lúc cho một loại (đó là Hỏi-2)."},
-    {"id": "OOS-4", "p": "Chưa gộp công tắc «Dòng Trợ lý OKR» vào bảng mới, chưa đổi tên trang Nhắc buổi sáng."},
-    {"id": "OOS-5", "p": "Không có cách tắt chuông; không gửi qua thư, trình duyệt hay ứng dụng điện thoại."},
-    {"id": "OOS-6", "p": "Chưa thêm loại thông báo mới (giao việc, nhắc tên lúc xảy ra); khi có, chúng tự đi qua đường này."},
-    {"id": "OOS-7", "p": "Không sửa phần nhận và gửi tin của bot Zalo/Slack — vùng của đội Mac Studio."}
-  ],
-  "scope_plain": "Những gì để vòng sau, mỗi dòng một việc:",
-  "coverage_plain": [
-    {"i": 0, "p": "Mọi loại thông báo theo nguồn (nhắc sáng hay sự kiện) và theo mức đều có tiêu chí — AC-1 (bảng mức), AC-2 (mặc định), AC-3 (lọc tin sáng), AC-4 (đẩy sự kiện)."},
-    {"i": 1, "p": "Năm hoàn cảnh kênh của người nhận — không kênh, Zalo, Slack, chọn Zalo mà chỉ dùng được Slack, Zalo chưa bật cho xưởng — đều được thử ở AC-2, AC-4, AC-6, AC-7."},
-    {"i": 2, "p": "Năm trạng thái cài đặt — mặc định, tắt, bật loại vốn tắt, tắt hết, loại không còn tồn tại — đều có ca ở AC-2, AC-3, AC-4, AC-6; chuẩn đối chiếu là cài đặt thông báo của GitHub và Linear."},
-    {"i": 3, "p": "Sáu thời điểm gửi — lượt sáng, sự kiện mới, sự kiện cũ, chạy chồng, hỏng rồi thử lại, hết lượt thử — có ca ở AC-3, AC-4, AC-5."},
-    {"i": 4, "p": "Chỉ của mình, song ngữ, hai khổ màn và các trạng thái chờ, lỗi, lưu hỏng được kiểm ở AC-6, AC-7."},
-    {"i": 5, "p": "Bản quét đầy đủ (phần làm ngay, để sau, không làm) nằm trong hồ sơ."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Chưa có gì chứng câu tin Zalo trùng câu chuông thật hiện cho người — đã sửa: thêm bài so câu của chuông với câu tin cho bốn loại sự kiện, kèm bản phá thử."},
-    {"i": 1, "p": "Chưa thử đủ năm hoàn cảnh kênh, và cột kênh có thể ghi cứng chữ Zalo — đã sửa: thử đủ năm ca so với kênh thật sẽ gửi, và thử cả cột tên Slack."},
-    {"i": 2, "p": "Lời hứa «quên khai loại mới thì báo lỗi» chưa có phép đo — đã sửa: thêm bài chép gói, thêm một loại, kiểm tra kiểu phải đỏ gọi đúng tên."},
-    {"i": 3, "p": "Lý do gửi tin chỉ tiếng Việt chưa đúng, và AC-4 tự mâu thuẫn với người dùng tiếng Anh — đã sửa: CRM không lưu ngôn ngữ người chọn ở máy chủ nên tin Zalo chỉ tiếng Việt như tin sáng hôm nay; AC-4 nói rõ điều đó; thêm hai dòng ghi việc không làm."},
-    {"i": 4, "p": "Bản chụp tin cũ có thể thiếu loại mà không ai thấy — đã sửa: thêm bài buộc bản chụp đủ 22 loại nhắc sáng (đo hôm nay đã đủ)."}
-  ]
+  "scope_plain": "Những gì để vòng sau, đã chốt ở Cổng Phạm vi:",
+  "decisions_plain": []
 }
