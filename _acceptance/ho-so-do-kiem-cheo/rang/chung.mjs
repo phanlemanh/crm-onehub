@@ -1,5 +1,5 @@
-import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -170,21 +170,25 @@ export function thuMucChung() {
 	return resolve(GOC, git("rev-parse", "--git-common-dir").trim(), "..");
 }
 
-export const NOI_VAO_CAY_TAM = [".env", "node_modules", "packages/db/src/generated"];
+export const NOI_VAO_CAY_TAM = [".env"];
+const LENH_CAI = [
+	["bun", ["install", "--frozen-lockfile"], "."],
+	["bun", ["run", "db:generate"], "packages/db"],
+];
 
 export function dungCayTam(ref, ten) {
 	const goc = mkdtempSync(join(tmpdir(), `${ten}-`));
 	const cay = join(goc, "cay");
 	git("worktree", "add", "--detach", "--quiet", cay, ref);
-	const noi = [...NOI_VAO_CAY_TAM];
-	for (const nhom of ["apps", "packages"])
-		for (const con of readdirSync(join(GOC, nhom)))
-			if (existsSync(join(GOC, nhom, con, "node_modules"))) noi.push(`${nhom}/${con}/node_modules`);
-	for (const t of noi)
+	for (const t of NOI_VAO_CAY_TAM)
 		if (existsSync(join(GOC, t)) && !existsSync(join(cay, t))) {
 			mkdirSync(dirname(join(cay, t)), { recursive: true });
 			symlinkSync(join(GOC, t), join(cay, t));
 		}
+	for (const [lenh, thamSo, noi] of LENH_CAI) {
+		const r = spawnSync(lenh, thamSo, { cwd: join(cay, noi), encoding: "utf8", maxBuffer: 1 << 26 });
+		if (r.status !== 0) hong(2, `MA 2: cay tam khong cai duoc (${lenh} ${thamSo.join(" ")}): ${String(r.stderr).split("\n").slice(-3).join(" ")}`);
+	}
 	let daDon = false;
 	const don = () => {
 		if (daDon) return;
