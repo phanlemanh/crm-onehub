@@ -1557,11 +1557,19 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		states: [
 			{
 				id: "ST-htmb-cua-toi",
-				nhan: "Đường vào: Của tôi › đơn vị bạn dẫn",
+				nhan: "Của tôi — KR cần cập nhật, mở từng KR",
 			},
 			{
 				id: "ST-htmb-the-okr",
 				nhan: "Bộ mình › thẻ OKR (nút Cập nhật từng KR)",
+			},
+			{
+				id: "ST-htmb-ngan-kr",
+				nhan: "Ngăn KR — Cập nhật ở đầu",
+			},
+			{
+				id: "ST-htmb-hop-cap-nhat",
+				nhan: "Hộp cập nhật một KR",
 			},
 			{
 				id: "ST-htmb-bo-okr-toi-dan",

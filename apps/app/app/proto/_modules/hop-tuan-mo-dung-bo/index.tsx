@@ -62,6 +62,7 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { HopCapNhatMau, NganKrMau } from "./cap-nhat";
 import {
 	CHU_KY,
 	CON_LAI,
@@ -77,6 +78,8 @@ import {
 const DUONG = "/proto/hop-tuan-mo-dung-bo";
 
 const ST = {
+	nganKr: "ST-htmb-ngan-kr",
+	hopCapNhat: "ST-htmb-hop-cap-nhat",
 	cuaToi: "ST-htmb-cua-toi",
 	theOkr: "ST-htmb-the-okr",
 	boOkrToiDan: "ST-htmb-bo-okr-toi-dan",
@@ -207,19 +210,25 @@ function TheOkr() {
 							<TableCell className="px-3 py-3 align-top whitespace-normal">
 								<span className="flex gap-3 ps-4">
 									<span className="flex min-w-0 flex-1 flex-col gap-1">
-										<span className="text-sm" translate="no">
+										<Link
+											className="text-start text-sm underline-offset-2 hover:underline"
+											data-mo-kr={kr.id}
+											href={den(ST.nganKr)}
+											translate="no"
+										>
 											{kr.tieuDe}
-										</span>
+										</Link>
 										<span className="md:hidden">
 											<TienDo dong={kr} />
 										</span>
 									</span>
 									<Button
+										asChild
 										data-nut="cap-nhat-dong-kr"
 										size="sm"
 										variant="outline"
 									>
-										Cập nhật
+										<Link href={den(ST.hopCapNhat)}>Cập nhật</Link>
 									</Button>
 								</span>
 							</TableCell>
@@ -234,8 +243,9 @@ function TheOkr() {
 				])}
 			</SimpleTable>
 			<p className="text-muted-foreground text-xs">
-				Nút «Cập nhật» trên từng dòng KR đã có ở bản thật (người sửa được KR mới
-				thấy). Bấm thẻ con «Họp tuần» để sang bảng họp của bộ này.
+				Cập nhật chỉ đi qua KR trong bộ (quyết định 24/10, như Tability): bấm
+				tên KR mở ngăn KR có nút «Cập nhật» ở đầu, hoặc bấm «Cập nhật» trên
+				dòng. Bấm thẻ con «Họp tuần» để sang bảng họp của bộ này.
 			</p>
 		</div>
 	);
@@ -243,20 +253,49 @@ function TheOkr() {
 
 function CuaToi() {
 	return (
-		<div className="flex flex-col gap-3" data-trang-thai={ST.cuaToi}>
-			<p className="font-medium text-sm">Đơn vị bạn dẫn</p>
-			<ItemGroup className="gap-2">
-				<Item asChild variant="outline">
-					<Link data-don-vi-dan="" href={den(ST.theOkr)}>
-						<ItemContent>
-							<ItemTitle translate="no">{PHONG_BAN}</ItemTitle>
-							<ItemDescription>
-								Phòng ban · 3 mục tiêu · đã cập nhật 3/5 KR tuần này
-							</ItemDescription>
-						</ItemContent>
-					</Link>
-				</Item>
-			</ItemGroup>
+		<div className="flex flex-col gap-6" data-trang-thai={ST.cuaToi}>
+			<div className="flex flex-col gap-3" data-can-cap-nhat="">
+				<p className="font-medium text-sm">Cần cập nhật tuần này</p>
+				<p className="text-muted-foreground text-xs">
+					2 KR bạn phụ trách chưa có số tuần {CHU_KY.tuan}. Bấm một KR để mở nó
+					trong bộ OKR rồi cập nhật — không có bảng cập nhật hàng loạt.
+				</p>
+				<ItemGroup className="gap-2">
+					{[DANG_BAN[0], CON_LAI[0]].map((kr) => (
+						<Item asChild key={kr.id} variant="outline">
+							<Link data-kr-can={kr.id} href={den(ST.nganKr)}>
+								<ItemContent>
+									<ItemTitle translate="no">{kr.tieuDe}</ItemTitle>
+									<ItemDescription>
+										<span translate="no">{PHONG_BAN}</span> · lần trước{" "}
+										{kr.tienDo}%
+									</ItemDescription>
+								</ItemContent>
+								<ItemActions>
+									<span className="hidden text-muted-foreground text-xs sm:inline">
+										Mở KR
+									</span>
+								</ItemActions>
+							</Link>
+						</Item>
+					))}
+				</ItemGroup>
+			</div>
+			<div className="flex flex-col gap-3">
+				<p className="font-medium text-sm">Đơn vị bạn dẫn</p>
+				<ItemGroup className="gap-2">
+					<Item asChild variant="outline">
+						<Link data-don-vi-dan="" href={den(ST.theOkr)}>
+							<ItemContent>
+								<ItemTitle translate="no">{PHONG_BAN}</ItemTitle>
+								<ItemDescription>
+									Phòng ban · 3 mục tiêu · đã cập nhật 3/5 KR tuần này
+								</ItemDescription>
+							</ItemContent>
+						</Link>
+					</Item>
+				</ItemGroup>
+			</div>
 		</div>
 	);
 }
@@ -559,6 +598,28 @@ function canhCua(state: string): Canh {
 	switch (state) {
 		case ST.cuaToi:
 			return { bo: "Của tôi", danhSach: true, cuaToi: true, than: <CuaToi /> };
+		case ST.nganKr:
+			return {
+				bo: PHONG_BAN,
+				the: "OKR",
+				than: (
+					<>
+						<TheOkr />
+						<NganKrMau capNhat={den(ST.hopCapNhat)} dongVe={den(ST.theOkr)} />
+					</>
+				),
+			};
+		case ST.hopCapNhat:
+			return {
+				bo: PHONG_BAN,
+				the: "OKR",
+				than: (
+					<>
+						<TheOkr />
+						<HopCapNhatMau dongVe={den(ST.theOkr)} />
+					</>
+				),
+			};
 		case ST.theOkr:
 			return { bo: PHONG_BAN, the: "OKR", than: <TheOkr /> };
 		case ST.boOkrToiDan:
