@@ -12,7 +12,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>157 việc"]
+  GB --> DG["Đã giao<br/>158 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>175 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -330,6 +330,7 @@ flowchart TD
 - Trả ổ cắm buổi khai thác về trạng thái trung tính, và thu phép đo ổ cắm về đúng hai ổ thiết kế (`o-cam-khai-thac-trung-tinh`)
 - Ô nhập số tiền thoả thuận đọc đúng theo tiếng đang dùng và số chữ số lẻ của đồng tiền, từ chối chuỗi mơ hồ (`o-so-tien-doc-theo-tieng`) — đã giao — máy thông, cửa veto còn mở
 - Ô soạn hội thoại không còn giả chữ — con trỏ đứng ở đầu ô trống, chữ gợi ý không nằm trong dòng chữ; thẻ lỗi hội thoại hiện mã lỗi; agent ghi log lý do lỗi của hội thoại (`o-soan-va-ly-do-loi`)
+- Ô Tệp trên phiếu đọc được ở khổ điện thoại: vùng kéo thả không bóp chữ, nhãn trường hiện trọn (`o-tep-dien-thoai`)
 - Gỡ bộ OKR mẫu (`bun run okr:mau --xoa`, và nạp lại) xoá các phiên bản cấu hình chương trình OKR do người mẫu tạo, gỡ mã đơn vị mẫu khỏi các phiên bản còn lại, và đếm cả hai vào dòng in (`okr-mau-xoa-cau-hinh`)
 - Gỡ bộ OKR mẫu (`bun run okr:mau --xoa`, và nạp lại) gỡ luôn cuộc soạn OKR trên chu kỳ, đơn vị hay người mẫu cùng đề xuất của chúng, đếm chúng vào dòng in, và giữ hàng chi phí AI (`okr-mau-xoa-cuoc-soan`)
 - Lệnh xoá bộ OKR mẫu dọn sạch cả dữ liệu người mẫu ghi vào các bảng mới (việc chung, tín hiệu), gọi đúng tên bảng khi phải dừng, và có lưới bắt bảng mới chưa khai (`okr-mau-xoa-du`)
