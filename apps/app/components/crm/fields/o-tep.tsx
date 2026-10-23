@@ -230,7 +230,7 @@ export function OTep({
 			: null;
 
 	return (
-		<DetailSheetProperty label={nhan} wide>
+		<DetailSheetProperty label={nhan} wide stackBelowMd>
 			<div className="flex min-w-0 flex-col gap-2" data-slot="o-tep">
 				{tep.length === 0 && dongTai.length === 0 ? (
 					<FieldDescription>{m.chuaCo}</FieldDescription>

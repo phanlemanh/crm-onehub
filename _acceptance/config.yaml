@@ -2112,6 +2112,7 @@ executors:
     ppr_dong: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t dong-gop"
     ppr_day_gop: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-gop"
     ppr_hinh: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t hinh-gop"
+    pcn_hinh: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t hinh-gop"
     tmd_phan_loai: node --test .github/scripts/test/phan-loai.test.mjs
     tmd_day: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t day"
     tmd_quet: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t quet-that"
@@ -2223,6 +2224,13 @@ executors:
     ntl_api_ban_ghi_cu: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-ban-ghi-cu"'
     ldv_bang: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-tai-lai.dom.tsx -t ldv-bang"
     ldv_giu: "cd apps/app && bun test ./test/loc-don-vi-giu-bang.spec.ts -t ldv-giu"
+    ttts_doc_ban_chup: 'bun run test -- "cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-doc-ban-chup"'
+    ttts_khong_lui: cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-khong-lui
+    ttts_bao: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-bao"'
+    ttts_khong_bao: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-khong-bao"'
+    ttts_giao_dich: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-giao-dich"'
+    ttts_cau: cd apps/app && bun test ./test/thong-bao-cau.spec.ts
+    ttts_do: 'bun run test -- "bun test scripts/tin-hieu/test/do-bao-doi-cho.spec.ts -t ttts-do"'
     ttp_tao_truong: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-tao-truong"'
     ttp_cai_dat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx -t ttp-cai-dat
     ttp_tai_len: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-tai-len"'
@@ -2237,6 +2245,7 @@ executors:
     ttp_khoa: 'bun run test -- "cd packages/db && bun test test/blob-tep-truong.spec.ts -t ttp-khoa && cd ../../apps/api && bun test test/truong-tep.spec.ts -t ttp-tat"'
     ttp_kho_tai_lieu: 'bun run test -- "cd packages/db && bun test test/blob-nguon.spec.ts && cd ../../apps/api && bun test test/tai-lieu-nguon.spec.ts test/tai-lieu-nguon-tat.spec.ts test/phieu-nguon.spec.ts" && bun _acceptance/truong-tep/rang/bai-cu-nguyen.mjs'
     ttp_ghi_chu: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-ghi-chu && cd ../agent && CRM_TELEMETRY_DISABLED=1 bun test test/truong-tep.integration.spec.ts -t ttp-kara"'
+    otdt_dom: '(git diff --quiet $(git merge-base origin/onehub HEAD) HEAD -- packages/ui/test/nguon-keo-tha.dom.tsx packages/ui/test/nguon-canh-nhau.dom.tsx apps/app/test/truong-tep.dom.tsx apps/app/test/nguon-keo-tha-chu.dom.tsx apps/app/test/tai-lieu-nguon.dom.tsx || (echo "otdt dom: bai cu bi sua" && exit 1)) && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx ./test/nguon-canh-nhau.dom.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx ./test/nguon-keo-tha-chu.dom.tsx ./test/tai-lieu-nguon.dom.tsx'
   script:
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs
@@ -3376,6 +3385,9 @@ executors:
     ppr_lich_su: node _acceptance/pre-push-phan-rieng-pr/rang/lich-su.mjs
     ppr_ho_so_cu: node _acceptance/pre-push-phan-rieng-pr/rang/ho-so-cu.mjs
     ppr_dot_bien: node _acceptance/pre-push-phan-rieng-pr/rang/dot-bien.mjs
+    pcn_doi_chieu: node _acceptance/pre-push-cau-va-nhan/rang/doi-chieu.mjs
+    pcn_lich_su_sap: node _acceptance/pre-push-cau-va-nhan/rang/lich-su-sap.mjs
+    pcn_neo: node _acceptance/pre-push-cau-va-nhan/rang/neo.mjs
     tmd_khai: node _acceptance/t1-ma-doc/rang/khai.mjs
     tmd_ho_so_cu: 'node --test .github/scripts/test/phan-loai.test.mjs && (cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t "phan-loai|mot-nguon") && node _acceptance/pre-push-t1/rang/mot-nguon.mjs'
     tmd_gpct_phan_loai: bun _acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs
@@ -3413,8 +3425,10 @@ executors:
     ntl_quet: bun _acceptance/nhap-truong-luc-tao/rang/quet.mjs
     ntl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/nhap-truong-luc-tao/rang/do-man.mjs"'
     ldv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs"'
+    ttts_do_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-thai-tin-hieu-song/rang/do-man.mjs"'
     ttp_quet: bun _acceptance/truong-tep/rang/quet-kieu.mjs
     ttp_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tep/rang/do-man.mjs"'
+    otdt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/o-tep-dien-thoai/rang/do-man.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
@@ -3523,6 +3537,7 @@ risk_tiers:
     - "lib/evidence-core.cjs"
     - "lib/eval-yaml.cjs"
     - "scripts/lo-trinh.mjs"
+    - "scripts/product-map.mjs"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"

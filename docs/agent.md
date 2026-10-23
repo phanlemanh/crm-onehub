@@ -325,6 +325,9 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   hay Slack vẫn gửi. Đường dẫn lưu là `duongTrongApp(v)` — đúng phần sau `/<slug>`
   của đường trong tin Zalo. `payload.mucTinh` là mẫu số của lệnh
   `bun run thong-bao:doi-chieu`; lệnh không bao giờ lấy mẫu số từ bảng `ThongBao`.
+- **Không phải mọi thông báo do tác nhân ghi.** Thông báo đổi chỗ tín hiệu (`tin-hieu-doi-cho`,
+  nguồn `tin-hieu`) do API ghi lúc nhận bản chụp lộ trình (`docs/api.md`, mục «Tín hiệu»); tác nhân
+  không quét lại nó.
 - **Kênh do `kenhSeDungCua` chọn** (`@crm/db/kenh-thong-bao`), không do `chayNhac`.
   Hàm đọc ưu tiên của người (`NotificationPreference`, thiếu hàng là `AUTO`),
   `ZaloLink`, `appSetting.zaloBotName` và khớp Slack, rồi gọi hàm thuần `chonKenh`.
