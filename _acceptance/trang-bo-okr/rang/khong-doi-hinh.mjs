@@ -26,6 +26,8 @@ const NGUONG_TEP_CHUNG = 5;
 const THUOC_THEO_VONG = {
 	"ve-sinh-do-san-onehub#E17":
 		"soat diff merge-base..HEAD cua nhanh dang chay theo nhan vong ve-sinh-do-san-onehub (V1-25)",
+	"tro-ly-okr-tom-tat#E17":
+		"khong do duoc — eval goi model, AI Gateway het tien (MODEL_CALL_FAILED, V1-26)",
 };
 const LA_THUOC = /^_acceptance\/|\/test\//;
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx)$/;
