@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: bb086916bd4595c75d5d8737732209bfc5593dba
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-24 — ký Cổng Bằng chứng trên vòng chấm 1 (PASS, 9 eval, 7 suite xanh, không chỗ yếu thước trong hợp đồng); 4 mục ngoài hợp đồng ghi Known limits, Ngoài-3 chấp nhận không sửa
 ---
 
 # Evidence Report: tom-tat-tuan-dang-cho
