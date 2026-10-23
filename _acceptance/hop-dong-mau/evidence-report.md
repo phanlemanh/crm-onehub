@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9cc7f8cf1fc084b54395a57e63ec5c405a980185
+verified_commit: d9652f53d0d9b291698de6f6ae22ce02bc6e7eaf
 human_signoff: manh 2026-10-23 — ký Cổng Bằng chứng trên S4 vòng 4 PASS (verified_commit 9cc7f8cf1; 7/7 eval, 7/7 suite). Ngoài-3, 5, 8, 13 chấp nhận, không sửa; 19 mục còn lại ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -172,3 +172,7 @@ Round 1: lệnh suite `bun run test -- --filter=api` đỏ chập chờn, không
 Round 2: toàn bộ bảy lệnh suite xanh trên cây ab72f2310; E1-E6 carry-forward từ round 1 vì delta không chạm paths của eval; E7 giữ đề xuất PASS, để trống human_override cho người quyết ở Cổng 2.
 Round 3: E1-E6 chạy lại xanh trên cây 5560d1fd5 (bốn thước yếu của S4 vòng 2 đã sửa); E7 panel giữ nguyên từ round 2; sáu lệnh suite xanh, riêng `bun run test -- --filter=app --filter=@crm/ui` đỏ ở `test/truong-mot-cach.dom.tsx`, không gắn eval. Quá ba vòng nên chuyển người quyết.
 Round 4: chủ kho chọn chấm thêm một lượt, không sửa mã, trên cây 9cc7f8cf1; E1-E6 carry-forward từ round 3 vì delta không chạm paths của eval; E7 panel giữ nguyên từ round 2; cả bảy lệnh suite xanh, kể cả lệnh app và ui đã đỏ ở round 3. Để trống human_override của E7 cho người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-23, do gộp onehub 50c86ba4c sau chữ ký (DA20 #537 đổi FieldFilesService)
+run_id: repin-20261023T071657Z-81187
+sha: d9652f53d0d9b291698de6f6ae22ce02bc6e7eaf · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
