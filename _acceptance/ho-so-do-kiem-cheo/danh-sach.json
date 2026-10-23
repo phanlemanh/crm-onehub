@@ -10,7 +10,8 @@
 			"can_cu": "e7afcb8b782566381cb119e514415c5bea12047b",
 			"sua": "rang/ranh-gioi.mjs chonNeo: GOP=e7afcb8b7, tu=merge-base(GOP^1,GOP^2), toi=GOP^2; expected E4",
 			"tep": [
-				"_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs"
+				"_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs",
+				"_acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs"
 			],
 			"dot_bien": {
 				"ten": "them-tep-ngoai-ranh-gioi",
