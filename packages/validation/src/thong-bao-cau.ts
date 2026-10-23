@@ -29,7 +29,10 @@ export const CAU_SU_KIEN_VI = {
 export type NoiDungSuKien = Extract<NoiDungThongBao, { loai: LoaiSuKien }>;
 
 function dien(mau: string, gia: Record<string, string>): string {
-	return mau.replace(/\{(\w+)\}/g, (nguyen, khoa: string) => gia[khoa] ?? nguyen);
+	return mau.replace(
+		/\{(\w+)\}/g,
+		(nguyen, khoa: string) => gia[khoa] ?? nguyen,
+	);
 }
 
 export function cauSuKienVi(nd: NoiDungSuKien): string {

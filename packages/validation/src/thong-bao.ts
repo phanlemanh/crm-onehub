@@ -106,6 +106,10 @@ export function laLoaiThongBao(v: string): v is LoaiThongBao {
 	return (LOAI_THONG_BAO as readonly string[]).includes(v);
 }
 
+export function macDinhDayRa(loai: string): boolean | null {
+	return laLoaiThongBao(loai) ? MUC_THONG_BAO[loai].macDinhDayRa : null;
+}
+
 export function laLoaiSuKien(v: string): v is LoaiSuKien {
 	return (LOAI_SU_KIEN as readonly string[]).includes(v);
 }

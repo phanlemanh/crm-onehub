@@ -29,6 +29,7 @@
 		"./images": "./src/images.ts",
 		"./idempotency": "./src/idempotency.ts",
 		"./json": "./src/json.ts",
+		"./cai-dat-thong-bao": "./src/cai-dat-thong-bao.ts",
 		"./kenh-thong-bao": "./src/kenh-thong-bao.ts",
 		"./measure-database": "./src/measure-database.ts",
 		"./okr-chi-so": "./src/okr-chi-so.ts",

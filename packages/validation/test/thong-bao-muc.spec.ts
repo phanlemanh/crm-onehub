@@ -11,11 +11,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { THU_TU_NHAC } from "@crm/db/onboarding-nhac";
-import {
-	LOAI_SU_KIEN,
-	LOAI_THONG_BAO,
-	MUC_THONG_BAO,
-} from "../src/thong-bao";
+import { LOAI_SU_KIEN, LOAI_THONG_BAO, MUC_THONG_BAO } from "../src/thong-bao";
 
 const GOI = join(import.meta.dir, "..");
 const GOC_KHO = join(GOI, "..", "..");
