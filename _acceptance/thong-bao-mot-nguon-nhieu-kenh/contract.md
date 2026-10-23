@@ -5,9 +5,9 @@ slug: thong-bao-mot-nguon-nhieu-kenh
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-10-23T02:51:55Z
 design_doc: docs/superpowers/specs/2026-10-23-thong-bao-mot-nguon-nhieu-kenh-design.md
 ---
 
