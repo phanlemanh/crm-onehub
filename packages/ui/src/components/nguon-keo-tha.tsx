@@ -158,7 +158,7 @@ export function NguonKeoTha({
 					<Icon icon={Add} />
 					{nutChon}
 				</Button>
-				<div className="flex min-w-0 flex-1 flex-col gap-0.5">
+				<div className="flex min-w-0 flex-1 basis-48 flex-col gap-0.5">
 					<span className="font-medium text-sm">{nhan}</span>
 					<FieldDescription id={idMoTa}>{moTa}</FieldDescription>
 				</div>
