@@ -8,6 +8,8 @@
 
 **Tech Stack:** Bun, Prisma (Postgres), NestJS + nestjs-trpc, Next.js App Router, zod, `@crm/ui`.
 
+**Gate 1.5:** duyệt — Manh Phan, 2026-10-23.
+
 **Spec:** `docs/superpowers/specs/2026-10-23-thong-bao-mot-nguon-nhieu-kenh-design.md` · hợp đồng `_acceptance/thong-bao-mot-nguon-nhieu-kenh/contract.md` · phép đo `_acceptance/thong-bao-mot-nguon-nhieu-kenh/evals.yaml` (expected của từng eval là đặc tả bài kiểm — đọc trước khi viết test).
 
 ## Global Constraints
