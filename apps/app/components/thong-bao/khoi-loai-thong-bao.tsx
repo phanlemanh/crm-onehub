@@ -2,7 +2,6 @@
 
 import {
 	Card,
-	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
@@ -110,63 +109,59 @@ export function BangLoaiThongBao({
 							<CardTitle>{n.ten}</CardTitle>
 							<CardDescription>{n.moTa}</CardDescription>
 						</CardHeader>
-						<CardContent>
-							<div className="hidden md:block" data-bang-loai="">
-								<SimpleTable
-									columns={[
-										{ id: "loai", header: t.cotLoai },
-										{ id: "chuong", header: t.cotChuong, align: "center" },
-										{ id: "kenh", header: tenKenh, align: "center" },
-									]}
-									surface="page"
-								>
-									{cua.map((d) => {
-										const c = congTac(d);
-										return (
-											<SimpleTableRow key={d.loai} data-dong-loai={d.loai}>
-												<SimpleTableCell>{d.ten}</SimpleTableCell>
-												<SimpleTableCell align="center">
-													{c.chuong}
-												</SimpleTableCell>
-												<SimpleTableCell align="center">
-													{c.kenh}
-												</SimpleTableCell>
-											</SimpleTableRow>
-										);
-									})}
-								</SimpleTable>
-							</div>
-							<div className="md:hidden" data-the-loai="">
-								<ItemGroup>
-									{cua.map((d) => {
-										const c = congTac(d);
-										return (
-											<Item
-												key={d.loai}
-												variant="outline"
-												data-dong-loai={d.loai}
-											>
-												<ItemContent>
-													<ItemTitle>{d.ten}</ItemTitle>
-												</ItemContent>
-												<ItemActions>
-													<div className="flex flex-col gap-2">
-														<Field orientation="horizontal">
-															<FieldLabel>{t.cotChuong}</FieldLabel>
-															{c.chuong}
-														</Field>
-														<Field orientation="horizontal">
-															<FieldLabel>{tenKenh}</FieldLabel>
-															{c.kenh}
-														</Field>
-													</div>
-												</ItemActions>
-											</Item>
-										);
-									})}
-								</ItemGroup>
-							</div>
-						</CardContent>
+						<div className="hidden md:block" data-bang-loai="">
+							<SimpleTable
+								columns={[
+									{ id: "loai", header: t.cotLoai },
+									{ id: "chuong", header: t.cotChuong, align: "center" },
+									{ id: "kenh", header: tenKenh, align: "center" },
+								]}
+								surface="page"
+							>
+								{cua.map((d) => {
+									const c = congTac(d);
+									return (
+										<SimpleTableRow key={d.loai} data-dong-loai={d.loai}>
+											<SimpleTableCell>{d.ten}</SimpleTableCell>
+											<SimpleTableCell align="center">
+												{c.chuong}
+											</SimpleTableCell>
+											<SimpleTableCell align="center">{c.kenh}</SimpleTableCell>
+										</SimpleTableRow>
+									);
+								})}
+							</SimpleTable>
+						</div>
+						<div className="md:hidden" data-the-loai="">
+							<ItemGroup>
+								{cua.map((d) => {
+									const c = congTac(d);
+									return (
+										<Item
+											key={d.loai}
+											variant="outline"
+											data-dong-loai={d.loai}
+										>
+											<ItemContent>
+												<ItemTitle>{d.ten}</ItemTitle>
+											</ItemContent>
+											<ItemActions>
+												<div className="flex flex-col gap-2">
+													<Field orientation="horizontal">
+														<FieldLabel>{t.cotChuong}</FieldLabel>
+														{c.chuong}
+													</Field>
+													<Field orientation="horizontal">
+														<FieldLabel>{tenKenh}</FieldLabel>
+														{c.kenh}
+													</Field>
+												</div>
+											</ItemActions>
+										</Item>
+									);
+								})}
+							</ItemGroup>
+						</div>
 					</Card>
 				);
 			})}
