@@ -54,6 +54,24 @@ export function FieldsCog({ kind }: { kind: EntityKind }) {
 
 export type NguCanhTep = DichOTep & { tep: Record<string, TepOTep[]> };
 
+export function nguCanhTepCua(
+	entity: DichOTep["entity"],
+	banGhi: {
+		id: string;
+		archivedAt: string | null;
+		owner: { name: string } | null;
+		tepTheoTruong: Record<string, TepOTep[]>;
+	},
+): NguCanhTep {
+	return {
+		entity,
+		recordId: banGhi.id,
+		luuTru: banGhi.archivedAt !== null,
+		phuTrach: banGhi.owner?.name ?? null,
+		tep: banGhi.tepTheoTruong,
+	};
+}
+
 export function moTaTruongTuTao(
 	field: RecordFieldEntry,
 	luu: (khoa: string, giaTri: FieldValueJson) => void,
@@ -81,6 +99,7 @@ export function moTaTruongTuTao(
 		entity: nguCanhTep.entity,
 		recordId: nguCanhTep.recordId,
 		luuTru: nguCanhTep.luuTru,
+		phuTrach: nguCanhTep.phuTrach ?? null,
 	};
 	return moTa;
 }
