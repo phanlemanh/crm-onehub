@@ -59,7 +59,7 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import type { Page, SortDirection } from "../trpc/list-input";
 import { FIELD_FILES_CONFIG } from "./field-files-config";
-import { coTheMoTep, coTheXoaTep, type NguoiGoiTep } from "./field-files-quyen";
+import type { NguoiGoiTep } from "./field-files-quyen";
 import type {
 	FieldCreateInput,
 	FieldReorderInput,
@@ -69,6 +69,7 @@ import type {
 import { FIELDS_CONFIG } from "./fields-config";
 import { KHO_TEP } from "./kho-tep";
 import { LoiGiaTriTruong, laGiaTriRong } from "./loi-gia-tri-truong";
+import { LUAT_TEP, LUAT_TEP_THAT, type LuatTep } from "./luat-tep";
 import { khoangMocTruong } from "./moc-ngay";
 
 const WITH_OPTIONS = {
@@ -216,6 +217,9 @@ export class FieldsService {
 		@InjectDatabase() private readonly db: Db,
 		private readonly agent: AgentTriggerService,
 		@Optional() @Inject(KHO_TEP) private readonly kho?: KhoTepTruong,
+		@Optional()
+		@Inject(LUAT_TEP)
+		private readonly luat: LuatTep = LUAT_TEP_THAT,
 	) {}
 
 	async donTepNgay(pathnames: string[]): Promise<void> {
@@ -891,8 +895,17 @@ export class FieldsService {
 				field: { select: { key: true } },
 			},
 		});
+		const phuTrachId =
+			hang.length > 0 ? await this.phuTrachCua(entity, recordId) : null;
 		const ket: TepTheoTruong = {};
 		for (const dong of hang) {
+			const quyen = nguoi
+				? this.luat.quyenMoTep({
+						vai: nguoi.role,
+						userId: nguoi.id,
+						phuTrachId,
+					})
+				: null;
 			const tep = tepTrongO.parse({
 				id: dong.id,
 				tenTep: dong.tenTep,
@@ -902,14 +915,39 @@ export class FieldsService {
 				taiBoi: dong.taiBoi
 					? { id: dong.taiBoi.id, ten: dong.taiBoi.name ?? null }
 					: null,
-				coTheMo: nguoi ? coTheMoTep(nguoi) : false,
-				coTheXoa: nguoi ? coTheXoaTep(nguoi, dong) : false,
+				coTheMo: quyen?.coTheMo ?? false,
+				coTheXoa: nguoi
+					? this.luat.coTheXoaTep({
+							vai: nguoi.role,
+							userId: nguoi.id,
+							phuTrachId,
+							taiBoiId: dong.taiBoiId,
+						})
+					: false,
+				lyDoKhongMo:
+					quyen && !quyen.coTheMo && quyen.lyDo !== "ngoai-pham-vi"
+						? quyen.lyDo
+						: null,
 			});
 			const danhSach = ket[dong.field.key] ?? [];
 			danhSach.push(tep);
 			ket[dong.field.key] = danhSach;
 		}
 		return ket;
+	}
+
+	private async phuTrachCua(
+		entity: FieldEntity,
+		recordId: string,
+	): Promise<string | null> {
+		const where = { where: { id: recordId }, select: { ownerId: true } };
+		const banGhi =
+			entity === "DEAL"
+				? await this.db.deal.findUnique(where)
+				: entity === "COMPANY"
+					? await this.db.company.findUnique(where)
+					: await this.db.contact.findUnique(where);
+		return banGhi?.ownerId ?? null;
 	}
 
 	async soTepTheoBanGhi(

@@ -16,6 +16,7 @@ import {
 	Injectable,
 	Logger,
 	NotFoundException,
+	Optional,
 	PreconditionFailedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -27,8 +28,9 @@ import type {
 	FieldFileRequestUploadInput,
 } from "./field-files.contracts";
 import { FIELD_FILES_CONFIG } from "./field-files-config";
-import { coTheMoTep, coTheXoaTep, type NguoiGoiTep } from "./field-files-quyen";
+import type { NguoiGoiTep } from "./field-files-quyen";
 import { KHO_TEP } from "./kho-tep";
+import { LUAT_TEP, LUAT_TEP_THAT, type LuatTep } from "./luat-tep";
 
 const T = TEP_TRUONG.thongDiep;
 
@@ -70,6 +72,9 @@ export class FieldFilesService {
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(KHO_TEP) private readonly kho: KhoTepTruong,
+		@Optional()
+		@Inject(LUAT_TEP)
+		private readonly luat: LuatTep = LUAT_TEP_THAT,
 		@Inject(ConfigService)
 		private readonly config: ConfigService<EnvironmentVariables, true>,
 	) {}
@@ -294,12 +299,50 @@ export class FieldFilesService {
 	async downloadUrl(nguoi: NguoiGoiTep, tepId: string) {
 		const tep = await this.db.fieldFile.findUnique({
 			where: { id: tepId },
-			select: { blobPathname: true },
+			select: {
+				blobPathname: true,
+				fieldId: true,
+				companyId: true,
+				contactId: true,
+				dealId: true,
+				company: { select: { ownerId: true } },
+				contact: { select: { ownerId: true } },
+				deal: { select: { ownerId: true } },
+			},
 		});
 		if (!tep) throw new NotFoundException(T.khongCoTep);
-		if (!coTheMoTep(nguoi)) throw new ForbiddenException(T.khongMo);
+		const phuTrachId =
+			(tep.deal ?? tep.company ?? tep.contact)?.ownerId ?? null;
+		const vet = {
+			tepId,
+			fieldId: tep.fieldId,
+			recordId: tep.dealId ?? tep.companyId ?? tep.contactId,
+			userId: nguoi.id,
+			role: nguoi.role,
+			laPhuTrach: phuTrachId !== null && phuTrachId === nguoi.id,
+		};
+		const quyen = this.luat.quyenMoTep({
+			vai: nguoi.role,
+			userId: nguoi.id,
+			phuTrachId,
+		});
+		if (!quyen.coTheMo) {
+			this.logger.log({
+				message: "Field file open refused",
+				...vet,
+				lyDo: quyen.lyDo,
+			});
+			throw new ForbiddenException(
+				quyen.lyDo === "chua-co-phu-trach"
+					? T.chuaPhuTrach
+					: quyen.lyDo === "khong-phu-trach"
+						? T.khongPhuTrach
+						: T.khongMo,
+			);
+		}
 		this.canBat();
 		const ky = await this.kho.kyGet(tep.blobPathname, TEP_TRUONG.taiVeGiay);
+		this.logger.log({ message: "Field file opened", ...vet });
 		return { url: ky.url, hetHan: ky.hetHan };
 	}
 
@@ -314,15 +357,24 @@ export class FieldFilesService {
 				companyId: true,
 				contactId: true,
 				dealId: true,
-				company: { select: { archivedAt: true } },
-				contact: { select: { archivedAt: true } },
-				deal: { select: { archivedAt: true } },
+				company: { select: { archivedAt: true, ownerId: true } },
+				contact: { select: { archivedAt: true, ownerId: true } },
+				deal: { select: { archivedAt: true, ownerId: true } },
 			},
 		});
 		if (!tep) throw new NotFoundException(T.khongCoTep);
 		const banGhi = tep.deal ?? tep.company ?? tep.contact;
 		if (banGhi?.archivedAt) throw new BadRequestException(T.luuTru);
-		if (!coTheXoaTep(nguoi, tep)) throw new ForbiddenException(T.khongXoa);
+		if (
+			!this.luat.coTheXoaTep({
+				vai: nguoi.role,
+				userId: nguoi.id,
+				phuTrachId: banGhi?.ownerId ?? null,
+				taiBoiId: tep.taiBoiId,
+			})
+		) {
+			throw new ForbiddenException(T.khongXoa);
+		}
 		const recordId = tep.dealId ?? tep.companyId ?? tep.contactId;
 
 		await this.db.$transaction(async (tx) => {
