@@ -1,0 +1,41 @@
+{
+  "feature_plain": "Trưởng đơn vị bấm Họp tuần là vào ngay bảng của bộ OKR mình dẫn, thấy bốn số của tuần ở đầu; bộ chưa có KR hay chu kỳ chưa chạy thì màn nói rõ vì sao và chỉ sang nơi có KR.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đưa trưởng phòng mở Họp tuần bằng liên kết không kèm đơn vị thẳng tới bảng của phòng mình, không lướt qua bảng OneHub, và số trên bảng khớp số đã ghi."},
+    {"id": "AC-2", "p": "Sẽ chọn đúng bộ cho từng người xem: người dẫn đơn vị vào đơn vị mình dẫn, quản trị không dẫn vào OneHub, thành viên vào phòng ban chính; ai đã chọn bộ trong liên kết thì giữ nguyên."},
+    {"id": "AC-3", "p": "Sẽ có mục «Họp tuần» trên thanh bên, ngay dưới «Bộ OKR», sáng lên khi đang xem Họp tuần của bất kỳ bộ nào."},
+    {"id": "AC-4", "p": "Sẽ đặt hàng bốn số ở đầu Họp tuần — đã cập nhật, đáng bàn, tự tin thấp, ngày còn lại — thay dòng chữ nhỏ; các thẻ con khác không có hàng này."},
+    {"id": "AC-5", "p": "Sẽ tính ngày còn lại theo lịch giờ Việt Nam, đúng ở ngày đầu, ngày cuối và sau khi kết thúc, không bao giờ in số âm hay chữ lỗi."},
+    {"id": "AC-6", "p": "Sẽ nói «bộ này chưa có KR công bố» thay cho «0/0», và ở bộ OneHub liệt các đơn vị có KR để bấm sang; số trên mỗi mục khớp Họp tuần của đơn vị ấy."},
+    {"id": "AC-7", "p": "Sẽ nói chu kỳ bắt đầu ngày nào khi chu kỳ chưa chạy, và chỉ nói «chưa có lần cập nhật nào» khi bộ thật sự có KR mà chưa ai cập nhật."},
+    {"id": "AC-8", "p": "Sẽ giữ tiêu đề và thẻ con khi đang tải hay tải lỗi, có nút Thử lại; lỗi khi chọn bộ không bao giờ âm thầm mở OneHub."},
+    {"id": "AC-9", "p": "Sẽ hiện gọn ở máy tính và điện thoại, sáng và tối: bốn ô một hàng hay lưới hai cột, không cuộn ngang, không chữ chìm."},
+    {"id": "AC-10", "p": "Sẽ không làm hỏng các hồ sơ đã ký; thước của VK3 chỉ đổi đúng hai chỗ anh duyệt, mỗi chỗ có dòng sổ mang tên anh."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG đổi các thẻ con khác: liên kết OKR, Việc, Sơ đồ, Chấm điểm không kèm đơn vị vẫn mở OneHub như VK3."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG nhớ bộ người xem chọn lần trước."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG cho bấm ô số để lọc bảng, chưa có số tuần trước hay xu hướng."},
+    {"id": "OOS-4", "p": "Sẽ KHÔNG làm phần dòng của bảng (ghi chú mới nhất, cập nhật từ dòng, ‹ ›) — việc của HT2 — và chưa có chế độ trình chiếu."},
+    {"id": "OOS-5", "p": "Sẽ KHÔNG đổi tin nhắc buổi sáng hay thông báo trong app."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Người xem: chín vai từ trưởng phòng, trưởng bộ phận, quản trị tới người đã rời phòng — mỗi vai một ô đo ở AC-2 (chọn đúng bộ)."},
+    {"i": 1, "p": "Đường vào: thanh bên, thẻ con, liên kết trần, liên kết cũ, có hay không chu kỳ, OneHub chọn tường minh, tin sáng — đo ở AC-1, AC-2, AC-3 (vào đúng bộ)."},
+    {"i": 2, "p": "Trạng thái bộ: sáu trạng thái từ chu kỳ chưa chạy tới có dòng đáng bàn — đo ở AC-4, AC-6, AC-7 (hàng số và màn rỗng)."},
+    {"i": 3, "p": "Các lớp cắt ngang áp cho mọi ô trên:"},
+    {"i": 4, "p": "Đang tải và tải lỗi — AC-8 (giữ khung, có Thử lại)."},
+    {"i": 5, "p": "Ngày của chu kỳ: trước, giữa, ngày cuối, đã qua — AC-5 (ngày còn lại)."},
+    {"i": 6, "p": "Quyền thấy: mục tiêu hạn chế ở đơn vị khác không bị đếm, không lộ tên — AC-6."},
+    {"i": 7, "p": "Máy tính và điện thoại, sáng và tối — AC-9 (ảnh chụp)."},
+    {"i": 8, "p": "Hồ sơ đã ký không xấu đi — AC-10."},
+    {"i": 9, "p": "Đối chiếu ngoài: Tability (chụp thật 22/10) mở đúng plan của đội và có ô số đầu plan."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ba lựa chọn máy ghi là «đã có căn cứ» nhưng thật ra còn lối khác. Đã sửa: chọn ô «Tự tin thấp» thành câu hỏi cho anh (Hỏi-5); sửa câu sai «chưa có lần cập nhật» ngay ở máy chủ thay vì né; ghi lại căn cứ tính bộ ở trang."},
+    {"i": 1, "p": "Không ảnh nào chụp danh sách «Đơn vị có KR» thật — đúng màn production 22/10. Đã sửa: dữ liệu mẫu thêm một chu kỳ mà OneHub rỗng còn các đơn vị có KR; thêm bốn ảnh và phép đo danh sách."},
+    {"i": 2, "p": "Chưa đo số trên danh sách khớp với Họp tuần của đơn vị được bấm, và chưa tách «cập nhật tuần này» với «tuần trước». Đã sửa: đo quan hệ hai bên cho mọi đơn vị được liệt; thêm KR chỉ cập nhật tuần trước; bỏ ca dữ liệu không thể có."},
+    {"i": 3, "p": "Đường đầu-cuối chỉ đăng nhập trưởng phòng; thành viên và quản trị chỉ được đo trên hàm. Đã sửa: đo thêm hai vai trên phiên thật, và đo khi đọc cây tổ chức lỗi thì trang báo lỗi chứ không mở OneHub."},
+    {"i": 4, "p": "Lời hứa «từ thanh bên, từ thẻ con» chưa đo bằng thao tác bấm thật. Đã sửa: đo bấm thanh bên và bấm thẻ con trong trình duyệt; còn nghĩa «từ thẻ con» (thẻ con giữ bộ đang xem) đưa vào Hỏi-2 cho anh chốt."}
+  ]
+}
