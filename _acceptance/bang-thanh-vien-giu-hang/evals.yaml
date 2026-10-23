@@ -109,8 +109,11 @@ evals:
       - "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
     expected: |
       Mo /<slug>/settings/members?q=ttv-khong-ai-trung-tu-nay o 1440: "DUNG 1440: tim khong ra
-      ai thi thay «Không ai khớp với bộ lọc này.» (cao >=16px, trong khung true, khong bi che
-      true)". Cau lay tu thanhVienMessages("vi").bang.trong.
+      ai thi thay «Không có kết quả nào khớp bộ lọc» (cao >=16px, trong khung true, khong bi che
+      true)" va "DUNG 1440: tim khong ra ai thi co nut «Bỏ lọc» trong vo bang (true)". Tu
+      datatable-loc-ro (fb486420a) bang dang loc ma rong noi cau chung cua DataTable: cau lay tu
+      messages("vi").table.noMatch cua packages/ui (tieu de [data-slot=empty-title], do chinh
+      dong chu chu khong do khung lop phu), nut lay tu messages("vi").table.resetFilters.
       CHIEU DO (ma chua sua): "SAI 1440: tim khong ra ai ... (cao 64px, trong khung false,
       khong bi che false)", ma 1. Pha-thu sau khi sua: bo chieu cao toi thieu cua vo bang o
       bien the content trong data-table.tsx -> "trong khung false", ma 1.

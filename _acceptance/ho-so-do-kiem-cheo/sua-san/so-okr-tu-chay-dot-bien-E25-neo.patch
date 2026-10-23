@@ -1,0 +1,11 @@
+--- a/_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs
++++ b/_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs
+@@ -18,7 +18,7 @@
+ const TEP_SCHEMA = "packages/db/prisma/schema.prisma";
+ const CAP = Object.freeze({
+ 	goc: "e86b5677ed8ff42c5754bf30b40f87f4a37507aa",
+-	dinh: "f2acca7f1ae619abdadbb09e3db29be65841ce87",
++	dinh: "0000000000000000000000000000000000000000",
+ });
+ const MODEL_MOI = ["OkrNguonKr", "OkrSoChup"];
+ const CHI_MUC_MAY = "okrSoChup_may_mot_ngay";

@@ -102,7 +102,7 @@ export function kiemKhai({ tepDoi, evalsCap, contractDoi, danhSach, configDoi, k
 				loi.push(`KHONG_KHAI ${k} (sua-cu-phap ma doi ${doi.join(",")})`);
 				continue;
 			}
-			const la = doi.filter((x) => !["status", "cmd", "expected", "paths"].includes(x));
+			const la = doi.filter((x) => !["status", "cmd", "expected", "paths"].includes(x) && !(x === "superseded_by" && co(["khai-not-run"])));
 			if (la.length) loi.push(`KHONG_KHAI ${k} (doi ${la.join(",")})`);
 			if (doi.includes("status") && !(b.status === "not-run" && co(["khai-not-run"]))) loi.push(`KHONG_KHAI ${k} (doi status)`);
 			if ((doi.includes("cmd") || doi.includes("expected")) && !co([...XU_LY_DOI_LENH, "khai-not-run"])) loi.push(`KHONG_KHAI ${k} (doi cmd/expected)`);

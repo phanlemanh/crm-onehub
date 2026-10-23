@@ -29,7 +29,14 @@
 			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
 			"can_cu": "fb486420a",
 			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
-			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E1.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
 		},
 		{
 			"ho_so": "bang-thanh-vien-giu-hang",
@@ -38,7 +45,14 @@
 			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
 			"can_cu": "fb486420a",
 			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
-			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E2.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
 		},
 		{
 			"ho_so": "bang-thanh-vien-giu-hang",
@@ -47,7 +61,14 @@
 			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
 			"can_cu": "fb486420a",
 			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
-			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E3.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
 		},
 		{
 			"ho_so": "bang-thanh-vien-giu-hang",
@@ -56,7 +77,14 @@
 			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
 			"can_cu": "fb486420a",
 			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
-			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E4.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
 		},
 		{
 			"ho_so": "bang-thanh-vien-giu-hang",
@@ -65,7 +93,14 @@
 			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
 			"can_cu": "fb486420a",
 			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
-			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E5.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
 		},
 		{
 			"ho_so": "bang-thanh-vien-giu-hang",
@@ -74,7 +109,14 @@
 			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
 			"can_cu": "fb486420a",
 			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
-			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E6.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
 		},
 		{
 			"ho_so": "bang-thanh-vien-giu-hang",
@@ -83,7 +125,14 @@
 			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
 			"can_cu": "fb486420a",
 			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
-			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E7.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
 		},
 		{
 			"ho_so": "bo-dung-khong-ket",
@@ -193,9 +242,12 @@
 			"ho_so": "cap-nhat-tuan-okr",
 			"eval": "E7",
 			"xu_ly": "khai-not-run",
-			"ly_do": "cua-toi-ba-phan AC-2 lật lời hứa phiên mở lúc tải màn entry=tab",
+			"ly_do": "cua-toi-ba-phan AC-2 (ký 15/10) lật lời hứa «mở /okr/cap-nhat-tuan là sinh một phiên entry=tab lúc tải màn»: bảng cập nhật chỉ mở khi bấm, entry «cua-toi»; ô mang superseded_by cua-toi-ba-phan#AC-2, hồ sơ thay tự nêu thẻ cap-nhat-tuan-okr/E7 ở design doc của nó.",
 			"can_cu": "_acceptance/cua-toi-ba-phan/contract.md:31",
-			"sua": "status not-run"
+			"sua": "status not-run",
+			"tep": [
+				"docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md"
+			]
 		},
 		{
 			"ho_so": "cap-nhat-tuan-okr",
@@ -204,7 +256,14 @@
 			"ly_do": "/okr/cap-nhat-tuan về /okr (cua-toi-ba-phan AC-3/4, vo-khu-muc-tieu AC-3); một try bao cả lượt",
 			"can_cu": "9203b9ca2",
 			"sua": "rang/man-cap-nhat.mjs: try từng bước; đường /okr?tu=viec-cua-toi",
-			"dot_bien_de_xuat": "CN-1"
+			"tep": [
+				"_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+			],
+			"dot_bien": {
+				"ten": "CN-1 phần 1 bỏ đọc ?tu=",
+				"ban_va": "dot-bien/cap-nhat-tuan-okr-E14.patch",
+				"thong_diep": "E14: entry cua phien C phai viec-cua-toi, thay cua-toi"
+			}
 		},
 		{
 			"ho_so": "cap-nhat-tuan-okr",
@@ -213,7 +272,14 @@
 			"ly_do": "kéo theo E7; chưa từng chạy",
 			"can_cu": "9203b9ca2",
 			"sua": "cùng E14, chạy lại xem",
-			"dot_bien_de_xuat": "mentionUserIds"
+			"tep": [
+				"_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+			],
+			"dot_bien": {
+				"ten": "mentionUserIds rỗng",
+				"ban_va": "dot-bien/cap-nhat-tuan-okr-E19.patch",
+				"thong_diep": "E19: binh luan moi co mention M"
+			}
 		},
 		{
 			"ho_so": "chan-lai-component-ra-man",
@@ -460,7 +526,15 @@
 				"07ea52a34"
 			],
 			"sua": "rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh",
-			"dot_bien_de_xuat": "TC-1 TC-2 TC-3"
+			"tep": [
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs",
+				"_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs"
+			],
+			"dot_bien": {
+				"ten": "TC-1 danhSach không kèm loc",
+				"ban_va": "dot-bien/toan-canh-okr-E3.patch",
+				"thong_diep": "E3: sau khi chon nguoi co loi goi okr.danhSach voi loc.phuTrach = [k]"
+			}
 		},
 		{
 			"ho_so": "toan-canh-okr",
@@ -472,7 +546,15 @@
 				"07ea52a34"
 			],
 			"sua": "rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh",
-			"dot_bien_de_xuat": "TC-1 TC-2 TC-3"
+			"tep": [
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs",
+				"_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs"
+			],
+			"dot_bien": {
+				"ten": "TC-2 vết mo-hop-tuan thiếu tuan",
+				"ban_va": "dot-bien/toan-canh-okr-E28.patch",
+				"thong_diep": "E28: dong mo-hop-tuan dung hinh"
+			}
 		},
 		{
 			"ho_so": "toan-canh-okr",
@@ -484,7 +566,15 @@
 				"07ea52a34"
 			],
 			"sua": "rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh",
-			"dot_bien_de_xuat": "TC-1 TC-2 TC-3"
+			"tep": [
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs",
+				"_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs"
+			],
+			"dot_bien": {
+				"ten": "TC-3 prefetch toanCanh bằng currentId",
+				"ban_va": "dot-bien/toan-canh-okr-E29.patch",
+				"thong_diep": "E29: co it nhat 1 loi goi okr.toanCanh sau khi chon ky va moi loi goi mang cycleId cua"
+			}
 		},
 		{
 			"ho_so": "tro-ly-okr-nen",
@@ -578,51 +668,6 @@
 				"ban_va": "dot-bien/tro-ly-okr-nen-E25.patch",
 				"thong_diep": "con_tro_ly: tinhNang okr.de-xuat, can okr.chuyen-tiep"
 			}
-		},
-		{
-			"ho_so": "so-okr-tu-chay",
-			"eval": "E8",
-			"xu_ly": "sua-rang",
-			"ly_do": "18 vi phạm trong .eve snapshots (gitignore); 2 ở okr-mau/nap.ts do bo-okr-mau AC-3/AC-8 đòi",
-			"can_cu": "_acceptance/bo-okr-mau/contract.md:37",
-			"sua": "rang/soi-ma.mjs: lấy tệp từ git ls-files; miễn trừ có tên nap.ts",
-			"dot_bien_de_xuat": "xoa-ngoai-mau"
-		},
-		{
-			"ho_so": "so-okr-tu-chay",
-			"eval": "E12",
-			"xu_ly": "sua-rang",
-			"ly_do": "ngan-kr-mot-cho: so-kr → kr:, mục so-nguon",
-			"can_cu": "5b6be6129",
-			"sua": "rang/man-so-tu-chay.mjs record kr:, [data-muc-ngan=so-nguon] [data-so-kr-noi-dung]",
-			"dot_bien_de_xuat": "banGhiChiSo không kèm ngày"
-		},
-		{
-			"ho_so": "so-okr-tu-chay",
-			"eval": "E14",
-			"xu_ly": "sua-rang",
-			"ly_do": "/okr/cap-nhat-tuan về /okr; moHopSua không chờ nút menu",
-			"can_cu": "9203b9ca2",
-			"sua": "man-so-tu-chay.mjs:1879,1892 /okr?tu=viec-cua-toi; chờ nút trước bam dòng 1290",
-			"dot_bien_de_xuat": "SO-1 bỏ disabled"
-		},
-		{
-			"ho_so": "so-okr-tu-chay",
-			"eval": "E23",
-			"xu_ly": "neo-co-dinh",
-			"ly_do": "origin/onehub...HEAD rỗng; áp vao-f28-so-okr-tu-chay.patch (chủ kho F8: b1)",
-			"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87",
-			"sua": "git apply _acceptance/neo-thuoc-het-han/vao-f28-so-okr-tu-chay.patch",
-			"dot_bien_de_xuat": "dinh-co-table; sha-khong-giai → mã 2"
-		},
-		{
-			"ho_so": "so-okr-tu-chay",
-			"eval": "E25",
-			"xu_ly": "neo-co-dinh",
-			"ly_do": "không migration mới so onehub; cùng bản vá",
-			"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87",
-			"sua": "cùng bản vá",
-			"dot_bien_de_xuat": "ADD COLUMN / DROP INDEX / model giữa tệp"
 		},
 		{
 			"ho_so": "zalo-gui-hong-ghi-ly-do",
@@ -954,6 +999,77 @@
 					"sua": "chạy làn",
 					"dot_bien": null,
 					"can_cu": ""
+				}
+			]
+		},
+		{
+			"ho_so": "so-okr-tu-chay",
+			"eval_do": [
+				"E8",
+				"E12",
+				"E14",
+				"E23",
+				"E25"
+			],
+			"san_pham_hong": [
+				{
+					"eval": "E12",
+					"ly_do": "Sau khi sửa bộ chọn theo ngăn KR một chỗ, mọi khẳng định E12 đạt nhưng lượt đỏ vì lỗi hydrat ở trang Của tôi (PhanDonViDan › TheDonVi › CardDescription: máy chủ trả khung xương, trình duyệt dựng span data-so-tom-tat) và mất ngày đang xem sau «Quay lại» (record-stack.ts:68 giuNgaySo chỉ giữ ngaySo khi còn ngăn so-kr, đã gỡ ở 5b6be6129); ngăn KR không còn hiện định nghĩa chỉ số (cần làn chủ phán).",
+					"can_cu": "5b6be6129"
+				},
+				{
+					"eval": "E14",
+					"ly_do": "Cùng lượt đo và cùng lỗi hydrat ở trang Của tôi như E12; mọi khẳng định riêng của E14 đạt sau khi sửa đường /okr?tu=viec-cua-toi và chờ nút thao tác.",
+					"can_cu": "5b6be6129"
+				}
+			],
+			"tin_hieu": [
+				{
+					"ma": "F1-30",
+					"tieu_de": "so-okr-tu-chay E12 E14: lỗi hydrat ở trang Của tôi khi mở ngăn mục tiêu",
+					"noi_dung": "apps/app khu Của tôi — PhanDonViDan › TheDonVi › CardDescription: máy chủ trả Skeleton, trình duyệt dựng <span data-so-tom-tat>."
+				},
+				{
+					"ma": "F1-31",
+					"tieu_de": "so-okr-tu-chay E12: mất ngày đang xem sau «Quay lại»",
+					"noi_dung": "apps/app/components/crm/record-sheet/record-stack.ts:68 giuNgaySo chỉ giữ ngaySo khi chồng ngăn còn so-kr."
+				},
+				{
+					"ma": "F1-32",
+					"tieu_de": "so-okr-tu-chay E12: ngăn KR không còn hiện tên chỉ số, phạm vi, khoảng ngày",
+					"noi_dung": "apps/app/components/okr/so-kr-sheet.tsx: [data-dinh-nghia] chỉ ở đầu SoKrSheet, mục «Số và nguồn» chỉ nhúng NoiDungSoKr."
+				}
+			],
+			"sua_san": [
+				{
+					"eval": "E8",
+					"xu_ly": "sua-rang",
+					"sua": "rang/soi-ma.mjs: lấy tệp từ git ls-files; miễn trừ có tên nap.ts — bản vá ghi sẵn sua-san/so-okr-tu-chay.patch",
+					"dot_bien": {
+						"ten": "xoa-ngoai-mau: deleteMany({})",
+						"ban_va": "sua-san/so-okr-tu-chay-dot-bien-E8.patch"
+					},
+					"can_cu": "_acceptance/bo-okr-mau/contract.md:37"
+				},
+				{
+					"eval": "E23",
+					"xu_ly": "neo-co-dinh",
+					"sua": "git apply _acceptance/neo-thuoc-het-han/vao-f28-so-okr-tu-chay.patch — bản vá ghi sẵn sua-san/so-okr-tu-chay.patch",
+					"dot_bien": {
+						"ten": "dinh-co-table",
+						"ban_va": "sua-san/so-okr-tu-chay-dot-bien-E23.patch"
+					},
+					"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87"
+				},
+				{
+					"eval": "E25",
+					"xu_ly": "neo-co-dinh",
+					"sua": "cùng bản vá — bản vá ghi sẵn sua-san/so-okr-tu-chay.patch",
+					"dot_bien": {
+						"ten": "ADD COLUMN okrKeyResult",
+						"ban_va": "sua-san/so-okr-tu-chay-dot-bien-E25.patch"
+					},
+					"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87"
 				}
 			]
 		}
