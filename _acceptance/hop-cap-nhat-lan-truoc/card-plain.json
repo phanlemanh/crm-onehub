@@ -1,35 +1,3 @@
 {
-  "feature_plain": "Người phụ trách KR mở hộp cập nhật là thấy ngay lần cập nhật trước — ngày giờ, số, mức tự tin, ghi chú — và ba câu gợi ý dưới ô ghi chú, để biết tuần trước mình đã hứa gì trước khi viết lần này.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ hiện khối «Lần cập nhật trước» ở đầu hộp ngay khi mở, không cần bấm: ngày giờ, số đúng kiểu KR, mức tự tin, ghi chú nguyên văn; chữ dưới ô số đổi thành «Hiện tại» để không có hai số cùng gọi là «lần trước»."},
-    {"id": "AC-3", "p": "Sẽ lấy đúng lần gửi sau cùng, kể cả khi một tuần có hai lần hay lần cuối do trưởng đơn vị ghi hộ — khớp với dữ liệu đã lưu."},
-    {"id": "AC-4", "p": "Sẽ hiện ngay lần vừa gửi khi mở lại hộp của cùng KR."},
-    {"id": "AC-5", "p": "Sẽ có ba câu hỏi gợi ý dưới ô ghi chú (tiếng Việt và tiếng Anh); ô vẫn một dòng, tối đa 200 ký tự."},
-    {"id": "AC-6", "p": "Sẽ vẫn hiện ngày, số, mức tự tin khi ghi chú đang tải hay tải hỏng; hỏng thì có nút «Thử lại»; người vẫn gửi được cập nhật."},
-    {"id": "AC-7", "p": "Sẽ đọc trọn trên điện thoại (375) và máy tính (1440): ghi chú dài xuống dòng, không tràn ngang, nút gửi bấm được."}
-  ],
-  "wont_do": [
-    {"id": "AC-2", "p": "Sẽ KHÔNG hiện khối trống khi KR chưa có lần cập nhật nào; lần trước không ghi chú thì khối không có dòng ghi chú."},
-    {"id": "OOS-1", "p": "Trang «Cập nhật tuần của tôi» giữ nguyên — không thêm khối lần trước, không thêm câu gợi ý."},
-    {"id": "OOS-2", "p": "Không hiện tên người ghi lần trước hay dấu «ghi hộ» trong khối."},
-    {"id": "OOS-3", "p": "Không đổi ô ghi chú thành nhiều dòng, không nâng giới hạn 200 ký tự."},
-    {"id": "OOS-4", "p": "Không bấm vào khối để mở lịch sử cập nhật."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Lịch sử KR: chưa có lần nào, có ghi chú, ghi chú rỗng, hai lần cùng tuần, lần cuối ghi hộ — đủ khi mỗi ca có bài kiểm riêng (AC-1 khối đủ bốn thứ, AC-2 không khối trống, AC-3 đúng lần sau cùng)."},
-    {"i": 1, "p": "Kiểu KR: số có đơn vị, phần trăm, mốc — đủ khi cả ba hiện số đúng cách viết (AC-1)."},
-    {"i": 2, "p": "Ghi chú đang tải, tải hỏng, tải xong — đủ khi cả ba lúc ngày, số, mức tự tin vẫn hiện và gửi được (AC-6)."},
-    {"i": 3, "p": "Trước khi gửi và ngay sau khi gửi rồi mở lại — đủ khi lần mở lại thấy lần vừa gửi (AC-4)."},
-    {"i": 4, "p": "Ba chỗ mở hộp (ngăn KR, phiếu mục tiêu, bảng theo đơn vị) dùng chung một hộp và cùng đưa đủ dữ liệu, nên đo một chỗ là đủ (AC-1)."},
-    {"i": 5, "p": "KR có số tự chảy vào khác số của lần cập nhật — đủ khi khối in số lần cập nhật, ô số in «Hiện tại» (AC-1)."},
-    {"i": 6, "p": "Lần gửi sát nửa đêm thứ Hai giờ Việt Nam — đủ khi ghi chú vẫn ghép đúng tuần (AC-3)."},
-    {"i": 7, "p": "Cắt ngang: hai khổ màn (AC-7), chữ tiếng Anh (AC-5), trang Cập nhật tuần không đổi (AC-5)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Lý do «chỉ một cách lấy dữ liệu» chưa loại cách thêm trường tuỳ chọn — đã sửa: luật kho cấm khuôn dữ liệu lỏng hơn cái thật sự lưu, nên cách đó cũng chết."},
-    {"i": 1, "p": "Chỗ đặt khối (đầu hộp hay ngay trên ô ghi chú) là chuyện gu, máy không được tự quyết — đã đổi thành câu hỏi Hỏi-3 cho anh."},
-    {"i": 2, "p": "Chưa đo lần gửi sát nửa đêm thứ Hai, chỗ ghép tuần dễ lệch — đã thêm ca này vào bài kiểm lấy đúng lần sau cùng."},
-    {"i": 3, "p": "Lo hộp mở từ bảng theo đơn vị thiếu dữ liệu lần trước — đã bác: bảng đọc trọn mục tiêu trước khi mở hộp, và trình biên dịch giữ điều đó."},
-    {"i": 4, "p": "Chữ cũ «Lần trước» dưới ô số thật ra là số hiện tại, có thể khác số trong khối — đã sửa: đổi thành «Hiện tại» và thêm ca kiểm."}
-  ]
+  "feature_plain": "Người phụ trách KR mở hộp cập nhật và thấy ngay lần cập nhật trước — ngày, số, mức tự tin, ghi chú — cùng ba câu hỏi gợi ý cho ô ghi chú, trước khi gửi."
 }
