@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 27b6f4d9563dd18e7a0662987ad2759f3cffb597
+verified_commit: 6683ad552bdc92912ea62bc0d1a97b04b718bab7
 human_signoff: Manh Phan 2026-10-23
 ---
 
@@ -191,3 +191,7 @@ Round 1: E1 đến E9 xanh; E10 (judgment) còn một lens bất đồng nên ch
 ### Re-pin lần 1 — 2026-10-23, do hoá cũ sau gộp onehub 0e34c4302
 run_id: repin-20261023T102540Z-71943
 sha: 27b6f4d9563dd18e7a0662987ad2759f3cffb597 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-23, do giữ tươi khi chốt ngưỡng đo giá trị (onehub e6fd8405f)
+run_id: repin-20261023T222915Z-51564
+sha: 6683ad552bdc92912ea62bc0d1a97b04b718bab7 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7, suite 3/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
