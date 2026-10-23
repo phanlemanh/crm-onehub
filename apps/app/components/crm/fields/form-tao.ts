@@ -52,7 +52,7 @@ export function useFormTao(entity: FieldEntity, mo = true) {
 	const tuTao = useMemo<TruongTao[]>(
 		() =>
 			(ds.data ?? [])
-				.filter((field) => !field.archived)
+				.filter((field) => !field.archived && field.type !== "FILE")
 				.map((field) => ({
 					id: field.id,
 					key: field.key,

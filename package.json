@@ -34,6 +34,7 @@
 		"tin-hieu:keo-ve": "bun scripts/tin-hieu/keo-ve.ts",
 		"tin-hieu:gom": "bun scripts/tin-hieu/gom-lich.ts",
 		"tin-hieu:do-gom": "bun scripts/tin-hieu/do-gom.ts",
+		"tin-hieu:do-bao": "bun scripts/tin-hieu/do-bao-doi-cho.ts",
 		"thong-bao:doi-chieu": "bun apps/agent/scripts/thong-bao-doi-chieu.ts",
 		"lo-trinh:do-san-pham": "bun scripts/lo-trinh-san-pham/do.ts"
 	},

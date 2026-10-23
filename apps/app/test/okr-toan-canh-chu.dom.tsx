@@ -99,6 +99,11 @@ mock.module("@/lib/trpc/client", () => ({
 				canManageProgram: true,
 				headOf: { divisions: [], departments: [] },
 			})),
+			moiKr: thuTuc("okr.moiKr", () => ({
+				rows: [],
+				total: 0,
+				facetCounts: { tinhTrang: [], donVi: [], nguoi: [] },
+			})),
 			toanCanh: {
 				queryOptions: () => ({
 					queryKey: ["okr.toanCanh"],

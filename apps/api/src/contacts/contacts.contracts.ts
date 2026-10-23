@@ -1,6 +1,7 @@
 import { EnrichmentStatus, FactBand, FactStatus, RecordSource } from "@crm/db";
 import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
 import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
+import { soTepTheoTruong, tepTheoTruong } from "@crm/validation/tep-truong";
 import { z } from "zod";
 import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
 import { thoaThuanDaLuuTruOutput } from "../crm/da-luu-tru";
@@ -164,6 +165,7 @@ export const contactRowOutput = z.object({
 	createdAt: z.string(),
 	archivedAt: z.string().nullable(),
 	fields: z.record(z.string(), fieldValueOutput),
+	soTepTheoTruong: soTepTheoTruong,
 });
 
 export type ContactRow = z.infer<typeof contactRowOutput>;
@@ -267,6 +269,7 @@ export const contactByIdOutput = z.object({
 		})
 		.nullable(),
 	fields: z.array(recordFieldOutput),
+	tepTheoTruong: tepTheoTruong,
 	queued: z.boolean(),
 	createdAt: z.string(),
 	archivedAt: z.string().nullable(),

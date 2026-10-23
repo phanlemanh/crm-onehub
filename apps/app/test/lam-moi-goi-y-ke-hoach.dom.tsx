@@ -67,6 +67,7 @@ const thoaThuanGia = (stage: string) => ({
 		email: "hai@onehub.vn",
 		image: null,
 	},
+	tepTheoTruong: {},
 	fields: [],
 	amountCents: null,
 	baseAmountCents: null,

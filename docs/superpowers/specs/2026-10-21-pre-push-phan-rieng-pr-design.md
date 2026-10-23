@@ -74,7 +74,9 @@ Dòng của luật cũ giữ nguyên từng byte khi không có tệp của oneh
 
 - `S` rỗng: `pre-push: lần đẩy chỉ mang phần của onehub (<k> tệp), PR không tự thêm tệp nào — bỏ test, build; CI phân loại PR theo cùng luật.`
 - `S` chỉ T1: `pre-push: chỉ tệp T1 trong phần PR tự thêm (<n> tệp; <k> tệp của onehub không tính) — bỏ test, build; CI phân loại PR theo cùng luật.`
-- `S` nặng: `pre-push: phần PR tự thêm (<n> tệp; <k> tệp của onehub không tính) có <tệp T1 mà mã đọc|tệp ngoài T1> (<tối đa 3 tệp>[ +m]) — chạy đủ năm bước.`
+- `S` nặng: `pre-push: phần PR tự thêm (<n> tệp; <k> tệp của onehub không tính) có <tệp dưới .github/|tệp T1 mà mã đọc|tệp ngoài T1> (<tối đa 3 tệp>[ +m]) — chạy đủ năm bước.`
+  Nhãn theo lý do của `quyetDinh`: `cham-github` gọi tên tệp dưới `.github/`, kể cả tệp T1 như `.github/*.md` (thêm
+  22/10, Ngoài-2 của Cổng Bằng chứng); `t1-ma-doc` gọi tên tệp `t1_ma_doc`; còn lại gọi tên tệp ngoài T1.
 
 «test, build» là `t1Only.skip` nối bằng «, », không viết tay (răng một-nguồn của `pre-push-t1`).
 
