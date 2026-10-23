@@ -23,7 +23,11 @@ export const TEP_TRUONG = {
 		khongCoBanGhi: "Không tìm thấy bản ghi.",
 		khongCoTep: "Không tìm thấy tệp.",
 		khongMo: "Chỉ quản trị mở được tệp.",
-		khongXoa: "Chỉ quản trị hoặc người đã tải tệp lên mới xoá được tệp này.",
+		khongPhuTrach: "Bạn không phụ trách bản ghi này nên không mở được tệp.",
+		chuaPhuTrach:
+			"Bản ghi chưa có người phụ trách nên chỉ quản trị mở được tệp.",
+		khongXoa:
+			"Chỉ quản trị, người phụ trách bản ghi hoặc người đã tải tệp lên mới xoá được tệp này.",
 	},
 } as const;
 
@@ -38,6 +42,10 @@ export const tepTrongO = z.object({
 	taiBoi: z.object({ id: z.string(), ten: z.string().nullable() }).nullable(),
 	coTheMo: z.boolean(),
 	coTheXoa: z.boolean(),
+	lyDoKhongMo: z
+		.enum(["khong-phu-trach", "chua-co-phu-trach"])
+		.nullable()
+		.default(null),
 });
 
 export type TepTrongO = z.infer<typeof tepTrongO>;

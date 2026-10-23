@@ -385,6 +385,10 @@ const en = {
 		soTep: (n: number) => (n === 1 ? "1 file" : `${n} files`),
 		taiBoi: (ten: string) => `by ${ten}`,
 		khongMo: "Only an admin can open files.",
+		khongPhuTrach: { truoc: "Only ", sau: " and admins can open these files." },
+		chuaPhuTrach:
+			"This record has no owner, so only admins can open its files.",
+		matQuyen: "You no longer own this record, so you can't open its files.",
 		tat: "File storage isn't switched on for this server, so files can't be uploaded yet.",
 		day: "This field already has 10 files. Delete one to add more.",
 		loi: {
@@ -796,6 +800,10 @@ const vi = {
 		soTep: (n: number) => `${n} tệp`,
 		taiBoi: (ten: string) => `bởi ${ten}`,
 		khongMo: "Chỉ quản trị mở được tệp.",
+		khongPhuTrach: { truoc: "Chỉ ", sau: " và quản trị mở được tệp." },
+		chuaPhuTrach:
+			"Bản ghi chưa có người phụ trách nên chỉ quản trị mở được tệp.",
+		matQuyen: "Bạn không còn phụ trách bản ghi này nên không mở được tệp.",
 		tat: "Kho tệp chưa bật trên máy chủ nên chưa tải tệp lên được.",
 		day: "Ô này đã đủ 10 tệp. Xoá bớt rồi tải tiếp.",
 		loi: {

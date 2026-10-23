@@ -37,7 +37,11 @@ import {
 	OTruongBang,
 	OTruongPhieu,
 } from "@/components/crm/fields/kieu-truong";
-import { FieldsCog, OTruongTuTao } from "@/components/crm/fields/record-fields";
+import {
+	FieldsCog,
+	nguCanhTepCua,
+	OTruongTuTao,
+} from "@/components/crm/fields/record-fields";
 import { mucChiTiet } from "@/components/crm/fields/truong-chuan";
 import { useBoTriTruong } from "@/components/crm/fields/use-bo-tri-truong";
 import { savingValue } from "@/components/crm/inline-field";
@@ -49,12 +53,9 @@ import { WebsiteActivity } from "@/components/crm/website-activity";
 import {
 	DetailSheetBody,
 	DetailSheetEmpty,
-	DetailSheetMain,
 	DetailSheetPending,
 	DetailSheetProperties,
-	DetailSheetRail,
 	DetailSheetSection,
-	DetailSheetSplit,
 	DetailSheetStat,
 	DetailSheetStats,
 	type DetailSheetTab,
@@ -538,59 +539,46 @@ export function CompanyOverview({ company }: { company: Company }) {
 	return (
 		<KhoaLuuTru khoa={company.archivedAt !== null}>
 			<DetailSheetBody>
-				<DetailSheetSplit>
-					<DetailSheetMain>
-						<CompanyAbout
-							title={m.section.about}
-							description={company.description}
-						/>
+				<CompanyAbout
+					title={m.section.about}
+					description={company.description}
+				/>
 
-						<WebsiteActivity companyId={company.id} />
-					</DetailSheetMain>
+				<DetailSheetSection
+					title={m.company.details}
+					action={company.archivedAt ? undefined : <FieldsCog kind="company" />}
+				>
+					<DetailSheetProperties>
+						{chiTiet.map((muc) => {
+							if (muc.kind === "custom")
+								return (
+									<OTruongTuTao
+										key={muc.field.id}
+										field={muc.field}
+										saving={isSavingField}
+										onSave={saveFields}
+										nguoiDung={users.data}
+										nguCanhTep={nguCanhTepCua("COMPANY", company)}
+									/>
+								);
+							const mt = truongTheoKhoa.get(muc.key);
+							return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
+						})}
+					</DetailSheetProperties>
 
-					<DetailSheetRail>
-						<DetailSheetSection
-							title={m.company.details}
-							action={
-								company.archivedAt ? undefined : <FieldsCog kind="company" />
-							}
-						>
-							<DetailSheetProperties columns={1}>
-								{chiTiet.map((muc) => {
-									if (muc.kind === "custom")
-										return (
-											<OTruongTuTao
-												key={muc.field.id}
-												field={muc.field}
-												saving={isSavingField}
-												onSave={saveFields}
-												nguoiDung={users.data}
-												nguCanhTep={{
-													entity: "COMPANY",
-													recordId: company.id,
-													luuTru: company.archivedAt !== null,
-													tep: company.tepTheoTruong,
-												}}
-											/>
-										);
-									const mt = truongTheoKhoa.get(muc.key);
-									return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
-								})}
-							</DetailSheetProperties>
-						</DetailSheetSection>
+					<DetailSheetPending
+						fields={pendingFields(company, locale)}
+						running={isEnriching(company.enrichmentStatus, company.queued)}
+					/>
+				</DetailSheetSection>
 
-						<DetailSheetPending
-							fields={pendingFields(company, locale)}
-							running={isEnriching(company.enrichmentStatus, company.queued)}
-						/>
+				{hasCompanyLinks(company) ? (
+					<DetailSheetSection title={m.section.links}>
+						<CompanySocials company={company} />
+					</DetailSheetSection>
+				) : null}
 
-						{hasCompanyLinks(company) ? (
-							<DetailSheetSection title={m.section.links}>
-								<CompanySocials company={company} />
-							</DetailSheetSection>
-						) : null}
-					</DetailSheetRail>
-				</DetailSheetSplit>
+				<WebsiteActivity companyId={company.id} />
 			</DetailSheetBody>
 		</KhoaLuuTru>
 	);
