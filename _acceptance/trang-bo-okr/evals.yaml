@@ -271,14 +271,15 @@ evals:
       từng «MUC <slug>#<E>» rồi dừng. Cờ --phan k/n chia các lần chạy riêng (đo màn và còn lại, mỗi nhóm xoay vòng theo
       khoá lệnh đã sắp) thành n phần rời nhau, hợp lại đúng cả lớp; E15 là phần 1/3 (kèm soát đổi thước), E17 phần 2/3,
       E18 phần 3/3 — chia vì trần long_running của kit là 240 phút, trọn lớp đo 5 giờ 28. (1) Chạy các eval thuộc lớp; gộp theo lệnh, trừ lệnh mang EVAL= thì mỗi eval
-      một lần chạy riêng với EVAL=<id>; lần đầu trả mã 2 (không đo được) thì chạy lại một lần, in «THU LAI». Khai tay đúng một eval loại khỏi lớp có lý do (V1-25): ve-sinh-do-san-onehub#E17 —
-      thước theo vòng, soát diff của nhánh đang chạy theo nhãn vòng ấy; in «THUOC THEO VONG <slug>#<E>: <lý do>». Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
+      một lần chạy riêng với EVAL=<id>; lần đầu trả mã 2 (không đo được) thì chạy lại một lần, in «THU LAI». Khai tay đúng hai eval loại khỏi lớp có lý do, in «THUOC THEO VONG <slug>#<E>: <lý do>»:
+      ve-sinh-do-san-onehub#E17 — thước theo vòng, soát diff của nhánh đang chạy theo nhãn vòng ấy (V1-25);
+      tro-ly-okr-tom-tat#E17 — không đo được, eval gọi model khi AI Gateway hết tiền (V1-26). Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
       worktree origin/onehub, in «HO SO <slug>#<E>: cay <ma> · nen <ma>»; SAI AC-11 khi nền 0 mà cây khác 0, «DO SAN TREN
       NEN <slug>#<E>» khi nền đỏ. (2) Với mỗi tệp thước hay bài kiểm (dưới _acceptance/ hoặc thư mục test/) của hồ sơ đã ký mà vòng sửa — bản đồ tệp → hồ sơ lập bằng chính lần quét; tệp dùng chung từ 5 hồ sơ mà vòng chỉ THÊM dòng in «THEM DANG KY <tep>:<dong>» và không đòi sổ; còn lại: sổ của hồ sơ có dòng fix decided_by
       chủ kho nhắc tệp (thiếu → «SAI AC-11: THIEU SO»); rồi xét QUAN HỆ từng khối diff -U0: dòng bỏ R và dòng thêm A,
       mỗi bên nối dòng, bỏ mọi khoảng trắng và dấu phẩy đuôi trước ) ] }, thay mọi chuỗi '…' "…" `…` bằng một chỗ giữ
       (biểu thức trong ${…} của chuỗi mẫu giữ lại để so) — khối chỉ đổi chuỗi khi hai bên bằng nhau; khác → «SAI AC-11:
-      DOI LOGIC <tep>:<dòng đầu> <mẫu>». Tệp có phép viết lại (VIET_LAI: V1-20, V1-21, V1-22, he-qua-donOkr cho
+      DOI LOGIC <tep>:<dòng đầu> <mẫu>». Tệp có phép viết lại (VIET_LAI: V1-20, V1-21, V1-22, V1-26, he-qua-donOkr cho
       do-man-dieu-huong.mjs, đòi dòng fix nhắc «h.nhan») không SAI nhưng vẫn qua luật quan hệ và in «VIET LAI <tep>
       (<phep>): <n> khoi doi logic» kèm từng khối, để thẻ thấy phép đã phủ gì.
       CHIEU DO (bản sao HEAD, ghim /SAI AC-11: DOI LOGIC \S+/ đúng tệp và dòng bị chèn, mã 1, in «CHIEU DO <kieu>: bat
