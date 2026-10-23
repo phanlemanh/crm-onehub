@@ -1,0 +1,93 @@
+[
+	{
+		"ma": "HD1",
+		"tenTep": "MAU-HD1-hop-dong-hop-tac.pdf",
+		"kieu": "pdf",
+		"thoaThuan": "HĐ mẫu HD1 · mẫu",
+		"coChu": true,
+		"ngayKy": "2026-03-05",
+		"ngayHetHan": "2027-03-04",
+		"giaTri": 1250000000,
+		"doan": {
+			"ngayKy": "ngày 05 tháng 03 năm 2026",
+			"ngayHetHan": "04/03/2027",
+			"giaTri": "1.250.000.000 đồng"
+		},
+		"sha256": "0ca0f71c3ec56d3f2f91fccd283eaa38e44fa385637ed33ebaa64a56a3dc8e4e"
+	},
+	{
+		"ma": "HD2",
+		"tenTep": "MAU-HD2-hop-dong-gioi-thieu.pdf",
+		"kieu": "pdf",
+		"thoaThuan": "HĐ mẫu HD2 · mẫu",
+		"coChu": true,
+		"ngayKy": "2026-04-12",
+		"ngayHetHan": "2027-04-11",
+		"giaTri": 860000000,
+		"doan": {
+			"ngayKy": "12/04/2026",
+			"ngayHetHan": "có hiệu lực 12 tháng kể từ ngày ký",
+			"giaTri": "860.000.000 đồng"
+		},
+		"suyTu": "ngày ký + 12 tháng − 1 ngày",
+		"sha256": "d6bc8739b99e1d6889a3e31f138c8b1b3bd476dbfc4d18a32a0a1678291747b5"
+	},
+	{
+		"ma": "HD3",
+		"tenTep": "MAU-HD3-hop-dong-dai-ly.docx",
+		"kieu": "docx",
+		"thoaThuan": "HĐ mẫu HD3 · mẫu",
+		"coChu": true,
+		"ngayKy": "2026-06-20",
+		"ngayHetHan": "2028-06-19",
+		"giaTri": 2300000000,
+		"doan": {
+			"ngayKy": "ngày 20 tháng 06 năm 2026",
+			"ngayHetHan": "19/06/2028",
+			"giaTri": "Hai tỷ ba trăm triệu đồng (2.300.000.000 đồng)"
+		},
+		"sha256": "5f46ef2534c1e8993476a36eedabf3ffc27afd9c7c33471d231e588b0044100d"
+	},
+	{
+		"ma": "HD4",
+		"tenTep": "MAU-HD4-hop-dong-dich-vu.docx",
+		"kieu": "docx",
+		"thoaThuan": "HĐ mẫu HD4 · mẫu",
+		"coChu": true,
+		"ngayKy": "2026-07-15",
+		"ngayHetHan": "2026-12-31",
+		"giaTri": null,
+		"doan": {
+			"ngayKy": "15/07/2026",
+			"ngayHetHan": "31/12/2026"
+		},
+		"sha256": "357fc9e67bc0fb2e326e12e4fedf1a4a98da35f6ff37aed8c8dd571d89f26eca"
+	},
+	{
+		"ma": "HD5",
+		"tenTep": "MAU-HD5-ban-quet.pdf",
+		"kieu": "pdf",
+		"thoaThuan": "HĐ mẫu HD5 · mẫu",
+		"coChu": false,
+		"ngayKy": "2026-08-01",
+		"ngayHetHan": "2027-07-31",
+		"giaTri": 480000000,
+		"doan": {},
+		"sha256": "494e11ba3673cb4b2ad065ed7d75334ef5094c65a07e80585251770f8ed8c916"
+	},
+	{
+		"ma": "HD6",
+		"tenTep": "MAU-HD6-phu-luc-HD1.pdf",
+		"kieu": "pdf",
+		"thoaThuan": "HĐ mẫu HD6 · mẫu",
+		"coChu": true,
+		"ngayKy": "2026-09-10",
+		"ngayHetHan": null,
+		"giaTri": 1400000000,
+		"doan": {
+			"ngayKy": "10/09/2026",
+			"giaTri": "1.400.000.000 đồng"
+		},
+		"sha256": "14854493c71b8bc7a883714d281b0cf4d60c36c56ee536c3a8a1bfc8f805f2c7"
+	}
+]
