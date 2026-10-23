@@ -83,7 +83,7 @@ export function DauTrangOkr({
 	if (laTrangSoan(duong ?? "")) return null;
 	return (
 		<LuoiDauTrangOkr
-			ghiChu={<DongLyDoKhu q={q} />}
+			ghiChu={<DongLyDoKhu q={q} tab={tab} />}
 			hanhDong={<HanhDongKhu cauNoi={cauNoi} q={q} tab={tab} />}
 			moTa={m.moTa[tab]}
 			tieuDe={tieuDeKhu(locale)}

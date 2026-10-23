@@ -337,14 +337,14 @@ function caThanhPhan() {
 	);
 
 	const sb = cay(TEP.sidebar);
-	const dungStrip = the(sb, "NavStrip").length >= 1;
+	const dungKhu = the(sb, "AreaSidebar").length >= 1;
 	const navTay = the(sb, "nav").filter((n) =>
 		lopTrong(thuocTinh(n, "className") ?? n).lop.includes("overflow-x-auto"),
 	).length;
 	ghi(
-		"khung-dung-nav-strip",
-		dungStrip && navTay === 0,
-		`settings-sidebar dung NavStrip ${dungStrip}, nav tu ve overflow-x-auto ${navTay}`,
+		"khung-dung-thanh-ben-khu",
+		dungKhu && navTay === 0,
+		`settings-sidebar dung AreaSidebar ${dungKhu}, nav tu ve overflow-x-auto ${navTay}`,
 	);
 
 	const tep = tepDiff();
