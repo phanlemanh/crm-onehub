@@ -5,7 +5,7 @@ slug: hop-dong-mau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-22T01:00:15Z
 design_doc: docs/superpowers/specs/2026-10-22-hop-dong-mau-design.md
@@ -137,3 +137,23 @@ Ngưỡng của ô Cổng Đáng (từ `bat_khi` của hàng):
 - Bộ chặn dùng chung `kiemDuocNap` của `okr:mau`, không sửa tệp của hồ sơ `bo-okr-mau` đã ký.
 - Vùng chung chỉ thêm dòng (luật 7): `package.json` gốc và của `apps/api` (một lệnh), `_acceptance/config.yaml`,
   `docs/setup.md`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-23:
+  - Ngoài-1: thẻ trình ký ghi «có eval fail — trả lại code» dù không tiêu chí nào hỏng.
+  - Ngoài-2: thẻ Cổng 2 không nêu vì sao chưa ký được và khuyên sửa code khi không tính năng nào hỏng.
+  - Ngoài-4: bài kiểm không bắt được khi hợp đồng mẫu thứ hai ghi thời hạn khác với đáp án.
+  - Ngoài-6: bộ chặn hợp đồng mẫu ghép lại câu từ chối của bộ OKR mẫu, đổi câu kia thì câu này có thể đọc lủng củng.
+  - Ngoài-7: khuôn hợp đồng mẫu kéo việc đọc tệp vào gói kiểm dữ liệu dùng chung, một màn app import nhầm thì bản dựng hỏng.
+  - Ngoài-9: cách chỉ phông chữ khác khi dựng lại bộ mẫu trên máy không phải Mac chưa được ghi ở đâu.
+  - Ngoài-10: trên kho thử có trường bắt buộc ở Công ty hay Thoả thuận, lệnh nạp dừng giữa chừng, để lại bản ghi dở và chạy lại vẫn hỏng.
+  - Ngoài-11: tổ chức bị xoá rồi tạo lại trên kho thử thì lệnh nạp hỏng giữa chừng và chạy lại không lành.
+  - Ngoài-12: bài kiểm chặn production có thể xanh khi tiến trình con chết vì lý do khác.
+  - Ngoài-14: câu từ chối của lệnh hợp đồng mẫu phụ thuộc chữ của lệnh OKR mẫu.
+  - Ngoài-15: chạy lệnh nạp trên máy dev đã bật khoá agent có thể làm agent xử lý luôn các việc đang chờ trên máy đó.
+  - Ngoài-16: kho chưa có bản cập nhật kiểu Tệp thì lệnh báo lỗi khó hiểu và để lại bản ghi mẫu dở, trái với tài liệu.
+  - Ngoài-17: bài kiểm không bắt được khi đáp án và chữ trong hợp đồng mẫu cùng sai một kiểu, như đảo ngày với tháng.
+  - Ngoài-18: lệnh hỏng sớm vì lý do khác trên máy cục bộ thì bài kiểm vẫn xanh.
+  - Ngoài-19: bài kiểm chưa chứng minh lần chạy bị ngắt dừng đúng sau tệp thứ ba.
+  - Ngoài-20: bài kiểm chưa chứng minh nhận diện đúng có khoá và không khoá trên cùng một cách chạy.
+  - Ngoài-21: bài kiểm thứ tự «chặn trước khi nạp kho» chỉ canh vị trí một dòng cố định.
+  - Ngoài-22: bộ quét cấm ghi thẳng vào kho mới được chứng minh báo đỏ ở một dạng ghi.
+  - Ngoài-23: kho tệp giả trong bài kiểm dễ tính hơn kho thật, lệnh gửi tệp sai loại hay sai cỡ chỉ lộ trên kho thật.

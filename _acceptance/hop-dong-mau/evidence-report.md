@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 9cc7f8cf1fc084b54395a57e63ec5c405a980185
-human_signoff:
+human_signoff: manh 2026-10-23 — ký Cổng Bằng chứng trên S4 vòng 4 PASS (verified_commit 9cc7f8cf1; 7/7 eval, 7/7 suite). Ngoài-3, 5, 8, 13 chấp nhận, không sửa; 19 mục còn lại ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: hop-dong-mau
