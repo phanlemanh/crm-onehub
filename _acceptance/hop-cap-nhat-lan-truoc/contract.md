@@ -5,7 +5,7 @@ slug: hop-cap-nhat-lan-truoc
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-22-hop-cap-nhat-lan-truoc-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-22T06:22:05Z

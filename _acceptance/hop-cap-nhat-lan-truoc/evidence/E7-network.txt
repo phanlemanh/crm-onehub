@@ -1,1 +1,1 @@
-khong co network tool (driver la script bun/playwright), xem log run
+driver: bun/playwright qua man.mjs (khong co browser tool doc network); network n-a (driver)
