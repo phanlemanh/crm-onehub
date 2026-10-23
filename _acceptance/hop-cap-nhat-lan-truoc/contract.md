@@ -5,7 +5,7 @@ slug: hop-cap-nhat-lan-truoc
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-22-hop-cap-nhat-lan-truoc-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-22T06:22:05Z
@@ -84,3 +84,10 @@ Quét tay theo trục (không qua skill `morphological-scan`: một màn, một 
 - Đường nền hạ tầng chưa chạy: phiên S1–S3 ngoài dãy không xin khoá `duong-nen` (luật đợt); dãy V2 chạy trước S4.
 - Hỏi-1 (câu hỏi gợi ý), Hỏi-2 (bỏ design-pass) và Hỏi-3 (chỗ đặt khối) chờ chủ kho ở Cổng Phạm vi — xem
   `decisions.jsonl`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-23:
+  - Ngoài-1: bằng chứng đo màn E7 từng là của lượt đo trước khi sửa thước; lượt chấm vòng 2 đã đo lại và ghi đè (21 đạt, 0 lỗi).
+  - Ngoài-2: ảnh và nhật ký đo màn E7 từng lệch lượt nhau; bản đã commit sau vòng 2 là một lượt, ảnh trùng byte.
+  - Ngoài-3: đối chứng tràn trong hộp từng chưa chạy với thước mới; vòng 2 cho thấy nó báo tràn đúng ở 375 và 1440.
+  - Ngoài-4: tuần theo giờ Việt Nam được tính ở hai chỗ, nếu sau này sửa một chỗ mà quên chỗ kia thì khối có thể mất ghi chú lần trước.
+  - Ngoài-5: khi hai lần cập nhật của một KR trùng đúng giây, nhãn lần cập nhật và khối «Lần cập nhật trước» có thể nói về hai lần khác nhau.
+  - Ngoài-6: khoảng cách trong khối «Lần cập nhật trước» chỉnh tại chỗ thay vì qua thành phần chung, nên có thể lệch nhẹ khi thành phần chung đổi.
