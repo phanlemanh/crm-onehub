@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, test } from "bun:test";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import {
 	chmodSync,
 	copyFileSync,
@@ -9,6 +9,7 @@ import {
 	readFileSync,
 	realpathSync,
 	rmSync,
+	utimesSync,
 	writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -41,6 +42,12 @@ const TAC_GIA = {
 };
 
 const tam: string[] = [];
+const CAU_HINH_RONG = join(
+	realpathSync(mkdtempSync(join(tmpdir(), "trang-ve-cau-hinh-"))),
+	"gitconfig",
+);
+writeFileSync(CAU_HINH_RONG, "");
+tam.push(dirname(CAU_HINH_RONG));
 afterAll(() => {
 	for (const d of tam) rmSync(d, { recursive: true, force: true });
 });
@@ -55,7 +62,12 @@ function envSach(them: Record<string, string> = {}): NodeJS.ProcessEnv {
 			continue;
 		env[k] = v;
 	}
-	Object.assign(env, TAC_GIA, them);
+	Object.assign(
+		env,
+		TAC_GIA,
+		{ GIT_CONFIG_NOSYSTEM: "1", GIT_CONFIG_GLOBAL: CAU_HINH_RONG },
+		them,
+	);
 	return env;
 }
 
@@ -378,4 +390,67 @@ describe("an-toan", () => {
 		expect(`${r.ra}${r.loi}`).not.toContain("hook cu");
 		expect(trangHead(k)).toBe("3\na\nb\nz");
 	});
+	test("an-toan (g): hook toan cuc chan khong chen vao buoc ve", () => {
+		const k = dungKho();
+		const hookToanCuc = join(k.d, "hook-toan-cuc");
+		mkdirSync(hookToanCuc);
+		for (const h of ["post-checkout", "pre-commit", "post-merge"]) {
+			writeFileSync(
+				join(hookToanCuc, h),
+				'#!/bin/sh\necho "hook toan cuc"\nexit 1\n',
+			);
+			chmodSync(join(hookToanCuc, h), 0o755);
+		}
+		const cauHinh = join(k.d, "gitconfig-toan-cuc");
+		writeFileSync(cauHinh, `[core]\n\thooksPath = ${hookToanCuc}\n`);
+		git(k.goc, "config", "core.hooksPath", "/dev/null");
+		haiNhanh(k);
+		git(k.goc, "config", "--unset", "core.hooksPath");
+		const r = chay(
+			k.goc,
+			["-c", "core.hooksPath=.githooks", "merge", "--no-edit", "onehub"],
+			{
+				GIT_CONFIG_GLOBAL: cauHinh,
+			},
+		);
+		expect(r.ma).toBe(0);
+		expect(`${r.ra}${r.loi}`).not.toContain("hook toan cuc");
+		expect(`${r.ra}${r.loi}`).not.toContain("không vẽ lại được");
+		expect(trangHead(k)).toBe("3\na\nb\nz");
+	});
+
+	test("an-toan (h): khoa ve dang giu thi cho, khoa cu thi bo", async () => {
+		const k = dungKho();
+		haiNhanh(k);
+		const khoa = join(k.goc, ".git", "crm-trang-ve.lock");
+		mkdirSync(khoa);
+		const con = spawn("git", ["merge", "--no-edit", "onehub"], {
+			cwd: k.goc,
+			env: envSach({ SO_VE: k.soVe }),
+		});
+		let loi = "";
+		con.stderr.on("data", (b) => {
+			loi += String(b);
+		});
+		const xong = new Promise<number>((ok) =>
+			con.on("close", (ma) => ok(ma ?? -1)),
+		);
+		await new Promise((ok) => setTimeout(ok, 2500));
+		expect(soLanVe(k)).toBe(0);
+		rmSync(khoa, { recursive: true });
+		expect(await xong).toBe(0);
+		expect(loi).toContain("chờ một lần vẽ khác trên máy");
+		expect(trangHead(k)).toBe("3\na\nb\nz");
+		expect(existsSync(khoa)).toBe(false);
+
+		const k2 = dungKho();
+		haiNhanh(k2);
+		const khoa2 = join(k2.goc, ".git", "crm-trang-ve.lock");
+		mkdirSync(khoa2);
+		const cu = new Date(Date.now() - 16 * 60 * 1000);
+		utimesSync(khoa2, cu, cu);
+		expect(gop(k2).ma).toBe(0);
+		expect(trangHead(k2)).toBe("3\na\nb\nz");
+		expect(existsSync(khoa2)).toBe(false);
+	}, 60_000);
 });

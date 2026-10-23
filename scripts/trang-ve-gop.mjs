@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,7 +13,14 @@ export const TRANG_VE = {
 	tienToCayTam: "trang-ve-",
 	hanVeMs: 5 * 60 * 1000,
 	tepThuocTinh: ".gitattributes",
+	khoa: "crm-trang-ve.lock",
+	choKhoaMs: 10 * 60 * 1000,
+	khoaCuMs: 15 * 60 * 1000,
+	nhipChoMs: 1000,
+	uuTien: "10",
 };
+
+const KHONG_HOOK = ["-c", "core.hooksPath=/dev/null"];
 
 const DONG_THUOC_TINH = new RegExp(`^(\\S+)\\s.*\\bmerge=${TRANG_VE.driver}\\b`);
 
@@ -58,21 +65,55 @@ function thuMucGit(goc, env, khoa) {
 	return isAbsolute(d) ? d : resolve(goc, d);
 }
 
+function ngu(ms) {
+	Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+function layKhoa(goc, env) {
+	const khoa = join(thuMucGit(goc, env, "--git-common-dir"), TRANG_VE.khoa);
+	const het = Date.now() + TRANG_VE.choKhoaMs;
+	let daBao = false;
+	for (;;) {
+		try {
+			mkdirSync(khoa);
+			return khoa;
+		} catch (e) {
+			if (e.code !== "EEXIST") throw e;
+		}
+		let tuoi = 0;
+		try {
+			tuoi = Date.now() - statSync(khoa).mtimeMs;
+		} catch {
+			continue;
+		}
+		if (tuoi > TRANG_VE.khoaCuMs) {
+			rmSync(khoa, { recursive: true, force: true });
+			continue;
+		}
+		if (Date.now() > het) throw new Error(`chờ khoá vẽ quá ${TRANG_VE.choKhoaMs / 60000} phút`);
+		if (!daBao) bao("chờ một lần vẽ khác trên máy xong…");
+		daBao = true;
+		ngu(TRANG_VE.nhipChoMs);
+	}
+}
+
 function veTrongCayTam(goc, commit, trang) {
 	const env = envSach();
+	const khoa = layKhoa(goc, env);
 	const tam = mkdtempSync(join(tmpdir(), TRANG_VE.tienToCayTam));
 	const cay = join(tam, "cay");
 	try {
-		gitPhai(goc, ["worktree", "add", "-q", "--detach", cay, commit], env);
-		const r = chay("node", [TRANG_VE.boVe, "--root", "."], { cwd: cay, env, timeout: TRANG_VE.hanVeMs });
+		gitPhai(goc, [...KHONG_HOOK, "worktree", "add", "-q", "--detach", cay, commit], env);
+		const r = chay("nice", ["-n", TRANG_VE.uuTien, "node", TRANG_VE.boVe, "--root", "."], { cwd: cay, env, timeout: TRANG_VE.hanVeMs });
 		if (!r.ok) throw new Error(`bộ vẽ thoát lỗi (${r.loi})`);
 		const ra = {};
 		for (const t of trang) if (existsSync(join(cay, t))) ra[t] = readFileSync(join(cay, t));
 		return ra;
 	} finally {
-		chay("git", ["worktree", "remove", "--force", cay], { cwd: goc, env });
+		chay("git", [...KHONG_HOOK, "worktree", "remove", "--force", cay], { cwd: goc, env });
 		rmSync(tam, { recursive: true, force: true });
-		chay("git", ["worktree", "prune"], { cwd: goc, env });
+		chay("git", [...KHONG_HOOK, "worktree", "prune"], { cwd: goc, env });
+		rmSync(khoa, { recursive: true, force: true });
 	}
 }
 

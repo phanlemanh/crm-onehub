@@ -42,7 +42,9 @@ Thuật ngữ «cây mã», «cùng cây mã», «dấu», «phiếu», «nguồ
   tua nhanh, When hook gộp chạy, Then trang vẽ chỉ từ nội dung đã vào commit (hoặc chỉ mục) — thư mục chưa commit không
   lọt vào trang; bộ vẽ hỏng thì lần gộp và commit không bị chặn, in đúng một dòng gọi lệnh vẽ tay, thoát 0; không còn
   worktree tạm nào sau đó; commit thường và gộp tua nhanh không vẽ, không in gì; hook gộp mới luôn chạy bản của chính
-  cây kể cả khi `core.hooksPath` trỏ checkout chính.
+  cây kể cả khi `core.hooksPath` trỏ checkout chính; hook toàn cục của máy (`core.hooksPath` toàn cục, như git-secrets
+  trên M5) không chen vào bước dựng cây tạm; trên một máy chỉ một lần vẽ chạy một lúc (khoá, khoá quá 15 phút bị coi
+  là bỏ dở), ở mức ưu tiên thấp, có trần thời gian.
 - AC-6: Given hai commit chỉ khác nhau ở tệp T1 thường (`docs/*.md`, `_acceptance/<hồ sơ>/run-log.jsonl`), When so cây
   mã, Then cùng cây mã; khác một tệp mã, một tệp `t1_ma_doc` (`LO-TRINH.html`), một tệp `.github/` (`ci.yml`, dù T1),
   `_acceptance/config.yaml`, hoặc diff vượt ngưỡng tệp → khác cây mã.

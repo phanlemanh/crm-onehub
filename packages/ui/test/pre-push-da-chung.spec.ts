@@ -111,6 +111,12 @@ const TAC_GIA = {
 };
 
 const tam: string[] = [];
+const CAU_HINH_RONG = join(
+	realpathSync(mkdtempSync(join(tmpdir(), "da-chung-cau-hinh-"))),
+	"gitconfig",
+);
+writeFileSync(CAU_HINH_RONG, "");
+tam.push(dirname(CAU_HINH_RONG));
 afterAll(() => {
 	for (const d of tam) rmSync(d, { recursive: true, force: true });
 });
@@ -122,7 +128,12 @@ function envSach(them: Record<string, string>): NodeJS.ProcessEnv {
 			continue;
 		env[k] = v;
 	}
-	Object.assign(env, TAC_GIA, them);
+	Object.assign(
+		env,
+		TAC_GIA,
+		{ GIT_CONFIG_NOSYSTEM: "1", GIT_CONFIG_GLOBAL: CAU_HINH_RONG },
+		them,
+	);
 	return env;
 }
 

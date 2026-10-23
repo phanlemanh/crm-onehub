@@ -70,6 +70,20 @@ Worktree tạm là repo git thật nên các bộ đọc hồ sơ gọi `git` v�
 **Không bao giờ chặn lần gộp hay commit.** Bộ vẽ hỏng, thiếu `node`, `CRM_SKIP_HOOKS` bật → in đúng một dòng nói vì sao
 và lệnh vẽ tay, thoát 0. Răng vẫn là `--check` ở CI: nó không đổi.
 
+**Không chen hook nào vào bước dựng cây tạm.** Mọi lệnh git của bộ vẽ lại chạy với `-c core.hooksPath=/dev/null`, nên
+hook toàn cục của máy (M5 đặt `core.hooksPath` toàn cục là `/opt/git-secrets/hooks`) hay `post-checkout` của kho không
+chạy khi dựng và gỡ cây tạm.
+
+**Một lần vẽ một lúc trên máy.** Vẽ lại tốn khoảng 35 giây máy (đo 23/10) sau mỗi commit gộp; nhiều thợ cùng gộp
+`onehub` thì chồng lên nhau và lên S4. Bộ vẽ lấy khoá `crm-trang-ve.lock` trong thư mục git chung (mọi worktree cùng
+thấy), chờ tối đa 10 phút (in một dòng «chờ một lần vẽ khác trên máy xong…»), coi khoá quá 15 phút là bỏ dở; chạy bộ vẽ
+qua `nice -n 10`; trần 5 phút mỗi lần vẽ. Hết chờ hay hết trần thì như bộ vẽ hỏng: không chặn gộp, in lệnh vẽ tay. Không
+nối vào khoá máy của đợt (`chay-nang.sh`): khoá ấy sống ở thư mục cá nhân, không phải của kho.
+
+**Lưới khi hook không chạy.** Nút gộp trên GitHub, merge-ref của CI hay worktree không đặt `core.hooksPath` gộp hai trang
+theo `union` mà không vẽ lại. Bước «Product map» của `acceptance.yml` (`product-map.mjs --check`) so CẢ HAI trang và
+thoát 1 khi một trong hai lệch; ca 3 của `rang/ca-550.mjs` chứng nó đỏ, gọi tên cả hai trang, trên bản ghép `union` thật.
+
 **Luôn chạy hook của chính cây.** Như `pre-push`: `core.hooksPath` của worktree trỏ `.githooks` của checkout chính, nên
 hai hook mới mở đầu bằng cùng khối «có `.githooks/<hook>` của cây thì `exec` nó».
 

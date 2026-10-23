@@ -126,7 +126,7 @@ evals:
       - "scripts/trang-ve-gop.mjs"
       - "packages/ui/test/trang-ve-gop.spec.ts"
     expected: |
-      bun test -t an-toan, 6 ca viet truoc:
+      bun test -t an-toan, 8 ca viet truoc:
         (a) thu muc _acceptance/c/ chua commit trong cay lam viec -> HEAD:PRODUCT-MAP.md == "3\na\nb\nz" (ban tron cua union la "2\na\nb\nz") (khong co «c»).
         (b) bo ve gia thoat 1 -> merge thoat 0, stderr co dung mot dong bat dau «trang-ve:» chua
             «node scripts/product-map.mjs --root .»; HEAD la commit git tao.
@@ -135,7 +135,15 @@ evals:
         (e) gop tua nhanh -> bo ve gia khong chay, stdout+stderr cua hook rong.
         (f) core.hooksPath tro .githooks cua mot «checkout chinh» co post-merge cu (in «hook cu») -> dau ra khong co
             «hook cu», trang van ve lai (hook cua cay chay).
-      Chieu do: E12 (d) bo ve trong cay lam viec thay vi cay tam -> (a) do voi «c» trong trang.
+        (g) GIT_CONFIG_GLOBAL tro mot cau hinh co core.hooksPath toan cuc chan (post-checkout, pre-commit, post-merge in
+            «hook toan cuc» roi exit 1), kho khong dat core.hooksPath, gop bang `git -c core.hooksPath=.githooks merge`
+            -> thoat 0, dau ra khong co «hook toan cuc» lan «không vẽ lại được», trang dung.
+        (h) thu muc khoa .git/crm-trang-ve.lock moi tao -> sau 2,5 giay bo ve gia chua chay; go khoa -> gop thoat 0,
+            stderr co «chờ một lần vẽ khác trên máy», trang dung, khoa da go; khoa cu 16 phut -> gop thang, khoa bi bo.
+      Moi lenh git cua hai spec chay voi GIT_CONFIG_NOSYSTEM=1 va GIT_CONFIG_GLOBAL tro tep rong (khong dinh cau hinh
+      toan cuc cua may).
+      Chieu do: E12 (d) bo ve trong cay lam viec thay vi cay tam -> (a) do voi «c» trong trang; E12 (j) bo
+      -c core.hooksPath=/dev/null khi dung cay tam -> (g) do; E12 (k) bo khoa -> (h) do.
 
   - id: E8
     criterion: AC-6
@@ -243,8 +251,8 @@ evals:
       - "_acceptance/trang-ve-gop-va-dau-cay/rang/doi-chieu.mjs"
     expected: |
       node rang/doi-chieu.mjs, ma 0: ban sao nguon o os.tmpdir() (khuon dot-bien.mjs cua pre-push-phan-rieng-pr), chay
-      spec voi bien nguon tro ban sao. Doi chung duong: ban sao lanh -> hai spec xanh, «dat doi-chung». Chin dot bien viet
-      truoc (a)–(i) trong cac eval tren, moi dot bien: neo «tu» xuat hien dung mot lan o tep that, va dung ca test da
+      spec voi bien nguon tro ban sao. Doi chung duong: ban sao lanh -> hai spec xanh, «dat doi-chung». Muoi mot dot bien viet
+      truoc (a)–(k) trong cac eval tren, moi dot bien: neo «tu» xuat hien dung mot lan o tep that, va dung ca test da
       khai do, in «BAT <ca>: <test>». Thieu mot BAT -> ma 1.
 
   - id: E13

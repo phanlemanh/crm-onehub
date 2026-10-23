@@ -31,10 +31,10 @@ const DOT_BIEN = [
 	{
 		ca: "(d) ve trong cay lam viec",
 		sua: [
-			["scripts/trang-ve-gop.mjs", "import { existsSync, mkdtempSync,", "import { cpSync, existsSync, mkdtempSync,"],
+			["scripts/trang-ve-gop.mjs", "import { existsSync, mkdirSync, mkdtempSync,", "import { cpSync, existsSync, mkdirSync, mkdtempSync,"],
 			[
 				"scripts/trang-ve-gop.mjs",
-				'gitPhai(goc, ["worktree", "add", "-q", "--detach", cay, commit], env);',
+				'gitPhai(goc, [...KHONG_HOOK, "worktree", "add", "-q", "--detach", cay, commit], env);',
 				'cpSync(goc, cay, { recursive: true, filter: (s) => !s.endsWith("/.git") });',
 			],
 		],
@@ -88,6 +88,18 @@ const DOT_BIEN = [
 		sua: [["scripts/verify-gate-shape.mjs", ".filter((id) => !boQuaTong.has(id));", ".filter((id) => !boQua.has(id));"]],
 		spec: SPEC_E,
 		test: "dau-hook (a)(b): day du nam roi day cung cay bo het",
+	},
+	{
+		ca: "(j) cay tam chay hook toan cuc",
+		sua: [["scripts/trang-ve-gop.mjs", "gitPhai(goc, [...KHONG_HOOK, \"worktree\", \"add\",", "gitPhai(goc, [\"worktree\", \"add\","]],
+		spec: SPEC_B,
+		test: "an-toan (g): hook toan cuc chan khong chen vao buoc ve",
+	},
+	{
+		ca: "(k) bo khoa ve",
+		sua: [["scripts/trang-ve-gop.mjs", "\tconst khoa = layKhoa(goc, env);", "\tconst khoa = join(tmpdir(), \"khong-khoa\");"]],
+		spec: SPEC_B,
+		test: "an-toan (h): khoa ve dang giu thi cho, khoa cu thi bo",
 	},
 ];
 
