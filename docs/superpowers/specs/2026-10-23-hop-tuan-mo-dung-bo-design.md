@@ -58,16 +58,28 @@ Trang `okr/theo-don-vi/page.tsx` (máy chủ) chuyển hướng khi `xemOkr = ho
 
 Chuyển ở máy chủ, không ở khách: không có khoảnh khắc hiện bảng OneHub rồi nhảy; URL sau khi vào chép gửi được; thẻ
 con, Quay lại và `kyOkr` chạy như mọi bộ khác (VK3 AC-5). `okr.moHopTuan` ghi vết mở họp đúng đơn vị trưởng dẫn, nên
-thước `ty-le-mo-hop-tuan.sql` đếm được lần mở từ thanh bên.
+thước `ty-le-mo-hop-tuan.sql` đếm được lần mở qua liên kết cũ không kèm đơn vị.
 
-### 2. Mục «Họp tuần» trên thanh bên (H1, «từ thanh bên»)
+### 2. Đường vào bộ của mình — như Tability, không có mục riêng trên thanh bên (H1)
 
-Thêm mục `hop-tuan` vào nhóm OKR của `NHOM_THANH_BEN`, ngay dưới «Bộ OKR»: href `/okr/bo-okr?xemOkr=hop-tuan`, thêm
-`kyOkr` khi URL đang có, không bao giờ mang `donOkr`. Bấm → máy chủ chuyển sang bộ của người xem (mục 1).
+Chủ kho chốt ở Cổng Phạm vi 24/10: bỏ mục «Họp tuần» trên thanh bên. Tability không có trang hay liên kết họp riêng;
+người ta mở plan của đội mình (qua My focus hay My teams) rồi họp trên chính plan và trình chiếu của nó. Ở đây cũng
+vậy — Họp tuần là thẻ con của bộ OKR, vào bằng hai đường đã có sau VK3, không dựng thêm gì:
 
-Trạng thái mở: «Họp tuần» mở khi đường là `/okr/bo-okr` và `xemOkr = hop-tuan` (mọi bộ); «Bộ OKR» mở ở các trang
-`/okr/bo-okr` còn lại. Mỗi lúc đúng một mục mang `aria-current="page"`. Từ `md` là một mục của thanh dọc; dưới `md`
-là một mục của hàng cuộn ngang mà `AreaSidebar` tự dựng — không dựng thêm bản điện thoại (`docs/design.md`).
+- thanh bên «Bộ OKR» → lọc «Tôi dẫn» → bấm bộ của mình → thẻ con «Họp tuần»;
+- «Của tôi» → thẻ «đơn vị bạn dẫn» → thẻ con «Họp tuần».
+
+Thanh bên giữ nguyên: nhóm OKR là «Bộ OKR», «Lấy ý kiến». Không liên kết nào trên thanh bên mang `xemOkr`, nên bài
+`tbo-lien-ket` (E11) của VK3 không phải đổi. Mục 1 vẫn cần: nó lo liên kết cũ và liên kết gõ tay không kèm đơn vị.
+
+Trang một bộ đã có cập nhật KR (check-in) như Tability, có từ trước vòng này:
+
+- nút «Cập nhật» trên từng dòng KR của thẻ OKR (`theo-don-vi/bang.tsx`, `NutCapNhatDong`);
+- nút «Cập nhật» ở đầu ngăn KR (`kr-sheet.tsx`);
+- hộp cập nhật hiện «Lần cập nhật trước» (HT3).
+
+Nút chỉ hiện cho người sửa được KR, khi số hiện tại của KR đến từ cập nhật (không phải nguồn máy), chu kỳ còn ghi
+được và mục tiêu chưa bỏ (`coNutCapNhat`). Dòng của thẻ Họp tuần chưa có nút ấy — việc của HT2.
 
 ### 3. Hàng số của tuần (H4)
 
@@ -137,7 +149,7 @@ Không màn nào in «0/0 KR». Hai trạng thái đầu không hiện hàng s�
 <!-- <<<UX-SPEC-TEMPLATE -->
 ### 1. Luồng
 
-- Suôn sẻ: thanh bên «Họp tuần» (hay liên kết cũ không kèm đơn vị) → máy chủ chuyển sang `?donOkr=<bộ mình dẫn>&xemOkr=hop-tuan` → thẻ Họp tuần của bộ ấy, hàng số đầu thẻ, bảng đáng bàn (điểm ra: thẻ con khác của cùng bộ, hay ngăn KR).
+- Suôn sẻ: thanh bên «Bộ OKR» → «Tôi dẫn» → bộ mình → thẻ con «Họp tuần» (hoặc «Của tôi» → đơn vị bạn dẫn → thẻ con; hoặc liên kết cũ không kèm đơn vị → máy chủ chuyển sang `?donOkr=<bộ mình dẫn>&xemOkr=hop-tuan`) → thẻ Họp tuần của bộ ấy, hàng số đầu thẻ, bảng đáng bàn (điểm ra: thẻ con khác của cùng bộ, hay ngăn KR).
 - Biên: quản trị không dẫn đơn vị → bộ OneHub; bộ chưa có KR công bố → câu lý do + danh sách đơn vị có KR; chu kỳ chưa chạy → câu ngày bắt đầu; thành viên không dẫn → phòng ban chính.
 - Lỗi & quay lại: `okr.hopTuan` hỏng → vùng lỗi có Thử lại; `okr.toanCanh` hỏng trong nhánh rỗng → câu lý do vẫn hiện, chỗ danh sách là vùng lỗi có Thử lại; đọc `okr.access` hay `org.tree` hỏng ở máy chủ → vùng lỗi của khu, không âm thầm mở OneHub.
 
@@ -145,7 +157,7 @@ Không màn nào in «0/0 KR». Hai trạng thái đầu không hiện hàng s�
 
 | Màn | MỘT việc của màn | Vào từ / ra tới |
 |---|---|---|
-| Thẻ Họp tuần của một bộ | đi qua KR đáng bàn của tuần | thanh bên, thẻ con, tin sáng, liên kết cũ / ngăn KR, thẻ con khác, Họp tuần của đơn vị trực thuộc |
+| Thẻ Họp tuần của một bộ | đi qua KR đáng bàn của tuần | thẻ con của bộ (từ Bộ OKR › Tôi dẫn hay Của tôi), tin sáng, liên kết cũ / ngăn KR, thẻ con khác, Họp tuần của đơn vị trực thuộc |
 
 ### 3. Bảng trạng thái
 
@@ -168,7 +180,6 @@ Không màn nào in «0/0 KR». Hai trạng thái đầu không hiện hàng s�
 - Bốn ô: 1440 một hàng bốn ô; 375 lưới hai cột hai hàng (hành vi `@container/stats` sẵn có của `StatGroup`); trang không cuộn ngang.
 - Tên đơn vị và tên chu kỳ là dữ liệu người nhập: `translate="no"`.
 - Liên kết trong danh sách «Đơn vị có KR» là `Link` thật (Tab tới, Enter mở), tên truy cập là tên đơn vị.
-- Mục thanh bên: một `aria-current="page"` mỗi lúc; tiêu điểm thấy được theo `AreaSidebarItem`.
 
 ### 5. Xuất xứ component
 
@@ -177,7 +188,6 @@ Không màn nào in «0/0 KR». Hai trạng thái đầu không hiện hàng s�
 | `StatGroup`, `StatCard` | dùng | nếp «Ô số tổng quan» của `docs/design.md`, như Toàn cảnh |
 | `Item` (`variant="outline"`) | dùng | danh sách mục ngắn, không cần `DataTable` |
 | `Empty` | dùng | câu lý do của màn rỗng |
-| `AreaSidebarItem` | dùng | mục mới của thanh bên khu |
 | `Skeleton` | dùng | bốn ô khung xương |
 
 ### 6. Khuôn IA đã chọn + căn cứ
@@ -191,9 +201,8 @@ Căn cứ: (ii) không tra công cụ — khuôn hiển nhiên: bản phạm vi 
 
 - **VK3 `trang-bo-okr` (đã ký, chưa gộp).**
   - AC-7 «`/okr/bo-okr?xemOkr=hop-tuan` mở bộ OneHub» đổi thành «mở bộ của người xem» (Hỏi-2).
-  - Hai thước đã ký phải đổi:
-    - E10 `tbo_man`: ca `xem-khong-don` kỳ vọng tiêu đề tên gốc.
-    - E11 `tbo-lien-ket`: thanh bên chỉ được dẫn tới trang danh sách; mục mới mang `xemOkr=hop-tuan`.
+  - Một thước đã ký phải đổi: E10 `tbo_man`, ca `xem-khong-don` kỳ vọng tiêu đề tên gốc. E11 `tbo-lien-ket` không
+    đổi vì thanh bên không có mục mới.
   - Luật tạm «không tự sửa thước hồ sơ đã ký» → mỗi thay đổi đi qua dòng sổ `fix` mang `decided_by` chủ kho
     (AC-10), không sửa im.
 - **VK8 `bo-okr-co-so` (đã duyệt phạm vi, chưa làm).** AC-3 «hàng số chỉ có ở thẻ OKR» đụng hàng số của Họp tuần (Hỏi-3). Hàm ngày còn lại dùng chung — ai gộp sau dùng lại.
@@ -229,7 +238,6 @@ Bài kiểm API và DOM dựng dữ liệu riêng, không dựa bộ mẫu.
 
 - `packages/validation/src/okr-bo-hop-tuan.ts` — `boHopTuan` (mới).
 - `apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx`, `theo-don-vi/chuyen-hop-tuan.ts` (mới) — chuyển hướng.
-- `apps/app/app/(app)/[slug]/okr/tab-okr.ts`, `thanh-ben-muc-tieu.tsx` — mục thanh bên.
 - `apps/app/app/(app)/[slug]/okr/hop-tuan.tsx`, `o-so-hop.ts` (mới), `ly-do-rong.ts` (mới), `don-vi-co-kr.tsx` (mới).
 - `apps/app/lib/messages/okr-hop-tuan-bo.ts` (mới, vi và en) — không sửa `okr-toan-canh.ts` mà HT2, HT4 cùng chạm.
 - `apps/api/src/okr/okr-xem.service.ts` — một dòng `tuanDau`.

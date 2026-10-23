@@ -19,8 +19,8 @@
   Nguồn: [SUY-TỪ-REPO: apps/api/src/okr/okr-access.service.ts].
 - **Trục B — đường vào** [thước CE: báo cáo dò đường vào trên `onehub` và VK3 —
   `thanh-ben-muc-tieu.tsx`, `the-con.tsx`, `next.config.ts:52-54`, `nhac-ke-hoach.ts:183-190`]:
-  - thanh bên;
-  - thẻ con (mang `donOkr`);
+  - thanh bên «Bộ OKR» › Tôi dẫn › bộ › thẻ con (mang `donOkr`);
+  - Của tôi › đơn vị bạn dẫn › thẻ con (mang `donOkr`);
   - `bo-okr` trần có hoặc không `kyOkr`;
   - `theo-don-vi` cũ trần;
   - `donOkr=goc` tường minh;
@@ -51,7 +51,7 @@ C: 6 ô, độc lập với A, B khi bộ đã chọn.
 1. Hàm chọn bộ × 9 người xem (AC-2) — luật lõi của H1; mỗi ô là một nhánh.
 2. Ba đường vào không kèm đơn vị × trưởng phòng ban, trên màn thật (AC-1) — đúng ca production 22/10.
 3. Đường mang `donOkr` không bị chuyển (AC-2) — chặn đảo nghĩa liên kết đã chọn bộ.
-4. Thanh bên có mục và trạng thái mở (AC-3) — «từ thanh bên» của `bat_khi`.
+4. Đường vào qua bộ OKR như Tability, thanh bên không có mục riêng (AC-3) — «từ thanh bên» đọc là qua «Bộ OKR» (chủ kho 24/10).
 5. Hàng số × có cập nhật (AC-4, AC-5) — H4.
 6. Ba trạng thái rỗng có lý do (AC-6, AC-7) — H2.
 
@@ -63,11 +63,12 @@ C: 6 ô, độc lập với A, B khi bộ đã chọn.
 ## Never
 
 - Thẻ con nhảy sang bộ người xem dẫn — phá VK3 AC-5 (thẻ con giữ bộ đang xem).
+- Mục «Họp tuần» riêng trên thanh bên — chủ kho bỏ 24/10, đi như Tability qua bộ OKR.
 - Liệt kê người chưa cập nhật trên Họp tuần — `CONTEXT.md` «Họp tuần»: bảng xếp theo KR, không liệt người.
 
 ## Cross-cutting áp mọi ô Core
 
-- Tải: đang tải · lỗi `hopTuan` · lỗi `boHopTuan` → AC-8.
+- Tải: đang tải · lỗi `hopTuan` · lỗi `toanCanh` · lỗi đọc `okr.access` hay `org.tree` → AC-8.
 - Ngày chu kỳ: trước bắt đầu · giữa · ngày cuối · đã qua → AC-5.
 - Quyền thấy: mục tiêu hạn chế ở đơn vị trực thuộc → AC-6.
 - Khổ 1440 · 375, sáng · tối → AC-9.

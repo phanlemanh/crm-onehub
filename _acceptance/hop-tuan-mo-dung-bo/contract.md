@@ -17,7 +17,8 @@ Production 22/10: bấm Họp tuần mà URL không kèm đơn vị thì bảng 
 hiện «0/0 KR» và «Chưa có lần cập nhật nào để bàn», trong khi phòng của người xem đã cập nhật đủ
 (`okr-xem.service.ts:160-161, :586`). Vòng này làm ba việc:
 
-- Họp tuần không kèm đơn vị mở bộ người xem dẫn: máy chủ chuyển hướng, và thanh bên có mục «Họp tuần».
+- Họp tuần không kèm đơn vị mở bộ người xem dẫn: máy chủ chuyển hướng. Không thêm mục «Họp tuần» trên thanh bên —
+  như Tability, người ta vào bộ OKR của mình rồi bấm thẻ con Họp tuần (chủ kho chốt ở Cổng Phạm vi 24/10).
 - Đầu thẻ Họp tuần có hàng bốn số của tuần.
 - Màn rỗng nói đúng lý do và chỉ sang đơn vị trực thuộc có KR.
 
@@ -50,12 +51,11 @@ Việt, khổ 1440×900 và 375×812.
 
   Và URL có `donOkr` — kể cả `donOkr=goc` — không bao giờ bị chuyển: `donOkr=goc&xemOkr=hop-tuan` vẫn mở Họp tuần
   của bộ OneHub với mọi người xem. (cross-layer)
-- AC-3: Given khu Mục tiêu, When nhìn nhóm OKR của thanh bên và bấm «Họp tuần», Then nhóm có mục «Họp tuần» ngay dưới
-  «Bộ OKR». href là `/okr/bo-okr?xemOkr=hop-tuan`, kèm `kyOkr` khi URL đang có, không mang `donOkr`. Bấm thì tới bộ
-  của người xem theo AC-2.
-
-  Trên mọi trang `/okr/bo-okr` có `xemOkr=hop-tuan` (của bất kỳ bộ nào), «Họp tuần» mang `aria-current="page"` và
-  «Bộ OKR» không. Trên các trang `/okr/bo-okr` khác thì ngược lại. Ở 375 mục nằm trong hàng cuộn ngang của thanh bên.
+- AC-3: Given trưởng phòng ban P, chu kỳ đang chạy, When đi theo hai đường vào bộ của mình — (a) thanh bên «Bộ OKR»
+  → lọc «Tôi dẫn» → bấm bộ P → bấm thẻ con «Họp tuần»; (b) «Của tôi» → thẻ «đơn vị bạn dẫn» P → bấm thẻ con «Họp
+  tuần» — Then cả hai tới Họp tuần của bộ P: URL `/okr/bo-okr` mang `donOkr=pb:P`, `xemOkr=hop-tuan` và `kyOkr` của
+  chu kỳ đang xem, tiêu đề là tên P. Thanh bên khu Mục tiêu không có mục «Họp tuần»: nhóm OKR giữ đúng «Bộ OKR», «Lấy ý
+  kiến», và không liên kết nào trên thanh bên mang `xemOkr`.
 - AC-4: Given thẻ Họp tuần của một bộ có KR công bố, When trang tải xong, Then đầu thẻ (trên khối Tóm tắt tuần và
   bảng) có đúng một hàng bốn ô `[data-hang-so-hop]`, theo thứ tự:
   - Đã cập nhật `daCapNhat/tongKr`, mô tả «Tuần dd/mm»;
@@ -114,13 +114,11 @@ Việt, khổ 1440×900 và 375×812.
   - ở 1440 bốn ô một hàng, ở 375 lưới hai cột hai hàng;
   - không nhãn ô nào bị cắt chữ, trang không cuộn ngang;
   - danh sách «Đơn vị có KR» đọc được, liên kết thấy được;
-  - mục «Họp tuần» của thanh bên thấy được ở cả hai khổ;
   - không chữ hay viền nào chìm vào nền.
 - AC-10: Given vòng này đã làm, When chạy eval máy của mọi hồ sơ đã ký có thước hay bài kiểm chạm `hop-tuan`,
   `/okr/bo-okr` hay thanh bên khu Mục tiêu, Then mọi mục không xấu hơn trên nền `origin/onehub` (mục đỏ sẵn trên nền in
-  «đỏ sẵn trên nền»). Mọi thay đổi trong thước của các hồ sơ ấy chỉ thuộc hai lớp:
-  - đổi kỳ vọng «`xemOkr` trần mở bộ OneHub» thành «mở bộ của người xem» (VK3 E10);
-  - thêm mục «Họp tuần» vào danh sách liên kết thanh bên (VK3 E11).
+  «đỏ sẵn trên nền»). Mọi thay đổi trong thước của các hồ sơ ấy chỉ thuộc một lớp: đổi kỳ vọng «`xemOkr` trần mở bộ
+  OneHub» thành «mở bộ của người xem» (VK3 E10).
 
   Mỗi hồ sơ bị đổi thước có một dòng sổ `fix` mang `decided_by` chủ kho và cặp đo hai chiều.
 
@@ -131,7 +129,7 @@ Quét theo trục (skill `morphological-scan`, preset entity-feature; bản qué
 - Trục A — người xem: trưởng phòng ban · trưởng bộ phận · dẫn bộ phận và phòng ban · dẫn hai phòng ban · quản trị
   không dẫn · quản trị kiêm trưởng · thành viên có phòng ban chính · thành viên không phòng ban · trưởng đã rời
   [thước CE: `okr-access.service.ts:80-104`] → AC-2.
-- Trục B — đường vào: thanh bên · thẻ con · liên kết trần `bo-okr` · liên kết cũ `theo-don-vi` · có/không `kyOkr` ·
+- Trục B — đường vào: thanh bên «Bộ OKR» › Tôi dẫn › bộ › thẻ con · Của tôi › đơn vị bạn dẫn › thẻ con · thẻ con · liên kết trần `bo-okr` · liên kết cũ `theo-don-vi` · có/không `kyOkr` ·
   `donOkr=goc` tường minh · tin sáng `donOkr=pb:` → AC-1, AC-2, AC-3. Thẻ con và tin sáng luôn mang `donOkr` nên
   thuộc luật «không chuyển» của AC-2.
 - Trục C — trạng thái bộ: chu kỳ chưa chạy · chưa KR công bố (có / không đơn vị trực thuộc có KR) · có KR chưa cập
@@ -150,9 +148,10 @@ rời».
 ## Đường đo
 
 - «Trưởng phòng mở Họp tuần từ thanh bên, từ thẻ con hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn» · số từ:
-  URL cuối và tiêu đề đọc trong phiên đo — ba liên kết gõ thẳng, bấm «Họp tuần» trên thanh bên (điều hướng phía
-  khách), và bấm thẻ con Họp tuần từ thẻ OKR của bộ mình; bài kiểm API của `boHopTuan` cho năm vai · bảo đảm bởi:
-  AC-1, AC-2, AC-3. Thẻ con giữ bộ đang xem (VK3 AC-5): «từ thẻ con» là từ thẻ con của bộ mình — Hỏi-2.
+  URL cuối và tiêu đề đọc trong phiên đo — ba liên kết gõ thẳng, đường thanh bên «Bộ OKR» › Tôi dẫn › bộ mình › thẻ
+  con Họp tuần, và đường Của tôi › đơn vị bạn dẫn › thẻ con Họp tuần; bài kiểm API của `boHopTuan` cho năm vai · bảo
+  đảm bởi: AC-1, AC-2, AC-3. «Từ thanh bên» đọc là qua mục «Bộ OKR» của thanh bên, như Tability đi qua plan — chủ kho
+  chốt 24/10 bỏ mục «Họp tuần» riêng. Thẻ con giữ bộ đang xem (VK3 AC-5) — Hỏi-2.
 - «Không còn màn "0/0 KR" với câu "chưa có lần cập nhật" khi bộ của người xem đã có cập nhật» · số từ: chữ của màn
   trong phiên đo (bàn đo đếm chuỗi «0/0» và câu `tuanDau` trên bộ có cập nhật, phải 0), và bài kiểm `tuanDau` · bảo
   đảm bởi: AC-1, AC-6, AC-7.
@@ -161,6 +160,7 @@ rời».
 
 - Các kiểu xem khác (OKR, Việc, Sơ đồ, Chấm điểm) không kèm `donOkr` — vẫn mở bộ OneHub như VK3.
 - Nhớ bộ người xem chọn lần trước.
+- Mục «Họp tuần» riêng trên thanh bên (chủ kho bỏ 24/10 — đường vào như Tability, qua bộ OKR).
 - Ô số bấm được để lọc bảng, số tuần trước hay xu hướng trong ô.
 - Ghi chú mới nhất trên dòng, cập nhật từ dòng, ‹ › theo thứ tự bảng (HT2); chế độ trình chiếu (H9).
 - Đổi tin sáng hay thông báo trong app (`apps/agent`).

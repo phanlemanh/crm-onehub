@@ -9,7 +9,7 @@ reaction: nac-2 (gui-anh-va-link-ban-mau)
 options:
 divergence: skipped — khuôn có sẵn: hàng số theo nếp «Ô số tổng quan» (StatGroup như Toàn cảnh), màn rỗng theo Empty và Item của docs/design.md; chỗ chọn còn mở đã nằm ở Hỏi-1…4
 ds_skill: web-design-guidelines
-states: [ST-htmb-hom-nay, ST-htmb-co-du-lieu, ST-htmb-chua-kr-onehub, ST-htmb-chua-kr-phong-ban, ST-htmb-chu-ky-chua-chay, ST-htmb-chua-ai-cap-nhat, ST-htmb-dang-tai]
+states: [ST-htmb-bo-okr-toi-dan, ST-htmb-hom-nay, ST-htmb-co-du-lieu, ST-htmb-chua-kr-onehub, ST-htmb-chua-kr-phong-ban, ST-htmb-chu-ky-chua-chay, ST-htmb-chua-ai-cap-nhat, ST-htmb-dang-tai]
 breakpoints: [mobile-375, desktop-1280]
 themes: [light, dark]
 patched: 2
@@ -27,6 +27,10 @@ Trạng thái «Hôm nay» là màn production 22/10, để so trước và sau.
 
 | state | breakpoint | theme | file |
 |---|---|---|---|
+| ST-htmb-bo-okr-toi-dan | desktop-1280 | light | evidence/design-pass/bo-okr-toi-dan--desktop-1280--light.png |
+| ST-htmb-bo-okr-toi-dan | desktop-1280 | dark | evidence/design-pass/bo-okr-toi-dan--desktop-1280--dark.png |
+| ST-htmb-bo-okr-toi-dan | mobile-375 | light | evidence/design-pass/bo-okr-toi-dan--mobile-375--light.png |
+| ST-htmb-bo-okr-toi-dan | mobile-375 | dark | evidence/design-pass/bo-okr-toi-dan--mobile-375--dark.png |
 | ST-htmb-hom-nay | desktop-1280 | light | evidence/design-pass/hom-nay--desktop-1280--light.png |
 | ST-htmb-hom-nay | desktop-1280 | dark | evidence/design-pass/hom-nay--desktop-1280--dark.png |
 | ST-htmb-hom-nay | mobile-375 | light | evidence/design-pass/hom-nay--mobile-375--light.png |
@@ -58,8 +62,14 @@ Trạng thái «Hôm nay» là màn production 22/10, để so trước và sau.
 
 ## Cảnh ngữ-cảnh
 
-- Khung tĩnh của khu Mục tiêu bọc mọi ảnh (thanh bên với mục «Họp tuần» đang mở, dòng vị trí, hàng thẻ con) — nấc
+- Khung tĩnh của khu Mục tiêu bọc mọi ảnh (thanh bên với «Bộ OKR» đang mở, dòng vị trí, hàng thẻ con) — nấc
   `static-frame`, không cần cảnh riêng. Chuyển hướng ở máy chủ không thấy được trên ảnh: E1 đo nó ở S4.
+
+## Vòng phản ứng
+
+- Vòng 1 (24/10): chủ kho «Bỏ mục Họp tuần trên thanh bên. Dùng đường dẫn vào bộ okr tương tự như Tability.» — bỏ mục
+  khỏi thanh bên của bản mẫu, thêm trạng thái `ST-htmb-bo-okr-toi-dan` (Bộ OKR › Tôi dẫn), chụp lại 32 ảnh; hợp đồng,
+  evals, thiết kế, hình `duong-vao` và sổ quyết định sửa theo.
 
 ## Findings
 

@@ -26,9 +26,10 @@ evals:
       (d) textContent trang không chứa «0/0» và không chứa câu tuanDau của tệp chữ. Phần B — hai vai khác, mỗi vai một
       phiên dev:session, URL /okr/bo-okr?xemOkr=hop-tuan: thành viên M của ca (không dẫn, phòng ban chính Q) → Location
       mang donOkr=pb:Q; quản trị A của ca (không dẫn) → Location mang donOkr=goc. Phần C — bấm trong trình duyệt, đăng
-      nhập P: từ /okr bấm «Họp tuần» trên thanh bên (điều hướng phía khách) → URL cuối mang donOkr=pb:P và
-      xemOkr=hop-tuan, tiêu đề là tên P, MutationObserver không bắt tiêu đề OneHub; từ thẻ OKR của bộ P bấm thẻ con
-      Họp tuần → URL mang donOkr=pb:P. In «DUNG <dong>» từng dòng; đếm dòng đã chạy = 7. KET LUAN: mã 0 mọi dòng
+      nhập P (điều hướng phía khách): từ /okr bấm «Bộ OKR» trên thanh bên → bấm lọc «Tôi dẫn» → bấm hàng bộ P → bấm thẻ
+      con «Họp tuần»; và từ /okr bấm thẻ «đơn vị bạn dẫn» P → bấm thẻ con «Họp tuần». Mỗi đường: URL cuối mang
+      donOkr=pb:P, xemOkr=hop-tuan và kyOkr của chu kỳ đang xem, tiêu đề là tên P, MutationObserver không bắt tiêu đề
+      OneHub. In «DUNG <dong>» từng dòng; đếm dòng đã chạy = 7. KET LUAN: mã 0 mọi dòng
       DUNG, 1 có SAI, 2 không đo được.
       CHIEU DO (--chieu-do, bản sao): page.tsx bỏ nhánh chuyển hướng → «SAI AC-1: <dong> khong chuyen (200)», mã 1;
       --chieu-do giu-ky: nhánh chuyển bỏ kyOkr → «SAI AC-1: ky-okr mat kyOkr», mã 1.
@@ -85,19 +86,21 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/okr/tab-okr.ts"
       - "apps/app/app/(app)/[slug]/okr/thanh-ben-muc-tieu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/phan-don-vi-dan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/the-con.tsx"
       - "apps/app/test/hop-tuan-mo-dung-bo.dom.tsx"
     expected: |
-      Ca «htmb-thanh-ben»: dựng ThanhBenMucTieu thật trong DOM (AreaSidebar của packages/ui, router giả theo đường và
-      tham số). Nhóm OKR có các mục theo thứ tự «Bộ OKR», «Họp tuần», «Lấy ý kiến». Ma trận viết trước 5 URL đang mở = 5
-      ô, mỗi ô đọc href của «Họp tuần» và mục mang aria-current="page":
-      /ws/okr → href /ws/okr/bo-okr?xemOkr=hop-tuan, aria-current ở «Của tôi»;
-      /ws/okr/bo-okr?kyOkr=q4 → href thêm kyOkr=q4, aria-current ở «Bộ OKR»;
-      /ws/okr/bo-okr?donOkr=pb:X&xemOkr=hop-tuan → aria-current ở «Họp tuần», «Bộ OKR» không;
-      /ws/okr/bo-okr?donOkr=goc&xemOkr=hop-tuan → aria-current ở «Họp tuần»;
-      /ws/okr/bo-okr?donOkr=pb:X&xemOkr=viec → aria-current ở «Bộ OKR».
-      Mỗi ô: đúng một phần tử aria-current trong thanh bên; href «Họp tuần» không bao giờ chứa donOkr. Đếm ô = 5.
-      Khổ hẹp (useAreaSidebarOrientation giả "horizontal"): mục «Họp tuần» có trong hàng ngang.
-      CHIEU DO: bản sao mucDangMo chỉ xét đường → đỏ «htmb-thanh-ben: hai muc aria-current (Bo OKR, Hop tuan)».
+      Ca «htmb-thanh-ben»: dựng ThanhBenMucTieu thật trong DOM (AreaSidebar của packages/ui, router giả) ở ba URL viết
+      trước — /ws/okr, /ws/okr/bo-okr?kyOkr=q4, /ws/okr/bo-okr?donOkr=pb:X&xemOkr=hop-tuan — mỗi URL: nhóm OKR có đúng
+      các mục theo thứ tự «Bộ OKR», «Lấy ý kiến»; không phần tử nào trong thanh bên có chữ «Họp tuần»; không href nào
+      của thanh bên chứa xemOkr. Đếm ô = 3. Đối chứng dương: ở URL thứ ba «Bộ OKR» mang aria-current="page".
+      Ca «htmb-duong-vao»: hai đường viết trước = 2 ô, dựng thành phần thật với dữ liệu parse bằng khuôn thật — (a) hàng
+      bộ P của DanhSachBo (lọc toi-dan, kyOkr=q4) → href mang donOkr=pb:P và kyOkr=q4; dựng TheConBo của bộ đó → href thẻ
+      «Họp tuần» mang donOkr=pb:P, xemOkr=hop-tuan, kyOkr=q4; (b) thẻ P của «đơn vị bạn dẫn» ở Của tôi → href mang
+      donOkr=pb:P; nối với TheConBo như (a).
+      CHIEU DO: bản sao thêm lại mục hop-tuan vào NHOM_THANH_BEN → đỏ «htmb-thanh-ben: thanh ben co muc Hop tuan»;
+      bản sao TheConBo bỏ donOkr khỏi href thẻ con → đỏ «htmb-duong-vao: the con mat donOkr».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
@@ -232,7 +235,7 @@ evals:
     steps:
       - "Phiên đo riêng qua mot-luot.sh (tien-de.mjs dựng api và app của CÂY ĐANG XÉT trên cổng tự do, kho crm_<cây>_do); không dùng cổng 3000/3001"
       - "Bàn đo gieo bộ OKR mẫu (okr:mau) có ca Họp tuần; đăng nhập trưởng phòng ban P (có dữ liệu)"
-      - "Khổ 1440 rồi 375, sáng rồi tối: bấm «Họp tuần» trên thanh bên (ở 375 trong hàng cuộn ngang), chờ [data-hang-so-hop], chụp htmb-co-du-lieu-<kho>-<sang|toi>.png; mở Họp tuần của bộ phòng ban chưa có KR trong ca, chờ danh sách hoặc liên kết, chụp htmb-chua-kr-<kho>-<sang|toi>.png; với chu kỳ con của ca (OneHub không KR, các đơn vị có KR) mở Họp tuần donOkr=goc, chờ [data-don-vi-co-kr], chụp htmb-ds-don-vi-<kho>-<sang|toi>.png vào evidence/"
+      - "Khổ 1440 rồi 375, sáng rồi tối: bấm «Bộ OKR» trên thanh bên (ở 375 trong hàng cuộn ngang) → «Tôi dẫn» → bộ P → thẻ con «Họp tuần», chờ [data-hang-so-hop], chụp htmb-co-du-lieu-<kho>-<sang|toi>.png; mở Họp tuần của bộ phòng ban chưa có KR trong ca, chờ danh sách hoặc liên kết, chụp htmb-chua-kr-<kho>-<sang|toi>.png; với chu kỳ con của ca (OneHub không KR, các đơn vị có KR) mở Họp tuần donOkr=goc, chờ [data-don-vi-co-kr], chụp htmb-ds-don-vi-<kho>-<sang|toi>.png vào evidence/"
       - "Mỗi khổ đo: scrollWidth của tài liệu ≤ bề rộng khung nhìn (đối chứng: chèn khối 4000px phải làm tràn); số cột của lưới [data-hang-so-hop] (1440: 4 ô cùng hàng theo offsetTop; 375: 2 hàng 2 ô); mỗi nhãn ô scrollWidth ≤ clientWidth + 1; danh sách đơn vị có ≥ 2 mục Item và mỗi tên, mỗi dòng «n KR · đã cập nhật m» scrollWidth ≤ clientWidth + 1"
       - "Đọc dòng KET LUAN cuối: mã 0 = mọi dòng DUNG; mã 1 = có dòng SAI; mã 2 = không đo được"
       - "Mở mười hai ảnh và đối chiếu bằng mắt với Expected"
@@ -241,14 +244,13 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
       - "apps/app/app/(app)/[slug]/okr/don-vi-co-kr.tsx"
-      - "apps/app/app/(app)/[slug]/okr/thanh-ben-muc-tieu.tsx"
       - "_acceptance/hop-tuan-mo-dung-bo/rang/man.mjs"
     expected: |
       Mười hai ảnh. Ảnh có dữ liệu: đầu thẻ Họp tuần là hàng bốn ô — 1440 một hàng, 375 lưới hai cột hai hàng — nhãn đọc trọn,
       số không bị cắt; dưới là khối tóm tắt (nếu có) rồi bảng. Ảnh chưa có KR: câu lý do nêu tên bộ và chu kỳ, danh sách
       liên kết «Xem mọi bộ OKR» thấy được, không hàng số. Ảnh danh sách đơn vị (màn production 22/10): câu «OneHub chưa
-      có KR công bố…», danh sách từ hai mục, mỗi mục tên và «n KR · đã cập nhật m» đọc trọn, liên kết thấy được. Mục «Họp tuần» thấy ở thanh bên (1440) hay
-      hàng cuộn ngang (375) và đang mở. Sáng và tối: không chữ, viền, ô số nào chìm vào nền. Bàn đo in DUNG cho không
+      có KR công bố…», danh sách từ hai mục, mỗi mục tên và «n KR · đã cập nhật m» đọc trọn, liên kết thấy được. Thanh bên (1440)
+      hay hàng cuộn ngang (375) có «Bộ OKR» đang mở và không có mục «Họp tuần». Sáng và tối: không chữ, viền, ô số nào chìm vào nền. Bàn đo in DUNG cho không
       tràn ngang, đối chứng tràn, lưới ô, nhãn không cắt, danh sách đơn vị — ở cả hai khổ. Thiếu ảnh nào → không đạt.
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot, observed]
 
@@ -267,9 +269,9 @@ evals:
       okr/bo-okr, okr/theo-don-vi hoặc thanh-ben-muc-tieu, hoặc bị vòng sửa. In «quet lop: <n> ho so, <k> eval».
       (1) Chạy các eval thuộc lớp trên cây; mục đỏ chạy lại trên worktree origin/onehub: «SAI AC-10» khi nền 0 mà cây
       khác 0, «DO SAN TREN NEN <slug>#<E>» khi nền đỏ. (2) Mỗi tệp thước hay bài kiểm của hồ sơ đã ký mà vòng sửa: sổ của
-      hồ sơ có dòng fix decided_by chủ kho nhắc tệp (thiếu → «SAI AC-10: THIEU SO <tep>»); khối diff chỉ được thuộc hai
-      lớp khai trước — (a) trang-bo-okr E10: chuỗi kỳ vọng tiêu đề/đường của ca xem-khong-don; (b) trang-bo-okr E11:
-      thêm thanh-ben-muc-tieu vào vai liên kết «hop-tuan» — khác → «SAI AC-10: DOI LOGIC <tep>:<dong>».
+      hồ sơ có dòng fix decided_by chủ kho nhắc tệp (thiếu → «SAI AC-10: THIEU SO <tep>»); khối diff chỉ được thuộc một
+      lớp khai trước — trang-bo-okr E10: chuỗi kỳ vọng tiêu đề/đường của ca xem-khong-don — khác → «SAI AC-10: DOI LOGIC
+      <tep>:<dong>».
       CHIEU DO (bản sao HEAD): thêm `export const doiLogicThu = 1 + 1;` cuối một tệp thước đã ký trong lớp → «SAI AC-10:
       DOI LOGIC <tep>:<dong>», mã 1; xoá dòng sổ fix → «SAI AC-10: THIEU SO <tep>».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

@@ -51,6 +51,7 @@ import { StatCard } from "@crm/ui/components/stat-card";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
+import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import {
@@ -76,6 +77,7 @@ import {
 const DUONG = "/proto/hop-tuan-mo-dung-bo";
 
 const ST = {
+	boOkrToiDan: "ST-htmb-bo-okr-toi-dan",
 	homNay: "ST-htmb-hom-nay",
 	coDuLieu: "ST-htmb-co-du-lieu",
 	chuaKrGoc: "ST-htmb-chua-kr-onehub",
@@ -89,7 +91,7 @@ const den = (state: string) => `${DUONG}?state=${state}`;
 
 const THE_CON = ["OKR", "Họp tuần", "Việc", "Sơ đồ góp vào"] as const;
 
-function ThanhBen({ hopTuanMo }: { hopTuanMo: boolean }) {
+function ThanhBen() {
 	return (
 		<AreaSidebar
 			header={
@@ -106,11 +108,8 @@ function ThanhBen({ hopTuanMo }: { hopTuanMo: boolean }) {
 				</AreaSidebarItem>
 			</AreaSidebarGroup>
 			<AreaSidebarGroup label="OKR">
-				<AreaSidebarItem active={!hopTuanMo} asChild>
-					<Link href={den(ST.chuaKrGoc)}>Bộ OKR</Link>
-				</AreaSidebarItem>
-				<AreaSidebarItem active={hopTuanMo} asChild data-muc-moi="hop-tuan">
-					<Link href={den(ST.coDuLieu)}>Họp tuần</Link>
+				<AreaSidebarItem active asChild>
+					<Link href={den(ST.boOkrToiDan)}>Bộ OKR</Link>
 				</AreaSidebarItem>
 				<AreaSidebarItem asChild>
 					<Link href={den(ST.coDuLieu)}>Lấy ý kiến</Link>
@@ -369,6 +368,61 @@ function ManRong({
 	);
 }
 
+const BO_TOI_DAN = [
+	{
+		ten: "Kinh doanh vùng 1",
+		truong: "Anh",
+		mucTieu: 3,
+		tienDo: "47%",
+		thap: 2,
+	},
+];
+
+function DanhSachToiDan() {
+	return (
+		<div className="flex flex-col gap-4" data-trang-thai={ST.boOkrToiDan}>
+			<Breadcrumb>
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbPage>Bộ OKR</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
+			<ToggleGroup size="sm" type="single" value="toi-dan" variant="outline">
+				<ToggleGroupItem value="tat-ca">
+					Tất cả <span className="text-muted-foreground tabular-nums">12</span>
+				</ToggleGroupItem>
+				<ToggleGroupItem value="toi-dan">
+					Tôi dẫn <span className="text-muted-foreground tabular-nums">1</span>
+				</ToggleGroupItem>
+				<ToggleGroupItem value="theo-doi">
+					Đang theo dõi{" "}
+					<span className="text-muted-foreground tabular-nums">3</span>
+				</ToggleGroupItem>
+			</ToggleGroup>
+			<ItemGroup className="gap-2">
+				{BO_TOI_DAN.map((bo) => (
+					<Item asChild key={bo.ten} variant="outline">
+						<Link href={den(ST.coDuLieu)}>
+							<ItemContent>
+								<ItemTitle translate="no">{bo.ten}</ItemTitle>
+								<ItemDescription>
+									Trưởng: {bo.truong} · {bo.mucTieu} mục tiêu · tiến độ{" "}
+									{bo.tienDo} · {bo.thap} KR tự tin thấp
+								</ItemDescription>
+							</ItemContent>
+						</Link>
+					</Item>
+				))}
+			</ItemGroup>
+			<p className="text-muted-foreground text-xs">
+				Bấm bộ để mở trang của bộ, rồi bấm thẻ con «Họp tuần» — như mở plan của
+				đội trên Tability. Bản mẫu nhảy thẳng tới thẻ Họp tuần.
+			</p>
+		</div>
+	);
+}
+
 function XemMoiBo() {
 	return (
 		<Button asChild size="sm" variant="outline">
@@ -379,16 +433,17 @@ function XemMoiBo() {
 
 type Canh = {
 	bo: string;
-	hopTuanMo: boolean;
+	danhSach?: boolean;
 	than: ReactNode;
 };
 
 function canhCua(state: string): Canh {
 	switch (state) {
+		case ST.boOkrToiDan:
+			return { bo: "Mục tiêu", danhSach: true, than: <DanhSachToiDan /> };
 		case ST.homNay:
 			return {
 				bo: GOC,
-				hopTuanMo: false,
 				than: (
 					<div className="flex flex-col gap-3" data-trang-thai={state}>
 						<p className="text-muted-foreground text-xs">
@@ -405,7 +460,6 @@ function canhCua(state: string): Canh {
 		case ST.chuaKrGoc:
 			return {
 				bo: GOC,
-				hopTuanMo: true,
 				than: (
 					<ManRong
 						moTa="Các đơn vị dưới đây có KR trong chu kỳ — chọn một đơn vị để họp."
@@ -423,7 +477,6 @@ function canhCua(state: string): Canh {
 		case ST.chuaKrPhongBan:
 			return {
 				bo: PHONG_BAN_RONG,
-				hopTuanMo: true,
 				than: (
 					<ManRong
 						moTa="Khi phòng công bố mục tiêu và KR, Họp tuần có số từ tuần đó."
@@ -442,7 +495,6 @@ function canhCua(state: string): Canh {
 		case ST.chuKyChuaChay:
 			return {
 				bo: PHONG_BAN,
-				hopTuanMo: true,
 				than: (
 					<ManRong
 						state={state}
@@ -458,7 +510,6 @@ function canhCua(state: string): Canh {
 		case ST.chuaAiCapNhat:
 			return {
 				bo: PHONG_BAN,
-				hopTuanMo: true,
 				than: (
 					<div className="flex flex-col gap-4">
 						<HangSo daCapNhat={`0/${DANG_BAN.length + CON_LAI.length}`} />
@@ -473,7 +524,6 @@ function canhCua(state: string): Canh {
 		case ST.dangTai:
 			return {
 				bo: PHONG_BAN,
-				hopTuanMo: true,
 				than: (
 					<div className="flex flex-col gap-4" data-trang-thai={state}>
 						<HangSoCho />
@@ -485,7 +535,6 @@ function canhCua(state: string): Canh {
 		default:
 			return {
 				bo: PHONG_BAN,
-				hopTuanMo: true,
 				than: (
 					<div className="flex flex-col gap-4">
 						<HangSo daCapNhat={`3/${DANG_BAN.length + CON_LAI.length}`} />
@@ -501,33 +550,37 @@ export function HopTuanMoDungBoMau({ state }: { state: string }) {
 	return (
 		<LocaleProvider locale="vi">
 			<div className="flex min-h-svh flex-col md:flex-row">
-				<ThanhBen hopTuanMo={canh.hopTuanMo} />
+				<ThanhBen />
 				<PageShell>
 					<PageShellHeader>
 						<PageShellHeading>
 							<PageShellTitle translate="no">{canh.bo}</PageShellTitle>
 							<PageShellDescription>
-								Mục tiêu và KR của đơn vị trong chu kỳ đang xem.
+								{canh.danhSach
+									? "Mỗi đơn vị một bộ OKR trong chu kỳ."
+									: "Mục tiêu và KR của đơn vị trong chu kỳ đang xem."}
 							</PageShellDescription>
 						</PageShellHeading>
 					</PageShellHeader>
 					<PageShellContent className="flex flex-col gap-6">
-						<div className="flex flex-col gap-3 pb-1">
-							<Breadcrumb>
-								<BreadcrumbList>
-									<BreadcrumbItem>
-										<BreadcrumbLink asChild>
-											<Link href={den(ST.chuaKrGoc)}>Bộ OKR</Link>
-										</BreadcrumbLink>
-									</BreadcrumbItem>
-									<BreadcrumbSeparator />
-									<BreadcrumbItem>
-										<BreadcrumbPage translate="no">{canh.bo}</BreadcrumbPage>
-									</BreadcrumbItem>
-								</BreadcrumbList>
-							</Breadcrumb>
-							<TheCon />
-						</div>
+						{canh.danhSach ? null : (
+							<div className="flex flex-col gap-3 pb-1">
+								<Breadcrumb>
+									<BreadcrumbList>
+										<BreadcrumbItem>
+											<BreadcrumbLink asChild>
+												<Link href={den(ST.boOkrToiDan)}>Bộ OKR</Link>
+											</BreadcrumbLink>
+										</BreadcrumbItem>
+										<BreadcrumbSeparator />
+										<BreadcrumbItem>
+											<BreadcrumbPage translate="no">{canh.bo}</BreadcrumbPage>
+										</BreadcrumbItem>
+									</BreadcrumbList>
+								</Breadcrumb>
+								<TheCon />
+							</div>
+						)}
 						{canh.than}
 					</PageShellContent>
 				</PageShell>

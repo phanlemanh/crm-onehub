@@ -3,7 +3,7 @@
 | Điểm | Đếm | Hình |
 | --- | --- | --- |
 | Hỏi-1 — chọn bộ khi Họp tuần không kèm đơn vị | 4 nhánh rẽ (dẫn · quản trị · phòng ban chính · còn lại) | `chon-bo.html` |
-| Hỏi-2 — đổi AC-7 của VK3 (liên kết trần) | 4 bước nối tiếp (thanh bên/liên kết cũ → next.config → page.tsx chuyển → thẻ Họp tuần) | `duong-vao.html` |
+| Hỏi-2 — đổi AC-7 của VK3 (liên kết trần) | 4 bước nối tiếp (liên kết gõ tay/liên kết cũ → next.config → page.tsx chuyển → thẻ Họp tuần) | `duong-vao.html` |
 | Hỏi-3 — hàng số Họp tuần cạnh VK8 AC-3 | dưới ngưỡng: 1 bước, không rẽ | — |
 | Hỏi-4 — bỏ design-pass | dưới ngưỡng: 1 bước, không rẽ | — |
 | Màn rỗng ba lý do (thiết kế mục 4) | 3 nhánh rẽ | `ly-do-rong.html` |
@@ -22,10 +22,10 @@
 ### duong-vao.html
 
 - Loại hình: luồng (flowchart ngang).
-- Ba điểm vào: «Thanh bên · Họp tuần», «/okr/theo-don-vi?xemOkr=hop-tuan (cũ)», «/okr/bo-okr?xemOkr=hop-tuan (trần)».
+- Ba điểm vào: «Liên kết gõ tay» (chủ kho bỏ mục thanh bên 24/10), «/okr/theo-don-vi?xemOkr=hop-tuan (cũ)», «/okr/bo-okr?xemOkr=hop-tuan (trần)».
 - Chuỗi: next.config (theo-don-vi → bo-okr, giữ truy vấn) → page.tsx máy chủ: không donOkr + xemOkr=hop-tuan →
   redirect thêm donOkr → thẻ Họp tuần của bộ người xem.
-- Nhánh song song không đổi: «Thẻ con / tin sáng (có donOkr)» → thẳng thẻ Họp tuần của bộ ấy.
+- Nhánh song song không đổi: «Bộ OKR › Tôi dẫn › thẻ con», «Của tôi › đơn vị bạn dẫn», tin sáng (có donOkr) → thẳng thẻ Họp tuần của bộ ấy.
 - Ghi chú đỏ: «VK3 AC-7 cũ: trần → OneHub» bị thay.
 - AC: AC-1, AC-3, AC-10.
 
