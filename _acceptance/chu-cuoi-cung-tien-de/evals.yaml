@@ -37,7 +37,7 @@ evals:
     criterion: AC-5
     executor: script
     cmd: config:executors.script.ccc_pham_vi
-    expected: "exit 0; git diff 058bb75f...HEAD ngoai _acceptance/** va tep T1 chi gom apps/api/test/workspace-thanh-vien.spec.ts; danh sach mau co apps/api/src/workspace/workspace.service.ts thi ham kiem goi ten dung tep do"
+    expected: "exit 0; git diff của cặp neo cố định PR #89 (gộp 46a52ade5b9fb48f823288f8063ec13141935d48): 5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b...2aff077d0cb4966a90d014a9a70c91a45d5c8f6a, không theo HEAD (sha neo không có → exit 2 'KHONG DO DUOC'), ngoai _acceptance/** va tep T1 chi gom apps/api/test/workspace-thanh-vien.spec.ts; danh sach mau co apps/api/src/workspace/workspace.service.ts thi ham kiem goi ten dung tep do"
     paths: ["apps/**", "packages/**", "_acceptance/chu-cuoi-cung-tien-de/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

@@ -9,7 +9,18 @@
 			"ly_do": "rev-list ghép --first-parent --ancestry-path ra rỗng; neo cặp gộp PR #365",
 			"can_cu": "e7afcb8b782566381cb119e514415c5bea12047b",
 			"sua": "rang/ranh-gioi.mjs chonNeo: GOP=e7afcb8b7, tu=merge-base(GOP^1,GOP^2), toi=GOP^2; expected E4",
-			"dot_bien_de_xuat": "--them apps/app/lib/x.ts → mã 1 ngoai-ranh-gioi; GOP sai → mã 2"
+			"tep": [
+				"_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs"
+			],
+			"dot_bien": {
+				"ten": "them-tep-ngoai-ranh-gioi",
+				"ban_va": "dot-bien/ban-gieo-gop-y-sau-nop-E4.patch",
+				"thong_diep": "ngoai-ranh-gioi:apps/app/lib/x.ts"
+			},
+			"dot_bien_neo": {
+				"ten": "GOP-sai",
+				"ban_va": "dot-bien/ban-gieo-gop-y-sau-nop-E4-neo.patch"
+			}
 		},
 		{
 			"ho_so": "bang-thanh-vien-giu-hang",
@@ -81,7 +92,18 @@
 			"ly_do": "merge-base trượt 0 điều ở HEAD=onehub; neo PR #178",
 			"can_cu": "8176bb2ef4086be290bbe8ed8df75ce9b845b6ad",
 			"sua": "rang/tai-lieu.mjs merge-base → 13477d5f8f8b75555120f438a5095e8f2940935c; tapTepRe diff tới ac6a3ab36239260dac1773e33c86e5d3843e32b4",
-			"dot_bien_de_xuat": "bo-outputSchema; bo-tep-re"
+			"tep": [
+				"_acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"
+			],
+			"dot_bien": {
+				"ten": "bo-outputSchema",
+				"ban_va": "dot-bien/bo-dung-khong-ket-E9.patch",
+				"thong_diep": "HEAD outputSchema: khong dat"
+			},
+			"dot_bien_neo": {
+				"ten": "NEO_GOC-sai",
+				"ban_va": "dot-bien/bo-dung-khong-ket-E9-neo.patch"
+			}
 		},
 		{
 			"ho_so": "bo-xuong-kara",
@@ -117,7 +139,18 @@
 			"ly_do": "merge-base(onehub,HEAD)=HEAD nên diff rỗng; neo cặp gộp PR #340",
 			"can_cu": "2d7c489816ae6452b4f73322b4db1401902bb20c",
 			"sua": "rang/pham-vi.mjs coSo=a9e8bc75a04f04a9a250eb2ff7fc4fadbe0f4747, TOI=16e80f31d62a56195253f1566b38284f8e0b4e66 thay HEAD",
-			"dot_bien_de_xuat": "đối chứng tasks.ts/tien to gieo có sẵn; TOI sai → mã 2"
+			"tep": [
+				"_acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs"
+			],
+			"dot_bien": {
+				"ten": "diff-cham-tasks.ts",
+				"ban_va": "dot-bien/ca-chap-chon-con-lai-E6.patch",
+				"thong_diep": "ngoai ranh gioi: apps/agent/agent/lib/tasks.ts"
+			},
+			"dot_bien_neo": {
+				"ten": "TOI-sai",
+				"ban_va": "dot-bien/ca-chap-chon-con-lai-E6-neo.patch"
+			}
 		},
 		{
 			"ho_so": "cai-dat-chung-chi-quan-tri",
@@ -206,7 +239,18 @@
 			"ly_do": "diff 058bb75f...HEAD trôi; neo PR #89",
 			"can_cu": "46a52ade5",
 			"sua": "rang/chu-la.mjs PHAM_VI tu=5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b toi=2aff077d0cb4966a90d014a9a70c91a45d5c8f6a; dòng 363, 369; expected E5 (KHÔNG sửa contract)",
-			"dot_bien_de_xuat": "PV-tu-goc-cu → 6 tệp ngoài phạm vi, exit 1"
+			"tep": [
+				"_acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs"
+			],
+			"dot_bien": {
+				"ten": "PV-tu-goc-cu",
+				"ban_va": "dot-bien/chu-cuoi-cung-tien-de-E5.patch",
+				"thong_diep": "RANG DO: diff cham tep ngoai pham vi"
+			},
+			"dot_bien_neo": {
+				"ten": "toi-sai",
+				"ban_va": "dot-bien/chu-cuoi-cung-tien-de-E5-neo.patch"
+			}
 		},
 		{
 			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
@@ -271,7 +315,18 @@
 			"ly_do": "diff merge-base rỗng ở HEAD=onehub; neo PR #311",
 			"can_cu": "45d4fde524b049b17b6887292b641585a914b754",
 			"sua": "rang/san-thiet-ke.mjs tepTrongDiff: diff 591bc8fb63a6505a888f80ccde43fc498e4eed2a..a33a0d62424150945bf2dc482d050dfbaaeccb6e",
-			"dot_bien_de_xuat": "--tu-thu gia-xam-tren-mau có sẵn"
+			"tep": [
+				"_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs"
+			],
+			"dot_bien": {
+				"ten": "rang-mu-p0",
+				"ban_va": "dot-bien/danh-sach-keo-chung-E13.patch",
+				"thong_diep": "tu-thu: BO LOT tep gia"
+			},
+			"dot_bien_neo": {
+				"ten": "TOI-sai",
+				"ban_va": "dot-bien/danh-sach-keo-chung-E13-neo.patch"
+			}
 		},
 		{
 			"ho_so": "to-chuc-danh-sach-chi-tiet",
@@ -280,7 +335,18 @@
 			"ly_do": "diff merge-base rỗng; neo PR #128",
 			"can_cu": "472e888085bd07c2ef47f02ecd946e7693785027",
 			"sua": "rang/san-thiet-ke.mjs moc=36f6bdb8e61cbaf23254a7fd92c34a01fe097e53, TOI=a7808bfbefc77a9bbe07468cc5b8e3b8081e7792; bỏ diff cây làm việc/untracked",
-			"dot_bien_de_xuat": "className-tren-Button trên chi-tiet-goc.tsx → mã 1"
+			"tep": [
+				"_acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
+			],
+			"dot_bien": {
+				"ten": "className-tren-Button",
+				"ban_va": "dot-bien/to-chuc-danh-sach-chi-tiet-E21.patch",
+				"thong_diep": "className tren Button"
+			},
+			"dot_bien_neo": {
+				"ten": "TOI-sai",
+				"ban_va": "dot-bien/to-chuc-danh-sach-chi-tiet-E21-neo.patch"
+			}
 		},
 		{
 			"ho_so": "toan-canh-okr",
@@ -417,7 +483,19 @@
 			"xu_ly": "neo-co-dinh",
 			"ly_do": "rang/pham-vi.mjs lấy diff merge-base với origin/onehub; ở nhánh chính diff rỗng nên mã 2. Neo cặp gộp PR #324.",
 			"can_cu": "0b62cebb90f12b700681cafae45f35a66816667f",
-			"sua": "rang/pham-vi.mjs: tu=0422d7976508e31d81923db5f8609fe5464d695d, toi=1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed thay merge-base…HEAD"
+			"sua": "rang/pham-vi.mjs: tu=0422d7976508e31d81923db5f8609fe5464d695d, toi=1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed thay merge-base…HEAD",
+			"tep": [
+				"_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs"
+			],
+			"dot_bien": {
+				"ten": "diff-cham-tep-la",
+				"ban_va": "dot-bien/zalo-gui-hong-ghi-ly-do-E7.patch",
+				"thong_diep": "ngoai ranh gioi: apps/app/lib/x.ts"
+			},
+			"dot_bien_neo": {
+				"ten": "TOI-sai",
+				"ban_va": "dot-bien/zalo-gui-hong-ghi-ly-do-E7-neo.patch"
+			}
 		},
 		{
 			"ho_so": "danh-sach-keo-chung",

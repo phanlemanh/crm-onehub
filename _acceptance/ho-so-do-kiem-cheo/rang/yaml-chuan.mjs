@@ -14,13 +14,14 @@ export function banGhiKit(text) {
 	);
 }
 
-export function soiHoSo(slug, textMoi, textCu) {
+export function soiHoSo(slug, textMoi, textCu, coDongRieng = new Set()) {
 	const loi = [];
 	const h = yamlHong(textMoi);
 	if (h) loi.push(`YAML_HONG ${slug}:${h.dong}:${h.cot} — ${h.loi}`);
 	const cu = banGhiKit(textCu);
 	const moi = banGhiKit(textMoi);
 	for (const id of new Set([...cu.keys(), ...moi.keys()])) {
+		if (coDongRieng.has(id) && cu.has(id) && moi.has(id)) continue;
 		const a = cu.get(id);
 		const b = moi.get(id);
 		if (!a || !b) {
@@ -43,9 +44,9 @@ function tuKiem(slug, textMoi, textCu) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-	const slugs = docDanhSach()
-		.dong.filter((d) => d.xu_ly === "sua-cu-phap")
-		.map((d) => d.ho_so);
+	const ds = docDanhSach();
+	const slugs = ds.dong.filter((d) => d.xu_ly === "sua-cu-phap").map((d) => d.ho_so);
+	const dongRieng = (slug) => new Set(ds.dong.filter((d) => d.ho_so === slug && d.xu_ly !== "sua-cu-phap").map((d) => d.eval));
 	if (!slugs.length) hong(2, "MA 2: khong dong sua-cu-phap nao");
 	const loiTong = [];
 	let tuKiemXong = false;
@@ -53,7 +54,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 		const moi = docTai(null, `_acceptance/${slug}/${EVAL_TEP}`);
 		const cu = docTai(MOC_NEN, `_acceptance/${slug}/${EVAL_TEP}`);
 		if (moi === null || cu === null) hong(2, `MA 2: khong doc duoc ${slug}/${EVAL_TEP} o HEAD hoac moc nen`);
-		const { loi, soEval } = soiHoSo(slug, moi, cu);
+		const rieng = dongRieng(slug);
+		const { loi, soEval } = soiHoSo(slug, moi, cu, rieng);
+		if (rieng.size) console.log(`${slug}: ${[...rieng].join(", ")} có dòng sửa riêng — thay đổi của chúng do phép khai đủ canh`);
 		if (!tuKiemXong) {
 			const sai = tuKiem(slug, moi, cu);
 			if (sai.length) hong(1, `HONG tu kiem: ${sai.join("; ")}`);

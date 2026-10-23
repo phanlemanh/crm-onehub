@@ -54,7 +54,7 @@ evals:
     executor: script
     cmd: config:executors.script.zghl_pham_vi
     paths: [_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs]
-    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải nằm trong danh sách Ranh giới ở ## Notes của contract.md (script đọc danh sách từ chính contract.md, không chép tay); _acceptance/config.yaml chỉ có dòng thêm; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng cùng lệnh qua chính hàm kiểm: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/nhac-ke-hoach.ts → «ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts»."
+    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi của cặp neo cố định PR #324 (gộp 0b62cebb90f12b700681cafae45f35a66816667f): từ 0422d7976508e31d81923db5f8609fe5464d695d tới 1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed, không theo HEAD; sha neo không có (git cat-file -e) → mã 2 «KHONG DO DUOC»; mọi tên phải nằm trong danh sách Ranh giới ở ## Notes của contract.md (script đọc danh sách từ chính contract.md, không chép tay); _acceptance/config.yaml chỉ có dòng thêm; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng cùng lệnh qua chính hàm kiểm: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/nhac-ke-hoach.ts → «ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8

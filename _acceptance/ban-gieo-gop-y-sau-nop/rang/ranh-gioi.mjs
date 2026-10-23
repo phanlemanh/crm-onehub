@@ -7,7 +7,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "..", "..", "..");
 const SLUG = "ban-gieo-gop-y-sau-nop";
 const MA_HANG = "K3b";
-const NHANH_CHINH = "origin/onehub";
+const GOP = "e7afcb8b782566381cb119e514415c5bea12047b";
 const NGUON_HANG = [
 	"docs/plan/dot-sau-14-10/hang-viec.json",
 	".acceptance-runs/dieu-phoi-sau-14-10/hang-viec.json",
@@ -86,50 +86,14 @@ function docDot() {
 
 function chonNeo() {
 	try {
-		git("rev-parse", "--verify", NHANH_CHINH);
+		git("cat-file", "-e", `${GOP}^{commit}`);
 	} catch {
-		boCuoc(`khong co ref ${NHANH_CHINH} — chay git fetch origin onehub`);
+		boCuoc(`khong co commit gop ${GOP} — chay git fetch origin onehub`);
 	}
-	const them = git(
-		"log",
-		"--diff-filter=A",
-		"--format=%H",
-		"--",
-		`_acceptance/${SLUG}/contract.md`,
-	)
-		.trim()
-		.split("\n")
-		.filter(Boolean);
-	const dau = them.at(-1);
-	if (!dau)
-		boCuoc(`khong tim thay commit dau them _acceptance/${SLUG}/contract.md`);
-	let daLen = true;
-	try {
-		git("merge-base", "--is-ancestor", dau, NHANH_CHINH);
-	} catch {
-		daLen = false;
-	}
-	if (!daLen)
-		return {
-			kieu: "nhanh-mo",
-			tu: git("merge-base", "HEAD", NHANH_CHINH).trim(),
-			toi: "HEAD",
-		};
-	const chuoi = git(
-		"rev-list",
-		"--first-parent",
-		"--ancestry-path",
-		`${dau}..${NHANH_CHINH}`,
-	)
-		.trim()
-		.split("\n")
-		.filter(Boolean);
-	const m = chuoi.at(-1);
-	if (!m) boCuoc("khong tim thay merge dua ho so len onehub");
-	const toi = git("rev-parse", `${m}^2`).trim();
+	const toi = git("rev-parse", `${GOP}^2`).trim();
 	return {
-		kieu: `merge ${m.slice(0, 9)}`,
-		tu: git("merge-base", `${m}^1`, toi).trim(),
+		kieu: `gop ${GOP.slice(0, 9)}`,
+		tu: git("merge-base", `${GOP}^1`, toi).trim(),
 		toi,
 	};
 }
@@ -156,7 +120,7 @@ const tep = git("diff", "--name-only", neo.tu, neo.toi)
 	.filter(Boolean);
 if (lay("--them")) tep.push(lay("--them"));
 console.log(
-	`neo ${neo.kieu}: ${neo.tu.slice(0, 9)}..${neo.toi === "HEAD" ? "HEAD" : neo.toi.slice(0, 9)} · ${tep.length} tep · ranh gioi ${dot ? dot.nguon : "chep"}`,
+	`neo ${neo.kieu}: ${neo.tu.slice(0, 9)}..${neo.toi.slice(0, 9)} · ${tep.length} tep · ranh gioi ${dot ? dot.nguon : "chep"}`,
 );
 
 const loi = [];
