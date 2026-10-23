@@ -105,10 +105,10 @@ const CAY_DO = {
 		chiBuoc: "2",
 		cam: (s) =>
 			s.replace(
-				"<DetailSheetProperty label={nhan} wide>",
-				"<DetailSheetProperty label={nhan}>",
+				/<DetailSheetProperty label=\{nhan\} wide( stackBelowMd)?>/,
+				(_, sau) => `<DetailSheetProperty label={nhan}${sau ?? ""}>`,
 			),
-		dauVet: "<DetailSheetProperty label={nhan}>",
+		dauVet: "<DetailSheetProperty label={nhan} stackBelowMd>",
 		ghim: /ctc-man: o tep hep/,
 	},
 	5: {

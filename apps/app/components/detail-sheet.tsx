@@ -392,18 +392,40 @@ export function DetailSheetPending({
 export function DetailSheetProperty({
 	label,
 	wide = false,
+	stackBelowMd = false,
 	children,
 }: {
 	label: ReactNode;
 	wide?: boolean;
+	stackBelowMd?: boolean;
 	children: ReactNode;
 }) {
 	return (
-		<div className={cn(PROPERTY_ROW, "items-start", wide && "col-span-full")}>
-			<span className={cn(PROPERTY_LABEL, PROPERTY_CELL, "text-xs/5")}>
+		<div
+			className={cn(
+				PROPERTY_ROW,
+				"items-start",
+				wide && "col-span-full",
+				stackBelowMd && "max-md:grid-cols-1 max-md:gap-0",
+			)}
+		>
+			<span
+				className={cn(
+					PROPERTY_LABEL,
+					PROPERTY_CELL,
+					"text-xs/5",
+					stackBelowMd && "max-md:whitespace-normal",
+				)}
+			>
 				{label}
 			</span>
-			<div className={cn(PROPERTY_CELL, "min-w-0 px-2 text-xs/5")}>
+			<div
+				className={cn(
+					PROPERTY_CELL,
+					"min-w-0 px-2 text-xs/5",
+					stackBelowMd && "max-md:px-0",
+				)}
+			>
 				{children}
 			</div>
 		</div>
