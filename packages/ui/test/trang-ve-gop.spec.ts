@@ -101,7 +101,7 @@ function commit(k: Kho, ...tep: [string, string][]): string {
 	return git(k.goc, "rev-parse", "HEAD");
 }
 
-function dungKho(driver = true): Kho {
+function dungKho(): Kho {
 	const d = realpathSync(mkdtempSync(join(tmpdir(), "trang-ve-")));
 	tam.push(d);
 	const goc = join(d, "kho");
@@ -120,7 +120,6 @@ function dungKho(driver = true): Kho {
 	git(goc, "add", "-A");
 	git(goc, "commit", "-q", "-m", "goc");
 	git(goc, "config", "core.hooksPath", ".githooks");
-	if (driver) git(goc, "config", "merge.trang-ve.driver", "true");
 	return k;
 }
 
@@ -156,7 +155,7 @@ function xungDot(k: Kho): string[] {
 }
 
 describe("khai", () => {
-	test("khai: trang mang merge=trang-ve dung bang tep bo ve dung lai", () => {
+	test("khai: trang mang merge=union dung bang tep bo ve dung lai", () => {
 		const d = realpathSync(mkdtempSync(join(tmpdir(), "trang-ve-khai-")));
 		tam.push(d);
 		const cay = join(d, "cay");
@@ -165,7 +164,7 @@ describe("khai", () => {
 			copyFileSync(join(NGUON, ".gitattributes"), join(cay, ".gitattributes"));
 			const trang = readFileSync(join(cay, ".gitattributes"), "utf8")
 				.split("\n")
-				.map((l) => /^(\S+)\s.*\bmerge=trang-ve\b/.exec(l)?.[1])
+				.map((l) => /^(\S+)\s.*\bmerge=union\b/.exec(l)?.[1])
 				.filter(Boolean) as string[];
 			for (const t of trang) rmSync(join(cay, t));
 			const r = spawnSync("node", ["scripts/product-map.mjs", "--root", "."], {
@@ -180,44 +179,30 @@ describe("khai", () => {
 			const doi = git(cay, "diff", "--name-only", "HEAD")
 				.split("\n")
 				.filter(Boolean)
-				.filter((t) => !trang.includes(t));
+				.filter((t) => !trang.includes(t) && t !== ".gitattributes");
 			expect(doi).toEqual([]);
 		} finally {
 			git(NGUON, "worktree", "remove", "--force", cay);
 		}
 	}, 300_000);
 
-	test("khai: prepare ghi driver vao cau hinh chung", () => {
-		const k = dungKho(false);
-		git(k.goc, "config", "extensions.worktreeConfig", "true");
-		const wt = join(k.d, "wt");
-		git(k.goc, "worktree", "add", "-q", "--detach", wt, "HEAD");
-		const prepare = JSON.parse(
-			readFileSync(join(NGUON, "package.json"), "utf8"),
-		).scripts.prepare;
-		const r = spawnSync("sh", ["-c", prepare], {
-			cwd: k.goc,
-			env: envSach(),
-			encoding: "utf8",
-		});
-		expect(r.status).toBe(0);
-		expect(git(wt, "config", "merge.trang-ve.driver")).toBe("true");
+	test("khai: khong can cau hinh git", () => {
+		const k = dungKho();
+		expect(chay(k.goc, ["config", "--get-regexp", "^merge\\."]).ra).toBe("");
+		git(k.goc, "config", "core.hooksPath", "/dev/null");
+		haiNhanh(k);
+		expect(gop(k).ma).toBe(0);
+		expect(xungDot(k)).toEqual([]);
 	});
 
-	test("khai: driver giu ban minh", () => {
-		for (const driver of [true, false]) {
-			const k = dungKho(driver);
-			git(k.goc, "config", "core.hooksPath", "/dev/null");
-			haiNhanh(k);
-			const r = gop(k);
-			if (driver) {
-				expect(r.ma).toBe(0);
-				expect(trangHead(k)).toBe("a\nb");
-			} else {
-				expect(r.ma).toBe(1);
-				expect(xungDot(k)).toContain("PRODUCT-MAP.md");
-			}
-		}
+	test("khai: khong thuoc tinh thi xung dot", () => {
+		const k = dungKho();
+		git(k.goc, "rm", "-q", ".gitattributes");
+		git(k.goc, "commit", "-q", "-m", "bo thuoc tinh");
+		git(k.goc, "config", "core.hooksPath", "/dev/null");
+		haiNhanh(k);
+		expect(gop(k).ma).toBe(1);
+		expect(xungDot(k)).toContain("PRODUCT-MAP.md");
 	});
 });
 

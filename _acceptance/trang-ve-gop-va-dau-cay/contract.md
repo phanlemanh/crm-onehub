@@ -24,12 +24,12 @@ Thuật ngữ «cây mã», «cùng cây mã», «dấu», «phiếu», «nguồ
 ## Criteria
 
 - AC-1: Given cây sau vòng này, When đọc `.gitattributes` và chạy `node scripts/product-map.mjs --root .` trong một bản
-  sao sạch đã xoá mọi tệp mang `merge=trang-ve`, Then tập tệp mang `merge=trang-ve` đúng bằng tập tệp bộ vẽ dựng lại, và
-  bộ vẽ không đổi tệp đang theo dõi nào khác; `bun install` (script `prepare`) ghi `merge.trang-ve.driver` vào cấu hình
-  git chung, nên một worktree khác của cùng kho đọc được nó mà không chạy gì thêm.
+  sao sạch đã xoá mọi tệp mang `merge=union`, Then tập tệp mang `merge=union` đúng bằng tập tệp bộ vẽ dựng lại, và bộ
+  vẽ không đổi tệp đang theo dõi nào khác; `union` là cách gộp dựng sẵn của git, nên một kho mới không khai cấu hình gì
+  vẫn gộp hai trang không xung đột.
 - AC-2: Given ca thật 23/10 13:19 — đầu #550 `bcf7ecdf9` gộp `onehub` `084ec4d12` — với bộ công cụ của vòng này
-  thêm vào cả hai phía, When gộp không có driver, Then xung đột đúng ở `LO-TRINH.html` và `PRODUCT-MAP.md`; When gộp có
-  driver và hook của cây, Then `git merge` thoát 0 không xung đột, đỉnh có đúng hai cha là hai đầu đem gộp cùng lời,
+  thêm vào cả hai phía, When gộp không có thuộc tính gộp của vòng, Then xung đột đúng ở `LO-TRINH.html` và
+  `PRODUCT-MAP.md`; When gộp có thuộc tính và hook của cây (không khai cấu hình git nào), Then `git merge` thoát 0 không xung đột, đỉnh có đúng hai cha là hai đầu đem gộp cùng lời,
   tác giả git đã tạo, `node scripts/product-map.mjs --root . --check` trên một bản sạch của đỉnh thoát 0, và cây làm
   việc cùng chỉ mục sạch.
 - AC-3: Given lần gộp dừng vì xung đột ở một tệp không phải trang máy vẽ, hoặc `git merge --no-commit`, When người giải
@@ -71,7 +71,7 @@ gian». Ánh xạ trục → AC:
 
 - B · kiểu gộp: tự động (AC-2) | dừng vì xung đột tệp khác (AC-3) | `--no-commit` (AC-3) | tua nhanh (AC-5) | rebase,
   cherry-pick (Out of scope).
-- B · cấu hình: có driver và hook (AC-2) | không driver (AC-2 đối chứng) | hook tắt (AC-4) | bộ vẽ hỏng (AC-5) | hook
+- B · cấu hình: có thuộc tính gộp và hook (AC-2) | không thuộc tính (AC-2 đối chứng) | hook tắt (AC-4) | bộ vẽ hỏng (AC-5) | hook
   của checkout chính cũ hơn cây (AC-5: hook mới chạy bản của cây).
 - B · cây làm việc: sạch (AC-2) | có hồ sơ chưa commit (AC-5).
 - E · nguồn: dấu hook (AC-7) | sổ chạy S4 (AC-8) | sổ chạy ghim lại (AC-8) | CI (AC-9) | không có (AC-10).
@@ -91,13 +91,13 @@ cho một PR hai lần đẩy) nằm trong design doc để so sau khi gộp, kh
 
 - Xung đột ở `_acceptance/config.yaml` (tệp gộp tay nhiều nhất) và `apps/api/src/generated/server.ts` — không phải đầu ra
   của bộ vẽ bản đồ.
-- GitHub vẫn báo PR «có xung đột» theo phép gộp của máy chủ (không chạy driver tự khai) cho tới khi một lần gộp trên máy
+- GitHub vẫn báo PR «có xung đột» theo phép gộp của máy chủ cho tới khi một lần gộp trên máy
   được đẩy lên; phương án 2 của hạt giống kit (không commit trang ở PR, job sau gộp tự vẽ) và mọi đổi ở kit.
-- `rebase`, `cherry-pick`: driver giữ bản phía «ours», không vẽ lại; `--check` ở CI bắt.
+- `rebase`, `cherry-pick`: trang gộp theo `union` mà không vẽ lại; `--check` ở CI bắt.
 - Nguồn CI hiểu theo cách nào (merge-ref hay chỉ khi cây merge-ref trùng cây đỉnh) — câu hỏi ở Cổng Phạm vi.
 - Sửa `.githooks/pre-push`, `.githooks/gate-shape.json`, `--check` hay luật phân loại T1.
 
 ## Notes
 
-- Hồ sơ đã ký có `paths` chạm `scripts/pre-push-t1.mjs`, `scripts/verify-gate-shape.mjs`, `package.json` hay
+- Hồ sơ đã ký có `paths` chạm `scripts/pre-push-t1.mjs`, `scripts/verify-gate-shape.mjs` hay
   `packages/ui/test/**` hoá cũ và được ghim lại trong cùng PR bằng một làn.

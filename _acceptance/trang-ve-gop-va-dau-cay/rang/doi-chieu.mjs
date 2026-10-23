@@ -12,9 +12,9 @@ const BIEN = { [SPEC_B]: "TRANG_VE_NGUON", [SPEC_E]: "DA_CHUNG_NGUON" };
 const DOT_BIEN = [
 	{
 		ca: "(a) bo LO-TRINH khoi .gitattributes",
-		sua: [[".gitattributes", "LO-TRINH.html merge=trang-ve\n", ""]],
+		sua: [[".gitattributes", "LO-TRINH.html merge=union\n", ""]],
 		spec: SPEC_B,
-		test: "khai: trang mang merge=trang-ve dung bang tep bo ve dung lai",
+		test: "khai: trang mang merge=union dung bang tep bo ve dung lai",
 	},
 	{
 		ca: "(b) post-merge khong viet lai dinh",

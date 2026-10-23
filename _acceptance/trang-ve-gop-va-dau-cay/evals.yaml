@@ -14,17 +14,15 @@ evals:
       - "packages/ui/test/trang-ve-gop.spec.ts"
     expected: |
       bun test -t khai, ba ca xanh:
-        (a) «khai: trang mang merge=trang-ve dung bang tep bo ve dung lai» — worktree tach roi tam cua HEAD, xoa moi tep
-            mang merge=trang-ve trong .gitattributes, chay that node scripts/product-map.mjs --root .; tap tep duoc dung
-            lai == tap mang merge=trang-ve (toEqual ["LO-TRINH.html","PRODUCT-MAP.md"]); git status --porcelain sau do
-            rong (khong tep dang theo doi nao khac doi).
-        (b) «khai: prepare ghi driver vao cau hinh chung» — kho tam co extensions.worktreeConfig va mot worktree lien ket;
-            chay dung chuoi scripts.prepare cua package.json o kho chinh; `git config merge.trang-ve.driver` doc tu
-            worktree lien ket in «true».
-        (c) «khai: driver giu ban minh» — kho tam, hai nhanh cung sua PRODUCT-MAP.md, hook tat: co driver -> git merge
-            thoat 0, PRODUCT-MAP.md = ban cua nhanh dang dung; khong driver -> thoat 1, PRODUCT-MAP.md trong
+        (a) «khai: trang mang merge=union dung bang tep bo ve dung lai» — worktree tach roi tam cua HEAD, xoa moi tep
+            mang merge=union trong .gitattributes, chay that node scripts/product-map.mjs --root .; tap tep duoc dung
+            lai == tap mang merge=union (toEqual ["LO-TRINH.html","PRODUCT-MAP.md"]); git diff --name-only HEAD sau do
+            chi gom hai trang (khong tep dang theo doi nao khac doi).
+        (b) «khai: khong can cau hinh git» — kho tam khong khai merge.* nao (git config --get-regexp '^merge\.' rong),
+            hai nhanh cung sua PRODUCT-MAP.md, hook tat -> git merge thoat 0, khong tep nao trong diff-filter=U.
+        (c) «khai: khong thuoc tinh thi xung dot» — cung ca (b) nhung xoa .gitattributes -> thoat 1, PRODUCT-MAP.md trong
             `git diff --name-only --diff-filter=U`.
-      Chieu do: E12 (a) bo LO-TRINH.html khoi .gitattributes -> ca (a) do voi thong diep gom «LO-TRINH.html».
+      Chieu do: E12 (a) bo dong LO-TRINH.html khoi .gitattributes -> ca (a) do.
 
   - id: E2
     criterion: AC-2
@@ -41,9 +39,10 @@ evals:
       node rang/ca-550.mjs, ma 0. Dung hai worktree tach roi tam: A = bcf7ecdf9 + mot commit chep bo cong cu cua vong
       (.gitattributes, .githooks/post-merge, .githooks/pre-commit, scripts/trang-ve-gop.mjs tu HEAD), B = 084ec4d12 + cung
       commit do. Ba lan gop B vao A, moi lan tu A sach:
-        (1) doi-chung: khong driver, hook tat -> merge thoat 1, tep xung dot dung ["LO-TRINH.html","PRODUCT-MAP.md"];
+        (1) doi-chung: hai commit goc (khong .gitattributes cua vong), hook tat -> merge thoat 1, tep xung dot dung
+            ["LO-TRINH.html","PRODUCT-MAP.md"];
             in «dat doi-chung».
-        (2) co-hook: driver + core.hooksPath=.githooks cua cay A -> merge thoat 0; HEAD co dung hai cha [A, B]; loi commit,
+        (2) co-hook: core.hooksPath=.githooks cua cay A, khong -c merge.* nao -> merge thoat 0; HEAD co dung hai cha [A, B]; loi commit,
             tac gia, nguoi commit bang cua commit gop git tao truoc khi hook viet lai (doc tu reflog HEAD@{1});
             `git status --porcelain` rong; trong mot worktree sach cua HEAD, product-map.mjs --check thoat 0;
             in «dat co-hook».
@@ -63,7 +62,7 @@ evals:
       - "packages/ui/test/trang-ve-gop.spec.ts"
     expected: |
       bun test -t "gop-tu-dong|gop-xung-dot". Kho tam voi bo ve gia (scripts/product-map.mjs gia: ghi PRODUCT-MAP.md va
-      LO-TRINH.html = danh sach thu muc _acceptance/* da sap), hook that cua vong, driver bat. Ma tran viet truoc 6 ca:
+      LO-TRINH.html = danh sach thu muc _acceptance/* da sap), hook that cua vong, .gitattributes that. Ma tran viet truoc 6 ca:
         gop-tu-dong (a) hai nhanh them hai ho so khac nhau -> merge 0; HEAD:PRODUCT-MAP.md == "a\nb\n"; HEAD^1, HEAD^2 la
             hai dau; status rong.
         gop-tu-dong (b) loi commit gop tu viet (-m "gop thu") va tac gia GIT_AUTHOR_NAME=x giu nguyen sau khi viet lai.

@@ -29,15 +29,16 @@ Ngày 23/10/2026. Hai hạng B và E của gói «cắt 80%» (đoạn ký → g
 
 ### Khai báo
 
-- `.gitattributes` ở gốc: `PRODUCT-MAP.md merge=trang-ve` và `LO-TRINH.html merge=trang-ve`. Đây là nơi duy nhất liệt
-  kê trang máy vẽ; hook đọc danh sách từ đây.
-- Driver `trang-ve` = `true` (giữ nguyên bản của nhánh đang đứng, thoát 0). Git không có driver `ours` dựng sẵn, nên
-  phải khai trong cấu hình git. Khai ở `prepare` của `package.json` (chạy ở mọi `bun install`, cùng chỗ đã đặt
-  `core.hooksPath`), bằng `git config` không cờ: với `extensions.worktreeConfig` bật, lệnh ấy ghi vào
-  `.git/config` chung nên mọi worktree của máy có ngay. CI cũng chạy `bun install`, nên cũng có — CI không gộp, nhưng
-  không chỗ nào thiếu cấu hình mà vẫn chạy được.
-- Máy chưa chạy `bun install` sau khi PR này vào: git không biết driver `trang-ve` thì dùng gộp văn bản như cũ — xung
-  đột như hôm nay, không hỏng gì thêm.
+- `.gitattributes` ở gốc: `PRODUCT-MAP.md merge=union` và `LO-TRINH.html merge=union`. Đây là nơi duy nhất liệt kê
+  trang máy vẽ; hook đọc danh sách từ đây.
+- `union` là cách gộp dựng sẵn của git: gộp hai bản theo dòng, không bao giờ để dấu xung đột. Nội dung gộp ra là trộn
+  của hai bản — vô nghĩa với một trang sinh — nhưng hook vẽ lại ngay sau đó (dưới), nên commit gộp mang trang đúng.
+  Không cần khai gì trong cấu hình git: mọi clone, mọi worktree, mọi máy có ngay từ lúc `.gitattributes` vào cây.
+- Bản đầu của vòng dùng một driver tự khai `merge=trang-ve` (= `true`, giữ bản mình) cài qua `prepare`. Đổi sang
+  `union` ngày 23/10 sau khi đo: công cụ đồng bộ của app (`sync_with_base_branch`) từ chối gộp («filtered_path») đúng
+  ở hai tệp mang driver tự khai, vì git của app không chạy driver kho khai. Hai cách cho cùng kết quả cuối (hook vẽ lại),
+  cùng lưới (gộp đi đường không qua hook thì trang trộn hoặc trang cũ, `--check` đều đỏ); `union` bỏ được bước cài và có
+  cơ hội giữ lối đồng bộ của app — đo ở lần `onehub` đi tiếp kế.
 
 ### Vẽ lại — đo trước khi chọn
 
@@ -75,8 +76,8 @@ hai hook mới mở đầu bằng cùng khối «có `.githooks/<hook>` của c�
 ### Răng giữ nguyên
 
 `acceptance.yml` bước «Product map» (`node scripts/product-map.mjs --root . --check`) không đổi một byte. Hai chiều của
-một ca: gộp có hook → trang khớp, `--check` 0; cùng ca gộp với hook tắt (`CRM_SKIP_HOOKS=1`) → driver vẫn giữ bản mình,
-trang cũ, `--check` 1 gọi tên trang lệch. Tức là bỏ bước vẽ lại thì CI đỏ đúng chỗ.
+một ca: gộp có hook → trang khớp, `--check` 0; cùng ca gộp với hook tắt (`CRM_SKIP_HOOKS=1`) → trang là bản trộn của
+`union`, `--check` 1 gọi tên trang lệch. Tức là bỏ bước vẽ lại thì CI đỏ đúng chỗ.
 
 ### Phần nào của 53 phút B cắt được
 
@@ -87,11 +88,12 @@ phần của onehub» có sẵn của hook và E lo.
 
 ### Giới hạn đã biết của B
 
-- **GitHub không chạy driver tự khai.** Phép tính «có xung đột không» của máy chủ GitHub bỏ qua `merge=trang-ve`, nên
-  PR vẫn hiện «có xung đột» khi `onehub` đi tiếp tới lúc có một lần gộp trên máy được đẩy lên. Cái được: lần gộp đó tự
+- **GitHub có thể vẫn báo xung đột.** Chưa đo phép tính «có xung đột không» của máy chủ GitHub có theo `merge=union` của
+  `.gitattributes` hay không; nếu không, PR vẫn hiện «có xung đột» khi `onehub` đi tiếp tới lúc có một lần gộp trên máy
+  được đẩy lên. Cái được: lần gộp đó tự
   xong, không còn giải tay, không còn tay sai trang. Bỏ hẳn được bước đẩy lại là phương án 2 của hạt giống (không
   commit trang ở PR, job sau gộp tự vẽ) — đổi luật `--check` của kit, ngoài phạm vi.
-- `rebase` và `cherry-pick` cũng dùng driver: trang lấy bản của phía «ours» lúc đó, không vẽ lại. Kho dùng gộp, không
+- `rebase` và `cherry-pick` cũng gộp trang theo `union` mà không vẽ lại. Kho dùng gộp, không
   rebase; trang lệch thì `--check` đỏ ở CI.
 
 ## E — hook trước-đẩy nhận cây mã đã chứng
@@ -176,7 +178,7 @@ Trục:
 
 - B · kiểu gộp: tự động | dừng vì xung đột tệp khác | `--no-commit` | tua nhanh | rebase, cherry-pick
   [thước CE: các đường git tạo commit nhiều cha — `merge`, `commit` kết thúc gộp; `pull` đi qua `merge`].
-- B · cấu hình: có driver và hook | không driver | hook tắt (`CRM_SKIP_HOOKS`) | bộ vẽ hỏng | hook của checkout chính
+- B · cấu hình: có thuộc tính gộp và hook | không thuộc tính | hook tắt (`CRM_SKIP_HOOKS`) | bộ vẽ hỏng | hook của checkout chính
   cũ hơn cây [thước CE: lỗi cũ `core.hooksPath` trỏ checkout chính, hồ sơ `dieu-phoi-truoc-mo-dot`].
 - B · cây làm việc: sạch | có hồ sơ chưa commit [thước CE: đo 23/10, thư mục hồ sơ rỗng làm `--check` đỏ].
 - E · nguồn: dấu hook | sổ chạy S4 | sổ chạy ghim lại | CI | không có [thước CE: đề bài mục E].

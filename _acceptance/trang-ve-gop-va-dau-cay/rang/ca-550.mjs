@@ -82,7 +82,7 @@ try {
 
 	const b = themCongCu(ONEHUB);
 	const a = themCongCu(DAU_PR);
-	const coHook = ["-c", "merge.trang-ve.driver=true", "-c", `core.hooksPath=${join(cay, ".githooks")}`];
+	const coHook = ["-c", `core.hooksPath=${join(cay, ".githooks")}`];
 
 	const r2 = git(cay, [...coHook, "merge", "--no-edit", b]);
 	const cha = phai(cay, ["rev-list", "--parents", "-n", "1", "HEAD"]).split(" ").slice(1);

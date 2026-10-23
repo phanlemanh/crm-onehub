@@ -6,7 +6,7 @@ import { dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const TRANG_VE = {
-	driver: "trang-ve",
+	driver: "union",
 	boVe: "scripts/product-map.mjs",
 	lenhTay: "node scripts/product-map.mjs --root .",
 	tienTo: "trang-ve:",
