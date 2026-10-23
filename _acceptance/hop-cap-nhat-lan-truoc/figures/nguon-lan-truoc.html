@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nguồn lần trước</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:  #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1100px; display: block; }
+  footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="card">
+  <svg viewBox="0 0 1280 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng dữ liệu trái sang phải. Gửi cập nhật ghi hai nơi trong cùng giao dịch: dòng vết cap-nhat-tuan mang lúc, số, mức tự tin, không có ghi chú; và hàng OkrCheckIn mang số, mức tự tin, ghi chú. Đọc vết qua okr.objective trail vào hàm lanTruocTuVet, ra lúc, số, mức tự tin cho hai dòng đầu của khối. Đọc okr.dienBien, mỗi tuần một điểm mang ghi chú của lần cuối trong tuần, vào hàm ghiChuLanTruoc cùng với lúc từ lanTruocTuVet. Tuần khớp thì khối có dòng ghi chú; lệch tuần hoặc ghi chú rỗng thì khối hai dòng, không dòng ghi chú.">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+      </marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+      </marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+      </marker>
+    </defs>
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <text x="32" y="32" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">CỔNG PHẠM VI · HÌNH 1/1 · D-…-1 · NGUỒN DỮ LIỆU CỦA KHỐI · AC-1 · AC-3</text>
+    <text x="32" y="64" fill="#171717" font-size="24" font-family="'Lora', Georgia, serif">Khối «Lần cập nhật trước» đọc hai nguồn đã có, ghép theo tuần</text>
+    <text x="32" y="88" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Một lần gửi ghi hai nơi. Ngày, số, mức tự tin lấy từ vết; ghi chú lấy từ điểm diễn biến cùng tuần với lúc gửi.</text>
+
+    <rect x="228" y="148" width="216" height="280" rx="8" fill="none" stroke="rgba(23,23,23,0.25)" stroke-width="0.8" stroke-dasharray="4,3"/>
+    <rect x="272" y="140" width="128" height="16" fill="#fafafa"/>
+    <text x="336" y="152" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">CÙNG GIAO DỊCH</text>
+
+    <path d="M192,276 H208 Q216,276 216,268 V220 Q216,212 224,212 H238" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M192,308 H208 Q216,308 216,316 V364 Q216,372 224,372 H238" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <line x1="432" y1="212" x2="486" y2="212" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="432" y1="372" x2="486" y2="372" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="656" y1="212" x2="702" y2="212" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="656" y1="372" x2="702" y2="372" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <line x1="792" y1="252" x2="792" y2="330" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <rect x="800" y="284" width="28" height="12" rx="2" fill="#fafafa"/>
+    <text x="804" y="293" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.06em">LÚC</text>
+
+    <line x1="880" y1="212" x2="958" y2="212" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <line x1="880" y1="356" x2="958" y2="356" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <rect x="884" y="334" width="72" height="12" rx="2" fill="#fafafa"/>
+    <text x="920" y="343" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TUẦN KHỚP</text>
+
+    <path d="M880,388 H904 Q912,388 912,396 V460 Q912,468 920,468 H958" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <rect x="800" y="428" width="104" height="24" rx="2" fill="#fafafa"/>
+    <text x="900" y="437" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">LỆCH TUẦN</text>
+    <text x="900" y="449" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">HAY GHI CHÚ RỖNG</text>
+
+    <rect x="32" y="252" width="160" height="80" rx="6" fill="#fafafa"/>
+    <rect x="32" y="252" width="160" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="40" y="258" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="56" y="267" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">GHI</text>
+    <text x="112" y="296" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gửi cập nhật</text>
+    <text x="112" y="314" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">guiCapNhat</text>
+
+    <rect x="240" y="172" width="192" height="80" rx="6" fill="#fafafa"/>
+    <rect x="240" y="172" width="192" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="248" y="178" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="264" y="187" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">VẾT</text>
+    <text x="336" y="214" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">cap-nhat-tuan</text>
+    <text x="336" y="230" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">lúc · số · mức tự tin</text>
+    <text x="336" y="244" fill="#666666" font-size="9" font-style="italic" font-family="'Geist', sans-serif" text-anchor="middle">không có ghi chú</text>
+
+    <rect x="240" y="332" width="192" height="80" rx="6" fill="#fafafa"/>
+    <rect x="240" y="332" width="192" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="248" y="338" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="264" y="347" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">BẢNG</text>
+    <text x="336" y="376" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">OkrCheckIn</text>
+    <text x="336" y="394" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">số · mức tự tin · ghi chú</text>
+
+    <rect x="488" y="172" width="168" height="80" rx="6" fill="#fafafa"/>
+    <rect x="488" y="172" width="168" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="496" y="178" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="512" y="187" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐỌC</text>
+    <text x="572" y="214" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">okr.objective → trail</text>
+    <text x="572" y="232" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">vết đủ, không cắt</text>
+
+    <rect x="488" y="332" width="168" height="80" rx="6" fill="#fafafa"/>
+    <rect x="488" y="332" width="168" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="496" y="338" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="512" y="347" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐỌC</text>
+    <rect x="532" y="338" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="548" y="347" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-3</text>
+    <text x="572" y="374" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">okr.dienBien</text>
+    <text x="572" y="392" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">mỗi tuần một điểm</text>
+    <text x="572" y="406" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ghi chú lần cuối trong tuần</text>
+
+    <rect x="704" y="172" width="176" height="80" rx="6" fill="#fafafa"/>
+    <rect x="704" y="172" width="176" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="712" y="178" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="728" y="187" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HÀM</text>
+    <text x="792" y="214" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">lanTruocTuVet</text>
+    <text x="792" y="232" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">dòng mới nhất của KR</text>
+
+    <rect x="704" y="332" width="176" height="80" rx="6" fill="#fafafa"/>
+    <rect x="704" y="332" width="176" height="80" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="712" y="338" width="32" height="12" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+    <text x="728" y="347" fill="#006B4F" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HÀM</text>
+    <text x="792" y="376" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">ghiChuLanTruoc</text>
+    <text x="792" y="394" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">điểm cùng tuần VN với lúc</text>
+
+    <rect x="960" y="172" width="288" height="240" rx="6" fill="#fafafa"/>
+    <rect x="960" y="172" width="288" height="240" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.4"/>
+    <rect x="968" y="178" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="984" y="187" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHỐI</text>
+    <rect x="1004" y="178" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="1020" y="187" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1</text>
+    <text x="976" y="216" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Lần cập nhật trước · 15/10, 09:30</text>
+    <circle cx="1024" cy="240" r="3.5" fill="#575757"/>
+    <text x="976" y="244" fill="#575757" font-size="11" font-family="'Geist', sans-serif">45% ·</text>
+    <text x="1032" y="244" fill="#575757" font-size="11" font-family="'Geist', sans-serif">mức tự tin</text>
+    <text x="976" y="268" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">ngày giờ · số · mức tự tin</text>
+    <line x1="976" y1="300" x2="1232" y2="300" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <rect x="976" y="324" width="256" height="64" rx="4" fill="#ffffff" stroke="rgba(0,107,79,0.60)" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="992" y="352" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ghi chú nguyên văn</text>
+    <text x="992" y="372" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">translate="no"</text>
+
+    <rect x="960" y="444" width="288" height="48" rx="6" fill="#fafafa"/>
+    <rect x="960" y="444" width="288" height="48" rx="6" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="976" y="464" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Khối hai dòng</text>
+    <text x="976" y="480" fill="#666666" font-size="9" font-family="'Geist', sans-serif">không dòng ghi chú, không đoán</text>
+
+    <text x="32" y="536" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">Không thêm trường, không thêm thủ tục: thêm cái nào cũng buộc sửa thước của hồ sơ đã ký.</text>
+
+    <line x1="32" y1="564" x2="1248" y2="564" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="32" y="592" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+    <rect x="112" y="582" width="28" height="14" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="148" y="593" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nơi ghi, nơi đọc, hàm</text>
+    <rect x="264" y="582" width="28" height="14" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="300" y="593" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỗ ghép theo tuần</text>
+    <line x1="408" y1="589" x2="440" y2="589" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <text x="452" y="593" fill="#575757" font-size="9" font-family="'Geist', sans-serif">có ghi chú</text>
+    <line x1="524" y1="589" x2="556" y2="589" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <text x="568" y="593" fill="#575757" font-size="9" font-family="'Geist', sans-serif">không ghi chú</text>
+    <text x="1248" y="593" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="end">AC-1, AC-3: tiêu chí trong contract.md</text>
+  </svg>
+  </div>
+
+  <footer>Hình nguon-lan-truoc · điểm quyết định d-…-1 tại Cổng Phạm vi · hồ sơ hop-cap-nhat-lan-truoc · nguồn: figures/index.md đề bài nguon-lan-truoc; docs/superpowers/specs/2026-10-22-hop-cap-nhat-lan-truoc-design.md mục «Dữ liệu: đọc cái đã có»</footer>
+</div>
+</body>
+</html>

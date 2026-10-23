@@ -534,7 +534,11 @@ export function useCrmCache(): CrmCache {
 
 		zalo: (options) =>
 			run(
-				[trpc.zalo.cuaToi.queryKey(), trpc.zalo.xuong.queryKey()],
+				[
+					trpc.zalo.cuaToi.queryKey(),
+					trpc.zalo.xuong.queryKey(),
+					trpc.thongBao.caiDat.queryKey(),
+				],
 				[],
 				options,
 			),

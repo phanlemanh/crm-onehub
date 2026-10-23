@@ -93,6 +93,7 @@
 		"./doc-du-lieu-lo-trinh": "./src/doc-du-lieu-lo-trinh.js",
 		"./tin-hieu": "./src/tin-hieu.ts",
 		"./tin-hieu-cho": "./src/tin-hieu-cho.ts",
+		"./thong-bao-cau": "./src/thong-bao-cau.ts",
 		"./thong-bao": "./src/thong-bao.ts",
 		"./bo-loc-truong": "./src/bo-loc-truong.ts"
 	},

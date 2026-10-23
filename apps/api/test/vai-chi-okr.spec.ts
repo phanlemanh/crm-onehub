@@ -142,6 +142,7 @@ const DAU_VAO_HOP_LE = {
 	"tinHieu.keoVe": {},
 	"thongBao.moMot": { id: "khong-co" },
 	"thongBao.docHet": {},
+	"thongBao.luuCaiDat": { loai: "okr-duoc-giao", dayRa: true },
 	"settings.setAgentModel": { modelId: null },
 	"settings.setResearchKey": { apiKey: "ctx_thu_khong_that_du_dai_1234567890" },
 	"settings.setArchiveRetention": { days: 30 },
@@ -529,6 +530,7 @@ const TU_PHUC_VU = [
 	"tinHieu.xoa",
 	"thongBao.moMot",
 	"thongBao.docHet",
+	"thongBao.luuCaiDat",
 ];
 const KHAI_2XX = [
 	"GET /",
