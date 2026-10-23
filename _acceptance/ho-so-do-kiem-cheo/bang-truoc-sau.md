@@ -361,9 +361,14 @@ tai-lieu khong dat
 ### bo-xuong-kara:E10
 
 - Xử lý: `sua-rang`
-- Lý do: K2 gỡ miễn trừ artifact/task (SONG qua kara/); vân tay confirmation đổi do ai-elements@latest
+- Lý do: Loại (a) cộng (c). (a) vật đổi có chủ đích: K2 (fc691046d) gỡ miễn trừ K1, artifact.tsx và task.tsx nay nằm trong khối SONG của cổng mồ côi qua kara/ — đúng hạn «K2» mà ô hẹn; răng cũ chỉ nhận MIEN TRU nên in «MO COI». (c) lỗi của răng: răng xích thêm so-lech-chuan.mjs của nen-chat-ai-elements, phép này so tệp trong kho với bunx ai-elements@latest tải qua mạng. confirmation.tsx không đổi từ be92eb153 (29/09) — cũng là commit ghi vân tay 5695b450b02078b9 vào sổ (git log -S trên so-lech-chuan.md), và git diff be92eb153..HEAD trên tệp rỗng — nên vân tay đo được dbfa031b680e2d02 lệch vì bản @latest của thượng nguồn đổi, không vì tệp trong kho. Một ô đã ký đỏ theo một gói ngoài trôi là lỗi của răng.
 - Căn cứ: `fc691046d` — fc691046d feat(acceptance): cổng mồ côi đi qua kara/, gỡ miễn trừ K1; tài liệu / mo-coi.mjs coi components/kara/*.tsx là cầu nên artifact.tsx và task.tsx / sống qua KaraArtifact và KaraSteps; MIEN_TRU rỗng. Ba răng của K2: / mo-coi-hai-chieu (E13), ranh-gioi (E13b), tai-lieu (E13c), mỗi răng có / chiều đỏ trên bản sao ở thư mục tạm. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: rang/ai-elements.mjs vế (d) nhận SONG; ghim phiên bản ai-elements thay @latest
+- Căn cứ thêm: `be92eb153` — be92eb153 feat(ui): ProposedChange trên AI Elements Confirmation, cỡ hộp assist / Confirmation kéo bằng CLI trong sân tạm, ghi sổ lệch chuẩn; hàm chuyển / propsThe() của cột góp ý là nguồn props duy nhất cho thẻ. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/nen-chat-ai-elements/so-lech-chuan.md:238` — **Vân tay lệch:** `5695b450b02078b9`
+- Căn cứ thêm: `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs:40` — const LENH_THEM = ["bunx", "--bun", "ai-elements@latest", "add"];
+- Căn cứ thêm: `_acceptance/bo-xuong-kara/rang/ai-elements.mjs:59` — for (const r of ["chu-cung.mjs", "mau-ban-kinh.mjs"]) {
+- Căn cứ thêm: `_acceptance/bo-xuong-kara/rang/ai-elements.mjs:16` — cau: "kara/",
+- Sửa: ai-elements.mjs: bỏ so-lech-chuan.mjs khỏi xích (còn chu-cung.mjs, mau-ban-kinh.mjs); vế (d) nhận artifact.tsx, task.tsx trong khối SONG với cầu kara/ (còn miễn trừ thì vẫn đòi lý do K1, hạn K2); bước (c) chỉ kiểm sổ có mục; expected E10 đổi theo. Không ghim phiên bản ai-elements.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -380,6 +385,29 @@ SAI MO COI: artifact.tsx
 SAI MO COI: task.tsx
 OK  mo-coi ma 0, CHET (0)
 DO: 3 muc sai
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ):
+
+```
+$ node _acceptance/bo-xuong-kara/rang/ai-elements.mjs
+--- exit 0 (ky vong 0)
+OK  co mat: artifact.tsx
+OK  co mat: task.tsx
+OK  vang mat: tool.tsx
+OK  vang mat: code-block.tsx
+OK  khong chu thich: artifact.tsx
+OK  khong lucide: artifact.tsx
+OK  khong chu thich: task.tsx
+OK  khong lucide: task.tsx
+OK  chu-cung.mjs ma 0: Răng xanh.
+OK  mau-ban-kinh.mjs ma 0: XANH: moi lop ban kinh nam trong thang bon gia tri, va moi lop mau goi dung mot ten co trong bang token.
+OK  so lech co muc artifact.tsx
+OK  so lech co muc task.tsx
+OK  song artifact.tsx qua kara/
+OK  song task.tsx qua kara/
+OK  mo-coi ma 0, CHET (0)
+XANH: 15 muc
 ```
 
 Trước (`expected`): "exit 0; rang/ai-elements.mjs (đường suy từ vị trí script): (a) artifact.tsx và task.tsx có trong packages/ui/src/components/ai-elements; tool.tsx và code-block.tsx không có; (b) hai tệp không chứa '//' đầu dòng hay '/*', không import 'lucide-react', và mọi chữ hiển thị tiếng Anh (thuộc tính sr-only, chuỗi giữa thẻ) đi qua useMessages — dò bằng danh sách cho phép đóng như rang-chat của packages/ui; (c) _acceptance/nen-chat-ai-elements/so-lech-chuan.md có một mục tiêu đề nêu artifact.tsx và một mục nêu task.tsx (tách mục theo tiêu đề, không grep cả tệp); (d) chạy node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs: mã 0, dòng MIEN TRU (2) liệt đúng artifact.tsx và task.tsx, mỗi lý do chứa 'K1' và mỗi hạn chứa 'K2'; CHET (0). In từng mục. Chiều đỏ ghim: chạy trên bản sao thư mục ai-elements có thêm một dòng chú thích trong task.tsx phải in 'co chu thich: task.tsx' và mã 1; bản sao mo-coi.mjs bỏ mục miễn trừ task.tsx phải làm bước (d) in 'MO COI: task.tsx' và mã 1."
@@ -591,9 +619,15 @@ phien-do: xong — mã 1
 ### cap-nhat-tuan-okr:E19
 
 - Xử lý: `sua-rang`
-- Lý do: kéo theo E7; chưa từng chạy
-- Căn cứ: `9203b9ca2` — 9203b9ca2 feat(okr): đường cũ cập nhật tuần chuyển về Của tôi (sống lâu dài), tin nhắc và liên kết trỏ /okr / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: cùng E14, chạy lại xem
+- Lý do: Loại (c) — lỗi của chính răng. Ở mốc nền ô E19 chạy lệnh chung cnt_man_chrome không đặt CHI (config.yaml:2847), nên man-cap-nhat.mjs chạy cả sáu khối trong MỘT try. Khối E6/E7 chạy trước, ném ngoại lệ ở man-cap-nhat.mjs:1059 của mốc nền ($eval ô số «[data-kr=…] input» — ô không còn ở /okr/cap-nhat-tuan vì cua-toi-ba-phan AC-2 dời bảng cập nhật vào phần 1 của /okr), try chung bắt ngoại lệ rồi bỏ mọi khối sau: log đầy đủ của lượt nền có 0 ảnh, 5 khẳng định, 4 hỏng, cả bốn là của E6 (dòng dưới). Khối E18/E19 chưa từng chạy, nên đầu ra nền không có dòng lỗi nào của E19. E19 phụ thuộc E7 đúng ở chỗ đó: chung lệnh và chung try, không chung dữ liệu hay bước; thân buocE18E19 (man-cap-nhat.mjs:1514) giữ nguyên từ mốc nền tới HEAD. Chưa chạy lại mốc nền với CHI=E18,E19 (cần cây tạm ở mốc nền và một phiên đo màn) — thay vào đó: log đầy đủ của lượt nền và lượt chạy lại ở 730af844a.
+- Căn cứ: `_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs:2060` — const CAC_BUOC = [
+- Căn cứ thêm: `_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs:2064` — [["E18", "E19"], buocE18E19],
+- Căn cứ thêm: `_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs:2075` — hong.push(`ngoai le ${khoi.join("/")}: ${e.stack ?? e.message}`);
+- Căn cứ thêm: `_acceptance/cap-nhat-tuan-okr/evals.yaml:197` — cmd: PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} CHI=E18,E19 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+- Căn cứ thêm: `_acceptance/config.yaml:2847` — cnt_man_chrome: 'PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"'
+- Căn cứ thêm: `_acceptance/cua-toi-ba-phan/contract.md:31` — - AC-2: Given phần 1 có KR thiếu số, When bấm «Cập nhật N KR», điền số và tự tin rồi gửi, Then bảng cập nhật mở ngay trong phần 1 (đường dẫn vẫn là `/okr`, không chuyển trang), có đủ ô số, tự tin, ghi chú và thanh gửi như bảng cũ; gửi xong phần 1 hiện «đã gửi» và danh sách làm mới; máy chủ có đúng một dòng `okrCheckInSession` mới mang `entry = "cua-toi"`, `submittedAt` khác rỗng và một `okrCheckIn` cho mỗi KR đã gửi; tải trang Của tôi mà không bấm thì không sinh dòng phiên nào. (cross-layer)
+- Căn cứ thêm: `6b2447971` — 6b2447971 fix(ho-so-do-kiem-cheo): sửa thước ba hồ sơ đo màn; Sổ OKR tự chạy hoàn lại vì ba lỗi sản phẩm / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Sửa: man-cap-nhat.mjs: thay một try bao cả lượt bằng bảng CAC_BUOC, mỗi khối một try — khối hỏng ghi «ngoai le <khối>» và khối sau vẫn chạy; evals.yaml E19 cmd đặt CHI=E18,E19 để lượt của E19 chỉ chạy khối E18/E19 (E7 khai not-run ở dòng riêng). Chạy lại ở 730af844a: mã 0, 43 khẳng định, 0 hỏng.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -610,6 +644,34 @@ $ bun scripts/dev-session.ts "rnja1l0p@thu.test"
 $ bun scripts/dev-session.ts "unja1l0p@thu.test"
 $ bun scripts/dev-session.ts "dinja1l0p@thu.test"
 phien-do: xong — mã 1
+```
+
+Dòng lỗi trong log đầy đủ của lượt nền (đuôi ở trên cắt mất):
+
+```
+man-cap-nhat: 0 anh o .acceptance-runs/cap-nhat-tuan-okr/evidence/nja1l0p
+man-cap-nhat: 5 khang dinh, 4 hong
+  HONG: E6 buoc 1: thanh tab co 5 tab
+  HONG: E6 buoc 1: tab Cap nhat tuan aria-current
+  HONG: E6 buoc 1: co 4 dong KR (3 cua muc tieu cn + KR trao doi ot cung chu M)
+  HONG: ngoai le: Error: Error: failed to find element matching selector "[data-kr='cmvja1nom000eg9cfcgeaw8xh'] input"
+    at async buocE6E7 (_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs:1059:12)
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ):
+
+```
+$ PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} CHI=E18,E19 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+--- exit 0 (ky vong 0)
+man-cap-nhat: 6 anh o .acceptance-runs/cap-nhat-tuan-okr/evidence/nke9otg
+  anh E18-step1.png
+  anh E18-step2.png
+  anh E18-step3.png
+  anh E18-step4.png
+  anh E18-step5.png
+  anh E18-step6.png
+man-cap-nhat: 43 khang dinh, 0 hong
+phien-do: xong — mã 0
 ```
 
 Trước (`cmd`): config:executors.script.cnt_man_chrome
@@ -631,9 +693,23 @@ phien-do: xong — mã 1
 ### chan-lai-component-ra-man:E1
 
 - Xử lý: `sua-rang`
-- Lý do: neo mac_dinh 129→132: 4 mục kỹ thuật thêm (#489 #344 #306 #333), 1 mất; nhóm người đọc vẫn 0
-- Căn cứ: `c1d11fd4b` — c1d11fd4b fix(acceptance): chan-lai-component-ra-man mỏ neo giá trị mặc định 128 → 129 (d6bf67768, nhóm kỹ thuật) / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: rang/lai-ra-man.mjs:9 mac_dinh 132; expected E1 E2
+- Lý do: Loại (a) — vật đổi có chủ đích của năm hồ sơ đã ký. Neo mac_dinh 129 đặt ở c1d11fd4b (06/10, 128→129); commit đó chỉ là mốc đặt neo 129, không chứng bước 129→132. Đếm lại bằng chính moi-mac-dinh.mjs trên cây c1d11fd4b và HEAD: 129 → 132, thêm 4, mất 1. Thêm, cả bốn vào nhóm kỹ thuật (nhóm chữ người đọc vẫn 0): area-sidebar.tsx placement="area" (1dac33e82, PR #489 thanh-ben-khu-dung-chung — AC-2 gọi tên placement="area"); kara/artifact.tsx variant="card" (96aaf882f, PR #344 soan-okr-trong-khung — AC-4 bản nháp và cột Kara thành một bề mặt liền); kara/ban-ghi.tsx size="sm" (1194c4543, PR #306 khung-ban-ghi-kara — AC-11 nút tra cứu mang dấu Kara); record-parts.tsx lyDo="mat-ket-noi" (6f087f98c, PR #333 khung-loi-ban-ghi-dung-ly-do — ghi chú hợp đồng: lý do mặc định «mất kết nối» để hành vi cũ giữ nguyên). Mất: tai-lieu/danh-sach.tsx nhom="cho" (gỡ ở 2829c0cf0, loc-va-kieu-xem-chung — AC-5 chuyển bộ lọc Tài liệu sang nuqs).
+- Căn cứ: `1dac33e82` — 1dac33e82 feat(thanh-ben-khu-dung-chung): AreaSidebar trong packages/ui / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `96aaf882f` — 96aaf882f feat(ui/kara): vỏ dock cho cột Kara và bản nháp phẳng / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `1194c4543` — 1194c4543 feat(ui): nút gọi Kara dùng chung; nút tra cứu mang dấu Kara / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `6f087f98c` — 6f087f98c feat(record-sheet): khung lỗi bản ghi nói đúng lý do — không còn, không có quyền, mất kết nối / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `2829c0cf0` — 2829c0cf0 feat(loc-va-kieu-xem-chung): Tài liệu đọc và ghi bộ lọc bằng nuqs / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `c1d11fd4b` — c1d11fd4b fix(acceptance): chan-lai-component-ra-man mỏ neo giá trị mặc định 128 → 129 (d6bf67768, nhóm kỹ thuật) / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/thanh-ben-khu-dung-chung/contract.md:34` — - AC-2: Given `AreaSidebar placement="panel"`, When dựng, Then chỉ có bố cục dọc (không `[data-slot=nav-strip]`), khung không mang lớp ẩn theo khổ (`hidden`) và không mang tên chuyển cảnh, còn `placement="area"` mang tên chuyển cảnh `area-sidebar` trên cả hai bố cục; và một phần tử bên gọi bọc bằng điều kiện `useAreaSidebarOrientation() === "vertical"` chỉ xuất hiện trong bố cục dọc.
+- Căn cứ thêm: `_acceptance/soan-okr-trong-khung/contract.md:30` — - AC-4: Given khung soạn rộng có bản nháp và khung hẹp chỉ có Kara, When dựng ở nền sáng và tối, Then khung là một bề mặt liền: bản nháp và cột Kara chia nhau bằng đúng một đường kẻ dọc, không ô nào có viền bốn cạnh hay góc bo riêng bên trong khung; mỗi ô có một dòng đầu cao bằng nhau và thẳng hàng nhau; ô soạn nằm ở đáy cột Kara và «Đưa vào» nằm ở đáy bản nháp; lăn tới cuối thân mỗi ô thì phần tử cuối cùng hiện trọn phía trên đáy của ô đó.
+- Căn cứ thêm: `_acceptance/khung-ban-ghi-kara/contract.md:39` — - AC-11: Given ngăn một cá nhân hay công ty có nút tra cứu, When nút hiện và khi đang tra cứu, Then nút mang dấu Kara (không còn `MagicWand`); lúc chạy, chữ nút là «Kara đang tra cứu…» thay `Spinner` trần; lỗi báo bằng câu tiếng Việt, không in thông điệp thô.
+- Căn cứ thêm: `_acceptance/khung-loi-ban-ghi-dung-ly-do/contract.md:55` — - `KhungTaiLoi` được bài `kara-ban-ghi.dom.tsx` của hồ sơ đã ký `khung-ban-ghi-kara` dùng; lý do mặc định là «mất kết nối» để hành vi cũ giữ nguyên (E7 chạy lại bài đó).
+- Căn cứ thêm: `_acceptance/loc-va-kieu-xem-chung/contract.md:42` — - AC-5: Given Tài liệu › Trang và › Chờ duyệt, When người dùng đổi loại trang, đơn vị, chủ trang, lưu trữ, nhóm đề
+- Căn cứ thêm: `packages/ui/src/components/area-sidebar.tsx:40` — placement = "area",
+- Căn cứ thêm: `packages/ui/src/components/kara/artifact.tsx:40` — variant = "card",
+- Căn cứ thêm: `packages/ui/src/components/kara/ban-ghi.tsx:22` — size = "sm",
+- Căn cứ thêm: `apps/app/components/crm/record-sheet/record-parts.tsx:47` — lyDo = "mat-ket-noi",
+- Sửa: rang/lai-ra-man.mjs:9 NEO mac_dinh 129→132 (dong_bang_cu 9→10 là phần kéo theo của chu-mac-dinh-thu-vien-ngoai E9); expected E1, E2 đổi theo.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -643,6 +719,16 @@ gia tri mac dinh la chuoi co chu: 132 · component so huu: 70
 dong trong bang gioi han vong truoc: 9
 tep git theo doi duoi goc: 1113
 DO: neo mac_dinh ghim 129 nhung do duoc 132
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ):
+
+```
+$ node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so
+--- exit 0 (ky vong 0)
+gia tri mac dinh la chuoi co chu: 132 · component so huu: 70
+dong trong bang gioi han vong truoc: 10
+XANH: moi neo khop dia, bo duyet thay du tep git theo doi.
 ```
 
 Trước (`expected`): Xanh: cac neo khop dia — 389 file · 129 gia tri mac dinh la chuoi co chu (neo doi 93 -> 129 theo d-20261004T123511Z-22) · 10
@@ -673,9 +759,23 @@ DO: neo mac_dinh ghim 132 nhung do duoc 133
 ### chan-lai-component-ra-man:E2
 
 - Xử lý: `sua-rang`
-- Lý do: cùng gốc E1
-- Căn cứ: `c1d11fd4b` — c1d11fd4b fix(acceptance): chan-lai-component-ra-man mỏ neo giá trị mặc định 128 → 129 (d6bf67768, nhóm kỹ thuật) / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: cùng
+- Lý do: Cùng gốc E1. Loại (a) — vật đổi có chủ đích của năm hồ sơ đã ký. Neo mac_dinh 129 đặt ở c1d11fd4b (06/10, 128→129); commit đó chỉ là mốc đặt neo 129, không chứng bước 129→132. Đếm lại bằng chính moi-mac-dinh.mjs trên cây c1d11fd4b và HEAD: 129 → 132, thêm 4, mất 1. Thêm, cả bốn vào nhóm kỹ thuật (nhóm chữ người đọc vẫn 0): area-sidebar.tsx placement="area" (1dac33e82, PR #489 thanh-ben-khu-dung-chung — AC-2 gọi tên placement="area"); kara/artifact.tsx variant="card" (96aaf882f, PR #344 soan-okr-trong-khung — AC-4 bản nháp và cột Kara thành một bề mặt liền); kara/ban-ghi.tsx size="sm" (1194c4543, PR #306 khung-ban-ghi-kara — AC-11 nút tra cứu mang dấu Kara); record-parts.tsx lyDo="mat-ket-noi" (6f087f98c, PR #333 khung-loi-ban-ghi-dung-ly-do — ghi chú hợp đồng: lý do mặc định «mất kết nối» để hành vi cũ giữ nguyên). Mất: tai-lieu/danh-sach.tsx nhom="cho" (gỡ ở 2829c0cf0, loc-va-kieu-xem-chung — AC-5 chuyển bộ lọc Tài liệu sang nuqs).
+- Căn cứ: `1dac33e82` — 1dac33e82 feat(thanh-ben-khu-dung-chung): AreaSidebar trong packages/ui / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `96aaf882f` — 96aaf882f feat(ui/kara): vỏ dock cho cột Kara và bản nháp phẳng / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `1194c4543` — 1194c4543 feat(ui): nút gọi Kara dùng chung; nút tra cứu mang dấu Kara / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `6f087f98c` — 6f087f98c feat(record-sheet): khung lỗi bản ghi nói đúng lý do — không còn, không có quyền, mất kết nối / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `2829c0cf0` — 2829c0cf0 feat(loc-va-kieu-xem-chung): Tài liệu đọc và ghi bộ lọc bằng nuqs / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `c1d11fd4b` — c1d11fd4b fix(acceptance): chan-lai-component-ra-man mỏ neo giá trị mặc định 128 → 129 (d6bf67768, nhóm kỹ thuật) / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/thanh-ben-khu-dung-chung/contract.md:34` — - AC-2: Given `AreaSidebar placement="panel"`, When dựng, Then chỉ có bố cục dọc (không `[data-slot=nav-strip]`), khung không mang lớp ẩn theo khổ (`hidden`) và không mang tên chuyển cảnh, còn `placement="area"` mang tên chuyển cảnh `area-sidebar` trên cả hai bố cục; và một phần tử bên gọi bọc bằng điều kiện `useAreaSidebarOrientation() === "vertical"` chỉ xuất hiện trong bố cục dọc.
+- Căn cứ thêm: `_acceptance/soan-okr-trong-khung/contract.md:30` — - AC-4: Given khung soạn rộng có bản nháp và khung hẹp chỉ có Kara, When dựng ở nền sáng và tối, Then khung là một bề mặt liền: bản nháp và cột Kara chia nhau bằng đúng một đường kẻ dọc, không ô nào có viền bốn cạnh hay góc bo riêng bên trong khung; mỗi ô có một dòng đầu cao bằng nhau và thẳng hàng nhau; ô soạn nằm ở đáy cột Kara và «Đưa vào» nằm ở đáy bản nháp; lăn tới cuối thân mỗi ô thì phần tử cuối cùng hiện trọn phía trên đáy của ô đó.
+- Căn cứ thêm: `_acceptance/khung-ban-ghi-kara/contract.md:39` — - AC-11: Given ngăn một cá nhân hay công ty có nút tra cứu, When nút hiện và khi đang tra cứu, Then nút mang dấu Kara (không còn `MagicWand`); lúc chạy, chữ nút là «Kara đang tra cứu…» thay `Spinner` trần; lỗi báo bằng câu tiếng Việt, không in thông điệp thô.
+- Căn cứ thêm: `_acceptance/khung-loi-ban-ghi-dung-ly-do/contract.md:55` — - `KhungTaiLoi` được bài `kara-ban-ghi.dom.tsx` của hồ sơ đã ký `khung-ban-ghi-kara` dùng; lý do mặc định là «mất kết nối» để hành vi cũ giữ nguyên (E7 chạy lại bài đó).
+- Căn cứ thêm: `_acceptance/loc-va-kieu-xem-chung/contract.md:42` — - AC-5: Given Tài liệu › Trang và › Chờ duyệt, When người dùng đổi loại trang, đơn vị, chủ trang, lưu trữ, nhóm đề
+- Căn cứ thêm: `packages/ui/src/components/area-sidebar.tsx:40` — placement = "area",
+- Căn cứ thêm: `packages/ui/src/components/kara/artifact.tsx:40` — variant = "card",
+- Căn cứ thêm: `packages/ui/src/components/kara/ban-ghi.tsx:22` — size = "sm",
+- Căn cứ thêm: `apps/app/components/crm/record-sheet/record-parts.tsx:47` — lyDo = "mat-ket-noi",
+- Sửa: Cùng sửa E1: tổng ba nhóm so với NEO.mac_dinh 132 ở lai-ra-man.mjs:9.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -685,6 +785,18 @@ nhom ky thuat: 125
 khong ve duoc (da khai kem ly do): 7
 tong: 132 · neo: 129
 DO: tong ba nhom 132 khac neo 129
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ):
+
+```
+$ node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs phan-nhom
+--- exit 0 (ky vong 0)
+nhom chu-nguoi-doc: 0
+nhom ky thuat: 125
+khong ve duoc (da khai kem ly do): 7
+tong: 132 · neo: 132
+XANH: phan nhom do BAN VE quyet, khong danh sach ten prop nao.
 ```
 
 Trước (`expected`): Xanh: moi gia tri mac dinh duoc xep nhom bang cach MOUNT component o CA HAI
@@ -727,9 +839,23 @@ DO: tong ba nhom 133 khac neo 132
 ### chan-lai-component-ra-man:E7
 
 - Xử lý: `sua-rang`
-- Lý do: cùng gốc E1
-- Căn cứ: `c1d11fd4b` — c1d11fd4b fix(acceptance): chan-lai-component-ra-man mỏ neo giá trị mặc định 128 → 129 (d6bf67768, nhóm kỹ thuật) / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: cùng
+- Lý do: Cùng gốc E1. Loại (a) — vật đổi có chủ đích của năm hồ sơ đã ký. Neo mac_dinh 129 đặt ở c1d11fd4b (06/10, 128→129); commit đó chỉ là mốc đặt neo 129, không chứng bước 129→132. Đếm lại bằng chính moi-mac-dinh.mjs trên cây c1d11fd4b và HEAD: 129 → 132, thêm 4, mất 1. Thêm, cả bốn vào nhóm kỹ thuật (nhóm chữ người đọc vẫn 0): area-sidebar.tsx placement="area" (1dac33e82, PR #489 thanh-ben-khu-dung-chung — AC-2 gọi tên placement="area"); kara/artifact.tsx variant="card" (96aaf882f, PR #344 soan-okr-trong-khung — AC-4 bản nháp và cột Kara thành một bề mặt liền); kara/ban-ghi.tsx size="sm" (1194c4543, PR #306 khung-ban-ghi-kara — AC-11 nút tra cứu mang dấu Kara); record-parts.tsx lyDo="mat-ket-noi" (6f087f98c, PR #333 khung-loi-ban-ghi-dung-ly-do — ghi chú hợp đồng: lý do mặc định «mất kết nối» để hành vi cũ giữ nguyên). Mất: tai-lieu/danh-sach.tsx nhom="cho" (gỡ ở 2829c0cf0, loc-va-kieu-xem-chung — AC-5 chuyển bộ lọc Tài liệu sang nuqs).
+- Căn cứ: `1dac33e82` — 1dac33e82 feat(thanh-ben-khu-dung-chung): AreaSidebar trong packages/ui / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `96aaf882f` — 96aaf882f feat(ui/kara): vỏ dock cho cột Kara và bản nháp phẳng / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `1194c4543` — 1194c4543 feat(ui): nút gọi Kara dùng chung; nút tra cứu mang dấu Kara / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `6f087f98c` — 6f087f98c feat(record-sheet): khung lỗi bản ghi nói đúng lý do — không còn, không có quyền, mất kết nối / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `2829c0cf0` — 2829c0cf0 feat(loc-va-kieu-xem-chung): Tài liệu đọc và ghi bộ lọc bằng nuqs / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `c1d11fd4b` — c1d11fd4b fix(acceptance): chan-lai-component-ra-man mỏ neo giá trị mặc định 128 → 129 (d6bf67768, nhóm kỹ thuật) / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/thanh-ben-khu-dung-chung/contract.md:34` — - AC-2: Given `AreaSidebar placement="panel"`, When dựng, Then chỉ có bố cục dọc (không `[data-slot=nav-strip]`), khung không mang lớp ẩn theo khổ (`hidden`) và không mang tên chuyển cảnh, còn `placement="area"` mang tên chuyển cảnh `area-sidebar` trên cả hai bố cục; và một phần tử bên gọi bọc bằng điều kiện `useAreaSidebarOrientation() === "vertical"` chỉ xuất hiện trong bố cục dọc.
+- Căn cứ thêm: `_acceptance/soan-okr-trong-khung/contract.md:30` — - AC-4: Given khung soạn rộng có bản nháp và khung hẹp chỉ có Kara, When dựng ở nền sáng và tối, Then khung là một bề mặt liền: bản nháp và cột Kara chia nhau bằng đúng một đường kẻ dọc, không ô nào có viền bốn cạnh hay góc bo riêng bên trong khung; mỗi ô có một dòng đầu cao bằng nhau và thẳng hàng nhau; ô soạn nằm ở đáy cột Kara và «Đưa vào» nằm ở đáy bản nháp; lăn tới cuối thân mỗi ô thì phần tử cuối cùng hiện trọn phía trên đáy của ô đó.
+- Căn cứ thêm: `_acceptance/khung-ban-ghi-kara/contract.md:39` — - AC-11: Given ngăn một cá nhân hay công ty có nút tra cứu, When nút hiện và khi đang tra cứu, Then nút mang dấu Kara (không còn `MagicWand`); lúc chạy, chữ nút là «Kara đang tra cứu…» thay `Spinner` trần; lỗi báo bằng câu tiếng Việt, không in thông điệp thô.
+- Căn cứ thêm: `_acceptance/khung-loi-ban-ghi-dung-ly-do/contract.md:55` — - `KhungTaiLoi` được bài `kara-ban-ghi.dom.tsx` của hồ sơ đã ký `khung-ban-ghi-kara` dùng; lý do mặc định là «mất kết nối» để hành vi cũ giữ nguyên (E7 chạy lại bài đó).
+- Căn cứ thêm: `_acceptance/loc-va-kieu-xem-chung/contract.md:42` — - AC-5: Given Tài liệu › Trang và › Chờ duyệt, When người dùng đổi loại trang, đơn vị, chủ trang, lưu trữ, nhóm đề
+- Căn cứ thêm: `packages/ui/src/components/area-sidebar.tsx:40` — placement = "area",
+- Căn cứ thêm: `packages/ui/src/components/kara/artifact.tsx:40` — variant = "card",
+- Căn cứ thêm: `packages/ui/src/components/kara/ban-ghi.tsx:22` — size = "sm",
+- Căn cứ thêm: `apps/app/components/crm/record-sheet/record-parts.tsx:47` — lyDo = "mat-ket-noi",
+- Sửa: Cùng sửa E1 (lai-ra-man.mjs:9).
 
 Đầu ra đỏ ở mốc nền:
 
@@ -739,6 +865,16 @@ gia tri mac dinh la chuoi co chu: 132 · component so huu: 70
 dong trong bang gioi han vong truoc: 9
 tep git theo doi duoi goc: 1113
 DO: neo mac_dinh ghim 129 nhung do duoc 132
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ):
+
+```
+$ node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so && cd packages/ui && bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx
+--- exit 0 (ky vong 0)
+gia tri mac dinh la chuoi co chu: 132 · component so huu: 70
+dong trong bang gioi han vong truoc: 10
+XANH: moi neo khop dia, bo duyet thay du tep git theo doi.
 ```
 
 Đột biến `neo-lech-mot` — thông điệp ghim «DO: neo mac_dinh ghim 132 nhung do duoc 133»
@@ -850,9 +986,18 @@ RANG DO: diff cham tep ngoai pham vi: apps/app/app/(app)/[slug]/campaigns/campai
 ### chu-mac-dinh-thu-vien-ngoai:E3
 
 - Xử lý: `sua-rang`
-- Lý do: neo đếm 76·37·21 → 120·43·39 do hồ sơ ký sau thêm component; 6 bọc mới không để chuỗi mặc định lên màn
-- Căn cứ: `3f99c7055` — 3f99c7055 fix(acceptance): realign the signed dossier's counts to the tree this round changed
-- Sửa: rang/khai-sinh.mjs:6 NEO {120,43,39}; expected E3
+- Lý do: Loại (a) — vật đổi có chủ đích của các hồ sơ ký sau. Neo 76·37·21 đặt ở 3f99c7055 (06/09); đếm lại bằng chính logic khai-sinh.mjs giữa 3f99c7055 và HEAD: packages/ui thêm 45 tệp component, bỏ suggestion.tsx (+44 → 120); bọc thư viện ngoài +7 → 44 — sáu tệp mới combobox-multi (c74dfc452), context-menu (29a101a4c, du-an-gantt), flow-map (7b9511288), markdown-reader (7371f8c86), radio-group (6d4703002), trinh-soan (584e6caae), và stat-card đổi sang bọc Slot của radix-ui (57c51b2e4, ghi ở d-20261023T025431Z-25 sau gộp onehub 23/10); đọc kho chuỗi +18 → 39. Con số 43 trong cột sửa cũ là trước 57c51b2e4. Chữ mặc định: combobox-multi, flow-map, trinh-soan đọc kho chuỗi (useMessages); context-menu được bộ mở nguyên bản của chan-lai-component-ra-man mount ở trạng thái mở và không sinh chữ nào (xem dòng E9); radio-group, markdown-reader, stat-card khai trong boc-ma-khong-doc.json (E4 xanh) nhưng chữ mặc định của chúng trên màn CHƯA được đo ở vòng này — E3 chỉ đếm.
+- Căn cứ: `57c51b2e4` — 57c51b2e4 feat(ui): StatCard dạng liên kết / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25` — {"id": "d-20261023T025431Z-25", "type": "fix", "stage": "S3", "decision": "Sau gộp onehub (135 commit) hai chỗ trôi mới ở hồ sơ trong vòng, sửa dưới dòng có sẵn: chu-mac-dinh-thu-vien-ngoai khai stat-card bọc Slot của radix-ui (57c51b2e4, neo bọc 43→44); toan-canh-okr khẳng định nhóm E10 đếm 5 thẻ số (thêm ô KR trượt của moi-kr-ca-cong-ty AC-1).", "why": "Cả hai là đổi có chủ đích của hồ sơ đã ký gộp sau mốc nền; lượt chung của E3/E28/E29 và E3/E4 đỏ vì chúng, ghim lại ở AC-4 cần xanh trên HEAD.", "cost_if_wrong": "Danh sách đóng chỉ khai ô đỏ ở mốc nền; hai chỗ trôi sau mốc nền đi dưới tệp của dòng có sẵn — người ký thấy chúng qua dòng này và bảng trước/sau.", "decided_by": "Manh Phan", "at": "2026-10-23T02:54:31Z"}
+- Căn cứ thêm: `3f99c7055` — 3f99c7055 fix(acceptance): realign the signed dossier's counts to the tree this round changed
+- Căn cứ thêm: `c74dfc452` — c74dfc452 fix(viec-chung): ComboboxMulti vào packages/ui, ô soạn Việc dùng nó thay bản dựng tại chỗ / Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `29a101a4c` — 29a101a4c feat(proto): du-an-gantt — bản mẫu Dự án và Gantt, cài @reui/gantt vào packages/ui / Ngoại lệ thành phần nền của docs/proto.md; Cổng Phạm vi từ chối thì gỡ cùng bản mẫu. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `7b9511288` — 7b9511288 feat(ui): FlowMap — khung vẽ nút–cạnh dùng chung (React Flow + dagre, tệp máy rút từ @reui/flow-2) / Dây lien/dut/an, lia tới thẻ vừa mở, tôn trọng prefers-reduced-motion / (thoiGianChuyenDong), FlowMapNode cho nút tự dựng; giữ focusId, đèn đường đi / và pathAround cho DH5. Bậc 4 của docs/design.md theo luật «Block có phần máy». / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `7371f8c86` — 7371f8c86 feat(ui): markdown-reader — trình đọc trang dài trên Streamdown; bản mẫu kho-tai-lieu dùng nó / Chế độ tĩnh, cỡ chữ và khoảng dòng cho đọc, bề rộng dòng giới hạn. / Tiêu đề có neo, kèm ReaderToc đánh dấu mục đang đọc. Liên kết [[Tên trang]] / xem trước khi rê chuột, trang chưa có hiện gạch đứt. Hộp [!NOTE]/[!WARNING] / thành Alert, bảng dùng Table của kho, chú thích [^1] thành mục Nguồn. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `6d4703002` — 6d4703002 feat(may-soan): hộp tải nguồn, tab Nguồn, màn duyệt nguồn trước và cạnh nhau / Hộp tải PUT tệp lên URL ký của xinCho, chọn trang mới hay trang đang dùng / (taiLieu.dangDung), bảng nguồn có Soạn lại theo quyền. Màn duyệt bản máy soạn / đi hai bước: đọc nguồn trước, rồi nguồn và bản máy cạnh nhau với tick từng / con số mới; Sửa bản này giữ nguonId và trichDoan. Màn đọc có mục Nguồn tải về. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `584e6caae` — 584e6caae feat(tai-lieu): trình soạn giàu TrinhSoan — thanh công cụ, lọc dán Word/Google Docs / TrinhSoan dựng Tiptap trên đúng PHAN_MO_RONG của @crm/validation, nạp / bằng nap và phát tuanTuHoa(getJSON()) đã NFC; đoạn trống cuối do / trailingNode thêm bị bỏ trước khi tuần tự hoá. Thanh công cụ là div / role="toolbar" với ToggleGroup/Button của @crm/ui, roving tabindex bằng / mũi tên, Home, End; nút khoá bị bỏ qua.
+- Căn cứ thêm: `_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/khai-sinh.mjs:6` — const NEO = { component: 120, boc: 44, doc_kho: 39 };
+- Sửa: rang/khai-sinh.mjs:6 NEO {component 120, boc 44, doc_kho 39}; expected E3 đổi theo.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -868,6 +1013,16 @@ neo ghim:  76 · 37 · 21
    boc: async-action.tsx <- lucide-react, motion/react
    boc: avatar.tsx <- radix-ui
    boc: calendar.tsx <- lucide-react
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ):
+
+```
+$ node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/khai-sinh.mjs
+--- exit 0 (ky vong 0)
+doc tu dia: 120 component · 44 boc thu vien ngoai · 39 doc kho chuoi dung chung
+neo ghim:  120 · 44 · 39
+XANH: ba con so doc tu dia bang ba con so neo.
 ```
 
 Trước (`expected`): exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 76 component .tsx trong
@@ -897,6 +1052,9 @@ nguyên vẹn 0 · đột biến 2
 - Xử lý: `sua-rang`
 - Lý do: progress nay đọc kho; radio-group, markdown-reader, context-menu mới, không chuỗi mặc định
 - Căn cứ: `4a4bea376` — 4a4bea376 feat(ui): thanh tiến độ trung tính có vạch lẽ ra, cặp chỉ báo mức tự tin và tình trạng / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `6d4703002` — 6d4703002 feat(may-soan): hộp tải nguồn, tab Nguồn, màn duyệt nguồn trước và cạnh nhau / Hộp tải PUT tệp lên URL ký của xinCho, chọn trang mới hay trang đang dùng / (taiLieu.dangDung), bảng nguồn có Soạn lại theo quyền. Màn duyệt bản máy soạn / đi hai bước: đọc nguồn trước, rồi nguồn và bản máy cạnh nhau với tick từng / con số mới; Sửa bản này giữ nguonId và trichDoan. Màn đọc có mục Nguồn tải về. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `7371f8c86` — 7371f8c86 feat(ui): markdown-reader — trình đọc trang dài trên Streamdown; bản mẫu kho-tai-lieu dùng nó / Chế độ tĩnh, cỡ chữ và khoảng dòng cho đọc, bề rộng dòng giới hạn. / Tiêu đề có neo, kèm ReaderToc đánh dấu mục đang đọc. Liên kết [[Tên trang]] / xem trước khi rê chuột, trang chưa có hiện gạch đứt. Hộp [!NOTE]/[!WARNING] / thành Alert, bảng dùng Table của kho, chú thích [^1] thành mục Nguồn. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `29a101a4c` — 29a101a4c feat(proto): du-an-gantt — bản mẫu Dự án và Gantt, cài @reui/gantt vào packages/ui / Ngoại lệ thành phần nền của docs/proto.md; Cổng Phạm vi từ chối thì gỡ cùng bản mẫu. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 - Sửa: rang/boc-ma-khong-doc.json bỏ progress, thêm 3 dòng (bản dựng sẵn scratchpad/tra-cmd/boc-ma-khong-doc.sua.json)
 
 Đầu ra đỏ ở mốc nền:
@@ -921,9 +1079,17 @@ bang: 29 dong · chan dem tu dia: 29 component boc-ma-khong-doc
 ### chu-mac-dinh-thu-vien-ngoai:E9
 
 - Xử lý: `sua-rang`
-- Lý do: context-menu mới thuộc nhóm chỉ hiện sau khi bấm
-- Căn cứ: `29a101a4c` — 29a101a4c feat(proto): du-an-gantt — bản mẫu Dự án và Gantt, cài @reui/gantt vào packages/ui / Ngoại lệ thành phần nền của docs/proto.md; Cổng Phạm vi từ chối thì gỡ cùng bản mẫu. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: rang/gioi-han-bam-moi-hien.json thêm context-menu (scratchpad/tra-cmd/gioi-han-bam-moi-hien.sua.json); KÉO THEO chan-lai-component-ra-man: mo-nguyen-ban.mjs:9 NEO_DONG 9→10, lai-ra-man.mjs:9 dong_bang_cu 9→10, da_do.ket_qua thêm context-menu từ bộ mở nguyên bản thật
+- Lý do: Loại (a) — vật đổi có chủ đích của hồ sơ đã ký du-an-gantt. context-menu.tsx vào packages/ui ở 29a101a4c như phụ thuộc của @reui/gantt (gantt-bar.tsx:9, gantt-view.tsx:13 nhập nó). du-an-gantt đã ký đủ: contract status signed-off; dòng sổ S1 «Gantt dựng trên @reui/gantt cài vào packages/ui (bậc 3)» (d-20261016T082504Z-5) được niêm ở Cổng Phạm vi 16/10 (d-20261016T112059Z-26); design doc dòng 179 nêu context-menu là phụ thuộc phải cài; design-pass dòng 85 ghi đã thêm context-menu.tsx; Cổng Bằng chứng ký 18/10 (human_signoff manh 2026-10-18). Câu «Cổng Phạm vi từ chối thì gỡ cùng bản mẫu» trong 29a101a4c là điều kiện chưa xảy ra: Cổng Phạm vi đã duyệt. Không AC nào của du-an-gantt gọi tên context-menu; căn cứ là dòng sổ được niêm và AC-4 (kiểu xem Gantt) mà bộ gantt phục vụ. Menu chỉ hiện khi bấm chuột phải lên Gantt nên thuộc bảng gioi-han-bam-moi-hien.
+- Căn cứ: `_acceptance/du-an-gantt/decisions.jsonl:5` — {"id":"d-20261016T082504Z-5","type":"approach","stage":"S1","at":"2026-10-16T08:25:04Z","decision":"Gantt dựng trên @reui/gantt cài vào packages/ui (bậc 3), bọc bằng GanttDuAn theo token của kho.","why":"Bậc 1–2 không có Gantt; @reui/gantt miễn phí và có sẵn thanh, mốc, mũi tên phụ thuộc, ngày nghỉ, lối phím.","cost_if_wrong":"Nếu sai, phải tự dựng Gantt ở packages/ui — thêm vài ngày máy và một bộ kiểm riêng.","can_cu":{"nguon":"muc-tieu","kho_dao":false,"tep":"docs/proto.md","trich":"biểu đồ Gantt — thiếu chúng thì không có gì để Cổng 1 duyệt, nên chờ tới S3 là"}}
+- Căn cứ thêm: `_acceptance/du-an-gantt/decisions.jsonl:26` — {"id":"d-20261016T112059Z-26","type":"seal","gate":1,"at":"2026-10-16T11:20:49Z"}
+- Căn cứ thêm: `_acceptance/du-an-gantt/contract.md:8` — status: signed-off
+- Căn cứ thêm: `_acceptance/du-an-gantt/contract.md:36` — - AC-4: Given dự án P có việc cha C với hai việc con, ba việc có đủ hai ngày, một việc thiếu ngày, hai phụ thuộc, một mốc, một việc Xong, và ngày lễ L, When M chọn P trong ô Phạm vi, Then kiểu xem Gantt hiện (đường dẫn mang `phamVi=<P>` và `xemViec=gantt`), hàng «Mốc» đầu cây có hình thoi mang tên mốc, việc con thụt dưới C, mỗi việc có ngày là một thanh từ ngày bắt đầu tới hết ngày hạn với màu theo nghĩa trạng thái, hai mũi tên nối đúng cặp, cột Thứ Bảy, Chủ nhật và ngày L tô nền ngày nghỉ, vạch hôm nay ở 16/10, và việc thiếu ngày nằm ở nhóm «Chưa có lịch (1)» với nút «Đặt ngày»; When M chọn kiểu Danh sách hay Bảng, Then hiện đúng việc của P (đường dẫn mang `xemViec=danh-sach` hay `xemViec=bang`) (Danh sách có cột Bắt đầu; Bảng là bốn cột của DA2 chỉ chứa việc của P); When M về phạm vi «Của tôi» hay «Tất cả dự án», Then mục Gantt không có trong kiểu xem, và đường dẫn mang `xemViec=gantt` với phạm vi đó thì hiện Danh sách; When máy tải chậm, tải hỏng hay P chưa có việc, Then màn hiện ST-gantt-cho-tai, ST-gantt-loi (có «Thử lại»), ST-gantt-rong và tiêu đề trang «Việc» cùng dải dự án giữ nguyên.
+- Căn cứ thêm: `_acceptance/du-an-gantt/evidence-report.md:11` — human_signoff: manh 2026-10-18
+- Căn cứ thêm: `docs/superpowers/specs/2026-10-16-du-an-gantt-design.md:179` — `react-day-picker` và `context-menu`; `cn` phải thay bằng `@crm/ui/lib/utils`.
+- Căn cứ thêm: `_acceptance/du-an-gantt/design-pass.md:85` — - `@reui/gantt` cài vào `packages/ui/src/components/reui/gantt/` theo ngoại lệ thành phần nền của `docs/proto.md` (9 tệp, thêm `context-menu.tsx` của shadcn, hai phụ thuộc `date-fns`, `@date-fns/tz`; bỏ gói `cn`, chú thích, Lucide ở tệp Gantt; vá 25 chỗ truy cập mảng cho `noUncheckedIndexedAccess`). Cổng Phạm vi từ chối thì gỡ cùng bản mẫu.
+- Căn cứ thêm: `packages/ui/src/components/reui/gantt/gantt-bar.tsx:9` — import { ContextMenu, ContextMenuContent, ContextMenuTrigger, } from "@crm/ui/components/context-menu";
+- Căn cứ thêm: `29a101a4c` — 29a101a4c feat(proto): du-an-gantt — bản mẫu Dự án và Gantt, cài @reui/gantt vào packages/ui / Ngoại lệ thành phần nền của docs/proto.md; Cổng Phạm vi từ chối thì gỡ cùng bản mẫu. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Sửa: rang/gioi-han-bam-moi-hien.json thêm dòng context-menu và da_do.ket_qua «context-menu.tsx: rong»; KÉO THEO chan-lai-component-ra-man: mo-nguyen-ban.mjs:9 NEO_DONG 9→10, lai-ra-man.mjs:9 dong_bang_cu 9→10. Bộ mở nguyên bản của chan-lai (E4) ở 730af844a mount context-menu ở trạng thái mở: không sinh chữ.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -931,6 +1097,20 @@ bang: 29 dong · chan dem tu dia: 29 component boc-ma-khong-doc
 bang gioi han: 9 dong · chan dem tu dia: 10 component boc-ma-khong-doc thuoc loai chi-hien-sau-khi-bam
    THIEU: context-menu.tsx
 KHONG DO DUOC: bang lech voi dia — mot bang khai mot dong khong duoc di qua nhu mot bang da ke het.
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ) — hai ô: chu-mac-dinh E9 rồi chan-lai-component-ra-man E4:
+
+```
+$ node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.mjs
+--- exit 0 (ky vong 0)
+bang gioi han: 10 dong · chan dem tu dia: 10 component boc-ma-khong-doc thuoc loai chi-hien-sau-khi-bam
+XANH: ca 10 dong deu tro mot component that, con boc thu vien, va co dau hieu mo/dong doc duoc tu ma.
+$ node _acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs
+--- exit 0 (ky vong 0)
+  context-menu.tsx  rong
+dong doc duoc: 10 · neo doc lap: 10
+XANH: ca 10 dong deu mount duoc o trang thai mo. 10 dong khong sinh chu nao; 0 dong co sinh.
 ```
 
 Đột biến `go-context-menu-khoi-bang` — thông điệp ghim «THIEU: context-menu.tsx»
@@ -944,15 +1124,36 @@ KHONG DO DUOC: bang lech voi dia — mot bang khai mot dong khong duoc di qua nh
 
 ### cron-theo-ban-khai:E8
 
-- Xử lý: `sua-rang`
-- Lý do: Chủ kho chọn Hỏi-4: ô đòi bản triển khai production READY mà cặp gộp vòng cron (147b47a33) là tổ tiên, thay vì đúng sha HEAD; token Vercel CLI hết hạn → mã 2 kèm câu nhắc vercel login.
-- Căn cứ: `147b47a33` — 147b47a33 Merge vòng T2: lịch chạy nền theo bản khai, bốn việc im lặng nay chạy / build-func.mjs ghim cứng một dòng cron, đè lên năm dòng của apps/api/vercel.json. Nay script đọc bản khai; vắng file, vắng khoá, hay mảng rỗng đều làm lượt dựng DỪNG. AC-8 đo trên bản dựng thật của nền tảng chứ không dừng ở file trên đĩa. Ký ở Cổng 2 bởi Manh Phan 2026-09-07.
-- Sửa: status not-run
+- Xử lý: `neo-co-dinh`
+- Lý do: Loại (b) — vòng này theo nhánh trôi. Ô gốc đòi bản production dựng từ đúng sha HEAD; nhánh vòng không bao giờ lên production, nên ô đỏ ở mọi nhánh trừ chính production. Chủ kho chọn Hỏi-4 ở Cổng Phạm vi (d-20261022T104414Z-14, thay dòng «khai not-run» d-20261022T104031Z-4; niêm d-20261022T225833Z-16): răng đòi bản production READY mới nhất có sha chứa cặp gộp vòng cron 147b47a33 (git merge-base --is-ancestor), và chủ kho đăng nhập lại Vercel CLI một lần trên máy đo. Ô KHÔNG khai not-run: status giữ như mốc nền, chỉ expected đổi. HTTP 403 ở lượt nền là token Vercel CLI hết hạn; răng nay tự làm mới bằng bunx vercel whoami khi còn refreshToken (8a8825cf5, d-20261023T123300Z-27), và lượt ở 730af844a xanh trên bản production thật (dòng dưới). Không chọn loại (d): máy đo có token Vercel, đã đo được.
+- Căn cứ: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:14` — {"id": "d-20261022T104414Z-14", "type": "approach", "stage": "S1", "decision": "Hỏi-4: cron-theo-ban-khai E8 (cron thật trên production khớp bản khai) — máy khuyên đổi răng đòi một bản triển khai production READY có sha chứa cặp gộp của vòng cron, thay vì đúng sha HEAD; chủ kho đăng nhập lại Vercel CLI một lần trên máy đo.", "why": "Ô hiện đòi bản production dựng từ đúng sha HEAD — nhánh vòng không bao giờ có; token Vercel CLI trên máy đo hết hạn 17/10 và không khoá Vercel nào khai trong .env.", "cost_if_wrong": "Khai not-run thì mất chốt máy duy nhất canh cron thật trên production; giữ ô sống thì cần một lần đăng nhập của chủ kho và mỗi lượt ghim phụ thuộc mạng Vercel.", "supersedes": "d-20261022T104031Z-4", "serves": ["AC-2", "AC-3", "AC-6"], "can_cu": {"nguon": "chi-nguoi", "kho_dao": false, "khuyen": "Răng đòi bản production chứa cặp gộp cron (merge-base --is-ancestor); chủ kho chạy vercel login một lần.", "loi_khac": "Khai not-run với lý do «máy đo không có bản production dựng từ sha của nhánh» — không cần người, mất chốt."}, "at": "2026-10-22T10:44:14Z"}
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:16` — {"id": "d-20261022T225833Z-16", "type": "seal", "gate": 1, "at": "2026-10-22T22:58:18Z"}
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:27` — {"id": "d-20261023T123300Z-27", "type": "fix", "stage": "S3", "decision": "cron-theo-ban-khai rang/ban-trien-khai-that.mjs (E8): token Vercel CLI hết hạn mà có refreshToken thì gọi bunx vercel whoami để CLI tự làm mới rồi đọc lại; vẫn hết hạn mới thoát 2.", "why": "Token của bản CLI hiện tại sống khoảng một giờ (chủ kho đăng nhập 09:54, hết hạn 10:54); lượt ghim B2 repin-20261023T120418Z-75562 đỏ ở E8 vì răng chỉ đọc token, không làm mới.", "cost_if_wrong": "Nếu refreshToken cũng hết hạn, E8 lại thoát 2 và chủ kho phải đăng nhập lại; lời AC không đổi.", "decided_by": "Manh Phan", "at": "2026-10-23T12:33:00Z"}
+- Căn cứ thêm: `_acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs:104` — if (git("merge-base", "--is-ancestor", CAP_GOP, sha).status !== 0) {
+- Căn cứ thêm: `_acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs:49` — spawnSync("bunx", ["vercel", "whoami"], { encoding: "utf8", timeout: TRAN_LAM_MOI_MS });
+- Căn cứ thêm: `147b47a33` — 147b47a33 Merge vòng T2: lịch chạy nền theo bản khai, bốn việc im lặng nay chạy / build-func.mjs ghim cứng một dòng cron, đè lên năm dòng của apps/api/vercel.json. Nay script đọc bản khai; vắng file, vắng khoá, hay mảng rỗng đều làm lượt dựng DỪNG. AC-8 đo trên bản dựng thật của nền tảng chứ không dừng ở file trên đĩa. Ký ở Cổng 2 bởi Manh Phan 2026-09-07.
+- Căn cứ thêm: `8a8825cf5` — 8a8825cf5 fix(ho-so-do-kiem-cheo): cron E8 làm mới token Vercel CLI trước khi kết luận hết hạn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Sửa: ban-trien-khai-that.mjs: bản production READY mới nhất phải chứa cặp gộp 147b47a33 (không chứa → mã 1 «khong chua cap gop cron», sha không có trong kho → mã 2); token hết hạn mà còn refreshToken thì gọi bunx vercel whoami rồi đọc lại, vẫn hết hạn mới mã 2; expected E8 đổi theo; status không đổi. Đột biến neo (dot-bien/cron-theo-ban-khai-E8-neo.patch, sha 40 số 0) thử 24/10: mã 2 «KHONG DO DUOC: sha cap gop cron 0000000000000000000000000000000000000000 khong co trong kho».
 
 Đầu ra đỏ ở mốc nền:
 
 ```
 MA 2: khong doc duoc danh sach ban trien khai — HTTP 403
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ):
+
+```
+$ bun _acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs
+--- exit 0 (ky vong 0)
+ban production moi nhat: dpl_A7aZCatX5pyjP4AVRiYznktEcK5u · sha 207a8ffc5 · cap gop cron 147b47a33
+nen tang dang ky: 5 · ban khai: 5
+  */5 * * * *  /internal/sync/mailboxes
+  0 6 * * *  /internal/sync/rates
+  0 7 * * *  /internal/telemetry/rollup
+  0 4 * * *  /internal/tracking/retention
+  0 5 * * *  /internal/archive/prune
+XANH: ban production that cua crm-onehub-api chua cap gop cron va dang ky dung 5 viec, tung cap path va nhip khop ban khai.
 ```
 
 Trước (`expected`): Do tren BAN TRIEN KHAI THAT, khong do file tren dia:
@@ -996,15 +1197,36 @@ DO: ban production moi nhat (sha 207a8ffc5) khong chua cap gop cron f148b2bb1
 
 ### cron-theo-ban-khai:E7
 
-- Xử lý: `sua-rang`
-- Lý do: spawnSync ENOBUFS; sau sửa còn ghim lint 3 vs 36 (HỎI)
-- Căn cứ: `147b47a33` — 147b47a33 Merge vòng T2: lịch chạy nền theo bản khai, bốn việc im lặng nay chạy / build-func.mjs ghim cứng một dòng cron, đè lên năm dòng của apps/api/vercel.json. Nay script đọc bản khai; vắng file, vắng khoá, hay mảng rỗng đều làm lượt dựng DỪNG. AC-8 đo trên bản dựng thật của nền tảng chứ không dừng ở file trên đĩa. Ký ở Cổng 2 bởi Manh Phan 2026-09-07.
-- Sửa: stdio inherit + maxBuffer
+- Xử lý: `neo-co-dinh`
+- Lý do: Loại (b) — vòng này theo nhánh trôi, cộng (c) ở bước đầu. (c): răng gom đầu ra năm lệnh vào bộ đệm spawnSync, lượt nền chết ENOBUFS trước khi đếm cảnh báo. (b): con số ghim «3 cảnh báo lint apps/app» là của vòng cron, mà răng đo ở HEAD trôi — HEAD 223b6d346 ra 36 (bun run lint ở apps/app: «Found 36 warnings.», mã 0; cùng con số ở dòng app:lint của lượt dưới). Đóng «(HỎI)»: chủ kho chọn Hỏi-3 ở Cổng Phạm vi (d-20261022T104414Z-13, niêm d-20261022T225833Z-16, làm theo ở d-20261023T005230Z-21 decided_by Manh Phan) — đo ghim ở cây cặp gộp vòng cron 147b47a33^2, vòng đó không thêm cảnh báo. Máy KHÔNG chứng 33 cảnh báo thêm là nền sạch: dòng sổ Hỏi-3 khai đúng giá «nếu 36 là hồi quy phải dọn, đo ở cặp gộp sẽ thôi canh việc đó», và chọn giá đó là của chủ kho. Máy chỉ chứng: cả năm lệnh mã 0 ở HEAD; 20 trong 36 cảnh báo biome in ra đều thuộc loại vệ sinh mã (noUnusedVariables 4, noUselessFragments 4, noUnusedImports 3, useOptionalChain 3, noBarrelFile 2, noAccumulatingSpread 2, noDocumentCookie 1, useTemplate 1), 9 trong 20 ở apps/app/test; 16 cảnh báo còn lại biome không in.
+- Căn cứ: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:13` — {"id": "d-20261022T104414Z-13", "type": "approach", "stage": "S1", "decision": "Hỏi-3: ghim «3 cảnh báo lint apps/app» của cron-theo-ban-khai E7 nay đo 36 — máy khuyên đo ở cặp gộp của vòng cron (vòng đó không thêm cảnh báo), sau khi sửa lỗi ENOBUFS của răng.", "why": "33 cảnh báo thêm đến từ nhiều vòng sau, không quyết định đã ký nào nâng ghim; coi 36 là hồi quy hay là nền mới là phán xét của chủ kho.", "cost_if_wrong": "Nếu 36 cảnh báo là hồi quy phải dọn, đo ở cặp gộp sẽ thôi canh việc đó.", "supersedes": "d-20261022T104031Z-5", "serves": ["AC-3"], "can_cu": {"nguon": "chi-nguoi", "kho_dao": false, "khuyen": "Đo ở cặp gộp của vòng cron.", "loi_khac": "Ghim lại 36 — đỏ lại mỗi lần ai thêm một cảnh báo; hoặc coi là hồi quy và dọn 33 cảnh báo — chạm apps/app của nhiều làn."}, "at": "2026-10-22T10:44:14Z"}
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:16` — {"id": "d-20261022T225833Z-16", "type": "seal", "gate": 1, "at": "2026-10-22T22:58:18Z"}
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:21` — {"id": "d-20261023T005230Z-21", "type": "fix", "stage": "S3", "decision": "Sửa thước tám hồ sơ theo vật đã đổi có chủ đích ở hồ sơ ký sau hoặc lỗi của chính răng: ca-chap-chon-cach-ly E5 E7, chan-trung-khoa-ban-nhap E3 E4, chan-lai-component-ra-man E1 E2 E7, chu-mac-dinh-thu-vien-ngoai E3 E4 E9, bo-xuong-kara E10, cai-dat-chung-chi-quan-tri E8, tro-ly-okr-nen E4 E17 E22 E23 E25, cron-theo-ban-khai E7 E8.", "why": "Mỗi dòng có căn cứ ở danh sách (sha hay AC của hồ sơ đã đổi vật), đối chứng dương (eval xanh ở cây hiện tại, trừ cron E8 chờ đăng nhập Vercel) và một đột biến đỏ đúng thông điệp; cron E7 đo ghim lint ở cặp gộp 147b47a33 (Hỏi-3), cron E8 đòi bản production chứa cặp gộp ấy (Hỏi-4).", "cost_if_wrong": "Một neo đếm nâng sai thì bỏ lọt một vật tăng không hợp lệ; lời AC của tám hồ sơ không đổi.", "decided_by": "Manh Phan", "at": "2026-10-23T00:52:30Z"}
+- Căn cứ thêm: `_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs:8` — const CAP_GOP = "147b47a339b2f5a37cbbd5feae536553d490cf5a";
+- Căn cứ thêm: `147b47a33` — 147b47a33 Merge vòng T2: lịch chạy nền theo bản khai, bốn việc im lặng nay chạy / build-func.mjs ghim cứng một dòng cron, đè lên năm dòng của apps/api/vercel.json. Nay script đọc bản khai; vắng file, vắng khoá, hay mảng rỗng đều làm lượt dựng DỪNG. AC-8 đo trên bản dựng thật của nền tảng chứ không dừng ở file trên đĩa. Ký ở Cổng 2 bởi Manh Phan 2026-09-07.
+- Căn cứ thêm: `3ee639d7c` — 3ee639d7c fix(ho-so-do-kiem-cheo): sửa thước tám hồ sơ theo vật đổi có chủ đích (Hỏi-3, Hỏi-4) / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Sửa: nam-lenh-chung.mjs: năm lệnh đổ thẳng ra màn (stdio inherit) thay gom vào bộ đệm; đếm cảnh báo lint apps/app ở cây tạm dựng tại 147b47a33^2 (git worktree add --detach, nối node_modules, gỡ khi xong); sha neo không có trong kho thì mã 2 «KHONG DO DUOC»; ghim 3 giữ nguyên; expected E7 đổi theo. Đột biến neo (dot-bien/cron-theo-ban-khai-E7-neo.patch, sha 40 số 0) thử 24/10 với năm lệnh thay bằng lệnh giả: mã 2 «KHONG DO DUOC: sha cap gop cron 0000000000000000000000000000000000000000 khong co trong kho».
 
 Đầu ra đỏ ở mốc nền:
 
 ```
 MA 2: khong chay duoc `test` — spawnSync bun ENOBUFS (stdout or stderr buffer reached maxBuffer size limit)
+```
+
+Đầu ra sau khi sửa — lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ):
+
+```
+$ bun _acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs
+--- exit 0 (ky vong 0)
+test: ma 0
+check-types: ma 0
+app:lint: Found 36 warnings.
+app:lint: Found 21 infos.
+lint: ma 0
+lint:slop: ma 0
+build: ma 0
+apps/app canh bao lint o cay cap gop cron 147b47a33^2: 3 · ghim: 3
+XANH: ca nam lenh chung ma 0, canh bao lint dung ghim.
 ```
 
 Trước (`expected`): Chay `bun run test`, `check-types`, `lint`, `lint:slop`, `build`, in ma tung lenh.
@@ -1121,9 +1343,17 @@ dat  packages/ui/test/to-chuc-thanh-phan.dom.tsx: da khai trong ke hoach
 ### toan-canh-okr:E3
 
 - Xử lý: `sua-rang`
-- Lý do: ngan-kr-mot-cho AC-1 (ngăn kr:), vo-khu-muc-tieu AC-2..5 (thanh bên Sức khoẻ, #chuong-trinh); lượt chạy mọi nhóm vì EVAL rỗng
-- Căn cứ: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh
+- Lý do: Loại (a) — vật đổi có chủ đích của vo-khu-muc-tieu và ngan-kr-mot-cho (đều signed-off). Ba ô chạy chung một lượt man-toan-canh.mjs (EVAL rỗng chạy mọi nhóm), nên hai dòng đỏ ở mốc nền làm đỏ cả ba. «hien [data-hang-toan-canh]: het 30000ms»: răng tới bảng Toàn cảnh bằng cách bấm thẻ «Toàn cảnh» ở hàng thẻ ngang; vo-khu-muc-tieu AC-3 bỏ hàng thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý, AC-1 đưa «Sức khoẻ» vào thanh bên Mục tiêu, AC-4 cho /okr/suc-khoe dựng nội dung Toàn cảnh — bảng [data-hang-toan-canh] vẫn còn (toan-canh.tsx:105), chỉ lối vào đổi. «E23 bước 4 … thay []» là hệ quả của dòng trên: không tới được bảng nên không đọc được hàng nào. Cùng lượt còn ba chỗ theo hồ sơ ký sau: ngan-kr-mot-cho AC-1 cho bấm dòng KR ở họp tuần mở ngăn kr: thay ngăn mục tiêu (E14/E28 bước 3); /okr/suc-khoe gọi okr.* cả từ máy chủ app nên E29 đọc nhật ký cửa chặn hai phía; E10 đếm 5 thẻ số theo moi-kr-ca-cong-ty AC-1 (d-20261023T025431Z-25). Đầu ra sau sửa: dòng «E23 … hang pb:PK … thay [Phòng Chu kỳ …]» là hàng [data-hang-toan-canh] hiện lại.
+- Căn cứ: `_acceptance/vo-khu-muc-tieu/contract.md:31` — - AC-3: Given trang Bộ OKR của một đơn vị, When trang dựng, Then trên trang chỉ còn một lớp thẻ ngang — chuyển kiểu xem `xemOkr` (danh sách · cây · họp tuần · chấm điểm) — và không màn nào của khu còn dựng thanh thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý.
+- Căn cứ thêm: `_acceptance/vo-khu-muc-tieu/contract.md:29` — - AC-1 (cross-layer): Given một người mở bất kỳ màn nào của khu Mục tiêu ở máy tính, When thanh bên dựng, Then nó là `aside[data-slot=area-sidebar]` nhãn «Mục tiêu» với đúng ba nhóm theo thứ tự — nhóm không nhãn (Của tôi → `/okr`), «OKR» (Bộ OKR → `/okr/bo-okr`, Lấy ý kiến → `/okr/lay-y-kien`), «Báo cáo» (Sức khoẻ → `/okr/suc-khoe`, Sơ đồ → `/okr/so-do`); đúng một mục sáng theo đường đang mở, kể cả đường con (`/okr/so-do/muc-tieu/<id>` sáng Sơ đồ); mục Lấy ý kiến mang số ý kiến cần góp khi số đó lớn hơn 0; chân thanh có «Chương trình OKR» → `/settings/okr` cho người quản lý chương trình và không có cho vai khác.
+- Căn cứ thêm: `_acceptance/vo-khu-muc-tieu/contract.md:32` — - AC-4: Given năm đường mới, When mở, Then `/okr/bo-okr` dựng trang đơn vị như `/okr/theo-don-vi` hôm nay, `/okr/lay-y-kien` dựng trang Hỏi ý, `/okr/suc-khoe` dựng nội dung Toàn cảnh và, cho người quản lý chương trình, phần quản trị chương trình ở mục `#chuong-trinh`, `/okr/so-do` dựng Sơ đồ góp vào cả công ty theo chu kỳ, `/okr/so-do/muc-tieu/<id>` dựng sơ đồ quanh một mục tiêu với nút quay lại trỏ `/okr/so-do`.
+- Căn cứ thêm: `_acceptance/ngan-kr-mot-cho/contract.md:33` — - AC-1: Given một KR K của mục tiêu M, When bấm vào K ở mỗi lối — dòng KR ở trang đơn vị, nút «Việc» và con số của K
+- Căn cứ thêm: `07ea52a34` — 07ea52a34 feat(vo-khu-muc-tieu): thanh bên Mục tiêu, ô chu kỳ ở đầu thanh, đầu trang thôi dựng thanh thẻ / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105` — <SimpleTableRow data-hang-toan-canh={h.key}>
+- Căn cứ thêm: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208` — await bamChu(t, "aside[data-slot='area-sidebar'] a", CHU.sucKhoeMuc);
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25` — {"id": "d-20261023T025431Z-25", "type": "fix", "stage": "S3", "decision": "Sau gộp onehub (135 commit) hai chỗ trôi mới ở hồ sơ trong vòng, sửa dưới dòng có sẵn: chu-mac-dinh-thu-vien-ngoai khai stat-card bọc Slot của radix-ui (57c51b2e4, neo bọc 43→44); toan-canh-okr khẳng định nhóm E10 đếm 5 thẻ số (thêm ô KR trượt của moi-kr-ca-cong-ty AC-1).", "why": "Cả hai là đổi có chủ đích của hồ sơ đã ký gộp sau mốc nền; lượt chung của E3/E28/E29 và E3/E4 đỏ vì chúng, ghim lại ở AC-4 cần xanh trên HEAD.", "cost_if_wrong": "Danh sách đóng chỉ khai ô đỏ ở mốc nền; hai chỗ trôi sau mốc nền đi dưới tệp của dòng có sẵn — người ký thấy chúng qua dòng này và bảng trước/sau.", "decided_by": "Manh Phan", "at": "2026-10-23T02:54:31Z"}
+- Sửa: man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -1142,6 +1372,25 @@ $ bun scripts/dev-session.ts "otjby1dn@thu.test"
 phien-do: xong — mã 1
 ```
 
+Đầu ra sau khi sửa — lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log):
+
+```
+man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)
+  nhom loc (E2, E3, E5, E10): 40 s
+  nhom hop (E14, E28): 15 s
+  nhom dien (E17): 5 s
+  nhom tong (E19): 11 s
+  nhom suc (E21): 6 s
+  E23 danh sach chu ky: [{"nhan":"","muc":[]},{"nhan":"","muc":[]},{"nhan":"","muc":[]},{"nhan":"Năm 2026 tkdk0pu","muc":["Năm 2026 tkdk0pu","Quý 3/2026 tkdk0pu · đã đóng","Quý 4/2026 tkdk0pu · hiện tại"]},{"nhan":"Năm 2027 tkdk0pu","muc":["Năm 2027 tkdk0pu"]}]
+  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q3: 1 KR, Q4: 2 KR), thay [Phòng Chu kỳ tkdk0pu,50%,0 · 1 · 0,1 KR có ghi chú mới,1,1]
+  E29 okr.danhSach: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  E29 okr.hopTuan: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  E29 okr.toanCanh: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  nhom ky (E23, E29): 6 s
+man-toan-canh: 164 khang dinh, 0 hong, 37 anh, 84 s
+phien-do: xong — mã 0
+```
+
 Đột biến `TC-1 danhSach không kèm loc` — thông điệp ghim «E3: sau khi chon nguoi co loi goi okr.danhSach voi loc.phuTrach = [k]»
 
 ```
@@ -1157,9 +1406,17 @@ phien-do: xong — mã 1
 ### toan-canh-okr:E28
 
 - Xử lý: `sua-rang`
-- Lý do: ngan-kr-mot-cho AC-1 (ngăn kr:), vo-khu-muc-tieu AC-2..5 (thanh bên Sức khoẻ, #chuong-trinh); lượt chạy mọi nhóm vì EVAL rỗng
-- Căn cứ: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh
+- Lý do: Loại (a) — vật đổi có chủ đích của vo-khu-muc-tieu và ngan-kr-mot-cho (đều signed-off). Ba ô chạy chung một lượt man-toan-canh.mjs (EVAL rỗng chạy mọi nhóm), nên hai dòng đỏ ở mốc nền làm đỏ cả ba. «hien [data-hang-toan-canh]: het 30000ms»: răng tới bảng Toàn cảnh bằng cách bấm thẻ «Toàn cảnh» ở hàng thẻ ngang; vo-khu-muc-tieu AC-3 bỏ hàng thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý, AC-1 đưa «Sức khoẻ» vào thanh bên Mục tiêu, AC-4 cho /okr/suc-khoe dựng nội dung Toàn cảnh — bảng [data-hang-toan-canh] vẫn còn (toan-canh.tsx:105), chỉ lối vào đổi. «E23 bước 4 … thay []» là hệ quả của dòng trên: không tới được bảng nên không đọc được hàng nào. Cùng lượt còn ba chỗ theo hồ sơ ký sau: ngan-kr-mot-cho AC-1 cho bấm dòng KR ở họp tuần mở ngăn kr: thay ngăn mục tiêu (E14/E28 bước 3); /okr/suc-khoe gọi okr.* cả từ máy chủ app nên E29 đọc nhật ký cửa chặn hai phía; E10 đếm 5 thẻ số theo moi-kr-ca-cong-ty AC-1 (d-20261023T025431Z-25). Đầu ra sau sửa: dòng «E23 … hang pb:PK … thay [Phòng Chu kỳ …]» là hàng [data-hang-toan-canh] hiện lại.
+- Căn cứ: `_acceptance/vo-khu-muc-tieu/contract.md:31` — - AC-3: Given trang Bộ OKR của một đơn vị, When trang dựng, Then trên trang chỉ còn một lớp thẻ ngang — chuyển kiểu xem `xemOkr` (danh sách · cây · họp tuần · chấm điểm) — và không màn nào của khu còn dựng thanh thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý.
+- Căn cứ thêm: `_acceptance/vo-khu-muc-tieu/contract.md:29` — - AC-1 (cross-layer): Given một người mở bất kỳ màn nào của khu Mục tiêu ở máy tính, When thanh bên dựng, Then nó là `aside[data-slot=area-sidebar]` nhãn «Mục tiêu» với đúng ba nhóm theo thứ tự — nhóm không nhãn (Của tôi → `/okr`), «OKR» (Bộ OKR → `/okr/bo-okr`, Lấy ý kiến → `/okr/lay-y-kien`), «Báo cáo» (Sức khoẻ → `/okr/suc-khoe`, Sơ đồ → `/okr/so-do`); đúng một mục sáng theo đường đang mở, kể cả đường con (`/okr/so-do/muc-tieu/<id>` sáng Sơ đồ); mục Lấy ý kiến mang số ý kiến cần góp khi số đó lớn hơn 0; chân thanh có «Chương trình OKR» → `/settings/okr` cho người quản lý chương trình và không có cho vai khác.
+- Căn cứ thêm: `_acceptance/vo-khu-muc-tieu/contract.md:32` — - AC-4: Given năm đường mới, When mở, Then `/okr/bo-okr` dựng trang đơn vị như `/okr/theo-don-vi` hôm nay, `/okr/lay-y-kien` dựng trang Hỏi ý, `/okr/suc-khoe` dựng nội dung Toàn cảnh và, cho người quản lý chương trình, phần quản trị chương trình ở mục `#chuong-trinh`, `/okr/so-do` dựng Sơ đồ góp vào cả công ty theo chu kỳ, `/okr/so-do/muc-tieu/<id>` dựng sơ đồ quanh một mục tiêu với nút quay lại trỏ `/okr/so-do`.
+- Căn cứ thêm: `_acceptance/ngan-kr-mot-cho/contract.md:33` — - AC-1: Given một KR K của mục tiêu M, When bấm vào K ở mỗi lối — dòng KR ở trang đơn vị, nút «Việc» và con số của K
+- Căn cứ thêm: `07ea52a34` — 07ea52a34 feat(vo-khu-muc-tieu): thanh bên Mục tiêu, ô chu kỳ ở đầu thanh, đầu trang thôi dựng thanh thẻ / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105` — <SimpleTableRow data-hang-toan-canh={h.key}>
+- Căn cứ thêm: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208` — await bamChu(t, "aside[data-slot='area-sidebar'] a", CHU.sucKhoeMuc);
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25` — {"id": "d-20261023T025431Z-25", "type": "fix", "stage": "S3", "decision": "Sau gộp onehub (135 commit) hai chỗ trôi mới ở hồ sơ trong vòng, sửa dưới dòng có sẵn: chu-mac-dinh-thu-vien-ngoai khai stat-card bọc Slot của radix-ui (57c51b2e4, neo bọc 43→44); toan-canh-okr khẳng định nhóm E10 đếm 5 thẻ số (thêm ô KR trượt của moi-kr-ca-cong-ty AC-1).", "why": "Cả hai là đổi có chủ đích của hồ sơ đã ký gộp sau mốc nền; lượt chung của E3/E28/E29 và E3/E4 đỏ vì chúng, ghim lại ở AC-4 cần xanh trên HEAD.", "cost_if_wrong": "Danh sách đóng chỉ khai ô đỏ ở mốc nền; hai chỗ trôi sau mốc nền đi dưới tệp của dòng có sẵn — người ký thấy chúng qua dòng này và bảng trước/sau.", "decided_by": "Manh Phan", "at": "2026-10-23T02:54:31Z"}
+- Sửa: man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -1178,6 +1435,25 @@ $ bun scripts/dev-session.ts "otjc2oty@thu.test"
 phien-do: xong — mã 1
 ```
 
+Đầu ra sau khi sửa — lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log):
+
+```
+man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)
+  nhom loc (E2, E3, E5, E10): 40 s
+  nhom hop (E14, E28): 15 s
+  nhom dien (E17): 5 s
+  nhom tong (E19): 11 s
+  nhom suc (E21): 6 s
+  E23 danh sach chu ky: [{"nhan":"","muc":[]},{"nhan":"","muc":[]},{"nhan":"","muc":[]},{"nhan":"Năm 2026 tkdk0pu","muc":["Năm 2026 tkdk0pu","Quý 3/2026 tkdk0pu · đã đóng","Quý 4/2026 tkdk0pu · hiện tại"]},{"nhan":"Năm 2027 tkdk0pu","muc":["Năm 2027 tkdk0pu"]}]
+  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q3: 1 KR, Q4: 2 KR), thay [Phòng Chu kỳ tkdk0pu,50%,0 · 1 · 0,1 KR có ghi chú mới,1,1]
+  E29 okr.danhSach: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  E29 okr.hopTuan: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  E29 okr.toanCanh: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  nhom ky (E23, E29): 6 s
+man-toan-canh: 164 khang dinh, 0 hong, 37 anh, 84 s
+phien-do: xong — mã 0
+```
+
 Đột biến `TC-2 vết mo-hop-tuan thiếu tuan` — thông điệp ghim «E28: dong mo-hop-tuan dung hinh»
 
 ```
@@ -1193,9 +1469,17 @@ phien-do: xong — mã 1
 ### toan-canh-okr:E29
 
 - Xử lý: `sua-rang`
-- Lý do: ngan-kr-mot-cho AC-1 (ngăn kr:), vo-khu-muc-tieu AC-2..5 (thanh bên Sức khoẻ, #chuong-trinh); lượt chạy mọi nhóm vì EVAL rỗng
-- Căn cứ: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-- Sửa: rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh
+- Lý do: Loại (a) — vật đổi có chủ đích của vo-khu-muc-tieu và ngan-kr-mot-cho (đều signed-off). Ba ô chạy chung một lượt man-toan-canh.mjs (EVAL rỗng chạy mọi nhóm), nên hai dòng đỏ ở mốc nền làm đỏ cả ba. «hien [data-hang-toan-canh]: het 30000ms»: răng tới bảng Toàn cảnh bằng cách bấm thẻ «Toàn cảnh» ở hàng thẻ ngang; vo-khu-muc-tieu AC-3 bỏ hàng thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý, AC-1 đưa «Sức khoẻ» vào thanh bên Mục tiêu, AC-4 cho /okr/suc-khoe dựng nội dung Toàn cảnh — bảng [data-hang-toan-canh] vẫn còn (toan-canh.tsx:105), chỉ lối vào đổi. «E23 bước 4 … thay []» là hệ quả của dòng trên: không tới được bảng nên không đọc được hàng nào. Cùng lượt còn ba chỗ theo hồ sơ ký sau: ngan-kr-mot-cho AC-1 cho bấm dòng KR ở họp tuần mở ngăn kr: thay ngăn mục tiêu (E14/E28 bước 3); /okr/suc-khoe gọi okr.* cả từ máy chủ app nên E29 đọc nhật ký cửa chặn hai phía; E10 đếm 5 thẻ số theo moi-kr-ca-cong-ty AC-1 (d-20261023T025431Z-25). Đầu ra sau sửa: dòng «E23 … hang pb:PK … thay [Phòng Chu kỳ …]» là hàng [data-hang-toan-canh] hiện lại.
+- Căn cứ: `_acceptance/vo-khu-muc-tieu/contract.md:31` — - AC-3: Given trang Bộ OKR của một đơn vị, When trang dựng, Then trên trang chỉ còn một lớp thẻ ngang — chuyển kiểu xem `xemOkr` (danh sách · cây · họp tuần · chấm điểm) — và không màn nào của khu còn dựng thanh thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý.
+- Căn cứ thêm: `_acceptance/vo-khu-muc-tieu/contract.md:29` — - AC-1 (cross-layer): Given một người mở bất kỳ màn nào của khu Mục tiêu ở máy tính, When thanh bên dựng, Then nó là `aside[data-slot=area-sidebar]` nhãn «Mục tiêu» với đúng ba nhóm theo thứ tự — nhóm không nhãn (Của tôi → `/okr`), «OKR» (Bộ OKR → `/okr/bo-okr`, Lấy ý kiến → `/okr/lay-y-kien`), «Báo cáo» (Sức khoẻ → `/okr/suc-khoe`, Sơ đồ → `/okr/so-do`); đúng một mục sáng theo đường đang mở, kể cả đường con (`/okr/so-do/muc-tieu/<id>` sáng Sơ đồ); mục Lấy ý kiến mang số ý kiến cần góp khi số đó lớn hơn 0; chân thanh có «Chương trình OKR» → `/settings/okr` cho người quản lý chương trình và không có cho vai khác.
+- Căn cứ thêm: `_acceptance/vo-khu-muc-tieu/contract.md:32` — - AC-4: Given năm đường mới, When mở, Then `/okr/bo-okr` dựng trang đơn vị như `/okr/theo-don-vi` hôm nay, `/okr/lay-y-kien` dựng trang Hỏi ý, `/okr/suc-khoe` dựng nội dung Toàn cảnh và, cho người quản lý chương trình, phần quản trị chương trình ở mục `#chuong-trinh`, `/okr/so-do` dựng Sơ đồ góp vào cả công ty theo chu kỳ, `/okr/so-do/muc-tieu/<id>` dựng sơ đồ quanh một mục tiêu với nút quay lại trỏ `/okr/so-do`.
+- Căn cứ thêm: `_acceptance/ngan-kr-mot-cho/contract.md:33` — - AC-1: Given một KR K của mục tiêu M, When bấm vào K ở mỗi lối — dòng KR ở trang đơn vị, nút «Việc» và con số của K
+- Căn cứ thêm: `07ea52a34` — 07ea52a34 feat(vo-khu-muc-tieu): thanh bên Mục tiêu, ô chu kỳ ở đầu thanh, đầu trang thôi dựng thanh thẻ / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105` — <SimpleTableRow data-hang-toan-canh={h.key}>
+- Căn cứ thêm: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208` — await bamChu(t, "aside[data-slot='area-sidebar'] a", CHU.sucKhoeMuc);
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25` — {"id": "d-20261023T025431Z-25", "type": "fix", "stage": "S3", "decision": "Sau gộp onehub (135 commit) hai chỗ trôi mới ở hồ sơ trong vòng, sửa dưới dòng có sẵn: chu-mac-dinh-thu-vien-ngoai khai stat-card bọc Slot của radix-ui (57c51b2e4, neo bọc 43→44); toan-canh-okr khẳng định nhóm E10 đếm 5 thẻ số (thêm ô KR trượt của moi-kr-ca-cong-ty AC-1).", "why": "Cả hai là đổi có chủ đích của hồ sơ đã ký gộp sau mốc nền; lượt chung của E3/E28/E29 và E3/E4 đỏ vì chúng, ghim lại ở AC-4 cần xanh trên HEAD.", "cost_if_wrong": "Danh sách đóng chỉ khai ô đỏ ở mốc nền; hai chỗ trôi sau mốc nền đi dưới tệp của dòng có sẵn — người ký thấy chúng qua dòng này và bảng trước/sau.", "decided_by": "Manh Phan", "at": "2026-10-23T02:54:31Z"}
+- Sửa: man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.
 
 Đầu ra đỏ ở mốc nền:
 
@@ -1212,6 +1496,25 @@ $ bun scripts/dev-session.ts "qtjc6gpt@thu.test"
 $ bun scripts/dev-session.ts "ktjc6gpt@thu.test"
 $ bun scripts/dev-session.ts "otjc6gpt@thu.test"
 phien-do: xong — mã 1
+```
+
+Đầu ra sau khi sửa — lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log):
+
+```
+man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)
+  nhom loc (E2, E3, E5, E10): 40 s
+  nhom hop (E14, E28): 15 s
+  nhom dien (E17): 5 s
+  nhom tong (E19): 11 s
+  nhom suc (E21): 6 s
+  E23 danh sach chu ky: [{"nhan":"","muc":[]},{"nhan":"","muc":[]},{"nhan":"","muc":[]},{"nhan":"Năm 2026 tkdk0pu","muc":["Năm 2026 tkdk0pu","Quý 3/2026 tkdk0pu · đã đóng","Quý 4/2026 tkdk0pu · hiện tại"]},{"nhan":"Năm 2027 tkdk0pu","muc":["Năm 2027 tkdk0pu"]}]
+  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q3: 1 KR, Q4: 2 KR), thay [Phòng Chu kỳ tkdk0pu,50%,0 · 1 · 0,1 KR có ghi chú mới,1,1]
+  E29 okr.danhSach: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  E29 okr.hopTuan: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  E29 okr.toanCanh: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]
+  nhom ky (E23, E29): 6 s
+man-toan-canh: 164 khang dinh, 0 hong, 37 anh, 84 s
+phien-do: xong — mã 0
 ```
 
 Đột biến `TC-3 prefetch toanCanh bằng currentId` — thông điệp ghim «E29: co it nhat 1 loi goi okr.toanCanh sau khi chon ky va moi loi goi mang cycleId cua»
@@ -1330,6 +1633,7 @@ con nhap duong cu: apps/api/src/okr/okr-xem.service.ts
 - Xử lý: `sua-rang`
 - Lý do: CONTEXT.md mục Tóm tắt tuần (#226 AC-15) và Trợ lý OKR (#230 Kara) đổi theo hồ sơ ký sau
 - Căn cứ: `e5c369cc6` — e5c369cc6 Merge pull request #226 from phanlemanh/feat/tro-ly-okr-tom-tat / Tóm tắt tuần của Trợ lý OKR (lượt 9c)
+- Căn cứ thêm: `923f57173` — 923f57173 Merge pull request #230 from phanlemanh/proto/gop-y-dung-cho / docs: Kara — một ngôn ngữ AI cho cả kho; proto gop-y-dung-cho; hạt giống nen-kara, gop-y-dung-cho
 - Sửa: rang/tu-dien-luat.mjs: hai mục so với git show <sha>:CONTEXT.md
 
 Đầu ra đỏ ở mốc nền:
@@ -1435,8 +1739,15 @@ RĂNG ĐỎ: có 9 chỗ khai kiểu ngôn ngữ, chờ đúng 1
 ### cai-dat-con-lai-noi-tieng-viet:E8
 
 - Xử lý: `san-pham-hong`
-- Lý do: nhãn trường tự tạo ở /settings/fields không translate=no (fields-list.tsx:407-409, 519)
-- Căn cứ: `6634d64c1` — 6634d64c1 feat(truong-chuan-o-cai-dat): Cài đặt › Trường sắp, ẩn trường chuẩn và bật «Bắt buộc» / Một danh sách trộn trường chuẩn với trường tự tạo, công tắc «Hiện trên hồ sơ» / trên mỗi hàng, trường bắt buộc khoá kèm lý do. Ô sửa có công tắc «Bắt buộc». / Gỡ standard-fields.ts. Ba bài kiểm cũ thêm thủ tục layout vào kho giả. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Lý do: Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8, chủ kho duyệt 23/10). Tên trường tự tạo ở Cài đặt › Trường vẽ trong span không mang translate="no" (fields-list.tsx:407-408 và :518-519 ở HEAD). Log đầy đủ của lượt nền có đúng dòng đó: các tên trường tự tạo của dữ liệu mẫu (Account type, BDR owner, ICP fit score, Lead source, Lifecycle stage, Segment, Territory) hiện giống hệt hai lượt tiếng mà không mang translate="no", trong khi dữ liệu người nhập khác như «Ada Okafor» có mang (Email, URL, Website cùng màn là nhãn kiểu trường, phần sửa răng E1 ở sua_san khai chúng). Luật buộc: CLAUDE.md «Dữ liệu người nhập không dịch, và đánh dấu để trình duyệt không tự dịch»; AC-6b của hồ sơ này (dữ liệu người nhập trên các màn Cài đặt mang translate="no"). Không quyết định đã ký nào miễn: hồ sơ đổi màn là truong-chuan-o-cai-dat (6634d64c1, signed-off) — 9 AC của nó không nói gì về translate hay dịch tên trường. Thiếu: chưa có đầu ra lượt đo sau khi sửa răng (sửa răng ghi sẵn ở sua_san, chưa áp vì hồ sơ hoàn lại không chạm tệp), nên dòng chứng là log đầy đủ của lượt nền.
+- Căn cứ: `apps/app/components/crm/fields/fields-list.tsx:407` — <span className="w-full truncate font-medium text-foreground text-xs">
+- Căn cứ thêm: `apps/app/components/crm/fields/fields-list.tsx:408` — {nhan}
+- Căn cứ thêm: `apps/app/components/crm/fields/fields-list.tsx:519` — {field.label}
+- Căn cứ thêm: `CLAUDE.md:130` — màn đó vẫn hiểu đúng thì chữ đó thừa. Dữ liệu người nhập không dịch, và đánh dấu
+- Căn cứ thêm: `CLAUDE.md:131` — để trình duyệt không tự dịch.
+- Căn cứ thêm: `_acceptance/cai-dat-con-lai-noi-tieng-viet/contract.md:68` — - AC-6b: Given dữ liệu người nhập trên các màn này — tên khoá API, tên miền được phép, tên nhà cung cấp SSO, tên kênh Slack — kê thành bảng đóng `(file, trường dữ liệu)` ở S3, When phép đo chạy, Then HAI chân: chân mã đọc cây cú pháp — phần tử JSX bọc biểu thức của trường đó mang `translate="no"`, khai thẳng là mức mã; chân màn chỉ cho thứ gieo được qua API thật KHÔNG cần OAuth (tạo một khoá API, thêm một tên miền) và in rõ danh sách gieo được / không gieo được mang sang cổng ký. Workspace `onehub` mặc định không có khoá API, không có SSO, không có kênh Slack — nên một chân màn đơn độc sẽ thoát mã 2 vĩnh viễn, và đó là lý do phải tách.
+- Căn cứ thêm: `6634d64c1` — 6634d64c1 feat(truong-chuan-o-cai-dat): Cài đặt › Trường sắp, ẩn trường chuẩn và bật «Bắt buộc» / Một danh sách trộn trường chuẩn với trường tự tạo, công tắc «Hiện trên hồ sơ» / trên mỗi hàng, trường bắt buộc khoá kèm lý do. Ô sửa có công tắc «Bắt buộc». / Gỡ standard-fields.ts. Ba bài kiểm cũ thêm thủ tục layout vào kho giả. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:8` — {"id": "d-20261022T104031Z-8", "type": "approach", "stage": "S1", "decision": "Hỏi-1: bốn lỗi sản phẩm thật — máy khuyên không sửa sản phẩm ở vòng này; ba hồ sơ dính vào hoan_lai, gửi bốn tín hiệu cho làn chủ, phần sửa răng đã tra ghi sẵn.", "why": "Lỗi nằm ở Cài đặt › Trường, Tổng quan và tám bài test DOM — vùng của làn khác, hai lỗi là giao diện.", "cost_if_wrong": "Ba hồ sơ còn đỏ tới khi hàng sửa sản phẩm gộp; PR nào chạm chúng trước đó vẫn đỏ ở lượt ghim.", "serves": ["AC-7"], "can_cu": {"nguon": "chi-nguoi", "kho_dao": false, "khuyen": "Không sửa sản phẩm; hoàn lại ba hồ sơ, gửi tín hiệu, ghi sẵn phần sửa răng.", "loi_khac": "Sửa luôn sản phẩm — chạm apps/app của làn khác, vòng thành chạm giao diện, to thêm khoảng một phần ba; hoặc chỉ sửa 8 bài test DOM và hoàn lại hai hồ sơ kia."}, "at": "2026-10-22T10:40:31Z"}
 
 Đầu ra đỏ ở mốc nền:
 
@@ -1455,11 +1766,35 @@ $ bun scripts/dev-session.ts manh.phan@onemount.com
 phien-do: xong — mã 1
 ```
 
+Dòng lỗi trong log đầy đủ của lượt nền (đuôi ở trên cắt mất):
+
+```
+   CHUA KHAI            "Account type" <- /settings/fields
+   du-lieu-nguoi-nhap   "Ada Okafor" [translate="no"] <- /settings/members
+   CHUA KHAI            "BDR owner" <- /settings/fields
+   CHUA KHAI            "Email" <- /settings/fields
+   CHUA KHAI            "ICP fit score" <- /settings/fields
+   CHUA KHAI            "Lead source" <- /settings/fields
+   CHUA KHAI            "Lifecycle stage" <- /settings/fields
+   CHUA KHAI            "Segment" <- /settings/fields
+   CHUA KHAI            "Territory" <- /settings/fields
+   CHUA KHAI            "URL" <- /settings/fields
+   CHUA KHAI            "Website" <- /settings/fields
+ket qua: thieu dong=0 · thua gia tri=24 · thieu thuoc tinh=0 · ngoai lat (gioi han da khai)=7 · mien tru chet=1 · route khong do duoc=1 · route lech do dai hai luot=0
+```
+
 ### cai-dat-con-lai-noi-tieng-viet:E13
 
 - Xử lý: `san-pham-hong`
-- Lý do: /settings/fields 360px: Điện thoại 57/56px, Trường chuẩn 75/56px bị cắt ở vi, en vừa (fields-list.tsx:407-424)
-- Căn cứ: `6634d64c1` — 6634d64c1 feat(truong-chuan-o-cai-dat): Cài đặt › Trường sắp, ẩn trường chuẩn và bật «Bắt buộc» / Một danh sách trộn trường chuẩn với trường tự tạo, công tắc «Hiện trên hồ sơ» / trên mỗi hàng, trường bắt buộc khoá kèm lý do. Ô sửa có công tắc «Bắt buộc». / Gỡ standard-fields.ts. Ba bài kiểm cũ thêm thủ tục layout vào kho giả. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Lý do: Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8). Ô E13 không cần sửa răng: lượt nền đã chỉ đúng chỗ hỏng, chỉ là đuôi 12 dòng cắt mất — log đầy đủ có «TRAN: "Điện thoại" — vi 57/56px · doi chung en 96/96px vua» và «TRAN: "Trường chuẩn" — vi 75/56px» trên /settings/fields ở 360px (dòng dưới). Chỗ hỏng: fields-list.tsx:419-425 ở HEAD (khối trường chuẩn) cắt nhãn bằng truncate. Luật buộc: AC-10 của hồ sơ này «với mọi phần tử mang nhãn dịch được scrollWidth ≤ clientWidth … không miễn trừ truncate». Không quyết định đã ký nào miễn: truong-chuan-o-cai-dat (6634d64c1, signed-off) dựng khối này, 9 AC của nó không có AC nào cho phép cắt chữ hay nói về khổ 360px (lớp cắt ngang của nó là 1280 và 375).
+- Căn cứ: `apps/app/components/crm/fields/fields-list.tsx:419` — <span className="w-full truncate font-medium text-foreground text-xs">
+- Căn cứ thêm: `apps/app/components/crm/fields/fields-list.tsx:422` — <span className="w-full truncate text-muted-foreground text-xs">
+- Căn cứ thêm: `_acceptance/cai-dat-con-lai-noi-tieng-viet/contract.md:72` — - AC-10: Given bản `vi` dài hơn bản `en`, When mọi route của lát dựng ở 360px hai lượt, Then với mọi phần tử mang nhãn dịch được `scrollWidth ≤ clientWidth`; lượt `en` là đối chứng dương; không miễn trừ `truncate`. **Giới hạn kế thừa:** mù với vùng chứa cho xuống dòng — chứng được "không chỗ nào bị cắt", không chứng "mọi nhãn vừa mắt".
+- Căn cứ thêm: `_acceptance/truong-chuan-o-cai-dat/contract.md:104` — Lớp cắt ngang: locale vi/en, quyền quản trị hay không, khổ 1280 và 375.
+- Căn cứ thêm: `6634d64c1` — 6634d64c1 feat(truong-chuan-o-cai-dat): Cài đặt › Trường sắp, ẩn trường chuẩn và bật «Bắt buộc» / Một danh sách trộn trường chuẩn với trường tự tạo, công tắc «Hiện trên hồ sơ» / trên mỗi hàng, trường bắt buộc khoá kèm lý do. Ô sửa có công tắc «Bắt buộc». / Gỡ standard-fields.ts. Ba bài kiểm cũ thêm thủ tục layout vào kho giả. / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `CLAUDE.md:130` — màn đó vẫn hiểu đúng thì chữ đó thừa. Dữ liệu người nhập không dịch, và đánh dấu
+- Căn cứ thêm: `CLAUDE.md:131` — để trình duyệt không tự dịch.
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:8` — {"id": "d-20261022T104031Z-8", "type": "approach", "stage": "S1", "decision": "Hỏi-1: bốn lỗi sản phẩm thật — máy khuyên không sửa sản phẩm ở vòng này; ba hồ sơ dính vào hoan_lai, gửi bốn tín hiệu cho làn chủ, phần sửa răng đã tra ghi sẵn.", "why": "Lỗi nằm ở Cài đặt › Trường, Tổng quan và tám bài test DOM — vùng của làn khác, hai lỗi là giao diện.", "cost_if_wrong": "Ba hồ sơ còn đỏ tới khi hàng sửa sản phẩm gộp; PR nào chạm chúng trước đó vẫn đỏ ở lượt ghim.", "serves": ["AC-7"], "can_cu": {"nguon": "chi-nguoi", "kho_dao": false, "khuyen": "Không sửa sản phẩm; hoàn lại ba hồ sơ, gửi tín hiệu, ghi sẵn phần sửa răng.", "loi_khac": "Sửa luôn sản phẩm — chạm apps/app của làn khác, vòng thành chạm giao diện, to thêm khoảng một phần ba; hoặc chỉ sửa 8 bài test DOM và hoàn lại hai hồ sơ kia."}, "at": "2026-10-22T10:40:31Z"}
 
 Đầu ra đỏ ở mốc nền:
 
@@ -1478,6 +1813,16 @@ $ bun scripts/dev-session.ts manh.phan@onemount.com
 phien-do: xong — mã 1
 ```
 
+Dòng lỗi trong log đầy đủ của lượt nền (đuôi ở trên cắt mất):
+
+```
+-- man /settings/fields o 360px · phan tu co chu: vi=68 en=68 · nhan dich duoc=55
+   TRAN CA HAI LUOT: "Trường chuẩn · bắt buộc" — vi 132/96px · en 131/96px — main:2/div:0/div:1/div:0/div:1/div:3/div:1/span:1
+   TRAN: "Điện thoại" — vi 57/56px · doi chung en 96/96px vua — main:2/div:0/div:1/div:0/div:1/div:6/div:1/span:0
+   TRAN: "Trường chuẩn" — vi 75/56px · doi chung en 96/96px vua — main:2/div:0/div:1/div:0/div:1/div:6/div:1/span:1
+ket qua 360px: 447 nhan dich duoc tren 17/18 route · vi tran ma en vua=2 · tran ca hai luot=1 · en tran ma vi vua=0
+```
+
 - Tín hiệu F1-26: cai-dat-con-lai-noi-tieng-viet E8: nhãn trường tự tạo ở Cài đặt › Trường thiếu translate=no
 
 - Tín hiệu F1-27: cai-dat-con-lai-noi-tieng-viet E13: chữ Việt bị cắt ở khổ 360px trên Cài đặt › Trường
@@ -1485,8 +1830,16 @@ phien-do: xong — mã 1
 ### tong-quan-va-khung-noi-tieng-viet:E7
 
 - Xử lý: `san-pham-hong`
-- Lý do: sau khi sửa răng như E1: sales-dashboard.tsx:204-209 bọc nhãn giai đoạn ForeignText lang=en không translate=no, trái giai-doan-thoa-thuan AC-13
-- Căn cứ: `ecb9448b4` — ecb9448b4 feat(giai-doan-thoa-thuan): app đọc giai đoạn động từ giaiDoan.list / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Lý do: Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8). Lượt nền của E7 chỉ là lỗi răng (ERR_MODULE_NOT_FOUND apps/app/lib/deal-stage.ts — tệp đã gỡ khi giai-doan-thoa-thuan chuyển giai đoạn thành dữ liệu workspace ở ecb9448b4); sửa răng ghi sẵn ở sua_san E1. Chỗ hỏng chứng ở mức mã: sales-dashboard.tsx:204-208 ở HEAD bọc nhãn giai đoạn (slice.label, nay là dữ liệu workspace người quản trị nhập) bằng ForeignText lang="en" mà không translate="no". Luật buộc: CLAUDE.md «Dữ liệu người nhập không dịch, và đánh dấu để trình duyệt không tự dịch»; cùng giá trị ấy ở Cài đặt › Giai đoạn, giai-doan-thoa-thuan AC-13 buộc mang translate="no". Không quyết định đã ký nào miễn ở Tổng quan. Lưu ý cho người ký: AC-7 của hồ sơ này viết khi nhãn giai đoạn còn là bảy giá trị cố định của lib/deal-stage.ts và loại «nhãn mang lang=en» khỏi tập ứng viên — xếp chỗ này là lỗi sản phẩm dựa trên luật dữ liệu người nhập, không dựa trên chữ của AC-7. Thiếu: không còn đầu ra lượt đo sau khi sửa răng (lượt thử không lưu log).
+- Căn cứ: `apps/app/app/(app)/[slug]/sales-dashboard.tsx:204` — <ForeignText
+- Căn cứ thêm: `apps/app/app/(app)/[slug]/sales-dashboard.tsx:206` — lang="en"
+- Căn cứ thêm: `apps/app/app/(app)/[slug]/sales-dashboard.tsx:208` — {slice.label}
+- Căn cứ thêm: `CLAUDE.md:130` — màn đó vẫn hiểu đúng thì chữ đó thừa. Dữ liệu người nhập không dịch, và đánh dấu
+- Căn cứ thêm: `CLAUDE.md:131` — để trình duyệt không tự dịch.
+- Căn cứ thêm: `_acceptance/giai-doan-thoa-thuan/contract.md:44` — - AC-13: Given trang Cài đặt › Giai đoạn thoả thuận ở khổ 320 · 375 · 768 · 1024 · 1440, tiếng Việt và tiếng Anh, When mở trang, thêm một giai đoạn, và xoá một giai đoạn còn thoả thuận qua hộp thoại chọn đích, Then trang có ba thẻ theo loại, không tràn ngang, nhãn giai đoạn mang `translate="no"`, giai đoạn mới hiện ở bảng cột của màn Thoả thuận, và thoả thuận của giai đoạn đã xoá nằm ở giai đoạn đích; And lúc tải có khung xương, lúc hỏng có lời báo và nút «Thử lại».
+- Căn cứ thêm: `_acceptance/tong-quan-va-khung-noi-tieng-viet/contract.md:49` — - AC-7: Given các giá trị không được dịch trên màn `/` và khung — bảy nhãn giai đoạn thoả thuận (`lang="en"`, `CONTEXT.md` chưa chốt nghĩa; giá trị đọc THẬT từ `lib/deal-stage.ts` qua `import`, không chép tay) · mã tiền tệ · thương hiệu `OneHub` — kê thành bảng đóng, **mỗi dòng khai `dieu_kien`** (luôn hiện · cần một thoả thuận ở giai đoạn X hiện trên `/` · cần một thoả thuận bằng tiền tệ chưa có tỷ giá), When màn dựng hai lượt tiếng, Then phép đo KIỂM ĐIỀU KIỆN trước khi gom (qua `nguon_san`; điều kiện không đạt là mã 2 gọi tên điều kiện, không phải bảng sai); tập ứng viên SINH TỪ MÀN (`translate="no"` ∪ chuỗi giống hệt hai lượt, trừ ba luật có tên: số thuần · dữ liệu người nhập · nhãn mang `lang="en"`) BẰNG phần bảng có điều kiện đạt theo cả hai chiều; dòng có điều kiện không đạt đo ở mức mã (phần tử render mang `lang="en"`) và in vào danh sách *không đo được trên màn* mang sang cổng ký. Hai lượt phải ra cùng số phần tử có chữ, lệch là ĐỎ.
+- Căn cứ thêm: `ecb9448b4` — ecb9448b4 feat(giai-doan-thoa-thuan): app đọc giai đoạn động từ giaiDoan.list / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:8` — {"id": "d-20261022T104031Z-8", "type": "approach", "stage": "S1", "decision": "Hỏi-1: bốn lỗi sản phẩm thật — máy khuyên không sửa sản phẩm ở vòng này; ba hồ sơ dính vào hoan_lai, gửi bốn tín hiệu cho làn chủ, phần sửa răng đã tra ghi sẵn.", "why": "Lỗi nằm ở Cài đặt › Trường, Tổng quan và tám bài test DOM — vùng của làn khác, hai lỗi là giao diện.", "cost_if_wrong": "Ba hồ sơ còn đỏ tới khi hàng sửa sản phẩm gộp; PR nào chạm chúng trước đó vẫn đỏ ở lượt ghim.", "serves": ["AC-7"], "can_cu": {"nguon": "chi-nguoi", "kho_dao": false, "khuyen": "Không sửa sản phẩm; hoàn lại ba hồ sơ, gửi tín hiệu, ghi sẵn phần sửa răng.", "loi_khac": "Sửa luôn sản phẩm — chạm apps/app của làn khác, vòng thành chạm giao diện, to thêm khoảng một phần ba; hoặc chỉ sửa 8 bài test DOM và hoàn lại hai hồ sơ kia."}, "at": "2026-10-22T10:40:31Z"}
 
 Đầu ra đỏ ở mốc nền:
 
@@ -1510,8 +1863,16 @@ phien-do: xong — mã 1
 ### so-okr-tu-chay:E12
 
 - Xử lý: `san-pham-hong`
-- Lý do: Sau khi sửa bộ chọn theo ngăn KR một chỗ, mọi khẳng định E12 đạt nhưng lượt đỏ vì lỗi hydrat ở trang Của tôi (PhanDonViDan › TheDonVi › CardDescription: máy chủ trả khung xương, trình duyệt dựng span data-so-tom-tat) và mất ngày đang xem sau «Quay lại» (record-stack.ts:68 giuNgaySo chỉ giữ ngaySo khi còn ngăn so-kr, đã gỡ ở 5b6be6129); ngăn KR không còn hiện định nghĩa chỉ số (cần làn chủ phán).
+- Lý do: Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8; quyết định chuyển hồ sơ d-20261023T010937Z-24). Đầu ra đỏ ở mốc nền chỉ có «E19 buoc 4» (nút Gửi không hiện, DB không ghi): đó là lỗi thước — răng mở /okr/cap-nhat-tuan, mà cua-toi-ba-phan AC-2 dời bảng cập nhật vào phần 1 của /okr; bản vá sua-san đổi sang /okr?tu=viec-cua-toi và bộ chọn [data-phan='can-cap-nhat'], lượt sau sửa không còn dòng E19 nào hỏng. Lượt sau sửa: 168 khẳng định, 7 hỏng (dòng dưới). Lệnh của E12, E14 chạy tròn mọi nhóm (EVAL rỗng), nên khẳng định của nhóm E11/E13 cũng làm đỏ hai ô này. Bảy dòng hỏng chia ba lỗi: (1) F1-32 — bốn dòng «E11 buoc 4/10» tên chỉ số, translate=no của tên, phạm vi, khoảng ngày rỗng vì ngăn KR không vẽ phần định nghĩa; (2) F1-31 — «E11 buoc 6» sau «Quay lại» đường dẫn mất ngaySo, và «E11 buoc 7» (câu lệch đọc 3 và 2 thay 1 và 0) suy ra từ đó: bước 7 tải lại trang rồi đọc câu lệch của ngày trên đường dẫn, mà đường dẫn đã mất ngày D2 (suy từ mã răng, chưa tách đo riêng); (3) F1-30 — lỗi hydrat ở Của tôi (dòng pageerror; khác biệt CardDescription: máy chủ trả khung xương, trình duyệt dựng span data-so-tom-tat). Mọi khẳng định riêng của E12 (số đã chụp = DB, số dòng bảng = banGhiChiSo, chọn ngày gọi đúng input) đạt. Vì sao không quyết định đã ký nào cho phép: ngan-kr-mot-cho (5b6be6129, signed-off) được chủ kho cho gộp ngăn số vào ngăn KR ở Hỏi-1 của nó (d-20261020T023533Z-7) với điều kiện «chuyển thước theo luật 21: đổi đúng chỗ hoặc khai nghỉ superseded_by» — phần gộp là có chủ đích, nên bộ chọn sang ngăn kr: là sửa răng. Nhưng AC-3 của nó hứa mục «Số và nguồn» là «nội dung ngăn số hôm nay», và nó không khai superseded_by cho AC-7 của so-okr-tu-chay. Hiện mục ấy chỉ nhúng NoiDungSoKr (kr-sheet.tsx:628) còn phần định nghĩa [data-dinh-nghia] (tên chỉ số, phạm vi, khoảng ngày) chỉ ở SoKrSheet (so-kr-sheet.tsx:90); giuNgaySo (record-stack.ts:68) chỉ giữ ngaySo khi chồng ngăn còn so-kr, mà không lối nào mở so-kr nữa. AC-7 của so-okr-tu-chay vẫn hứa tên chỉ số, phạm vi, khoảng ngày và «Quay lại về ngăn số» với ngày đã chọn.
 - Căn cứ: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/ngan-kr-mot-cho/decisions.jsonl:7` — {"id":"d-20261020T023533Z-7","type":"approach","stage":"S1","at":"2026-10-20T02:35:33Z","decision":"Hỏi-1: gộp cả lối con số (ngăn số) và lối diễn biến vào ngăn KR, và cho chuyển thước hồ sơ đã ký theo khuôn luật 21?","why":"Ngưỡng nói mọi lối; hai lối ấy đang được okr-to-chuc-va, so-okr-tu-chay, toan-canh-okr, cua-toi-ba-phan đo, mà luật tạm 18/10 cấm máy tự sửa thước hồ sơ đã ký.","cost_if_wrong":"Không gộp thì vế mọi lối không đạt; gộp mà chuyển thước sai thì một lời hứa đã ký mất thước.","can_cu":{"nguon":"chi-nguoi","kho_dao":false,"khuyen":"Gộp cả hai, chuyển thước theo khuôn luật 21 như đã cho VK6: đổi đúng chỗ hoặc khai nghỉ superseded_by, đo hai chiều, dòng sổ fix decided_by chủ kho, cham-tep.","loi_khac":"Chỉ gộp các lối đang mở kr và thêm Cập nhật — còn ba nơi, ngưỡng chỉ đạt vế 3 bấm."}}
+- Căn cứ thêm: `_acceptance/ngan-kr-mot-cho/contract.md:40` — - AC-3: Given ngăn KR của K, Then thân ngăn có theo thứ tự: ô số «Hiện tại» kèm đích và «Tiến độ» kèm kỳ vọng
+- Căn cứ thêm: `_acceptance/so-okr-tu-chay/contract.md:38` — - AC-7: Given sheet mục tiêu có KR tay, KR nguồn CRM có lịch sử, KR đo cạnh và KR nguồn API, When mở sheet trong trình duyệt thật của cây đang xét rồi bấm vào con số của KR nguồn CRM, chọn một ngày khác trong lịch sử, bấm một bản ghi trong danh sách rồi «Quay lại», Then bảng KR có dấu nguồn cạnh số, KR đo cạnh hiện «<số tay> tay · <số máy> máy»; ngăn «Số của KR» chồng lên sheet mục tiêu (URL thêm `record=so-kr:<id>`) với tên chỉ số, phạm vi, khoảng ngày, số đã chụp, bảng bản ghi và bảng lịch sử; chọn ngày đổi danh sách và URL; bấm bản ghi mở sheet của nó, «Quay lại» về ngăn số; And ngăn có trạng thái đang tải, rỗng theo chỉ số, lệch, lỗi có «Thử lại» (bấm tải lại được); And vai «chỉ OKR» thấy số không bấm được; And ảnh 1440 và 390 không tràn ngang, chữ người nhập mang `translate="no"`. (cross-layer)
+- Căn cứ thêm: `apps/app/components/crm/record-sheet/kr-sheet.tsx:628` — return <NoiDungSoKr keyResultId={kr.id} />;
+- Căn cứ thêm: `apps/app/components/crm/record-sheet/so-kr-sheet.tsx:90` — <span data-dinh-nghia>
+- Căn cứ thêm: `apps/app/components/crm/record-sheet/record-stack.ts:68` — export function giuNgaySo(truoc: RecordRef[], sau: RecordRef[]): boolean {
+- Căn cứ thêm: `_acceptance/cua-toi-ba-phan/contract.md:31` — - AC-2: Given phần 1 có KR thiếu số, When bấm «Cập nhật N KR», điền số và tự tin rồi gửi, Then bảng cập nhật mở ngay trong phần 1 (đường dẫn vẫn là `/okr`, không chuyển trang), có đủ ô số, tự tin, ghi chú và thanh gửi như bảng cũ; gửi xong phần 1 hiện «đã gửi» và danh sách làm mới; máy chủ có đúng một dòng `okrCheckInSession` mới mang `entry = "cua-toi"`, `submittedAt` khác rỗng và một `okrCheckIn` cho mỗi KR đã gửi; tải trang Của tôi mà không bấm thì không sinh dòng phiên nào. (cross-layer)
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:24` — {"id": "d-20261023T010937Z-24", "type": "descope", "stage": "S3", "decision": "so-okr-tu-chay chuyển sang hoàn lại: lượt đo màn sau khi sửa răng lộ ba lỗi sản phẩm (lỗi hydrat ở Của tôi, mất ngày đang xem sau «Quay lại», ngăn KR thiếu định nghĩa chỉ số); phần sửa răng E8 E23 E25 và bản vá F8 ghi sẵn ở sua-san/so-okr-tu-chay.patch, tệp hồ sơ trả về nguyên; ba tín hiệu F1-30, F1-31, F1-32.", "why": "Áp đúng lối chủ kho duyệt ở Hỏi-1 (hồ sơ dính lỗi sản phẩm thì hoàn lại, không chạm tệp); ghim lại hồ sơ này sẽ đỏ ở E12 E14 cho tới khi sản phẩm được sửa.", "cost_if_wrong": "Bản vá F8 cho E23 E25 chưa vào cây; hồ sơ còn đỏ ở năm ô tới khi hàng sửa sản phẩm mang bản vá theo. Hợp đồng F28 mục Out of scope chưa liệt hồ sơ này — người ký phê ở Cổng Bằng chứng.", "at": "2026-10-23T01:09:37Z"}
 
 Đầu ra đỏ ở mốc nền:
 
@@ -1530,11 +1891,30 @@ $ bun scripts/dev-session.ts "osjcym9j@thu.test"
 phien-do: xong — mã 1
 ```
 
+Đầu ra sau khi sửa — lượt man-so-tu-chay.mjs sau khi áp bản vá sửa răng ghi sẵn sua-san/so-okr-tu-chay.patch, cây 3ee639d7c, 23/10 08:03 (+07); log scratchpad/c-f28/log-so-okr-tu-chay, tóm tắt scratchpad/sau-so-okr-tu-chay.json:
+
+```
+$ EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs"
+--- exit 1 (ky vong 0)
+man-so-tu-chay: chay tron 5 eval; chay rieng: EVAL=E11 (ma: E11, E12, E13, E14, E19); chieu do: --chieu-do
+man-so-tu-chay: 168 khang dinh, 7 hong, 21 anh (…)
+  HONG: E11 buoc 4: ten chi so «Thoả thuận chốt được» (thay «»)
+  HONG: E11 buoc 10: ten chi so mang translate=no (thay null)
+  HONG: E11 buoc 4: pham vi phong ban Phòng Đối tác số sk9lu9h (thay null «»)
+  HONG: E11 buoc 4: co khoang ngay (thay «»)
+  HONG: E11 buoc 6: sau Quay lai URL con ngaySo=2026-10-21 va kr (thay objective:cmvk9lvma000ndncfhlz6feej,kr:cmvk9lvof000rdncf4y2e6lh6 ngaySo=null)
+  HONG: E11 buoc 7: cau lech co hai so (da chup 1, tinh lai 0) — thay «Đã chụp 3 · tính lại lúc này 2 — dữ liệu đã đổi sau khi chụp», data-so-tinh-lai=2
+  HONG: khong loi console (1): E13/E14 /okr?record=objective:cmvk9lvwd001adncfpudiyiqd: pageerror Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerate
+```
+
 ### so-okr-tu-chay:E14
 
 - Xử lý: `san-pham-hong`
-- Lý do: Cùng lượt đo và cùng lỗi hydrat ở trang Của tôi như E12; mọi khẳng định riêng của E14 đạt sau khi sửa đường /okr?tu=viec-cua-toi và chờ nút thao tác.
+- Lý do: Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8; d-20261023T010937Z-24). Đầu ra đỏ ở mốc nền chỉ có «E19 buoc 4» (nút Gửi không hiện, DB không ghi): đó là lỗi thước — răng mở /okr/cap-nhat-tuan, mà cua-toi-ba-phan AC-2 dời bảng cập nhật vào phần 1 của /okr; bản vá sua-san đổi sang /okr?tu=viec-cua-toi và bộ chọn [data-phan='can-cap-nhat'], lượt sau sửa không còn dòng E19 nào hỏng. Lượt sau sửa: 168 khẳng định, 7 hỏng (dòng dưới). Lệnh của E12, E14 chạy tròn mọi nhóm (EVAL rỗng), nên khẳng định của nhóm E11/E13 cũng làm đỏ hai ô này. Lỗi thuộc nhóm của chính E14: «khong loi console (1): E13/E14 /okr?record=objective:…: pageerror Error: Hydration failed» — F1-30, ở trang Của tôi (PhanDonViDan › TheDonVi › CardDescription: máy chủ trả khung xương, trình duyệt dựng span data-so-tom-tat; tệp mạng cùng lượt dưới đây). Mọi khẳng định riêng của E14 (DB okrNguonKr bằng lựa chọn, một AgentTask okr-doc-sheet, docLoi khong-phai-so) đạt; sáu dòng hỏng còn lại thuộc nhóm E11 (xem E12). Hydrat không phải đổi có chủ đích của hồ sơ nào: không AC hay dòng sổ đã ký nào chấp nhận lỗi console trên trang này.
 - Căn cứ: `5b6be6129` — 5b6be6129 feat(ngan-kr-mot-cho): mọi lối bấm KR mở cùng một ngăn / Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+- Căn cứ thêm: `_acceptance/so-okr-tu-chay/contract.md:38` — - AC-7: Given sheet mục tiêu có KR tay, KR nguồn CRM có lịch sử, KR đo cạnh và KR nguồn API, When mở sheet trong trình duyệt thật của cây đang xét rồi bấm vào con số của KR nguồn CRM, chọn một ngày khác trong lịch sử, bấm một bản ghi trong danh sách rồi «Quay lại», Then bảng KR có dấu nguồn cạnh số, KR đo cạnh hiện «<số tay> tay · <số máy> máy»; ngăn «Số của KR» chồng lên sheet mục tiêu (URL thêm `record=so-kr:<id>`) với tên chỉ số, phạm vi, khoảng ngày, số đã chụp, bảng bản ghi và bảng lịch sử; chọn ngày đổi danh sách và URL; bấm bản ghi mở sheet của nó, «Quay lại» về ngăn số; And ngăn có trạng thái đang tải, rỗng theo chỉ số, lệch, lỗi có «Thử lại» (bấm tải lại được); And vai «chỉ OKR» thấy số không bấm được; And ảnh 1440 và 390 không tràn ngang, chữ người nhập mang `translate="no"`. (cross-layer)
+- Căn cứ thêm: `_acceptance/cua-toi-ba-phan/contract.md:31` — - AC-2: Given phần 1 có KR thiếu số, When bấm «Cập nhật N KR», điền số và tự tin rồi gửi, Then bảng cập nhật mở ngay trong phần 1 (đường dẫn vẫn là `/okr`, không chuyển trang), có đủ ô số, tự tin, ghi chú và thanh gửi như bảng cũ; gửi xong phần 1 hiện «đã gửi» và danh sách làm mới; máy chủ có đúng một dòng `okrCheckInSession` mới mang `entry = "cua-toi"`, `submittedAt` khác rỗng và một `okrCheckIn` cho mỗi KR đã gửi; tải trang Của tôi mà không bấm thì không sinh dòng phiên nào. (cross-layer)
+- Căn cứ thêm: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:24` — {"id": "d-20261023T010937Z-24", "type": "descope", "stage": "S3", "decision": "so-okr-tu-chay chuyển sang hoàn lại: lượt đo màn sau khi sửa răng lộ ba lỗi sản phẩm (lỗi hydrat ở Của tôi, mất ngày đang xem sau «Quay lại», ngăn KR thiếu định nghĩa chỉ số); phần sửa răng E8 E23 E25 và bản vá F8 ghi sẵn ở sua-san/so-okr-tu-chay.patch, tệp hồ sơ trả về nguyên; ba tín hiệu F1-30, F1-31, F1-32.", "why": "Áp đúng lối chủ kho duyệt ở Hỏi-1 (hồ sơ dính lỗi sản phẩm thì hoàn lại, không chạm tệp); ghim lại hồ sơ này sẽ đỏ ở E12 E14 cho tới khi sản phẩm được sửa.", "cost_if_wrong": "Bản vá F8 cho E23 E25 chưa vào cây; hồ sơ còn đỏ ở năm ô tới khi hàng sửa sản phẩm mang bản vá theo. Hợp đồng F28 mục Out of scope chưa liệt hồ sơ này — người ký phê ở Cổng Bằng chứng.", "at": "2026-10-23T01:09:37Z"}
 
 Đầu ra đỏ ở mốc nền:
 
@@ -1551,6 +1931,30 @@ $ bun scripts/dev-session.ts asjdcsgz@thu.test
 $ bun scripts/dev-session.ts tsjdcsgz@thu.test
 $ bun scripts/dev-session.ts osjdcsgz@thu.test
 phien-do: xong — mã 1
+```
+
+Đầu ra sau khi sửa — lượt man-so-tu-chay.mjs sau khi áp bản vá sửa răng ghi sẵn sua-san/so-okr-tu-chay.patch, cây 3ee639d7c, 23/10 08:03 (+07); log scratchpad/c-f28/log-so-okr-tu-chay, tóm tắt scratchpad/sau-so-okr-tu-chay.json:
+
+```
+$ EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs"
+--- exit 1 (ky vong 0)
+man-so-tu-chay: chay tron 5 eval; chay rieng: EVAL=E11 (ma: E11, E12, E13, E14, E19); chieu do: --chieu-do
+man-so-tu-chay: 168 khang dinh, 7 hong, 21 anh (…)
+  HONG: E11 buoc 4: ten chi so «Thoả thuận chốt được» (thay «»)
+  HONG: E11 buoc 10: ten chi so mang translate=no (thay null)
+  HONG: E11 buoc 4: pham vi phong ban Phòng Đối tác số sk9n4xu (thay null «»)
+  HONG: E11 buoc 4: co khoang ngay (thay «»)
+  HONG: E11 buoc 6: sau Quay lai URL con ngaySo=2026-10-21 va kr (thay objective:cmvk9n66n000nm8cfd43r4h9g,kr:cmvk9n67u000rm8cfp3tokwmd ngaySo=null)
+  HONG: E11 buoc 7: cau lech co hai so (da chup 1, tinh lai 0) — thay «Đã chụp 3 · tính lại lúc này 2 — dữ liệu đã đổi sau khi chụp», data-so-tinh-lai=2
+  HONG: khong loi console (1): E13/E14 /okr?record=objective:cmvk9n6e4001am8cffape4hgd: pageerror Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerate
+--- .acceptance-runs/so-okr-tu-chay/evidence/man-so-tu-chay-network.txt (cùng lượt E14, app :4103):
+2026-10-23T01:03:32.036Z pageerror Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-e
+            <PhanDonViDan cycleId="cmvk9n62s0..." ky={null} tenKy="Quý 4/2026...">
+                    <TheDonVi cay={{...}} cycleId="cmvk9n62s0..." don={{loai:"pb",id:"..."}} ky={null} ...>
+                              <CardDescription>
++                                 <span data-so-tom-tat="">
+-                                 <div
+-                                   data-slot="skeleton"
 ```
 
 - Tín hiệu F1-30: so-okr-tu-chay E12 E14: lỗi hydrat ở trang Của tôi khi mở ngăn mục tiêu

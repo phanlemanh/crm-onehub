@@ -28,8 +28,11 @@ function evalCua(ref, slug, id) {
 
 function khoi(tieuDe, dong, duoi, chieuDo, ref) {
 	const ra = [`### ${tieuDe}`, "", `- Xử lý: \`${dong.xu_ly}\``, `- Lý do: ${dong.ly_do ?? ""}`, `- Căn cứ: \`${dong.can_cu ?? ""}\` — ${nguyenVanCanCu(dong.can_cu) || "(không đọc được)"}`];
+	for (const cc of dong.can_cu_them ?? []) ra.push(`- Căn cứ thêm: \`${cc}\` — ${nguyenVanCanCu(cc) || "(không đọc được)"}`);
 	if (dong.sua) ra.push(`- Sửa: ${dong.sua}`);
 	ra.push("", "Đầu ra đỏ ở mốc nền:", "", "```", ...(duoi.length ? duoi : ["(không có)"]), "```");
+	if (dong.duoi_nen?.length) ra.push("", "Dòng lỗi trong log đầy đủ của lượt nền (đuôi ở trên cắt mất):", "", "```", ...dong.duoi_nen, "```");
+	if (dong.duoi_sau?.length) ra.push("", `Đầu ra sau khi sửa${dong.duoi_sau_nguon ? ` — ${dong.duoi_sau_nguon}` : ""}:`, "", "```", ...dong.duoi_sau, "```");
 	if (ref) {
 		const [slug, id] = tieuDe.split(":");
 		const truoc = evalCua(MOC_NEN, slug, id);
