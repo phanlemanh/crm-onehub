@@ -2120,6 +2120,14 @@ executors:
     ppr_day_gop: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-gop"
     ppr_hinh: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t hinh-gop"
     pcn_hinh: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t hinh-gop"
+    tvg_khai: "cd packages/ui && bun test --timeout 300000 ./test/trang-ve-gop.spec.ts -t khai"
+    tvg_gop: "cd packages/ui && bun test --timeout 300000 ./test/trang-ve-gop.spec.ts -t 'gop-tu-dong|gop-xung-dot'"
+    tvg_an_toan: "cd packages/ui && bun test --timeout 300000 ./test/trang-ve-gop.spec.ts -t an-toan"
+    tvg_cay_ma: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t cay-ma"
+    tvg_dau_hook: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t dau-hook"
+    tvg_so_chay: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t so-chay"
+    tvg_ci: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t nguon-ci"
+    tvg_nhu_cu: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t 'nhu-cu|verify-da-chung' && bun test --timeout 120000 ./test/pre-push-t1.spec.ts ./test/t1-ma-doc.spec.ts ./test/push-ghim-lai-t1.spec.ts"
     tmd_phan_loai: node --test .github/scripts/test/phan-loai.test.mjs
     tmd_day: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t day"
     tmd_quet: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t quet-that"
@@ -3407,6 +3415,9 @@ executors:
     pcn_doi_chieu: node _acceptance/pre-push-cau-va-nhan/rang/doi-chieu.mjs
     pcn_lich_su_sap: node _acceptance/pre-push-cau-va-nhan/rang/lich-su-sap.mjs
     pcn_neo: node _acceptance/pre-push-cau-va-nhan/rang/neo.mjs
+    tvg_ca_that: node _acceptance/trang-ve-gop-va-dau-cay/rang/ca-550.mjs
+    tvg_khong_doi: node _acceptance/trang-ve-gop-va-dau-cay/rang/khong-doi.mjs
+    tvg_doi_chieu: node _acceptance/trang-ve-gop-va-dau-cay/rang/doi-chieu.mjs
     tmd_khai: node _acceptance/t1-ma-doc/rang/khai.mjs
     tmd_ho_so_cu: 'node --test .github/scripts/test/phan-loai.test.mjs && (cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t "phan-loai|mot-nguon") && node _acceptance/pre-push-t1/rang/mot-nguon.mjs'
     tmd_gpct_phan_loai: bun _acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs
