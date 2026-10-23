@@ -1,68 +1,68 @@
-# Review findings: trang-bo-okr (round 3)
+# Review findings: trang-bo-okr (round 4)
 
 ## Trong hợp đồng
 
-Không có phát hiện trong hợp đồng ở vòng này.
+Không có phát hiện nào trong hợp đồng.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **okr.viecCuaBo trộn việc của mục tiêu «Đã bỏ» vào danh sách chính, trái luật vòng đời**
-  Người dùng thấy gì: Ở thẻ Việc của một bộ OKR, việc của mục tiêu đã bỏ vẫn hiện lẫn với việc của mục tiêu đang chạy, nên người xem có thể tưởng những việc đó vẫn cần làm.
-  Căn cứ: Chỉ gây nhầm lẫn khi đọc, không mất hay sai dữ liệu, người dùng tự nhận ra qua tên mục tiêu, và sửa sau không đắt.
+- **okr.viecCuaBo mixes tasks of «Đã bỏ» objectives into the main list, against docs/vong-doi.md**
+  Người dùng thấy gì: Ở thẻ Việc của một bộ OKR, các việc thuộc mục tiêu đã bỏ nằm lẫn với việc của mục tiêu đang chạy, không có dòng riêng «Đã bỏ». Người xem có thể tưởng việc đã bỏ vẫn đang cần làm.
+  Căn cứ: Nhẹ: không mất dữ liệu, chỉ thêm nhiễu khi đọc danh sách; người dùng vẫn nhìn ra qua tên KR, và sửa sau không đắt nhưng cần quyết định cách hiện.
   file: `apps/api/src/okr/okr-xem.service.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Hàng việc của bộ OKR tự dựng lại select và cách map đã có, mất daRoi và quaHan**
-  Người dùng thấy gì: Ở thẻ Việc của bộ OKR, người làm đã rời workspace và việc quá hạn không được đánh dấu, trong khi màn Cạnh KR có đánh dấu cho cùng các việc đó.
-  Căn cứ: Người dùng chỉ thiếu một dấu cảnh báo phụ, vẫn thấy đủ việc, hạn và người làm, và có thể xem màn Cạnh KR để đối chiếu.
+- **Task rows of an OKR set rebuild the select and mapping from scratch instead of the existing canh-kr pattern, losing daRoi and quaHan**
+  Người dùng thấy gì: Ở thẻ Việc của bộ OKR, việc quá hạn hoặc có người làm đã rời nhóm không mang dấu cảnh báo như trong phiếu bản ghi. Người xem phải tự so với ngày hạn.
+  Căn cứ: Nhẹ: thông tin vẫn đủ (có hạn và người làm), chỉ thiếu dấu nhắc; không sai số liệu và có thể bổ sung sau.
   file: `apps/api/src/okr/bo-okr.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Danh sách Bộ OKR đè khoảng cách TableCell bằng className thay vì dùng SimpleTableCell hay SimpleTableRow sub**
-  Người dùng thấy gì: Chữ trong các cột của bảng Bộ OKR lệch nhẹ so với tiêu đề cột, nhìn hơi không thẳng hàng nhưng vẫn đọc được.
-  Căn cứ: Chỉ là lệch nhỏ về thị giác, không ảnh hưởng thao tác hay dữ liệu, và có thể dọn khi chỉnh giao diện lần sau.
-  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx`
+- **Old compose links without donOkr now land on the set list and are silently dropped**
+  Người dùng thấy gì: Một đường dẫn cũ mở bản nháp Soạn mà không có tham số đơn vị sẽ mở ra danh sách các bộ, không mở bản nháp và không báo lỗi. Người dùng phải tự tìm lại bản nháp.
+  Căn cứ: Vừa: không mất bản nháp, chỉ mất đường tắt từ liên kết cũ hoặc dấu trang; người dùng tự mở lại được từ màn Soạn nên chấp nhận được trước mắt.
+  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **«Đang theo dõi» counts follows on draft and abandoned objectives, but the Mục tiêu column counts only published ones**
+  Người dùng thấy gì: Một đơn vị có thể hiện trong «Đang theo dõi» chỉ vì người xem theo dõi một mục tiêu nháp hoặc đã bỏ, trong khi cột Mục tiêu của đơn vị đó ghi 0 hoặc ít hơn. Con số trông lệch nhau.
+  Căn cứ: Nhẹ: chỉ là chênh lệch hiển thị ở trường hợp hiếm, không mất dữ liệu; người dùng bỏ theo dõi hoặc mở bộ ra là hiểu.
+  file: `apps/api/src/okr/okr-xem.service.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình, không có đối chứng dương thật): đối chứng «doi chung duong» của tbo-viec-ten không bao giờ sai được**
+  Người dùng thấy gì: Người dùng không thấy gì khác. Chỉ là một bài kiểm tự động có phần đối chứng không bắt được lỗi, nên nếu tên việc ở thẻ Việc bị trống trở lại thì phần đó không báo.
+  Căn cứ: Rất nhẹ với người dùng: không ảnh hưởng sản phẩm hiện tại, phần kiểm chính vẫn có; sửa là việc dọn bài kiểm, không đáng mở việc riêng.
+  file: `apps/app/test/trang-bo-okr.dom.tsx`
   severity: low
   Đề xuất: wont-fix
 
-- **khong-doi-hinh: an eval that cannot run on origin/onehub (exit 2 or timeout) is counted as 'already red' and does not fail the check**
-  Người dùng thấy gì: Phép kiểm tra rằng vòng này không làm hỏng các màn cũ có thể báo đạt dù thật ra không đo được trên bản gốc, nên một hồi quy có thể lọt mà không ai biết.
-  Căn cứ: Không ảnh hưởng người dùng cuối trực tiếp nhưng làm mất lưới an toàn của người ký, và sửa công cụ đo không đắt.
+- **Hình dạng 2 (fixture viết tay thay vì lấy từ bên ghi): tbo-lien-ket-do dựng href bằng tay, không cho Toàn cảnh chạy bản serialize cũ**
+  Người dùng thấy gì: Người dùng không thấy gì khác. Một bài kiểm tự động chưa chứng minh được rằng nó sẽ báo đỏ nếu Toàn cảnh quay lại phát liên kết thiếu tham số đơn vị.
+  Căn cứ: Rất nhẹ với người dùng: sản phẩm hiện đúng và phần kiểm chính đã đo liên kết thật; dựng lại đối chứng tốn công mà ít giá trị thêm.
+  file: `apps/app/test/trang-bo-okr.dom.tsx`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 5 (khai quét LỚP nhưng cách giải lệnh bỏ sót mục): khong-doi-hinh.mjs bỏ mọi eval mà lệnh không ghi đường dẫn tệp**
+  Người dùng thấy gì: Người dùng không thấy khác biệt ngay. Việc kiểm «không xấu hơn trước» bỏ sót những bài kiểm chạy cả bộ hoặc qua script bọc, nên một hồi quy ở đó có thể lọt mà không ai biết.
+  Căn cứ: Vừa: không ảnh hưởng người dùng hôm nay nhưng làm lưới an toàn hở ở vài hồ sơ cũ; nên ghi lại là hạn chế đã biết, đo thêm thủ công khi cần.
   file: `_acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs`
-  severity: medium
-  Đề xuất: new-contract
-
-- **Danh sách Bộ OKR: a division row's objective count covers only the division, while its progress and low-confidence count include its departments**
-  Người dùng thấy gì: Ở danh sách Bộ OKR, một bộ phận có thể hiện 0 mục tiêu nhưng vẫn có tiến độ và số KR tự tin thấp, vì các con số này tính theo phạm vi khác nhau, và bấm vào lại thấy bộ có mục tiêu của phòng ban con.
-  Căn cứ: Người dùng thấy số liệu mâu thuẫn trên cùng một hàng gây hoang mang, nhưng không mất dữ liệu và bấm vào bộ là thấy đúng nội dung.
-  file: `apps/api/src/okr/bo-okr.ts`
-  severity: low
-  Đề xuất: new-contract
-
-- **Đo CHỈ DẪN thay vì ĐẦU RA: tbo-lien-ket lấy href của the-con.tsx từ hàm hrefThe với đường gốc do chính bài truyền vào, không đọc href TheConBo thật sự dựng ra**
-  Người dùng thấy gì: Bài kiểm liên kết của các thẻ con chưa đo đường dẫn thật mà trang dựng ra, nên nếu sau này đường dẫn thẻ con bị sai thì bài kiểm vẫn xanh.
-  Căn cứ: Không có lỗi nào đang xảy ra với người dùng, chỉ là lưới kiểm thưa ở một chỗ, và bổ sung sau không đắt.
-  file: `apps/app/test/trang-bo-okr.dom.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Fixture VIẾT TAY đúng khuôn bên đọc: ca DonViCon cho bộ OneHub dựng một hàng con khoa "goc" mà bên ghi conTrucTiep không bao giờ sinh ra**
-  Người dùng thấy gì: Một bài kiểm về liên kết Đơn vị con của bộ OneHub dùng dữ liệu mà thực tế không bao giờ xuất hiện, nên chưa chứng minh được liên kết thật đúng.
-  Căn cứ: Người dùng không gặp lỗi nào, chỉ là bài kiểm đo một tình huống không có thật, và sửa sau không đắt.
-  file: `apps/app/test/trang-bo-okr.dom.tsx`
+- **Hình dạng 3 (khẳng định «có mặt» trong khi lời hứa là quan hệ): E7 coi thẻ Sơ đồ đã mở khi nội dung mang mốc ST-donvi-rong, mà thẻ OKR cũng dùng mốc này**
+  Người dùng thấy gì: Người dùng không thấy khác biệt. Phép đo có thể báo đạt cho thẻ Sơ đồ ngay cả khi nó hiện nhầm khối rỗng của danh sách, nhưng chỉ khi bộ đo không có mục tiêu ở chu kỳ khác.
+  Căn cứ: Nhẹ: chỉ xảy ra với bộ dữ liệu mẫu đặc biệt, không động tới dữ liệu người dùng; sửa phép đo đắt hơn hậu quả.
+  file: `_acceptance/trang-bo-okr/rang/man-bo-okr-du-lieu.mjs`
   severity: low
-  Đề xuất: known-limits
-
-- **Assert «chuỗi có mặt» trong khi lời hứa là QUAN HỆ: câu rỗng theo lọc chỉ được đo bằng một giá trị lọc (Tôi dẫn)**
-  Người dùng thấy gì: Chỉ kiểm được câu thông báo rỗng khi bật Tôi dẫn, nên nếu câu này không đổi theo lọc Đang theo dõi thì chưa ai phát hiện.
-  Căn cứ: Nếu có lỗi thì chỉ là một câu thông báo hiện sai tên lọc, người dùng nhìn là biết và không mất dữ liệu.
-  file: `_acceptance/trang-bo-okr/rang/man-bo-okr-do.mjs`
-  severity: low
-  Đề xuất: known-limits
+  Đề xuất: wont-fix
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
 
