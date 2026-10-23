@@ -5,7 +5,7 @@ slug: tom-tat-tuan-dang-cho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-22-tom-tat-tuan-dang-cho-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-22T06:22:25Z
