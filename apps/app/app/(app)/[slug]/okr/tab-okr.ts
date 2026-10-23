@@ -26,11 +26,12 @@ export function tabTuDuong(duong: string | null): TabOkr {
 }
 
 export const DUONG_SO_DO = "/okr/so-do";
+export const DUONG_MOI_KR = "/okr/moi-kr";
 
 export const NHOM_THANH_BEN = [
 	{ khoa: "dau", muc: ["cua-toi"] },
 	{ khoa: "okr", muc: ["bo-okr", "lay-y-kien"] },
-	{ khoa: "bao-cao", muc: ["suc-khoe", "so-do"] },
+	{ khoa: "bao-cao", muc: ["suc-khoe", "moi-kr", "so-do"] },
 ] as const;
 
 export type MucThanhBen = (typeof NHOM_THANH_BEN)[number]["muc"][number];
@@ -40,6 +41,7 @@ export const DUONG_MUC = {
 	"bo-okr": DUONG["theo-don-vi"],
 	"lay-y-kien": DUONG["hoi-y"],
 	"suc-khoe": DUONG["toan-canh"],
+	"moi-kr": DUONG_MOI_KR,
 	"so-do": DUONG_SO_DO,
 } as const satisfies Record<MucThanhBen, string>;
 

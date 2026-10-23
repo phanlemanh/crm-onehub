@@ -5,6 +5,8 @@ import {
 	type Prisma,
 	Prisma as PrismaNamespace,
 } from "@crm/db";
+import { donChoXoa, ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
+import type { KhoTepTruong } from "@crm/db/blob-tep-truong";
 import {
 	attachValues,
 	type CachSapTruong,
@@ -35,22 +37,29 @@ import {
 	viTriChuan,
 } from "@crm/db/fields-chuan";
 import {
+	GIA_TRI_CO_TEP,
 	GIA_TRI_TRONG,
 	type LocTruong,
 	LocTruongError,
 	MOC_NGAY,
 	phanTichLocTruong,
 } from "@crm/validation/bo-loc-truong";
+import { type TepTheoTruong, tepTrongO } from "@crm/validation/tep-truong";
 import {
 	BadRequestException,
 	ConflictException,
 	ForbiddenException,
+	Inject,
 	Injectable,
+	Logger,
 	NotFoundException,
+	Optional,
 } from "@nestjs/common";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import type { Page, SortDirection } from "../trpc/list-input";
+import { FIELD_FILES_CONFIG } from "./field-files-config";
+import { coTheMoTep, coTheXoaTep, type NguoiGoiTep } from "./field-files-quyen";
 import type {
 	FieldCreateInput,
 	FieldReorderInput,
@@ -58,6 +67,7 @@ import type {
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
+import { KHO_TEP } from "./kho-tep";
 import { LoiGiaTriTruong, laGiaTriRong } from "./loi-gia-tri-truong";
 import { khoangMocTruong } from "./moc-ngay";
 
@@ -74,16 +84,27 @@ const RELATIONS = {
 export type DieuKienTruong =
 	| { fieldValues: { some: Prisma.FieldValueWhereInput } }
 	| { fieldValues: { none: Prisma.FieldValueWhereInput } }
+	| { fieldFiles: { some: Prisma.FieldFileWhereInput } }
+	| { fieldFiles: { none: Prisma.FieldFileWhereInput } }
 	| { OR: DieuKienTruong[] };
 
 function coGiaTriCua(definition: {
 	id: string;
 	type: FieldTypeName;
 }): Prisma.FieldValueWhereInput {
-	return {
-		fieldId: definition.id,
-		[columnFor(definition.type)]: { not: null },
-	};
+	const cot = columnFor(definition.type);
+	return cot
+		? { fieldId: definition.id, [cot]: { not: null } }
+		: { fieldId: definition.id };
+}
+
+function trongCua(definition: {
+	id: string;
+	type: FieldTypeName;
+}): DieuKienTruong {
+	return cachLocTruong(definition.type) === "coTep"
+		? { fieldFiles: { none: { fieldId: definition.id } } }
+		: { fieldValues: { none: coGiaTriCua(definition) } };
 }
 
 function phanTich(
@@ -154,10 +175,13 @@ function dieuKienLoc(
 		case "nguoi":
 			if (loc.id.length > 0) cacNhanh.push(co({ userId: { in: loc.id } }));
 			break;
+		case "coTep":
+			if (loc.co) cacNhanh.push({ fieldFiles: { some: { fieldId } } });
+			break;
 	}
 
 	if (loc.cach !== "tich" && loc.trong) {
-		cacNhanh.push({ fieldValues: { none: coGiaTriCua(definition) } });
+		cacNhanh.push(trongCua(definition));
 	}
 
 	return hoacCua(cacNhanh);
@@ -186,10 +210,45 @@ function thuTuGiaTri(
 
 @Injectable()
 export class FieldsService {
+	private readonly logger = new Logger(FieldsService.name);
+
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		private readonly agent: AgentTriggerService,
+		@Optional() @Inject(KHO_TEP) private readonly kho?: KhoTepTruong,
 	) {}
+
+	async donTepNgay(pathnames: string[]): Promise<void> {
+		if (pathnames.length === 0 || !this.kho?.bat()) return;
+		try {
+			const kq = await donChoXoa(this.db, this.kho, {
+				toiDa: pathnames.length,
+				pathnames,
+			});
+			if (kq.hong.length > 0) {
+				this.logger.warn({
+					message: "Field file blobs not deleted, left for the daily sweep",
+					hong: kq.hong.length,
+				});
+			}
+		} catch (error) {
+			this.logger.error({
+				message: "Field file blob cleanup failed, left for the daily sweep",
+				error: error instanceof Error ? error.message : String(error),
+			});
+		}
+	}
+
+	async donHangCho(
+		bayGio: Date = new Date(),
+	): Promise<{ daXoa: number; hong: number }> {
+		if (!this.kho?.bat()) return { daXoa: 0, hong: 0 };
+		const kq = await donChoXoa(this.db, this.kho, {
+			bayGio,
+			toiDa: FIELD_FILES_CONFIG.don.toiDa,
+		});
+		return { daXoa: kq.daXoa.length, hong: kq.hong.length };
+	}
 
 	async list(
 		entity: FieldEntity,
@@ -324,11 +383,12 @@ export class FieldsService {
 		const type = data.type ?? existing.type;
 
 		if (data.type && data.type !== existing.type) {
-			const values = await this.db.fieldValue.count({
-				where: { fieldId: id },
-			});
+			const [values, tep] = await Promise.all([
+				this.db.fieldValue.count({ where: { fieldId: id } }),
+				this.db.fieldFile.count({ where: { fieldId: id } }),
+			]);
 
-			if (values > 0) {
+			if (values + tep > 0) {
 				throw new ConflictException(
 					"This field already holds values, so its type cannot change. Archive it and make a new one.",
 				);
@@ -632,12 +692,18 @@ export class FieldsService {
 	async delete(actingUserId: string, id: string): Promise<{ id: string }> {
 		await this.requireManager(actingUserId);
 
+		let tepXoa: string[];
 		try {
-			await this.db.fieldDefinition.delete({ where: { id } });
+			tepXoa = await this.db.$transaction(async (tx) => {
+				const pathnames = await ghiChoXoaTheoTep(tx, { fieldId: id });
+				await tx.fieldDefinition.delete({ where: { id } });
+				return pathnames;
+			});
 		} catch (error) {
 			throw this.translate(error);
 		}
 
+		await this.donTepNgay(tepXoa);
 		return { id };
 	}
 
@@ -711,7 +777,12 @@ export class FieldsService {
 		values: Record<string, unknown>,
 	): Promise<void> {
 		const batBuoc = await client.fieldDefinition.findMany({
-			where: { entity, archivedAt: null, required: true },
+			where: {
+				entity,
+				archivedAt: null,
+				required: true,
+				type: { not: "FILE" },
+			},
 			select: { key: true, label: true },
 			orderBy: { position: "asc" },
 		});
@@ -798,6 +869,81 @@ export class FieldsService {
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
 		});
+	}
+
+	async tepTheoBanGhi(
+		entity: FieldEntity,
+		recordId: string,
+		nguoi?: NguoiGoiTep,
+	): Promise<TepTheoTruong> {
+		const cot = recordColumn(entity);
+		const hang = await this.db.fieldFile.findMany({
+			where: { [cot]: recordId, field: { entity, archivedAt: null } },
+			orderBy: [{ taiLuc: "asc" }, { id: "asc" }],
+			select: {
+				id: true,
+				tenTep: true,
+				kieu: true,
+				kichThuoc: true,
+				taiLuc: true,
+				taiBoiId: true,
+				taiBoi: { select: { id: true, name: true } },
+				field: { select: { key: true } },
+			},
+		});
+		const ket: TepTheoTruong = {};
+		for (const dong of hang) {
+			const tep = tepTrongO.parse({
+				id: dong.id,
+				tenTep: dong.tenTep,
+				kieu: dong.kieu,
+				kichThuoc: dong.kichThuoc,
+				taiLuc: dong.taiLuc.toISOString(),
+				taiBoi: dong.taiBoi
+					? { id: dong.taiBoi.id, ten: dong.taiBoi.name ?? null }
+					: null,
+				coTheMo: nguoi ? coTheMoTep(nguoi) : false,
+				coTheXoa: nguoi ? coTheXoaTep(nguoi, dong) : false,
+			});
+			const danhSach = ket[dong.field.key] ?? [];
+			danhSach.push(tep);
+			ket[dong.field.key] = danhSach;
+		}
+		return ket;
+	}
+
+	async soTepTheoBanGhi(
+		entity: FieldEntity,
+		recordIds: string[],
+	): Promise<Map<string, Record<string, number>>> {
+		const ket = new Map<string, Record<string, number>>();
+		if (recordIds.length === 0) return ket;
+		const truong = await this.db.fieldDefinition.findMany({
+			where: { entity, type: "FILE", archivedAt: null, showOnTable: true },
+			select: { id: true, key: true },
+		});
+		if (truong.length === 0) return ket;
+		for (const id of recordIds) {
+			ket.set(id, Object.fromEntries(truong.map((t) => [t.key, 0])));
+		}
+		const cot = recordColumn(entity);
+		const khoaTheoId = new Map(truong.map((t) => [t.id, t.key]));
+		const nhom = await this.db.fieldFile.groupBy({
+			by: ["fieldId", cot],
+			where: {
+				fieldId: { in: truong.map((t) => t.id) },
+				[cot]: { in: recordIds },
+			} as Prisma.FieldFileWhereInput,
+			_count: { _all: true },
+		});
+		for (const dong of nhom) {
+			const recordId = (dong as Record<string, unknown>)[cot];
+			const khoa = khoaTheoId.get(dong.fieldId);
+			if (typeof recordId !== "string" || !khoa) continue;
+			const muc = ket.get(recordId);
+			if (muc) muc[khoa] = dong._count._all;
+		}
+		return ket;
 	}
 
 	async valuesFor(
@@ -1086,12 +1232,19 @@ export class FieldsService {
 			]);
 		}
 
+		if (cachLocTruong(definition.type) === "coTep") {
+			dem.push([
+				GIA_TRI_CO_TEP,
+				this.demBanGhi(entity, relationWhere, {
+					fieldFiles: { some: { fieldId } },
+				}),
+			]);
+		}
+
 		if (locDuocTrong(definition.type)) {
 			dem.push([
 				GIA_TRI_TRONG,
-				this.demBanGhi(entity, relationWhere, {
-					fieldValues: { none: coGiaTriCua(definition) },
-				}),
+				this.demBanGhi(entity, relationWhere, trongCua(definition)),
 			]);
 		}
 

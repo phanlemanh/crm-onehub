@@ -25,6 +25,7 @@ import type { EnvironmentVariables } from "../config/env.validation";
 import { ContactsService } from "../contacts/contacts.service";
 import { InjectDatabase } from "../database/database.constants";
 import { DealsService } from "../deals/deals.service";
+import { FieldsService } from "../fields/fields.service";
 
 const DAY_MS = 24 * 60 * 60_000;
 
@@ -46,6 +47,7 @@ export class ArchiveRetentionController {
 		private readonly companies: CompaniesService,
 		private readonly contacts: ContactsService,
 		private readonly deals: DealsService,
+		private readonly fields: FieldsService,
 		config: ConfigService<EnvironmentVariables, true>,
 	) {
 		this.secret = config.get("CRON_SECRET", { infer: true });
@@ -89,8 +91,12 @@ export class ArchiveRetentionController {
 			this.deals.purgeExpired(before),
 		]);
 
+		const tep = await this.fields.donHangCho();
+
 		this.logger.log({
 			message: "Archive retention swept",
+			tepDaXoa: tep.daXoa,
+			tepHong: tep.hong,
 			retentionDays,
 			companies: companies.succeeded,
 			companiesSkipped: companies.skipped,
@@ -100,7 +106,7 @@ export class ArchiveRetentionController {
 			dealsSkipped: deals.skipped,
 		});
 
-		return { retentionDays, companies, contacts, deals };
+		return { retentionDays, companies, contacts, deals, tep };
 	}
 }
 

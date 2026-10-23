@@ -476,6 +476,14 @@ Vì sao: màn Cài đặt hiện CẢ trường chuẩn lẫn trường tự t�
 tạo" vào nhãn là nói hẹp hơn thứ người thấy; ba từ còn lại là tiếng của nhà khác,
 hoặc nửa Việt nửa Anh.
 
+**Tệp** (kiểu trường): kiểu trường giữ tệp tải lên — hợp đồng, bản quét, ảnh —
+gắn vào một thoả thuận, công ty hay liên hệ. Một ô Tệp giữ tối đa 10 tệp PDF, DOCX,
+PNG hay JPG. Ai thấy bản ghi cũng thấy tên và số tệp; mở hay tải tệp là việc của
+quản trị. Chốt 2026-10-21.
+_Avoid_: tệp đính kèm, attachment, file, tài liệu
+Vì sao: «tài liệu» đã là trang của Kho tài liệu; «đính kèm» gợi một thư gửi đi,
+còn ô này nằm trên bản ghi như mọi trường khác.
+
 **Bộ phận**: cấp trên của cây tổ chức OneHub; một bộ phận chứa nhiều phòng ban.
 Cây có đúng hai cấp cố định dưới gốc OneHub — bộ phận, rồi phòng ban — và là cây
 dùng chung cho cả CRM: Điều phối 30 ngày, OKR, báo cáo và bộ lọc cùng đọc một
@@ -1292,6 +1300,13 @@ hiệu của mình, nhãn «Đã lưu trữ», và vẫn tự xoá được. Kh�
 _Avoid_: gỡ (khi ý là lưu trữ), ẩn, xoá, đánh dấu rác
 Vì sao: «gỡ» và «ẩn» trong từ điển là chữ của quyền, liên kết và chu kỳ; «xoá» là mất thật — tín hiệu lưu trữ thì lấy
 lại được.
+
+**Đổi chỗ (tín hiệu)**: điều trang «Tín hiệu đã gửi» hiện cho một tín hiệu đổi khác — vào nhóm, đổi nhóm, thành việc,
+việc đổi trạng thái (chưa bắt đầu, đang làm, đã giao), để riêng, để sau, đã có việc lo. Lần đầu tín hiệu hiện ở «Đang
+xem xét» không phải đổi chỗ. Mỗi lần đổi chỗ người gửi nhận một thông báo trong chuông. Chốt 2026-10-22 tại bước thiết
+kế của `trang-thai-tin-hieu-song`.
+_Avoid_: đổi trạng thái (khi ý là cả nhóm lẫn việc), cập nhật tín hiệu
+Vì sao: «trạng thái» của một tín hiệu dễ đọc thành chỉ nhãn; «chỗ» gồm cả nhóm và việc mà người gửi theo dõi.
 
 **Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
 của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè

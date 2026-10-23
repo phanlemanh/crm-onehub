@@ -14,7 +14,7 @@ function StatGroup({
 		>
 			<div
 				className={cn(
-					"grid grid-cols-2 @2xl/stats:grid-cols-4",
+					"grid grid-cols-2 @2xl/stats:grid-cols-4 @2xl/stats:has-[>:nth-child(5)]:grid-cols-5",
 					"[&:nth-child(2n)]:border-l [&:nth-child(n+3)]:border-t",
 					"@2xl/stats:[&>*]:border-t-0 @2xl/stats:[&>*]:border-l @2xl/stats:[&>*:first-child]:border-l-0",
 				)}

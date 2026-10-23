@@ -139,6 +139,10 @@ export class EnvironmentVariables {
 	KHO_TAI_LIEU_BLOB_TOKEN?: string;
 
 	@IsOptional()
+	@IsString()
+	TEP_BAN_GHI_BLOB_TOKEN?: string;
+
+	@IsOptional()
 	@IsUrl(
 		{ require_tld: false, require_protocol: true },
 		{

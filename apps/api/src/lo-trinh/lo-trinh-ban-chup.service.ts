@@ -1,17 +1,26 @@
 import type { Db } from "@crm/db";
-import { ghiBanChupLoTrinh } from "@crm/db/ban-chup-lo-trinh";
-import type {
-	BanChupVao,
-	KetQuaBanChup,
-} from "@crm/validation/ban-chup-lo-trinh";
-import { Injectable } from "@nestjs/common";
+import type { BanChupVao } from "@crm/validation/ban-chup-lo-trinh";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
+import {
+	ghiBanChupVaBaoTinHieu,
+	type KetQuaGhiVaBao,
+	type TuyChonDoiCho,
+} from "./tin-hieu-doi-cho";
 
 @Injectable()
 export class LoTrinhBanChupService {
+	private readonly logger = new Logger(LoTrinhBanChupService.name);
+
 	constructor(@InjectDatabase() private readonly db: Db) {}
 
-	ghi(vao: BanChupVao): Promise<KetQuaBanChup> {
-		return ghiBanChupLoTrinh(this.db, vao, new Date());
+	ghi(
+		vao: BanChupVao,
+		tuyChon: Pick<TuyChonDoiCho, "ghiThongBao"> = {},
+	): Promise<KetQuaGhiVaBao> {
+		return ghiBanChupVaBaoTinHieu(this.db, vao, new Date(), {
+			...tuyChon,
+			canhBao: (o) => this.logger.warn(o),
+		});
 	}
 }

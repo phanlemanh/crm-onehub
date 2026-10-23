@@ -1,0 +1,30 @@
+{
+  "sha_goc": "b32a1495f4accacd69df646b359976a84ea6d930",
+  "tran_phut": 80,
+  "lo": [
+    {
+      "so": 1,
+      "ho_so": [
+        "ba-ho-so-do-san",
+        "buoc-kara-bo-qua",
+        "thu-haiku-tro-ly-okr",
+        "vai-chi-okr"
+      ],
+      "uoc_phut": 79.7
+    },
+    {
+      "so": 2,
+      "ho_so": [
+        "bo-cau-hoi-mau",
+        "dat-okr-trong-crm",
+        "dot-hoi-y-tuong-okr",
+        "giai-doan-thoa-thuan",
+        "khung-khong-con-dung-chu",
+        "lich-su-va-luu-tru-trang",
+        "ngan-ho-so-trong-lo-trinh",
+        "tat-preview-agent-okr"
+      ],
+      "uoc_phut": 77.2
+    }
+  ]
+}

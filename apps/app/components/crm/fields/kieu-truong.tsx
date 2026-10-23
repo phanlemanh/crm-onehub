@@ -47,6 +47,7 @@ import {
 	type KieuTruong,
 	type MaTuChoi,
 } from "./doc-nhap";
+import { type DichOTep, OTep, type TepOTep } from "./o-tep";
 
 export type { KieuTruong } from "./doc-nhap";
 
@@ -72,6 +73,8 @@ export type MoTaTruong = {
 	deXuat?: ReactNode;
 	luu: (giaTri: GiaTriTruong) => void;
 	dangLuu?: boolean;
+	tep?: TepOTep[];
+	dichTep?: DichOTep;
 };
 
 export type GiaTriHienThi = {
@@ -182,6 +185,14 @@ function veGiaTri(gia: GiaTriHienThi, locale: Locale): ReactNode {
 			return (
 				<HienThiLienKet kieu={gia.kieu} chuoi={chuoi} trinhBay={gia.trinhBay} />
 			);
+		case "FILE":
+			return Number(gia.giaTri) > 0 ? (
+				<span className="tabular-nums">
+					{m.tepTruong.soTep(Number(gia.giaTri))}
+				</span>
+			) : (
+				<EmptyCellValue />
+			);
 		default:
 			return gia.trinhBay ? gia.trinhBay(chuoi) : chuoi;
 	}
@@ -195,7 +206,11 @@ export function HienThiTruong(props: GiaTriHienThi) {
 export function OTruongBang(props: GiaTriHienThi) {
 	const locale = useLocale();
 	const trong =
-		props.kieu === "USER" ? timNguoi(props) === null : laRong(props.giaTri);
+		props.kieu === "USER"
+			? timNguoi(props) === null
+			: props.kieu === "FILE"
+				? !(Number(props.giaTri) > 0)
+				: laRong(props.giaTri);
 	if (trong) return <EmptyCellValue />;
 	return (
 		<span className="block min-w-0 truncate">{veGiaTri(props, locale)}</span>
@@ -718,13 +733,27 @@ export function docGiaTriTao(
 
 export type KhoAn = "sm" | "md" | "lg";
 
+export type HangCoTruong = {
+	fields: Record<string, GiaTriTruong>;
+	soTepTheoTruong?: Record<string, number>;
+};
+
 type DongKieu = {
 	hienThi: (gia: GiaTriHienThi) => ReactNode;
 	suaTaiCho: (moTa: MoTaTruong) => ReactNode;
 	oBang: (gia: GiaTriHienThi) => ReactNode;
+	giaTriHang: (hang: HangCoTruong, khoa: string) => GiaTriTruong;
 	anDuoi: KhoAn;
 	canh: "left" | "right";
 	oTao: (moTa: MoTaTao) => ReactNode;
+};
+
+const giaTriHang = (hang: HangCoTruong, khoa: string): GiaTriTruong =>
+	hang.fields[khoa] ?? null;
+
+const soTepHang = (hang: HangCoTruong, khoa: string): GiaTriTruong => {
+	const so = hang.soTepTheoTruong?.[khoa] ?? 0;
+	return so > 0 ? so : null;
 };
 
 const hienThi = (gia: GiaTriHienThi) => <HienThiTruong {...gia} />;
@@ -739,6 +768,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: suaChu,
 		oBang,
+		giaTriHang,
 		anDuoi: "lg",
 		canh: "left",
 		oTao: taoNhap,
@@ -747,6 +777,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: (moTa) => <OChuDai moTa={moTa} />,
 		oBang,
+		giaTriHang,
 		anDuoi: "lg",
 		canh: "left",
 		oTao: (moTa) => <OChuDaiTao moTa={moTa} />,
@@ -755,6 +786,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: suaChu,
 		oBang,
+		giaTriHang,
 		anDuoi: "sm",
 		canh: "right",
 		oTao: taoNhap,
@@ -763,6 +795,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: (moTa) => <ONgay moTa={moTa} />,
 		oBang,
+		giaTriHang,
 		anDuoi: "lg",
 		canh: "left",
 		oTao: (moTa) => <ONgayTao moTa={moTa} />,
@@ -771,6 +804,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: (moTa) => <OTich moTa={moTa} />,
 		oBang,
+		giaTriHang,
 		anDuoi: "lg",
 		canh: "left",
 		oTao: (moTa) => <OTichTao moTa={moTa} />,
@@ -779,6 +813,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: suaChon,
 		oBang,
+		giaTriHang,
 		anDuoi: "lg",
 		canh: "left",
 		oTao: taoChon,
@@ -787,6 +822,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: suaChu,
 		oBang,
+		giaTriHang,
 		anDuoi: "md",
 		canh: "left",
 		oTao: taoNhap,
@@ -795,6 +831,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: suaChu,
 		oBang,
+		giaTriHang,
 		anDuoi: "md",
 		canh: "left",
 		oTao: taoNhap,
@@ -803,6 +840,7 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: suaChu,
 		oBang,
+		giaTriHang,
 		anDuoi: "md",
 		canh: "left",
 		oTao: taoNhap,
@@ -811,14 +849,33 @@ export const KIEU_TRUONG = {
 		hienThi,
 		suaTaiCho: suaChon,
 		oBang,
+		giaTriHang,
 		anDuoi: "md",
 		canh: "left",
 		oTao: taoChon,
+	},
+	FILE: {
+		hienThi,
+		suaTaiCho: (moTa) =>
+			moTa.dichTep ? (
+				<OTep
+					nhan={moTa.nhan}
+					khoa={moTa.khoa}
+					tep={moTa.tep ?? []}
+					dich={moTa.dichTep}
+				/>
+			) : null,
+		oBang,
+		giaTriHang: soTepHang,
+		anDuoi: "md",
+		canh: "left",
+		oTao: () => null,
 	},
 	MONEY: {
 		hienThi,
 		suaTaiCho: (moTa) => <OTien moTa={moTa} />,
 		oBang,
+		giaTriHang,
 		anDuoi: "sm",
 		canh: "right",
 		oTao: (moTa) => <OTienTao moTa={moTa} />,
@@ -831,6 +888,14 @@ export function anDuoiTheoKieu(kieu: KieuTruong): KhoAn {
 
 export function canhTheoKieu(kieu: KieuTruong): "left" | "right" {
 	return KIEU_TRUONG[kieu].canh;
+}
+
+export function giaTriTrongHang(
+	kieu: KieuTruong,
+	hang: HangCoTruong,
+	khoa: string,
+): GiaTriTruong {
+	return KIEU_TRUONG[kieu].giaTriHang(hang, khoa);
 }
 
 export function OTruongPhieu({ moTa }: { moTa: MoTaTruong }) {

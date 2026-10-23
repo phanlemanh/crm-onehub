@@ -1,0 +1,1130 @@
+{
+  "sha": "b32a1495f4accacd69df646b359976a84ea6d930",
+  "so": 281,
+  "ho_so": [
+    {
+      "slug": "agent-builder-noi-tieng-viet",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "agent-test-khong-nhap-app",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ba-ho-so-do-san",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E5"
+    },
+    {
+      "slug": "ban-gieo-gop-y-sau-nop",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bang-cot-loi-va-nhan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bang-thanh-vien-giu-hang",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bo-ca-mau-quy-4",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bo-cau-hoi-mau",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E9j"
+    },
+    {
+      "slug": "bo-chu-lap-keo-tha",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bo-cuc-hep-ngan-va-kanban",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bo-dung-chung-nhan-chuoi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bo-dung-khong-ket",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bo-okr-mau",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "bo-xuong-kara",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E12"
+    },
+    {
+      "slug": "buoc-kara-bo-qua",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ca-chap-chon-cach-ly",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ca-chap-chon-con-lai",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cai-dat-chung-chi-quan-tri",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cai-dat-con-lai-noi-tieng-viet",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E19"
+    },
+    {
+      "slug": "canh-kr-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cap-nhat-tuan-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cau-truc-to-chuc",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cay-can-chinh-co-ly-do",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "chan-lai-component-ra-man",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "chan-trung-khoa-ban-nhap",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E5"
+    },
+    {
+      "slug": "chan-uy-thac-sai-luot",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "chat-an-toan-truoc-r1",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "chat-duong-day-ban-chup",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E9"
+    },
+    {
+      "slug": "chen-lien-ket-khong-lac",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "chep-viec-can-lam-cu",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E12"
+    },
+    {
+      "slug": "chi-quan-tri-sua-duoc-truong",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cho-phep-ai-vao-o-man-hinh",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cho-tac-nhan-lau",
+      "nhom": "thieu-paths:paths-khong-tro-toi-tep:E5:apps/app/lib/thong-bao*.ts"
+    },
+    {
+      "slug": "chu-cuoi-cung-tien-de",
+      "nhom": "thieu-paths:eval-may-thieu-paths:E6"
+    },
+    {
+      "slug": "chu-mac-dinh-thu-vien-ngoai",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E10"
+    },
+    {
+      "slug": "chu-man-tieng-viet-khong-tran",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E5j"
+    },
+    {
+      "slug": "chuyen-goi-dieu-phoi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ci-ma-tran-ba-o",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "claimdue-chi-thay-dong-cua-minh",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cron-theo-ban-khai",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cua-so-tro-chuyen-noi-tieng-viet",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E20"
+    },
+    {
+      "slug": "cua-toi-ba-phan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cua-vao-dang-nhap",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "cua-vao-va",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "da-gui-dem-dung-kr-cho",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "da-luu-tru-tai-loi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dai-luu-tru-dung-chung",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E10"
+    },
+    {
+      "slug": "danh-sach-keo-chung",
+      "nhom": "thieu-paths:dang-khai-la:E6:apps/app/app/(app"
+    },
+    {
+      "slug": "dat-okr-trong-crm",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "datatable-loc-ro",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dau-trang-okr-cho-nut-hoi-kara",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "deal-va",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dem-dau-cot-khi-dang-luu",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dich-ten-nganh-bang-bang",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dien-thoai-ca-nhan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dien-thoai-o-deal-cong-ty",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dieu-huong-khu-muc-tieu",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E13"
+    },
+    {
+      "slug": "dieu-phoi-hai-tang",
+      "nhom": "thieu-paths:hop-paths-rong"
+    },
+    {
+      "slug": "dieu-phoi-truoc-mo-dot",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dieu-phoi-va-bien",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "do-man-tren-kho-rieng",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "do-quyen-luot-bang-hanh-vi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "doi-nhan-khu-muc-tieu",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "doi-ten-onehub-center",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "don-okr-nhap-sai",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E18"
+    },
+    {
+      "slug": "dong-thoi-gian-giu-khi-loi",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E7"
+    },
+    {
+      "slug": "dong-thoi-gian-loi-dung-luot",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "dot-hoi-y-tuong-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "du-an-gantt",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E14"
+    },
+    {
+      "slug": "duong-ly-do-muc-tieu",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "duong-proto-cho-design-pass",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "gan-tay-va-kara-co-ly-do",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ghim-thuoc-soi-xem-okr",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E3"
+    },
+    {
+      "slug": "giai-doan-mac-dinh",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "giai-doan-thoa-thuan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "giam-phut-ci-nhap-t1",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "gieo-rai-deu-danh-ba",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "gioi-han-duyet-cay-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "gioi-han-tep-dom",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "go-khoa-goc-nhin",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "go-la-cat-quyen-that",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "go-thanh-vien-phai-giu-duoc",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "goi-y-mo-ke-hoach",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E9"
+    },
+    {
+      "slug": "gop-y-dung-cho",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "gui-tin-hieu-trong-crm",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E14"
+    },
+    {
+      "slug": "ha-tran-thang-hoi-zalo",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "han-viec-theo-ngay",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "hd-theo-danh-sach",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "heap-lenh-dung",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "hinh-cua-luoi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "hoan-tac-loat-bao-dung",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E16"
+    },
+    {
+      "slug": "hoan-tac-loat-dung-id",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "hoan-thien-hoi-crm-qua-zalo",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "hoi-crm-qua-zalo",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "hoi-dap-okr",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E9j"
+    },
+    {
+      "slug": "hop-thoai-giu-cho-dang-nhap",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "hop-thong-bao-tren-web",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E13"
+    },
+    {
+      "slug": "hydrat-giai-doan-deals",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "hydrat-thanh-bieu-tuong",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "kanban-viec",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E12"
+    },
+    {
+      "slug": "kara-gop-y-luot-2",
+      "nhom": "thieu-paths:paths-khong-tro-toi-tep:E13:apps/app/lib/okr-search-params.ts"
+    },
+    {
+      "slug": "kara-mot-ten",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "kara-trang-thai-toan-crm",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E14"
+    },
+    {
+      "slug": "ke-hoach-la-mot-ban-ghi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ke-hoach-sinh-viec",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E14"
+    },
+    {
+      "slug": "keo-tha-thoa-thuan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khang-dinh-microsoft-co-rang",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khep-ky-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "kho-mau-mang-dau-ngay",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E9"
+    },
+    {
+      "slug": "kho-nguon-khoa-rieng",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "kho-nguon-khong-ket",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "kho-tai-lieu",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khoa-api-ghi-thua",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khoa-con-bat-xa-tran",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khoa-cu-khong-mo-khoa-moi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khoa-eve-khong-tranh",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khoa-lo-giu-tran",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khoa-rieng-dien-node",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khong-re-theo-ten-thanh-luat-kho",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khung-ban-ghi-kara",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E17"
+    },
+    {
+      "slug": "khung-khong-con-dung-chu",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khung-loi-ban-ghi-dung-ly-do",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E7"
+    },
+    {
+      "slug": "khung-man-chung",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E12j"
+    },
+    {
+      "slug": "khung-okr-truoc-r1",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E16"
+    },
+    {
+      "slug": "khung-soan-chan-lien-ket",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khung-tao-okr-nhu-deal",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khung-trang-cai-dat",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "khuon-mat-bo-phan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "kiem-cheo-chay-quang-lang",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "kiem-cheo-sau-gop",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "lai-ra-man-tran-gio",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "lam-moi-chuyen-viec-qua-loi-chung",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "lam-moi-goi-y-ke-hoach",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "lenh-chung-khong-an-cache-doi",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E8"
+    },
+    {
+      "slug": "lenh-dung-do-khong-ai-thay",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "lich-su-va-luu-tru-trang",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E13j"
+    },
+    {
+      "slug": "lien-quan-loc-ban-da-cat",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E16"
+    },
+    {
+      "slug": "lo-trinh-doc-ban-chup",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "lo-trinh-dong-bo-ho-so",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E10"
+    },
+    {
+      "slug": "lo-trinh-hien-ngay-du-kien",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E11"
+    },
+    {
+      "slug": "lo-trinh-ten-va-build",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "loc-va-kieu-xem-chung",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E7j"
+    },
+    {
+      "slug": "logo-onehub",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "loi-moi-da-huy-van-cho-vao",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "loi-tac-tu-zalo-noi-dung-nguyen-nhan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "luat-kho-vong-doi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "luoi-day-do-that",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "luu-tru-truong-khong-hoi",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E11"
+    },
+    {
+      "slug": "ly-do-can-chinh-tu-soan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ly-do-tu-choi-nop-theo-locale",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ma-tran-phai-co-chieu-song",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "man-cai-dat-noi-tieng-viet",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "man-chu-theo-khoa-kho-nguon",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "man-okr-truoc-r1",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E11"
+    },
+    {
+      "slug": "man-xin-quyen-co-rang",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "mau-trang-thai-chung",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "may-nhac-truoc-nguoi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "may-soan-de-xuat",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "menu-con-loc-dien-thoai",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "mo-lai-khong-tra-viec-chi-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "moi-bai-kiem-dom-deu-chay",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "moi-phia-deu-thay-ke-hoach",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "moi-tin-hieu-cho-quan-tri",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E12"
+    },
+    {
+      "slug": "mot-duong-ghi-phong-ban",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "muc-tieu-va-kr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "nen-chat-ai-elements",
+      "nhom": "thieu-paths:eval-may-thieu-paths:E3"
+    },
+    {
+      "slug": "nen-kara",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "neo-dan-so-khong-cung",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ngan-ho-so-trong-lo-trinh",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E10"
+    },
+    {
+      "slug": "ngay-gieo-theo-gio-vn",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ngay-lich-test-tao-ke-hoach",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ngoai-le-telemetry-giai-doan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "nguoi-huy-khong-lac",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "nguon-keo-tha-reui",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "nhac-qua-zalo",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "no-sau-luot-4-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "no-sau-luot-5-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "noi-bon-nut-dieu-phoi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "noi-zalo-cho-nguoi-moi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "nop-ban-nhap-chon-theo-khoa",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E4"
+    },
+    {
+      "slug": "o-cam-chay-duoc-that",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "o-cam-khai-thac-trung-tinh",
+      "nhom": "thieu-paths:eval-may-thieu-paths:E1"
+    },
+    {
+      "slug": "o-so-tien-doc-theo-tieng",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "o-soan-va-ly-do-loi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "okr-cua-toi-tach-theo-doi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "okr-loai-hoc-tap",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E14"
+    },
+    {
+      "slug": "okr-mau-xoa-cau-hinh",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "okr-mau-xoa-cuoc-soan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "okr-soat-anh-luot-3",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "okr-to-chuc-va",
+      "nhom": "thieu-paths:eval-may-thieu-paths:E15"
+    },
+    {
+      "slug": "onboarding-giong-deals",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "phien-chet-ve-dang-nhap",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "pre-push-t1",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "quen-mat-khau",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "quyen-luot-mang-theo",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "quyet-gop-y-noi-dung-ly-do",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ro-slack-tac-nhan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "slack-thieu-quyen-email",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "so-do-can-chinh-don-vi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "so-do-quanh-muc-tieu",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "so-moi-khong-chap-chon",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E4"
+    },
+    {
+      "slug": "so-okr-tu-chay",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E24"
+    },
+    {
+      "slug": "soan-okr-cung-tro-ly",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "soan-okr-khong-lac",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "soan-okr-khong-tru-luot",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "soan-okr-song-lai",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "soan-okr-trang-rieng",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E15"
+    },
+    {
+      "slug": "soan-okr-trong-khung",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E12"
+    },
+    {
+      "slug": "sua-an-chu-ky-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "sua-giao-dien-tin-hieu",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E10"
+    },
+    {
+      "slug": "sua-luu-tru-dieu-phoi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "sua-paths-e5-soan-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "sua-sau-chay-that",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "sua-test-do-thu-tu-nap",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "t1-ma-doc",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E7b"
+    },
+    {
+      "slug": "tac-nhan-glm-5-3-cham",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E4"
+    },
+    {
+      "slug": "tac-nhan-model-rieng",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tac-nhan-va",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tai-lieu-diff-bo-myers-vo-ich",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tai-lieu-loc-giu-lich-su",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tat-ban-preview",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E11"
+    },
+    {
+      "slug": "tat-preview-agent-okr",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E9"
+    },
+    {
+      "slug": "ten-dong-tien-bao-cao",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "test-api-khong-de-viec-vo-chu",
+      "nhom": "thieu-paths:eval-may-thieu-paths:E5"
+    },
+    {
+      "slug": "thanh-ben-khu-dung-chung",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "thanh-vien-hai-khoi-cung-khuon",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "thanh-vien-vao-dung",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "the-gop-y-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "them-buoc-bao-dung",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "thu-haiku-tro-ly-okr",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E8"
+    },
+    {
+      "slug": "thu-lai-sau-45-giay",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "thuoc-cache-het-doi-tuong",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E7"
+    },
+    {
+      "slug": "thuoc-mot-cho-khai-quet-man",
+      "nhom": "thieu-paths:eval-may-thieu-paths:E2"
+    },
+    {
+      "slug": "thuoc-o-soan-don-dep",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tien-te-chua-tai-khong-doan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tiep-thi-tuyen-doi-tac",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tieu-de-cot-doc-tron",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tim-va-dieu-huong-kho",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tin-hieu-tu-ve-kho",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E11b"
+    },
+    {
+      "slug": "to-chuc-chi-tiet-cho-url",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "to-chuc-danh-sach-chi-tiet",
+      "nhom": "thieu-paths:paths-khong-tro-toi-tep:E19:apps/app/app/(app"
+    },
+    {
+      "slug": "toan-canh-okr",
+      "nhom": "thieu-paths:paths-khong-tro-toi-tep:E21:apps/app/app/(app"
+    },
+    {
+      "slug": "tong-quan-va-khung-noi-tieng-viet",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E19"
+    },
+    {
+      "slug": "tra-cuu-thuong-hieu-viet-nam",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E11"
+    },
+    {
+      "slug": "tra-loi-tin-nhac",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tran-cho-app-rieng",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tran-mot-lan-uy-thac",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tran-uy-thac-chiu-chay-lai",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "trang-chua-de-xuat-mo-duoc",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "trang-don-vi-mot-bang",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E14"
+    },
+    {
+      "slug": "trang-lo-trinh-mo-hinh-hien-thi",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "trang-lo-trinh-trong-crm",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E14"
+    },
+    {
+      "slug": "tro-ly-doc-kho",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E15j"
+    },
+    {
+      "slug": "tro-ly-kho-dung-phien",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tro-ly-okr-bo-final-output",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tro-ly-okr-de-xuat",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "tro-ly-okr-nen",
+      "nhom": "thieu-paths:paths-khong-tro-toi-tep:E21:packages/db/src/okr-can-chinh.ts"
+    },
+    {
+      "slug": "tro-ly-okr-tom-tat",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "truong-tu-tao-o-cai-dat",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ux-lai-thu-8c-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "va-gantt-lich-bay-ngay",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E9"
+    },
+    {
+      "slug": "va-lo-ro-vai-chi-okr",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E12"
+    },
+    {
+      "slug": "va-tro-ly-okr-sau-thu",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "vai-chi-okr",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "vao-bang-email-va-mat-khau",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "ve-sinh-do-san-onehub",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "viec-cha-khong-lo-tieu-de",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "viec-chung",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E15"
+    },
+    {
+      "slug": "viec-rieng-chi-nguoi-trong-cuoc",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E9"
+    },
+    {
+      "slug": "vong-doi-mot-cach-cat",
+      "nhom": "thieu-paths:eval-ngoai-may-thieu-paths:E13"
+    },
+    {
+      "slug": "vung-cuon-la-khoi-chua",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-bom-gio",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-gio-theo-mui-gio-xuong",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-goi-thu-hong-hien-dung-bot",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-gui-hong-ghi-ly-do",
+      "nhom": "thieu-paths:eval-may-thieu-paths:E12"
+    },
+    {
+      "slug": "zalo-hoi-okr-khong-chet",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-qua-webhook",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-tro-ly-kho-chi-dan",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-va",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-va-cach-ly",
+      "nhom": "loc-ap"
+    },
+    {
+      "slug": "zalo-webhook-doc-khuon-that",
+      "nhom": "loc-ap"
+    }
+  ]
+}
