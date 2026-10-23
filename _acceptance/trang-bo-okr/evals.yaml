@@ -258,7 +258,7 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.tbo_khong_doi_hinh
-    long_running: 420
+    long_running: 200
     paths:
       - "_acceptance/*/rang/**"
       - "apps/app/test/**"
@@ -268,7 +268,9 @@ evals:
       tệp mã cùng thư mục rang của tệp thước) — eval thuộc lớp khi một tệp ấy chứa okr/bo-okr, okr/theo-don-vi,
       data-view-switch hay ViewSwitch, hoặc bị vòng sửa (diff merge-base…HEAD) mà không phải tệp dùng chung từ 5 hồ sơ
       trở lên. In «quet lop: <n> ho so da ky, <m> ho so …, <k> eval may cham, <r> lan chay rieng»; cờ --chi-quet in
-      từng «MUC <slug>#<E>» rồi dừng. (1) Chạy các eval thuộc lớp; gộp theo lệnh, trừ lệnh mang EVAL= thì mỗi eval
+      từng «MUC <slug>#<E>» rồi dừng. Cờ --phan k/n chia các lần chạy riêng (đo màn và còn lại, mỗi nhóm xoay vòng theo
+      khoá lệnh đã sắp) thành n phần rời nhau, hợp lại đúng cả lớp; E15 là phần 1/3 (kèm soát đổi thước), E17 phần 2/3,
+      E18 phần 3/3 — chia vì trần long_running của kit là 240 phút, trọn lớp đo 5 giờ 28. (1) Chạy các eval thuộc lớp; gộp theo lệnh, trừ lệnh mang EVAL= thì mỗi eval
       một lần chạy riêng với EVAL=<id>; lần đầu trả mã 2 (không đo được) thì chạy lại một lần, in «THU LAI». Khai tay đúng một eval loại khỏi lớp có lý do (V1-25): ve-sinh-do-san-onehub#E17 —
       thước theo vòng, soát diff của nhánh đang chạy theo nhãn vòng ấy; in «THUOC THEO VONG <slug>#<E>: <lý do>». Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
       worktree origin/onehub, in «HO SO <slug>#<E>: cay <ma> · nen <ma>»; SAI AC-11 khi nền 0 mà cây khác 0, «DO SAN TREN
@@ -283,4 +285,30 @@ evals:
       duoc <tep>:<dong>»): «--chieu-do» thêm dòng `export const doiLogicThu = 1 + 1;` cuối vo-khu-muc-tieu.dom.tsx;
       «--chieu-do tron» trộn trong CÙNG một dòng của khối đang chỉ đổi chuỗi (vkm-mot-lop, dòng chờ [data-the-con-bo])
       một đổi chuỗi bộ chọn và `&& true` vào điều kiện → vẫn «SAI AC-11: DOI LOGIC <tep>:<dong>» dù khối có token được phép.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tbo_khong_doi_hinh_2
+    long_running: 200
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+    expected: |
+      Như E15, phần 2/3 của lớp (--phan 2/3), không soát đổi thước. «KET LUAN khong-doi-hinh: dat»; SAI AC-11 khi một
+      eval của phần này đỏ trên cây mà xanh trên origin/onehub.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tbo_khong_doi_hinh_3
+    long_running: 200
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+    expected: |
+      Như E15, phần 3/3 của lớp (--phan 3/3), không soát đổi thước. «KET LUAN khong-doi-hinh: dat»; SAI AC-11 khi một
+      eval của phần này đỏ trên cây mà xanh trên origin/onehub.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

@@ -175,6 +175,25 @@ function quetLop() {
 	return lopDaQuet;
 }
 
+function docPhan(argv) {
+	const i = argv.indexOf("--phan");
+	if (i < 0) return { k: 1, n: 1 };
+	const m = /^(\d+)\/(\d+)$/.exec(argv[i + 1] ?? "");
+	const k = Number(m?.[1]);
+	const n = Number(m?.[2]);
+	if (!m || k < 1 || k > n) throw new Error(`--phan sai: ${argv[i + 1]}`);
+	return { k, n };
+}
+
+function chiaPhan(ds, { k, n }) {
+	if (n === 1) return ds;
+	const khoa = [...new Set(ds.map((m) => m.khoa))].sort();
+	const nang = khoa.filter((x) => /tien-de|mot-luot\.sh/.test(x));
+	const nhe = khoa.filter((x) => !/tien-de|mot-luot\.sh/.test(x));
+	const cua = new Set([...nang, ...nhe].filter((_, i) => i % n === k - 1));
+	return ds.filter((m) => cua.has(m.khoa));
+}
+
 function danhSach() {
 	return quetLop().muc;
 }
@@ -468,10 +487,12 @@ try {
 	const viTri = process.argv.indexOf("--chieu-do");
 	if (viTri >= 0)
 		process.exit(chieuDo(process.argv[viTri + 1] === "tron" ? "tron" : "dong"));
-	const saiSo = soatDoiThuoc(GOC);
+	const phan = docPhan(process.argv);
+	const saiSo = phan.k === 1 ? soatDoiThuoc(GOC) : [];
 	for (const s of saiSo) console.log(s);
 	let sai = saiSo.length;
-	const ds = danhSach();
+	const ds = chiaPhan(danhSach(), phan);
+	console.log(`phan ${phan.k}/${phan.n}`);
 	const lenhRieng = new Set(ds.map((m) => m.khoa)).size;
 	const lop = quetLop();
 	for (const l of lop.loai) console.log(l);
@@ -485,10 +506,15 @@ try {
 	}
 	const daChayCay = new Map();
 	const hong = [];
-	for (const m of ds) {
-		const ma = chay(m, GOC, daChayCay);
-		if (ma === 0) console.log(`HO SO ${m.ten}: cay 0`);
-		else hong.push({ ...m, ma });
+	const banSao = phan.n > 1 ? dungCay("HEAD") : null;
+	try {
+		for (const m of ds) {
+			const ma = chay(m, banSao?.cay ?? GOC, daChayCay);
+			if (ma === 0) console.log(`HO SO ${m.ten}: cay 0`);
+			else hong.push({ ...m, ma });
+		}
+	} finally {
+		if (banSao) donCay(banSao);
 	}
 	sai += chayTrenNen(hong);
 	console.log(`KET LUAN khong-doi-hinh: ${sai === 0 ? "dat" : `${sai} SAI`}`);
