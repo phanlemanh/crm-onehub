@@ -1,4 +1,8 @@
-import type { LoaiSuKien, NoiDungThongBao } from "./thong-bao";
+import {
+	type LoaiSuKien,
+	laLoaiSuKien,
+	type NoiDungThongBao,
+} from "./thong-bao";
 import type { KhoaChoTinHieu } from "./tin-hieu-cho";
 
 export const CAU_SU_KIEN_VI = {
@@ -27,6 +31,10 @@ export const CAU_SU_KIEN_VI = {
 };
 
 export type NoiDungSuKien = Extract<NoiDungThongBao, { loai: LoaiSuKien }>;
+
+export function laNoiDungSuKien(nd: NoiDungThongBao): nd is NoiDungSuKien {
+	return laLoaiSuKien(nd.loai);
+}
 
 function dien(mau: string, gia: Record<string, string>): string {
 	return mau.replace(

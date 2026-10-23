@@ -161,7 +161,7 @@ export async function lenLichNhac(
 	return { ghi: count };
 }
 
-function appUrlMacDinh(): string | null {
+export function appUrlMacDinh(): string | null {
 	const dau = process.env.APP_URL?.split(",")[0]?.trim().replace(/\/+$/, "");
 	return dau || null;
 }
@@ -211,6 +211,14 @@ export async function duongMo(appUrl: string | null): Promise<LienKet> {
 	const ctx = await xuongSlug(appUrl);
 	if (!ctx) return () => null;
 	return (v) => `${ctx.appUrl}/${ctx.slug}${duongTrongApp(v)}`;
+}
+
+export async function lienKetDuongDan(
+	appUrl: string | null,
+): Promise<(duongDan: string) => string | null> {
+	const ctx = await xuongSlug(appUrl);
+	if (!ctx) return () => null;
+	return (duongDan) => `${ctx.appUrl}/${ctx.slug}${duongDan}`;
 }
 
 export async function lienKetKeHoach(): Promise<

@@ -5,6 +5,7 @@ import {
 	describe,
 	expect,
 	setSystemTime,
+	spyOn,
 	test,
 } from "bun:test";
 import { readFileSync } from "node:fs";
@@ -21,7 +22,17 @@ import {
 } from "@crm/db/onboarding-nhac";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
-import { khoaThongBao, macDinhDayRa } from "@crm/validation/thong-bao";
+import {
+	khoaThongBao,
+	LOAI_SU_KIEN,
+	type LoaiSuKien,
+	MUC_THONG_BAO,
+	macDinhDayRa,
+	type NoiDungThongBao,
+	noiDungThongBao,
+	THONG_BAO,
+} from "@crm/validation/thong-bao";
+import { cauSuKienVi } from "@crm/validation/thong-bao-cau";
 import {
 	chayNhac,
 	conMaDuoc,
@@ -29,9 +40,12 @@ import {
 	lenLichNhac,
 	locDayRa,
 } from "../agent/lib/nhac-ke-hoach";
+import { dayThongBaoSuKien } from "../agent/lib/thong-bao-day";
 import { dungTin } from "../agent/lib/tin-nhac";
 import { ZALO } from "../agent/lib/zalo-config";
 import { type BanChup, CHUP, chupTin } from "./support/chup-tin-nhac";
+import { MUC_MAU_TAC_NHAN } from "./support/muc-mau-tac-nhan";
+import { MUC_MAU_TIN_HIEU } from "./support/muc-mau-tin-hieu";
 import {
 	donDep,
 	gieoKeHoach,
@@ -392,4 +406,323 @@ describe("tbk-loc", () => {
 			for (const k of khoaA) expect(p.daGuiKhoa ?? []).toContain(k);
 		});
 	}
+});
+
+const PHUT_MS = 60 * 1000;
+
+const MAU_SU_KIEN: Record<LoaiSuKien, NoiDungThongBao> = {
+	...MUC_MAU_TAC_NHAN,
+	...MUC_MAU_TIN_HIEU,
+};
+
+async function ghiSuKien(
+	userId: string,
+	loai: LoaiSuKien,
+	luc: Date,
+): Promise<string> {
+	const goc = MAU_SU_KIEN[loai];
+	const noiDung = noiDungThongBao.parse(
+		goc.loai === "tin-hieu-doi-cho"
+			? { ...goc, sha: `${goc.sha.slice(0, 30)}${luc.getTime()}`.slice(0, 40) }
+			: { ...goc, luotId: `${userId}-${luc.getTime()}` },
+	);
+	const tinHieu = noiDung.loai === "tin-hieu-doi-cho";
+	const h = await db.thongBao.create({
+		data: {
+			nguoiNhanId: userId,
+			nguon: tinHieu ? THONG_BAO.nguon.tinHieu : THONG_BAO.nguon.tacNhan,
+			khoa: khoaThongBao(noiDung, luc),
+			noiDung,
+			duongDan: tinHieu
+				? "/tin-hieu"
+				: `/chat/${"conversationId" in noiDung ? noiDung.conversationId : ""}`,
+			ngayDau: "2026-10-10",
+			thayNgay: "2026-10-10",
+			taoLuc: luc,
+		},
+		select: { id: true },
+	});
+	return h.id;
+}
+
+async function batLoai(userId: string, loai: string): Promise<void> {
+	await luuCaiDatThongBao(db, userId, loai, true, macDinhDayRa);
+}
+
+async function nguoiKenh(kenh: "zalo" | "slack") {
+	const n = await gieoNguoi(kenh === "zalo" ? "Zung" : "Son");
+	if (kenh === "zalo") {
+		await batBot();
+		await noiZalo(n.id, `Z-${n.id}`);
+	} else {
+		await noiSlack(n.id);
+		await khopSlack(n.id, `U-${n.id}`);
+	}
+	return n;
+}
+
+function chatId(kenh: "zalo" | "slack", id: string): string {
+	return kenh === "zalo" ? `Z-${id}` : `U-${id}`;
+}
+
+async function day(
+	z: ReturnType<typeof zaloGia>,
+	s: ReturnType<typeof slackGia>,
+	now: Date,
+) {
+	return voiToken(() =>
+		dayThongBaoSuKien({
+			now,
+			zaloFetcher: z.fetcher,
+			fetcher: s.fetcher,
+			appUrl: APP_URL,
+		}),
+	);
+}
+
+function tinGui(
+	kenh: "zalo" | "slack",
+	z: ReturnType<typeof zaloGia>,
+	s: ReturnType<typeof slackGia>,
+	id: string,
+): string[] {
+	return kenh === "zalo" ? tinZalo(z, chatId(kenh, id)) : tinSlack(s);
+}
+
+describe("tbk-mac-dinh", () => {
+	test("tbk-mac-dinh: c — chua bat thi thong bao su kien khong ra kenh", async () => {
+		const goc = new Date("2026-10-10T03:00:00Z");
+		const Z = await nguoiKenh("zalo");
+		const S = await nguoiKenh("slack");
+		for (const n of [Z, S]) {
+			await ghiSuKien(n.id, "tac-nhan-xong", goc);
+			await ghiSuKien(n.id, "tin-hieu-doi-cho", goc);
+		}
+		const z = zaloGia();
+		const s = slackGia();
+		await day(z, s, new Date(goc.getTime() + PHUT_MS));
+		await day(z, s, new Date(goc.getTime() + 2 * PHUT_MS));
+		expect(
+			[...tinZalo(z, chatId("zalo", Z.id)), ...tinSlack(s)],
+			"thong bao su kien bi day khi chua bat: tac-nhan-xong",
+		).toEqual([]);
+		const daDay = await db.thongBao.count({
+			where: { nguoiNhanId: { in: [Z.id, S.id] }, dayLuc: { not: null } },
+		});
+		expect(daDay).toBe(0);
+	});
+});
+
+describe("tbk-su-kien", () => {
+	const loaiSuKien = LOAI_SU_KIEN.filter((l) => !MUC_THONG_BAO[l].macDinhDayRa);
+
+	test("tbk-su-kien: ma tran du bon loai", () => {
+		console.log(`tbk-su-kien: so loai ${loaiSuKien.length}`);
+		expect(loaiSuKien.length).toBe(4);
+	});
+
+	for (const kenh of ["zalo", "slack"] as const) {
+		for (const loai of loaiSuKien) {
+			test(`tbk-su-kien: ${kenh} × ${loai} — mot tin, cau chuong, duong dan`, async () => {
+				const goc = new Date("2026-10-10T03:00:00Z");
+				setSystemTime(new Date(goc.getTime() - PHUT_MS));
+				const n = await nguoiKenh(kenh);
+				await batLoai(n.id, loai);
+				setSystemTime(goc);
+				const id = await ghiSuKien(n.id, loai, goc);
+				const truoc = await db.thongBao.findUniqueOrThrow({ where: { id } });
+				const z = zaloGia();
+				const s = slackGia();
+				await day(z, s, new Date(goc.getTime() + PHUT_MS));
+				const tin = tinGui(kenh, z, s, n.id);
+				expect(tin.length, "thong bao su kien khong ra kenh").toBe(1);
+				const nd = noiDungThongBao.parse(truoc.noiDung);
+				if (!(LOAI_SU_KIEN as readonly string[]).includes(nd.loai)) {
+					throw new Error("mau khong phai su kien");
+				}
+				const [cau, duong] = (tin[0] ?? "").split("\n");
+				expect(cau, "cau tin khac cau chuong").toBe(
+					cauSuKienVi(nd as Parameters<typeof cauSuKienVi>[0]),
+				);
+				expect(duong ?? "", "duong dan tin khac duong dan thong bao").toMatch(
+					new RegExp(`^${APP_URL}/[^/]+${truoc.duongDan}$`),
+				);
+				const sau = await db.thongBao.findUniqueOrThrow({ where: { id } });
+				expect(sau.dayLuc).not.toBeNull();
+				expect(sau.dayKenh).toBe(kenh);
+				expect(sau.docLuc).toEqual(truoc.docLuc);
+				expect(sau.moLuc).toEqual(truoc.moLuc);
+				expect(sau.noiDung).toEqual(truoc.noiDung);
+			});
+		}
+	}
+
+	test("tbk-su-kien: e — thong bao ghi truoc luc bat thi khong gui", async () => {
+		const goc = new Date("2026-10-10T03:00:00Z");
+		const n = await nguoiKenh("zalo");
+		await ghiSuKien(n.id, "tac-nhan-xong", new Date(goc.getTime() - PHUT_MS));
+		setSystemTime(goc);
+		await batLoai(n.id, "tac-nhan-xong");
+		const z = zaloGia();
+		const s = slackGia();
+		await day(z, s, new Date(goc.getTime() + PHUT_MS));
+		expect(
+			tinZalo(z, chatId("zalo", n.id)),
+			"thong bao cu bi day khi vua bat",
+		).toEqual([]);
+	});
+
+	test("tbk-su-kien: e2 — thong bao ghi dung luc bat van gui", async () => {
+		const goc = new Date("2026-10-10T03:00:00Z");
+		const n = await nguoiKenh("zalo");
+		setSystemTime(goc);
+		await batLoai(n.id, "tac-nhan-xong");
+		const { doiLuc } = await db.caiDatThongBao.findUniqueOrThrow({
+			where: { userId_loai: { userId: n.id, loai: "tac-nhan-xong" } },
+		});
+		await ghiSuKien(n.id, "tac-nhan-xong", doiLuc);
+		const z = zaloGia();
+		await day(z, slackGia(), new Date(goc.getTime() + PHUT_MS));
+		expect(tinZalo(z, chatId("zalo", n.id)).length).toBe(1);
+	});
+
+	test("tbk-su-kien: f — cua so 30 phut", async () => {
+		const goc = new Date("2026-10-10T03:00:00Z");
+		setSystemTime(new Date(goc.getTime() - 60 * PHUT_MS));
+		const n = await nguoiKenh("zalo");
+		await batLoai(n.id, "tac-nhan-xong");
+		setSystemTime(goc);
+		const cu = await ghiSuKien(
+			n.id,
+			"tac-nhan-xong",
+			new Date(goc.getTime() - (THONG_BAO.day.cuaSoPhut + 1) * PHUT_MS),
+		);
+		const moi = await ghiSuKien(
+			n.id,
+			"tac-nhan-xong",
+			new Date(goc.getTime() - (THONG_BAO.day.cuaSoPhut - 1) * PHUT_MS),
+		);
+		const z = zaloGia();
+		await day(z, slackGia(), goc);
+		expect(tinZalo(z, chatId("zalo", n.id)).length).toBe(1);
+		const hCu = await db.thongBao.findUniqueOrThrow({ where: { id: cu } });
+		expect(hCu.dayLuc, "thong bao qua cua so van day").toBeNull();
+		const hMoi = await db.thongBao.findUniqueOrThrow({ where: { id: moi } });
+		expect(hMoi.dayLuc).not.toBeNull();
+	});
+
+	test("tbk-su-kien: g — bat ma khong co kenh thi khong gui, khong nem", async () => {
+		const goc = new Date("2026-10-10T03:00:00Z");
+		setSystemTime(new Date(goc.getTime() - PHUT_MS));
+		const n = await gieoNguoi("Kha");
+		await batLoai(n.id, "tac-nhan-xong");
+		setSystemTime(goc);
+		const id = await ghiSuKien(n.id, "tac-nhan-xong", goc);
+		const z = zaloGia();
+		const s = slackGia();
+		const ket = await day(z, s, new Date(goc.getTime() + PHUT_MS));
+		expect(ket.hong).toBe(0);
+		expect([...z.goi, ...s.goi]).toEqual([]);
+		const h = await db.thongBao.findUniqueOrThrow({ where: { id } });
+		expect(h.dayKenh).toBeNull();
+	});
+
+	test("tbk-su-kien: nguoi da roi xuong thi bo qua, nguoi khac van gui", async () => {
+		const goc = new Date("2026-10-10T03:00:00Z");
+		setSystemTime(new Date(goc.getTime() - PHUT_MS));
+		const roi = await nguoiKenh("zalo");
+		const con = await nguoiKenh("zalo");
+		for (const n of [roi, con]) await batLoai(n.id, "tac-nhan-xong");
+		setSystemTime(goc);
+		await ghiSuKien(roi.id, "tac-nhan-xong", goc);
+		await ghiSuKien(con.id, "tac-nhan-xong", goc);
+		await db.member.deleteMany({ where: { userId: roi.id } });
+		const z = zaloGia();
+		await day(z, slackGia(), new Date(goc.getTime() + PHUT_MS));
+		expect(tinZalo(z, chatId("zalo", roi.id))).toEqual([]);
+		expect(tinZalo(z, chatId("zalo", con.id)).length).toBe(1);
+	});
+});
+
+describe("tbk-hong", () => {
+	async function mot(): Promise<{ id: string; userId: string; goc: Date }> {
+		const goc = new Date("2026-10-10T03:00:00Z");
+		setSystemTime(new Date(goc.getTime() - PHUT_MS));
+		const n = await nguoiKenh("zalo");
+		await noiSlack(n.id);
+		await khopSlack(n.id, `U-${n.id}`);
+		await db.notificationPreference.create({
+			data: { userId: n.id, channel: "ZALO" },
+		});
+		await batLoai(n.id, "tac-nhan-xong");
+		setSystemTime(goc);
+		const id = await ghiSuKien(n.id, "tac-nhan-xong", goc);
+		return { id, userId: n.id, goc };
+	}
+
+	test("tbk-hong: a, b — hai nhip chong va nhip lai van mot tin", async () => {
+		const { userId, goc } = await mot();
+		const z = zaloGia();
+		const s = slackGia();
+		const luc = new Date(goc.getTime() + PHUT_MS);
+		await Promise.all([day(z, s, luc), day(z, s, luc)]);
+		expect(
+			tinZalo(z, chatId("zalo", userId)).length,
+			"day trung khi hai nhip chong",
+		).toBe(1);
+		await day(z, s, new Date(goc.getTime() + 2 * PHUT_MS));
+		expect(tinZalo(z, chatId("zalo", userId)).length).toBe(1);
+	});
+
+	test("tbk-hong: c — Zalo hong khong doi sang Slack, ghi loi", async () => {
+		const { id, goc } = await mot();
+		const z = zaloGia({ send: 500 });
+		const s = slackGia();
+		const tat = spyOn(console, "error").mockImplementation(() => {});
+		await day(z, s, new Date(goc.getTime() + PHUT_MS));
+		tat.mockRestore();
+		expect(tinSlack(s), "zalo loi doi sang slack").toEqual([]);
+		const h = await db.thongBao.findUniqueOrThrow({ where: { id } });
+		expect(h.dayLoi ?? "").not.toBe("");
+		expect(h.dayLan).toBe(1);
+	});
+
+	test("tbk-hong: d — hong nhip mot, nhip hai gui duoc", async () => {
+		const { id, userId, goc } = await mot();
+		const tat = spyOn(console, "error").mockImplementation(() => {});
+		await day(
+			zaloGia({ send: 500 }),
+			slackGia(),
+			new Date(goc.getTime() + PHUT_MS),
+		);
+		tat.mockRestore();
+		const z = zaloGia();
+		await day(z, slackGia(), new Date(goc.getTime() + 2 * PHUT_MS));
+		expect(tinZalo(z, chatId("zalo", userId)).length).toBe(1);
+		const h = await db.thongBao.findUniqueOrThrow({ where: { id } });
+		expect(h.dayLoi).toBeNull();
+	});
+
+	test("tbk-hong: e, f — ba lan hong thi thoi, thong bao van con", async () => {
+		const { id, goc } = await mot();
+		const tat = spyOn(console, "error").mockImplementation(() => {});
+		for (let i = 1; i <= THONG_BAO.day.tranLan; i += 1) {
+			await day(
+				zaloGia({ send: 500 }),
+				slackGia(),
+				new Date(goc.getTime() + i * PHUT_MS),
+			);
+		}
+		tat.mockRestore();
+		const z = zaloGia();
+		await day(
+			z,
+			slackGia(),
+			new Date(goc.getTime() + (THONG_BAO.day.tranLan + 1) * PHUT_MS),
+		);
+		expect(z.soGoi("sendMessage"), "thu lai qua tran").toBe(0);
+		const h = await db.thongBao.findUniqueOrThrow({ where: { id } });
+		expect(h.dayLan).toBe(THONG_BAO.day.tranLan);
+		expect(h.docLuc).toBeNull();
+	});
 });
