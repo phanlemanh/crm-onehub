@@ -17,6 +17,7 @@ export const THONG_BAO = {
 		tinHieu: "tin-hieu",
 	},
 	doiChieu: { tranGiaoDichMs: 10 * 60 * GIAY_MS },
+	day: { cuaSoPhut: 30, tranLan: 3 },
 	loi: { khongCo: "Không có thông báo này." },
 } as const;
 
@@ -50,6 +51,64 @@ export const LOAI_THONG_BAO = [
 ] as const;
 
 export type LoaiThongBao = (typeof LOAI_THONG_BAO)[number];
+
+export const LOAI_SU_KIEN = [
+	"tac-nhan-xong",
+	"tac-nhan-can-tra-loi",
+	"tac-nhan-hong",
+	"tin-hieu-doi-cho",
+] as const satisfies readonly LoaiThongBao[];
+
+export type LoaiSuKien = (typeof LOAI_SU_KIEN)[number];
+
+export const MUC_LOAI = ["can-lam", "de-biet"] as const;
+
+export type MucThongBao = (typeof MUC_LOAI)[number];
+
+const canLam = (macDinhDayRa: boolean) =>
+	({ muc: "can-lam", macDinhDayRa }) as const;
+const deBiet = (macDinhDayRa: boolean) =>
+	({ muc: "de-biet", macDinhDayRa }) as const;
+
+export const MUC_THONG_BAO = {
+	"okr-cap-nhat": canLam(true),
+	"okr-cho-duyet": canLam(true),
+	"okr-tra-lai": canLam(true),
+	"okr-hoi-y-gop": canLam(true),
+	"buoc-qua-han": canLam(true),
+	"buoc-sap-han": canLam(true),
+	"ke-hoach-im": canLam(true),
+	"moc-ngay": canLam(true),
+	"goi-y-ke-hoach": canLam(true),
+	"viec-qua-han": canLam(true),
+	"viec-sap-han": canLam(true),
+	"viec-cho-danh-gia": canLam(true),
+	"okr-kr-im": canLam(true),
+	"okr-duoc-giao": deBiet(true),
+	"okr-nhac-ten": deBiet(true),
+	"okr-ghi-nhan": deBiet(true),
+	"okr-hoi-y-cong-bo": deBiet(true),
+	"okr-theo-doi": deBiet(true),
+	"tai-lieu-cho-duyet": canLam(true),
+	"okr-tom-tat": deBiet(true),
+	"ai-tran": deBiet(true),
+	"ai-doi-soat-lech": canLam(true),
+	"tac-nhan-xong": deBiet(false),
+	"tac-nhan-can-tra-loi": canLam(false),
+	"tac-nhan-hong": deBiet(false),
+	"tin-hieu-doi-cho": deBiet(false),
+} as const satisfies Record<
+	LoaiThongBao,
+	{ muc: MucThongBao; macDinhDayRa: boolean }
+>;
+
+export function laLoaiThongBao(v: string): v is LoaiThongBao {
+	return (LOAI_THONG_BAO as readonly string[]).includes(v);
+}
+
+export function laLoaiSuKien(v: string): v is LoaiSuKien {
+	return (LOAI_SU_KIEN as readonly string[]).includes(v);
+}
 
 const ma = z.string().min(1);
 
@@ -291,3 +350,7 @@ export const danhSachThongBaoInput = z.object({
 	chiChuaDoc: z.boolean(),
 	cursor: z.string().min(1).optional(),
 });
+
+export const luuCaiDatThongBaoInput = z
+	.object({ loai: z.enum(LOAI_THONG_BAO), dayRa: z.boolean() })
+	.strict();
