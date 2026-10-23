@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f28f4ba412ec6e954970c6eccbf75eb5e909a72e
+verified_commit: f91b4721b353b24c36cac18e10f33321c8f697f8
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -353,3 +353,7 @@ sha: cbb8da9a5b2f21af07a434a6a73044b0cffc0bc0 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-22, do VK9 mot-nut-tao-muc-tieu: khai superseded_by cho eval DOM gãy, bàn đo màn qua hộp Thêm mục tiêu (V2-20 b2)
 run_id: repin-20261022T224734Z-81705
 sha: f28f4ba412ec6e954970c6eccbf75eb5e909a72e · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · diff chạm vật đo ngoài làn máy: E11, E14, E16 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: eval thay bởi VK9, bàn đo qua hộp Thêm mục tiêu (V2-20 b2), thước Cài đặt theo hiện trạng (V2-21), sau gộp onehub
+run_id: repin-20261023T034523Z-32223
+sha: f91b4721b353b24c36cac18e10f33321c8f697f8 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

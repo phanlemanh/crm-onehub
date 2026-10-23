@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6e3d4c62116ca1cc0a4db4d18851f873814b448a
+verified_commit: f91b4721b353b24c36cac18e10f33321c8f697f8
 human_signoff: Manh Phan 2026-09-26
 ---
 
@@ -267,3 +267,7 @@ sha: ea2082066a7f3804de3aecfe7f38bdcfa0c5b272 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-18, do DA4 du-an-gantt: code Dự án, Lịch làm việc, răng HG đổi; 10 hồ sơ, trần 150′, bỏ DH2 (răng DH2 gãy sau gộp) theo Điều phối
 run_id: repin-20261018T002421Z-44023
 sha: 6e3d4c62116ca1cc0a4db4d18851f873814b448a · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E14 · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: eval thay bởi VK9, bàn đo qua hộp Thêm mục tiêu (V2-20 b2), thước Cài đặt theo hiện trạng (V2-21), sau gộp onehub
+run_id: repin-20261023T034523Z-32223
+sha: f91b4721b353b24c36cac18e10f33321c8f697f8 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E14 · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
