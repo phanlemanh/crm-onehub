@@ -769,6 +769,7 @@ describe("pre-push-t1 verify", () => {
 
 const TV = "tệp ngoài T1";
 const MD = "tệp T1 mà mã đọc";
+const GH = "tệp dưới .github/";
 const B_TS: [string, string] = ["apps/api/b.ts", "export const b = 1;\n"];
 
 function nhanhX(k: Kho, ...them: [string, string][]): string {
@@ -1017,7 +1018,25 @@ const CA_GOP: Ca[] = [
 			expect(phanLoai(k, dongX(k, cu))).toEqual({
 				ma: 0,
 				ra: "",
-				loi: dongNang(1, 1, TV, ".github/workflows/ci.yml"),
+				loi: dongNang(1, 1, GH, ".github/workflows/ci.yml"),
+			});
+			const md = khoG1();
+			suaGop(md.k, [".github/ghi-chu.md", "g\n"], ["docs/c.md", "c\n"]);
+			expect(phanLoai(md.k, dongX(md.k, md.cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(2, 1, GH, ".github/ghi-chu.md"),
+			});
+			const ma = khoG1();
+			suaGop(
+				ma.k,
+				[".github/workflows/ci.yml", "name: CI\n"],
+				["apps/api/a.ts", "export const a = 9;\n"],
+			);
+			expect(phanLoai(ma.k, dongX(ma.k, ma.cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(2, 1, GH, ".github/workflows/ci.yml"),
 			});
 		},
 	},
@@ -1126,6 +1145,16 @@ describe("pre-push-t1 gop", () => {
 		expect(hinh.t1Only.sameRuleAs).toBe(".github/scripts/phan-loai.mjs");
 		expect(hinh.t1Only.vi_sao).toContain("phần PR tự thêm");
 		expect(hinh.t1Only.vi_sao).toContain("merge-base");
+	});
+
+	test("hinh-gop (b): vi_sao ta ve dau tu xa", () => {
+		const hinh = JSON.parse(
+			readFileSync(join(NGUON, ".githooks/gate-shape.json"), "utf8"),
+		);
+		expect(hinh.t1Only.vi_sao).toContain("merge-base(nền, sha từ xa)");
+		expect(hinh.t1Only.vi_sao).not.toContain(
+			"không khác bản onehub tại merge-base(đỉnh",
+		);
 	});
 });
 

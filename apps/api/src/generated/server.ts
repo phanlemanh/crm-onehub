@@ -25,6 +25,7 @@ import { dashboardSummaryInput, dashboardSummaryOutput } from "../dashboard/dash
 import { dealListInput, dealListOutput, dealBoardInput, dealBoardOutput, dealIdInput, dealDetailOutput, dealCreateInput, dealCreateOutput, dealUpdateArgs, dealMutateOutput, setStageInput, dealSetStageOutput, dealContactsInput, dealContactOptionsOutput, dealAttachContactInput, dealContactLinkOutput, dealDetachContactInput, dealContactRoleInput, dealContactRoleOutput, dealBulkOwnerInput, dealBulkResultOutput, dealBulkStageInput, dealBulkInput } from "../deals/deals.contracts";
 import { duAnListInput, duAnListOutput, duAnIdInput, duAnDong, duAnLichOutput, duAnTaoInput, duAnTaoOutput, duAnSuaInput, duAnOkOutput, duAnMocTaoInput, duAnMocSuaInput, duAnPhuThuocInput, duAnDaDoiOutput } from "../du-an/du-an.contracts";
 import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
+import { fieldFileStatusOutput, fieldFileRequestUploadInput, fieldFileRequestUploadOutput, fieldFileCompleteInput, fieldFileCompleteOutput, fieldFileIdInput, fieldFileDownloadOutput, fieldFileRemoveOutput } from "../fields/field-files.contracts";
 import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldLayoutOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldStandardHiddenInput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { giaiDoanListOutput, giaiDoanCreateInput, giaiDoanWriteOutput, giaiDoanRenameInput, giaiDoanReorderInput, giaiDoanArchiveInput, giaiDoanArchivedOutput, giaiDoanRestoreInput } from "../giai-doan/giai-doan.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
@@ -604,6 +605,27 @@ const appRouter = t.router({
 	scheduledTotal: z.number(),
 }))
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  fieldFiles: t.router({
+    status: publicProcedure
+      .output(fieldFileStatusOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    requestUpload: publicProcedure
+      .input(fieldFileRequestUploadInput)
+      .output(fieldFileRequestUploadOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    complete: publicProcedure
+      .input(fieldFileCompleteInput)
+      .output(fieldFileCompleteOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    downloadUrl: publicProcedure
+      .input(fieldFileIdInput)
+      .output(fieldFileDownloadOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    remove: publicProcedure
+      .input(fieldFileIdInput)
+      .output(fieldFileRemoveOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   fields: t.router({
     access: publicProcedure

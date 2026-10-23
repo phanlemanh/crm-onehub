@@ -40,7 +40,7 @@ describe("cau-noi-server", () => {
 		expect(
 			doc("app/(app)/[slug]/okr/hanh-dong-khu.tsx"),
 			"hang hanh dong khong truyen co",
-		).toMatch(/<NutSoan[\s\S]*?cauNoi=\{cauNoi\}/);
+		).toMatch(/<HopChonDuong[^>]*cauNoi=\{cauNoi\}/);
 		const layout = doc("app/(app)/[slug]/layout.tsx");
 		expect(layout, "man soan khong nhan co cau noi").toMatch(
 			/import \{[^}]*\bokrBridgeConfigured\b[^}]*\} from "@\/lib\/agent-bridge"/,

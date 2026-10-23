@@ -5,7 +5,12 @@ import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
-import { createParser, parseAsBoolean, useQueryState } from "nuqs";
+import {
+	createParser,
+	parseAsBoolean,
+	useQueryState,
+	useQueryStates,
+} from "nuqs";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { HopThoaiMucTieu } from "./hop-thoai-muc-tieu";
@@ -76,13 +81,28 @@ export function NganTaoMucTieu({
 	don: DonChonOkr;
 	tenDon: string;
 }) {
-	const [mo, datMo] = useMoTaoMucTieu();
-	if (mo && suaDuoc === false) return <BoKhoaUrl bo={() => void datMo(null)} />;
+	const [thamSo, dat] = useQueryStates({
+		[SEARCH_PARAM.dialog.create]: parseAsBoolean.withDefault(false),
+		[SEARCH_PARAM.okr.tuMau]: parseAsBoolean.withDefault(false),
+	});
+	const mo = thamSo[SEARCH_PARAM.dialog.create];
+	const dong = () =>
+		void dat({
+			[SEARCH_PARAM.dialog.create]: null,
+			[SEARCH_PARAM.okr.tuMau]: null,
+		});
+	if (mo && suaDuoc === false) return <BoKhoaUrl bo={dong} />;
 	if (!mo || !suaDuoc) return null;
 	return (
 		<HopThoaiMucTieu
-			yeuCau={{ loai: "tao", cycleId, don, tenDon }}
-			dong={() => void datMo(null)}
+			yeuCau={{
+				loai: "tao",
+				cycleId,
+				don,
+				tenDon,
+				batDau: thamSo[SEARCH_PARAM.okr.tuMau] ? "mau" : "tay",
+			}}
+			dong={dong}
 		/>
 	);
 }

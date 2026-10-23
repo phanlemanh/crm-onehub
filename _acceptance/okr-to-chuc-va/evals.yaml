@@ -85,6 +85,8 @@ evals:
     criterion: AC-8
     executor: test
     cmd: config:executors.test.r1d_nut_them
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-8
     expected: "exit 0; okr-to-chuc-va.dom.tsx -t nut-them dựng TheoDonVi thật với tRPC giả (okr.byUnit parse bằng schema output thật) — ma trận viết trước 3 vai {quản trị không là trưởng: canCreate=true canEdit=false; trưởng phòng: true/true; thành viên: false/false}: hai vai đầu có [data-nut=them-muc-tieu] và [data-nut=nhap-bang-tinh] trong [data-hang-nut]; thành viên không có cả hai. Bấm them-muc-tieu → URL có khoá dialog.create và ngăn tạo có mặt. In 'so vai: 3'. Chiều đỏ ghim: bản sao để NutThemMucTieu đọc lại canEdit phải làm bài đỏ 'quan tri khong thay nut them'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/okr/ngan-okr-url.tsx", "apps/app/test/okr-to-chuc-va.dom.tsx"]

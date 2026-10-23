@@ -533,7 +533,7 @@ describe("theo-don-vi", () => {
 		const truong = await mo("pb:pb-1");
 		const nutTruong = [
 			nutCo(truong.o, m.themMucTieu),
-			nutCo(truong.o, m.nhapBangTinh),
+			nutCo(truong.o, m.nhap.tieuDe),
 		];
 		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
 			objectives: [mucTieu("a", 1)],
@@ -544,7 +544,7 @@ describe("theo-don-vi", () => {
 			truong: nutTruong,
 			thanhVien: [
 				nutCo(thanhVien.o, m.themMucTieu),
-				nutCo(thanhVien.o, m.nhapBangTinh),
+				nutCo(thanhVien.o, m.nhap.tieuDe),
 			],
 		}).toEqual({ truong: [false, false], thanhVien: [false, false] });
 	});

@@ -440,6 +440,7 @@ describe("lmt-duong-dan", () => {
 			CHECKBOX: ["yes", "no"],
 			SELECT: ["o-a", "none"],
 			USER: ["u-1", "none"],
+			FILE: ["some", "none"],
 		} satisfies Record<FieldTypeName, string[]>;
 		let soVong = 0;
 		for (const { key, type } of truong) {
@@ -475,7 +476,7 @@ describe("lmt-duong-dan", () => {
 			}
 			soVong += 1;
 		}
-		if (soVong !== 10) throw new Error(`lmt duong dan: thieu o ${soVong}`);
+		if (soVong !== 11) throw new Error(`lmt duong dan: thieu o ${soVong}`);
 		expect(soVong).toBe(FIELD_TYPES.length);
 	});
 });

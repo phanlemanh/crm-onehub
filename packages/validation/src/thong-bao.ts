@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { homNayVN } from "./ngay-vn";
+import { KHOA_CHO_TIN_HIEU } from "./tin-hieu-cho";
 
 const GIAY_MS = 1000;
 const NGAY_MS = 24 * 60 * 60 * GIAY_MS;
@@ -10,7 +11,11 @@ export const THONG_BAO = {
 	hoiLaiMs: 60 * GIAY_MS,
 	giuNgay: 90,
 	tranSo: 99,
-	nguon: { nhacBuoiSang: "nhac-buoi-sang", tacNhan: "tac-nhan" },
+	nguon: {
+		nhacBuoiSang: "nhac-buoi-sang",
+		tacNhan: "tac-nhan",
+		tinHieu: "tin-hieu",
+	},
 	doiChieu: { tranGiaoDichMs: 10 * 60 * GIAY_MS },
 	loi: { khongCo: "Không có thông báo này." },
 } as const;
@@ -41,6 +46,7 @@ export const LOAI_THONG_BAO = [
 	"tac-nhan-xong",
 	"tac-nhan-can-tra-loi",
 	"tac-nhan-hong",
+	"tin-hieu-doi-cho",
 ] as const;
 
 export type LoaiThongBao = (typeof LOAI_THONG_BAO)[number];
@@ -202,6 +208,13 @@ export const noiDungThongBao = z.discriminatedUnion("loai", [
 	tacNhan("tac-nhan-xong"),
 	tacNhan("tac-nhan-can-tra-loi"),
 	tacNhan("tac-nhan-hong"),
+	z.object({
+		loai: z.literal("tin-hieu-doi-cho"),
+		ma: ma,
+		tieuDe: z.string(),
+		khoa: z.enum(KHOA_CHO_TIN_HIEU),
+		sha: ma,
+	}),
 ]);
 
 export type NoiDungThongBao = z.infer<typeof noiDungThongBao>;
@@ -267,6 +280,8 @@ export function khoaThongBao(nd: NoiDungThongBao, now: Date): string {
 		case "tac-nhan-can-tra-loi":
 		case "tac-nhan-hong":
 			return `${nd.loai}:${nd.luotId}`;
+		case "tin-hieu-doi-cho":
+			return `${nd.loai}:${nd.ma}:${nd.sha}`;
 	}
 }
 
