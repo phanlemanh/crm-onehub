@@ -114,6 +114,7 @@ export const TYPE_KEY = {
 	EMAIL: "email",
 	PHONE: "phone",
 	USER: "user",
+	FILE: "file",
 } as const satisfies Record<FieldTypeName, string>;
 
 export function fieldTypeLabel(

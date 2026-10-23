@@ -1,5 +1,6 @@
 import {
 	columnFor,
+	FIELD_FILE_COPY,
 	FieldValueError,
 	type FieldValueJson,
 	type FieldValueWrite,
@@ -99,6 +100,12 @@ export function coerceValue(
 	definition: FieldDefinitionWithOptions,
 	input: unknown,
 ): FieldValueWrite {
+	const column = columnFor(definition.type);
+
+	if (column === null) {
+		throw new FieldValueError(definition.key, FIELD_FILE_COPY.chiNhanTep);
+	}
+
 	const blank =
 		input === null ||
 		input === undefined ||
@@ -112,7 +119,7 @@ export function coerceValue(
 			);
 		}
 
-		return { [columnFor(definition.type)]: null };
+		return { [column]: null };
 	}
 
 	switch (definition.type) {
@@ -185,6 +192,9 @@ export function coerceValue(
 		case "USER":
 			return { userId: String(input).trim() };
 
+		case "FILE":
+			throw new FieldValueError(definition.key, FIELD_FILE_COPY.chiNhanTep);
+
 		default:
 			return { text: String(input).trim() };
 	}
@@ -207,6 +217,8 @@ export function readValue(
 			return row.optionId ?? null;
 		case "USER":
 			return row.userId ?? null;
+		case "FILE":
+			return null;
 		default:
 			return row.text ?? null;
 	}
@@ -269,8 +281,13 @@ export async function writeValues(
 		}
 
 		const data = coerceValue(definition, input);
+		const cotGiaTri = columnFor(definition.type);
 
-		return { definition, data, stored: data[columnFor(definition.type)] };
+		return {
+			definition,
+			data,
+			stored: cotGiaTri ? data[cotGiaTri] : undefined,
+		};
 	});
 
 	await assertUsersExist(tx, writes);

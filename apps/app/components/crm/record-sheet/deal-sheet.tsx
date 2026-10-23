@@ -491,6 +491,12 @@ export function DealOverview({ deal }: { deal: Deal }) {
 									saving={isSavingField}
 									onSave={saveFields}
 									nguoiDung={users.data}
+									nguCanhTep={{
+										entity: "DEAL",
+										recordId: deal.id,
+										luuTru: deal.archivedAt !== null,
+										tep: deal.tepTheoTruong,
+									}}
 								/>
 							) : (
 								<Fragment key={muc.key}>

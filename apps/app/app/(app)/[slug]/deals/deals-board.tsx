@@ -14,7 +14,10 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
-import { HienThiTruong } from "@/components/crm/fields/kieu-truong";
+import {
+	giaTriTrongHang,
+	HienThiTruong,
+} from "@/components/crm/fields/kieu-truong";
 import { type Owner, OwnerCell } from "@/components/crm/owner-cell";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
@@ -196,9 +199,8 @@ function DealBoardCard({
 				) : null}
 			</span>
 			{truongThe.map((field) => {
-				const giaTri = card.fields[field.key];
-				if (giaTri === undefined || giaTri === null || giaTri === "")
-					return null;
+				const giaTri = giaTriTrongHang(field.type, card, field.key);
+				if (giaTri === null || giaTri === "") return null;
 				return (
 					<span
 						key={field.key}

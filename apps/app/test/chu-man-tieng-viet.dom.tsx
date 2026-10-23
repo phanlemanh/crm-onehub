@@ -32,6 +32,7 @@ const NGAN = {
 		EMAIL: "Email",
 		PHONE: "Số điện thoại",
 		USER: "Người",
+		FILE: "Tệp",
 	},
 	en: {
 		TEXT: "Text",
@@ -44,6 +45,7 @@ const NGAN = {
 		EMAIL: "Email",
 		PHONE: "Phone",
 		USER: "User",
+		FILE: "File",
 	},
 } satisfies Record<Locale, Record<FieldTypeName, string>>;
 
@@ -226,12 +228,12 @@ describe("nhan-kieu", () => {
 					o.querySelectorAll("[data-nhan-kieu]").length >= FIELD_TYPES.length,
 				"du muoi nhan kieu",
 			);
-			expect(kiemNhanKieu(o, locale)).toBe(10);
+			expect(kiemNhanKieu(o, locale)).toBe(11);
 		});
 	}
 
 	test("ma tran du 20 o", () => {
-		expect(FIELD_TYPES.length * Object.keys(NGAN).length).toBe(20);
+		expect(FIELD_TYPES.length * Object.keys(NGAN).length).toBe(22);
 	});
 
 	test("chieu do: hang dung cau dai thi bai kiem bat", () => {
@@ -296,7 +298,7 @@ describe("o-chon", () => {
 			const chu = [...document.querySelectorAll('[role="option"]')].map(
 				(x) => x.textContent?.trim() ?? "",
 			);
-			expect(kiemOChon(locale, chu)).toBe(10);
+			expect(kiemOChon(locale, chu)).toBe(11);
 		});
 	}
 

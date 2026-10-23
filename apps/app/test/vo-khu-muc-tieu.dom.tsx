@@ -52,6 +52,7 @@ const { TAB } = await import("@/app/(app)/[slug]/okr/tab-okr");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrVoKhuMessages } = await import("@/lib/messages/okr-vo-khu");
+const { okrMoiKrMessages } = await import("@/lib/messages/okr-moi-kr");
 const { khungUngDungMessages } = await import("@/lib/messages/khung-ung-dung");
 
 const t = okrVoKhuMessages("vi");
@@ -217,6 +218,7 @@ const HREF_MUC = [
 	"/ws/okr/bo-okr",
 	"/ws/okr/lay-y-kien",
 	"/ws/okr/suc-khoe",
+	"/ws/okr/moi-kr",
 	"/ws/okr/so-do",
 ];
 
@@ -258,6 +260,7 @@ describe("vkm-thanh-ben", () => {
 				t.muc.boOkr,
 				t.muc.layYKien,
 				t.muc.sucKhoe,
+				okrMoiKrMessages("vi").muc,
 				t.muc.soDo,
 			];
 			if (JSON.stringify(nhanMuc) !== JSON.stringify(mongNhan))
@@ -420,7 +423,7 @@ describe("vkm-chu-ky", () => {
 	test("vkm-chu-ky: lien ket muc mang kyOkr dang xem, va doi theo khi chon chu ky khac", async () => {
 		datNen();
 		await dung(<ThanhBenMucTieu />, "/ws/okr?kyOkr=c2");
-		await cho(() => mucTrenAside().length === 5, "nam muc");
+		await cho(() => mucTrenAside().length === 6, "nam muc");
 		const coKy = hrefMuc();
 		if (
 			!coKy.every(
@@ -434,7 +437,7 @@ describe("vkm-chu-ky", () => {
 
 		datNen();
 		await dung(<ThanhBenMucTieu />, "/ws/okr");
-		await cho(() => mucTrenAside().length === 5, "nam muc khong ky");
+		await cho(() => mucTrenAside().length === 6, "nam muc khong ky");
 		const khongKy = hrefMuc();
 		if (khongKy.some((h) => h.includes("kyOkr")))
 			throw new Error(
@@ -469,7 +472,7 @@ describe("vkm-chu-ky", () => {
 			datNen();
 			urlGhi.length = 0;
 			await dung(<ThanhBenMucTieu />, ca.duong);
-			await cho(() => mucTrenAside().length === 5, `nam muc ${ca.duong}`);
+			await cho(() => mucTrenAside().length === 6, `nam muc ${ca.duong}`);
 			await chonKy(ca.ten);
 			const cuoi = urlGhi.at(-1) ?? "";
 			if (new URLSearchParams(cuoi).get("kyOkr") !== ca.id)
