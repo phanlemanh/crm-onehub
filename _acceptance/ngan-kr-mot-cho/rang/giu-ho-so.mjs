@@ -42,6 +42,8 @@ const GIU = {
 			"luat pham vi vong: git diff --quiet merge-base tren messages-guard.spec.ts cua vong do",
 		"muc-tieu-va-kr#E14":
 			"thuoc chay thuoc: rang/ho-so-cham.mjs tu chay eval cua 14 ho so khac",
+		"kara-mot-ten#E12":
+			"so-do-toan-vung AC-6 gỡ bài Cây có chủ đích (cay-can-chinh-ly-do.dom.tsx, ca theo-don-vi-cay); chủ kho V3-18 lối 1",
 	},
 	cayNen: ".acceptance-runs/ngan-kr-mot-cho/goc",
 };
