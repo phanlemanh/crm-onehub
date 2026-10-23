@@ -13,6 +13,7 @@
 		"./blob": "./src/blob.ts",
 		"./blob-nguon": "./src/blob-nguon.ts",
 		"./blob-tep-truong": "./src/blob-tep-truong.ts",
+		"./hop-dong-mau": "./src/hop-dong-mau.ts",
 		"./blob-cho-xoa": "./src/blob-cho-xoa.ts",
 		"./client": "./src/client.ts",
 		"./currency": "./src/currency.ts",

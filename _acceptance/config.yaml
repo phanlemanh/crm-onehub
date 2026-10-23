@@ -57,6 +57,13 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    hdm_bo_mau: 'bun run test -- "cd apps/agent && bun test test/hop-dong-mau.spec.ts -t hdm-bo-mau"'
+    hdm_doc_chu: 'bun run test -- "cd apps/agent && bun test test/hop-dong-mau.spec.ts -t hdm-doc-chu"'
+    hdm_nap: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-nap"'
+    hdm_khong_ghi_thang: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-khong-ghi-thang"'
+    hdm_chay_lai: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-chay-lai"'
+    hdm_chan: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-chan"'
+    hdm_thoat: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-thoat"'
     gdl_gui_sai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/gon-dau-trang-lay-y-kien.dom.tsx -t gdl-gui-sai
     smt_api_sap: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-sap"'
     smt_api_trang: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-trang"'
