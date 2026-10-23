@@ -730,7 +730,7 @@ describe("tbo-viec-lien-ket", () => {
 		campaign: null,
 		plan: null,
 	};
-	const hang: Record<string, HangViecBo> = {
+	const hang = {
 		viec: { ...goc, loai: "viec", tieuDe: "Gọi khách" },
 		song: {
 			...goc,
@@ -740,7 +740,7 @@ describe("tbo-viec-lien-ket", () => {
 		},
 		xoa: { ...goc, loai: "chien-dich", campaignId: "c2" },
 		keHoachXoa: { ...goc, loai: "ke-hoach", planId: "p2" },
-	};
+	} satisfies Record<string, HangViecBo>;
 	const ra = (vai: "admin" | "okr") =>
 		Object.fromEntries(
 			Object.entries(hang).map(([k, h]) => {

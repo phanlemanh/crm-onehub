@@ -251,7 +251,7 @@ evals:
       - "Chạy đúng lệnh của eval (tien-de.mjs + man-bo-okr.mjs); không gọi thẳng script con"
       - "Mở ảnh _acceptance/trang-bo-okr/evidence/tbo-danh-sach-1440-sang.png, tbo-danh-sach-1440-toi.png, tbo-danh-sach-375-sang.png"
       - "Mở ảnh _acceptance/trang-bo-okr/evidence/tbo-mot-bo-1440-sang.png, tbo-mot-bo-1440-toi.png, tbo-mot-bo-375-sang.png"
-    expected: "Danh sách: bảng các bộ thụt theo cấp với năm cột, lọc ba mục ở trên bảng, không có nút chính. Một bộ: liên kết Bộ OKR ở đầu, tiêu đề tên đơn vị, hàng thẻ con gạch chân ngay dưới đầu trang với thẻ đang mở rõ ràng; không có ô chuyển kiểu xem. Chỗ lệch bản mẫu được phép chỉ gồm: ô chọn đơn vị trên trang một bộ, thẻ Chấm điểm, nội dung Sơ đồ là cây cả chu kỳ, lọc ghi URL — mọi chỗ lệch khác là FAIL. Ở cả sáng và tối, chữ và viền không chìm vào nền; ở 375 danh sách là các mục, không bảng tràn."
+    expected: "Danh sách: bảng các bộ thụt theo cấp với năm cột, lọc ba mục ở trên bảng, không có nút chính. Một bộ: tiêu đề trang giữ «Mục tiêu» (V1-19), dòng vị trí «Bộ OKR › <tên đơn vị>» với «Bộ OKR» là liên kết, hàng thẻ con gạch chân ngay dưới đầu trang với thẻ đang mở rõ ràng; không có ô chuyển kiểu xem. Chỗ lệch bản mẫu được phép chỉ gồm: ô chọn đơn vị trên trang một bộ, thẻ Chấm điểm, nội dung Sơ đồ là cây cả chu kỳ, lọc ghi URL — mọi chỗ lệch khác là FAIL. Ở cả sáng và tối, chữ và viền không chìm vào nền; ở 375 danh sách là các mục, không bảng tràn."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
   - id: E15
