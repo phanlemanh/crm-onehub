@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gộp giữ bản mình rồi vẽ lại</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper: #fafafa;
+      --color-ink: #171717;
+      --color-muted: #575757;
+      --font-sans: 'Geist', system-ui, sans-serif;
+      --font-serif: 'Lora', serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 2rem;
+    }
+    .frame { max-width: 1000px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      color: var(--color-ink);
+      margin-bottom: 1rem;
+    }
+    svg { width: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng · AC-2, 3, 4, 5</p>
+    <h1>Gộp giữ bản mình rồi vẽ lại</h1>
+
+    <svg viewBox="0 0 1000 648" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="500" y1="88" x2="500" y2="120" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 440,176 V 196 Q 440,204 432,204 H 268 Q 260,204 260,212 V 240" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 560,176 V 196 Q 560,204 568,204 H 732 Q 740,204 740,212 V 240" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="260" y1="296" x2="260" y2="328" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="260" y1="384" x2="260" y2="416" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="740" y1="296" x2="740" y2="328" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="740" y1="384" x2="740" y2="416" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 260,472 V 492 Q 260,500 268,500 H 468 Q 476,500 476,508 V 528" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 740,472 V 492 Q 740,500 732,500 H 532 Q 524,500 524,508 V 528" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="336" y="178" width="28" height="16" rx="2" fill="#fafafa"/>
+      <text x="350" y="190" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">(1)</text>
+      <rect x="636" y="178" width="28" height="16" rx="2" fill="#fafafa"/>
+      <text x="650" y="190" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">(2)</text>
+
+      <rect x="340" y="40" width="320" height="48" rx="24" fill="#fafafa"/>
+      <rect x="340" y="40" width="320" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="500" y="68" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">git merge (máy, app đồng bộ, git pull)</text>
+
+      <rect x="260" y="120" width="480" height="56" rx="6" fill="#fafafa"/>
+      <rect x="260" y="120" width="480" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="500" y="144" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">driver trang-ve: giữ bản của nhánh,</text>
+      <text x="500" y="160" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không xung đột ở PRODUCT-MAP.md, LO-TRINH.html</text>
+
+      <rect x="60" y="240" width="400" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="260" y="272" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">gộp tự động → post-merge</text>
+
+      <rect x="60" y="328" width="400" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="260" y="360" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cây tạm từ commit gộp → bộ vẽ product-map.mjs</text>
+
+      <rect x="60" y="416" width="400" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="260" y="448" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">viết lại commit gộp: cùng cha, lời, tác giả; trang mới</text>
+
+      <rect x="540" y="240" width="400" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="740" y="264" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">dừng vì xung đột ở tệp khác (hay --no-commit)</text>
+      <text x="740" y="280" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">→ người giải, git commit → pre-commit</text>
+
+      <rect x="540" y="328" width="400" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="740" y="360" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cây tạm từ chỉ mục → bộ vẽ</text>
+
+      <rect x="540" y="416" width="400" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="740" y="448" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">git add hai trang vào commit gộp</text>
+
+      <rect x="344" y="528" width="312" height="48" rx="24" fill="#fafafa"/>
+      <rect x="344" y="528" width="312" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="500" y="556" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">CI: product-map.mjs --check không đổi</text>
+
+      <rect x="688" y="528" width="252" height="48" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="814" y="548" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">GitHub vẫn báo xung đột tới khi đẩy</text>
+      <text x="814" y="564" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">(ngoài phạm vi)</text>
+
+      <line x1="40" y1="600" x2="960" y2="600" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="620" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="132" y="612" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="164" y="622" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bắt đầu / kết thúc</text>
+
+      <rect x="292" y="612" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="324" y="622" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước</text>
+
+      <rect x="384" y="612" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="416" y="622" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chỗ đổi chính của vòng</text>
+
+      <rect x="560" y="612" width="24" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="592" y="622" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Ngoài phạm vi</text>
+    </svg>
+  </div>
+</body>
+</html>
