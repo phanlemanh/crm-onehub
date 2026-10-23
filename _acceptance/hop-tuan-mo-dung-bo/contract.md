@@ -5,8 +5,10 @@ slug: hop-tuan-mo-dung-bo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-23-hop-tuan-mo-dung-bo-design.md
+approved_by: Phan Le Manh
+approved_at: 2026-10-24
 ---
 
 # Acceptance Contract: hop-tuan-mo-dung-bo
