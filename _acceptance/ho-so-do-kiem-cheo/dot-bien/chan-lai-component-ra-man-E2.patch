@@ -1,0 +1,10 @@
+--- a/packages/ui/src/components/separator.tsx
++++ b/packages/ui/src/components/separator.tsx
+@@ -8,6 +8,7 @@
+ 	className,
+ 	orientation = "horizontal",
+ 	decorative = true,
++	"aria-label": nhan = "Divider",
+ 	...props
+ }: React.ComponentProps<typeof SeparatorPrimitive.Root>) {
+ 	return (

@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,6 +10,8 @@ const doc = (tuong, bien) => readFileSync(process.env[bien] ?? join(GOC, tuong),
 
 const CAU_ZDR = "nhà cung cấp model là bên nhận; nội dung OKR chỉ gửi đi khi có ZDR, kể cả eval";
 const TEN = ["Trợ lý OKR", "Đề xuất", "Tóm tắt tuần", "Sổ chi phí AI"];
+const TEN_DOI_SAU = ["Trợ lý OKR", "Tóm tắt tuần"];
+const NEO_GOP = process.env.NEO_GOP ?? "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9";
 const TEP_CHO_RE = [
 	"lib/session-purpose.ts",
 	"instructions/task.ts",
@@ -47,9 +50,20 @@ const agent = doc("docs/agent.md", "TEP_AGENT");
 const ranh = doc("apps/agent/agent/skills/data-boundaries.md", "TEP_RANH");
 const api = doc("docs/api.md", "TEP_API");
 
+let ctxGop = "";
+try {
+	ctxGop = execFileSync("git", ["-C", GOC, "show", `${NEO_GOP}:CONTEXT.md`], {
+		encoding: "utf8",
+		stdio: ["ignore", "pipe", "ignore"],
+	});
+} catch {
+	console.log(`KHONG DO DUOC: khong doc duoc CONTEXT.md o sha neo ${NEO_GOP}`);
+	process.exit(2);
+}
+
 for (const ten of TEN) {
 	const goc = muc(opp, ten);
-	const ban = muc(ctx, ten);
+	const ban = muc(TEN_DOI_SAU.includes(ten) ? ctxGop : ctx, ten);
 	if (!goc) loi.push(`opportunity thieu muc: ${ten}`);
 	else if (goc !== ban) loi.push(`tu dien lech: ${ten}`);
 }

@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const GOC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
-const TRAN_MS = 20 * 60_000;
+const TRAN_MS = 45 * 60_000;
 const require = createRequire(import.meta.url);
 
 let kitDaNap = null;

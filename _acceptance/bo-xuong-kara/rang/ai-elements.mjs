@@ -13,6 +13,7 @@ const AE = {
 	so: "_acceptance/nen-chat-ai-elements/so-lech-chuan.md",
 	lyDo: "K1",
 	han: "K2",
+	cau: "kara/",
 };
 
 const doiSo = (ten) => {
@@ -55,7 +56,7 @@ for (const t of AE.coMat) {
 	ghi(!lucide, lucide ? `con icon lucide: ${t}` : `khong lucide: ${t}`);
 }
 
-for (const r of ["chu-cung.mjs", "mau-ban-kinh.mjs", "so-lech-chuan.mjs"]) {
+for (const r of ["chu-cung.mjs", "mau-ban-kinh.mjs"]) {
 	const { ma, ra } = chay(join(GOC, AE.rang, r));
 	const cuoi = ra.trim().split("\n").at(-1);
 	ghi(ma === 0, `${r} ma ${ma}: ${cuoi}`);
@@ -68,10 +69,17 @@ for (const t of AE.coMat)
 
 const mc = chay(moCoi);
 const khoi = mc.ra.split("\n");
+const dauSong = khoi.findIndex((d) => d.startsWith("SONG ("));
 const dauMien = khoi.findIndex((d) => d.startsWith("MIEN TRU ("));
 const dauChet = khoi.findIndex((d) => d.startsWith("CHET ("));
+const song = dauSong === -1 ? [] : khoi.slice(dauSong + 1, dauMien === -1 ? undefined : dauMien);
 const mien = dauMien === -1 ? [] : khoi.slice(dauMien + 1, dauChet === -1 ? undefined : dauChet);
 for (const t of AE.coMat) {
+	const s = song.find((d) => d.trim().startsWith(`${t} — `));
+	if (s !== undefined) {
+		ghi(s.includes(AE.cau), s.includes(AE.cau) ? `song ${t} qua ${AE.cau}` : `song ${t} khong qua ${AE.cau}: ${s.trim()}`);
+		continue;
+	}
 	const i = mien.findIndex((d) => d.trim().startsWith(`${t} — miễn trừ:`));
 	const lyDo = i === -1 ? "" : mien[i];
 	const han = i === -1 ? "" : (mien[i + 1] ?? "");

@@ -1,10 +1,12 @@
+import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { AGENT, RA } from "./mau-chung.mjs";
+import { AGENT, GOC, RA, vanTayMa } from "./mau-chung.mjs";
 
 const { gateway } = await import(Bun.resolveSync("ai", AGENT));
 
 const TONG_KET = join(RA, "e9-tong-ket.jsonl");
+const SHA_TONG_KET = `${TONG_KET}.sha`;
 const NGUONG = 0.1;
 const CHO_MS = 15 * 60_000;
 const NHIP_MS = 20_000;
@@ -13,9 +15,28 @@ if (!process.env.AI_GATEWAY_API_KEY?.trim()) {
 	console.log("khong co khoa rieng de doc bao cao Gateway");
 	process.exit(2);
 }
-if (!existsSync(TONG_KET)) {
-	console.log("chua co tong ket cua E9 — chay cach-ly-dau-cuoi.mjs truoc");
-	process.exit(2);
+const SHA = vanTayMa();
+const shaTongKet = () =>
+	existsSync(SHA_TONG_KET) ? readFileSync(SHA_TONG_KET, "utf8").trim() : "";
+if (!existsSync(TONG_KET) || shaTongKet() !== SHA) {
+	console.log(
+		`tong ket cua E9 ${existsSync(TONG_KET) ? `ghi sha ${shaTongKet() || "(khong)"}` : "chua co"}, cay dang do ${SHA} — chay cach-ly-dau-cuoi.mjs --lan 3`,
+	);
+	const e9 = spawnSync(
+		"bun",
+		[join(import.meta.dirname, "cach-ly-dau-cuoi.mjs"), "--lan", "3"],
+		{ cwd: GOC, stdio: "inherit" },
+	);
+	if (e9.status !== 0 || !existsSync(TONG_KET)) {
+		console.log(`E9 khong xanh (ma ${e9.status}) — khong doi soat duoc`);
+		process.exit(2);
+	}
+	if (shaTongKet() !== SHA) {
+		console.log(
+			`tong ket cua E9 ghi sha ${shaTongKet() || "(khong)"}, khac cay dang do ${SHA} — khong doi soat duoc`,
+		);
+		process.exit(2);
+	}
 }
 
 const luot = readFileSync(TONG_KET, "utf8")
@@ -110,4 +131,8 @@ if (lechBoCon <= NGUONG) {
 	console.log("thuoc khong phan biet duoc so thieu phien con");
 	process.exit(1);
 }
-process.exit(lech <= NGUONG ? 0 : 1);
+if (lech > NGUONG) {
+	console.log(`so lech gateway qua ${NGUONG * 100}%`);
+	process.exit(1);
+}
+process.exit(0);

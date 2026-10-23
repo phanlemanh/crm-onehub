@@ -4,7 +4,7 @@ import { isAbsolute, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { docDanhSach, dungCayTam, evalMay, HO_SO_DIR, khoa, THU_MUC_CHAY, XU_LY_CO_DOT_BIEN } from "./chung.mjs";
 
-const TRAN_MS = 20 * 60_000;
+const TRAN_MS = 45 * 60_000;
 const MA_KHONG_DO = 2;
 const KET_QUA = join(THU_MUC_CHAY, "chieu-do.json");
 

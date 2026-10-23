@@ -51,6 +51,14 @@
 			]
 		},
 		{
+			"component": "context-menu.tsx",
+			"nguyen_ban": [
+				"ContextMenuPrimitive (radix-ui)",
+				"ChevronRightIcon (lucide-react)",
+				"CheckIcon (lucide-react)"
+			]
+		},
+		{
 			"component": "dashboard-chart.tsx",
 			"nguyen_ban": [
 				"Area (recharts)",
@@ -100,6 +108,12 @@
 			]
 		},
 		{
+			"component": "markdown-reader.tsx",
+			"nguyen_ban": [
+				"Streamdown (streamdown)"
+			]
+		},
+		{
 			"component": "markdown.tsx",
 			"nguyen_ban": [
 				"Streamdown (streamdown)"
@@ -112,15 +126,15 @@
 			]
 		},
 		{
-			"component": "progress.tsx",
-			"nguyen_ban": [
-				"ProgressPrimitive (radix-ui)"
-			]
-		},
-		{
 			"component": "questionnaire.tsx",
 			"nguyen_ban": [
 				"QuestionnairePrimitive (@shadcn/react/questionnaire)"
+			]
+		},
+		{
+			"component": "radio-group.tsx",
+			"nguyen_ban": [
+				"RadioGroupPrimitive (radix-ui)"
 			]
 		},
 		{

@@ -45,8 +45,8 @@ evals:
     executor: script
     cmd: config:executors.script.tv_khai_sinh
     expected: >-
-      exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 76 component .tsx trong
-      packages/ui · 37 boc thu vien ngoai · 16 doc kho chuoi dung chung. Lech la thoat
+      exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 120 component .tsx trong
+      packages/ui · 43 boc thu vien ngoai · 39 doc kho chuoi dung chung (neo doi 76·37·21 -> 120·43·39 theo 3f99c7055). Lech la thoat
       ma 2 kem diff ten file. Danh sach "boc thu vien" sinh tu cau lenh nhap trong file,
       KHONG go tay ten goi.
     paths:

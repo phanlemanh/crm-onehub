@@ -130,10 +130,17 @@ evals:
       Do tren BAN TRIEN KHAI THAT, khong do file tren dia:
       doc khoi `crons` cua ban triem khai production moi nhat cua `crm-onehub-api`
       qua API cua nen tang — DUNG dung cu da lap neo "mot cron" truoc vong.
+      Ban do la ban production READY moi nhat; sha commit cua no phai CHUA cap gop
+      cron 147b47a33 (Merge vong T2, git merge-base --is-ancestor) — khong doi dung
+      sha HEAD, vi nhanh vong khong bao gio len production. Khong chua -> ma 1
+      "khong chua cap gop cron". Sha cap gop hay sha ban production khong co trong
+      kho -> ma 2 "KHONG DO DUOC".
       Xanh: dung NAM muc, va tung cap `path` + `schedule` khop `apps/api/vercel.json`.
       Lech mot muc -> ma 1, in ca hai danh sach.
-      Khong doc duoc ban trien khai (het han xac thuc, khong co ban nao) -> ma 2,
-      KHONG phai ma 0.
+      Token Vercel CLI het han (auth.json expiresAt da qua, hay API tra 401/403) ->
+      in "token Vercel CLI het han — chay vercel login" va ma 2. Khong doc duoc ban
+      trien khai (khong co ban nao) -> ma 2, KHONG phai ma 0. Co `--gia <tep.json>`
+      de chay logic tren du lieu gia (chieu do da thu).
       Vi sao eval nay bat buoc: moi eval khac dung o mot file tren dia. Mot luot dung
       ghi dung nam dong vao `.vercel/output` ma nen tang van dang ky lich cu la ca
       hong ma ca bay eval kia deu xanh — dung lop loi vong nay tuyen dong.
@@ -147,7 +154,11 @@ evals:
       - "apps/**"
       - "packages/**"
     expected: |
-      Chay `bun run test`, `check-types`, `lint`, `lint:slop`, `build`, in ma tung lenh.
+      Chay `bun run test`, `check-types`, `lint`, `lint:slop`, `build`, in ma tung lenh
+      (dau ra cua nam lenh di thang ra man, khong gom vao bo dem).
       Xanh: ca nam ma 0, VA `apps/app` ra dung ba canh bao lint — so ba la con so GHIM
-      cua kho, lech hai chieu deu la do.
+      cua kho, lech hai chieu deu la do. Con so ghim do o CAY CUA CAP GOP vong cron
+      (cha thu hai cua 147b47a33, Merge vong T2), khong o HEAD: cay tam dung bang
+      `git worktree add --detach` trong tmpdir, noi node_modules, go khi xong. Sha cap
+      gop khong co trong kho -> ma 2 "KHONG DO DUOC".
       Mot lenh khac 0 -> ma 1, neu ten lenh va ma.

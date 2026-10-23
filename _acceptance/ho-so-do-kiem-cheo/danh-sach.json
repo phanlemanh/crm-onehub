@@ -112,7 +112,14 @@
 			"ly_do": "K2 gỡ miễn trừ artifact/task (SONG qua kara/); vân tay confirmation đổi do ai-elements@latest",
 			"can_cu": "fc691046d",
 			"sua": "rang/ai-elements.mjs vế (d) nhận SONG; ghim phiên bản ai-elements thay @latest",
-			"dot_bien_de_xuat": "bo-cau-kara"
+			"tep": [
+				"_acceptance/bo-xuong-kara/rang/ai-elements.mjs"
+			],
+			"dot_bien": {
+				"ten": "bo-cau-kara",
+				"ban_va": "dot-bien/bo-xuong-kara-E10.patch",
+				"thong_diep": "SAI MO COI: task.tsx"
+			}
 		},
 		{
 			"ho_so": "ca-chap-chon-cach-ly",
@@ -121,7 +128,14 @@
 			"ly_do": "khoa-eve-khong-tranh dời lời gọi dungMoCoi vào gianhKhoaCu (AC-3)",
 			"can_cu": "f47a7002b",
 			"sua": "rang/mo-coi.mjs:14 MOC_DON='\\tawait dungMoCoi(daGianh);\\n'",
-			"dot_bien_de_xuat": "go-don-moi"
+			"tep": [
+				"_acceptance/ca-chap-chon-cach-ly/rang/mo-coi.mjs"
+			],
+			"dot_bien": {
+				"ten": "moc-don-cu",
+				"ban_va": "dot-bien/ca-chap-chon-cach-ly-E5.patch",
+				"thong_diep": "moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1"
+			}
 		},
 		{
 			"ho_so": "ca-chap-chon-cach-ly",
@@ -130,7 +144,14 @@
 			"ly_do": "cùng gốc E5",
 			"can_cu": "f47a7002b",
 			"sua": "rang/dot-bien.mjs:20 cặp a mo-coi mốc mới",
-			"dot_bien_de_xuat": "a mo-coi trên mốc mới"
+			"tep": [
+				"_acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs"
+			],
+			"dot_bien": {
+				"ten": "a-mo-coi-moc-cu",
+				"ban_va": "dot-bien/ca-chap-chon-cach-ly-E7.patch",
+				"thong_diep": "moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1"
+			}
 		},
 		{
 			"ho_so": "ca-chap-chon-con-lai",
@@ -159,7 +180,14 @@
 			"ly_do": "phien-chet-ve-dang-nhap (#184 AC-4) thêm hetPhien:false vào khẳng định cũ",
 			"can_cu": "c895e5bff",
 			"sua": "rang/khang-dinh-cu-nguyen-ven.mjs:9 NEO=c895e5bff; expected E8",
-			"dot_bien_de_xuat": "bo-het-phien"
+			"tep": [
+				"_acceptance/cai-dat-chung-chi-quan-tri/rang/khang-dinh-cu-nguyen-ven.mjs"
+			],
+			"dot_bien": {
+				"ten": "dao-het-phien",
+				"ban_va": "dot-bien/cai-dat-chung-chi-quan-tri-E8.patch",
+				"thong_diep": "SAI khoi cu con nguyen: it(\"says the viewer is out when the API names no role for them\""
+			}
 		},
 		{
 			"ho_so": "cap-nhat-tuan-okr",
@@ -194,7 +222,15 @@
 			"ly_do": "neo mac_dinh 129→132: 4 mục kỹ thuật thêm (#489 #344 #306 #333), 1 mất; nhóm người đọc vẫn 0",
 			"can_cu": "c1d11fd4b",
 			"sua": "rang/lai-ra-man.mjs:9 mac_dinh 132; expected E1 E2",
-			"dot_bien_de_xuat": "neo-lech-mot label=Save"
+			"tep": [
+				"_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs",
+				"_acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs"
+			],
+			"dot_bien": {
+				"ten": "neo-lech-mot label=Save",
+				"ban_va": "dot-bien/chan-lai-component-ra-man-E1.patch",
+				"thong_diep": "DO: neo mac_dinh ghim 132 nhung do duoc 133"
+			}
 		},
 		{
 			"ho_so": "chan-lai-component-ra-man",
@@ -203,7 +239,14 @@
 			"ly_do": "cùng gốc E1",
 			"can_cu": "c1d11fd4b",
 			"sua": "cùng",
-			"dot_bien_de_xuat": "mount-mot-trang-thai"
+			"tep": [
+				"_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs"
+			],
+			"dot_bien": {
+				"ten": "them-mac-dinh-separator",
+				"ban_va": "dot-bien/chan-lai-component-ra-man-E2.patch",
+				"thong_diep": "DO: tong ba nhom 133 khac neo 132"
+			}
 		},
 		{
 			"ho_so": "chan-lai-component-ra-man",
@@ -212,7 +255,14 @@
 			"ly_do": "cùng gốc E1",
 			"can_cu": "c1d11fd4b",
 			"sua": "cùng",
-			"dot_bien_de_xuat": "neo-lech-mot"
+			"tep": [
+				"_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs"
+			],
+			"dot_bien": {
+				"ten": "neo-lech-mot",
+				"ban_va": "dot-bien/chan-lai-component-ra-man-E7.patch",
+				"thong_diep": "DO: neo mac_dinh ghim 132 nhung do duoc 133"
+			}
 		},
 		{
 			"ho_so": "chan-trung-khoa-ban-nhap",
@@ -221,7 +271,14 @@
 			"ly_do": "okr-loai-hoc-tap thêm import ./okr-muc-tieu; răng chỉ vá một import tương đối",
 			"can_cu": "020b2ec69",
 			"sua": "rang/pha-thu.mjs dungBanSao: viết lại mọi from \"./x\"",
-			"dot_bien_de_xuat": "chan-khoa-luon-qua"
+			"tep": [
+				"_acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs"
+			],
+			"dot_bien": {
+				"ten": "chan-khoa-luon-qua",
+				"ban_va": "dot-bien/chan-trung-khoa-ban-nhap-E3.patch",
+				"thong_diep": "don-vi: ca sai chieu: trung-khoa (a)"
+			}
 		},
 		{
 			"ho_so": "chan-trung-khoa-ban-nhap",
@@ -230,7 +287,14 @@
 			"ly_do": "cùng gốc E3",
 			"can_cu": "020b2ec69",
 			"sua": "cùng sửa E3",
-			"dot_bien_de_xuat": "gỡ superRefine"
+			"tep": [
+				"_acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs"
+			],
+			"dot_bien": {
+				"ten": "go-superRefine",
+				"ban_va": "dot-bien/chan-trung-khoa-ban-nhap-E4.patch",
+				"thong_diep": "KHONG DO DUOC: okr-cuoc-soan.ts: moc xuat hien 0 lan, can 1: .superRefine(chanKhoaTrung)"
+			}
 		},
 		{
 			"ho_so": "chu-cuoi-cung-tien-de",
@@ -266,7 +330,14 @@
 				"584e6caae"
 			],
 			"sua": "rang/khai-sinh.mjs:6 NEO {120,43,39}; expected E3",
-			"dot_bien_de_xuat": "them-component-boc-gia → LECH, exit 2"
+			"tep": [
+				"_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/khai-sinh.mjs"
+			],
+			"dot_bien": {
+				"ten": "them-component-boc-gia",
+				"ban_va": "dot-bien/chu-mac-dinh-thu-vien-ngoai-E3.patch",
+				"thong_diep": "LECH: component — do duoc 121, neo ghim 120"
+			}
 		},
 		{
 			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
@@ -280,7 +351,14 @@
 				"29a101a4c"
 			],
 			"sua": "rang/boc-ma-khong-doc.json bỏ progress, thêm 3 dòng (bản dựng sẵn scratchpad/tra-cmd/boc-ma-khong-doc.sua.json)",
-			"dot_bien_de_xuat": "khai-nguyen-ban-sai-radio-group → HONG exit 1; tra-progress-vao-bang → THUA exit 2"
+			"tep": [
+				"_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/boc-ma-khong-doc.json"
+			],
+			"dot_bien": {
+				"ten": "khai-nguyen-ban-sai-radio-group",
+				"ban_va": "dot-bien/chu-mac-dinh-thu-vien-ngoai-E4.patch",
+				"thong_diep": "HONG: radio-group.tsx khai boc CircleIcon (lucide-react) ma tren dia khong thay"
+			}
 		},
 		{
 			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
@@ -289,24 +367,48 @@
 			"ly_do": "context-menu mới thuộc nhóm chỉ hiện sau khi bấm",
 			"can_cu": "29a101a4c",
 			"sua": "rang/gioi-han-bam-moi-hien.json thêm context-menu (scratchpad/tra-cmd/gioi-han-bam-moi-hien.sua.json); KÉO THEO chan-lai-component-ra-man: mo-nguyen-ban.mjs:9 NEO_DONG 9→10, lai-ra-man.mjs:9 dong_bang_cu 9→10, da_do.ket_qua thêm context-menu từ bộ mở nguyên bản thật",
-			"dot_bien_de_xuat": "go-context-menu-khoi-bang → THIEU exit 2"
+			"tep": [
+				"_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.json",
+				"_acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs",
+				"_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs"
+			],
+			"dot_bien": {
+				"ten": "go-context-menu-khoi-bang",
+				"ban_va": "dot-bien/chu-mac-dinh-thu-vien-ngoai-E9.patch",
+				"thong_diep": "THIEU: context-menu.tsx"
+			}
 		},
 		{
 			"ho_so": "cron-theo-ban-khai",
 			"eval": "E8",
-			"xu_ly": "khai-not-run",
-			"ly_do": "cần bản triển khai production READY dựng từ đúng sha HEAD + token Vercel CLI; nhánh vòng không bao giờ lên production",
-			"can_cu": "_acceptance/cron-theo-ban-khai/contract.md:119",
-			"sua": "status not-run"
+			"xu_ly": "sua-rang",
+			"ly_do": "Chủ kho chọn Hỏi-4: ô đòi bản triển khai production READY mà cặp gộp vòng cron (147b47a33) là tổ tiên, thay vì đúng sha HEAD; token Vercel CLI hết hạn → mã 2 kèm câu nhắc vercel login.",
+			"can_cu": "147b47a33",
+			"sua": "status not-run",
+			"tep": [
+				"_acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs"
+			],
+			"dot_bien": {
+				"ten": "production-khong-chua-cap-gop",
+				"ban_va": "dot-bien/cron-theo-ban-khai-E8.patch",
+				"thong_diep": "khong chua cap gop cron f148b2bb1"
+			}
 		},
 		{
 			"ho_so": "cron-theo-ban-khai",
 			"eval": "E7",
 			"xu_ly": "sua-rang",
 			"ly_do": "spawnSync ENOBUFS; sau sửa còn ghim lint 3 vs 36 (HỎI)",
-			"can_cu": "_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs:16",
+			"can_cu": "147b47a33",
 			"sua": "stdio inherit + maxBuffer",
-			"dot_bien_de_xuat": "test-hong; canh-bao-them"
+			"tep": [
+				"_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs"
+			],
+			"dot_bien": {
+				"ten": "canh-bao-ghim-lech",
+				"ban_va": "dot-bien/cron-theo-ban-khai-E7.patch",
+				"thong_diep": "DO: apps/app ra 3 canh bao lint, ghim la 4."
+			}
 		},
 		{
 			"ho_so": "danh-sach-keo-chung",
@@ -391,7 +493,16 @@
 			"ly_do": "phụ thuộc thứ tự: đòi tổng kết E9",
 			"can_cu": "_acceptance/tro-ly-okr-nen/rang/doi-soat-that.mjs:16",
 			"sua": "cach-ly-dau-cuoi ghi sha; doi-soat tự chạy E9 khi thiếu/khác sha",
-			"dot_bien_de_xuat": "tong-ket-cu"
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/doi-soat-that.mjs",
+				"_acceptance/tro-ly-okr-nen/rang/cach-ly-dau-cuoi.mjs",
+				"_acceptance/tro-ly-okr-nen/rang/mau-chung.mjs"
+			],
+			"dot_bien": {
+				"ten": "so-chi-phi-gap-doi",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E4.patch",
+				"thong_diep": "so lech gateway qua 10%"
+			}
 		},
 		{
 			"ho_so": "tro-ly-okr-nen",
@@ -400,7 +511,18 @@
 			"ly_do": "migration mới tính theo merge-base; model mới không cuối schema vì du-an-gantt d429e39b2, goi-y-mo-ke-hoach 34a010430 thêm sau",
 			"can_cu": "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9",
 			"sua": "rang/migration-chi-them.mjs NEN=e3dd799ad GOP=1bb45ac78; diff schema NEN..GOP; liền khối 6 model thay cuối tệp",
-			"dot_bien_de_xuat": "DROP COLUMN; @@index AgentTask; tach-khoi"
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/migration-chi-them.mjs"
+			],
+			"dot_bien": {
+				"ten": "DROP COLUMN",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E17.patch",
+				"thong_diep": "migration khong chi them: DROP COLUMN"
+			},
+			"dot_bien_neo": {
+				"ten": "neo-0",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E17-neo.patch"
+			}
 		},
 		{
 			"ho_so": "tro-ly-okr-nen",
@@ -409,7 +531,18 @@
 			"ly_do": "git show merge-base:tien-do.ts — tệp đã dời ở HEAD",
 			"can_cu": "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9",
 			"sua": "rang/tien-do-da-doi.mjs nen=c1e37b730548a6faa9c2dbac1e0a652a32934753",
-			"dot_bien_de_xuat": "nhap-duong-cu; doi-than-ky-vong"
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/tien-do-da-doi.mjs"
+			],
+			"dot_bien": {
+				"ten": "nhap-duong-cu",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E22.patch",
+				"thong_diep": "con nhap duong cu: apps/api/src/okr/okr-xem.service.ts"
+			},
+			"dot_bien_neo": {
+				"ten": "neo-0",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E22-neo.patch"
+			}
 		},
 		{
 			"ho_so": "tro-ly-okr-nen",
@@ -421,7 +554,14 @@
 				"923f57173"
 			],
 			"sua": "rang/tu-dien-luat.mjs: hai mục so với git show <sha>:CONTEXT.md",
-			"dot_bien_de_xuat": "sua-tom-tat"
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/tu-dien-luat.mjs"
+			],
+			"dot_bien": {
+				"ten": "sua-tom-tat",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E23.patch",
+				"thong_diep": "tu dien lech: Tóm tắt tuần"
+			}
 		},
 		{
 			"ho_so": "tro-ly-okr-nen",
@@ -430,7 +570,14 @@
 			"ly_do": "tro-ly-okr-tom-tat: phiên con chưa có việc vào okr.chuyen-tiep",
 			"can_cu": "853f07bd2",
 			"sua": "rang/so-phien-con-that.mjs:8 con_tro_ly=okr.chuyen-tiep",
-			"dot_bien_de_xuat": "tro-ly-ve-de-xuat"
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/so-phien-con-that.mjs"
+			],
+			"dot_bien": {
+				"ten": "tro-ly-ve-de-xuat",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E25.patch",
+				"thong_diep": "con_tro_ly: tinhNang okr.de-xuat, can okr.chuyen-tiep"
+			}
 		},
 		{
 			"ho_so": "so-okr-tu-chay",
