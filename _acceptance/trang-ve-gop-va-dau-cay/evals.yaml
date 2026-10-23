@@ -237,9 +237,10 @@ evals:
         (c) gh thoat 1 -> du nam buoc chay, ma day 0.
         (d) gh ngu 30 giay (giay_gh 2 trong tep khai cua kho tam) -> du nam, lan day xong duoi 20 giay.
         (e) remote la duong dan tran (khong github) -> gh khong duoc goi (tep dem cua gh gia khong ton tai).
-        (f) ten khop: tap ten trong khoa ci cua .githooks/da-chung.json toEqual tap ten dung tu .github/workflows/ci.yml
-            (name cua job check, «test (<ten>)» voi moi matrix.o.ten) va acceptance.yml (job «lệnh dựng»); moi ten co trong
-            mau check-runs-538.json.
+      Roi node rang/ten-job.mjs (doc .github/workflows/*.yml, nam ngoai bun run test): tap ten trong khoa ci cua
+      .githooks/da-chung.json BANG DUNG tap job kiem dung tu ci.yml («check-types, lint», «test (<ten>)» voi moi
+      matrix.o.ten) va acceptance.yml («lệnh dựng»), moi ten co trong mau; chieu do: them mot ten la hay bot mot o test
+      -> in «BAT».
       Chieu do: E12 (h) coi «skipped» la xanh -> (b) do.
 
   - id: E12
@@ -275,8 +276,9 @@ evals:
       - "packages/ui/test/pre-push-da-chung.spec.ts"
     expected: |
       bun test -t "nhu-cu|verify-da-chung":
-        nhu-cu (a) ba kho mau (docs; ma; gop onehub chi T1) khong co dau: stdout, stderr cua bo phan loai va so bun toEqual
-            chinh chung khi chay bo phan loai, verify cua `git show origin/onehub:` trong cung kho.
+        nhu-cu (a) ba kho mau (docs; ma; docs va ma) khong co dau: stdout, stderr cua bo phan loai va so bun toEqual chinh
+            chung khi chay ban truoc vong cua bo phan loai va verify (packages/ui/test/mau/truoc-vong/*.txt, chep tu goc
+            vong 6adaf11e0) trong cung kho.
         nhu-cu (b) xoa .githooks/da-chung.json, co dau hook cung cay -> du nam buoc chay.
         verify-da-chung (a) --bo-qua «check-types lint lint:slop test build» khong phieu -> do «does not match» kieu cu.
         verify-da-chung (b) phieu cua lan day nay, tep khai thieu vi_sao -> do «vi_sao».

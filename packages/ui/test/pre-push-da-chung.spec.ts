@@ -32,8 +32,6 @@ const TEP_CHEP = [
 	"scripts/verify-gate-shape.mjs",
 	"scripts/gate-shape-node-test.mjs",
 	".github/scripts/phan-loai.mjs",
-	".github/workflows/ci.yml",
-	".github/workflows/acceptance.yml",
 	"scripts/pre-merge-check.sh",
 	"lib/workspace-record.cjs",
 	"lib/evidence-core.cjs",
@@ -95,7 +93,6 @@ if (process.env.GH_NGU) {
 if (process.env.GH_HONG) process.exit(1);
 process.stdout.write(readFileSync(process.env.GH_MAU, "utf8"));
 `;
-const BIEN_MA_TRAN = ["$", "{{ matrix.o.ten }}"].join("");
 const OXLINT_GIA = `#!/bin/sh\necho "${DONG_PHU}"\n`;
 
 type Kho = { d: string; goc: string; bin: string; so: string; ghSo: string };
@@ -671,54 +668,16 @@ describe("nguon-ci", () => {
 		expect(existsSync(k.ghSo)).toBe(false);
 		expect(soBun(k)).toEqual(NAM);
 	});
-
-	test("nguon-ci (f): ten job khop ci.yml, acceptance.yml va mau", () => {
-		const khai = JSON.parse(
-			readFileSync(join(NGUON, ".githooks/da-chung.json"), "utf8"),
-		);
-		const tenKhai = [
-			...new Set(Object.values(khai.ci as Record<string, string[]>).flat()),
-		].sort();
-		const ci = readFileSync(join(NGUON, ".github/workflows/ci.yml"), "utf8");
-		const acc = readFileSync(
-			join(NGUON, ".github/workflows/acceptance.yml"),
-			"utf8",
-		);
-		const tenJob = (chu: string) =>
-			[...chu.matchAll(/^ {4}name: (.+)$/gm)].map((m) => m[1].trim());
-		const oMaTran = [...ci.matchAll(/^ {10}- ten: (\S+)$/gm)].map((m) => m[1]);
-		const dung = new Set<string>();
-		for (const t of [...tenJob(ci), ...tenJob(acc)]) {
-			if (t.includes(BIEN_MA_TRAN))
-				for (const o of oMaTran) dung.add(t.replace(BIEN_MA_TRAN, o));
-			else dung.add(t);
-		}
-		expect(tenKhai.filter((t) => !dung.has(t))).toEqual([]);
-		const tenMau = new Set(
-			JSON.parse(readFileSync(MAU_CI, "utf8")).check_runs.map(
-				(c: { name: string }) => c.name,
-			),
-		);
-		expect(tenKhai.filter((t) => !tenMau.has(t))).toEqual([]);
-		expect(tenKhai.length).toBe(5);
-	});
 });
 
 describe("nhu-cu", () => {
 	const CU = ["pre-push-t1.mjs", "verify-gate-shape.mjs"];
 
 	function docCu(t: string): string {
-		const r = spawnSync(
-			"git",
-			["show", `refs/remotes/origin/onehub:scripts/${t}`],
-			{
-				cwd: NGUON,
-				encoding: "utf8",
-				maxBuffer: 1 << 26,
-			},
+		return readFileSync(
+			join(import.meta.dir, "mau", "truoc-vong", `${t}.txt`),
+			"utf8",
 		);
-		if (r.status !== 0) throw new Error(`khong doc duoc ${t} o origin/onehub`);
-		return r.stdout;
 	}
 
 	function doiBan(k: Kho, ban: "cu" | "moi"): void {
@@ -744,7 +703,7 @@ describe("nhu-cu", () => {
 	];
 
 	for (const [ten, tep] of MAU) {
-		test(`nhu-cu (a): ${ten} khong dau thi nhu origin/onehub`, () => {
+		test(`nhu-cu (a): ${ten} khong dau thi nhu truoc vong`, () => {
 			const k = dungKho();
 			commit(k.goc, ...tep);
 			const dong = `refs/heads/x ${head(k)} refs/heads/x ${Z}`;

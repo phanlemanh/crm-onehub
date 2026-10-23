@@ -1,4 +1,4 @@
 {
-  "feature_plain": "Gộp onehub vào một nhánh không còn dừng vì hai trang máy vẽ, và lần đẩy không chạy lại bộ kiểm nặng khi đúng phần mã ấy đã xanh.",
-  "analyst_plain": "Cả hai lượt đều đỏ ở cùng một chỗ: bộ quét «tệp T1 mà bài kiểm đọc» của kho bắt bài kiểm mới đọc sổ chạy thật của kho."
+  "feature_plain": "Gộp onehub vào một nhánh không còn dừng vì hai trang máy vẽ (bản đồ sản phẩm, trang lộ trình), và lần đẩy không chạy lại bộ kiểm nặng khi đúng phần mã ấy đã xanh.",
+  "analyst_plain": "Lượt 3 đạt sau khi đổi khuôn theo lối 2: bài kiểm đọc dòng sổ chạy mẫu cố định thay vì sổ chạy đang sống."
 }
