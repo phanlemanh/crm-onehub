@@ -37,6 +37,7 @@ const TEP = [
 	".githooks/gate-shape.json",
 ];
 const DONG_GIAO = "if (rieng.has(t)) tep.add(t);";
+const SAP = /không phân loại được/;
 
 function git(cwd, ...a) {
 	const r = spawnSync("git", a, { cwd, encoding: "utf8", maxBuffer: 1 << 28 });
@@ -76,7 +77,12 @@ function phanLoai(kho, m, p1, p2) {
 			input: `refs/heads/pr ${m} refs/heads/pr ${p1}\n`,
 		},
 	);
-	return { ma: r.status, nhe: r.stdout.trim() !== "", loi: r.stderr.trim() };
+	return {
+		ma: r.status,
+		nhe: r.stdout.trim() !== "",
+		sap: SAP.test(r.stderr),
+		loi: r.stderr.trim(),
+	};
 }
 
 const globs = docGlobT1(GOC);
@@ -146,7 +152,8 @@ try {
 	for (const c of ds) {
 		const tay = tinhTay(c.m, c.p1, c.p2);
 		const may = phanLoai(kho, c.m, c.p1, c.p2);
-		if (may.ma !== 0 || may.nhe !== tay.moi)
+		if (may.sap) loi.push(`sap ${c.m.slice(0, 9)}: ${may.loi}`);
+		else if (may.ma !== 0 || may.nhe !== tay.moi)
 			loi.push(
 				`lech ${c.m.slice(0, 9)}: bo phan loai ${may.nhe ? "nhe" : "nang"}, tinh tay ${tay.moi ? "nhe" : "nang"}`,
 			);
