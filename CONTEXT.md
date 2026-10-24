@@ -726,6 +726,25 @@ Vì sao: «kế hoạch» đã là chữ của Kế hoạch 30 ngày (khuôn k�
 đơn vị» gọi tên cái trang chứ không gọi tên vật — người ta mở một bộ OKR, không mở một
 đơn vị.
 
+**Tôi dẫn · Đang theo dõi (lọc phạm vi)**: bộ lọc phạm vi của khu Mục tiêu — ba chip
+Tất cả · Tôi dẫn · Đang theo dõi, ghi trên đường dẫn. Mọi màn của khu lọc theo phạm vi
+dùng đúng ba chữ này: Bộ OKR, Cập nhật gần đây và các màn sau. **Tôi dẫn** là các bộ
+của đơn vị người xem làm trưởng; trưởng một bộ phận không kéo theo các phòng ban con, và
+bộ OneHub không thuộc Tôi dẫn của ai. **Đang theo dõi** là các bộ có ít nhất một mục tiêu
+người xem theo dõi. Chốt 2026-10-24 (Manh Phan).
+_Avoid_: Bộ OKR bạn dẫn, Bạn theo dõi, của tôi, yêu thích
+Vì sao: một khái niệm mang hai bộ chữ trên hai màn cạnh nhau thì người ta tưởng là hai
+bộ lọc; «Của tôi» đã là tên một nơi đến trên thanh bên.
+
+**Cập nhật gần đây**: mục ở đầu thanh bên khu Mục tiêu, cạnh Của tôi — dòng tin mọi
+lần cập nhật KR trong chu kỳ đang chọn, mới nhất trước, lọc Tất cả · Tôi dẫn · Đang theo
+dõi. Trả lời ngay tại dòng tin; bấm một dòng thì mở chi tiết KR. Học từ «Recent updates»
+của Tability. Chốt 2026-10-18 cùng vỏ khu; mục từ ghi 2026-10-24.
+_Avoid_: bảng tin, hoạt động gần đây, nhật ký, feed
+Vì sao: tên gọi đúng thứ người ta đọc — các lần cập nhật — và «Cập nhật» đã là chữ chốt
+cho lần ghi của một KR. «Hoạt động» rộng hơn: gồm cả bình luận và sửa mục tiêu, trùng
+với Lịch sử. «Feed» lẫn tiếng.
+
 **Báo cáo (khu Mục tiêu)**: nhóm thứ hai trên thanh bên khu Mục tiêu, cho mọi vai, kể
 cả «chỉ OKR» — nơi nhìn ngang cả công ty trong một chu kỳ: **Sức khoẻ** (ô số, bảng đơn
 vị, mức tự tin theo tuần, phần quản trị), **Mọi KR** (mọi KR lọc theo tình trạng, đơn vị,
