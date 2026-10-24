@@ -12,17 +12,13 @@ import {
 import { NutGuiTao } from "@/components/tin-hieu/hop-gui-tin-hieu";
 import { NutGuiTinHieu } from "@/components/tin-hieu/nut-gui-tin-hieu";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
+import { phanTuHien, tieuDiemNutThaoTac } from "@/lib/tin-hieu/tieu-diem";
 import type { TrangThaiTinHieu } from "@/lib/tin-hieu/trang-thai";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { KhungChoTinHieu } from "./khung-cho";
 
 const MA_DA_LAY_VE = 409;
-
-function phanTuHien(chon: string): HTMLElement | null {
-	const ds = [...document.querySelectorAll<HTMLElement>(chon)];
-	return ds.find((e) => e.getClientRects().length > 0) ?? ds[0] ?? null;
-}
 
 function dieuTieuDiem(ke: DongTinHieu | null) {
 	const dich = !ke
@@ -101,7 +97,7 @@ export function DanhSachTinHieuTrang({
 							await cache.tinHieu();
 							requestAnimationFrame(() => dieuTieuDiem(ke));
 						},
-						onError: (loi) => {
+						onError: async (loi) => {
 							setXoaHong(
 								dien(
 									loi.data?.httpStatus === MA_DA_LAY_VE
@@ -110,7 +106,11 @@ export function DanhSachTinHieuTrang({
 									{ ma: muc.ma },
 								),
 							);
-							void cache.tinHieu();
+							await cache.tinHieu();
+							requestAnimationFrame(() => {
+								const dang = document.activeElement;
+								if (!dang || dang === document.body) tieuDiemNutThaoTac(muc.ma);
+							});
 						},
 					},
 				);
