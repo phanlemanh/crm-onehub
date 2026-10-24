@@ -81,6 +81,7 @@ export function PhanKrPhuTrach({
 									<span className="flex flex-col items-start gap-0.5">
 										<Button
 											data-mo-kr={k.id}
+											data-mo-muc-tieu={mucTieu.id}
 											onClick={() => openRecord({ kind: "kr", id: k.id })}
 											size="xs-wrap"
 											variant="link"

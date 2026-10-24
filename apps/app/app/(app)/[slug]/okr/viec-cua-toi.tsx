@@ -193,6 +193,7 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 				size="sm"
 				variant="outline"
 				data-mo-kr={krId}
+				data-mo-muc-tieu={viec.objectiveId}
 				onClick={() => openRecord({ kind: "kr", id: krId })}
 			>
 				{m.moKr}
