@@ -3671,6 +3671,124 @@
         "H8"
       ],
       "tieu_chi": 8
+    },
+    {
+      "ma": "SV1",
+      "slug": "cua-toi-chi-liet-kr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.76,
+      "dung_tren": [
+        "HT2"
+      ],
+      "ten": "Của tôi chỉ liệt KR, cập nhật qua bộ",
+      "ten_ngan": "Cập nhật qua bộ",
+      "ngay": "2026-10-24",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR mở Của tôi hay bấm tin nhắc 08:30, thấy các KR cần cập nhật tuần này, bấm một KR thì ngăn KR mở trong bộ OKR của nó và cập nhật bằng hộp một KR»",
+      "vi_sao": "Hôm nay có hai đường cập nhật: bảng hàng loạt ở Của tôi (phan-can-cap-nhat.tsx → BangCapNhat, lối nhac · viec-cua-toi · cua-toi trong LOI_VAO) và hộp một KR từ ngăn KR; tin nhắc «N KR chờ» dẫn tới /okr?tu=nhac (nhac-ke-hoach.ts:192-193). Tability không có trang cập nhật riêng: My focus liệt KR, cập nhật trong ngăn KR (README hop-tuan §4, ảnh tab/t09-my-focus.jpg, tab/t03-ngan-kr.jpg).",
+      "bat_khi": "Của tôi không còn bảng cập nhật hàng loạt; tin nhắc, Của tôi, ngăn KR và dòng bộ OKR đều mở cùng hộp một KR; bấm tin nhắc «N KR chờ» tới KR chứ không tới /okr?tu=nhac",
+      "ly_do": "Chủ kho chốt 24/10 ở phiên HT1 (Cổng Phạm vi hop-tuan-mo-dung-bo), nguyên văn «Lối (b), nhưng tôi hỏi lúc research tability đã quyết định như vậy, nhưng phiên này không giữ được gì từ quyết định research». Câu hỏi gốc 22/10: «Tôi nhớ Tability cập nhật trực tiếp trong bộ okr giúp đơn giản hóa chứ không có trang riêng?». Nghiên cứu: docs/findings/2026-10-22-hop-tuan/README.md §1, §4, §6. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §1.",
+      "ghi_chu": "Lật hàng đã ký DH3 cua-toi-ba-phan (#443, 15/10): eval đo bảng hàng loạt của DH3 cần superseded_by trỏ hàng này. Đi sau HT2 (nút cập nhật trên dòng Họp tuần, ‹ › theo bảng). Bản mẫu /proto/hop-tuan-mo-dung-bo, commit 5ebcd43dc trên feat/hop-tuan-mo-dung-bo (ST-htmb-ngan-kr, ST-htmb-hop-cap-nhat, «Cần cập nhật tuần này»). Mã Tability có hộp cập nhật hàng loạt (modals.bulkCheckin) nhưng không phải lối chính; chủ kho chọn bỏ. Đọc Known limits HT3 Ngoài-4, Ngoài-5 (bản phạm vi §6) trước khi chạm đường «lần trước».",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "LB"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "SV2",
+      "slug": "thuoc-sau-mot-nut-tao",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.6,
+      "dung_tren": [],
+      "ten": "Thước hồ sơ đã ký sau Một nút tạo",
+      "ten_ngan": "Thước sau một nút tạo",
+      "ngay": "2026-10-24",
+      "vai": "nen",
+      "cau_giao": "«Thước màn của mọi hồ sơ đã ký không còn bấm lối tạo mục tiêu mà VK9 đã gỡ, và chiều đỏ E16 của canh-kr-okr đỏ lại khi danh sách mẫu phía màn không lọc theo đơn vị»",
+      "vi_sao": "VK9 gỡ menu «…», «Bắt đầu từ mẫu» và nhóm Soạn ở đầu trang. V2-20 b2 đã sửa bốn bàn đo nhưng chưa lượt quét nào chứng là không còn thước nào bấm lối cũ. Hộp chọn khoá dòng «Từ mẫu» theo useCoMau, nên bản sao lỗi của E16 không còn tới màn chọn mẫu: E16 xanh mà thôi chứng danh sách mẫu lọc theo đơn vị.",
+      "bat_khi": "Quét evals.yaml và rang/ của mọi hồ sơ đã ký: 0 bước bấm lối VK9 đã gỡ mà thiếu superseded_by; man-canh-kr.mjs --chieu-do E16 thoát 1 đúng câu ghim «tên mẫu lọt»",
+      "ly_do": "VK9 mot-nut-tao-muc-tieu (#545) Ngoài-3, chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 22/10 15:00Z và giữ ở lượt ký lại 22:09Z (d-20261022T150049Z-23, d-20261022T220930Z-39, decided_by Phan Le Manh); phần lớn đã xử theo «V2-20 b2» (22/10 12:57Z). E16: phát hiện ở dòng sổ canh-kr-okr d-20261022T152758Z-39, nguyên văn «--chieu-do E16 nay LOT vì dòng Từ mẫu của trưởng kho-van bị khoá theo bộ lọc riêng của hộp». Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §2, §3.",
+      "ghi_chu": "Sửa thước hồ sơ đã ký: luật tạm 18/10 — Cổng Phạm vi của hàng này là chỗ chủ kho duyệt từng tệp. Bốn bàn đo đã sửa: man-canh-kr.mjs, man-okr.mjs (dat-okr-trong-crm), do-man.mjs (okr-soat-anh-luot-3), man-dau-trang.mjs (dieu-huong-khu-muc-tieu). 5 tiêu chí, dưới mục tiêu: không gộp với SV4 vì SV4 phải chờ VK6 gộp, hàng này không.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "N3",
+        "E16"
+      ],
+      "tieu_chi": 5
+    },
+    {
+      "ma": "SV3",
+      "slug": "cac-cuoc-da-soan-khi-het-luot",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.77,
+      "dung_tren": [],
+      "ten": "Các cuộc đã soạn khi hết lượt",
+      "ten_ngan": "Cuộc đã soạn",
+      "ngay": "2026-10-24",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị đã dùng hết cuộc soạn cùng Kara trong kỳ vẫn mở được Các cuộc đã soạn từ hộp Thêm mục tiêu và đọc lại từng cuộc»",
+      "vi_sao": "Từ VK9, hết cuộc soạn trong kỳ thì lối «Các cuộc đã soạn» biến mất (duong-soan.ts) — đúng ca mà quyết định d-15 của VK9 muốn giữ. Không mất dữ liệu nhưng mất cách xem lại.",
+      "bat_khi": "Đơn vị hết cuộc soạn: dòng «Soạn cùng Kara» khoá kèm lý do và lối «Các cuộc đã soạn» vẫn mở danh sách; đơn vị chưa có cuộc nào thì không có lối rỗng",
+      "ly_do": "VK9 mot-nut-tao-muc-tieu (#545) Ngoài-9 (mức high), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 22/10 15:00Z và giữ ở lượt ký lại 22:09Z (d-20261022T150049Z-29, d-20261022T220930Z-45, decided_by Phan Le Manh). Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §2.",
+      "ghi_chu": "Tệp apps/app/app/(app)/[slug]/okr/soan/duong-soan.ts. 5 tiêu chí, dưới mục tiêu; không hàng okr nào cùng vùng để gộp.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "N9"
+      ],
+      "tieu_chi": 5
+    },
+    {
+      "ma": "SV4",
+      "slug": "giu-ho-so-quet-du",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.7,
+      "dung_tren": [
+        "VK6"
+      ],
+      "ten": "Bộ rà hồ sơ cũ quét đủ tệp",
+      "ten_ngan": "giu-ho-so quét đủ",
+      "ngay": "2026-10-24",
+      "vai": "nen",
+      "cau_giao": "«Bộ rà hồ sơ cũ giu-ho-so đọc đủ mọi tệp thước khai ở paths và quét đủ chuỗi đường đã bỏ, không rơi tệp nào xen kẽ»",
+      "vi_sao": "chuCuaEval và TEP_THUOC dùng regex cờ /g với .test() trong filter: lastIndex giữ giữa hai lần gọi nên cứ hai tệp thước thì mất một, vế quét chuỗi bỏ hụt mà không báo. Hôm nay chưa sót gì, nhưng lỗi im lặng.",
+      "bat_khi": "Ca kiểm có bốn tệp thước liền nhau trong paths: cả bốn vào danh sách quét; bản sao regex có cờ /g làm ca kiểm đỏ đúng câu",
+      "ly_do": "VK6 so-do-toan-vung Ngoài-5 và Ngoài-10, chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 22/10 14:59Z (d-20261022T145948Z-42, -47 trên feat/so-do-toan-vung, decided_by Phan Le Manh). Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §4.",
+      "ghi_chu": "Tệp _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs (có trên onehub khi VK6 gộp). Kiểm cùng lúc bản giu-ho-so.mjs của ngan-kr-mot-cho. Ngoài-9 của VK6 (GIU.kiemDuong thiếu đối chứng dương khung-man-chung, Known limits) chạm đúng tệp này.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "N5",
+        "N10"
+      ],
+      "tieu_chi": 5
+    },
+    {
+      "ma": "SV5",
+      "slug": "thuoc-man-sau-vo-khu",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.8,
+      "dung_tren": [
+        "VK6"
+      ],
+      "ten": "Thước màn đúng sau vỏ khu",
+      "ten_ngan": "Thước màn sau vỏ khu",
+      "ngay": "2026-10-24",
+      "vai": "nen",
+      "cau_giao": "«Thước màn trang-don-vi-mot-bang E2 và toan-canh-okr E10, E21 xanh trên onehub sau vỏ khu Mục tiêu và chỉ đỏ khi màn hỏng thật»",
+      "vi_sao": "Sau V3-27 B, 14 ô thước gãy đã sửa tại chỗ trên feat/so-do-toan-vung. Còn hai lớp chưa có chốt máy đúng: trang-don-vi E2 SAI «khoang lech 4px — KHOANG 1440: don vi 65px · Thoa thuan 69px» (sổ trang-don-vi d-20261022T223644Z-59 ghi là giới hạn sản phẩm thật ở 1440), và toan-canh E10, E21 (ui-check) hỏng năm bước — thẻ số 5 ≠ 4 sau Mọi KR, breadcrumb (sổ toan-canh d-20261022T235101Z-55).",
+      "bat_khi": "Lượt ghim lại trang-don-vi-mot-bang và toan-canh-okr trên onehub: E2, E10, E21 xanh; cấy lại khoảng lệch 4px hay thêm một thẻ số thì đúng ô đó đỏ",
+      "ly_do": "Chủ kho 22/10 22:14Z nguyên văn «Đồng ý A» (V3-25): «thước dải lượt và màn đỏ sẵn not-run có lý do, mở một hàng sửa thước»; 22:18Z «V3-27 B»: máy sửa tại chỗ 14 ô, riêng trang-don-vi E3 E4 E5 E17 chẩn trước. Sổ đợt .acceptance-runs/dieu-phoi-vo-khu-muc-tieu/yeu-cau/V3-25.json, tra-loi/V3-25.json, V3-27. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §5.",
+      "ghi_chu": "Nếu khoảng lệch 4px ở 1440 là sản phẩm thì sửa màn trong hàng này (hàng công cụ trang đơn vị, giới hạn đã biết từ VK2 — vo-khu-muc-tieu d-20261020T224928Z-43). Lớp thước gắn ref nhánh, dải lượt (gãy khi chính hồ sơ gộp) thuộc F35 don-ho-so-cu, không cắt lại ở đây. 6 tiêu chí, dưới mục tiêu: không gộp với SV4 — kết quả khác (thước màn vs công cụ rà).",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "T25"
+      ],
+      "tieu_chi": 6
     }
   ],
   "chan_troi": [
