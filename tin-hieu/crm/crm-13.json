@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "“30 ngày đầu” hiện quản lý được checklist onboarding nhưng chưa liên kết thành một flow xuyên suốt với pipeline MA và bư…",
+    "muon_lam": "Quản trị quá trình onboarding MA liền mạch ngay sau khi hoàn tất handover/ký kết.",
+    "da_xay_ra": "“30 ngày đầu” hiện quản lý được checklist onboarding nhưng chưa liên kết thành một flow xuyên suốt với pipeline MA và bước handover trước đó.",
+    "man": "/onboarding"
+  },
+  "luc": "2026-10-21T03:10:49.584Z"
+}
