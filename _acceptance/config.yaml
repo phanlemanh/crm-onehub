@@ -84,6 +84,13 @@ executors:
     kgd_mo_ta: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-mo-ta"'
     kgd_chi_tay: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-chi-tay"'
     ltc_hien: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t hien
+    tbo_api_hang: 'bun run test -- "cd apps/api && bun test test/okr-danh-sach-bo.spec.ts -t tbo-hang"'
+    tbo_api_co: 'bun run test -- "cd apps/api && bun test test/okr-danh-sach-bo.spec.ts -t tbo-co"'
+    tbo_api_viec: 'bun run test -- "cd apps/api && bun test test/okr-danh-sach-bo.spec.ts -t tbo-viec"'
+    tbo_dom_the: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/trang-bo-okr.dom.tsx -t tbo-the
+    tbo_dom_lien_ket: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/trang-bo-okr.dom.tsx -t tbo-lien-ket
+    tbo_dom_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/trang-bo-okr.dom.tsx -t tbo-tai
+    tbo_dom_viec: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/trang-bo-okr.dom.tsx -t tbo-viec-ten
     ltc_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t loc
     ltc_khoan_dung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t khoan-dung
     ltc_chi_doc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t chi-doc
@@ -2890,6 +2897,10 @@ executors:
     gtsx_buoc_ci_chay: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/buoc-ci.mjs --chay
     gtsx_tai_lieu: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/buoc-ci.mjs --tai-lieu
     hy_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs"'
+    tbo_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-bo-okr/rang/man-bo-okr.mjs"'
+    tbo_khong_doi_hinh: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --phan 1/3
+    tbo_khong_doi_hinh_2: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --phan 2/3
+    tbo_khong_doi_hinh_3: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --phan 3/3
     hy_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dot-hoi-y-tuong-okr/rang/ty-le.mjs"'
     hy_san_thiet_ke: "bun _acceptance/dot-hoi-y-tuong-okr/rang/soi-ma.mjs --ca thiet-ke"
     hy_migration_chi_them: "bun _acceptance/dot-hoi-y-tuong-okr/rang/migration-chi-them.mjs"

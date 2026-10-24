@@ -38,6 +38,9 @@ import {
 	KhungDangTaiDonVi,
 	KhungHangCongCu,
 } from "./hang-cong-cu";
+import { TheConBo } from "./the-con";
+import { ViTriBo } from "./vi-tri-bo";
+import { ViecCuaBo } from "./viec-cua-bo";
 
 const PHA_CO_CHAM: readonly PhaChuKy[] = ["cham-diem", "da-dong"];
 
@@ -168,6 +171,23 @@ export function TheoDonVi() {
 	});
 
 	const quanTri = access.data?.canManageProgram === true;
+	const theCon = (
+		<TheConBo
+			coCham={coCham}
+			don={don}
+			ky={url[SEARCH_PARAM.okr.ky]}
+			xem={xem}
+		/>
+	);
+	const coThe = (noiDung: ReactNode) => (
+		<div className="flex flex-col gap-6">
+			<div className="flex flex-col gap-3 pb-1">
+				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={null} />
+				{theCon}
+			</div>
+			{noiDung}
+		</div>
+	);
 	const thuLai = () => {
 		void cay.refetch();
 		void cycles.refetch();
@@ -177,15 +197,15 @@ export function TheoDonVi() {
 	if (cycles.data?.cycles.length === 0 && !access.isPending)
 		return <ChuaChuKy quanTri={quanTri} />;
 	if (cycles.isPending || access.isPending || cay.isPending)
-		return <KhungDangTaiDonVi />;
-	if (cycles.isError || cay.isError) return <Loi thuLai={thuLai} />;
+		return coThe(<KhungDangTaiDonVi />);
+	if (cycles.isError || cay.isError) return coThe(<Loi thuLai={thuLai} />);
 	if (currentId === null) return <ChuaChuKy quanTri={quanTri} />;
 
 	const tenKy = cycles.data.cycles.find((c) => c.id === currentId)?.name ?? "";
 	const dv = giaiDon(don, cay.data, tenGoc);
 	const chonDon = (d: DonChonOkr) =>
 		void datUrl({
-			[SEARCH_PARAM.okr.don]: khoaDon(d) === "goc" ? null : d,
+			[SEARCH_PARAM.okr.don]: d,
 		});
 	const hang = (
 		<HangCongCuDonVi
@@ -198,21 +218,14 @@ export function TheoDonVi() {
 					tenGoc={tenGoc}
 				/>
 			}
-			coCham={coCham}
-			doiXem={(moi) =>
-				void datUrl({
-					[SEARCH_PARAM.okr.xem]: moi === "danh-sach" ? null : moi,
-				})
-			}
-			xem={xem}
 		/>
 	);
 
 	if (dv === null)
-		return (
+		return coThe(
 			<KhungCachXem hang={hang}>
 				<DonKhongThay veGoc={() => chonDon(GOC)} />
-			</KhungCachXem>
+			</KhungCachXem>,
 		);
 
 	const objectives = byUnit.data?.rows ?? [];
@@ -220,7 +233,13 @@ export function TheoDonVi() {
 	const khoa = `${currentId}:${khoaDon(don)}`;
 
 	let than: ReactNode;
-	if (xem === "cham") {
+	if (xem === "viec") {
+		than = (
+			<KhungCachXem hang={hang}>
+				<ViecCuaBo cycleId={currentId} key={khoa} unit={don} />
+			</KhungCachXem>
+		);
+	} else if (xem === "cham") {
 		than = (
 			<KhungCachXem hang={hang}>
 				<ChamDiem cycleId={currentId} key={khoa} unit={don} />
@@ -292,6 +311,16 @@ export function TheoDonVi() {
 			</>
 		);
 	}
+
+	than = (
+		<>
+			<div className="flex flex-col gap-3 pb-1">
+				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={dv.ten} />
+				{theCon}
+			</div>
+			{than}
+		</>
+	);
 
 	return (
 		<div className="flex flex-col gap-6">

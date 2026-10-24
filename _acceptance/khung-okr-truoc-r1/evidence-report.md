@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a
+verified_commit: 9b246f0a57bae04226f308c1d481f95b31a15217
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 3 (18/18 eval đạt, 7/7 lệnh suite xanh). Phát hiện trong hợp đồng AC-10 trên điện thoại (chip Kara không cuộn tới vùng Kara khi mục tiêu đã có sẵn dữ liệu) ghi Known limits, sửa trong R1d. Mười sáu mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 3–10, 12, 14, 15 ghi Known limits; Ngoài-2 mở hợp đồng mới; Ngoài-11, 13, 16 chấp nhận không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -330,3 +330,7 @@ sha: f91b4721b353b24c36cac18e10f33321c8f697f8 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 10 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: hoá cũ lại sau gộp onehub (#547)
 run_id: repin-20261023T043846Z-81133
 sha: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E2, E4, E5 · thay bởi hồ sơ đã ký: E2→mot-nut-tao-muc-tieu#AC-7, E4→mot-nut-tao-muc-tieu#AC-7, E5→mot-nut-tao-muc-tieu#AC-7 · ngoài làn máy: E1, E3, E8, E9, E10, E12, E13, E15, E18, E16 (E16 không khai paths) · diff chạm vật đo ngoài làn máy: E1, E8, E9, E10, E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3, AC-4, AC-7, AC-8, AC-9, AC-11, AC-13, AC-14 · chập chờn (đỏ lần đầu, đạt khi chạy lại): khung-soan-chan-lien-ket E8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 11 — 2026-10-24, do VK3 trang-bo-okr sửa thước và vật — ghim lại sau chữ ký, ba thước theo «duyệt cả ba» (9b246f0a5)
+run_id: repin-20261024T133834Z-50324
+sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E2, E4, E5 · thay bởi hồ sơ đã ký: E2→mot-nut-tao-muc-tieu#AC-7, E4→mot-nut-tao-muc-tieu#AC-7, E5→mot-nut-tao-muc-tieu#AC-7 · ngoài làn máy: E1, E3, E8, E9, E10, E12, E13, E15, E18, E16 (E16 không khai paths) · diff chạm vật đo ngoài làn máy: E1, E3, E8, E9, E10, E15, E18 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3, AC-4, AC-7, AC-8, AC-9, AC-11, AC-13, AC-14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
