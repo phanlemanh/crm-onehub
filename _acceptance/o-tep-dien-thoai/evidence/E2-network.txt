@@ -1,0 +1,1 @@
+E2: driver la rang puppeteer cua do-man.mjs qua tien-de.mjs; khong co tool doc network (read_network_requests); networkObserved = n-a (driver). Rang do-man.mjs thoat 0 'otdt man: dat', khong co dong loi 'otdt man: ...'.

@@ -1,6 +1,7 @@
 "use client";
 
 import Notification from "@carbon/icons-react/es/Notification";
+import Settings from "@carbon/icons-react/es/Settings";
 import { Button } from "@crm/ui/components/button";
 import {
 	Empty,
@@ -46,6 +47,7 @@ export function ChuongThongBaoKhung({
 	homNay,
 	truocDo,
 	hrefTatCa,
+	hrefCaiDat,
 	dangDocHet,
 	open,
 	onOpenChange,
@@ -59,6 +61,7 @@ export function ChuongThongBaoKhung({
 	homNay: DongThongBao[];
 	truocDo: DongThongBao[];
 	hrefTatCa: string;
+	hrefCaiDat: string;
 	dangDocHet: boolean;
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;
@@ -66,7 +69,9 @@ export function ChuongThongBaoKhung({
 	onDocHet: () => void;
 	onThuLai: () => void;
 }) {
-	const m = thongBaoMessages(useLocale()).chuong;
+	const tatCa = thongBaoMessages(useLocale());
+	const m = tatCa.chuong;
+	const caiDat = tatCa.caiDat.moChuong;
 	const so = soTrenChuong(soChuaDoc, tranSo);
 	const nhan = so ? dien(m.nhanSo, { so }) : m.nhan;
 	const rong = homNay.length === 0 && truocDo.length === 0;
@@ -143,14 +148,27 @@ export function ChuongThongBaoKhung({
 						<span className="font-semibold text-popover-foreground text-sm">
 							{m.tieuDe}
 						</span>
-						<Button
-							variant="ghost"
-							size="sm"
-							disabled={soChuaDoc === 0 || dangDocHet || trangThai !== "xong"}
-							onClick={onDocHet}
-						>
-							{dangDocHet ? m.dangDocHet : m.docHet}
-						</Button>
+						<div className="flex items-center gap-1">
+							<Button
+								variant="ghost"
+								size="sm"
+								disabled={soChuaDoc === 0 || dangDocHet || trangThai !== "xong"}
+								onClick={onDocHet}
+							>
+								{dangDocHet ? m.dangDocHet : m.docHet}
+							</Button>
+							<Button variant="ghost" size="icon" asChild>
+								<Link
+									aria-label={caiDat}
+									data-slot="cai-dat-thong-bao"
+									href={hrefCaiDat}
+									onClick={() => onOpenChange?.(false)}
+									title={caiDat}
+								>
+									<Settings aria-hidden="true" />
+								</Link>
+							</Button>
+						</div>
 					</div>
 					{than}
 					<div className="border-t px-4 py-2">
@@ -198,6 +216,7 @@ export function ChuongThongBao() {
 			dangDocHet={docHet.isPending}
 			homNay={homNay}
 			hrefTatCa={workspaceUrl("/thong-bao")}
+			hrefCaiDat={workspaceUrl("/reminders#loai-thong-bao")}
 			onDocHet={() => docHet.mutate()}
 			onMo={(id) => {
 				moMot.mutate({ id });

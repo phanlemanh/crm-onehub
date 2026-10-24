@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { docGlobT1, quyetDinh, tachT1, tepT1 } from "../.github/scripts/phan-loai.mjs";
@@ -11,6 +11,9 @@ const NHANH_CHINH = "onehub";
 const DUOI = "CI phân loại PR theo cùng luật.";
 const TOI_DA_TEP_MA_DOC = 3;
 const LY_DO_CHI_NEN = "chi-cua-nen";
+const LY_DO_GITHUB = "cham-github";
+const THU_MUC_GITHUB = ".github/";
+const TEP_KHAI_DA_CHUNG = join(".githooks", "da-chung.json");
 
 function git(goc, ...args) {
 	const r = spawnSync("git", args, { cwd: goc, encoding: "utf8" });
@@ -104,7 +107,22 @@ function rutGon(ds) {
 	return `${ds.slice(0, TOI_DA_TEP_MA_DOC).join(", ")}${con > 0 ? ` +${con}` : ""}`;
 }
 
-function chay() {
+async function daChung(dongs, remote, boQuaT1) {
+	if (!existsSync(join(KHO, TEP_KHAI_DA_CHUNG))) return [];
+	try {
+		const m = await import("./pre-push-da-chung.mjs");
+		const khai = m.docKhai(KHO);
+		const kq = m.chungDay(KHO, khai, dongs, remote);
+		m.ghiPhieu(KHO, { refs: kq.refs, t1: boQuaT1, daChung: kq.buoc });
+		if (kq.dong) process.stderr.write(`${kq.dong}\n`);
+		return kq.buoc;
+	} catch (e) {
+		process.stderr.write(`pre-push: không đọc được dấu cây (${String(e.message).replace(/\s+/g, " ").trim()}) — chạy như cũ.\n`);
+		return [];
+	}
+}
+
+async function chay() {
 	const i = process.argv.indexOf("--remote");
 	const remote = i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : "origin";
 	let chu = "";
@@ -113,6 +131,7 @@ function chay() {
 	} catch {
 		chu = "";
 	}
+	let boQuaT1 = [];
 	try {
 		const kq = phanLoaiDay(KHO, docDong(chu), remote);
 		const n = kq.tep.length;
@@ -126,13 +145,18 @@ function chay() {
 				process.stderr.write(
 					`pre-push: chỉ tệp T1 trong phần PR tự thêm (${n} tệp; ${k} tệp của ${NHANH_CHINH} không tính) — bỏ ${bo}; ${DUOI}\n`,
 				);
-			process.stdout.write(`${kq.boQua.join(" ")}\n`);
+			boQuaT1 = kq.boQua;
 		} else if (k > 0 && n > 0) {
 			const maDoc = tepMaDocDay(KHO, kq.tep);
 			const t1 = tepT1(docGlobT1(KHO), kq.tep);
 			const ngoai = kq.tep.filter((t) => !t1.has(t));
-			const ds = maDoc.length ? maDoc : ngoai.length ? ngoai : kq.tep;
-			const loai = maDoc.length ? "tệp T1 mà mã đọc" : "tệp ngoài T1";
+			const github = kq.tep.filter((t) => t.startsWith(THU_MUC_GITHUB));
+			const [loai, ds] =
+				kq.lyDo === LY_DO_GITHUB
+					? ["tệp dưới .github/", github]
+					: maDoc.length
+						? ["tệp T1 mà mã đọc", maDoc]
+						: ["tệp ngoài T1", ngoai];
 			process.stderr.write(
 				`pre-push: phần PR tự thêm (${n} tệp; ${k} tệp của ${NHANH_CHINH} không tính) có ${loai} (${rutGon(ds)}) — chạy đủ năm bước.\n`,
 			);
@@ -143,6 +167,8 @@ function chay() {
 	} catch (e) {
 		process.stderr.write(`pre-push: không phân loại được lần đẩy (${String(e.message).replace(/\s+/g, " ").trim()}) — chạy đủ năm bước.\n`);
 	}
+	const tong = [...new Set([...boQuaT1, ...(await daChung(docDong(chu), remote, boQuaT1))])];
+	if (tong.length) process.stdout.write(`${tong.join(" ")}\n`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) chay();

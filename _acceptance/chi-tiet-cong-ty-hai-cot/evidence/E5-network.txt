@@ -1,0 +1,1 @@
+E5 network: driver la script puppeteer (do-bo-cuc.mjs) chay trong phien do, khong co duong doc network/console cho verifier -> n-a (driver). Khong co du lieu failed requests.

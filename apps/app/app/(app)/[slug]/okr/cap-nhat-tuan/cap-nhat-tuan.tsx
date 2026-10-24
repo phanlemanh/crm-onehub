@@ -131,7 +131,7 @@ function lucGuiMoiNhat(items: KrCapNhat[]): string | null {
 	);
 }
 
-function ngayGioVN(luc: string, locale: Locale) {
+export function ngayGioVN(luc: string, locale: Locale) {
 	return {
 		ngay: ngayThang(ngayVN(luc)),
 		gio: new Date(luc).toLocaleTimeString(DINH_DANG[locale], {
@@ -728,11 +728,13 @@ export function OGhiChu({
 	value,
 	datGhiChu,
 	khoa,
+	goiY,
 }: {
 	id: string;
 	value: string;
 	datGhiChu: (v: string) => void;
 	khoa: boolean;
+	goiY?: readonly string[];
 }) {
 	const m = okrMessages(useLocale()).capNhat;
 	return (
@@ -746,6 +748,16 @@ export function OGhiChu({
 				placeholder={m.ghiChuGoiY}
 				value={value}
 			/>
+			{goiY ? (
+				<FieldDescription data-goi-y-ghi-chu>
+					{goiY.map((cau, i) => (
+						<Fragment key={cau}>
+							{i > 0 ? " · " : null}
+							<span data-cau-goi-y>{cau}</span>
+						</Fragment>
+					))}
+				</FieldDescription>
+			) : null}
 		</Field>
 	);
 }

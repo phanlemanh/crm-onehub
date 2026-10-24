@@ -10,9 +10,20 @@ import {
 import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { db } from "@crm/db";
+import { luuCaiDatThongBao } from "@crm/db/cai-dat-thong-bao";
+import { ngayVN } from "@crm/db/onboarding-nhac";
+import { SETTINGS_ID } from "@crm/db/settings";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
+import {
+	khoaThongBao,
+	macDinhDayRa,
+	noiDungThongBao,
+	THONG_BAO,
+} from "@crm/validation/thong-bao";
 import { chayNhac, lenLichNhac } from "../agent/lib/nhac-ke-hoach";
+import { dayThongBaoSuKien } from "../agent/lib/thong-bao-day";
 import { coMat, doiChieu } from "../agent/lib/thong-bao-doi-chieu";
+import { MUC_MAU_TAC_NHAN } from "./support/muc-mau-tac-nhan";
 import {
 	donDep,
 	gieoKeHoach,
@@ -30,6 +41,7 @@ import {
 	ngayCach,
 	PHUT_SAU,
 } from "./support/nhac-gui-gieo";
+import { zaloGia } from "./support/zalo-gia";
 
 const GOC_KHO = resolve(import.meta.dir, "../../..");
 const NGAY = ["2026-10-10", "2026-10-11", "2026-10-12"] as const;
@@ -242,5 +254,169 @@ describe("htb-doi-chieu", () => {
 		const r = lenh("--tu", NGAY[0], "--den", NGAY[2]);
 		expect(r.status).toBe(1);
 		expect(r.stdout).toContain(mot.khoa);
+	});
+});
+
+describe("tbk-doi-chieu", () => {
+	const NGAY_KENH = ["2026-10-20", "2026-10-21"] as const;
+	const TOKEN = "1:abc";
+
+	async function voiToken<T>(chay: () => Promise<T>): Promise<T> {
+		const cu = process.env.ZALO_BOT_TOKEN;
+		process.env.ZALO_BOT_TOKEN = TOKEN;
+		try {
+			return await chay();
+		} finally {
+			if (cu === undefined) delete process.env.ZALO_BOT_TOKEN;
+			else process.env.ZALO_BOT_TOKEN = cu;
+		}
+	}
+
+	async function luotKenh(ngay: string, nguoi: Nguoi[]): Promise<void> {
+		const goc = lucVN(ngay, PHUT_SAU);
+		setSystemTime(goc);
+		await lenLichNhac(goc);
+		const s = slackGia();
+		const z = zaloGia();
+		for (const n of nguoi) {
+			const hang = await db.agentTask.findFirstOrThrow({
+				where: { subject: `user:${n.id}:${ngay}` },
+			});
+			await voiToken(() =>
+				chayNhac(hang, {
+					fetcher: s.fetcher,
+					zaloFetcher: z.fetcher,
+					appUrl: APP_URL,
+				}),
+			);
+		}
+	}
+
+	async function suKien(n: Nguoi, luc: Date): Promise<void> {
+		const noiDung = noiDungThongBao.parse({
+			...MUC_MAU_TAC_NHAN["tac-nhan-xong"],
+			luotId: `${n.id}-${luc.getTime()}`,
+		});
+		await db.thongBao.create({
+			data: {
+				nguoiNhanId: n.id,
+				nguon: THONG_BAO.nguon.tacNhan,
+				khoa: khoaThongBao(noiDung, luc),
+				noiDung,
+				duongDan: `/chat/${noiDung.loai === "tac-nhan-xong" ? noiDung.conversationId : ""}`,
+				ngayDau: ngayVN(luc),
+				thayNgay: ngayVN(luc),
+				taoLuc: luc,
+			},
+		});
+		const z = zaloGia();
+		await voiToken(() =>
+			dayThongBaoSuKien({
+				now: new Date(luc.getTime() + 60_000),
+				zaloFetcher: z.fetcher,
+				fetcher: slackGia().fetcher,
+				appUrl: APP_URL,
+			}),
+		);
+	}
+
+	let Z: Nguoi;
+	let S: Nguoi;
+
+	async function demKenh(ngay: string) {
+		const luot = await db.agentTask.findMany({
+			where: {
+				kind: "nhac-ke-hoach",
+				subject: { in: [Z, S].map((n) => `user:${n.id}:${ngay}`) },
+			},
+			select: { payload: true },
+		});
+		const theo = (k: "zalo" | "slack") =>
+			luot
+				.map((l) => parseNhacPayload(l.payload))
+				.filter((p) => p.kenh === k)
+				.reduce((n, p) => n + (p.daGuiKhoa?.length ?? 0), 0);
+		const daDay = await db.thongBao.findMany({
+			where: { dayKenh: { not: null }, dayLoi: null, dayLuc: { not: null } },
+			select: { dayLuc: true },
+		});
+		return {
+			quaZalo: theo("zalo"),
+			quaSlack: theo("slack"),
+			suKien: daDay.filter((h) => h.dayLuc && ngayVN(h.dayLuc) === ngay).length,
+		};
+	}
+
+	beforeAll(async () => {
+		const goc = lucVN(NGAY_KENH[0], PHUT_SAU);
+		Z = await nguoiCoBuocTre("Zung", goc);
+		S = await nguoiCoBuocTre("Son", goc);
+		await db.appSetting.upsert({
+			where: { id: SETTINGS_ID },
+			create: { id: SETTINGS_ID, zaloBotName: "Bot" },
+			update: { zaloBotName: "Bot" },
+		});
+		await db.zaloLink.create({
+			data: { crmUserId: Z.id, zaloUserId: "ZZ", zaloDisplayName: "ZZ" },
+		});
+		await noiSlack(S.id);
+		await khopSlack(S.id, `U-${S.id}`);
+		setSystemTime(new Date(goc.getTime() - 60 * 60_000));
+		await luuCaiDatThongBao(db, Z.id, "tac-nhan-xong", true, macDinhDayRa);
+		await luotKenh(NGAY_KENH[0], [Z, S]);
+		await suKien(Z, lucVN(NGAY_KENH[0], PHUT_SAU + 5));
+		await luotKenh(NGAY_KENH[1], [Z, S]);
+		await suKien(Z, lucVN(NGAY_KENH[1], PHUT_SAU + 5));
+		setSystemTime();
+	}, 120_000);
+
+	afterAll(async () => {
+		await db.zaloLink.deleteMany({ where: { crmUserId: Z.id } });
+		await db.caiDatThongBao.deleteMany({ where: { userId: Z.id } });
+		await db.appSetting.updateMany({
+			where: { id: SETTINGS_ID },
+			data: { zaloBotName: null },
+		});
+	});
+
+	test("tbk-doi-chieu: moi so kenh ngoai khop dem doc lap, khong lech", async () => {
+		const kq = await doiChieu(db, { tu: NGAY_KENH[0], den: NGAY_KENH[1] });
+		expect(kq.ngay.map((d) => d.ngay)).toEqual([...NGAY_KENH]);
+		for (const d of kq.ngay) {
+			const doc = await demKenh(d.ngay);
+			console.log(
+				`tbk-doi-chieu ${d.ngay}: zalo ${d.quaZalo} slack ${d.quaSlack} su kien ${d.suKienDaDay}`,
+			);
+			expect(doc.quaZalo).toBeGreaterThan(0);
+			expect(doc.quaSlack).toBeGreaterThan(0);
+			expect(d.quaZalo).toBe(doc.quaZalo);
+			expect(d.quaSlack).toBe(doc.quaSlack);
+			expect(d.suKienDaDay, "thieu so su kien da day").toBe(doc.suKien);
+			expect(d.suKienDaDay).toBe(1);
+			expect(d.kenhCoThongBao).toBe(doc.quaZalo + doc.quaSlack);
+			expect(d.kenhLech).toEqual([]);
+		}
+		const khac = await db.caiDatThongBao.groupBy({ by: ["userId"] });
+		expect(kq.nguoiKhacMacDinh).toBe(khac.length);
+		expect(kq.nguoiKhacMacDinh).toBeGreaterThan(0);
+	});
+
+	test("tbk-doi-chieu: xoa mot thong bao da gui qua Zalo thi lenh goi ten khoa, ma 1", async () => {
+		const hang = await db.agentTask.findFirstOrThrow({
+			where: { subject: `user:${Z.id}:${NGAY_KENH[1]}` },
+			select: { payload: true },
+		});
+		const khoa = parseNhacPayload(hang.payload).daGuiKhoa?.[0];
+		if (!khoa) throw new Error("Z khong co muc da gui");
+		await db.thongBao.deleteMany({ where: { nguoiNhanId: Z.id, khoa } });
+		const kq = await doiChieu(db, { tu: NGAY_KENH[0], den: NGAY_KENH[1] });
+		const lech = kq.ngay.flatMap((d) => d.kenhLech);
+		expect(
+			lech.some((m) => m.userId === Z.id && m.khoa === khoa),
+			"doi chieu khong goi ten muc da gui ma mat",
+		).toBe(true);
+		const r = lenh("--tu", NGAY_KENH[0], "--den", NGAY_KENH[1]);
+		expect(r.status).toBe(1);
+		expect(r.stdout).toContain(khoa);
 	});
 });

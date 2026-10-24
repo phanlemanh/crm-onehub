@@ -310,11 +310,6 @@ gieo thẳng bản đang dùng).
 <!-- <<<UX-STATE-TABLE -->
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
-| ST-soan-nut | Khung đơn vị | Nút phụ «Soạn OKR cùng Trợ lý» khi chu kỳ đang lập kế hoạch và nấc bật | Bấm |
-| ST-soan-nut-tiep | Khung đơn vị | Nút «Tiếp cuộc đang soạn» khi có cuộc `dang` | Bấm |
-| ST-soan-nut-an | Khung đơn vị | Nút kèm nhãn «chế độ ẩn», chỉ quản trị thấy | Bấm |
-| ST-soan-nut-het-cuoc | Khung đơn vị | Nút mờ + «Đã dùng hết 3 cuộc soạn kỳ này» | — |
-| ST-soan-nut-het-tran | Khung đơn vị | Nút mờ + «Trợ lý OKR tạm nghỉ tới 01/MM» | — |
 | ST-soan-mo-dau | Màn soạn | Cột trái: lượt mở đầu «Kỳ trước phòng đạt…, cấp trên nhắm…»; 2–4 câu hỏi, mỗi câu hai `Suggestion`; ô soạn; cột phải: «Chưa có dòng nào» | Bấm gợi ý hay gõ |
 | ST-soan-thieu-boi-canh | Màn soạn | Dải nhắc «Chưa có Hồ sơ công ty và Chiến lược năm…» trên cột trái; quản trị có nút tới Kho tài liệu | Soạn tiếp hoặc đi viết trang |
 | ST-soan-dang-tra-loi | Màn soạn | `Shimmer` «Trợ lý OKR đang soạn…»; ô soạn khoá | Chờ |
@@ -342,6 +337,8 @@ gieo thẳng bản đang dùng).
 | ST-sodo-soan-rong | Thẻ Soạn OKR | «Chu kỳ này chưa có cuộc soạn nào» | — |
 | ST-sodo-soan-ngan | Ngăn một cuộc | Đơn vị, nấc, lượt, chi phí, bản nháp cuối kể cả dòng bị loại kèm mã | Đóng |
 <!-- UX-STATE-TABLE>>> -->
+
+Năm trạng thái `ST-soan-nut`, `ST-soan-nut-tiep`, `ST-soan-nut-an`, `ST-soan-nut-het-cuoc`, `ST-soan-nut-het-tran` (nút soạn ở khung đơn vị) gỡ ngày 22/10/2026: hồ sơ `mot-nut-tao-muc-tieu` đưa «Soạn cùng Kara» vào hộp chọn sau nút «Thêm mục tiêu», và ma trận 12 ô của ca `mnt-soan` đo các trạng thái đó (AC-7).
 
 ### 4. Hành vi
 

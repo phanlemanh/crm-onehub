@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lần đẩy biết bước nào đã xanh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper: #fafafa;
+      --color-ink: #171717;
+      --color-muted: #575757;
+      --font-sans: 'Geist', system-ui, sans-serif;
+      --font-serif: 'Lora', serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 2rem;
+    }
+    .frame { max-width: 1000px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      color: var(--color-ink);
+      margin-bottom: 1rem;
+    }
+    svg { width: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng · AC-6, 7, 8, 9, 10</p>
+    <h1>Lần đẩy biết bước nào đã xanh</h1>
+
+    <svg viewBox="0 0 1000 696" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="500" y1="88" x2="500" y2="120" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 440,168 V 192 Q 440,200 432,200 H 208 Q 200,200 200,208 V 232" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="168" x2="500" y2="232" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 560,168 V 192 Q 560,200 568,200 H 792 Q 800,200 800,208 V 232" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 200,288 V 300 Q 200,308 208,308 H 452 Q 460,308 460,316 V 336" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="288" x2="500" y2="336" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 800,288 V 300 Q 800,308 792,308 H 548 Q 540,308 540,316 V 336" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="500" y1="384" x2="500" y2="416" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="464" x2="500" y2="496" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="544" x2="500" y2="576" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 280,604 H 56 Q 48,604 48,596 V 268 Q 48,260 56,260 H 80" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="132" y="582" width="64" height="16" rx="2" fill="#fafafa"/>
+      <text x="164" y="594" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">GHI DẤU</text>
+
+      <rect x="320" y="40" width="360" height="48" rx="24" fill="#fafafa"/>
+      <rect x="320" y="40" width="360" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="500" y="68" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">git push → .githooks/pre-push (không đổi)</text>
+
+      <rect x="260" y="120" width="480" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="148" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">pre-push-t1.mjs: luật T1 như cũ + pre-push-da-chung.mjs</text>
+
+      <rect x="80" y="232" width="240" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="200" y="256" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">dấu hook (bước đã chạy,</text>
+      <text x="200" y="272" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">vân tay, 14 ngày)</text>
+
+      <rect x="380" y="232" width="240" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="264" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">sổ chạy S4 / ghim lại</text>
+
+      <rect x="680" y="232" width="240" height="56" rx="6" fill="#ffffff" stroke="#006B4F" stroke-width="1.2" stroke-dasharray="4,4"/>
+      <text x="800" y="256" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">CI check-run —</text>
+      <text x="800" y="272" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hỏi-1: merge-ref?</text>
+
+      <rect x="340" y="336" width="320" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="364" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cùng cây mã? (diff chỉ T1 thường)</text>
+
+      <rect x="300" y="416" width="400" height="48" rx="6" fill="#fafafa"/>
+      <rect x="300" y="416" width="400" height="48" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="500" y="444" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">dòng bỏ qua = T1 ∪ đã chứng + phiếu</text>
+
+      <rect x="340" y="496" width="320" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="524" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hook chạy phần còn lại</text>
+
+      <rect x="280" y="576" width="440" height="56" rx="28" fill="#fafafa"/>
+      <rect x="280" y="576" width="440" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="500" y="600" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">verify-gate-shape: đọc phiếu, kiểm,</text>
+      <text x="500" y="616" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ghi dấu cho bước đã chạy</text>
+
+      <line x1="40" y1="652" x2="960" y2="652" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="672" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="132" y="664" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="164" y="674" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bắt đầu / kết thúc</text>
+
+      <rect x="292" y="664" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="324" y="674" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước</text>
+
+      <rect x="384" y="664" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="416" y="674" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chỗ đổi chính của vòng</text>
+
+      <rect x="560" y="664" width="24" height="12" rx="2" fill="#ffffff" stroke="#006B4F" stroke-width="1.2" stroke-dasharray="4,4"/>
+      <text x="592" y="674" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi mở chờ người</text>
+
+      <line x1="732" y1="670" x2="764" y2="670" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="772" y="674" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Dấu dùng cho lần đẩy sau</text>
+    </svg>
+  </div>
+</body>
+</html>

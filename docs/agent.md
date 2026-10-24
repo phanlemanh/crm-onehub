@@ -325,6 +325,19 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   hay Slack vẫn gửi. Đường dẫn lưu là `duongTrongApp(v)` — đúng phần sau `/<slug>`
   của đường trong tin Zalo. `payload.mucTinh` là mẫu số của lệnh
   `bun run thong-bao:doi-chieu`; lệnh không bao giờ lấy mẫu số từ bảng `ThongBao`.
+- **Tin sáng bỏ loại người đã tắt** (hồ sơ `thong-bao-mot-nguon-nhieu-kenh`). Sau
+  `kenhSeDungCua`, `chayNhac` lọc danh sách mục theo cài đặt loại thông báo của người
+  (`docCaiDatThongBao` ở `@crm/db/cai-dat-thong-bao`, mặc định ở `MUC_THONG_BAO` của
+  `@crm/validation/thong-bao`). Thông báo của mọi mục vẫn ghi trước đó. Lọc xong mà rỗng
+  thì không gửi, lượt đóng `da-tat-het`. `payload.daGuiKhoa` giữ khoá thông báo của các
+  mục thật sự vào tin — lệnh đối chiếu dùng nó để kiểm mỗi mục ra Zalo/Slack có bản trong chuông.
+- **Thông báo sự kiện rẽ ra kênh ở một chỗ** (`lib/thong-bao-day.ts`). Bước
+  `dayThongBaoSuKien` trong nhịp mỗi phút đọc thẳng bảng `ThongBao`: thông báo không phải
+  nhắc sáng, ghi trong 30 phút gần nhất, loại người nhận đã bật và ghi sau lúc bật. Giữ chỗ
+  bằng một cập nhật có điều kiện trước khi gửi (`dayLan`, `dayLuc`) nên hai nhịp chồng
+  không gửi đôi; hỏng thì ghi `dayLoi`, thử lại tới `THONG_BAO.day.tranLan` lần; Zalo hỏng
+  không đổi sang Slack. Câu gửi là câu tiếng Việt của chuông (`cauSuKienVi`,
+  `@crm/validation/thong-bao-cau`) cộng đường dẫn. Nguồn thông báo mới không phải sửa gì ở đây.
 - **Không phải mọi thông báo do tác nhân ghi.** Thông báo đổi chỗ tín hiệu (`tin-hieu-doi-cho`,
   nguồn `tin-hieu`) do API ghi lúc nhận bản chụp lộ trình (`docs/api.md`, mục «Tín hiệu»); tác nhân
   không quét lại nó.

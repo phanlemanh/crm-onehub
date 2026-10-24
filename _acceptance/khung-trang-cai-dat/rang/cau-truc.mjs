@@ -35,6 +35,7 @@ const BANG_BE_RONG = {
 	// du-an-gantt khai-trang: Cài đặt › Lịch làm việc (DA4, 17/10, sau khi hồ sơ này ký) — width="page" theo
 	// docs/settings.md; khai để bảng đủ trang thật, chân đếm trang không nới.
 	"lich-lam-viec/page.tsx": "page",
+	"san-pham/page.tsx": "page",
 };
 const CHUYEN_HUONG = "notifications/page.tsx";
 const MAU_CAM = [

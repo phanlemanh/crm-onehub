@@ -263,7 +263,12 @@ export function DetailSheetTabs({
 					{danhSach}
 				</div>
 			) : (
-				danhSach
+				<div
+					data-tab-cuon-ngang
+					className="shrink-0 overflow-x-auto overflow-y-hidden"
+				>
+					{danhSach}
+				</div>
 			)}
 
 			{tabs.map((tab) => (
@@ -339,26 +344,6 @@ export function DetailSheetSection({
 	);
 }
 
-export function DetailSheetSplit({ children }: { children: ReactNode }) {
-	return (
-		<div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-			{children}
-		</div>
-	);
-}
-
-export function DetailSheetMain({ children }: { children: ReactNode }) {
-	return <div className="flex min-w-0 flex-1 flex-col">{children}</div>;
-}
-
-export function DetailSheetRail({ children }: { children: ReactNode }) {
-	return (
-		<div className="flex w-full min-w-0 shrink-0 flex-col lg:w-80">
-			{children}
-		</div>
-	);
-}
-
 export function DetailSheetProperties({
 	children,
 	columns = 2,
@@ -407,18 +392,40 @@ export function DetailSheetPending({
 export function DetailSheetProperty({
 	label,
 	wide = false,
+	stackBelowMd = false,
 	children,
 }: {
 	label: ReactNode;
 	wide?: boolean;
+	stackBelowMd?: boolean;
 	children: ReactNode;
 }) {
 	return (
-		<div className={cn(PROPERTY_ROW, "items-start", wide && "col-span-full")}>
-			<span className={cn(PROPERTY_LABEL, PROPERTY_CELL, "text-xs/5")}>
+		<div
+			className={cn(
+				PROPERTY_ROW,
+				"items-start",
+				wide && "col-span-full",
+				stackBelowMd && "max-md:grid-cols-1 max-md:gap-0",
+			)}
+		>
+			<span
+				className={cn(
+					PROPERTY_LABEL,
+					PROPERTY_CELL,
+					"text-xs/5",
+					stackBelowMd && "max-md:whitespace-normal",
+				)}
+			>
 				{label}
 			</span>
-			<div className={cn(PROPERTY_CELL, "min-w-0 px-2 text-xs/5")}>
+			<div
+				className={cn(
+					PROPERTY_CELL,
+					"min-w-0 px-2 text-xs/5",
+					stackBelowMd && "max-md:px-0",
+				)}
+			>
 				{children}
 			</div>
 		</div>
