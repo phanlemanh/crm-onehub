@@ -73,7 +73,7 @@ const vi = {
 	nguon: {
 		tay: {
 			nhan: "Nhập tay",
-			moTa: "Người phụ trách ghi số ở cập nhật tuần.",
+			moTa: "Người phụ trách ghi số ở lần cập nhật.",
 		},
 		crm: {
 			nhan: "Chỉ số CRM",
@@ -260,7 +260,7 @@ const en: OkrSoMessages = {
 	nguon: {
 		tay: {
 			nhan: "Manual",
-			moTa: "The owner enters the number in the weekly update.",
+			moTa: "The owner enters the number in the update.",
 		},
 		crm: {
 			nhan: "CRM metric",

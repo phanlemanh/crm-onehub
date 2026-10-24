@@ -1,0 +1,170 @@
+[
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "vi",
+		"cu": "capNhatTuan: \"Cập nhật tuần\"",
+		"moi": "capNhatTuan: \"Cập nhật\"",
+		"soLan": 2
+	},
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "vi",
+		"cu": "\"cap-nhat-tuan\": \"Cập nhật tuần\"",
+		"moi": "\"cap-nhat-tuan\": \"Cập nhật\"",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "vi",
+		"cu": "ngayCapNhat: \"Ngày cập nhật tuần\"",
+		"moi": "ngayCapNhat: \"Ngày cập nhật\"",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "vi",
+		"cu": "khoảng nghỉ và ngày cập nhật tuần",
+		"moi": "khoảng nghỉ và ngày cập nhật",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "vi",
+		"cu": "không phải cập nhật tuần.",
+		"moi": "không phải cập nhật.",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "en",
+		"cu": "capNhatTuan: \"Weekly update\"",
+		"moi": "capNhatTuan: \"Update\"",
+		"soLan": 2
+	},
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "en",
+		"cu": "\"cap-nhat-tuan\": \"Weekly update\"",
+		"moi": "\"cap-nhat-tuan\": \"Update\"",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "en",
+		"cu": "Your weekly updates,",
+		"moi": "Your updates,",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr.ts",
+		"lang": "en",
+		"cu": "doesn't need a weekly update.",
+		"moi": "doesn't need an update.",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-toan-canh.ts",
+		"lang": "vi",
+		"cu": "Tuần này chưa có Cập nhật tuần nào",
+		"moi": "Tuần này chưa có lần cập nhật nào",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-toan-canh.ts",
+		"lang": "vi",
+		"cu": "ít nhất một lần Cập nhật tuần",
+		"moi": "ít nhất một lần cập nhật",
+		"soLan": 2
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-toan-canh.ts",
+		"lang": "vi",
+		"cu": "lần cập nhật tuần đầu tiên",
+		"moi": "lần cập nhật đầu tiên",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-toan-canh.ts",
+		"lang": "vi",
+		"cu": "KR có cập nhật tuần đó",
+		"moi": "KR có lần cập nhật trong tuần đó",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-toan-canh.ts",
+		"lang": "en",
+		"cu": "No weekly updates yet this week",
+		"moi": "No updates yet this week",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-toan-canh.ts",
+		"lang": "en",
+		"cu": "at least one weekly update",
+		"moi": "at least one update",
+		"soLan": 2
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-toan-canh.ts",
+		"lang": "en",
+		"cu": "after the first weekly update",
+		"moi": "after the first update",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-soan.ts",
+		"lang": "vi",
+		"cu": "dòng tóm gọn Cập nhật tuần",
+		"moi": "dòng tóm gọn lần cập nhật",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-soan.ts",
+		"lang": "en",
+		"cu": "weekly update summaries",
+		"moi": "update summaries",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-so.ts",
+		"lang": "vi",
+		"cu": "ghi số ở cập nhật tuần",
+		"moi": "ghi số ở lần cập nhật",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-so.ts",
+		"lang": "en",
+		"cu": "in the weekly update",
+		"moi": "in the update",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-tai-co-cau.ts",
+		"lang": "vi",
+		"cu": "giữ KR, cập nhật tuần,",
+		"moi": "giữ KR, lần cập nhật,",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/app/lib/messages/okr-tai-co-cau.ts",
+		"lang": "en",
+		"cu": "key results, weekly updates,",
+		"moi": "key results, updates,",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/agent/agent/lib/tin-nhac.ts",
+		"lang": "vi",
+		"cu": "\"okr-cap-nhat\": \"Cập nhật tuần\"",
+		"moi": "\"okr-cap-nhat\": \"Cập nhật\"",
+		"soLan": 1
+	},
+	{
+		"tep": "apps/agent/agent/lib/tin-nhac.ts",
+		"lang": "vi",
+		"cu": "\"okr-cap-nhat\": \"mở cập nhật tuần\"",
+		"moi": "\"okr-cap-nhat\": \"mở cập nhật\"",
+		"soLan": 1
+	}
+]

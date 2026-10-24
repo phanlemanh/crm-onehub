@@ -1,0 +1,128 @@
+[
+	{
+		"tep": "bang-kr.tsx",
+		"kind": "kr",
+		"id": "kr.id",
+		"nguon": "kr"
+	},
+	{
+		"tep": "bang-kr.tsx",
+		"kind": "kr",
+		"id": "kr.id",
+		"nguon": "kr"
+	},
+	{
+		"tep": "cay-can-chinh.tsx",
+		"kind": "kr",
+		"id": "nut.id",
+		"nguon": "kr"
+	},
+	{
+		"tep": "cay-can-chinh.tsx",
+		"kind": "objective",
+		"id": "nut.objectiveId",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "chip-gop-y.tsx",
+		"kind": "objective",
+		"id": "mt.id",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "dong-dan-gop-y.tsx",
+		"kind": "objective",
+		"id": "objectiveId",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "hanh-dong-khu.tsx",
+		"kind": "soan",
+		"id": "",
+		"nguon": "soan"
+	},
+	{
+		"tep": "hoi-y/khoi-ket-qua.tsx",
+		"kind": "objective",
+		"id": "objectiveId",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "hop-thoai-muc-tieu.tsx",
+		"kind": "objective",
+		"id": "kq.id",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "khoi-muc-tieu.tsx",
+		"kind": "objective",
+		"id": "mucTieu.id",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "phan-kr-phu-trach.tsx",
+		"kind": "kr",
+		"id": "k.id",
+		"nguon": "kr"
+	},
+	{
+		"tep": "quanh-muc-tieu/the-quanh.tsx",
+		"kind": "kr",
+		"id": "nut.id",
+		"nguon": "kr"
+	},
+	{
+		"tep": "quanh-muc-tieu/the-quanh.tsx",
+		"kind": "objective",
+		"id": "nut.id",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "soan/duong-soan.ts",
+		"kind": "soan",
+		"id": "",
+		"nguon": "soan"
+	},
+	{
+		"tep": "soan/nut-soan.tsx",
+		"kind": "soan",
+		"id": "",
+		"nguon": "soan"
+	},
+	{
+		"tep": "theo-don-vi/bang.tsx",
+		"kind": "kr",
+		"id": "kr.id",
+		"nguon": "kr"
+	},
+	{
+		"tep": "theo-don-vi/bang.tsx",
+		"kind": "objective",
+		"id": "mt.id",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "toan-canh/suc-khoe/okr-mo-coi.tsx",
+		"kind": "objective",
+		"id": "muc.objectiveId",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "toan-canh/the-don-vi.tsx",
+		"kind": "objective",
+		"id": "mt.id",
+		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "viec-cua-toi.tsx",
+		"kind": "kr",
+		"id": "krId",
+		"nguon": "kr"
+	},
+	{
+		"tep": "viec-cua-toi.tsx",
+		"kind": "objective",
+		"id": "viec.objectiveId",
+		"nguon": "muc-tieu"
+	}
+]

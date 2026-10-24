@@ -257,7 +257,12 @@ export function CayCanChinh({
 							onExpandedChange={setMo}
 							onSelect={(khoa) => {
 								const nut = theoKhoa.get(khoa);
-								if (nut) openRecord({ kind: "objective", id: nut.objectiveId });
+								if (!nut) return;
+								openRecord(
+									nut.loai === "kr"
+										? { kind: "kr", id: nut.id }
+										: { kind: "objective", id: nut.objectiveId },
+								);
 							}}
 							renderLabel={(n) =>
 								n.data.loai === "nut" ? (
