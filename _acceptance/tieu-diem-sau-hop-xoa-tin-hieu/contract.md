@@ -5,7 +5,7 @@ slug: tieu-diem-sau-hop-xoa-tin-hieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-10-24T07:26:02Z
 design_doc: docs/superpowers/specs/2026-10-24-tieu-diem-sau-hop-xoa-tin-hieu-design.md
