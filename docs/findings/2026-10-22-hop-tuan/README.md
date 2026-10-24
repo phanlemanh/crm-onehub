@@ -24,6 +24,7 @@ thay vì chỉ ở artifact hay transcript. Mọi phần dưới đây làm trê
 | 22/10 | «Đồng ý và báo với phiên điều phối để thực hiện» | HT1 được đổi AC-7 của VK3 (liên kết Họp tuần không kèm đơn vị mở bộ của người xem, chỉ quản trị mặc định OneHub); HT2 được đổi thứ tự ‹ › của ngăn KR khi mở từ Họp tuần. Ghi ở comment trên #543. |
 | 24/10 | «Lối (b), nhưng tôi hỏi lúc research tability đã quyết định như vậy, nhưng phiên này không giữ được gì từ quyết định research» | Bỏ bảng cập nhật hàng loạt ở «Của tôi»; «Của tôi» chỉ liệt KR cần cập nhật, bấm KR mở ngăn KR trong bộ; tin nhắc 08:30 dẫn tới KR; chỉ còn hộp cập nhật một KR. Lật DH3 `cua-toi-ba-phan` (#443). Hàng riêng, đi sau HT2. |
 | 24/10 | Cổng Phạm vi HT1: «/acceptance-gate:approve hop-tuan-mo-dung-bo duyệt» | Bỏ mục «Họp tuần» trên thanh bên; đường vào như Tability: Bộ OKR › Tôi dẫn › bộ mình › thẻ con, hoặc Của tôi › đơn vị bạn dẫn. Bộ mình dẫn thắng vai quản trị; hàng số Họp tuần là hàng riêng; ô «Tự tin thấp» là một số. |
+| 24/10 | «Đồng ý hết theo khuyến nghị» (sau đối chiếu tài liệu của ba dãy) | Luật «Bấm vào KR và cập nhật» vào `docs/design.md`; «Cập nhật tuần» đổi thành «Cập nhật» trong `CONTEXT.md`; hàng SV6, SV7, mục chờ SV-C1; D1–D8 ghi vào HT1, VK8, VK12, HT5 (§8). |
 
 **Bài học về ngữ cảnh:** câu hỏi 22/10 đã cho thấy hướng «cập nhật ngay trong bộ OKR, không trang riêng», nhưng các
 hàng HT1–HT5 cắt cùng ngày không ghi hướng đó, nên phiên HT1 ngày 24/10 phải hỏi lại. Tài liệu này là chỗ giữ.
@@ -202,3 +203,26 @@ bàn KR at risk/off track hoặc tự tin thấp.
 - Nấc Tóm tắt tuần thật trên production và việc đã có chu kỳ chạy với cập nhật thật hay chưa: cần đọc
   `OkrProgramConfig`, `OkrCheckIn` trên production.
 - Giao diện sửa hay xoá lần cập nhật cũ của Tability: thấy lời gọi API trong mã, chưa thấy màn.
+
+## 8. Bấm KR — hiện trạng 24/10
+
+Đọc trên origin/onehub `09d7d1dcf`. Luật đích ở `docs/design.md`, mục «Nếp màn» › «Bấm vào KR và cập nhật»: bấm
+một mục tiêu thì mở chi tiết mục tiêu; bấm một KR ở bất kỳ đâu thì mở chi tiết KR (`openRecord({ kind: "kr" })`).
+Chỉ có một form cập nhật là hộp cập nhật một KR, mở từ chi tiết KR › «Cập nhật». Nút tắt trên dòng mở đúng hộp đó.
+Không có ô nhập trên dòng, không gửi nhiều KR một lần. Họp tuần là thẻ con của bộ OKR.
+
+Mọi đường dưới đây nằm trong `apps/app/app/(app)/[slug]/okr/`.
+
+| Chỗ | Hôm nay | Đích | Hàng |
+| --- | --- | --- | --- |
+| Của tôi, KR mình phụ trách (`phan-kr-phu-trach.tsx:85`) | mở mục tiêu chứa KR | mở chi tiết KR | SV6 |
+| Sơ đồ, cây căn chỉnh (`cay-can-chinh.tsx:260`) | `onSelect` mở mục tiêu; VK6 xoá tệp này khi gộp | nút KR trên Sơ đồ toàn vùng (`so-do/`) mở chi tiết KR | SV6 |
+| Việc của tôi (`viec-cua-toi.tsx:194`) | «Mở mục tiêu» kể cả khi việc gắn một KR | việc có `keyResultId` thì mở chi tiết KR | SV6 |
+| Bảng KR trong chi tiết mục tiêu (`bang-kr.tsx:366`) | tên KR là chữ trơn | tên KR là nút mở chi tiết KR | SV6 |
+| Lịch sử trong chi tiết KR | gom theo tuần (VK7 Ngoài-1, Known limits) | mỗi lần cập nhật một dòng, biểu đồ theo lần | SV7 |
+| Của tôi, bảng cập nhật hàng loạt (`phan-can-cap-nhat.tsx`) | gửi nhiều KR một lần | chỉ liệt KR, bấm mở chi tiết KR | SV1 |
+
+Chữ trên màn và trong tin nhắc: «Cập nhật tuần» dùng như danh từ (`apps/app/lib/messages/okr.ts:340`,
+`okr-toan-canh.ts:107`, `:109`, `okr-soan.ts:271`, `apps/agent/agent/lib/tin-nhac.ts:31`) đổi thành «Cập nhật»
+(SV6). Cụm «cập nhật tuần này» chỉ một khoảng thời gian thì giữ. Dữ liệu `OkrCheckIn` không có khoá duy nhất theo
+tuần (`packages/db/prisma/schema.prisma`, chỉ `@@index([weekStart])`), nên một tuần có thể có nhiều lần cập nhật.

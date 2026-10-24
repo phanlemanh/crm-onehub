@@ -187,6 +187,36 @@ bàn đo rơi về `?record=kr:<id>`.
   - Giám sát duyệt `cham-tep` xoá bốn khoá chữ chết.
   - Khi gộp sau VK6, khúc `okr.ts` cạnh `cayCanChinh` sẽ xung đột. Giữ cả hai lần xoá.
 
+## 8. Bấm vào KR và cập nhật (24/10)
+
+**Chủ kho chốt 24/10**, nguyên văn «Đồng ý hết theo khuyến nghị». Lời này trả lời các khuyến nghị của giám sát vk,
+gom từ ba bảng đối chiếu tài liệu Họp tuần của dãy V1, V2, V3 (ghi chú bàn giao `V1-doi-chieu-hop-tuan-2410.md`,
+`V2-doi-chieu-hop-tuan-2410.md`, `V3-doi-chieu-hop-tuan-2410.md`). Bảng bốn chỗ bấm KR còn sai nằm ở
+`docs/findings/2026-10-22-hop-tuan/README.md` mục 8.
+
+Ba điều thành luật trong kho, không cắt thành hàng:
+
+- `docs/design.md`, mục «Nếp màn», có tiểu mục mới «Bấm vào KR và cập nhật». Bấm mục tiêu thì mở chi tiết mục tiêu.
+  Bấm KR ở bất kỳ đâu thì mở chi tiết KR. Chỉ có một form cập nhật là hộp cập nhật một KR. Họp tuần là thẻ con của
+  bộ OKR.
+- `CONTEXT.md` đổi tên mục «Cập nhật tuần» thành «Cập nhật». Ghi lúc nào cũng được, mỗi lần một dòng. Nhịp hằng
+  tuần là khuyến nghị vận hành. «Cập nhật tuần» vào _Avoid_.
+- Các quyết định D1–D8 ghi vào `ghi_chu` của hàng nhận:
+  - HT1: D1, D2, D4.
+  - VK8: D3.
+  - VK12: D5 (giữ trả lời ở lần mới nhất), D7, D8.
+  - HT5: D5 (trả lời từng lần), D6.
+
+Phần việc phát triển thành hai hàng và một mục chờ:
+
+- **SV6** `bam-kr-mo-chi-tiet-kr` sửa bốn chỗ bấm KR còn mở mục tiêu, và đổi chữ «Cập nhật tuần» khi dùng như danh từ
+  trên màn và tin nhắc. Dãy V2 làm ngay, không chờ VK3.
+- **SV7** `lich-su-moi-lan-cap-nhat`, sau SV6: Lịch sử trong chi tiết KR hiện mọi lần cập nhật, biểu đồ có một điểm
+  cho mỗi lần. Hàng này lật Known limits Ngoài-1 của VK7 («lịch sử gom theo tuần»), nên cần dòng sổ decided_by chủ
+  kho ở hồ sơ `ngan-kr-mot-cho`. `OkrCheckIn` không có khoá duy nhất theo tuần; schema chỉ có
+  `@@index([weekStart])`.
+- **SV-C1** (chờ điều kiện): xem riêng một lần cập nhật cũ. Mở lại khi, sau SV7, người dùng cần màn riêng cho một lần.
+
 <!-- <<<PHAM-VI-MA -->
 ```
 dot: okr-sau-vo-khu-2410
@@ -200,5 +230,8 @@ nguon: quyết định chủ kho treo trong đợt Điều phối – Thợ vo-k
 - `N5` — VK6 Ngoài-5: chuCuaEval của giu-ho-so không rơi tệp thước xen kẽ (regex cờ /g với .test())
 - `N10` — VK6 Ngoài-10: TEP_THUOC của giu-ho-so không mất một nửa tệp thước khai ở paths, cùng gốc với N5
 - `T25` — hàng sửa thước mà V3-25 «Đồng ý A» mở: thước màn trang-don-vi-mot-bang E2 và toan-canh-okr E10 E21 đo đúng vỏ khu
+- `BK` — bấm KR ở bất kỳ đâu mở chi tiết KR (bốn chỗ còn mở mục tiêu), chữ «Cập nhật tuần» làm danh từ thành «Cập nhật»
+- `LS` — Lịch sử của chi tiết KR hiện mọi lần cập nhật, biểu đồ theo lần, lật VK7 Ngoài-1
+- `CT1` — xem riêng một lần cập nhật cũ khi bấm trong Lịch sử
 ```
 <!-- PHAM-VI-MA>>> -->

@@ -3317,7 +3317,7 @@
       "cau_giao": "«Trưởng đơn vị mở bộ OKR của đơn vị mình và biết ngay đội đang ra sao: ngày còn lại, tiến độ so với kỳ vọng, số KR đã cập nhật tuần này, số KR tự tin thấp, và mọi KR đã mở sẵn»",
       "vi_sao": "Trang đơn vị hôm nay gập mục tiêu, không có số tóm tắt; phải mở từng dòng. Trang kế hoạch của Tability mở ra là thấy bốn ô số.",
       "bat_khi": "Bốn ô số ở đầu thẻ OKR của mọi bộ; nút Mở tất cả / Gập tất cả",
-      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Dưới mục tiêu cỡ (6) nhưng không gộp với VK3: VK3 là đường dẫn và thẻ con, hàng này là nội dung thẻ OKR.",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Dưới mục tiêu cỡ (6) nhưng không gộp với VK3: VK3 là đường dẫn và thẻ con, hàng này là nội dung thẻ OKR. Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D3 nhận cách đọc hẹp của HT1 — E4 chỉ dò hàng số của VK8 ở thẻ OKR, không dò StatGroup của Họp tuần; VK8 gộp trước HT1, hàng nào gộp sau dùng lại hàm ngày còn lại của hàng gộp trước.",
       "dot": "okr-vo-khu-1810",
       "phu": [
         "B2"
@@ -3413,7 +3413,7 @@
       "cau_giao": "«Trưởng đơn vị mở Cập nhật gần đây trước buổi họp tuần, đọc mọi lần cập nhật của bộ OKR mình dẫn, mới nhất trước, và trả lời ngay dưới từng lần»",
       "vi_sao": "Lần cập nhật chỉ đọc được trong thẻ Trao đổi của từng mục tiêu; không có chỗ đọc chung. Tability có Recent updates lọc theo kế hoạch đang theo dõi, đội, cấp dưới.",
       "bat_khi": "Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Bộ OKR bạn dẫn · Bạn theo dõi",
-      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D5 giữ trả lời chỉ ở lần mới nhất (Hỏi-1 lối a, T2, không migration); trả lời từng lần sang HT5. D7 thêm mục thứ bảy trên thanh bên thì sửa thước vo-khu-muc-tieu DO.soMuc 6 → 7 trong làn của VK12, kèm dòng sổ fix và cham-tep. D8 bấm dòng tin mở chi tiết KR (useMoNganKr/openRecord), thêm ô vào MA_TRAN của ngan-kr-mot-cho. Nguồn: ghi chú bàn giao V3-doi-chieu-hop-tuan-2410.md mục 2, 5, 7.",
       "dot": "okr-vo-khu-1810",
       "phu": [
         "B5c"
@@ -3575,7 +3575,7 @@
       "cau_giao": "«Trưởng đơn vị bấm Họp tuần và vào thẳng bảng của bộ OKR mình dẫn, thấy hàng số của tuần ở đầu; bộ chưa có KR công bố hay chu kỳ chưa chạy thì màn nói đúng lý do và chỉ sang đơn vị có KR»",
       "vi_sao": "Production 22/10: bấm Họp tuần không kèm đơn vị thì bảng là của OneHub, cấp này không có KR công bố nên màn hiện «0/0 KR» và câu «Chưa có lần cập nhật nào để bàn» trong khi phòng của người xem đã cập nhật đủ (okr-xem.service.ts:160-161, :586). VK3 AC-7 vẫn giữ «xemOkr trần mở bộ OneHub»; VK8 AC-3 đặt hàng số chỉ ở thẻ OKR. Tability mở đúng plan của đội và có bốn ô số ở đầu plan.",
       "bat_khi": "Trưởng phòng mở Họp tuần từ Bộ OKR › Tôi dẫn › bộ › thẻ con, từ Của tôi › đơn vị bạn dẫn, hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn; không còn màn «0/0 KR» với câu «chưa có lần cập nhật» khi bộ của người xem đã có cập nhật",
-      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi luật AC-7 đã duyệt của VK3 (xemOkr trần → OneHub): chủ kho chốt ở Cổng Phạm vi của hàng này. Thước của VK3 đo thẻ Họp tuần; sửa sau khi VK3 ký có thể phải ghim lại hồ sơ trang-bo-okr. Chủ kho bỏ mục «Họp tuần» trên thanh bên 24/10 (Cổng Phạm vi HT1; docs/findings/2026-10-22-hop-tuan/README.md §1).",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi luật AC-7 đã duyệt của VK3 (xemOkr trần → OneHub): chủ kho chốt ở Cổng Phạm vi của hàng này. Thước của VK3 đo thẻ Họp tuần; sửa sau khi VK3 ký có thể phải ghim lại hồ sơ trang-bo-okr. Chủ kho bỏ mục «Họp tuần» trên thanh bên 24/10 (Cổng Phạm vi HT1; docs/findings/2026-10-22-hop-tuan/README.md §1). Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D1 giữ AC-2 — người dẫn cả bộ phận và phòng ban vào bộ phận, theo thuTuDan của Của tôi; sửa chữ F01 của README cho khớp. D2 «tiêu đề là tên phòng ban» đọc là dòng vị trí «Bộ OKR › tên đơn vị» theo VK3 V1-19 (d-14), không mở lại V1-19. D4 cập nhật từ Họp tuần dùng lối sheet, không thêm lối hop-tuan vào LOI_VAO.",
       "phu": [
         "H1",
         "H2",
@@ -3667,7 +3667,7 @@
       "cau_giao": "«Thành viên thả cảm xúc lên một lần cập nhật tuần ở Cập nhật gần đây, thẻ con Họp tuần của bộ OKR và ngăn KR, và người cập nhật thấy ai đã thả»",
       "vi_sao": "VK12 mang trả lời dưới từng lần cập nhật; chưa có cách ghi nhận nhẹ hơn một câu trả lời. Tability có Reply và Like trên từng check-in ở ba chỗ: Recent updates, ngăn KR, trình chiếu.",
       "bat_khi": "Một lần thả hiện ở cả ba chỗ trong cùng phiên; thả lại thì gỡ; người ngoài quyền xem mục tiêu không thấy",
-      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). T3: thêm bảng ở packages/db/prisma. Đứng trên dòng tin của VK12.",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). T3: thêm bảng ở packages/db/prisma. Đứng trên dòng tin của VK12. Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D5 trả lời trên từng lần cập nhật (Hỏi-1 lối b của VK12) đi cùng hàng này. D6 thêm checkInId cho OkrComment trong cùng migration với bảng cảm xúc, để trả lời và cảm xúc dùng một khoá lần cập nhật; VK12 đổi cách gắn trả lời ở vòng sau. Không dùng OkrGhiNhan cho cảm xúc. Nguồn: ghi chú bàn giao V3-doi-chieu-hop-tuan-2410.md mục 5, 6, 10.",
       "phu": [
         "H8"
       ],
@@ -3788,6 +3788,52 @@
       "dot": "okr-sau-vo-khu-2410",
       "phu": [
         "T25"
+      ],
+      "tieu_chi": 6
+    },
+    {
+      "ma": "SV6",
+      "slug": "bam-kr-mo-chi-tiet-kr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.78,
+      "dung_tren": [],
+      "ten": "Bấm KR mở chi tiết KR",
+      "ten_ngan": "Bấm KR mở KR",
+      "ngay": "2026-10-24",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR bấm một KR ở Của tôi, Việc, Sơ đồ hay bảng KR trong chi tiết mục tiêu và luôn mở chi tiết KR, không mở mục tiêu chứa nó; màn và tin nhắc gọi mỗi lần ghi là «Cập nhật»»",
+      "vi_sao": "Bốn chỗ bấm KR còn mở mục tiêu hoặc không bấm được: apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx:85 (Của tôi mở objective), apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx:260 (onSelect mở objective), apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx:194 (việc có keyResultId vẫn mở objective), tên KR ở apps/app/app/(app)/[slug]/okr/bang-kr.tsx:366 là chữ trơn. «Cập nhật tuần» còn dùng như danh từ trên màn và tin nhắc: apps/app/lib/messages/okr.ts:340, okr-toan-canh.ts:107, :109, okr-soan.ts:271, apps/agent/agent/lib/tin-nhac.ts:31.",
+      "bat_khi": "Mọi lối bấm KR trong khu Mục tiêu mở openRecord({ kind: \"kr\" }); không còn chữ «Cập nhật tuần» làm danh từ trên màn hay tin nhắc, cụm «cập nhật tuần này» chỉ khoảng thời gian vẫn giữ",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu tài liệu Họp tuần của ba dãy V1, V2, V3). Luật «Bấm vào KR và cập nhật» ở docs/design.md mục «Nếp màn»; từ «Cập nhật» ở CONTEXT.md. Bảng bốn chỗ sai ở docs/findings/2026-10-22-hop-tuan/README.md mục 8. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §8.",
+      "ghi_chu": "Giao dãy V2 làm ngay, không chờ VK3. Thêm lối bấm KR thì thêm ô vào MA_TRAN của _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs và bài vk7-moi-loi (nay 9 ô), cùng lớp V3-27 B — dòng sổ fix decided_by chủ kho. Đổi chữ tin nhắc chạm apps/agent/test/okr-nhac.integration.spec.ts:407 và _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs (hồ sơ đã ký): luật tạm 18/10, chủ kho duyệt ở Cổng Phạm vi của hàng này. VK6 so-do-toan-vung xoá cay-can-chinh.tsx khi gộp; khi đó luật áp cho nút KR trên màn Sơ đồ toàn vùng (okr/so-do/).",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "BK"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "SV7",
+      "slug": "lich-su-moi-lan-cap-nhat",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.79,
+      "dung_tren": [
+        "SV6"
+      ],
+      "ten": "Lịch sử hiện mọi lần cập nhật",
+      "ten_ngan": "Lịch sử mọi lần",
+      "ngay": "2026-10-24",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR mở chi tiết KR và thấy trong Lịch sử mọi lần cập nhật, kể cả nhiều lần trong một tuần, và biểu đồ có một điểm cho mỗi lần»",
+      "vi_sao": "Ngăn KR gom lịch sử theo tuần, nên gửi lần thứ hai trong tuần thì số dòng lịch sử không tăng. OkrCheckIn không có khoá duy nhất theo tuần (chỉ @@index([weekStart]) ở packages/db/prisma/schema.prisma), và «Cập nhật» ghi lúc nào cũng được (CONTEXT.md 24/10). Tability: Timeline của ngăn KR hiện từng lần kèm số, mức đổi và câu phân tích (README hop-tuan, ảnh tab/t03b-ngan-kr-dong-thoi-gian.jpg).",
+      "bat_khi": "Gửi hai lần cập nhật cho một KR trong cùng tuần: Lịch sử tăng hai dòng và biểu đồ có hai điểm",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu tài liệu Họp tuần của ba dãy V1, V2, V3). Đổi hành vi đã ký của VK7 ngan-kr-mot-cho Ngoài-1 (Known limits «lịch sử gom theo tuần», d-20261020T125111Z-30, d-20261021T121547Z-76): cần dòng sổ decided_by chủ kho ở hồ sơ ngan-kr-mot-cho. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §8.",
+      "ghi_chu": "Đi sau SV6 vì cùng ngăn KR. Bước E12 của VK7 («số dòng lịch sử trong ngăn tăng 1») sẽ đúng lại sau hàng này. Bấm một lần cũ để xem riêng lần ấy: mục chờ SV-C1.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "LS"
       ],
       "tieu_chi": 6
     }
@@ -3922,6 +3968,16 @@
         "H9"
       ],
       "mo_lai_khi": "Phiên nghiệm thu Họp tuần (Cổng Giá trị của lượt 5) cho thấy trưởng đơn vị vẫn chiếu bằng công cụ khác sau khi HT1, HT2 đã giao"
+    },
+    {
+      "ma": "SV-C1",
+      "dot": "okr-sau-vo-khu-2410",
+      "cau_giao": "«Người phụ trách KR bấm một lần cập nhật cũ trong Lịch sử của chi tiết KR và xem riêng lần ấy: số, mức tự tin, ghi chú, trả lời»",
+      "ly_do": "Chủ kho 24/10 «Đồng ý hết theo khuyến nghị»: SV7 hiện mọi lần ngay trong Lịch sử, đủ để đọc từng lần; chưa biết người dùng có cần một màn riêng cho một lần hay không.",
+      "phu": [
+        "CT1"
+      ],
+      "mo_lai_khi": "Sau khi SV7 giao, người dùng cần xem riêng một lần cập nhật (trả lời, cảm xúc hay sửa sai) mà Lịch sử không đủ chỗ"
     }
   ],
   "da_bac": [
