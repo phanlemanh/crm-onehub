@@ -5,7 +5,7 @@ slug: hop-tuan-mo-dung-bo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: approved
+status: draft
 design_doc: docs/superpowers/specs/2026-10-23-hop-tuan-mo-dung-bo-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-24
@@ -37,7 +37,8 @@ Việt, khổ 1440×900 và 375×812.
 - AC-1: Given trưởng một phòng ban có KR công bố và đã cập nhật trong chu kỳ đang chạy, When mở
   `/okr/bo-okr?xemOkr=hop-tuan`, `/okr/bo-okr?xemOkr=hop-tuan&kyOkr=<id>` hay `/okr/theo-don-vi?xemOkr=hop-tuan`,
   Then trình duyệt tới `/okr/bo-okr` mang `donOkr=pb:<phòng ban ấy>`, `xemOkr=hop-tuan` và `kyOkr` như URL vào (có
-  thì giữ, không thì không thêm); tiêu đề là tên phòng ban; trang không lúc nào hiện bảng của bộ OneHub. Bảng là của
+  thì giữ, không thì không thêm); dòng vị trí là «Bộ OKR › <tên phòng ban>» (tiêu đề trang giữ «Mục tiêu» như cả
+  khu, theo V1-19); trang không lúc nào hiện bảng của bộ OneHub. Bảng là của
   đúng phòng ban ấy: số đã cập nhật và tổng KR khớp số `OkrCheckIn` tuần này và số KR công bố trong cơ sở dữ liệu.
   (cross-layer)
 - AC-2: Given ma trận người xem, When hàm chọn bộ `boHopTuan` chạy trên `okr.access` và `org.tree` thật của người
@@ -56,7 +57,7 @@ Việt, khổ 1440×900 và 375×812.
 - AC-3: Given trưởng phòng ban P, chu kỳ đang chạy, When đi theo hai đường vào bộ của mình — (a) thanh bên «Bộ OKR»
   → lọc «Tôi dẫn» → bấm bộ P → bấm thẻ con «Họp tuần»; (b) «Của tôi» → thẻ «đơn vị bạn dẫn» P → bấm thẻ con «Họp
   tuần» — Then cả hai tới Họp tuần của bộ P: URL `/okr/bo-okr` mang `donOkr=pb:P`, `xemOkr=hop-tuan` và `kyOkr` của
-  chu kỳ đang xem, tiêu đề là tên P. Thanh bên khu Mục tiêu không có mục «Họp tuần»: nhóm OKR giữ đúng «Bộ OKR», «Lấy ý
+  chu kỳ đang xem, dòng vị trí là «Bộ OKR › P». Thanh bên khu Mục tiêu không có mục «Họp tuần»: nhóm OKR giữ đúng «Bộ OKR», «Lấy ý
   kiến», và không liên kết nào trên thanh bên mang `xemOkr`.
 - AC-4: Given thẻ Họp tuần của một bộ có KR công bố, When trang tải xong, Then đầu thẻ (trên khối Tóm tắt tuần và
   bảng) có đúng một hàng bốn ô `[data-hang-so-hop]`, theo thứ tự:
@@ -150,7 +151,7 @@ rời».
 ## Đường đo
 
 - «Trưởng phòng mở Họp tuần từ thanh bên, từ thẻ con hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn» · số từ:
-  URL cuối và tiêu đề đọc trong phiên đo — ba liên kết gõ thẳng, đường thanh bên «Bộ OKR» › Tôi dẫn › bộ mình › thẻ
+  URL cuối và dòng vị trí đọc trong phiên đo — ba liên kết gõ thẳng, đường thanh bên «Bộ OKR» › Tôi dẫn › bộ mình › thẻ
   con Họp tuần, và đường Của tôi › đơn vị bạn dẫn › thẻ con Họp tuần; bài kiểm API của `boHopTuan` cho năm vai · bảo
   đảm bởi: AC-1, AC-2, AC-3. «Từ thanh bên» đọc là qua mục «Bộ OKR» của thanh bên, như Tability đi qua plan — chủ kho
   chốt 24/10 bỏ mục «Họp tuần» riêng. Thẻ con giữ bộ đang xem (VK3 AC-5) — Hỏi-2.

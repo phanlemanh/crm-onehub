@@ -20,16 +20,16 @@ evals:
       Mỗi dòng:
       (a) yêu cầu đầu tiên tới /okr/bo-okr (fetch redirect manual, cookie phiên) trả 307 với Location mang donOkr=pb:P,
       xemOkr=hop-tuan, và kyOkr đúng như URL vào (dòng 2 có, dòng 1 và 3 không); (b) trình duyệt mở URL ấy: URL cuối
-      đúng như (a), tiêu đề trang là tên P, không lúc nào DOM chứa tiêu đề tên gốc «OneHub» trước khi tới (bắt bằng
-      MutationObserver gắn từ lúc điều hướng); (c) chữ của [data-hang-so-hop] ô Đã cập nhật bằng «<n>/<m>» với n = số
+      đúng như (a), dòng vị trí [data-vi-tri-bo="mot-bo"] là «Bộ OKR › P» và tiêu đề trang «Mục tiêu», không lúc nào dòng
+      vị trí mang tên gốc «OneHub» trước khi tới (bắt bằng MutationObserver gắn từ lúc điều hướng); (c) chữ của [data-hang-so-hop] ô Đã cập nhật bằng «<n>/<m>» với n = số
       KR công bố của P có OkrCheckIn tuần này (giờ VN) và m = số KR công bố của P, cả hai đếm bằng SQL trên kho đo;
       (d) textContent trang không chứa «0/0» và không chứa câu tuanDau của tệp chữ. Phần B — hai vai khác, mỗi vai một
       phiên dev:session, URL /okr/bo-okr?xemOkr=hop-tuan: thành viên M của ca (không dẫn, phòng ban chính Q) → Location
       mang donOkr=pb:Q; quản trị A của ca (không dẫn) → Location mang donOkr=goc. Phần C — bấm trong trình duyệt, đăng
       nhập P (điều hướng phía khách): từ /okr bấm «Bộ OKR» trên thanh bên → bấm lọc «Tôi dẫn» → bấm hàng bộ P → bấm thẻ
       con «Họp tuần»; và từ /okr bấm thẻ «đơn vị bạn dẫn» P → bấm thẻ con «Họp tuần». Mỗi đường: URL cuối mang
-      donOkr=pb:P, xemOkr=hop-tuan và kyOkr của chu kỳ đang xem, tiêu đề là tên P, MutationObserver không bắt tiêu đề
-      OneHub. In «DUNG <dong>» từng dòng; đếm dòng đã chạy = 7. KET LUAN: mã 0 mọi dòng
+      donOkr=pb:P, xemOkr=hop-tuan và kyOkr của chu kỳ đang xem, dòng vị trí là «Bộ OKR › P», MutationObserver không bắt
+      dòng vị trí mang tên OneHub. In «DUNG <dong>» từng dòng; đếm dòng đã chạy = 7. KET LUAN: mã 0 mọi dòng
       DUNG, 1 có SAI, 2 không đo được.
       CHIEU DO (--chieu-do, bản sao): page.tsx bỏ nhánh chuyển hướng → «SAI AC-1: <dong> khong chuyen (200)», mã 1;
       --chieu-do giu-ky: nhánh chuyển bỏ kyOkr → «SAI AC-1: ky-okr mat kyOkr», mã 1.
