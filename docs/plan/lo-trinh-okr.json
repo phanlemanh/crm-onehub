@@ -3978,6 +3978,12 @@
         "CT1"
       ],
       "mo_lai_khi": "Sau khi SV7 giao, người dùng cần xem riêng một lần cập nhật (trả lời, cảm xúc hay sửa sai) mà Lịch sử không đủ chỗ"
+    },
+    {
+      "ma": "TH-C1",
+      "cau_giao": "«Một tín hiệu cài lời dặn không lấy được khoá mô hình của lịch gom, kể cả khi Claude Code có lỗi phân quyền»",
+      "ly_do": "Hỏi-2 của TH2b (gia-co-gom-tin-hieu), chủ kho duyệt «để sau» 21/10: cách ly hệ điều hành cho phiên gom — người dùng hệ điều hành riêng, chặn mạng theo người dùng, proxy giữ khoá mô hình. TH2b chỉ dựa vào lớp phân quyền của Claude Code, và cách ly hệ điều hành chỉ kiểm được trên Actions.",
+      "mo_lai_khi": "Lịch gom tín hiệu đã chạy thật với khoá mô hình"
     }
   ],
   "da_bac": [
