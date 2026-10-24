@@ -196,10 +196,10 @@ gom từ ba bảng đối chiếu tài liệu Họp tuần của dãy V1, V2, V3
 
 Ba điều thành luật trong kho, không cắt thành hàng:
 
-- `docs/design.md`, mục «Nếp màn», có tiểu mục mới «Bấm vào KR và cập nhật». Bấm mục tiêu thì mở chi tiết mục tiêu.
+- Tệp `docs/design.md`, mục «Nếp màn», có tiểu mục mới «Bấm vào KR và cập nhật». Bấm mục tiêu thì mở chi tiết mục tiêu.
   Bấm KR ở bất kỳ đâu thì mở chi tiết KR. Chỉ có một form cập nhật là hộp cập nhật một KR. Họp tuần là thẻ con của
   bộ OKR.
-- `CONTEXT.md` đổi tên mục «Cập nhật tuần» thành «Cập nhật». Ghi lúc nào cũng được, mỗi lần một dòng. Nhịp hằng
+- Tệp `CONTEXT.md` đổi tên mục «Cập nhật tuần» thành «Cập nhật». Ghi lúc nào cũng được, mỗi lần một dòng. Nhịp hằng
   tuần là khuyến nghị vận hành. «Cập nhật tuần» vào _Avoid_.
 - Các quyết định D1–D8 ghi vào `ghi_chu` của hàng nhận:
   - HT1: D1, D2, D4.
