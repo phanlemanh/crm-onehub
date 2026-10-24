@@ -126,12 +126,12 @@ chạy qua `dvb_man_may` và cả bốn ô ra DUNG.
 
 Sau `d691d20ec`, nhánh còn bốn commit sửa thước, đỉnh cục bộ `cc12de94f` (24/10):
 
-- `3235b8eb4`: `kara-mot-ten#E12` vào `boRa` của giu-ho-so VK7, cùng lý do V3-18 lối 1.
-- `cccaf43f1`: thước màn `trang-truong.mjs` của `truong-tu-tao-o-cai-dat` chụp ảnh ra `.acceptance-runs/`, chỉ chép
+- Commit `3235b8eb4`: `kara-mot-ten#E12` vào `boRa` của giu-ho-so VK7, cùng lý do V3-18 lối 1.
+- Commit `cccaf43f1`: thước màn `trang-truong.mjs` của `truong-tu-tao-o-cai-dat` chụp ảnh ra `.acceptance-runs/`, chỉ chép
   vào hồ sơ đã ký khi đặt `TTC_CHEP_ANH=1`. Chủ kho 23/10, nguyên văn «V3-30 giữ», miễn luật tạm 18/10 cho riêng sửa này.
-- `5d4ac9504`: đối chứng `mnt-man-doc` của VK9 đổi `ve-so-do` thành `ve-ca-cong-ty`, vì VK6 đổi nút về sơ đồ cả công
+- Commit `5d4ac9504`: đối chứng `mnt-man-doc` của VK9 đổi `ve-so-do` thành `ve-ca-cong-ty`, vì VK6 đổi nút về sơ đồ cả công
   ty. Chủ kho 24/10, nguyên văn «V3-33: giữ».
-- `18ee50b5e`: E13 của `ngan-kr-mot-cho` theo lối A. Chủ kho 24/10, nguyên văn «E13: A». E13 giữ nguyên trong lượt
+- Commit `18ee50b5e`: E13 của `ngan-kr-mot-cho` theo lối A. Chủ kho 24/10, nguyên văn «E13: A». E13 giữ nguyên trong lượt
   ghim lại và chạy một lượt dài, trần 300′, khi khoá s4 rảnh.
 
 `_acceptance/ngan-kr-mot-cho/rang/giu-ho-so.mjs` (VK7) cũng đã đổi neo ở `d691d20ec`. Trước đó nền là
