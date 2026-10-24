@@ -3574,8 +3574,8 @@
       "vai": "Trưởng đơn vị",
       "cau_giao": "«Trưởng đơn vị bấm Họp tuần và vào thẳng bảng của bộ OKR mình dẫn, thấy hàng số của tuần ở đầu; bộ chưa có KR công bố hay chu kỳ chưa chạy thì màn nói đúng lý do và chỉ sang đơn vị có KR»",
       "vi_sao": "Production 22/10: bấm Họp tuần không kèm đơn vị thì bảng là của OneHub, cấp này không có KR công bố nên màn hiện «0/0 KR» và câu «Chưa có lần cập nhật nào để bàn» trong khi phòng của người xem đã cập nhật đủ (okr-xem.service.ts:160-161, :586). VK3 AC-7 vẫn giữ «xemOkr trần mở bộ OneHub»; VK8 AC-3 đặt hàng số chỉ ở thẻ OKR. Tability mở đúng plan của đội và có bốn ô số ở đầu plan.",
-      "bat_khi": "Trưởng phòng mở Họp tuần từ thanh bên, từ thẻ con hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn; không còn màn «0/0 KR» với câu «chưa có lần cập nhật» khi bộ của người xem đã có cập nhật",
-      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi luật AC-7 đã duyệt của VK3 (xemOkr trần → OneHub): chủ kho chốt ở Cổng Phạm vi của hàng này. Thước của VK3 đo thẻ Họp tuần; sửa sau khi VK3 ký có thể phải ghim lại hồ sơ trang-bo-okr.",
+      "bat_khi": "Trưởng phòng mở Họp tuần từ Bộ OKR › Tôi dẫn › bộ › thẻ con, từ Của tôi › đơn vị bạn dẫn, hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn; không còn màn «0/0 KR» với câu «chưa có lần cập nhật» khi bộ của người xem đã có cập nhật",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi luật AC-7 đã duyệt của VK3 (xemOkr trần → OneHub): chủ kho chốt ở Cổng Phạm vi của hàng này. Thước của VK3 đo thẻ Họp tuần; sửa sau khi VK3 ký có thể phải ghim lại hồ sơ trang-bo-okr. Chủ kho bỏ mục «Họp tuần» trên thanh bên 24/10 (Cổng Phạm vi HT1; docs/findings/2026-10-22-hop-tuan/README.md §1).",
       "phu": [
         "H1",
         "H2",
@@ -3592,7 +3592,8 @@
       "dot": "okr-hop-tuan-2210",
       "thu_tu": 104.72,
       "dung_tren": [
-        "VK7"
+        "VK7",
+        "HT1"
       ],
       "ten": "Đi họp ngay trên bảng Họp tuần",
       "ten_ngan": "Họp trên bảng",
@@ -3600,7 +3601,7 @@
       "cau_giao": "«Trưởng đơn vị đi họp ngay trên bảng Họp tuần: mỗi KR hiện ghi chú mới nhất và mức đổi so với lần trước ở mọi khổ màn, cập nhật được ngay từ dòng, và ngăn KR mở từ bảng đi ‹ › theo thứ tự đáng bàn»",
       "vi_sao": "Dưới 1024px cột «Ghi chú mới nhất» biến mất (hop-tuan.tsx:137, :162); phần «Còn lại» không có ghi chú; dòng bảng chỉ mở ngăn KR, và ‹ › của ngăn đi trong một mục tiêu (kr-sheet.tsx:400-401). Tability: trình chiếu hiện câu phân tích mới nhất cho mọi KR kèm mức đổi, ngăn KR đi ‹ › qua mọi KR của plan, nút Create check-in ở ngăn và ở từng trang trình chiếu.",
       "bat_khi": "Ở 375, 768 và 1440 mọi dòng Họp tuần có ghi chú mới nhất; cập nhật một KR từ bảng không phải rời bảng; ‹ › trong ngăn mở từ bảng đi đúng thứ tự của bảng",
-      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi AC-2 đã ký của VK7 (thứ tự ‹ › theo position của mục tiêu) chỉ khi ngăn mở từ Họp tuần — xét thước ngan-kr-mot-cho theo luật tạm «không tự sửa thước hồ sơ đã ký». Cùng tệp hop-tuan.tsx với HT1: đi sau HT1 trên cùng dãy.",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi AC-2 đã ký của VK7 (thứ tự ‹ › theo position của mục tiêu) chỉ khi ngăn mở từ Họp tuần — xét thước ngan-kr-mot-cho theo luật tạm «không tự sửa thước hồ sơ đã ký». Cùng tệp hop-tuan.tsx với HT1: đi sau HT1 trên cùng dãy. Cập nhật từ dòng = nút mở hộp cập nhật một KR như NutCapNhatDong; không ô nhập trên dòng; không gửi nhiều KR (Lối (b), SV1).",
       "phu": [
         "H3",
         "H5"
@@ -3663,7 +3664,7 @@
       "ten": "Thả cảm xúc trên lần cập nhật",
       "ten_ngan": "Cảm xúc trên cập nhật",
       "vai": "Thành viên",
-      "cau_giao": "«Thành viên thả cảm xúc lên một lần cập nhật tuần ở Cập nhật gần đây, Họp tuần và ngăn KR, và người cập nhật thấy ai đã thả»",
+      "cau_giao": "«Thành viên thả cảm xúc lên một lần cập nhật tuần ở Cập nhật gần đây, thẻ con Họp tuần của bộ OKR và ngăn KR, và người cập nhật thấy ai đã thả»",
       "vi_sao": "VK12 mang trả lời dưới từng lần cập nhật; chưa có cách ghi nhận nhẹ hơn một câu trả lời. Tability có Reply và Like trên từng check-in ở ba chỗ: Recent updates, ngăn KR, trình chiếu.",
       "bat_khi": "Một lần thả hiện ở cả ba chỗ trong cùng phiên; thả lại thì gỡ; người ngoài quyền xem mục tiêu không thấy",
       "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). T3: thêm bảng ở packages/db/prisma. Đứng trên dòng tin của VK12.",
@@ -3758,7 +3759,7 @@
       "vi_sao": "chuCuaEval và TEP_THUOC dùng regex cờ /g với .test() trong filter: lastIndex giữ giữa hai lần gọi nên cứ hai tệp thước thì mất một, vế quét chuỗi bỏ hụt mà không báo. Hôm nay chưa sót gì, nhưng lỗi im lặng.",
       "bat_khi": "Ca kiểm có bốn tệp thước liền nhau trong paths: cả bốn vào danh sách quét; bản sao regex có cờ /g làm ca kiểm đỏ đúng câu",
       "ly_do": "VK6 so-do-toan-vung Ngoài-5 và Ngoài-10, chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 22/10 14:59Z (d-20261022T145948Z-42, -47 trên feat/so-do-toan-vung, decided_by Phan Le Manh). Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §4.",
-      "ghi_chu": "Tệp _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs (có trên onehub khi VK6 gộp). Kiểm cùng lúc bản giu-ho-so.mjs của ngan-kr-mot-cho. Ngoài-9 của VK6 (GIU.kiemDuong thiếu đối chứng dương khung-man-chung, Known limits) chạm đúng tệp này.",
+      "ghi_chu": "Tệp _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs (có trên onehub khi VK6 gộp). Kiểm cùng lúc bản giu-ho-so.mjs của ngan-kr-mot-cho — đọc bản đã đổi neo theo commit gộp #525 (d691d20ec, sổ ngan-kr-mot-cho d-20261022T235101Z-97). Ngoài-9 của VK6 (GIU.kiemDuong thiếu đối chứng dương khung-man-chung, Known limits) chạm đúng tệp này.",
       "dot": "okr-sau-vo-khu-2410",
       "phu": [
         "N5",

@@ -96,7 +96,7 @@ Nguyên nhân trong mã: `okr.hopTuan` với đơn vị gốc chỉ lọc `level
 
 | # | Mức | Phát hiện | Đề xuất | Hàng nhận |
 | --- | --- | --- | --- | --- |
-| F01 | Cao | Đơn vị mặc định là OneHub, không phải đơn vị người xem dẫn | Không có `donOkr` thì chọn đơn vị đầu tiên người xem dẫn (phòng ban rồi bộ phận); không dẫn đơn vị nào thì phòng chính; chỉ quản trị mặc định OneHub | HT1 (đổi AC-7 của VK3) |
+| F01 | Cao | Đơn vị mặc định là OneHub, không phải đơn vị người xem dẫn | Đề xuất lúc audit: không có `donOkr` thì chọn đơn vị người xem dẫn; không dẫn đơn vị nào thì phòng chính; chỉ quản trị mặc định OneHub. **Luật đã duyệt thay đề xuất này là HT1 AC-2** (Cổng Phạm vi 24/10): thứ tự theo `thuTuDan` của «đơn vị bạn dẫn» ở Của tôi, thành viên không có phòng chính → OneHub, quản trị kiêm trưởng → đơn vị mình dẫn | HT1 (đổi AC-7 của VK3) |
 | F02 | Cao | Một câu trống cho ba tình huống: không có KR công bố · chu kỳ đang lập kế hoạch · chưa ai cập nhật | Tách ba trạng thái, mỗi trạng thái một câu đúng | HT1 |
 | F03 | Cao | Màn trống không có lối đi tiếp | Đặt khối «Đơn vị trực thuộc» trong trạng thái rỗng, mỗi đơn vị dẫn thẳng vào Họp tuần của nó | HT1 |
 | F04 | Vừa | Khối Tóm tắt tuần vô hình tới khi có bản đầu tiên (`khoi-tom-tat.tsx:343` trả null) | Nấc «bật» mà chưa có bản: «Kara viết tóm tắt tuần đầu tiên lúc 06:00 ngày …» | HT4 |
@@ -186,8 +186,8 @@ bàn KR at risk/off track hoặc tự tin thấp.
 | Tability (đã thấy trên màn) | Họp tuần 22/10 | Nên học | Hàng |
 | --- | --- | --- | --- |
 | Không trang họp riêng; họp trên plan và trình chiếu của plan | Cách xem rời, chỉ đọc, mặc định OneHub | Họp tuần là thẻ con của chính bộ OKR, mở đúng bộ người xem | VK3, HT1 |
-| Không trang cập nhật riêng; cập nhật trong ngăn KR | Bảng cập nhật hàng loạt ở Của tôi | Chỉ còn hộp cập nhật một KR; Của tôi chỉ liệt KR | «Lối (b)» (hàng mới) |
-| «Create check-in» ở ngăn KR và từng trang trình chiếu | Dòng bảng chỉ mở ngăn KR | Cập nhật được ngay từ dòng Họp tuần | HT2 |
+| Không trang cập nhật riêng; cập nhật trong ngăn KR | Bảng cập nhật hàng loạt ở Của tôi | Chỉ còn hộp cập nhật một KR; Của tôi chỉ liệt KR | SV1 `cua-toi-chi-liet-kr` («Lối (b)») |
+| «Create check-in» ở ngăn KR và từng trang trình chiếu | Dòng bảng chỉ mở ngăn KR | Cập nhật được ngay từ dòng Họp tuần — nút trên dòng mở **hộp cập nhật một KR**, không ô nhập trên dòng, không gửi nhiều KR (khớp «Lối (b)») | HT2 |
 | Câu phân tích mới nhất cho mọi KR, kèm mức đổi | Chỉ KR đáng bàn có ghi chú; mất dưới 1024px | Ghi chú mới nhất mọi dòng, mọi khổ, kèm mức đổi | HT2 |
 | Bốn ô số đầu plan và trình chiếu | Một dòng chữ xs | Hàng số đầu thẻ Họp tuần | HT1 |
 | ‹ › «4 of 5» qua mọi KR của plan | ‹ › «2/3» trong một mục tiêu | Mở từ Họp tuần thì ‹ › theo thứ tự bảng | HT2 |
