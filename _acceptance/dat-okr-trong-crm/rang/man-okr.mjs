@@ -38,7 +38,7 @@ const CHU = {
 	rongBody: "Trưởng đơn vị thêm từng mục tiêu",
 	cuaToiRong: "Bạn chưa phụ trách mục tiêu hay KR nào",
 	cayCanChinh: "Sơ đồ góp vào",
-	danhSach: "Danh sách",
+	danhSach: "OKR",
 	quayLai: "Quay lại",
 	nhap: "Nháp",
 	daCongBo: "Đã công bố",
@@ -724,7 +724,7 @@ async function doiRong(trang, rong) {
 }
 
 const theoDonVi = (don, them = "") =>
-	`/okr/theo-don-vi${don ? `?donOkr=${don}${them}` : them ? `?${them.slice(1)}` : ""}`;
+	`/okr/theo-don-vi${don ? `?donOkr=${don}${them}` : them ? `?${them.slice(1)}` : "?donOkr=goc"}`;
 
 async function byUnit(c, don) {
 	return hoi(c, "okr.byUnit", { cycleId: OKR.quy, unit: don });
@@ -852,7 +852,7 @@ async function buocE11() {
 	kiem(`E11 buoc 2: thead bang KR phai 4 cot, thay ${cot}`, cot === 4);
 	await chup(t, "E11-step2.png", true);
 
-	await bamChu(t, "[role='radio']", CHU.cayCanChinh);
+	await bamChu(t, "[data-the-con-bo] a", CHU.cayCanChinh);
 	if (await hienSel(t, "[data-trang-thai='ST-donvi-caycanchinh']")) {
 		const dong = await t.evaluate(() =>
 			[...document.querySelectorAll("[data-nut-can-chinh]")].map((r) => ({
@@ -877,7 +877,7 @@ async function buocE11() {
 		);
 	}
 	await chup(t, "E11-step3.png", true);
-	await bamChu(t, "[role='radio']", CHU.danhSach);
+	await bamChu(t, "[data-the-con-bo] a", CHU.danhSach);
 	await hienSel(t, `[data-muc-tieu='${OKR.o3.id}']`);
 
 	await chonTuySelect(t, "[data-chon-chu-ky]", KY.nam);

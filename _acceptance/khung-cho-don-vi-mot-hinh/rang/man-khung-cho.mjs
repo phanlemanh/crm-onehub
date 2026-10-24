@@ -404,7 +404,7 @@ try {
 			() =>
 				[
 					...document.querySelectorAll(
-						"[data-slot=nav-item][href*='/okr/bo-okr'], [data-slot=nav-item] a[href*='/okr/bo-okr'], [role=tablist] a[href*='/okr/theo-don-vi']",
+						"a[href*='/okr/bo-okr?'][href*='donOkr=']:not([href*='new=']), [data-slot=nav-item] a[href*='/okr/bo-okr?'][href*='donOkr=']:not([href*='new=']), [role=tablist] a[href*='/okr/theo-don-vi']",
 					),
 				].find((e) => e.getClientRects().length > 0) ?? null,
 		);

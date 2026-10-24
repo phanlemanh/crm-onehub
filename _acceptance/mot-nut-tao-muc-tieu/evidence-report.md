@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 091fe8c15de653fb8a15580241b2a25cfdc53fed
+verified_commit: 9b246f0a57bae04226f308c1d481f95b31a15217
 human_signoff: Phan Le Manh 2026-10-23 — ký lại Cổng Bằng chứng trên vòng chấm 3 (PASS, 16 eval, 7 suite xanh) sau bản sửa lỗi Của tôi không chuyển trang tìm thấy sau lượt ký 22/10; Ngoài-3 và Ngoài-9 mở hợp đồng mới, 11 mục ghi Known limits
 ---
 
@@ -251,3 +251,7 @@ Round 1: các phát hiện trong hợp đồng về hình dạng bài đo (bàn 
 Round 2: 17/17 eval máy đạt sau khi sửa thước; sau đó có lỗi sau chữ ký (chọn đường ở Của tôi bị lần ghi URL tại chỗ đè mất), hạ về implemented để chấm lại.
 Round 3: chấm lại trên commit 091fe8c15; các eval chạm paths chạy lại, E7, E10, E12, E14 mang từ round 1; verified_at của round 3 lấy theo giờ mở ảnh 22:46 giờ VN.
 
+
+### Re-pin lần 1 — 2026-10-24, do VK3 trang-bo-okr sửa thước và vật — ghim lại sau chữ ký, ba thước theo «duyệt cả ba» (9b246f0a5)
+run_id: repin-20261024T133834Z-50324
+sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E5, E16 · diff chạm vật đo ngoài làn máy: E5, E16 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

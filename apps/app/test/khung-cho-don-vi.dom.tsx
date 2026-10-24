@@ -111,9 +111,6 @@ const hangThat = (
 				Phòng Kinh doanh
 			</button>
 		}
-		coCham={false}
-		doiXem={() => {}}
-		xem="danh-sach"
 	/>
 );
 
