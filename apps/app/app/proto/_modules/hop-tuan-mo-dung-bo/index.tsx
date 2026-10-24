@@ -129,12 +129,12 @@ function ThanhBen({ mucMo }: { mucMo: "cua-toi" | "bo-okr" }) {
 	);
 }
 
-const DICH_THE: Record<(typeof THE_CON)[number], string | null> = {
+const DICH_THE = {
 	OKR: ST.theOkr,
 	"Họp tuần": ST.coDuLieu,
 	Việc: null,
 	"Sơ đồ góp vào": null,
-};
+} satisfies Record<(typeof THE_CON)[number], string | null>;
 
 function TheCon({ dangMo }: { dangMo: (typeof THE_CON)[number] }) {
 	return (
@@ -544,15 +544,14 @@ function DanhSachToiDan() {
 				</BreadcrumbList>
 			</Breadcrumb>
 			<ToggleGroup size="sm" type="single" value="toi-dan" variant="outline">
-				<ToggleGroupItem value="tat-ca">
-					Tất cả <span className="text-muted-foreground tabular-nums">12</span>
+				<ToggleGroupItem count={12} value="tat-ca">
+					Tất cả
 				</ToggleGroupItem>
-				<ToggleGroupItem value="toi-dan">
-					Tôi dẫn <span className="text-muted-foreground tabular-nums">1</span>
+				<ToggleGroupItem count={1} value="toi-dan">
+					Tôi dẫn
 				</ToggleGroupItem>
-				<ToggleGroupItem value="theo-doi">
-					Đang theo dõi{" "}
-					<span className="text-muted-foreground tabular-nums">3</span>
+				<ToggleGroupItem count={3} value="theo-doi">
+					Đang theo dõi
 				</ToggleGroupItem>
 			</ToggleGroup>
 			<ItemGroup className="gap-2">

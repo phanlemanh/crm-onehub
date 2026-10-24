@@ -39,7 +39,9 @@ import { DANG_BAN, type TuTin } from "./du-lieu";
 
 const KR = DANG_BAN[0];
 
-const LICH_SU: { ngay: string; so: string; tuTin: TuTin; ghiChu: string }[] = [
+type LanCapNhatMau = { ngay: string; so: string; tuTin: TuTin; ghiChu: string };
+
+const LICH_SU: [LanCapNhatMau, ...LanCapNhatMau[]] = [
 	{
 		ngay: "16/10, 09:30",
 		so: "4 hợp đồng",

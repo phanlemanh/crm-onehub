@@ -38,7 +38,7 @@ export const PHONG_BAN = "Kinh doanh vùng 1";
 export const PHONG_BAN_RONG = "Chăm sóc đối tác";
 export const GOC = "OneHub";
 
-export const DANG_BAN: DongHopMau[] = [
+export const DANG_BAN: [DongHopMau, DongHopMau, DongHopMau, ...DongHopMau[]] = [
 	{
 		id: "kr-1",
 		tieuDe: "Ký 12 hợp đồng đối tác mới",
@@ -72,7 +72,7 @@ export const DANG_BAN: DongHopMau[] = [
 	},
 ];
 
-export const CON_LAI: DongHopMau[] = [
+export const CON_LAI: [DongHopMau, ...DongHopMau[]] = [
 	{
 		id: "kr-4",
 		tieuDe: "Đào tạo 30 đối tác dùng cổng mới",
