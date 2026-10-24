@@ -81,10 +81,14 @@ import {
 	MOI_KR,
 	MUC_TIEU,
 } from "./du-lieu";
+import { type CheDoPhieu, PhieuMucTieuMau } from "./phieu-muc-tieu";
 
 const DUONG = "/proto/bo-okr-la-noi-hop";
 
 const ST = {
+	phieuHomNay: "ST-bln-phieu-hom-nay",
+	phieuDeXuat: "ST-bln-phieu-de-xuat",
+	phieuCapNhat: "ST-bln-phieu-cap-nhat",
 	theOkr: "ST-bln-the-okr",
 	dangBan: "ST-bln-dang-ban",
 	chuaCapNhat: "ST-bln-chua-cap-nhat",
@@ -345,7 +349,14 @@ function Bang({ loc }: { loc: Loc }) {
 							className="px-3 py-3 font-medium whitespace-normal"
 							colSpan={4}
 						>
-							<span translate="no">{mt.ten}</span>
+							<Link
+								className="underline-offset-2 hover:underline"
+								data-mo-muc-tieu={mt.id}
+								href={den(ST.phieuDeXuat)}
+								translate="no"
+							>
+								{mt.ten}
+							</Link>
 							<span className="ps-2 font-normal text-muted-foreground text-xs tabular-nums">
 								{mt.tienDo}%
 							</span>
@@ -626,6 +637,22 @@ function canhCua(state: string): Canh {
 		than,
 	});
 	switch (state) {
+		case ST.phieuHomNay:
+		case ST.phieuDeXuat:
+		case ST.phieuCapNhat: {
+			const cheDo: CheDoPhieu =
+				state === ST.phieuHomNay
+					? "hom-nay"
+					: state === ST.phieuCapNhat
+						? "dang-cap-nhat"
+						: "de-xuat";
+			return bo(
+				<>
+					<TheOkr ghim={false} loc="tat-ca" />
+					<PhieuMucTieuMau cheDo={cheDo} dongVe={den(ST.theOkr)} />
+				</>,
+			);
+		}
 		case ST.dangBan:
 			return bo(<TheOkr ghim={false} loc="dang-ban" />);
 		case ST.chuaCapNhat:

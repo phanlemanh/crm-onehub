@@ -1607,6 +1607,15 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-bln-ngan-kr-da-gui", nhan: "Ngăn KR — vừa gửi cập nhật" },
 			{ id: "ST-bln-cua-toi", nhan: "Của tôi — KR cần cập nhật" },
 			{ id: "ST-bln-huong-b", nhan: "Hướng B — giữ thẻ Họp tuần" },
+			{
+				id: "ST-bln-phieu-hom-nay",
+				nhan: "Phiếu mục tiêu — hôm nay (production)",
+			},
+			{ id: "ST-bln-phieu-de-xuat", nhan: "Phiếu mục tiêu — đề xuất" },
+			{
+				id: "ST-bln-phieu-cap-nhat",
+				nhan: "Phiếu mục tiêu — cập nhật ngay dưới dòng",
+			},
 		],
 	},
 ];
