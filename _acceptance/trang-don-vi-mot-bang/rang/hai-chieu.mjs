@@ -195,8 +195,8 @@ const DOT_BIEN = {
 			thay: [
 				{
 					tep: "packages/ui/src/components/data-table.tsx",
-					cu: "\t\t\t\t\t\t\t\t\t\t\t\t<ExpandRowButton\n\t\t\t\t\t\t\t\t\t\t\t\t\tlabel={\n\t\t\t\t\t\t\t\t\t\t\t\t\t\texpandable?.rowLabel?.(row) ??\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tmsg.table.rowFallback\n\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\topen={isOpen}\n\t\t\t\t\t\t\t\t\t\t\t\t\trowId={id}\n\t\t\t\t\t\t\t\t\t\t\t\t\tonToggle={handleClick}\n\t\t\t\t\t\t\t\t\t\t\t\t/>\n",
-					moi: "\t\t\t\t\t\t\t\t\t\t\t\t<ChevronRight size={12} />\n",
+					cu: "\t\t\t\t\t\t\t\t\t\t\t\t\t<ExpandRowButton\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tlabel={\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\texpandable?.rowLabel?.(row) ??\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tmsg.table.rowFallback\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\topen={isOpen}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\trowId={id}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tonToggle={handleClick}\n\t\t\t\t\t\t\t\t\t\t\t\t\t/>\n",
+					moi: "\t\t\t\t\t\t\t\t\t\t\t\t\t<ChevronRight size={12} />\n",
 				},
 			],
 			ghim: /data-table-mo-rong: dong r1 khong co button\[aria-expanded\] trong o mui ten/,
