@@ -212,7 +212,8 @@ describe("bkr-bang-kr", () => {
 		O,
 		MA_TRAN.map((c) => kr(c.k, O, { title: c.ten })),
 	);
-	const tay: { dong: (() => void) | null } = { dong: null };
+	type TayDong = { dong: (() => void) | null };
+	const tay: TayDong = { dong: null };
 	function GiuDong() {
 		tay.dong = useRecordStack().close;
 		return null;

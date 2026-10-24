@@ -58,7 +58,9 @@ export function chuoiTrong(duong: string): string[] {
 	return ra;
 }
 
-export function quetChuLop(): { tep: number; chuoi: number; lot: string[] } {
+export type KetQuetChu = { tep: number; chuoi: number; lot: string[] };
+
+export function quetChuLop(): KetQuetChu {
 	const tep = LOP_CHU.flatMap(tepTrong).filter((t) => !NGOAI_LOP_CHU.has(t));
 	const lot: string[] = [];
 	let chuoi = 0;
