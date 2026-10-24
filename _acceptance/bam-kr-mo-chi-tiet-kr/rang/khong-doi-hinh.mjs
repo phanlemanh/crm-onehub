@@ -31,7 +31,8 @@ const VAT = [
 ];
 const CHU_CU = "Cập nhật tuần";
 const ANH_CHUP = "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json";
-const LOP_TEP = /^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|_acceptance\/[^/]+\/rang\/)/;
+const LOP_TEP =
+	/^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|_acceptance\/[^/]+\/rang\/)/;
 const AP_CAP = [
 	['import { theoCapChu } from "./support/cap-chu-sv6";', ""],
 	["theoCapChu(", ""],
@@ -105,7 +106,9 @@ function ganNen() {
 function tepDaSua(nen, cwd = GOC) {
 	return git(["diff", "--name-only", "--diff-filter=M", `${nen}...HEAD`], cwd)
 		.split("\n")
-		.filter((t) => t && LOP_TEP.test(t) && !t.startsWith(`_acceptance/${SLUG}/`));
+		.filter(
+			(t) => t && LOP_TEP.test(t) && !t.startsWith(`_acceptance/${SLUG}/`),
+		);
 }
 
 function tepTrongLenh(lenh) {
@@ -130,10 +133,16 @@ export function quetLop(daSua) {
 		if (slug === SLUG || !TRANG_THAI_KY.has(trangThai(slug) ?? "")) continue;
 		const tep = join(GOC, "_acceptance", slug, "evals.yaml");
 		if (!existsSync(tep)) continue;
-		for (const e of parseEvals(readFileSync(tep, "utf8"), ["executor", "cmd", "status"])) {
+		for (const e of parseEvals(readFileSync(tep, "utf8"), [
+			"executor",
+			"cmd",
+			"status",
+		])) {
 			if (!["test", "script"].includes(String(e.executor).trim())) continue;
 			if (String(e.status ?? "").trim() === "not-run") continue;
-			const ref = String(e.cmd ?? "").trim().replace(/^config:/, "");
+			const ref = String(e.cmd ?? "")
+				.trim()
+				.replace(/^config:/, "");
 			const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
 			if (!lenh) continue;
 			const tepLenh = tepTrongLenh(lenh);
@@ -199,24 +208,25 @@ function dongSo(slug) {
 		});
 }
 
-export function kiemSo(daSua, lop) {
+export function kiemSo(daSua) {
 	const loi = [];
 	for (const t of daSua) {
 		if (t === ANH_CHUP) {
 			loi.push(`SAI AC-6: ANH CHUP LICH SU DOI ${t}`);
 			continue;
 		}
-		const chu = [...new Set(lop.filter((m) => m.tep.includes(t)).map((m) => m.slug))];
-		if (chu.length === 0) continue;
-		for (const slug of chu) {
-			const co = dongSo(slug).some(
-				(d) =>
-					d.type === "fix" &&
-					d.decided_by === NGUOI_QUYET &&
-					JSON.stringify(d).includes(t),
-			);
-			if (!co) loi.push(`SAI AC-6: THIEU SO ${t} (${slug})`);
-		}
+		const coSo = readdirSync(join(GOC, "_acceptance")).some(
+			(slug) =>
+				slug !== SLUG &&
+				TRANG_THAI_KY.has(trangThai(slug) ?? "") &&
+				dongSo(slug).some(
+					(d) =>
+						d.type === "fix" &&
+						d.decided_by === NGUOI_QUYET &&
+						JSON.stringify(d).includes(t),
+				),
+		);
+		if (!coSo) loi.push(`SAI AC-6: THIEU SO ${t}`);
 	}
 	return loi;
 }
@@ -226,7 +236,9 @@ export function kiemKhoi(daSua, nen, cwd = GOC) {
 	const loi = [];
 	for (const t of daSua) {
 		if (t === ANH_CHUP) continue;
-		for (const k of khoiDiff(git(["diff", "-U0", `${nen}...HEAD`, "--", t], cwd)))
+		for (const k of khoiDiff(
+			git(["diff", "-U0", `${nen}...HEAD`, "--", t], cwd),
+		))
 			if (!khoiHopLe(k, cap)) loi.push(`SAI AC-6: DOI LOGIC ${t}:${k.dong}`);
 	}
 	return loi;
@@ -243,14 +255,18 @@ function chieuDo(kieu) {
 		if (!dich) throw new Error("khong co tep da ky nao bi sua de pha");
 		if (kieu === "doi-logic") {
 			const duong = join(sao, dich);
-			writeFileSync(duong, `${readFileSync(duong, "utf8")}export const doiLogicThu = 1 + 1;\n`);
+			writeFileSync(
+				duong,
+				`${readFileSync(duong, "utf8")}export const doiLogicThu = 1 + 1;\n`,
+			);
 		}
 		if (kieu === "not-tobe") {
 			const duong = join(sao, dich);
 			const than = readFileSync(duong, "utf8");
 			const i = than.indexOf("Cập nhật");
 			const j = than.indexOf(".toBe(", i);
-			if (i < 0 || j < 0) throw new Error(`khong tim duoc cho pha not-tobe o ${dich}`);
+			if (i < 0 || j < 0)
+				throw new Error(`khong tim duoc cho pha not-tobe o ${dich}`);
 			writeFileSync(duong, `${than.slice(0, j)}.not.toBe(${than.slice(j + 6)}`);
 		}
 		if (kieu === "xoa-so") {
@@ -265,12 +281,22 @@ function chieuDo(kieu) {
 		}
 		git(["add", "-A"], sao);
 		git(
-			["-c", "user.name=kiem-do", "-c", "user.email=kiem@do.do", "commit", "-q", "--no-verify", "-m", `test(bkr): chieu do ${kieu}`],
+			[
+				"-c",
+				"user.name=kiem-do",
+				"-c",
+				"user.email=kiem@do.do",
+				"commit",
+				"-q",
+				"--no-verify",
+				"-m",
+				`test(bkr): chieu do ${kieu}`,
+			],
 			sao,
 		);
 		const loi =
 			kieu === "xoa-so"
-				? kiemSo(daSua, quetLop(daSua))
+				? kiemSo(daSua)
 				: kiemKhoi(tepDaSua(nen, sao), nen, sao);
 		for (const l of loi) console.log(l);
 		return loi.length > 0 ? MA_DO : 0;
@@ -292,7 +318,7 @@ try {
 		`quet lop: ${new Set(lop.map((m) => m.slug)).size} ho so, ${lop.length} eval`,
 	);
 	let sai = 0;
-	for (const l of [...kiemSo(daSua, lop), ...kiemKhoi(daSua, nen)]) {
+	for (const l of [...kiemSo(daSua), ...kiemKhoi(daSua, nen)]) {
 		console.log(l);
 		sai += 1;
 	}
