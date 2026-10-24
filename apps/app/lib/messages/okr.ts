@@ -582,7 +582,7 @@ const vi = {
 			nghiTu: "Nghỉ từ",
 			nghiDen: "Nghỉ đến",
 			boNghi: "Bỏ khoảng nghỉ",
-			ngayCapNhat: "Ngày cập nhật",
+			ngayCapNhat: "Ngày cập nhật tuần",
 			thu: [
 				"Thứ Hai",
 				"Thứ Ba",
@@ -601,7 +601,7 @@ const vi = {
 			moTaMoiO: (ten: string) =>
 				`${ten} chưa có dữ liệu — sửa được mọi ô trừ loại và năm.`,
 			moTaCoDuLieu: (ten: string) =>
-				`${ten} đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật giữ nguyên để số đã tính không lệch.`,
+				`${ten} đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật tuần giữ nguyên để số đã tính không lệch.`,
 			moTaRoiKeHoach: (ten: string) =>
 				`${ten} đã rời pha Lập kế hoạch — chỉ sửa được tên.`,
 			khoaCoDuLieu:

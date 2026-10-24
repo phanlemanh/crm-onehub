@@ -16,20 +16,6 @@
 	{
 		"tep": "apps/app/lib/messages/okr.ts",
 		"lang": "vi",
-		"cu": "ngayCapNhat: \"Ngày cập nhật tuần\"",
-		"moi": "ngayCapNhat: \"Ngày cập nhật\"",
-		"soLan": 1
-	},
-	{
-		"tep": "apps/app/lib/messages/okr.ts",
-		"lang": "vi",
-		"cu": "khoảng nghỉ và ngày cập nhật tuần",
-		"moi": "khoảng nghỉ và ngày cập nhật",
-		"soLan": 1
-	},
-	{
-		"tep": "apps/app/lib/messages/okr.ts",
-		"lang": "vi",
 		"cu": "không phải cập nhật tuần.",
 		"moi": "không phải cập nhật.",
 		"soLan": 1

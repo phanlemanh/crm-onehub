@@ -89,9 +89,9 @@ export function khoiDiff(than) {
 
 export function khoiHopLe(k, cap) {
 	const bo = chuan(apCap(k.bo.join("\n"), cap)).replaceAll("objective:", "kr:");
-	let them = k.them.join("\n");
-	for (const [a, b] of AP_CAP) them = them.split(a).join(b);
-	them = chuan(them).replaceAll("objective:", "kr:");
+	let them = chuan(k.them.join("\n"));
+	for (const [a, b] of AP_CAP) them = them.split(chuan(a)).join(chuan(b));
+	them = them.replaceAll("objective:", "kr:");
 	return bo === them;
 }
 

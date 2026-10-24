@@ -12,7 +12,7 @@ export const LOP_CHU = [
 export const NGOAI_LOP_CHU = new Set([
 	join(GOC, "apps/agent/agent/lib/okr/chi-dan-tom-tat.ts"),
 ]);
-export const LAU_VI = /[Cc]ập nhật tuần(?! này)/;
+export const LAU_VI = /(?<![Nn]gày )[Cc]ập nhật tuần(?! này)/;
 export const LAU_EN = /[Ww]eekly update(?! day)/;
 
 export type CapChu = {
