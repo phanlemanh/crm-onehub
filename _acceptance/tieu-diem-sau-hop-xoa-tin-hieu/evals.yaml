@@ -109,8 +109,9 @@ evals:
       describe "sgt-tieu-diem" cua sua-giao-dien-tin-hieu.dom.tsx (TH6, da ky) chay KHONG SUA tep test: 5 o xoa xong (dich nut-3,
       nut-2, rong, dong-2, nut-2 sau lam moi cham) + 4 o xoa hong. Exit 0 va dong in "sgt-tieu-diem: 23 khang dinh (5 x 3 + 4 x 2)".
       git diff <merge-base>..HEAD -- apps/app/test/sua-giao-dien-tin-hieu.dom.tsx rong (doi chung: bai da ky khong bi noi long).
-      CHIEU DO: ban sao bo preventDefault va de Radix tra tieu diem mac dinh -> o a do voi thong diep ghim cua TH6 "tieu diem roi ve
-      dau trang sau xoa".
+      CHIEU DO: ban sao bo buoc doi tieu diem trong onSuccess (requestAnimationFrame(() => dieuTieuDiem(ke))) -> o a do voi thong
+      diep ghim cua TH6 "tieu diem roi ve dau trang sau xoa". (Chieu do TH6 tu khai — bo preventDefault de Radix tra mac dinh — KHONG
+      do bai nay vi lam moi xong van doi tieu diem; ca do do E1 bat: 16 o giu-lai/esc do.)
 
   - id: E6
     criterion: AC-6
