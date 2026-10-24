@@ -20,7 +20,6 @@ const { resolveConfigKey } = require(join(GOC, "lib", "evidence-core.cjs"));
 
 const SLUG = "bam-kr-mo-chi-tiet-kr";
 const NHANH_GOC = "origin/onehub";
-const NGUOI_QUYET = "Phan Le Manh";
 const TRANG_THAI_KY = new Set(["signed-off", "machine-cleared"]);
 const VAT = [
 	"phan-kr-phu-trach",
@@ -30,6 +29,10 @@ const VAT = [
 	"tin-nhac",
 ];
 const CHU_CU = "Cập nhật tuần";
+const THEM = [
+	["dat-okr-trong-crm", "dok_man_chrome"],
+	["hop-thoai-giu-cho-dang-nhap", "hg_man_that"],
+];
 const TEP_CUA_VONG = /(bam-kr-mo-chi-tiet-kr|\/bkr-|bam-kr-quet)/;
 const ANH_CHUP = "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json";
 const LOP_TEP =
@@ -40,70 +43,6 @@ const MA_KHONG_DO = 2;
 
 const git = (args, cwd = GOC) =>
 	execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
-
-function giaTri(dong) {
-	const m = /:\s*"(.*)"$/.exec(dong);
-	return m ? m[1] : dong;
-}
-
-export function capChu() {
-	const ds = JSON.parse(
-		readFileSync(join(GOC, `_acceptance/${SLUG}/rang/cap-chu.json`), "utf8"),
-	);
-	const cap = ds.flatMap((c) => [
-		[c.cu, c.moi],
-		[giaTri(c.cu), giaTri(c.moi)],
-	]);
-	return [...new Map(cap.map((x) => [x.join("→"), x])).values()].sort(
-		(a, b) => b[0].length - a[0].length,
-	);
-}
-
-function doiMotCap(cu, moi, cap) {
-	const khop = cap.filter(([a, b]) => {
-		const vi = cu.indexOf(a);
-		if (vi < 0 || cu.indexOf(a, vi + 1) >= 0) return false;
-		if (cu.slice(vi + a.length).startsWith(" này")) return false;
-		return cu.slice(0, vi) + b + cu.slice(vi + a.length) === moi;
-	});
-	return khop.length >= 1;
-}
-
-export function khoiDiff(than) {
-	const khoi = [];
-	let hien = null;
-	for (const dong of than.split("\n")) {
-		if (dong.startsWith("@@")) {
-			const m = /\+(\d+)/.exec(dong);
-			hien = { dong: Number(m?.[1] ?? 0), bo: [], them: [] };
-			khoi.push(hien);
-		} else if (hien && dong.startsWith("-") && !dong.startsWith("---"))
-			hien.bo.push(dong.slice(1));
-		else if (hien && dong.startsWith("+") && !dong.startsWith("+++"))
-			hien.them.push(dong.slice(1));
-	}
-	return khoi;
-}
-
-export function khoiHopLe(k, cap, apAnh = null) {
-	const bo = k.bo.map((d) => d.trim());
-	const them = k.them.map((d) => d.trim());
-	if (apAnh) {
-		const boKhop = bo.every((d) => apAnh.dongBo.includes(d));
-		const themKhop = them.every((d) => apAnh.dongThem.includes(d));
-		if (boKhop && themKhop) return true;
-	}
-	if (bo.length !== them.length || bo.length === 0) return false;
-	return bo.every((d, i) => d === them[i] || doiMotCap(d, them[i], cap));
-}
-
-function cocSo(mb) {
-	return mb;
-}
-
-function ganNen() {
-	return git(["merge-base", NHANH_GOC, "HEAD"]);
-}
 
 function tepDaSua(nen, cwd = GOC) {
 	return git(
@@ -163,6 +102,14 @@ export function quetLop(daSua) {
 			if (thuoc) lop.push({ slug, ten: `${slug}#${e.id}`, lenh, tep: tepLenh });
 		}
 	}
+	for (const [slug, khoa] of THEM) {
+		const lenh = String(
+			resolveConfigKey(cauHinh, `executors.script.${khoa}`) ?? "",
+		).trim();
+		if (!lenh) throw new Error(`khong giai duoc thuoc man ${slug} (${khoa})`);
+		console.log(`THEM ${slug}`);
+		lop.push({ slug, ten: `${slug}#${khoa}`, lenh, tep: tepTrongLenh(lenh) });
+	}
 	return lop;
 }
 
@@ -202,170 +149,107 @@ function donCay({ tam, cay }) {
 	spawnSync("git", ["worktree", "prune"], { cwd: GOC });
 }
 
-function dongSo(slug, cwd = GOC) {
-	const duong = join(cwd, "_acceptance", slug, "decisions.jsonl");
-	if (!existsSync(duong)) return [];
-	return readFileSync(duong, "utf8")
-		.split("\n")
-		.filter(Boolean)
-		.flatMap((d) => {
-			try {
-				return [JSON.parse(d)];
-			} catch {
-				return [];
-			}
-		});
-}
-
-export function chuBai() {
-	return JSON.parse(
-		readFileSync(join(GOC, `_acceptance/${SLUG}/rang/chu-bai.json`), "utf8"),
+function anhChupDoi(nen, cwd = GOC) {
+	return (
+		git(["diff", "--name-only", `${nen}...HEAD`, "--", ANH_CHUP], cwd) !== ""
 	);
 }
 
-export function kiemSo(daSua, cwd = GOC) {
-	const { chu, apBangCapAnhChup } = chuBai();
-	const loi = [];
-	for (const t of daSua) {
-		if (t === ANH_CHUP) {
-			loi.push(`SAI AC-6: ANH CHUP LICH SU DOI ${t}`);
-			continue;
-		}
-		if (t === apBangCapAnhChup.tepHoTro) continue;
-		const slug = chu[t];
-		if (!slug) {
-			loi.push(`SAI AC-6: THIEU CHU ${t}`);
-			continue;
-		}
-		const co = dongSo(slug, cwd).some(
-			(d) =>
-				d.type === "fix" &&
-				d.decided_by === NGUOI_QUYET &&
-				JSON.stringify(d).includes(t),
-		);
-		if (!co) loi.push(`SAI AC-6: THIEU SO ${t} (${slug})`);
-	}
-	return loi;
-}
-
-export function kiemTepHoTro(cwd = GOC) {
-	const { apBangCapAnhChup: a } = chuBai();
-	const duong = join(cwd, a.tepHoTro);
-	if (!existsSync(duong)) return [];
-	const than = readFileSync(duong, "utf8");
-	const loi = [];
-	if (!than.includes("_acceptance/bam-kr-mo-chi-tiet-kr/rang/cap-chu.json"))
-		loi.push(`SAI AC-6: ${a.tepHoTro} khong doc bang cap`);
-	if (!than.includes('"apps/agent/agent/lib/tin-nhac.ts"'))
-		loi.push(`SAI AC-6: ${a.tepHoTro} khong gioi han cap cua tin-nhac`);
-	return loi;
-}
-
-export function kiemKhoi(daSua, nen, cwd = GOC) {
-	const cap = capChu();
-	const { apBangCapAnhChup: a } = chuBai();
-	const loi = [];
-	for (const t of daSua) {
-		if (t === ANH_CHUP || t === a.tepHoTro) continue;
-		const apAnh = a.tepGoi.includes(t) ? a : null;
-		for (const k of khoiDiff(
-			git(["diff", "-U0", `${nen}...HEAD`, "--", t], cwd),
-		))
-			if (!khoiHopLe(k, cap, apAnh))
-				loi.push(`SAI AC-6: DOI LOGIC ${t}:${k.dong}`);
-	}
-	return loi;
+function lamBanSao(sua) {
+	const tam = mkdtempSync(join(tmpdir(), "bkr-khong-doi-do-"));
+	const sao = join(tam, "crm");
+	git(["worktree", "add", "--detach", "--quiet", sao, "HEAD"]);
+	const env = join(GOC, ".env");
+	if (existsSync(env)) symlinkSync(env, join(sao, ".env"));
+	sua(sao);
+	git(["add", "-A"], sao);
+	git(
+		[
+			"-c",
+			"user.name=kiem-do",
+			"-c",
+			"user.email=kiem@do.do",
+			"commit",
+			"-q",
+			"--no-verify",
+			"-m",
+			"test(bkr): chieu do",
+		],
+		sao,
+	);
+	return { tam, cay: sao };
 }
 
 function chieuDo(kieu) {
-	const tam = mkdtempSync(join(tmpdir(), "bkr-khong-doi-do-"));
-	const sao = join(tam, "crm");
-	try {
-		git(["worktree", "add", "--detach", "--quiet", sao, "HEAD"]);
-		const nen = git(["merge-base", NHANH_GOC, "HEAD"], sao);
-		const daSua = tepDaSua(nen, sao);
-		const dich = daSua.find((t) => t !== ANH_CHUP);
-		if (!dich) throw new Error("khong co tep da ky nao bi sua de pha");
-		if (kieu === "doi-logic") {
-			const duong = join(sao, dich);
-			writeFileSync(
-				duong,
-				`${readFileSync(duong, "utf8")}export const doiLogicThu = 1 + 1;\n`,
-			);
-		}
-		if (kieu === "not-tobe") {
-			const duong = join(sao, dich);
-			const than = readFileSync(duong, "utf8");
-			const i = than.indexOf("Cập nhật");
-			const j = than.indexOf(".toBe(", i);
-			if (i < 0 || j < 0)
-				throw new Error(`khong tim duoc cho pha not-tobe o ${dich}`);
-			writeFileSync(duong, `${than.slice(0, j)}.not.toBe(${than.slice(j + 6)}`);
-		}
-		if (kieu === "xoa-so") {
-			for (const slug of readdirSync(join(sao, "_acceptance"))) {
-				const duong = join(sao, "_acceptance", slug, "decisions.jsonl");
-				if (!existsSync(duong)) continue;
-				const giu = readFileSync(duong, "utf8")
-					.split("\n")
-					.filter((d) => {
-						try {
-							const x = JSON.parse(d);
-							return !(x.type === "fix" && JSON.stringify(x).includes(dich));
-						} catch {
-							return true;
-						}
-					});
-				writeFileSync(duong, giu.join("\n"));
+	if (kieu === "anh-chup") {
+		const sao = lamBanSao((c) => {
+			const d = join(c, ANH_CHUP);
+			writeFileSync(d, `${readFileSync(d, "utf8")}\n`);
+		});
+		try {
+			const nen = git(["merge-base", NHANH_GOC, "HEAD"], sao.cay);
+			if (anhChupDoi(nen, sao.cay)) {
+				console.log("SAI AC-6: ANH CHUP LICH SU DOI");
+				return MA_DO;
 			}
+			return 0;
+		} finally {
+			donCay(sao);
 		}
-		git(["add", "-A"], sao);
-		git(
-			[
-				"-c",
-				"user.name=kiem-do",
-				"-c",
-				"user.email=kiem@do.do",
-				"commit",
-				"-q",
-				"--no-verify",
-				"-m",
-				`test(bkr): chieu do ${kieu}`,
-			],
-			sao,
+	}
+	const BAI = "apps/agent/test/kara-mot-ten.spec.ts";
+	const sao = lamBanSao((c) => {
+		const d = join(c, BAI);
+		writeFileSync(
+			d,
+			readFileSync(d, "utf8").replace('"*Cập nhật*"', '"*Cập nhật sai*"'),
 		);
-		const loi =
-			kieu === "xoa-so"
-				? kiemSo(daSua, sao)
-				: kiemKhoi(tepDaSua(nen, sao), nen, sao);
-		for (const l of loi) console.log(l);
-		return loi.length > 0 ? MA_DO : 0;
+	});
+	try {
+		execFileSync("bun", ["install", "--frozen-lockfile", "--silent"], {
+			cwd: sao.cay,
+			stdio: "ignore",
+		});
+		const lop = quetLop([BAI]).filter(
+			(m) => m.slug === "kara-mot-ten" && m.tep.includes(BAI),
+		);
+		if (lop.length === 0)
+			throw new Error("khong thay eval kara-mot-ten chay bai");
+		const goc = dungCayGoc();
+		let sai = 0;
+		try {
+			for (const m of lop) {
+				const cay = chay(m.lenh, sao.cay, new Map());
+				const nen = cay === 0 ? 0 : chay(m.lenh, goc.cay, new Map());
+				if (nen === 0 && cay !== 0) {
+					sai += 1;
+					console.log(`SAI AC-6: ${m.ten} nen 0, cay ${cay}`);
+				}
+			}
+		} finally {
+			donCay(goc);
+		}
+		return sai > 0 ? MA_DO : 0;
 	} finally {
-		spawnSync("git", ["worktree", "remove", "--force", sao], { cwd: GOC });
-		rmSync(tam, { recursive: true, force: true });
-		spawnSync("git", ["worktree", "prune"], { cwd: GOC });
+		donCay(sao);
 	}
 }
 
 try {
 	const iDo = process.argv.indexOf("--chieu-do");
-	if (iDo >= 0) process.exit(chieuDo(process.argv[iDo + 1] ?? "doi-logic"));
-	const nen = cocSo(ganNen());
+	if (iDo >= 0) process.exit(chieuDo(process.argv[iDo + 1] ?? "hoi-quy"));
+	const nen = git(["merge-base", NHANH_GOC, "HEAD"]);
 	const daSua = tepDaSua(nen);
 	for (const t of daSua) console.log(`DA SUA ${t}`);
+	let sai = 0;
+	if (anhChupDoi(nen)) {
+		console.log("SAI AC-6: ANH CHUP LICH SU DOI");
+		sai += 1;
+	}
 	const lop = quetLop(daSua);
 	console.log(
 		`quet lop: ${new Set(lop.map((m) => m.slug)).size} ho so, ${lop.length} eval`,
 	);
-	let sai = 0;
-	for (const l of [
-		...kiemSo(daSua),
-		...kiemTepHoTro(),
-		...kiemKhoi(daSua, nen),
-	]) {
-		console.log(l);
-		sai += 1;
-	}
 	if (process.argv.includes("--chi-tinh")) {
 		console.log(
 			`KET LUAN khong-doi-hinh tinh: ${sai === 0 ? "dat" : `${sai} SAI`}`,
@@ -374,13 +258,13 @@ try {
 	}
 	const daChayCay = new Map();
 	const cay = lop.map((m) => ({ ...m, ma: chay(m.lenh, GOC, daChayCay) }));
-	const do_ = cay.filter((m) => m.ma !== 0);
 	for (const m of cay.filter((x) => x.ma === 0)) console.log(`DUNG ${m.ten}`);
-	if (do_.length > 0) {
+	const doCay = cay.filter((m) => m.ma !== 0);
+	if (doCay.length > 0) {
 		const goc = dungCayGoc();
 		try {
 			const daChayNen = new Map();
-			for (const m of do_) {
+			for (const m of doCay) {
 				const ma = chay(m.lenh, goc.cay, daChayNen);
 				if (ma === 0) {
 					sai += 1;

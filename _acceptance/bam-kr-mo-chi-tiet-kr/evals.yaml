@@ -108,6 +108,7 @@ evals:
     long_running: 200
     paths:
       - "_acceptance/*/rang/**"
+      - "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json"
       - "apps/app/test/**"
       - "apps/agent/test/**"
       - "apps/api/test/**"
@@ -115,18 +116,15 @@ evals:
     expected: |
       khong-doi-hinh.mjs QUÉT LỚP LÚC CHẠY (khuôn gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs): mọi hồ sơ signed-off
       hay machine-cleared có eval test/script (không not-run) mà tệp trong lệnh đã giải chứa «Cập nhật tuần», chạm một trong
-      phan-kr-phu-trach, cay-can-chinh, viec-cua-toi, bang-kr, tin-nhac, hoặc bị vòng sửa. In «quet lop: <n> ho so, <k> eval».
-      (1) Chạy các eval thuộc lớp trên cây; mục đỏ chạy lại trên worktree origin/onehub: «SAI AC-6» khi nền 0 mà cây khác 0,
-      «DO SAN TREN NEN <slug>#<E>» khi nền đỏ. (2) Mỗi tệp bài kiểm hay thước của hồ sơ đã ký mà vòng sửa: sổ của hồ sơ có
-      dòng fix decided_by chủ kho nhắc tệp (thiếu → «SAI AC-6: THIEU SO <tep>»); mỗi khối diff (dòng bỏ, dòng thêm) phải là đúng một
-      phần tử của bảng cặp đọc từ _acceptance/bam-kr-mo-chi-tiet-kr/rang/cap-chu.json (chép từ bảng «Chữ» của design doc:
-      chuỗi cũ → chuỗi mới, vi và en), hoặc kỳ vọng objective:<x> → kr:<x> ở bốn chỗ — khác → «SAI AC-6: DOI LOGIC
-      <tep>:<dong>». (3) apps/agent/test/fixtures/tin-nhac-truoc-tb1.json không đổi so origin/onehub — đổi → «SAI AC-6: ANH
-      CHUP LICH SU DOI». Đối chứng dương: một khối đúng cặp «Tuần này chưa có Cập nhật tuần nào» → «Tuần này chưa có lần cập
-      nhật nào» qua.
-      CHIEU DO (bản sao HEAD): thêm `export const doiLogicThu = 1 + 1;` cuối một tệp bài kiểm đã ký trong lớp → «SAI AC-6:
-      DOI LOGIC <tep>:<dong>», mã 1; cùng một dòng đúng cặp chữ mà đổi toBe thành not.toBe → «SAI AC-6: DOI LOGIC»; xoá dòng
-      sổ fix → «SAI AC-6: THIEU SO <tep>».
+      phan-kr-phu-trach, cay-can-chinh, viec-cua-toi, bang-kr, tin-nhac, hoặc bị vòng sửa; cộng hai thước màn viết trước:
+      dat-okr-trong-crm (dok_man_chrome) và hop-thoai-giu-cho-dang-nhap (hg_man_that). In «quet lop: <n> ho so, <k> eval».
+      (1) Chạy các mục trên cây; mục đỏ chạy lại trên worktree origin/onehub: «SAI AC-6: <slug>#<E> nen 0, cay <m>» khi nền 0
+      mà cây khác 0, «DO SAN TREN NEN <slug>#<E>» khi nền đỏ; mục xanh in «DUNG <slug>#<E>». (2)
+      apps/agent/test/fixtures/tin-nhac-truoc-tb1.json không đổi so origin/onehub (thêm, sửa hay xoá) — đổi → «SAI AC-6: ANH
+      CHUP LICH SU DOI». Đối chứng dương: hai thước màn có mặt trong lớp («THEM <slug>»).
+      CHIEU DO (bản sao HEAD): sửa ảnh chụp lịch sử → «SAI AC-6: ANH CHUP LICH SU DOI», mã 1; trong bản sao đổi chuỗi kỳ vọng
+      «*Cập nhật*» của kara-mot-ten.spec.ts thành chuỗi sai rồi chạy eval của kara-mot-ten trên bản sao và trên nền →
+      «SAI AC-6: kara-mot-ten#<E> nen 0, cay 1», mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7

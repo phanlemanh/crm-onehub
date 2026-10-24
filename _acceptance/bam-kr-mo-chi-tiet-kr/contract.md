@@ -5,10 +5,10 @@ slug: bam-kr-mo-chi-tiet-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: draft
 design_doc: docs/superpowers/specs/2026-10-24-bam-kr-mo-chi-tiet-kr-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-10-24
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: bam-kr-mo-chi-tiet-kr
@@ -47,12 +47,11 @@ Source input: lời chủ kho 24/10 «Đồng ý hết theo khuyến nghị» qu
   «Cập nhật tuần» hay «cập nhật tuần» mà chữ kế sau không phải «này», không chuỗi en nào chứa «weekly update» mà chữ kế
   sau không phải «day»; mỗi chuỗi đổi bằng đúng bản mới ở bảng cặp «Chữ» của design doc; cụm chỉ khoảng thời gian («KR đã
   cập nhật tuần này», «Cần cập nhật tuần này») và «ngày cập nhật» giữ nguyên.
-- AC-6: Given vòng này đã làm, When chạy eval máy của mọi hồ sơ đã ký có bài kiểm hay thước chạm bốn tệp ở Context hoặc
-  khẳng định chuỗi «Cập nhật tuần», Then mọi mục không xấu hơn trên nền `origin/onehub` (mục đỏ sẵn in «đỏ sẵn trên nền»).
-  Mỗi khối thay đổi trong bài kiểm hay thước của các hồ sơ ấy là đúng một phần tử của bảng cặp «Chữ» trong design doc
-  (chuỗi cũ → chuỗi mới), hoặc kỳ vọng `objective:` → `kr:` ở đúng bốn chỗ của Context. Ảnh chụp lịch sử
-  `apps/agent/test/fixtures/tin-nhac-truoc-tb1.json` không đổi. Mỗi hồ sơ bị đổi có một dòng sổ `fix` mang `decided_by`
-  chủ kho, trích chữ duyệt Cổng Phạm vi của vòng này.
+- AC-6: Given vòng này đã làm, When chạy lại eval máy (test, script) của mọi hồ sơ đã ký có bài kiểm hay thước chạm bốn
+  tệp ở Context, tin nhắc, hoặc khẳng định chuỗi «Cập nhật tuần», cùng hai thước màn đã ký chạm Của tôi —
+  `dat-okr-trong-crm` (`rang/man-okr.mjs`) và `hop-thoai-giu-cho-dang-nhap` (`rang/man-giu-cho.mjs`) — Then không mục nào
+  xấu hơn trên nền `origin/onehub` (mục đỏ sẵn in «đỏ sẵn trên nền»), và ảnh chụp lịch sử
+  `apps/agent/test/fixtures/tin-nhac-truoc-tb1.json` không đổi.
 - AC-7: Given mọi chỗ gọi `openRecord` / `useOpenRecord` dưới `apps/app/app/(app)/[slug]/okr/`, When quét lúc chạy, Then
   mỗi chỗ gọi `kind: "objective"` có trong bảng viết trước của vòng với nguồn là mục tiêu, mỗi chỗ có nguồn là KR mở
   `kind: "kr"`; một chỗ gọi mới không có trong bảng là đỏ.
@@ -82,6 +81,13 @@ hình thái); chữ (danh từ · khoảng thời gian · en) → AC-5; hồ sơ
 > Out of scope = scope-truth (Gate 1 duyệt mục này). Rationale/trade-off từng mục → 1 entry `descope` trong `decisions.jsonl`.
 
 ## Notes
+
+- Known limits — lối 2 chủ kho chọn 24/10 sau S4 vòng 2:
+  - Bài kiểm của bảy hồ sơ đã ký đổi chuỗi kỳ vọng theo bảng cặp `rang/cap-chu.json`; máy không kiểm từng khối diff
+    có đúng một cặp hay không — người review đọc diff bảy tệp ở PR. Mỗi hồ sơ chủ vẫn có một dòng sổ `fix`.
+  - Thước màn `hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs` mở ngăn mục tiêu thẳng bằng
+    `/okr?record=objective:<id>` thay cho bấm tên KR ở Của tôi: tên KR nay mở KR, và Của tôi của người dùng mẫu không
+    còn nút nào mở mục tiêu. Thước đó thôi đo đường bấm vào; các bước trong ngăn giữ nguyên. Một dòng sổ `fix`.
 
 - Không migration, không thủ tục API mới; chỉ `apps/app` và nhãn tin nhắc ở `apps/agent`.
 - AC-4: `bang-kr.tsx` có sẵn `SoViecKr` mở KR bằng `useOpenRecord()`; tên KR dùng cùng đường, `Button variant="link"`
