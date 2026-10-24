@@ -1,0 +1,149 @@
+schema_version: 1
+slug: bam-kr-mo-chi-tiet-kr
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.bkr_kr_phu_trach
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx"
+      - "apps/app/test/bam-kr-mo-chi-tiet-kr.dom.tsx"
+    expected: |
+      Ca «bkr-kr-phu-trach»: PhanKrPhuTrach thật trong DOM, nuqs adapter thử, dữ liệu parse bằng khuôn thật của thủ tục mà
+      thành phần gọi; ma trận viết trước 2 KR (K1 của mục tiêu O1, K2 của O2) = 2 ô: bấm nút tên Ki → giá trị record cuối
+      bằng `kr:<Ki>` và không chứa `objective:`. Đếm ô = 2. Đối chứng dương: chưa bấm → record rỗng.
+      CHIEU DO (bản sao): trả lại openRecord({kind:"objective"}) → đỏ «bkr-kr-phu-trach: K1 mo objective:O1, can kr:K1».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.bkr_cay
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx"
+      - "apps/app/test/bam-kr-mo-chi-tiet-kr.dom.tsx"
+      - "apps/app/test/fixtures/bkr-cay.json"
+    expected: |
+      Ca «bkr-cay»: CayCanChinh thật, đầu ra đọc từ apps/app/test/fixtures/bkr-cay.json (đầu ra thật E2b ghi), parse bằng
+      cayCanChinhOutput. Ma trận viết trước 2 ô: chọn nút K (bấm nhãn trong TreeNav) → record `kr:<K>`; chọn
+      nút O → record `objective:<O>`. Đếm ô = 2.
+      CHIEU DO (bản sao): mở nut.objectiveId cho mọi loại → đỏ «bkr-cay: nut kr K mo objective:O, can kr:K».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bkr_cay_api
+    paths:
+      - "apps/api/src/okr/can-chinh.ts"
+      - "apps/api/test/bam-kr-mo-chi-tiet-kr.spec.ts"
+    expected: |
+      Ca «bkr-cay-api» trên CSDL thử: gieo một mục tiêu O và hai KR K1, K2 qua service thật, gọi okr.cayCanChinh bằng router
+      caller, parse bằng cayCanChinhOutput. Ma trận viết trước 2 ô: với mỗi Ki, đúng một nút loai "kr" có id bằng id bản ghi
+      OkrKeyResult của Ki (đọc bằng Prisma) và objectiveId bằng O; đối chứng: nút loai "muc-tieu" có id gắn O. Ghi
+      đầu ra cây vào apps/app/test/fixtures/bkr-cay.json khi BKR_GHI=1, so byte khi chạy thường; E2 dựng cây từ đúng tệp ấy
+      — lệch là đỏ «bkr-cay-api: fixture lech dau ra that».
+      CHIEU DO (bản sao): can-chinh.ts thêm tiền tố vào id nút KR → đỏ «bkr-cay-api: nut kr K1 id <x>, can <id K1>».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.bkr_viec
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/bam-kr-mo-chi-tiet-kr.dom.tsx"
+    expected: |
+      Ca «bkr-viec»: ViecCuaToi thật, danh sách việc parse bằng khuôn thật; ma trận viết trước 2 dòng: việc có keyResultId K
+      → nút tên «Mở KR» (chữ lấy từ tệp chữ), bấm → record `kr:<K>`; việc keyResultId null, objectiveId O → nút «Mở mục
+      tiêu», bấm → record `objective:<O>`. Đếm ô = 2.
+      CHIEU DO (bản sao): bỏ nhánh keyResultId → đỏ «bkr-viec: viec gan KR mo objective:O, can kr:K».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.bkr_bang_kr
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/bang-kr.tsx"
+      - "apps/app/test/bam-kr-mo-chi-tiet-kr.dom.tsx"
+    expected: |
+      Ca «bkr-bang-kr»: BangKr thật trong ngăn mục tiêu O (record ban đầu `objective:<O>`), hai KR K1, K2. Ma trận viết
+      trước 2 ô, mỗi KR: getByRole("button", { name: tên Ki }) có; Tab tới được (focus vào nút sau một chuỗi Tab từ đầu
+      bảng); bấm → record bằng `objective:<O>|kr:<Ki>`. Đối chứng: thêm ô Enter trên nút K2 → cùng kết quả; đóng ngăn KR (gọi
+      close của record stack) → record về `objective:<O>`. Đếm ô = 2 (+2 đối chứng).
+      CHIEU DO (bản sao): tên KR là span như trước vòng → đỏ «bkr-bang-kr: ten K1 khong phai nut».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.bkr_chu
+    paths:
+      - "apps/app/lib/messages/**"
+      - "apps/agent/agent/lib/**"
+      - "apps/app/test/bam-kr-mo-chi-tiet-kr.spec.ts"
+    expected: |
+      Ca «bkr-chu» QUÉT LỚP LÚC CHẠY: liệt mọi tệp khớp apps/app/lib/messages/**/*.ts và apps/agent/agent/lib/**/*.ts (trừ
+      okr/chi-dan-tom-tat.ts), đọc mọi chuỗi chữ trong tệp (literal và template, bằng bộ phân tích TS); in «quet: <f> tep, <n>
+      chuoi» (f bằng số tệp khớp khuôn, kiểm bằng glob độc lập). Thêm: tin nhắc thật do bộ ghép tin của agent dựng cho loại
+      okr-cap-nhat (dữ liệu mẫu) không chứa «Cập nhật tuần» ở đầu tin.
+      (1) vi: không chuỗi nào khớp /[Cc]ập nhật tuần(?! này)/ — in từng chuỗi lọt «bkr-chu: <khoá> "<chuỗi>"»; (2) en: không
+      chuỗi nào khớp /[Ww]eekly update(?! day)/; (3) ma trận viết trước 8 khoá vi phải đổi (bảng cặp «Chữ» của design doc), giá trị bằng đúng chuỗi mới:
+      okr.ts capNhatTuan (hai chỗ) và "cap-nhat-tuan" = «Cập nhật»; okr-toan-canh chuaCapNhat = «Tuần này chưa có lần cập
+      nhật nào», chuỗi mô tả kế nó = «Kara tóm tắt sáng hôm sau ngày cập nhật, khi phòng có ít nhất một lần cập nhật.», chuỗi
+      việc tóm tắt chạy lúc 06:00 chứa «ít nhất một lần cập nhật»; okr-soan "3-tom-gon" = «Lớp 3: dòng tóm gọn lần cập
+      nhật»; tin-nhac "okr-cap-nhat" = «Cập nhật». Đếm ô = 8. (4) đối chứng dương: ít nhất một chuỗi chứa «cập nhật tuần
+      này» còn (khoảng thời gian giữ).
+      CHIEU DO (bản sao): thêm lại «Cập nhật tuần» vào một chuỗi → đỏ «bkr-chu: <khoá> "Cập nhật tuần"».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.bkr_khong_doi_hinh
+    long_running: 200
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+      - "apps/agent/test/**"
+      - "apps/api/test/**"
+      - "packages/validation/test/**"
+    expected: |
+      khong-doi-hinh.mjs QUÉT LỚP LÚC CHẠY (khuôn gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs): mọi hồ sơ signed-off
+      hay machine-cleared có eval test/script (không not-run) mà tệp trong lệnh đã giải chứa «Cập nhật tuần», chạm một trong
+      phan-kr-phu-trach, cay-can-chinh, viec-cua-toi, bang-kr, tin-nhac, hoặc bị vòng sửa. In «quet lop: <n> ho so, <k> eval».
+      (1) Chạy các eval thuộc lớp trên cây; mục đỏ chạy lại trên worktree origin/onehub: «SAI AC-6» khi nền 0 mà cây khác 0,
+      «DO SAN TREN NEN <slug>#<E>» khi nền đỏ. (2) Mỗi tệp bài kiểm hay thước của hồ sơ đã ký mà vòng sửa: sổ của hồ sơ có
+      dòng fix decided_by chủ kho nhắc tệp (thiếu → «SAI AC-6: THIEU SO <tep>»); mỗi khối diff (dòng bỏ, dòng thêm) phải là đúng một
+      phần tử của bảng cặp đọc từ _acceptance/bam-kr-mo-chi-tiet-kr/rang/cap-chu.json (chép từ bảng «Chữ» của design doc:
+      chuỗi cũ → chuỗi mới, vi và en), hoặc kỳ vọng objective:<x> → kr:<x> ở bốn chỗ — khác → «SAI AC-6: DOI LOGIC
+      <tep>:<dong>». (3) apps/agent/test/fixtures/tin-nhac-truoc-tb1.json không đổi so origin/onehub — đổi → «SAI AC-6: ANH
+      CHUP LICH SU DOI». Đối chứng dương: một khối đúng cặp «Tuần này chưa có Cập nhật tuần nào» → «Tuần này chưa có lần cập
+      nhật nào» qua.
+      CHIEU DO (bản sao HEAD): thêm `export const doiLogicThu = 1 + 1;` cuối một tệp bài kiểm đã ký trong lớp → «SAI AC-6:
+      DOI LOGIC <tep>:<dong>», mã 1; cùng một dòng đúng cặp chữ mà đổi toBe thành not.toBe → «SAI AC-6: DOI LOGIC»; xoá dòng
+      sổ fix → «SAI AC-6: THIEU SO <tep>».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.bkr_quet_mo
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/bam-kr-mo-chi-tiet-kr/rang/cho-mo-ban-ghi.json"
+      - "apps/app/test/bam-kr-mo-chi-tiet-kr.spec.ts"
+    expected: |
+      Ca «bkr-quet-mo» QUÉT LỚP LÚC CHẠY: bộ phân tích TS liệt mọi lời gọi openRecord(...) và hàm từ useOpenRecord() dưới
+      apps/app/app/(app)/[slug]/okr/ cùng giá trị kind (literal, hoặc biểu thức điều kiện thì liệt cả hai nhánh); in «quet:
+      <n> cho goi». Bảng viết trước rang/cho-mo-ban-ghi.json (viết ở S3 TRƯỚC khi sửa mã, mỗi phần tử: tệp, mỏ neo, kind,
+      nguon muc-tieu|kr) phải khớp toàn phần: số phần tử bằng n; chỗ gọi không có trong bảng → «bkr-quet-mo: cho goi moi
+      <tep>:<dong>»; phần tử nguon kr mà kind objective → «bkr-quet-mo: <tep>:<dong> nguon KR mo objective». Bảng gồm bốn chỗ
+      sửa (nguon kr, kind kr) và các chỗ đã đúng của design doc.
+      CHIEU DO (bản sao): trả lại kind objective ở phan-kr-phu-trach.tsx → đỏ «bkr-quet-mo: phan-kr-phu-trach.tsx:<dong>
+      nguon KR mo objective»; thêm một lời gọi mới → đỏ «bkr-quet-mo: cho goi moi».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
