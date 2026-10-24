@@ -1,0 +1,174 @@
+schema_version: 1
+slug: tieu-diem-sau-hop-xoa-tin-hieu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tdx_giu_lai
+    paths:
+      - "apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/tieu-diem.ts"
+      - "apps/app/test/tieu-diem-sau-hop-xoa-tin-hieu.dom.tsx"
+    expected: |
+      tieu-diem-sau-hop-xoa-tin-hieu.dom.tsx describe "tdx-giu-lai": DanhSachTinHieuTrang that, ConfirmDialog that cua packages/ui,
+      query cuaToi va mutation xoa mock. "Ban dang hien" gia lap bang cach thay getClientRects: kho 375 -> chi phan tu nam trong
+      khoi md:hidden co hinh; kho 1280 -> chi phan tu trong khoi hidden md:block co hinh. Ma tran viet truoc
+      {nut "Giữ lại" (chu rut tu tep loi, khong viet tay), phim Escape} x {dong dau, giua, cuoi cua [1,2,3]; dong duy nhat cua [1]}
+      x {375, 1280} = 16 o. Moi o mo menu cua dong do bang nut ⋮ cua dung ban dang hien, chon Xoa, dong hop, cho mot khung hinh:
+        1 document.activeElement khac body va mang data-thao-tac-tin-hieu == ma cua dong do
+        2 activeElement nam trong khoi cua ban dang hien o kho do (khong phai ban an)
+        3 khong co [role=alertdialog]; mutation xoa duoc goi 0 lan; dong van con
+      In so khang dinh == 16 x 3.
+      CHIEU DO: ban sao giu onCloseAutoFocus chi preventDefault -> o giu-lai/giua/1280 do voi thong diep ghim
+      "tieu diem roi ve dau trang sau giu lai"; ban sao luon tro ban dau tien trong DOM -> o esc/cuoi/375 do voi thong diep ghim
+      "tieu diem toi ban an".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tdx_hong
+    paths:
+      - "apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/tieu-diem.ts"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tieu-diem-sau-hop-xoa-tin-hieu.dom.tsx"
+    expected: |
+      describe "tdx-hong" phan 409: [1,2,3], xoa dong 2, mutation nem loi CONFLICT; mock lam moi sau loi tra dong 2 voi daKeoVe=true.
+      Loi dung TRPCClientError that cua @trpc/client dung tu phong bi loi ma may chu tRPC tra (data.httpStatus 409, data.code
+      CONFLICT) — khong dung class tu viet. Ma tran {vi, en} x {375, 1280} = 4 o, moi o sau khi lam moi:
+        1 dong 2 con
+        2 dung mot [role=alert] voi chu == dien(trang.xoaHongDaLayVe, {ma}) theo locale; khong chua thong diep may chu
+        3 activeElement mang data-thao-tac-tin-hieu == ma dong 2 va nam trong ban dang hien
+        4 mo menu tu activeElement (phim Enter): muc [data-xoa-tin-hieu] mang aria-disabled="true" va menu co dong chu ==
+          trang.khongXoaDuoc
+      In so khang dinh == 4 x 4.
+      CHIEU DO: ban sao bo buoc tra tieu diem sau loi va de lam moi thay nut ⋮ bang nut moi -> o vi/1280 do voi thong diep
+      ghim "tieu diem roi ve dau trang sau xoa hong"; ban sao nuot loi -> dong 2 do voi thong diep ghim "xoa hong khong noi vi sao".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tdx_hong
+    paths:
+      - "apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/tieu-diem.ts"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tieu-diem-sau-hop-xoa-tin-hieu.dom.tsx"
+    expected: |
+      describe "tdx-hong" phan mang/may-chu: [1,2,3], xoa dong 2. Ma tran {mat mang (fetch nem TypeError "Failed to fetch"),
+      may chu loi (TRPCClientError that, httpStatus 500, INTERNAL_SERVER_ERROR)} x {vi, en} x {375, 1280} = 8 o:
+        1 dong 2 con
+        2 dung mot [role=alert] voi chu == dien(trang.xoaHong, {ma}) theo locale; khong chua thong diep may chu
+        3 activeElement mang data-thao-tac-tin-hieu == ma dong 2, nam trong ban dang hien
+        4 go loi khoi mock, mo lai menu TU activeElement (Enter), chon Xoa, xac nhan -> mutation lan hai nhan {id} cua dong 2 va
+          sau lam moi khong con dong 2
+      In so khang dinh == 8 x 4.
+      CHIEU DO: ban sao de tieu diem ve body khi loi -> o mang/vi/375 do voi thong diep ghim "tieu diem roi ve dau trang sau xoa
+      hong"; ban sao bat loi roi khong cho xoa lai (dangXoa khong ve null) -> dong 4 do voi thong diep ghim "xoa hong khong xoa lai
+      duoc".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tdx_cho
+    paths:
+      - "apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/tieu-diem.ts"
+      - "apps/app/test/tieu-diem-sau-hop-xoa-tin-hieu.dom.tsx"
+    expected: |
+      describe "tdx-cho": mutation xoa mock tre 150 ms. Ba o viet truoc, moi o x {375, 1280} (ban dang hien gia lap nhu E1):
+        cho-dung-yen: [1,2,3], xac nhan xoa dong 2; o moc 50 ms (truoc khi may chu tra) activeElement mang data-thao-tac-tin-hieu
+          == ma dong 2 va khac body (1), va nam trong khoi cua ban dang hien o kho do (1)
+        tu-doi-roi-hong: [1,2,3], xac nhan xoa dong 2 voi loi mang; o moc 50 ms goi focus() len nut ⋮ cua dong 1 (ban dang hien);
+          sau khi loi va lam moi xong (cho 200 ms) activeElement van la nut ⋮ cua dong 1 (1), cau xoa hong van hien (1)
+        tu-doi-roi-xong: [1,2,3], xac nhan xoa dong 2 thanh cong; o moc 50 ms goi focus() len nut ⋮ cua dong 1; sau khi lam moi
+          xong activeElement la nut ⋮ cua dong 3 trong ban dang hien (1) — hanh vi TH6 da ky, ghim lai de khong ai lang le ap dieu
+          kien cua o tu-doi-roi-hong cho ca xoa xong
+      In so khang dinh == 2 x (2 + 2 + 1).
+      CHIEU DO: ban sao tra tieu diem ve nut ⋮ dong 2 vo dieu kien sau loi -> o tu-doi-roi-hong/1280 do voi thong diep ghim
+      "giat tieu diem khoi cho nguoi dung da doi"; ban sao chi preventDefault khi xac nhan -> o cho-dung-yen do voi thong diep
+      ghim "tieu diem roi ve dau trang luc cho xoa"; ban sao luon tro ban dau tien trong DOM -> o cho-dung-yen/375 do voi thong
+      diep ghim "tieu diem toi ban an"; ban sao ap dieu kien de-yen cho ca xoa xong -> o tu-doi-roi-xong do voi thong diep ghim
+      "xoa xong khong toi dong ke".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.sgt_tieu_diem
+    paths:
+      - "apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/tieu-diem.ts"
+      - "apps/app/test/sua-giao-dien-tin-hieu.dom.tsx"
+    expected: |
+      describe "sgt-tieu-diem" cua sua-giao-dien-tin-hieu.dom.tsx (TH6, da ky) chay KHONG SUA tep test: 5 o xoa xong (dich nut-3,
+      nut-2, rong, dong-2, nut-2 sau lam moi cham) + 4 o xoa hong. Exit 0 va dong in "sgt-tieu-diem: 23 khang dinh (5 x 3 + 4 x 2)".
+      git diff <merge-base>..HEAD -- apps/app/test/sua-giao-dien-tin-hieu.dom.tsx rong (doi chung: bai da ky khong bi noi long).
+      CHIEU DO: ban sao bo preventDefault va de Radix tra tieu diem mac dinh -> o a do voi thong diep ghim cua TH6 "tieu diem roi ve
+      dau trang sau xoa".
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tdx_ban_phim
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/tieu-diem-sau-hop-xoa-tin-hieu/evidence dat tuong minh: lenh cua tdx_ban_phim (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi evidence/o.jsonl: vong sang tieu diem nam tren nut ⋮ cua dong mang ma_dich cua o do"
+    inputs:
+      - _acceptance/tieu-diem-sau-hop-xoa-tin-hieu/evidence/
+      - _acceptance/tieu-diem-sau-hop-xoa-tin-hieu/evidence/o.jsonl
+    paths:
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "_acceptance/tieu-diem-sau-hop-xoa-tin-hieu/rang/do-ban-phim.mjs"
+    expected: |
+      rang/do-ban-phim.mjs (puppeteer, Chrome that) dung nguoi gui la thanh vien thuong va quan tri trong kho do rieng; tin hieu
+      gui qua thu tuc that tinHieu.gui. MOI thao tac chi bang ban phim (Tab/Shift+Tab, Enter, mui ten, Escape) — khong page.click.
+      MOI o co nguoi gui rieng (thanh vien moi trong kho do rieng, cung cach tao nguoi cua rang/do-man.mjs cua TH6 — tran 10 tin
+      hieu moi ngay moi nguoi khong cho mot nguoi gui du 30 tin hieu) va tu gieo ba tin hieu moi qua tinHieu.gui, nap trang, roi
+      nham dong THEO MA (khong theo vi tri; danh sach xep moi nhat truoc). Ma tran viet
+      truoc 10 o, w thuoc {375, 1280}, ngon ngu vi:
+        giu-lai-<w>: mo hop xoa tu nut ⋮ cua tin hieu thu hai vua gieo, Tab toi "Giữ lại", Enter
+        esc-<w>: mo hop xoa tu nut ⋮ cua tin hieu thu ba vua gieo, Escape
+        lay-ve-<w>: trang da tai; quan tri goi tinHieu.keoVe qua API that; nguoi gui xac nhan xoa tin hieu thu hai -> may chu tra
+          409; sau khi on dinh (KHONG tai lai) nhan Enter tren activeElement: [data-xoa-tin-hieu] mang aria-disabled="true" va menu
+          co dong chu == trang.khongXoaDuoc rut tu tep loi (du lieu may chu sinh, doi chung cho mau cua E2)
+        mang-<w>: trinh duyet huy yeu cau tinHieu.xoa (request interception abort) roi xac nhan xoa tin hieu thu hai
+        xoa-xong-<w>: xac nhan xoa tin hieu thu hai, may chu that xoa; dich la tin hieu ngay duoi no trong danh sach luc truoc xoa
+      Moi o, sau khi on dinh: document.activeElement mang data-thao-tac-tin-hieu == ma dich VA activeElement.matches(":focus-visible")
+      VA getClientRects cua no khong rong (ban dang hien); scrollWidth == clientWidth cua tai lieu; lay-ve va mang: [role=alert]
+      mang dung cau theo tep loi. Moi o mot dong DUNG/SAI in ca ma dich va ma cua activeElement, mot dong JSON trong
+      evidence/o.jsonl {o, ma_dich, ma_tieu_diem, focus_visible, ket_luan}, va mot anh evidence/<o>.png chup ca vong sang tieu diem.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tdx_ranh_gioi
+    paths:
+      - "_acceptance/tieu-diem-sau-hop-xoa-tin-hieu/rang/ranh-gioi.mjs"
+    expected: |
+      rang/ranh-gioi.mjs suy goc kho tu vi tri cua no (khong viet tay ROOT), doc git diff --name-only <merge-base voi
+      origin/onehub>...HEAD; dong DUNG khi khong tep nao khop {apps/api/**, packages/ui/**, packages/db/**, packages/validation/**};
+      in so tep da xet (> 0 khi nhanh co thay doi ngoai _acceptance).
+      CHIEU DO (ca --tep): them duong gia "packages/ui/src/components/confirm-dialog.tsx" vao danh sach -> thoat 1 voi thong diep
+      ghim "vong sua tieu diem cham vung cam: packages/ui/src/components/confirm-dialog.tsx".
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tdx_thiet_ke
+    paths:
+      - "apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx"
+      - "apps/app/app/(app)/[slug]/tin-hieu/danh-sach-tin-hieu-trang.tsx"
+    expected: |
+      design-gate.mjs --mode static cho hai tep danh-sach-tin-hieu.tsx va danh-sach-tin-hieu-trang.tsx: khong P0, exit 0.
+      CHIEU DO: ban sao them className doi mau cho nut ⋮ -> P0 do.
