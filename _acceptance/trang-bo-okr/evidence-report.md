@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 52e720120c11b9d18919da4903f82e369d2a544c
+verified_commit: 9b246f0a57bae04226f308c1d481f95b31a15217
 human_signoff: Phan Le Manh 2026-10-23
 ---
 
@@ -298,3 +298,7 @@ Round 2: cả 15 eval và 7 lệnh suite xanh (E15 chạy xong, đạt). REJECT 
 Round 3: E15 và E17 đỏ (phép quét không-đổi-hình báo lỗi AC-11 trên các hồ sơ cũ đã ký) và E14 đỏ (trang một bộ giữ tiêu đề «Mục tiêu» không đặt tên đơn vị làm tiêu đề); hai lệnh suite đỏ ngoài eval (mot-nut-tao-muc-tieu.dom.tsx và lint:slop ở okr-danh-sach-bo.spec.ts). Chuyển lên người, REJECT.
 Round 4: cả 18 eval (E15, E17, E18 là ba phần của phép quét không-đổi-hình) và 7 lệnh suite xanh trên cây 52e720120c11b9d18919da4903f82e369d2a544c; E14 xem lại bằng mắt, khớp Expected.
 
+
+### Re-pin lần 1 — 2026-10-24, do VK3 trang-bo-okr sửa thước và vật — ghim lại sau chữ ký, ba thước theo «duyệt cả ba» (9b246f0a5)
+run_id: repin-20261024T133834Z-50324
+sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
