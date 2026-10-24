@@ -63,7 +63,10 @@ afterEach(async () => {
 
 async function dung(
 	man: ReactElement,
-	{ locale = "vi", thamSo = "" }: { locale?: Locale; thamSo?: string } = {},
+	{
+		locale = "vi",
+		thamSo = "?donOkr=goc",
+	}: { locale?: Locale; thamSo?: string } = {},
 ): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);

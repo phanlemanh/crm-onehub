@@ -39,9 +39,9 @@ function maTranAc4(n) {
 	return [
 		{
 			nhan: "/okr/bo-okr",
-			duong: "/okr/bo-okr",
+			duong: "/okr/bo-okr?donOkr=goc",
 			t: tq,
-			cho: "[data-hang-cong-cu-don-vi] [data-view-switch]",
+			cho: "[data-the-con-bo]",
 			kiem: async (t) => {
 				const lop = await demLop(t.trang);
 				const mt = await moTa(t.trang);
@@ -137,8 +137,8 @@ function maTranAc4(n) {
 export async function e4(n) {
 	for (const h of maTranAc4(n)) {
 		const duong =
-			PHA === "rewrite" && h.duong === "/okr/bo-okr"
-				? `${h.duong}${DUOI_PHA_REWRITE}`
+			PHA === "rewrite" && h.nhan === "/okr/bo-okr"
+				? `${h.nhan}${DUOI_PHA_REWRITE}`
 				: h.duong;
 		const r = await mo(h.t, n.w(duong), h.cho);
 		if (r.status === 404) {
@@ -177,9 +177,7 @@ async function dauHopTuan(n, t) {
 		const hang = document.querySelector("[data-hang-cong-cu-don-vi]");
 		return {
 			bat: [
-				...(hang?.querySelectorAll(
-					"[data-view-switch='nut'] [data-state='on']",
-				) ?? []),
+				...document.querySelectorAll("[data-the-con-bo] [aria-current='page']"),
 			].map((e) => e.textContent.trim()),
 			chu: hang?.innerText ?? "",
 		};
@@ -250,7 +248,7 @@ function maTranAc6(n) {
 				truyVan: { xemOkr: "hop-tuan", donOkr: pb, kyOkr: ky.hienHanh },
 			},
 			muc: "/okr/bo-okr",
-			cho: "[data-hang-cong-cu-don-vi] [data-view-switch='nut'] [data-state='on']",
+			cho: "[data-the-con-bo] [aria-current='page']",
 			dau: (t) => dauHopTuan(n, t),
 		},
 		{
