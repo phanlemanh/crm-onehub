@@ -202,8 +202,8 @@ function donCay({ tam, cay }) {
 	spawnSync("git", ["worktree", "prune"], { cwd: GOC });
 }
 
-function dongSo(slug) {
-	const duong = join(GOC, "_acceptance", slug, "decisions.jsonl");
+function dongSo(slug, cwd = GOC) {
+	const duong = join(cwd, "_acceptance", slug, "decisions.jsonl");
 	if (!existsSync(duong)) return [];
 	return readFileSync(duong, "utf8")
 		.split("\n")
@@ -223,7 +223,7 @@ export function chuBai() {
 	);
 }
 
-export function kiemSo(daSua) {
+export function kiemSo(daSua, cwd = GOC) {
 	const { chu, apBangCapAnhChup } = chuBai();
 	const loi = [];
 	for (const t of daSua) {
@@ -237,7 +237,7 @@ export function kiemSo(daSua) {
 			loi.push(`SAI AC-6: THIEU CHU ${t}`);
 			continue;
 		}
-		const co = dongSo(slug).some(
+		const co = dongSo(slug, cwd).some(
 			(d) =>
 				d.type === "fix" &&
 				d.decided_by === NGUOI_QUYET &&
@@ -336,7 +336,7 @@ function chieuDo(kieu) {
 		);
 		const loi =
 			kieu === "xoa-so"
-				? kiemSo(daSua)
+				? kiemSo(daSua, sao)
 				: kiemKhoi(tepDaSua(nen, sao), nen, sao);
 		for (const l of loi) console.log(l);
 		return loi.length > 0 ? MA_DO : 0;
