@@ -165,6 +165,19 @@ cảnh OKR.
 - Mục không nằm trong thẻ: `SectionHeading`. Không `<h2>`–`<h4>` tự đặt cỡ chữ
   (xem bảng «Dấu hiệu vẽ tay» ở trên).
 
+### Bấm vào KR và cập nhật
+
+Chủ kho chốt 24/10/2026, theo lối Tability: cập nhật đi qua bộ OKR, không có trang
+cập nhật riêng. Bối cảnh ở `docs/findings/2026-10-22-hop-tuan/README.md` (mục 1 và 8).
+Chỗ còn lệch theo dõi ở các hàng SV1, SV6, SV7 của `docs/plan/lo-trinh-okr.json`.
+
+- **Bấm một mục tiêu ở bất kỳ đâu thì mở chi tiết mục tiêu.**
+- **Bấm một KR ở bất kỳ đâu thì mở chi tiết KR** (`openRecord({ kind: "kr" })`). Luật này áp cả trong chi tiết mục
+  tiêu, ở Sơ đồ, Của tôi và Việc. Không mở mục tiêu chứa KR thay cho chính KR.
+- **Chỉ có một form cập nhật: hộp cập nhật một KR.** Đường chính là chi tiết KR › «Cập nhật». Nút tắt «Cập nhật»
+  trên dòng KR được giữ, nhưng phải mở đúng hộp đó. Không đặt ô nhập trên dòng, và không gửi nhiều KR một lần.
+- **Họp tuần là thẻ con của bộ OKR**, không phải mục trên thanh bên khu.
+
 ### Màu trạng thái
 
 Mọi chấm và nhãn trạng thái dùng `tone` của `StatusIndicator`, theo nghĩa chứ
