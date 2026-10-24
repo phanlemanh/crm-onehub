@@ -1,43 +1,24 @@
+# Review findings: ho-so-do-kiem-cheo (round 2)
+
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC.
+- **Nâng trần lên 240 phút không làm E1 xanh: chính nhật ký vòng 2 đã có một ô lệch (cron-theo-ban-khai E8), nên phép tái lập sẽ thoát mã 1**
+  AC: AC-1
+  file: `_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:31`
+  severity: high
+  source: bugs
+  detail: Dòng sổ d-20261024T064813Z-31 viết rằng E1 «chỉ thiếu trần, không phải lỗi răng» và dẫn nhật ký .acceptance-runs/ho-so-do-kiem-cheo/s4-lenh-dai/r2-l1-1-20261023170921.log. Tôi so từng dòng `<hồ sơ> <eval> exit= ky=` trong nhật ký đó (311 dòng) với do-lai-nen.json theo đúng luật của taiLap() trong rang/danh-sach.mjs (đỏ = exit khác ky_vong; DO_LAI_LECH khi trạng thái đỏ ở mốc nền khác trạng thái đỏ ở lượt tái lập). Kết quả có đúng một khoá lệch: `cron-theo-ban-khai:E8`. Ở mốc nền ô này exit 2, phần đuôi là «MA 2: khong doc duoc danh sach ban trien khai — HTTP 403»; lượt tái lập ra `exit=0 ky=0` (dòng 128 của nhật ký). Số đếm khớp với một lần lệch: mốc nền có 50 ô đỏ ngoài nhóm cần máy chủ, nhật ký có 49. Lý do đỏ ở mốc nền là token Vercel hết hạn, tức do môi trường lúc đo. Răng ở mốc 6be0bb688 gọi thẳng api.vercel.com, nên giờ token còn hạn là ô này xanh. Vì vậy, khi vòng 3 chạy hết với trần 240 phút, taiLap() sẽ trả `DO_LAI_LECH cron-theo-ban-khai:E8: nen 2 · tai lap 0` và danh-sach.mjs thoát 1, nghĩa là E1 FAIL chứ không BLOCKED. Mỗi vòng như vậy tốn khoảng 95 phút. Nói gọn: lượt đo nền ghi một lỗi do môi trường thành «đỏ», mà phép tái lập lại đòi lỗi ấy lặp lại y hệt. Lời khai trong sổ không đúng với chính nhật ký nó dẫn.
+  Ghi chú vòng này: lượt E1 của round 2 đã chạy hết và đúng như dự đoán, danh-sach.mjs thoát 1 với `DO_LAI_LECH cron-theo-ban-khai:E8: nen 2 · tai lap 0`; ngoài ra còn một ô lệch thứ hai, `DO_LAI_LECH tro-ly-okr-nen:E9: nen 0 · tai lap 1`.
+  rationale: AC-1 đòi chạy lại do-lai trên cây tạm ở mốc nền phải cho cùng tập đỏ ở nhóm eval không cần máy chủ; finding nói ô cron-theo-ban-khai:E8 đỏ ở mốc nền nhưng xanh khi tái lập, tức tập đỏ lệch và AC-1 thất bại.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **«Đầu ra sau khi sửa» là chữ chép tay từ log ở scratchpad; ô cron E8 còn in đầu ra có trước một phần của bản sửa**
-  Người dùng thấy gì: Bảng so trước/sau cho người đọc có một khối «đầu ra sau khi sửa» do người dán tay, không phải máy chạy ra, dù đầu bảng nói là máy sinh. Riêng ô cron E8, khối này có thể là kết quả của bản cũ hơn bản đang giao, nên người đọc có thể tin một kết quả chưa đo lại.
-  Căn cứ: Hậu quả nhẹ: chỉ làm bảng đọc lệch sự thật ở một vài ô, không mất dữ liệu và không đổi hành vi sản phẩm; người đọc tự kiểm lại được và đo lại sau rẻ.
-  file: `_acceptance/ho-so-do-kiem-cheo/danh-sach.json:634`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Bản vá realpath cho khối chạy chính chỉ sửa do-lai.mjs; bảy tệp răng khác giữ phép so cũ, và khi so hỏng thì thoát 0 im lặng**
-  Người dùng thấy gì: Một số lệnh kiểm của hồ sơ có thể báo xanh mà thực ra không kiểm gì nếu chạy qua đường dẫn có liên kết tượng trưng, như trong cây tạm trên máy này. Hiện chưa thấy lượt chấm nào bị ảnh hưởng.
-  Căn cứ: Rủi ro chỉ xảy ra khi chạy trong cây tạm có liên kết tượng trưng và không mất dữ liệu; sửa sau rẻ và chưa có lượt chấm nào dính.
-  file: `_acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs:125`
-  severity: low
-  Đề xuất: known-limits
-
-- **Bảng trước/sau không có kết quả đột biến neo của cron E7 và E8 vì tệp kết quả chiều đỏ không được chạy lại**
-  Người dùng thấy gì: Trong bảng so trước/sau, hai ô cron E7 và E8 không có số liệu thử phá bằng neo cố định như các ô khác, nên người duyệt chỉ thấy lời tự khai chứ không thấy kết quả máy chạy cho hai ô này.
-  Căn cứ: Chỉ làm thiếu một con số bằng chứng ở hai ô trong tài liệu duyệt; chạy lại phép thử là xong và không ảnh hưởng người dùng sản phẩm.
-  file: `_acceptance/ho-so-do-kiem-cheo/chieu-do-ket-qua.json`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): «Đầu ra sau khi sửa» và «Dòng lỗi trong log đầy đủ» trong bảng trước/sau được chép tay vào danh-sach.json, không rút ra từ lượt chạy nào**
-  Người dùng thấy gì: Hội đồng chấm chỉ đọc bảng trước/sau, mà hai khối đầu ra trong đó do người gõ tay nên không có gì bảo đảm chúng đúng hay còn mới, dù đầu bảng ghi là máy sinh. Hội đồng có thể dựa vào số liệu cũ khi chấm.
-  Căn cứ: Ảnh hưởng chỉ ở độ tin cậy của tài liệu chấm nội bộ, không mất dữ liệu và không đụng người dùng sản phẩm; ghi rõ là trích tay hoặc đo lại đều rẻ.
-  file: `_acceptance/ho-so-do-kiem-cheo/rang/bang.mjs:34`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 (âm tính đứng một mình, không ghim thông điệp): kiểm đột biến neo của hai dòng neo-co-dinh mới chỉ so mã thoát 2**
-  Người dùng thấy gì: Phép thử cho hai ô neo cố định chỉ kiểm mã thoát, mà mã đó cũng có thể do lỗi khác gây ra, nên về sau nếu thứ tự trong lệnh đổi thì phép thử có thể xanh vì lý do sai.
-  Căn cứ: Hiện kết quả vẫn đúng và rủi ro chỉ xuất hiện nếu mã lệnh đổi về sau; không mất dữ liệu, không ảnh hưởng người dùng và sửa sau rẻ.
-  file: `_acceptance/ho-so-do-kiem-cheo/rang/chieu-do.mjs:58`
+- **Khi trần thời lượng giết lượt tái lập bằng SIGKILL, tiến trình con do-lai vẫn chạy tiếp và cây tạm ở mốc nền bị bỏ lại**
+  Người dùng thấy gì: Khi một lượt đo lại chạy quá giờ và bị ngắt cưỡng bức, nó để lại một bản sao làm việc tạm và có thể còn tiến trình chạy ngầm trong máy. Việc này chỉ tốn chỗ và tài nguyên máy, không làm sai kết quả nghiệm thu và không ảnh hưởng người dùng sản phẩm.
+  Căn cứ: Hậu quả nhẹ, chỉ rác trên máy chạy nghiệm thu, không mất dữ liệu và người vận hành tự dọn được bằng tay, nên ghi vào han chế đã biết là đủ.
+  file: `_acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs`
   severity: low
   Đề xuất: known-limits
 
@@ -48,7 +29,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Dòng danh sách của cron-theo-ban-khai E7/E8 đã cũ, bảng trước/sau và hội đồng E6 đọc sai cách sửa thật (r1 · tệp đã đổi)**
+- **Dòng danh sách của cron-theo-ban-khai E7/E8 đã cũ, bảng trước/sau và hội đồng E6 đọc sai cách sửa thật (r1)**
   Người dùng thấy gì: Bảng so sánh trước/sau cho hai bài kiểm của lịch chạy theo bản khai mô tả cách sửa không còn đúng. Người duyệt đọc bảng này có thể hiểu sai điều đã thực sự được sửa.
   Căn cứ: Chỉ làm sai lời giải thích trong hồ sơ nội bộ, không ảnh hưởng người dùng, và sửa lại câu chữ sau vẫn rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/danh-sach.json`
@@ -104,7 +85,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **do-lai.mjs drops the first argument when --log is not given (r1 · tệp đã đổi)**
+- **do-lai.mjs drops the first argument when --log is not given (r1)**
   Người dùng thấy gì: Nếu chạy lại phép đo theo thứ tự khác với tài liệu, một hồ sơ có thể âm thầm bị bỏ khỏi lượt đo. Tổng kết vẫn trông bình thường.
   Căn cứ: Chỉ xảy ra khi gọi sai thứ tự, kết quả thiếu hồ sơ có thể phát hiện bằng cách đếm lại, và không ảnh hưởng người dùng.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/do-lai.mjs`
