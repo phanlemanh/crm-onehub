@@ -20,3 +20,18 @@ thông điệp ghim có trong đầu ra. Đối chứng dương: cả bộ xanh 
 | E5 | bỏ hẳn `onCloseAutoFocus` (chiều đỏ TH6 tự khai) | `sgt-tieu-diem` | **XANH** — bài TH6 không bắt ca này (lượt làm mới vẫn dời tiêu điểm); chiều đỏ đổi, xem dòng dưới |
 | E5 | bỏ `requestAnimationFrame(() => dieuTieuDiem(ke))` | `sgt-tieu-diem: o a` | đỏ «tieu diem roi ve dau trang sau xoa» |
 | E7 | thêm `--tep packages/ui/src/components/confirm-dialog.tsx` | `ranh-gioi.mjs` | mã 1 «vong sua tieu diem cham vung cam: packages/ui/src/components/confirm-dialog.tsx» |
+
+## Phép đo bàn phím trên bản chạy thật (E6)
+
+Ba lượt `tdx_ban_phim` trên phiên đo riêng (`next dev` của chính cây, máy chủ thật), 24/10/2026:
+
+| Lượt | Mã | Kết quả |
+|---|---|---|
+| Đối chứng dương | đỉnh `954356529` | 10 ĐÚNG / 0 SAI |
+| Bản hỏng: `tieuDiemNutThaoTac` luôn tới nút ⋮ dòng đầu | đỉnh + sửa tạm `apps/app/lib/tin-hieu/tieu-diem.ts` | 2 ĐÚNG / 8 SAI — SAI đúng mã dòng sai (vd «ma dich crm-2, tieu diem crm-3»); hai ô Esc ĐÚNG vì đích Esc chính là dòng đầu |
+| Mã TRƯỚC vòng (hai tệp ở `61ed839a2`) | chỉ đổi mã trang tín hiệu | **10 ĐÚNG / 0 SAI** |
+
+Lượt thứ ba là phát hiện: trên Chrome thật, bản trước vòng cũng đã để tiêu điểm ở nút ⋮ của dòng sau «Giữ lại», Esc và
+xoá hỏng. Lỗi Ngoài-6 của TH6 được nêu từ đọc mã và chỉ tái hiện trên mô phỏng DOM của bài kiểm (happy-dom: menu đóng ngay,
+không hiệu ứng), nơi 16/16 ô «Giữ lại»/Esc đỏ với mã cũ. Thước E6 có răng (lượt hai) nhưng không phân biệt được mã cũ với mã
+mới trên Chrome — nên ngưỡng của Cổng Giá trị đo trên production cũng sẽ đạt dù không có vòng này.
