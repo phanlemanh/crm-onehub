@@ -673,15 +673,18 @@ Vì sao: «loại» đã là chữ của mục tiêu — cam kết hay tham vọ
 cùng một hộp thoại thì người đọc không biết ô nào nói về cái gì. «Công thức» gợi
 người dùng tự viết phép tính, mà kiểu KR là một lựa chọn trong sáu.
 
-**Cập nhật tuần**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và
-một dòng ghi chú, mỗi tuần một lần. Lần cập nhật chỉ thêm, không sửa lần cũ. Màn
-«Cập nhật tuần của tôi» gom mọi KR một người phụ trách. Là chữ chốt cho
-«check-in». Chốt 2026-09-24.
-_Avoid_: check-in, báo cáo tuần, điểm danh
-Vì sao: «check-in» để nguyên thì màn lẫn tiếng; «báo cáo tuần» gợi một văn bản
-gửi lên để duyệt, còn cập nhật là một con số và một dòng; «điểm danh» nói có mặt,
-không nói tiến độ. Số tự chảy từ CRM vào KR không phải cập nhật tuần — mức tự tin
-và ghi chú vẫn do người ghi.
+**Cập nhật**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và một
+dòng ghi chú. Ghi lúc nào cũng được, mỗi lần thành một dòng; lần cập nhật chỉ thêm,
+không sửa lần cũ. Ghi bằng hộp cập nhật một KR, mở từ chi tiết KR. Nhịp hằng tuần là
+khuyến nghị vận hành, đến qua tin nhắc 08:30 và Họp tuần, không phải luật của dữ
+liệu. Cụm «cập nhật tuần này» vẫn đúng khi nói một khoảng thời gian. Là chữ chốt
+cho «check-in». Chốt 2026-09-24; bỏ chữ «tuần» khỏi tên 2026-10-24.
+_Avoid_: check-in, Cập nhật tuần, báo cáo tuần, điểm danh
+Vì sao: «check-in» để nguyên thì màn lẫn tiếng. «Cập nhật tuần» làm người ta tưởng
+mỗi tuần chỉ ghi được một lần, trong khi dữ liệu không có khoá duy nhất theo tuần.
+«Báo cáo tuần» gợi một văn bản gửi lên để duyệt, còn cập nhật chỉ là một con số và
+một dòng. «Điểm danh» nói có mặt, không nói tiến độ. Số tự chảy từ CRM vào KR không
+phải cập nhật, vì mức tự tin và ghi chú vẫn do người ghi.
 
 **Mức tự tin**: phán đoán của người phụ trách, ghi ở mỗi lần cập nhật tuần, rằng
 KR sẽ tới đích khi chu kỳ khép. Người chọn; máy không chọn thay. Chốt 2026-09-24.
@@ -722,6 +725,25 @@ _Avoid_: kế hoạch, plan, bảng OKR, trang đơn vị
 Vì sao: «kế hoạch» đã là chữ của Kế hoạch 30 ngày (khuôn kế hoạch, kế hoạch im); «trang
 đơn vị» gọi tên cái trang chứ không gọi tên vật — người ta mở một bộ OKR, không mở một
 đơn vị.
+
+**Tôi dẫn · Đang theo dõi (lọc phạm vi)**: bộ lọc phạm vi của khu Mục tiêu — ba chip
+Tất cả · Tôi dẫn · Đang theo dõi, ghi trên đường dẫn. Mọi màn của khu lọc theo phạm vi
+dùng đúng ba chữ này: Bộ OKR, Cập nhật gần đây và các màn sau. **Tôi dẫn** là các bộ
+của đơn vị người xem làm trưởng; trưởng một bộ phận không kéo theo các phòng ban con, và
+bộ OneHub không thuộc Tôi dẫn của ai. **Đang theo dõi** là các bộ có ít nhất một mục tiêu
+người xem theo dõi. Chốt 2026-10-24 (Manh Phan).
+_Avoid_: Bộ OKR bạn dẫn, Bạn theo dõi, của tôi, yêu thích
+Vì sao: một khái niệm mang hai bộ chữ trên hai màn cạnh nhau thì người ta tưởng là hai
+bộ lọc; «Của tôi» đã là tên một nơi đến trên thanh bên.
+
+**Cập nhật gần đây**: mục ở đầu thanh bên khu Mục tiêu, cạnh Của tôi — dòng tin mọi
+lần cập nhật KR trong chu kỳ đang chọn, mới nhất trước, lọc Tất cả · Tôi dẫn · Đang theo
+dõi. Trả lời ngay tại dòng tin; bấm một dòng thì mở chi tiết KR. Học từ «Recent updates»
+của Tability. Chốt 2026-10-18 cùng vỏ khu; mục từ ghi 2026-10-24.
+_Avoid_: bảng tin, hoạt động gần đây, nhật ký, feed
+Vì sao: tên gọi đúng thứ người ta đọc — các lần cập nhật — và «Cập nhật» đã là chữ chốt
+cho lần ghi của một KR. «Hoạt động» rộng hơn: gồm cả bình luận và sửa mục tiêu, trùng
+với Lịch sử. «Feed» lẫn tiếng.
 
 **Báo cáo (khu Mục tiêu)**: nhóm thứ hai trên thanh bên khu Mục tiêu, cho mọi vai, kể
 cả «chỉ OKR» — nơi nhìn ngang cả công ty trong một chu kỳ: **Sức khoẻ** (ô số, bảng đơn
