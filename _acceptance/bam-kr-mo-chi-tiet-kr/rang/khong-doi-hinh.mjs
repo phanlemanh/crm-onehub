@@ -33,11 +33,6 @@ const CHU_CU = "Cập nhật tuần";
 const ANH_CHUP = "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json";
 const LOP_TEP =
 	/^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|_acceptance\/[^/]+\/rang\/)/;
-const AP_CAP = [
-	['import { theoCapChu } from "./support/cap-chu-sv6";', ""],
-	["theoCapChu(", ""],
-	["asBanChup),", "asBanChup,"],
-];
 const TRAN_LENH_MS = 15 * 60_000;
 const MA_DO = 1;
 const MA_KHONG_DO = 2;
@@ -63,12 +58,14 @@ export function capChu() {
 	);
 }
 
-function apCap(chu, cap) {
-	return cap.reduce((kq, [cu, moi]) => kq.split(cu).join(moi), chu);
-}
-
-function chuan(chu) {
-	return chu.replace(/\s+/g, "");
+function doiMotCap(cu, moi, cap) {
+	const khop = cap.filter(([a, b]) => {
+		const vi = cu.indexOf(a);
+		if (vi < 0 || cu.indexOf(a, vi + 1) >= 0) return false;
+		if (cu.slice(vi + a.length).startsWith(" này")) return false;
+		return cu.slice(0, vi) + b + cu.slice(vi + a.length) === moi;
+	});
+	return khop.length >= 1;
 }
 
 export function khoiDiff(than) {
@@ -87,12 +84,16 @@ export function khoiDiff(than) {
 	return khoi;
 }
 
-export function khoiHopLe(k, cap) {
-	const bo = chuan(apCap(k.bo.join("\n"), cap)).replaceAll("objective:", "kr:");
-	let them = chuan(k.them.join("\n"));
-	for (const [a, b] of AP_CAP) them = them.split(chuan(a)).join(chuan(b));
-	them = them.replaceAll("objective:", "kr:");
-	return bo === them;
+export function khoiHopLe(k, cap, apAnh = null) {
+	const bo = k.bo.map((d) => d.trim());
+	const them = k.them.map((d) => d.trim());
+	if (apAnh) {
+		const boKhop = bo.every((d) => apAnh.dongBo.includes(d));
+		const themKhop = them.every((d) => apAnh.dongThem.includes(d));
+		if (boKhop && themKhop) return true;
+	}
+	if (bo.length !== them.length || bo.length === 0) return false;
+	return bo.every((d, i) => d === them[i] || doiMotCap(d, them[i], cap));
 }
 
 function cocSo(mb) {
@@ -104,7 +105,10 @@ function ganNen() {
 }
 
 function tepDaSua(nen, cwd = GOC) {
-	return git(["diff", "--name-only", "--diff-filter=M", `${nen}...HEAD`], cwd)
+	return git(
+		["diff", "--name-only", "--diff-filter=AMDR", `${nen}...HEAD`],
+		cwd,
+	)
 		.split("\n")
 		.filter(
 			(t) => t && LOP_TEP.test(t) && !t.startsWith(`_acceptance/${SLUG}/`),
@@ -208,38 +212,62 @@ function dongSo(slug) {
 		});
 }
 
+export function chuBai() {
+	return JSON.parse(
+		readFileSync(join(GOC, `_acceptance/${SLUG}/rang/chu-bai.json`), "utf8"),
+	);
+}
+
 export function kiemSo(daSua) {
+	const { chu, apBangCapAnhChup } = chuBai();
 	const loi = [];
 	for (const t of daSua) {
 		if (t === ANH_CHUP) {
 			loi.push(`SAI AC-6: ANH CHUP LICH SU DOI ${t}`);
 			continue;
 		}
-		const coSo = readdirSync(join(GOC, "_acceptance")).some(
-			(slug) =>
-				slug !== SLUG &&
-				TRANG_THAI_KY.has(trangThai(slug) ?? "") &&
-				dongSo(slug).some(
-					(d) =>
-						d.type === "fix" &&
-						d.decided_by === NGUOI_QUYET &&
-						JSON.stringify(d).includes(t),
-				),
+		if (t === apBangCapAnhChup.tepHoTro) continue;
+		const slug = chu[t];
+		if (!slug) {
+			loi.push(`SAI AC-6: THIEU CHU ${t}`);
+			continue;
+		}
+		const co = dongSo(slug).some(
+			(d) =>
+				d.type === "fix" &&
+				d.decided_by === NGUOI_QUYET &&
+				JSON.stringify(d).includes(t),
 		);
-		if (!coSo) loi.push(`SAI AC-6: THIEU SO ${t}`);
+		if (!co) loi.push(`SAI AC-6: THIEU SO ${t} (${slug})`);
 	}
+	return loi;
+}
+
+export function kiemTepHoTro(cwd = GOC) {
+	const { apBangCapAnhChup: a } = chuBai();
+	const duong = join(cwd, a.tepHoTro);
+	if (!existsSync(duong)) return [];
+	const than = readFileSync(duong, "utf8");
+	const loi = [];
+	if (!than.includes("_acceptance/bam-kr-mo-chi-tiet-kr/rang/cap-chu.json"))
+		loi.push(`SAI AC-6: ${a.tepHoTro} khong doc bang cap`);
+	if (!than.includes('"apps/agent/agent/lib/tin-nhac.ts"'))
+		loi.push(`SAI AC-6: ${a.tepHoTro} khong gioi han cap cua tin-nhac`);
 	return loi;
 }
 
 export function kiemKhoi(daSua, nen, cwd = GOC) {
 	const cap = capChu();
+	const { apBangCapAnhChup: a } = chuBai();
 	const loi = [];
 	for (const t of daSua) {
-		if (t === ANH_CHUP) continue;
+		if (t === ANH_CHUP || t === a.tepHoTro) continue;
+		const apAnh = a.tepGoi.includes(t) ? a : null;
 		for (const k of khoiDiff(
 			git(["diff", "-U0", `${nen}...HEAD`, "--", t], cwd),
 		))
-			if (!khoiHopLe(k, cap)) loi.push(`SAI AC-6: DOI LOGIC ${t}:${k.dong}`);
+			if (!khoiHopLe(k, cap, apAnh))
+				loi.push(`SAI AC-6: DOI LOGIC ${t}:${k.dong}`);
 	}
 	return loi;
 }
@@ -318,9 +346,17 @@ try {
 		`quet lop: ${new Set(lop.map((m) => m.slug)).size} ho so, ${lop.length} eval`,
 	);
 	let sai = 0;
-	for (const l of [...kiemSo(daSua), ...kiemKhoi(daSua, nen)]) {
+	for (const l of [
+		...kiemSo(daSua),
+		...kiemTepHoTro(),
+		...kiemKhoi(daSua, nen),
+	]) {
 		console.log(l);
 		sai += 1;
+	}
+	if (process.argv.includes("--chi-tinh")) {
+		console.log(`KET LUAN khong-doi-hinh tinh: ${sai === 0 ? "dat" : `${sai} SAI`}`);
+		process.exit(sai === 0 ? 0 : MA_DO);
 	}
 	const daChayCay = new Map();
 	const cay = lop.map((m) => ({ ...m, ma: chay(m.lenh, GOC, daChayCay) }));
