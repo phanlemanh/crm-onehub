@@ -1019,8 +1019,8 @@ const GHIM = {
 		"12 chưa có dữ liệu — sửa được mọi ô trừ loại và năm.",
 	],
 	"okr:caiDat.sua.moTaCoDuLieu": [
-		"1 đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật tuần giữ nguyên để số đã tính không lệch.",
-		"12 đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật tuần giữ nguyên để số đã tính không lệch.",
+		"1 đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật giữ nguyên để số đã tính không lệch.",
+		"12 đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật giữ nguyên để số đã tính không lệch.",
 	],
 	"okr:caiDat.sua.moTaRoiKeHoach": [
 		"1 đã rời pha Lập kế hoạch — chỉ sửa được tên.",

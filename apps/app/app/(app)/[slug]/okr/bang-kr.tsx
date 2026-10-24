@@ -368,12 +368,10 @@ function HangKr({
 								data-mo-kr={kr.id}
 								onClick={() => moBanGhi({ kind: "kr", id: kr.id })}
 								size="xs-wrap"
+								translate="no"
 								variant="link"
 							>
-								<span
-									className="wrap-anywhere whitespace-normal"
-									translate="no"
-								>
+								<span className="wrap-anywhere whitespace-normal">
 									{kr.title}
 								</span>
 							</Button>
