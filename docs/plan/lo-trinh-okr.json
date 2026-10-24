@@ -3175,7 +3175,7 @@
       "cau_giao": "«Trưởng đơn vị mở Mục tiêu và đi giữa Của tôi, Bộ OKR, Lấy ý kiến và Báo cáo bằng một thanh bên, chu kỳ chọn một lần ở đầu thanh, và mọi đường dẫn cũ vẫn mở đúng chỗ»",
       "vi_sao": "Hôm nay trang đơn vị có ba lớp điều khiển ngang chồng nhau; ô chu kỳ lẫn giữa các nút hành động; chia theo phạm vi (của tôi · đơn vị · cả công ty) làm người dùng không biết một mục nói về bộ OKR hay số liệu. Tability chia theo việc và vật, phạm vi là bộ lọc trong trang.",
       "bat_khi": "Trên trang đơn vị chỉ còn một lớp thẻ ngang; mọi đường dẫn cũ (?donOkr=, ?xemOkr=, /okr/theo-don-vi, /okr/toan-canh, /okr/quanh-muc-tieu/…, /okr?tu=nhac) chuyển tới đúng chỗ mới",
-      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Bản mẫu /proto/vo-khu-muc-tieu (nhánh feat/vo-khu-muc-tieu) là đầu vào của Cổng Phạm vi; slug bản mẫu trùng slug hàng. Chạy làn ghim lại chung với VK4 vì cả hai chạm cùng màn.",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Bản mẫu /proto/vo-khu-muc-tieu (nhánh feat/vo-khu-muc-tieu) là đầu vào của Cổng Phạm vi; slug bản mẫu trùng slug hàng. Chạy làn ghim lại chung với VK4 vì cả hai chạm cùng màn. C4 (Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77)): một chu kỳ cho cả khu, thay mỗi màn một mặc định — hàng VK17.",
       "dot": "okr-vo-khu-1810",
       "phu": [
         "V2"
@@ -3199,7 +3199,7 @@
       "cau_giao": "«Trưởng đơn vị mở Bộ OKR, lọc Tôi dẫn, mở bộ OKR của đơn vị mình và đi giữa OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm bằng thẻ con có đường dẫn riêng»",
       "vi_sao": "Ô chọn đơn vị trên một màn chung thay cho trang riêng của từng bộ; cách xem và chip lọc trông giống hệt nhau. Mỗi bộ OKR một trang, như Plan của Tability.",
       "bat_khi": "Mỗi bộ OKR có đường dẫn riêng; đổi thẻ con không mất chu kỳ và bộ đang xem; bộ lọc Tất cả · Tôi dẫn · Đang theo dõi ghi trên đường dẫn",
-      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). C1 (Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77)): khuyến nghị (a) bỏ thẻ con Sơ đồ khỏi trang một bộ tới khi VK14 giao; lối tạm cụ thể chủ kho chọn ở hàng gộp sau trong VK3, VK6, kèm dòng sổ ở hồ sơ của nó. VK14 dựng lại thẻ với đơn vị cha và con.",
       "dot": "okr-vo-khu-1810",
       "phu": [
         "V2b"
@@ -3270,7 +3270,7 @@
       "cau_giao": "«Ban lãnh đạo mở Báo cáo › Sơ đồ, thấy sơ đồ góp vào chiếm trọn vùng nội dung, bấm Toàn màn hình để thu thanh bên, và mở sơ đồ lấy tâm một mục tiêu từ ngăn của nó»",
       "vi_sao": "Sơ đồ quanh mục tiêu dựng khung trang lồng trong khung trang nên bị nhốt trong bề rộng tối đa và một đầu trang lớn; căn chỉnh hiện ở sáu chỗ với ba cách vẽ. Tability đặt bản đồ trong vỏ nhưng cho nó trọn vùng, có Full screen.",
       "bat_khi": "Sơ đồ không còn bề rộng tối đa của trang; một màn Sơ đồ thay cho Cây căn chỉnh và trang Sơ đồ quanh mục tiêu; Esc thoát toàn màn hình",
-      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Đứng trên DH4, DH5 đã ký.",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Đứng trên DH4, DH5 đã ký. C1 (Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77)): khuyến nghị (a) bỏ thẻ con Sơ đồ khỏi trang một bộ tới khi VK14 giao; lối tạm cụ thể chủ kho chọn ở hàng gộp sau trong VK3, VK6, kèm dòng sổ ở hồ sơ của nó. VK14 dựng lại thẻ với đơn vị cha và con.",
       "dot": "okr-vo-khu-1810",
       "phu": [
         "V3"
@@ -3412,8 +3412,8 @@
       "vai": "Trưởng đơn vị",
       "cau_giao": "«Trưởng đơn vị mở Cập nhật gần đây trước buổi họp tuần, đọc mọi lần cập nhật của bộ OKR mình dẫn, mới nhất trước, và trả lời ngay dưới từng lần»",
       "vi_sao": "Lần cập nhật chỉ đọc được trong thẻ Trao đổi của từng mục tiêu; không có chỗ đọc chung. Tability có Recent updates lọc theo kế hoạch đang theo dõi, đội, cấp dưới.",
-      "bat_khi": "Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Bộ OKR bạn dẫn · Bạn theo dõi",
-      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D5 giữ trả lời chỉ ở lần mới nhất (Hỏi-1 lối a, T2, không migration); trả lời từng lần sang HT5. D7 thêm mục thứ bảy trên thanh bên thì sửa thước vo-khu-muc-tieu DO.soMuc 6 → 7 trong làn của VK12, kèm dòng sổ fix và cham-tep. D8 bấm dòng tin mở chi tiết KR (useMoNganKr/openRecord), thêm ô vào MA_TRAN của ngan-kr-mot-cho. Nguồn: ghi chú bàn giao V3-doi-chieu-hop-tuan-2410.md mục 2, 5, 7.",
+      "bat_khi": "Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D5 giữ trả lời chỉ ở lần mới nhất (Hỏi-1 lối a, T2, không migration); trả lời từng lần sang HT5. D7 thêm mục thứ bảy trên thanh bên thì sửa thước vo-khu-muc-tieu DO.soMuc 6 → 7 trong làn của VK12, kèm dòng sổ fix và cham-tep. D8 bấm dòng tin mở chi tiết KR (useMoNganKr/openRecord), thêm ô vào MA_TRAN của ngan-kr-mot-cho. Nguồn: ghi chú bàn giao V3-doi-chieu-hop-tuan-2410.md mục 2, 5, 7. C5 (Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77)): chip lọc dùng đúng chữ của VK3 «Tất cả · Tôi dẫn · Đang theo dõi», thay «Bộ OKR bạn dẫn · Bạn theo dõi»; mục từ ở CONTEXT.md, cùng mục «Cập nhật gần đây». Hợp đồng trên feat/cap-nhat-gan-day (21/10) còn ghi tham số ?ky= trong khi kho dùng kyOkr.",
       "dot": "okr-vo-khu-1810",
       "phu": [
         "B5c"
@@ -3836,6 +3836,127 @@
         "LS"
       ],
       "tieu_chi": 6
+    },
+    {
+      "ma": "VK14",
+      "slug": "so-do-cua-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.8,
+      "dung_tren": [
+        "VK3",
+        "VK6"
+      ],
+      "ten": "Sơ đồ của một bộ OKR",
+      "ten_ngan": "Sơ đồ của bộ",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở thẻ con Sơ đồ của bộ OKR đơn vị mình và thấy ngay trong trang bộ đơn vị đó cùng đơn vị cha và các đơn vị con, mục tiêu nào góp vào mục tiêu nào, mà không rời sang Báo cáo»",
+      "vi_sao": "VK3 dựng thẻ «Sơ đồ góp vào» của trang bộ bằng cây cả chu kỳ (xemOkr=cay), còn VK6 chuyển ?xemOkr=cay sang /okr/so-do?moDonVi và bỏ Cây căn chỉnh: gộp cả hai thì thẻ con của một vật bật ra một nơi khác của khu, trái luật thẻ con ở docs/design.md. Nghiên cứu 18/10 đặt «Sơ đồ — đơn vị này với cha và con» làm thẻ con của một bộ (báo cáo 18/10, «Hình dạng hai màn chính»; wiki đợt okr-vo-khu-1810), như khối cha–con của một Plan trên Tability.",
+      "bat_khi": "Trang một bộ có lại thẻ con Sơ đồ; sơ đồ chỉ gồm đơn vị của bộ, đơn vị cha và các đơn vị con; bấm một đơn vị khác mở bộ OKR của đơn vị ấy; đổi thẻ con không mất chu kỳ và bộ đang xem",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C1 thẻ Sơ đồ của bộ: (a) bỏ tới khi có hàng mới VK14». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Lối tạm cho thẻ Sơ đồ tới khi hàng này giao (khuyến nghị (a): bỏ thẻ khỏi trang bộ) chủ kho chọn ở hàng gộp sau trong VK3, VK6; dòng sổ ở hồ sơ hàng ấy do dãy của nó ghi. Dùng lại FlowMap của VK6, không dựng sơ đồ thứ hai. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/so-do-cua-bo-okr (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "phu": [
+        "DC1"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK15",
+      "slug": "cot-phai-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.81,
+      "dung_tren": [
+        "VK8"
+      ],
+      "ten": "Cột phải của bộ OKR",
+      "ten_ngan": "Cột phải bộ",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở bộ OKR của đơn vị mình và thấy ở cột phải đơn vị góp vào mục tiêu nào của cấp trên cùng các đơn vị trực thuộc, bấm một dòng để mở mục tiêu hay bộ OKR ấy»",
+      "vi_sao": "Muốn biết đơn vị góp vào đâu, hôm nay phải mở từng mục tiêu, khoảng hai bấm mỗi mục tiêu; danh sách đơn vị trực thuộc chỉ có ở cách xem cũ của Theo đơn vị. Nghiên cứu 18/10 đặt khối «Góp vào» và «Đơn vị trực thuộc» ở cột phải trang một bộ, như cột quan hệ của trang Plan trên Tability: «Thấy đơn vị góp vào đâu» từ 2 bấm còn 0 (báo cáo 18/10, «Trước và sau theo việc hằng tuần», «Bảng chuyển chỗ»).",
+      "bat_khi": "Trang một bộ có cột phải với hai khối Góp vào và Đơn vị trực thuộc từ md trở lên, xếp dưới thẻ OKR ở khổ điện thoại; mỗi dòng bấm được; bộ chưa góp vào đâu và đơn vị không có đơn vị con mỗi trường hợp có câu rỗng riêng",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C2 cột phải bộ (Góp vào · Đơn vị trực thuộc): cắt hàng sau VK8». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Khối «Hỏi nhanh Kara» của bản mẫu 18/10 không thuộc hàng này: lần đối chiếu 24/10 không trình nó. Đọc dữ liệu căn chỉnh và cây tổ chức có sẵn, không đổi lược đồ. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/cot-phai-bo-okr (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "phu": [
+        "DC2"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK16",
+      "slug": "mot-tin-hieu-tren-dong",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.82,
+      "dung_tren": [
+        "VK8"
+      ],
+      "ten": "Một tín hiệu trên dòng",
+      "ten_ngan": "Một tín hiệu",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên đọc một dòng mục tiêu hay KR và chỉ thấy tình trạng cạnh mức tự tin; nhãn loại và «Đã công bố» không còn trên dòng, nhãn trạng thái chỉ hiện khi mục tiêu là nháp hay chờ duyệt»",
+      "vi_sao": "Một dòng hôm nay mang cùng lúc tình trạng, mức tự tin, nhãn loại, «Đã công bố» và chip Kara; Tability để một ô màu và một thanh tiến độ. P12 của nghiên cứu 18/10 («Một tín hiệu trên dòng») giữ tình trạng và mức tự tin cạnh nhau, vì lúc hai thứ lệch nhau là lúc đáng bàn.",
+      "bat_khi": "Trên mọi dòng mục tiêu và KR của khu Mục tiêu không còn nhãn loại và «Đã công bố»; nhãn Nháp và Chờ duyệt vẫn hiện; tình trạng và mức tự tin đứng cạnh nhau; loại mục tiêu vẫn đọc được trong chi tiết mục tiêu",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C3 P12 một tín hiệu trên dòng: thành hàng; trang một người: chân trời». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Đi sau VK8 vì cùng dòng của thẻ OKR (KR mở sẵn). Màu nhãn theo StatusIndicator và bảng nghĩa ở docs/design.md «Màu trạng thái». Hồ sơ đã ký đo theo nhãn trên dòng thì ghim lại theo luật tạm 18/10. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/mot-tin-hieu-tren-dong (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "phu": [
+        "DC3a"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK17",
+      "slug": "mot-chu-ky-ca-khu",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.83,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Một chu kỳ cho cả khu",
+      "ten_ngan": "Một chu kỳ",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên chọn chu kỳ một lần ở đầu thanh bên Mục tiêu và mọi nơi đến trong khu — Của tôi, Cập nhật gần đây, Bộ OKR, Lấy ý kiến, Báo cáo — hiện cùng chu kỳ ấy cho tới khi đổi lại»",
+      "vi_sao": "VK2 cho mỗi màn giữ chu kỳ mặc định riêng (d-20261019T170009Z-7 của hồ sơ vo-khu-muc-tieu): Lấy ý kiến mặc định chu kỳ đang lập kế hoạch, nên đi từ Của tôi sang Lấy ý kiến thì chu kỳ tự đổi. Nghiên cứu 18/10 đặt ô chu kỳ «áp cho mọi nơi trong khu», để «hết cảnh chuyển thẻ thì kỳ tự đổi» (báo cáo 18/10, đặc tả vỏ). Mặc định nằm ở apps/app/app/(app)/[slug]/okr/okr-search-params.ts, chon-chu-ky.tsx, layout.tsx.",
+      "bat_khi": "Chọn một chu kỳ rồi đi qua mọi mục của thanh bên: kyOkr trên đường dẫn và chu kỳ trên ô không đổi; Lấy ý kiến chỉ mặc định chu kỳ đang lập kế hoạch khi đường dẫn không mang kyOkr",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C4 ô chu kỳ: một chu kỳ cho cả khu». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Đổi hành vi đã ký của VK2: cần dòng sổ decided_by chủ kho ở hồ sơ vo-khu-muc-tieu và ghim lại okr-giai-ky-an. Đi sau VK3 vì thẻ con của trang một bộ mang kyOkr trên đường dẫn. Ô chu kỳ giữ ở header của AreaSidebar theo docs/design.md «Thanh bên khu và thẻ con». Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/mot-chu-ky-ca-khu (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "phu": [
+        "DC4"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK18",
+      "slug": "sau-ten-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.84,
+      "dung_tren": [
+        "VK8"
+      ],
+      "ten": "Sáu tên còn treo của khu Mục tiêu",
+      "ten_ngan": "Sáu tên",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên thấy một tên cho lịch sử, mức chắc của lý do, danh sách đáng bàn và nút thêm việc: Lịch sử thay Vết và Diễn biến, Phỏng đoán thay Đặt cược, Đáng bàn thay Cần bàn, Thêm việc, Tiếp tục soạn OKR; bản tiếng Anh ghi Tasks và Company-wide»",
+      "vi_sao": "Màn còn các tên mà bảng «Đặt tên» của nghiên cứu 18/10 đề xuất đổi: «Vết» (apps/app/lib/messages/okr.ts:222, :223, okr-canh-kr.ts:131, :193), «Diễn biến» (okr-toan-canh.ts:170, :172), «Đặt cược» (okr.ts:217, :363), «Cần bàn» (okr.ts:161), «Tiếp cuộc đang soạn» (okr.ts:69, okr-soan.ts:40), nút «Thêm» trần của cột Việc; bản tiếng Anh gọi cột Việc là «Actions» (okr-canh-kr.ts:298) và thẻ cả công ty là «Overview» (okr.ts:789), trùng trang chủ CRM. CONTEXT.md mục Trao đổi (OKR) còn viết «sau «Vết»».",
+      "bat_khi": "Không còn «Vết», «Diễn biến», «Đặt cược», «Cần bàn», «Tiếp cuộc đang soạn» trên màn khu Mục tiêu; chi tiết mục tiêu có một thẻ Lịch sử; bản tiếng Anh không còn cột «Actions» cho việc và thẻ «Overview»; CONTEXT.md sửa trước khi đổi nhãn",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C8 sáu tên VK-C1: duyệt cả bảng». Mục chờ VK-C1 đóng và thành hàng này; hàng giữ dot okr-vo-khu-1810 và gánh mã C1 của bản phạm vi 18/10 để bảng phủ của đợt ấy vẫn ở một chỗ. Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Theo cách làm của bảng «Đặt tên»: sửa từ điển trước, rồi một lượt đổi nhãn cho cả hai thứ tiếng. Đi sau VK8 vì VK8 dựng chip «Cần bàn». VK10 chạm «Tiếp cuộc đang soạn» ở chế độ Soạn: hàng nào gộp sau giữ tên mới. Cột thao tác «Actions» (okr.ts:1023, cotThaoTac) là cột thao tác thật, không đổi. Hồ sơ đã ký đo theo nhãn (DH1–DH5, VK4) ghim lại sau lượt đổi nhãn. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/sau-ten-khu-muc-tieu (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "C1"
+      ],
+      "tieu_chi": 10
     }
   ],
   "chan_troi": [
@@ -3910,24 +4031,14 @@
       "mo_lai_khi": "NM2 chốt chỗ đặt và khu Mục tiêu cần theo"
     },
     {
-      "ma": "VK-C1",
-      "dot": "okr-vo-khu-1810",
-      "cau_giao": "«Thành viên thấy một tên cho lịch sử, mức chắc của lý do, danh sách đáng bàn và nút thêm việc»",
-      "ly_do": "Các tên này chưa chốt: gộp Vết và Diễn biến thành Lịch sử, «Đặt cược» thành «Phỏng đoán», «Cần bàn» thành «Đáng bàn», nút «Thêm» thành «Thêm việc», «Tiếp cuộc đang soạn» thành «Tiếp tục soạn OKR», và hai lỗi bản tiếng Anh (cột «Actions», thẻ «Overview» trùng trang chủ). Đổi tên là quyết định của chủ kho.",
-      "phu": [
-        "C1"
-      ],
-      "mo_lai_khi": "Chủ kho chốt các tên ở bảng «Đặt tên» của báo cáo 18/10; mục nào chạm từ điển thì sửa từ điển trước"
-    },
-    {
       "ma": "VK-C2",
       "dot": "okr-vo-khu-1810",
       "cau_giao": "«Trưởng đơn vị thấy trong Của tôi ai trong đơn vị chưa cập nhật tuần này»",
-      "ly_do": "Từ điển (mục Họp tuần) cố ý không liệt kê người chưa cập nhật và tránh chữ «điểm danh», để họp tuần bàn KR chứ không bàn người. Bản mẫu 18/10 có khối này; giữ hay bỏ là quyết định sản phẩm của chủ kho.",
+      "ly_do": "Từ điển (mục Họp tuần) cố ý không liệt kê người chưa cập nhật và tránh chữ «điểm danh», để họp tuần bàn KR chứ không bàn người. Bản mẫu 18/10 có khối này; giữ hay bỏ là quyết định sản phẩm của chủ kho. Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C7, C9, C10: giữ hiện trạng»: Của tôi không liệt kê người chưa cập nhật.",
       "phu": [
         "C2"
       ],
-      "mo_lai_khi": "Chủ kho quyết Của tôi có liệt kê người chưa cập nhật hay không, và sửa mục Họp tuần của từ điển nếu có"
+      "mo_lai_khi": "Trưởng đơn vị cần biết ai chưa cập nhật mà bảng họp tuần xếp theo KR không đủ, và chủ kho sửa mục Họp tuần của từ điển"
     },
     {
       "ma": "NS-C1",
@@ -3978,6 +4089,16 @@
         "CT1"
       ],
       "mo_lai_khi": "Sau khi SV7 giao, người dùng cần xem riêng một lần cập nhật (trả lời, cảm xúc hay sửa sai) mà Lịch sử không đủ chỗ"
+    },
+    {
+      "ma": "VK-C3",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "cau_giao": "«Thành viên mở trang của một người và thấy cùng khuôn trang một bộ OKR: hàng số, KR người ấy phụ trách, việc và hoạt động»",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C3 P12 một tín hiệu trên dòng: thành hàng; trang một người: chân trời». Nguyên tắc 3 của nghiên cứu 18/10 (một khuôn cho mọi vật chứa); VK3 để OKR cá nhân ngoài phạm vi.",
+      "phu": [
+        "DC3b"
+      ],
+      "mo_lai_khi": "Chương trình OKR bật OKR cá nhân, hoặc người dùng cần xem OKR của một người mà Mọi KR lọc theo người không đủ"
     }
   ],
   "da_bac": [
