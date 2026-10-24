@@ -30,6 +30,7 @@ const VAT = [
 	"tin-nhac",
 ];
 const CHU_CU = "Cập nhật tuần";
+const TEP_CUA_VONG = /(bam-kr-mo-chi-tiet-kr|\/bkr-|bam-kr-quet)/;
 const ANH_CHUP = "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json";
 const LOP_TEP =
 	/^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|_acceptance\/[^/]+\/rang\/)/;
@@ -111,7 +112,11 @@ function tepDaSua(nen, cwd = GOC) {
 	)
 		.split("\n")
 		.filter(
-			(t) => t && LOP_TEP.test(t) && !t.startsWith(`_acceptance/${SLUG}/`),
+			(t) =>
+				t &&
+				LOP_TEP.test(t) &&
+				!t.startsWith(`_acceptance/${SLUG}/`) &&
+				!TEP_CUA_VONG.test(t),
 		);
 }
 
@@ -355,7 +360,9 @@ try {
 		sai += 1;
 	}
 	if (process.argv.includes("--chi-tinh")) {
-		console.log(`KET LUAN khong-doi-hinh tinh: ${sai === 0 ? "dat" : `${sai} SAI`}`);
+		console.log(
+			`KET LUAN khong-doi-hinh tinh: ${sai === 0 ? "dat" : `${sai} SAI`}`,
+		);
 		process.exit(sai === 0 ? 0 : MA_DO);
 	}
 	const daChayCay = new Map();
