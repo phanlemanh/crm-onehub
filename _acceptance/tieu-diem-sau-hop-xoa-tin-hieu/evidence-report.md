@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 5dbc958489a70931f04c9471cab6b5fbcdc772bc
-human_signoff:
+human_signoff: Manh Phan 2026-10-24 — ký Cổng Bằng chứng trên verdict PASS vòng 1 (8/8 eval). Ngoài-1 đến Ngoài-5 ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: tieu-diem-sau-hop-xoa-tin-hieu

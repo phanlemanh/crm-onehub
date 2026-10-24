@@ -5,7 +5,7 @@ slug: tieu-diem-sau-hop-xoa-tin-hieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-24T07:26:02Z
 design_doc: docs/superpowers/specs/2026-10-24-tieu-diem-sau-hop-xoa-tin-hieu-design.md
@@ -62,3 +62,9 @@ Quét bằng `morphological-scan` (preset test-matrix), chi tiết ở `_accepta
 - Vòng đời (`docs/vong-doi.md`): vòng không thêm loại bản ghi hay trạng thái kết thúc; ba câu giữ nguyên câu trả lời của `_acceptance/gui-tin-hieu-trong-crm/`.
 - Vùng: `apps/app/components/tin-hieu`, `apps/app/app/(app)/[slug]/tin-hieu`, `apps/app/lib/tin-hieu` thuộc làn MacBook Pro (luật 19 của đợt `lo-trinh-tin-hieu`).
 - Hồ sơ đã ký `sua-giao-dien-tin-hieu` có eval khai `paths` chạm các tệp này (E5, E12…): ghim lại hồ sơ đó sau khi vòng này gộp.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-24:
+  - Ngoài-1: Cách tìm nút ⋮ của một dòng đang viết ở hai chỗ; đổi một chỗ mà quên chỗ kia thì tiêu điểm sau khi xoá xong có thể lại rơi về đầu trang.
+  - Ngoài-2: Chạy lại phép kiểm ranh giới sau khi nhánh đã gộp thì nó có thể báo đạt mà không xét tệp nào.
+  - Ngoài-3: Bài kiểm ca mất mạng không bắt được trường hợp trang để lộ thông báo lỗi kỹ thuật ra ngoài vùng báo lỗi.
+  - Ngoài-4: Bài kiểm tự động dùng lỗi máy chủ dựng tay; máy chủ đổi cách báo lỗi thì bài vẫn xanh, chỉ phép đo bàn phím trên máy chủ thật (tiếng Việt) bắt được.
+  - Ngoài-5: Phép kiểm ranh giới báo đạt cả khi danh sách tệp rỗng (cùng gốc với Ngoài-2).
