@@ -139,10 +139,10 @@ afterEach(() => {
 	hangCuaToi = [];
 });
 
-const KHOI: Record<Kho, string> = {
+const KHOI = {
 	375: ".md\\:hidden",
 	1280: ".hidden.md\\:block",
-};
+} satisfies Record<Kho, string>;
 
 function datKho(w: Kho) {
 	HTMLElement.prototype.getClientRects = function (this: HTMLElement) {
