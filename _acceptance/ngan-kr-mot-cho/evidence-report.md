@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f
+verified_commit: 5f6b44ddffd125c65677de273e1a6d5be148312f
 human_signoff: Phan Le Manh 2026-10-21
 ---
 
@@ -225,6 +225,6 @@ Round 3: PASS (14/14 eval trả về).
 Round 4: REJECT (11/11 eval trả về); nguyên nhân xem run-log.jsonl vòng 4. Returned to implementation.
 Round 5: chạy lại E1, E6, E8, E10, E12, E13 cùng 7 lệnh suite, tất cả đạt; E2-E5, E7, E9 mang từ round 1 và E11 mang từ round 4; verdict PASS.
 
-### Re-pin lần 1 — 2026-10-23, do hoá cũ do so-do-toan-vung (VK6) — thước sửa tại chỗ theo V3-25 A, V3-27 B, V3-30; AC-10 chứng ở bước ghim lại
-run_id: repin-20261023T053547Z-88592
-sha: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+### Re-pin lần 1 — 2026-10-24, do VK3 trang-bo-okr chạm vật; E13 theo vòng sửa theo chủ kho «Chọn A» (5f6b44ddf)
+run_id: repin-20261024T223232Z-56924
+sha: 5f6b44ddffd125c65677de273e1a6d5be148312f · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

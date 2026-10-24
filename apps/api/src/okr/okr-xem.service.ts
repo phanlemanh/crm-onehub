@@ -30,10 +30,13 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
+import { chonViecBo, gopDanhSachBo, viecBoTu } from "./bo-okr";
 import { dungCayCanChinh } from "./can-chinh";
+import { hangViec } from "./canh-kr";
 import { demMatLoc, type MucTieuGon } from "./danh-sach";
 import { demGopYCho } from "./dem-gop-y";
 import { dienBienKr, tuanCapNhatDau } from "./dien-bien";
+import { khoaDonViDong } from "./don-vi";
 import type { PhamDoc } from "./hien-thi";
 import type { DonViChon, MucTieuOutput, NutCanChinh } from "./okr.contracts";
 import { OkrService } from "./okr.service";
@@ -47,6 +50,7 @@ import { OKR_XEM } from "./okr-xem.config";
 import type {
 	CanhCanChinh,
 	CayCanChinhOutput,
+	DanhSachBoOutput,
 	DanhSachInput,
 	DanhSachOutput,
 	DienBienOutput,
@@ -62,6 +66,8 @@ import type {
 	SoDoDonViOutput,
 	SucKhoeOutput,
 	ToanCanhOutput,
+	ViecCuaBoInput,
+	ViecCuaBoOutput,
 } from "./okr-xem.contracts";
 import { gopQuanhMucTieu } from "./quanh-muc-tieu";
 import { type DauVaoSoDo, gopSoDoDonVi } from "./so-do-don-vi";
@@ -374,6 +380,15 @@ export class OkrXemService {
 		homNay = new Date(),
 	): Promise<ToanCanhOutput> {
 		const q = await this.quyenOkr.quyen(userId);
+		return this.toanCanhTheo(q, userId, cycleId, homNay);
+	}
+
+	private async toanCanhTheo(
+		q: Quyen,
+		userId: string,
+		cycleId: string,
+		homNay: Date,
+	): Promise<ToanCanhOutput> {
 		const where = { cycleId, status: "cong-bo" };
 		const [congBo, lan, tuanKy] = await Promise.all([
 			this.okr.docMucTieu(this.db, where, userId, q, "so-gop"),
@@ -396,6 +411,101 @@ export class OkrXemService {
 			await readTenGoc(this.db),
 			{ tuanKy, homNay },
 		);
+	}
+
+	async danhSachBo(
+		userId: string,
+		cycleId: string,
+		homNay = new Date(),
+	): Promise<DanhSachBoOutput> {
+		const q = await this.quyenOkr.quyen(userId);
+		const nc = this.quyenOkr.nguCanhXem(q, userId);
+		const [tc, soMucTieu, theoDoi, tenGoc] = await Promise.all([
+			this.toanCanhTheo(q, userId, cycleId, homNay),
+			this.okr.countByUnit(userId, cycleId),
+			this.db.okrFollow.findMany({
+				where: {
+					userId,
+					objective: { AND: [{ cycleId }, dieuKienXemMucTieu(nc)] },
+				},
+				select: {
+					objective: {
+						select: {
+							level: true,
+							divisionId: true,
+							departmentId: true,
+							personUserId: true,
+						},
+					},
+				},
+			}),
+			readTenGoc(this.db),
+		]);
+		return gopDanhSachBo({
+			cay: cayGon(q),
+			tenGoc,
+			soMucTieu,
+			toanCanh: tc.hang,
+			dan: { boPhan: q.truongBoPhan, phongBan: q.truongPhongBan },
+			theoDoi: new Set(theoDoi.map((f) => khoaDonViDong(f.objective))),
+		});
+	}
+
+	async viecCuaBo(
+		userId: string,
+		input: ViecCuaBoInput,
+	): Promise<ViecCuaBoOutput> {
+		const q = await this.quyenOkr.quyen(userId);
+		const nc = this.quyenOkr.nguCanhXem(q, userId);
+		const krs = await this.db.okrKeyResult.findMany({
+			where: {
+				objective: {
+					AND: [
+						{ cycleId: input.cycleId },
+						this.dieuKienDonVi(input.unit, q),
+						dieuKienXemMucTieu(nc),
+					],
+				},
+				viecKr: { some: {} },
+			},
+			orderBy: [
+				{ objective: { position: "asc" } },
+				{ objective: { createdAt: "asc" } },
+				{ objectiveId: "asc" },
+				{ position: "asc" },
+				{ createdAt: "asc" },
+				{ id: "asc" },
+			],
+			select: {
+				id: true,
+				title: true,
+				objective: { select: { id: true, title: true } },
+				viecKr: {
+					orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
+					select: chonViecBo,
+				},
+			},
+		});
+		return {
+			nhom: krs.map((k) => ({
+				kr: {
+					id: k.id,
+					ten: k.title,
+					mucTieu: { id: k.objective.id, ten: k.objective.title },
+				},
+				viec: k.viecKr.map((v) =>
+					viecBoTu(
+						{
+							...hangViec(v),
+							nguoiLam: v.nguoiLam,
+							campaign: v.campaign,
+							plan: v.plan,
+						},
+						q.role,
+					),
+				),
+			})),
+		};
 	}
 
 	async sucKhoe(

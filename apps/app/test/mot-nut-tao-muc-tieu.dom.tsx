@@ -515,7 +515,11 @@ describe("mnt-dau-trang", () => {
 				for (const xem of [TB1, QT]) {
 					soO += 1;
 					const ten = `${man}/${pha}/${xem.ten}`;
-					await dauTrang(man, { xem, pha });
+					await dauTrang(
+						man,
+						{ xem, pha },
+						man === "bo-okr" ? "?donOkr=goc" : "",
+					);
 					const h = hang();
 					const chinh = nutChinh(h);
 					const con = h ? [...h.children] : [];
@@ -548,7 +552,11 @@ describe("mnt-dau-trang", () => {
 				}
 		for (const man of ["cua-toi", "bo-okr"] as const) {
 			soO += 1;
-			await dauTrang(man, { xem: TB1, treoQuyen: true });
+			await dauTrang(
+				man,
+				{ xem: TB1, treoQuyen: true },
+				man === "bo-okr" ? "?donOkr=goc" : "",
+			);
 			const h = hang();
 			s.kiem(
 				qa("[data-hang-cho]", h ?? document).length === 1 &&
@@ -666,7 +674,7 @@ describe("mnt-man-doc", () => {
 			`mnt-man-doc: doi chung khong thay nut ${NUT_MAU_DOI_CHUNG} trong PageShellActions (bo duyet trang server mu)`,
 		);
 		soO += 1;
-		await dauTrang("bo-okr", { xem: TB1 });
+		await dauTrang("bo-okr", { xem: TB1 }, "?donOkr=goc");
 		s.kiem(
 			nutChinh(hang()).length === 1,
 			"mnt-man-doc: doi chung bo-okr/truong khong thay nut chinh (bo dem mu)",

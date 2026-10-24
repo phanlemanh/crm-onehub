@@ -48,9 +48,12 @@ const { okrToanCanhMessages } = await import(
 const { okrKhepMessages } = await import(
 	join(GOC, "apps/app/lib/messages/okr-khep.ts")
 );
+const { okrVoKhuMessages } = await import(
+	join(GOC, "apps/app/lib/messages/okr-vo-khu.ts")
+);
 const M = okrMessages("vi");
 const NHAN_XEM = {
-	"danh-sach": M.danhSach,
+	"danh-sach": okrVoKhuMessages("vi").boOkr.the["danh-sach"],
 	"hop-tuan": okrToanCanhMessages("vi").hopTuan.cachXem,
 	cham: okrKhepMessages("vi").cham.cachXem,
 };
@@ -172,7 +175,7 @@ async function doKhoang(t) {
 			.querySelector("[data-slot=page-shell-content] thead")
 			?.getBoundingClientRect();
 		const tl = document
-			.querySelector("[data-slot=page-shell] [role=tablist]")
+			.querySelector("[data-slot=page-shell] [data-the-con-bo]")
 			?.getBoundingClientRect();
 		const hd = document
 			.querySelector("[data-slot=page-shell-header]")
@@ -198,8 +201,6 @@ async function doHang(t) {
 			nut.find((b) => re.test((b.innerText ?? "").trim())) ?? null;
 		const cs = {
 			"o chon": document.querySelector("[data-chon-don-vi]"),
-			"cach xem":
-				[...document.querySelectorAll("[data-view-switch]")].find(hien) ?? null,
 			"o loc nhanh": theoChu(/^(Tất cả|Cần bàn|Chưa góp vào đâu)/),
 			Loc: theoChu(/^Lọc/),
 			"Sap xep": theoChu(/^Sắp xếp/),
@@ -236,23 +237,18 @@ async function doThan(t) {
 	}));
 }
 
-/* Vị trí ô chọn và cách xem đang hiện (ToggleGroup ≥ md, Select < md). */
 async function viTri(t) {
 	return t.evaluate(() => {
 		const hien = (e) => Boolean(e) && e.offsetParent !== null;
 		const o = [...document.querySelectorAll("[data-chon-don-vi]")].find(hien);
-		const x = [...document.querySelectorAll("[data-view-switch]")].find(hien);
+		const x = [...document.querySelectorAll("[data-the-con-bo]")].find(hien);
 		const r = (e) => {
 			if (!e) return null;
 			const b = e.getBoundingClientRect();
 			return { top: Math.round(b.top), left: Math.round(b.left) };
 		};
 		const dangXem = x
-			? x.getAttribute("data-view-switch") === "nut"
-				? (x.querySelector("[data-state=on]")?.textContent ?? "").trim()
-				: (
-						x.querySelector("[data-slot=select-value]")?.textContent ?? ""
-					).trim()
+			? (x.querySelector("a[aria-current=page]")?.textContent ?? "").trim()
 			: "";
 		return {
 			o: r(o),
@@ -367,7 +363,7 @@ try {
 			await choMs(500);
 			if (kho === 1440) {
 				const h = await doHang(t);
-				const motHang = h.k === 5 && h.lech !== null && h.lech <= 4;
+				const motHang = h.k === 4 && h.lech !== null && h.lech <= 4;
 				if (motHang) soHang = 1;
 				dong(
 					motHang,

@@ -42,10 +42,6 @@ const GIU = {
 			"luat pham vi vong: git diff --quiet merge-base tren messages-guard.spec.ts cua vong do",
 		"muc-tieu-va-kr#E14":
 			"thuoc chay thuoc: rang/ho-so-cham.mjs tu chay eval cua 14 ho so khac",
-		"kara-mot-ten#E12":
-			"so-do-toan-vung AC-6 gỡ bài Cây có chủ đích (cay-can-chinh-ly-do.dom.tsx, ca theo-don-vi-cay); chủ kho V3-18 lối 1",
-		"truong-tu-tao-o-cai-dat#E11":
-			"thước màn trang-truong.mjs khay-cu chụp ảnh vào evidence của hồ sơ đã ký (làn ghim lại dừng «executor chạm hồ sơ đã thông»), và đỏ sẵn trên onehub; chủ kho V3-39 lối A",
 	},
 	cayNen: ".acceptance-runs/ngan-kr-mot-cho/goc",
 };
@@ -247,28 +243,19 @@ function kiemNghi(hoSo) {
 	return { nghi, loi };
 }
 
-function khungDaGop() {
-	const gop = git(
-		"log",
-		GIU.nhanhNen,
-		"--first-parent",
-		"--merges",
-		"--format=%H %P%x09%s",
-		"--grep",
-		`/feat/${SLUG}`,
-	)
-		.split("\n")
-		.map((d) => d.split("\t"))
-		.find(([, s]) => s?.endsWith(`/feat/${SLUG}`))?.[0];
-	if (!gop) return null;
-	const [, cha1, cha2] = gop.split(" ");
-	return { nen: git("merge-base", cha1, cha2).trim(), den: cha2 };
+function vongDaGop() {
+	const hd = spawnSync(
+		"git",
+		["-C", GOC, "show", `${GIU.nhanhNen}:_acceptance/${SLUG}/contract.md`],
+		{ encoding: "utf8" },
+	);
+	if (hd.status !== 0) return false;
+	return GIU.daKy.has(hd.stdout.match(/^status:\s*(\S+)/m)?.[1] ?? "");
 }
 
 function tepDoiCuaVong() {
-	const khung = khungDaGop();
-	const nen = khung?.nen ?? git("merge-base", "HEAD", GIU.nhanhNen).trim();
-	const tep = git("diff", "--name-only", nen, ...(khung ? [khung.den] : []))
+	const nen = git("merge-base", "HEAD", GIU.nhanhNen).trim();
+	const tep = git("diff", "--name-only", nen)
 		.split("\n")
 		.filter((t) => t && !GIU.boTepDoi.some((r) => r.test(t)));
 	return { nen, tep };
@@ -406,6 +393,12 @@ function chay() {
 	console.log(
 		`nen ${nen.slice(0, 9)} (${GIU.nhanhNen}) · ${tep.length} tep doi`,
 	);
+	if (vongDaGop()) {
+		console.log(
+			`VONG DA GOP: ${SLUG} da ky tren ${GIU.nhanhNen} — thuoc theo vong, khong do vong cua nhanh khac`,
+		);
+		process.exit(0);
+	}
 	const am = tapKhop(hoSo, [GIU.tepKhongCo]);
 	if (am.length !== 0) {
 		console.log(`KHONG DO DUOC: doi chung am khop ${am.map(khoa).join(", ")}`);

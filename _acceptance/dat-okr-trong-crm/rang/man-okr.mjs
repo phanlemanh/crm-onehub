@@ -37,7 +37,8 @@ const CHU = {
 	chuaTruong: "Gán trưởng ở Cài đặt › Tổ chức",
 	rongBody: "Trưởng đơn vị thêm từng mục tiêu",
 	cuaToiRong: "Bạn chưa phụ trách mục tiêu hay KR nào",
-	danhSach: "Danh sách",
+	soDoGopVao: "Sơ đồ góp vào",
+	danhSach: "OKR",
 	quayLai: "Quay lại",
 	nhap: "Nháp",
 	daCongBo: "Đã công bố",
@@ -723,7 +724,7 @@ async function doiRong(trang, rong) {
 }
 
 const theoDonVi = (don, them = "") =>
-	`/okr/theo-don-vi${don ? `?donOkr=${don}${them}` : them ? `?${them.slice(1)}` : ""}`;
+	`/okr/theo-don-vi${don ? `?donOkr=${don}${them}` : them ? `?${them.slice(1)}` : "?donOkr=goc"}`;
 
 async function byUnit(c, don) {
 	return hoi(c, "okr.byUnit", { cycleId: OKR.quy, unit: don });
@@ -851,7 +852,17 @@ async function buocE11() {
 	kiem(`E11 buoc 2: thead bang KR phai 4 cot, thay ${cot}`, cot === 4);
 	await chup(t, "E11-step2.png", true);
 
-	await bamChu(t, "[role='radio']", CHU.danhSach);
+	await bamChu(t, "[data-the-con-bo] a", CHU.soDoGopVao);
+	await hienSel(t, "[data-man-so-do]");
+	kiem(
+		`E11 buoc 3: the «Sơ đồ góp vào» phai mo /okr/so-do voi moDonVi=${pb("pb1")}, thay ${new URL(t.url()).pathname} moDonVi=${thamSo(t, "moDonVi")}`,
+		new URL(t.url()).pathname.endsWith("/okr/so-do") &&
+			thamSo(t, "moDonVi") === pb("pb1"),
+	);
+	await chup(t, "E11-step3.png", true);
+	await t.goBack();
+	await hienSel(t, "[data-the-con-bo]");
+	await bamChu(t, "[data-the-con-bo] a", CHU.danhSach);
 	await hienSel(t, `[data-muc-tieu='${OKR.o3.id}']`);
 
 	await chonTuySelect(t, "[data-chon-chu-ky]", KY.nam);

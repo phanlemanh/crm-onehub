@@ -17,6 +17,7 @@ import {
 	khoaDonOkr,
 	LOC_GOP_Y,
 	type LocGopY,
+	PHAM_VI_BO,
 } from "@crm/validation/okr-tham-so";
 import {
 	createLoader,
@@ -74,6 +75,9 @@ export const okrParsers = {
 };
 
 export const parseAsNeoGopY = parseAsBoolean;
+
+export const parseAsPhamViBo =
+	parseAsStringLiteral(PHAM_VI_BO).withDefault("tat-ca");
 
 export const LOC_MUC_TIN_CAY = ["tat-ca", "chua-co-ly-do", "dat-cuoc"] as const;
 
