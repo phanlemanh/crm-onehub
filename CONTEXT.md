@@ -673,15 +673,18 @@ Vì sao: «loại» đã là chữ của mục tiêu — cam kết hay tham vọ
 cùng một hộp thoại thì người đọc không biết ô nào nói về cái gì. «Công thức» gợi
 người dùng tự viết phép tính, mà kiểu KR là một lựa chọn trong sáu.
 
-**Cập nhật tuần**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và
-một dòng ghi chú, mỗi tuần một lần. Lần cập nhật chỉ thêm, không sửa lần cũ. Màn
-«Cập nhật tuần của tôi» gom mọi KR một người phụ trách. Là chữ chốt cho
-«check-in». Chốt 2026-09-24.
-_Avoid_: check-in, báo cáo tuần, điểm danh
-Vì sao: «check-in» để nguyên thì màn lẫn tiếng; «báo cáo tuần» gợi một văn bản
-gửi lên để duyệt, còn cập nhật là một con số và một dòng; «điểm danh» nói có mặt,
-không nói tiến độ. Số tự chảy từ CRM vào KR không phải cập nhật tuần — mức tự tin
-và ghi chú vẫn do người ghi.
+**Cập nhật**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và một
+dòng ghi chú. Ghi lúc nào cũng được, mỗi lần thành một dòng; lần cập nhật chỉ thêm,
+không sửa lần cũ. Ghi bằng hộp cập nhật một KR, mở từ chi tiết KR. Nhịp hằng tuần là
+khuyến nghị vận hành, đến qua tin nhắc 08:30 và Họp tuần, không phải luật của dữ
+liệu. Cụm «cập nhật tuần này» vẫn đúng khi nói một khoảng thời gian. Là chữ chốt
+cho «check-in». Chốt 2026-09-24; bỏ chữ «tuần» khỏi tên 2026-10-24.
+_Avoid_: check-in, Cập nhật tuần, báo cáo tuần, điểm danh
+Vì sao: «check-in» để nguyên thì màn lẫn tiếng. «Cập nhật tuần» làm người ta tưởng
+mỗi tuần chỉ ghi được một lần, trong khi dữ liệu không có khoá duy nhất theo tuần.
+«Báo cáo tuần» gợi một văn bản gửi lên để duyệt, còn cập nhật chỉ là một con số và
+một dòng. «Điểm danh» nói có mặt, không nói tiến độ. Số tự chảy từ CRM vào KR không
+phải cập nhật, vì mức tự tin và ghi chú vẫn do người ghi.
 
 **Mức tự tin**: phán đoán của người phụ trách, ghi ở mỗi lần cập nhật tuần, rằng
 KR sẽ tới đích khi chu kỳ khép. Người chọn; máy không chọn thay. Chốt 2026-09-24.
