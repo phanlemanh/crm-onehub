@@ -8,7 +8,7 @@
 
 **Tech Stack:** Next.js App Router (máy chủ `redirect`), tRPC + TanStack Query, Zod, Prisma, bun test (DOM qua `packages/ui/test/setup-dom.ts`), Playwright trong bàn đo `rang/`.
 
-**Spec:** `docs/superpowers/specs/2026-10-23-hop-tuan-mo-dung-bo-design.md` · hợp đồng `_acceptance/hop-tuan-mo-dung-bo/contract.md` (approved 24/10) · `evals.yaml` (12 eval, lệnh ở khoá `htmb_*` của `_acceptance/config.yaml`).
+**Spec:** `docs/superpowers/specs/2026-10-23-hop-tuan-mo-dung-bo-design.md` · nghiên cứu `docs/findings/2026-10-22-hop-tuan/README.md` (§1 lời chủ kho, §3 F01–F03 · F07, §6) · bản phạm vi `docs/plan/pham-vi-okr-sau-vo-khu-2410.md` §1 «Lối (b)» · hợp đồng `_acceptance/hop-tuan-mo-dung-bo/contract.md` (approved 24/10) · `evals.yaml` (12 eval, lệnh ở khoá `htmb_*` của `_acceptance/config.yaml`).
 
 **Tiền đề S3:** viết trên mã của VK3 `trang-bo-okr` (`the-con.tsx`, `danh-sach-bo.tsx`, `page.tsx` chia danh sách/bộ). S3 bắt đầu khi VK3 đã gộp `onehub`; trước đó gộp `origin/onehub` vào nhánh, `bun install`, `bun run db:generate`.
 
@@ -22,6 +22,8 @@
 - Tên đơn vị và tên chu kỳ bọc `translate="no"`.
 - Thành phần từ `packages/ui` (`StatGroup`, `StatCard`, `Item variant="outline"`, `Empty`, `Skeleton`, `VungTaiLoi`); không `className` đổi màu/góc/khoảng cách.
 - Mỗi phép đo mới có cặp hai chiều trên cùng fixture (đối chứng dương + phá-thử trong bản sao, thông điệp ghim đúng như `evals.yaml`).
+- «Lối (b)» (chủ kho 24/10): chỉ còn hộp cập nhật một KR, mở từ ngăn KR hay dòng bộ OKR. HT1 không thêm lối cập nhật nào, không chạm `phan-can-cap-nhat.tsx` / `BangCapNhat` (SV1 gỡ), không thêm nút cập nhật trên dòng Họp tuần (HT2, qua hộp một KR).
+- Thứ tự «đơn vị bạn dẫn» giữ đúng AC-2 đã duyệt (bộ phận trước phòng ban); README F01 ghi ngược (phòng ban trước) — đã báo giám sát, chủ kho quyết, không đổi ở S3 khi chưa có lời.
 - Không sửa thước hồ sơ đã ký ngoài đúng một lớp đã duyệt (VK3 E10, ca `xem-khong-don`), kèm dòng sổ `fix` `decided_by: Phan Le Manh`.
 
 ## Review Focus
@@ -201,7 +203,7 @@ phục vụ E1 (AC-1), E11 (AC-9) · `independent: false` (cần Task 3, 6)
 **Interfaces:**
 - Produces: ca mẫu in một dòng JSON `{ truongP, thanhVienM, quanTriA, boP, boRong, chuKyCon, chuKyKeHoach }` (email và khoá) để bàn đo đọc; `man.mjs --phan duong|anh [--chieu-do [giu-ky]]` in `DUNG <dong>` / `SAI AC-n: …` và dòng `KET LUAN` mã 0/1/2.
 
-- [ ] **Step 1: Ca mẫu** qua service thật (không chèn bảng): chu kỳ `lap-ke-hoach` bắt đầu sau hôm nay; chu kỳ con đang chạy mà OneHub không mục tiêu công bố, ≥ 2 đơn vị chưa xếp có KR công bố và lần cập nhật; phòng ban có trưởng mà không KR; thành viên M (phòng ban chính Q, không dẫn); quản trị A không dẫn; một đơn vị tên 60 ký tự có KR (Review Focus 5). Từ chối chạy trên production như các ca khác.
+- [ ] **Step 1: Ca mẫu** qua service thật (không chèn bảng; lần cập nhật ghi qua `OkrCapNhatService` với lối `sheet` — đường còn sống sau «Lối (b)», không dùng `cua-toi`, `viec-cua-toi`): chu kỳ `lap-ke-hoach` bắt đầu sau hôm nay; chu kỳ con đang chạy mà OneHub không mục tiêu công bố, ≥ 2 đơn vị chưa xếp có KR công bố và lần cập nhật; phòng ban có trưởng mà không KR; thành viên M (phòng ban chính Q, không dẫn); quản trị A không dẫn; một đơn vị tên 60 ký tự có KR (Review Focus 5). Từ chối chạy trên production như các ca khác.
 - [ ] **Step 2: `man.mjs --phan duong`** đúng bảy dòng của E1 (ba URL × (a)(b)(c)(d), hai vai phần B, hai đường bấm phần C), đếm dòng = 7; `--chieu-do` (bỏ nhánh chuyển) → «SAI AC-1: <dong> khong chuyen (200)»; `--chieu-do giu-ky` → «SAI AC-1: ky-okr mat kyOkr».
 - [ ] **Step 3: `man.mjs --phan anh`** đúng bước của E11: 1440/375 × sáng/tối × ba màn = 12 ảnh vào `evidence/`, đo tràn ngang có đối chứng khối 4000px, lưới ô, nhãn không cắt, danh sách ≥ 2 mục.
 - [ ] **Step 4:** `bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-tuan-mo-dung-bo/rang/man.mjs --phan duong"` → `KET LUAN` mã 0; rồi hai lượt chiều đỏ → mã 1 với đúng thông điệp. Lặp với `--phan anh` → mã 0, đủ 12 ảnh.

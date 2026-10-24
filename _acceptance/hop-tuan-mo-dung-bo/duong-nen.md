@@ -1,19 +1,17 @@
 ---
 slug: hop-tuan-mo-dung-bo
-at: 2026-10-23T23:46:40.309Z
-sha: 5ebcd43dc985b3853011c17a8f48316a4544bf03
-nen: do
+at: 2026-10-24T00:34:01.848Z
+sha: 5347d9f22841957d3429911d95c6c3f706cc05b5
+nen: xanh
 cong_cu: xanh
-suite: do
+suite: xanh
 luoi: xanh
 engine: xanh
 ---
 
 ## Dòng đỏ
 
-- nen suite: DO SAN executors.test.suite_app_ui ma 1
-- nen suite: DO SAN executors.script.lint_slop ma 1
-- nen suite: DO SAN executors.script.build_khong_cache ma 1
+- không có
 
 ## Dòng vàng
 
