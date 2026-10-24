@@ -5,13 +5,16 @@ Bộ nghiên cứu 18/10 của đợt `okr-vo-khu-1810` bị thất lạc khi m�
 Giám sát đợt `vo-khu-muc-tieu` đối chiếu nghiên cứu với `onehub` @ `1591d8b77` và trình mười câu C1–C10. Chủ kho trả lời
 nguyên văn «Đồng ý hết theo khuyến nghị» (24/10, khoảng 06:05Z).
 
-Mỗi mục dưới trích dòng khuyến nghị chủ kho đã đồng ý.
+Mỗi mục dưới trích dòng khuyến nghị chủ kho đã đồng ý. Mọi hàng mới chạm giao diện, nên theo luật 24/10 ở
+`docs/proto.md` («Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng `/proto/<slug>` trên dữ liệu mẫu dày, chủ kho
+bấm thử trước Cổng Phạm vi.
 
 ## Thành hàng hay mục chờ
 
 - **C1** «thẻ Sơ đồ của bộ: (a) bỏ tới khi có hàng mới VK14». VK6 bỏ Cây căn chỉnh; nếu VK3 giữ thẻ «Sơ đồ góp vào»
-  bằng cây cả chu kỳ thì gộp cả hai làm thẻ con bật ra Báo cáo › Sơ đồ, trái luật thẻ con của `docs/design.md`. Hàng gộp
-  sau trong hai hàng VK3, VK6 gỡ thẻ khỏi trang bộ. **VK14** dựng lại thẻ: đơn vị đó cùng đơn vị cha và con. Mã `DC1`.
+  bằng cây cả chu kỳ thì gộp cả hai làm thẻ con bật ra Báo cáo › Sơ đồ, trái luật thẻ con của `docs/design.md`. Lối tạm
+  tới khi VK14 giao (khuyến nghị: bỏ thẻ khỏi trang bộ) chủ kho chọn ở hàng gộp sau trong hai hàng VK3, VK6. **VK14**
+  dựng lại thẻ: đơn vị đó cùng đơn vị cha và con. Mã `DC1`.
 - **C2** «cột phải bộ (Góp vào · Đơn vị trực thuộc): cắt hàng sau VK8». **VK15**. Mã `DC2`. Khối «Hỏi nhanh Kara» của bản
   mẫu không thuộc hàng này.
 - **C3** «P12 một tín hiệu trên dòng: thành hàng; trang một người: chân trời». **VK16** (mã `DC3a`) và mục chờ

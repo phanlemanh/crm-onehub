@@ -62,7 +62,7 @@ VK17.
 
 | Chỗ | Nghiên cứu | Hiện trạng trước 24/10 | Quyết định 24/10 | Hàng gánh |
 | --- | --- | --- | --- | --- |
-| Thẻ con «Sơ đồ» của một bộ | Sơ đồ của một bộ là đơn vị đó cùng đơn vị cha và con | VK3 dựng thẻ «Sơ đồ góp vào» bằng cây cả chu kỳ; VK6 bỏ Cây căn chỉnh. Gộp cả hai thì thẻ con bật ra Báo cáo › Sơ đồ, rời trang bộ | C1 (a): bỏ thẻ khỏi trang bộ tới khi có hàng mới | VK14 |
+| Thẻ con «Sơ đồ» của một bộ | Sơ đồ của một bộ là đơn vị đó cùng đơn vị cha và con | VK3 dựng thẻ «Sơ đồ góp vào» bằng cây cả chu kỳ; VK6 bỏ Cây căn chỉnh. Gộp cả hai thì thẻ con bật ra Báo cáo › Sơ đồ, rời trang bộ | C1 (a): bỏ thẻ khỏi trang bộ tới khi có hàng mới; lối tạm cụ thể chủ kho chọn ở hàng gộp sau trong VK3, VK6 | VK14 |
 | Cột phải của trang một bộ | Khối «Góp vào» (đơn vị góp vào đâu) và «Đơn vị trực thuộc»; «Thấy đơn vị góp vào đâu: 2 bấm → 0» | Không mã nào của phạm vi 18/10 | C2: cắt hàng sau VK8 | VK15 |
 | Một tín hiệu trên dòng (P12) | Giữ tình trạng và mức tự tin cạnh nhau; bỏ nhãn loại và «Đã công bố» khỏi dòng; nhãn trạng thái chỉ khi nháp hay chờ duyệt | Không hàng | C3: thành hàng | VK16 |
 | Trang một người cùng khuôn bộ OKR | Nguyên tắc 3 | VK3 để OKR cá nhân ngoài phạm vi | C3: chân trời | mục chờ VK-C3 |
