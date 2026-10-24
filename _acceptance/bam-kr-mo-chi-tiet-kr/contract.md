@@ -5,8 +5,10 @@ slug: bam-kr-mo-chi-tiet-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-24-bam-kr-mo-chi-tiet-kr-design.md
+approved_by: Phan Le Manh
+approved_at: 2026-10-24
 ---
 
 # Acceptance Contract: bam-kr-mo-chi-tiet-kr
