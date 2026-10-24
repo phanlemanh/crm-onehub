@@ -308,7 +308,14 @@ function chieuDo(kieu) {
 				if (!existsSync(duong)) continue;
 				const giu = readFileSync(duong, "utf8")
 					.split("\n")
-					.filter((d) => !(d.includes('"type":"fix"') && d.includes(dich)));
+					.filter((d) => {
+						try {
+							const x = JSON.parse(d);
+							return !(x.type === "fix" && JSON.stringify(x).includes(dich));
+						} catch {
+							return true;
+						}
+					});
 				writeFileSync(duong, giu.join("\n"));
 			}
 		}
