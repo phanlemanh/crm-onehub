@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: ho-so-do-kiem-cheo
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 9ae69ba57db57e431cc30d63e5a2ce98ad7724ec
-human_signoff:
+human_signoff: Manh Phan 2026-10-24
 ---
 
 # Evidence Report: ho-so-do-kiem-cheo
@@ -85,7 +85,7 @@ Ghi chú: round 3 chạy sau khi chủ kho thu phạm vi ngày 24/10 (AC-1 bỏ 
     - so-okr-tu-chay:E12 và E14 — hai lượt tách ô (EVAL=E12, EVAL=E14) với bản vá sua-san/so-okr-tu-chay.patch, toàn văn _acceptance/ngan-kr-mot-cho/contract.md:40 (AC-3), và lượt chạy lỗi hydrat trên cây mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f; tệp:dòng chứa chỗ hydrat lệch (grep data-so-tom-tat apps/app).
     - cron-theo-ban-khai:E7 — chốt khác còn canh số cảnh báo lint apps/app ở HEAD, hoặc dòng sổ của chủ kho (có decided_by) nói ô E7 không còn canh HEAD.
     - bo-dung-chung-nhan-chuoi:E4, hoan_lai.sua_san (cai-dat-con-lai-noi-tieng-viet, tong-quan-va-khung-noi-tieng-viet, so-okr-tu-chay), cap-nhat-tuan-okr:E14, chu-mac-dinh-thu-vien-ngoai:E3 — ly_do phân loại và căn cứ trích được cho từng dòng, log đầy đủ lượt nền, và bảng gán từng tệp component mới trong packages/ui với hồ sơ đã ký.
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Manh Phan 2026-10-24
 
 ### Lệnh suite (hồi quy)
 
