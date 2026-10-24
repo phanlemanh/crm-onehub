@@ -138,7 +138,18 @@ if (!process.env.DVB_BASE && !nhanh)
 const khung = process.env.DVB_BASE ? null : khungDaGop(nhanh);
 const base =
 	process.env.DVB_BASE ?? khung?.goc ?? git("merge-base", "HEAD", nhanh);
-const NHANH_DH1 = "feat/dieu-huong-khu-muc-tieu";
+const dinhNhanhDaGop = (ten, nhanhGop) =>
+	nhanhGop && coRef(nhanhGop)
+		? git("log", nhanhGop, "--merges", "--first-parent", "--format=%P%x09%s", "--grep", `/${ten}`)
+				.split("\n")
+				.map((d) => d.split("\t"))
+				.find(([, s]) => s?.endsWith(`/${ten}`))?.[0]
+				?.split(" ")[1]
+		: undefined;
+const TEN_DH1 = "feat/dieu-huong-khu-muc-tieu";
+const NHANH_DH1 = coRef(TEN_DH1)
+	? TEN_DH1
+	: (dinhNhanhDaGop(TEN_DH1, nhanh) ?? TEN_DH1);
 const gocLuot =
 	process.env.DVB_BASE ??
 	(coRef(NHANH_DH1) && !laToTien(NHANH_DH1, nhanh)
@@ -370,7 +381,19 @@ const notesCua = (slug) => {
 };
 for (const slug of KHAI) {
 	const duong = `_acceptance/${slug}/rang`;
-	const cacDiff = [git("diff", base, "--", duong)];
+	const doiSauLuot = khung
+		? git("diff", "--name-only", khung.dinh, "HEAD", "--", duong).split("\n").filter(Boolean)
+		: [];
+	const cacDiff =
+		doiSauLuot.length === 0
+			? [git("diff", base, "--", duong)]
+			: [
+					git("diff", base, "--", duong, ...doiSauLuot.map((t) => `:(exclude)${t}`)),
+					...doiSauLuot.flatMap((t) => [
+						git("diff", base, khung.dinh, "--", t),
+						git("diff", "HEAD", "--", t),
+					]),
+				];
 	let ngoai = 0;
 	const khongKhai = [];
 	const khaiTaiCho = [];

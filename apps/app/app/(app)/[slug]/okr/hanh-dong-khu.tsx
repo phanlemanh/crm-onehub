@@ -132,7 +132,7 @@ export function useDuongTheoDonVi(cycleId: string) {
 		const ky =
 			cycleId && cycleId !== kyChay ? cycleId : thamSo[SEARCH_PARAM.okr.ky];
 		if (ky) q.set(SEARCH_PARAM.okr.ky, ky);
-		if (don.loai !== "goc") q.set(SEARCH_PARAM.okr.don, khoaDon(don));
+		q.set(SEARCH_PARAM.okr.don, khoaDon(don));
 		for (const k of khoa) q.set(k, "true");
 		return `${url(DUONG["theo-don-vi"])}?${q}`;
 	};
