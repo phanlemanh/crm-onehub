@@ -10,6 +10,7 @@ import { AuthModule } from "./auth/auth.module";
 import { BackfillModule } from "./backfill/backfill.module";
 import { AppCacheModule } from "./cache/cache.module";
 import { CampaignsModule } from "./campaigns/campaigns.module";
+import { ChiPhiAdsModule } from "./chi-phi-ads/chi-phi-ads.module";
 import { CompaniesModule } from "./companies/companies.module";
 import { validateEnv } from "./config/env.validation";
 import { ContactsModule } from "./contacts/contacts.module";
@@ -103,6 +104,7 @@ import { ZaloModule } from "./zalo/zalo.module";
 		SavedViewsModule,
 		ListingsModule,
 		CampaignsModule,
+		ChiPhiAdsModule,
 		OnboardingModule,
 		ToChucModule,
 		OkrModule,

@@ -3413,3 +3413,24 @@ model GoiYKeHoach {
   @@index([sinhLuc])
   @@map("goiYKeHoach")
 }
+
+model ChiPhiAds {
+  id           String    @id @default(cuid())
+  ngay         DateTime
+  nenTang      String // google | meta | tiktok
+  accountId    String    @default("")
+  campaignId   String
+  campaignName String    @default("")
+  spend        Float
+  currency     String    @default("VND")
+  clicks       Int       @default(0)
+  impressions  Int       @default(0)
+  conversions  Float     @default(0)
+  fetchedAt    DateTime?
+  taoLuc       DateTime  @default(now())
+  doiLuc       DateTime  @updatedAt
+
+  @@unique([ngay, nenTang, campaignId])
+  @@index([nenTang, ngay])
+  @@map("chiPhiAds")
+}
