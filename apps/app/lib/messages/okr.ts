@@ -337,7 +337,7 @@ const vi = {
 		trongSoMoTa: "Từ 0 đến 10.",
 		daKhoa: "Đã khoá khi công bố",
 		hienTaiDoiO: "Số hiện tại đổi ở",
-		capNhatTuan: "Cập nhật tuần",
+		capNhatTuan: "Cập nhật",
 		chiNguoiSua:
 			"Chỉ người sửa được mục tiêu mới đổi được kiểu, người phụ trách và khởi điểm.",
 		soSai: "Nhập một số, dùng dấu phẩy cho phần thập phân.",
@@ -390,7 +390,7 @@ const vi = {
 		"go-can-chinh": "Thôi góp vào",
 		"sua-ly-do-can-chinh": "Sửa lý do góp vào",
 		"nhap-bang-tinh": "Nhập từ bảng tính",
-		"cap-nhat-tuan": "Cập nhật tuần",
+		"cap-nhat-tuan": "Cập nhật",
 		"binh-luan": "Bình luận",
 		"theo-doi": "Theo dõi",
 		"bo-theo-doi": "Bỏ theo dõi",
@@ -677,7 +677,7 @@ const vi = {
 		veCuaToi: "Về Của tôi",
 		rong: {
 			title: "Tuần này bạn không có KR nào cần cập nhật",
-			body: "Bạn chưa phụ trách KR nào đang chạy. Người tham gia một mục tiêu không phải cập nhật tuần.",
+			body: "Bạn chưa phụ trách KR nào đang chạy. Người tham gia một mục tiêu không phải cập nhật.",
 		},
 		loi: {
 			title: "Không lấy được danh sách KR của bạn",
@@ -748,8 +748,9 @@ const vi = {
 			hoiYGop: "Lấy ý kiến về mục tiêu đang chờ bạn góp",
 			hoiYCongBo: "Lấy ý kiến về mục tiêu đã công bố — xem ý của bạn đi đâu",
 		},
-		capNhatTuan: "Cập nhật tuần",
+		capNhatTuan: "Cập nhật",
 		moMucTieu: "Mở mục tiêu",
+		moKr: "Mở KR",
 		moHoiY: "Mở Lấy ý kiến",
 		rong: "Hôm nay OKR không cần gì từ bạn",
 		loi: {
@@ -798,8 +799,7 @@ const en: OkrMessages = {
 		loiQuyen: "Couldn't load your permissions — reload the page to try again.",
 	},
 	moTa: {
-		"cua-toi":
-			"Your weekly updates, the units you lead and the key results you own.",
+		"cua-toi": "Your updates, the units you lead and the key results you own.",
 		"theo-don-vi":
 			"Each unit's OKRs for the cycle, and how they contribute to each other.",
 		"toan-canh": "The whole company on one screen.",
@@ -1121,7 +1121,7 @@ const en: OkrMessages = {
 		trongSoMoTa: "From 0 to 10.",
 		daKhoa: "Locked when published",
 		hienTaiDoiO: "The current value changes in",
-		capNhatTuan: "Weekly update",
+		capNhatTuan: "Update",
 		chiNguoiSua:
 			"Only someone who can edit the objective can change the kind, owner and start value.",
 		soSai: "Enter a number; a comma works as the decimal mark.",
@@ -1175,7 +1175,7 @@ const en: OkrMessages = {
 		"go-can-chinh": "Stopped contributing",
 		"sua-ly-do-can-chinh": "Edited the contribution reason",
 		"nhap-bang-tinh": "Imported from spreadsheet",
-		"cap-nhat-tuan": "Weekly update",
+		"cap-nhat-tuan": "Update",
 		"binh-luan": "Commented",
 		"theo-doi": "Followed",
 		"bo-theo-doi": "Unfollowed",
@@ -1464,7 +1464,7 @@ const en: OkrMessages = {
 		veCuaToi: "Back to Mine",
 		rong: {
 			title: "You have no key results to update this week",
-			body: "You don't own a key result in a running cycle. Taking part in an objective doesn't need a weekly update.",
+			body: "You don't own a key result in a running cycle. Taking part in an objective doesn't need an update.",
 		},
 		loi: {
 			title: "Couldn't load your key results",
@@ -1535,8 +1535,9 @@ const en: OkrMessages = {
 			hoiYGop: "The call for ideas on objectives is waiting for yours",
 			hoiYCongBo: "The call for ideas is published — see where your ideas went",
 		},
-		capNhatTuan: "Weekly update",
+		capNhatTuan: "Update",
 		moMucTieu: "Open objective",
+		moKr: "Open key result",
 		moHoiY: "Open the call for ideas",
 		rong: "Nothing in OKR needs you today",
 		loi: {

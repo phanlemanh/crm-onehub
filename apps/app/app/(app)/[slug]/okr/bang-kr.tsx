@@ -348,6 +348,7 @@ function HangKr({
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mc = okrCanhKrMessages(locale).bangKr;
+	const moBanGhi = useOpenRecord();
 	return (
 		<SimpleTableRow
 			data-kr={kr.id}
@@ -363,9 +364,17 @@ function HangKr({
 					</span>
 					<span className="flex min-w-0 flex-1 flex-col gap-1">
 						<span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-							<span className="wrap-anywhere whitespace-normal" translate="no">
-								{kr.title}
-							</span>
+							<Button
+								data-mo-kr={kr.id}
+								onClick={() => moBanGhi({ kind: "kr", id: kr.id })}
+								size="xs-wrap"
+								translate="no"
+								variant="link"
+							>
+								<span className="wrap-anywhere whitespace-normal">
+									{kr.title}
+								</span>
+							</Button>
 							{coNoiDung(sauTen) ? sauTen : null}
 						</span>
 						<span className="flex flex-wrap items-center gap-2 text-muted-foreground text-xs">

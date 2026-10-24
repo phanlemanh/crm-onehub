@@ -28,7 +28,7 @@ export const TIEU_DE = {
 	"viec-qua-han": "Việc quá hạn",
 	"viec-sap-han": "Việc sắp hạn",
 	"viec-cho-danh-gia": "Việc chờ bạn đánh giá",
-	"okr-cap-nhat": "Cập nhật tuần",
+	"okr-cap-nhat": "Cập nhật",
 	"okr-cho-duyet": "Chờ bạn duyệt",
 	"okr-tra-lai": "Bị trả lại",
 	"okr-kr-im": "KR im",
@@ -167,7 +167,7 @@ function dongAi(
 }
 
 const NHAN_LIEN_KET_OKR = {
-	"okr-cap-nhat": "mở cập nhật tuần",
+	"okr-cap-nhat": "mở cập nhật",
 	"okr-kr-im": "mở mục tiêu",
 	"okr-duoc-giao": "mở mục tiêu",
 	"okr-nhac-ten": "mở mục tiêu",

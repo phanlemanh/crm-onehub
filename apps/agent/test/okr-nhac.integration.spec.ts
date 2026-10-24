@@ -404,8 +404,8 @@ describe("mot-tin", () => {
 			soGuiSlack: r.s.goi.length,
 			dongDau: text.split("\n")[0],
 			capNhatTruocQuaHan:
-				text.indexOf("Cập nhật tuần") >= 0 &&
-				text.indexOf("Cập nhật tuần") < text.indexOf("Quá hạn"),
+				text.indexOf("Cập nhật") >= 0 &&
+				text.indexOf("Cập nhật") < text.indexOf("Quá hạn"),
 			dongCapNhat: dongCo(text, "KR chờ cập nhật").map((d) =>
 				d.includes(`${APP_URL}/${s}/okr?tu=nhac`),
 			),
