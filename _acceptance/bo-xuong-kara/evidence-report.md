@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6fdc7ed4587ef09283181bd35699a668ab3faa27
+verified_commit: e0389b2a953d782c9f58f04cc8c119e7a47f1d88
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (15/15 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; hội đồng E12 PASS). Mười mục ngoài hợp đồng định đoạt ở lượt ký này — Ngoài-1, 3, 4, 5, 6, 7, 8, 9 ghi Known limits; Ngoài-2, 10 chấp nhận, không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê hết.
 ---
 
@@ -257,3 +257,7 @@ sha: c2194108ee1258c40d635c28ed628e43cd233131 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
 run_id: repin-20261023T105529Z-32502
 sha: 6fdc7ed4587ef09283181bd35699a668ab3faa27 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 (E12 không khai paths) · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-24, do hoá cũ do gộp origin/onehub a971d21be vào nhánh F28 (lượt 3, từng hồ sơ)
+run_id: repin-20261024T182422Z-97721
+sha: e0389b2a953d782c9f58f04cc8c119e7a47f1d88 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 (E12 không khai paths) · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

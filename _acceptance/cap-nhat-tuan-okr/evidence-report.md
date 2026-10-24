@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c04176e365aa69a4d6fd059f02daa97d4749063f
+verified_commit: e0389b2a953d782c9f58f04cc8c119e7a47f1d88
 human_signoff: Manh Phan 2026-09-26
 ---
 
@@ -399,3 +399,7 @@ sha: a8e229b52f9d3819c526d154271e98f18d9ebe28 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
 run_id: repin-20261023T100712Z-77061
 sha: c04176e365aa69a4d6fd059f02daa97d4749063f · suites: 7 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E7 · thay bởi hồ sơ đã ký: E7→cua-toi-ba-phan#AC-2 · ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 · diff chạm vật đo ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-24, do hoá cũ do gộp origin/onehub a971d21be vào nhánh F28 (lượt 3, từng hồ sơ)
+run_id: repin-20261024T182422Z-97721
+sha: e0389b2a953d782c9f58f04cc8c119e7a47f1d88 · suites: 7 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E7 · thay bởi hồ sơ đã ký: E7→cua-toi-ba-phan#AC-2 · ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 · diff chạm vật đo ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

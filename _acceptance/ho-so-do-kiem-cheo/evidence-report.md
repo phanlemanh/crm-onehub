@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9ae69ba57db57e431cc30d63e5a2ce98ad7724ec
+verified_commit: e0389b2a953d782c9f58f04cc8c119e7a47f1d88
 human_signoff: Manh Phan 2026-10-24
 ---
 
@@ -149,3 +149,7 @@ none — every multi-run eval is uniform
 Round 1: E1 tái lập hỏng, E3 quá trần 30 phút, E6 hội đồng không qua; E2, E4, E5 xanh; E7 xanh (16:02:37Z). Trả về triển khai (sửa tái lập, khai lệnh chạy dài, bằng chứng cho hội đồng).
 Round 2: E1 chạy hết với trần 240 phút nhưng tập đỏ khi tái lập lệch hai ô (cron-theo-ban-khai:E8, tro-ly-okr-nen:E9); E3 bắt đúng 36 trên 38 đột biến, hai ô sai thông điệp (cron-theo-ban-khai:E7, tro-ly-okr-nen:E4); E6 vẫn chưa chốt; E2, E4, E5 và bảy lệnh suite xanh; E7 mang từ round 1. Trả về triển khai.
 Round 3: sau khi chủ kho thu phạm vi 24/10 (AC-1 chỉ đo phần tất định, AC-3 và E3 ra Known limits của hợp đồng), E1, E2, E4, E5 và bảy lệnh suite xanh; E7 mang từ round 1; E6 giữ panel round 2, chưa chốt nên chờ người ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-24, do hoá cũ do gộp origin/onehub a971d21be vào nhánh F28 (lượt 3, từng hồ sơ)
+run_id: repin-20261024T182422Z-97721
+sha: e0389b2a953d782c9f58f04cc8c119e7a47f1d88 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E6 (E6 không khai paths) · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
