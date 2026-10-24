@@ -73,6 +73,18 @@ const VIET_LAI = {
 	"apps/app/test/okr-dau-trang-khu.dom.tsx": { phep: "V1-22", so: "V1-22" },
 	"apps/app/test/okr-to-chuc-va.dom.tsx": { phep: "V1-22", so: "V1-22" },
 	"apps/app/test/mot-nut-tao-muc-tieu.dom.tsx": { phep: "V1-26", so: "V1-26" },
+	"_acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs": {
+		phep: "chu-kho-2410",
+		so: "moi-kr",
+	},
+	"_acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs": {
+		phep: "V3-27 B",
+		so: "V3-27 B",
+	},
+	"_acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs": {
+		phep: "V3-27 B",
+		so: "V3-27 B",
+	},
 };
 const EXECUTOR_MAY = new Set(["test", "script"]);
 const CHO_CHUOI = "\u00abS\u00bb";
