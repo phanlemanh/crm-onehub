@@ -16,11 +16,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = process.env.GOC_CAY
 	? resolve(process.env.GOC_CAY)
 	: resolve(HERE, "../../..");
-const THU_ANH =
-	process.env.TTC_CHEP_ANH === "1"
-		? `${HERE}/..`
-		: resolve(HERE, "../../../.acceptance-runs/truong-tu-tao-o-cai-dat");
-const ANH = `${THU_ANH}/evidence`;
+const ANH = `${HERE}/../evidence`;
 const EMAIL = process.env.EMAIL_DO ?? "manh.phan@onemount.com";
 const TIEN_TO = "ZZ thu ";
 const HET_HAN_MS = Number(process.env.HET_HAN_MS ?? 32_000);
@@ -1165,7 +1161,7 @@ async function napTruocDungThucThe(browser, cookie, slug) {
 	ketLuan("nap-truoc-dung-thuc-the");
 }
 
-const ANH_TK = `${ANH}/design-pass`;
+const ANH_TK = `${HERE}/../evidence/design-pass`;
 
 function chupTK(ten) {
 	if (!existsSync(ANH_TK)) mkdirSync(ANH_TK, { recursive: true });

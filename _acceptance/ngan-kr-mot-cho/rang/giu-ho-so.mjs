@@ -44,6 +44,8 @@ const GIU = {
 			"thuoc chay thuoc: rang/ho-so-cham.mjs tu chay eval cua 14 ho so khac",
 		"kara-mot-ten#E12":
 			"so-do-toan-vung AC-6 gỡ bài Cây có chủ đích (cay-can-chinh-ly-do.dom.tsx, ca theo-don-vi-cay); chủ kho V3-18 lối 1",
+		"truong-tu-tao-o-cai-dat#E11":
+			"thước màn trang-truong.mjs khay-cu chụp ảnh vào evidence của hồ sơ đã ký (làn ghim lại dừng «executor chạm hồ sơ đã thông»), và đỏ sẵn trên onehub; chủ kho V3-39 lối A",
 	},
 	cayNen: ".acceptance-runs/ngan-kr-mot-cho/goc",
 };
