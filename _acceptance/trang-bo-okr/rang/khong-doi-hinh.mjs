@@ -61,8 +61,16 @@ const VIET_LAI = {
 		so: "V1-21",
 	},
 	"_acceptance/khep-ky-okr/rang/man-khep-ky.mjs": {
-		phep: "V1-21",
-		so: "V1-21",
+		phep: "V1-21, duyệt cả ba",
+		so: "duyệt cả ba",
+	},
+	"_acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs": {
+		phep: "duyệt cả ba",
+		so: "duyệt cả ba",
+	},
+	"_acceptance/vo-khu-muc-tieu/rang/do-man-lib.mjs": {
+		phep: "V3-25 A",
+		so: "V3-25 A",
 	},
 	"_acceptance/vo-khu-muc-tieu/rang/do-man-dieu-huong.mjs": {
 		phep: "he-qua-donOkr",
