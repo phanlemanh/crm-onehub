@@ -1,0 +1,11 @@
+--- a/_acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs
++++ b/_acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs
+@@ -144,7 +144,7 @@
+ }
+ 
+ const coSo = TU;
+-const ds = git(["diff", "--name-only", coSo, TOI]).split("\n").filter(Boolean);
++const ds = git(["diff", "--name-only", coSo, TOI]).split("\n").filter(Boolean).concat("apps/agent/agent/lib/tasks.ts");
+ const loi = [];
+ const danhSach = kiemDanhSach(ds);
+ if (danhSach.ma === 2) {

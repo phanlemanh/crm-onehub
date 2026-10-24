@@ -1,0 +1,12 @@
+--- a/apps/app/test/onboarding-gate.spec.ts
++++ b/apps/app/test/onboarding-gate.spec.ts
+@@ -177,8 +177,8 @@
+ 			gate: "settled",
+ 			slug: SLUG,
+ 			inWorkspace: false,
+-			viewerRole: null,
+ 			hetPhien: false,
++			viewerRole: null,
+ 		});
+ 	});
+ 

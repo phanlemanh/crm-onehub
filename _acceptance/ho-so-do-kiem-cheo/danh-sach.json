@@ -1,0 +1,1467 @@
+{
+	"moc_nen": "6be0bb688900ecd8843989bd8f8b3095548b604f",
+	"ghi_chu": "Danh sách đóng của F28. Mỗi dòng một (hồ sơ, eval) đỏ ở mốc nền hoặc một evals.yaml không chuẩn; hoan_lai là ba hồ sơ dính lỗi sản phẩm thật (Hỏi-1, duyệt 23/10).",
+	"dong": [
+		{
+			"ho_so": "ban-gieo-gop-y-sau-nop",
+			"eval": "E4",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "rev-list ghép --first-parent --ancestry-path ra rỗng; neo cặp gộp PR #365",
+			"can_cu": "e7afcb8b782566381cb119e514415c5bea12047b",
+			"sua": "rang/ranh-gioi.mjs chonNeo: GOP=e7afcb8b7, tu=merge-base(GOP^1,GOP^2), toi=GOP^2; expected E4",
+			"tep": [
+				"_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs",
+				"_acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs"
+			],
+			"dot_bien": {
+				"ten": "them-tep-ngoai-ranh-gioi",
+				"ban_va": "dot-bien/ban-gieo-gop-y-sau-nop-E4.patch",
+				"thong_diep": "ngoai-ranh-gioi:apps/app/lib/x.ts"
+			},
+			"dot_bien_neo": {
+				"ten": "GOP-sai",
+				"ban_va": "dot-bien/ban-gieo-gop-y-sau-nop-E4-neo.patch"
+			}
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E1",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E1.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E2",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E2.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E3",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E3.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E4",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E4.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E5",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E5.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E6",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E6.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E7",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"tep": [
+				"_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
+			],
+			"dot_bien": {
+				"ten": "DB-1 filteredEmpty",
+				"ban_va": "dot-bien/bang-thanh-vien-giu-hang-E7.patch",
+				"thong_diep": "het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay"
+			}
+		},
+		{
+			"ho_so": "bo-dung-khong-ket",
+			"eval": "E9",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "merge-base trượt 0 điều ở HEAD=onehub; neo PR #178",
+			"can_cu": "8176bb2ef4086be290bbe8ed8df75ce9b845b6ad",
+			"sua": "rang/tai-lieu.mjs merge-base → 13477d5f8f8b75555120f438a5095e8f2940935c; tapTepRe diff tới ac6a3ab36239260dac1773e33c86e5d3843e32b4",
+			"tep": [
+				"_acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"
+			],
+			"dot_bien": {
+				"ten": "bo-outputSchema",
+				"ban_va": "dot-bien/bo-dung-khong-ket-E9.patch",
+				"thong_diep": "HEAD outputSchema: khong dat"
+			},
+			"dot_bien_neo": {
+				"ten": "NEO_GOC-sai",
+				"ban_va": "dot-bien/bo-dung-khong-ket-E9-neo.patch"
+			}
+		},
+		{
+			"ho_so": "bo-xuong-kara",
+			"eval": "E10",
+			"xu_ly": "sua-rang",
+			"ly_do": "Loại (a) cộng (c). (a) vật đổi có chủ đích: K2 (fc691046d) gỡ miễn trừ K1, artifact.tsx và task.tsx nay nằm trong khối SONG của cổng mồ côi qua kara/ — đúng hạn «K2» mà ô hẹn; răng cũ chỉ nhận MIEN TRU nên in «MO COI». (c) lỗi của răng: răng xích thêm so-lech-chuan.mjs của nen-chat-ai-elements, phép này so tệp trong kho với bunx ai-elements@latest tải qua mạng. confirmation.tsx không đổi từ be92eb153 (29/09) — cũng là commit ghi vân tay 5695b450b02078b9 vào sổ (git log -S trên so-lech-chuan.md), và git diff be92eb153..HEAD trên tệp rỗng — nên vân tay đo được dbfa031b680e2d02 lệch vì bản @latest của thượng nguồn đổi, không vì tệp trong kho. Một ô đã ký đỏ theo một gói ngoài trôi là lỗi của răng.",
+			"can_cu": "fc691046d",
+			"can_cu_them": [
+				"be92eb153",
+				"_acceptance/nen-chat-ai-elements/so-lech-chuan.md:238",
+				"_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs:40",
+				"_acceptance/bo-xuong-kara/rang/ai-elements.mjs:59",
+				"_acceptance/bo-xuong-kara/rang/ai-elements.mjs:16"
+			],
+			"sua": "ai-elements.mjs: bỏ so-lech-chuan.mjs khỏi xích (còn chu-cung.mjs, mau-ban-kinh.mjs); vế (d) nhận artifact.tsx, task.tsx trong khối SONG với cầu kara/ (còn miễn trừ thì vẫn đòi lý do K1, hạn K2); bước (c) chỉ kiểm sổ có mục; expected E10 đổi theo. Không ghim phiên bản ai-elements.",
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ)",
+			"duoi_sau": [
+				"$ node _acceptance/bo-xuong-kara/rang/ai-elements.mjs",
+				"--- exit 0 (ky vong 0)",
+				"OK  co mat: artifact.tsx",
+				"OK  co mat: task.tsx",
+				"OK  vang mat: tool.tsx",
+				"OK  vang mat: code-block.tsx",
+				"OK  khong chu thich: artifact.tsx",
+				"OK  khong lucide: artifact.tsx",
+				"OK  khong chu thich: task.tsx",
+				"OK  khong lucide: task.tsx",
+				"OK  chu-cung.mjs ma 0: Răng xanh.",
+				"OK  mau-ban-kinh.mjs ma 0: XANH: moi lop ban kinh nam trong thang bon gia tri, va moi lop mau goi dung mot ten co trong bang token.",
+				"OK  so lech co muc artifact.tsx",
+				"OK  so lech co muc task.tsx",
+				"OK  song artifact.tsx qua kara/",
+				"OK  song task.tsx qua kara/",
+				"OK  mo-coi ma 0, CHET (0)",
+				"XANH: 15 muc"
+			],
+			"tep": [
+				"_acceptance/bo-xuong-kara/rang/ai-elements.mjs"
+			],
+			"dot_bien": {
+				"ten": "bo-cau-kara",
+				"ban_va": "dot-bien/bo-xuong-kara-E10.patch",
+				"thong_diep": "SAI MO COI: task.tsx"
+			}
+		},
+		{
+			"ho_so": "ca-chap-chon-cach-ly",
+			"eval": "E5",
+			"xu_ly": "sua-rang",
+			"ly_do": "khoa-eve-khong-tranh dời lời gọi dungMoCoi vào gianhKhoaCu (AC-3)",
+			"can_cu": "f47a7002b",
+			"sua": "rang/mo-coi.mjs:14 MOC_DON='\\tawait dungMoCoi(daGianh);\\n'",
+			"tep": [
+				"_acceptance/ca-chap-chon-cach-ly/rang/mo-coi.mjs"
+			],
+			"dot_bien": {
+				"ten": "moc-don-cu",
+				"ban_va": "dot-bien/ca-chap-chon-cach-ly-E5.patch",
+				"thong_diep": "moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1"
+			}
+		},
+		{
+			"ho_so": "ca-chap-chon-cach-ly",
+			"eval": "E7",
+			"xu_ly": "sua-rang",
+			"ly_do": "cùng gốc E5",
+			"can_cu": "f47a7002b",
+			"sua": "rang/dot-bien.mjs:20 cặp a mo-coi mốc mới",
+			"tep": [
+				"_acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs"
+			],
+			"dot_bien": {
+				"ten": "a-mo-coi-moc-cu",
+				"ban_va": "dot-bien/ca-chap-chon-cach-ly-E7.patch",
+				"thong_diep": "moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1"
+			}
+		},
+		{
+			"ho_so": "ca-chap-chon-con-lai",
+			"eval": "E6",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "merge-base(onehub,HEAD)=HEAD nên diff rỗng; neo cặp gộp PR #340",
+			"can_cu": "2d7c489816ae6452b4f73322b4db1401902bb20c",
+			"sua": "rang/pham-vi.mjs coSo=a9e8bc75a04f04a9a250eb2ff7fc4fadbe0f4747, TOI=16e80f31d62a56195253f1566b38284f8e0b4e66 thay HEAD",
+			"tep": [
+				"_acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs"
+			],
+			"dot_bien": {
+				"ten": "diff-cham-tasks.ts",
+				"ban_va": "dot-bien/ca-chap-chon-con-lai-E6.patch",
+				"thong_diep": "ngoai ranh gioi: apps/agent/agent/lib/tasks.ts"
+			},
+			"dot_bien_neo": {
+				"ten": "TOI-sai",
+				"ban_va": "dot-bien/ca-chap-chon-con-lai-E6-neo.patch"
+			}
+		},
+		{
+			"ho_so": "cai-dat-chung-chi-quan-tri",
+			"eval": "E8",
+			"xu_ly": "sua-rang",
+			"ly_do": "phien-chet-ve-dang-nhap (#184 AC-4) thêm hetPhien:false vào khẳng định cũ",
+			"can_cu": "c895e5bff",
+			"sua": "rang/khang-dinh-cu-nguyen-ven.mjs:9 NEO=c895e5bff; expected E8",
+			"tep": [
+				"_acceptance/cai-dat-chung-chi-quan-tri/rang/khang-dinh-cu-nguyen-ven.mjs"
+			],
+			"dot_bien": {
+				"ten": "dao-het-phien",
+				"ban_va": "dot-bien/cai-dat-chung-chi-quan-tri-E8.patch",
+				"thong_diep": "SAI khoi cu con nguyen: it(\"says the viewer is out when the API names no role for them\""
+			}
+		},
+		{
+			"ho_so": "cap-nhat-tuan-okr",
+			"eval": "E7",
+			"xu_ly": "khai-not-run",
+			"ly_do": "cua-toi-ba-phan AC-2 (ký 15/10) lật lời hứa «mở /okr/cap-nhat-tuan là sinh một phiên entry=tab lúc tải màn»: bảng cập nhật chỉ mở khi bấm, entry «cua-toi»; ô mang superseded_by cua-toi-ba-phan#AC-2, hồ sơ thay tự nêu thẻ cap-nhat-tuan-okr/E7 ở design doc của nó.",
+			"can_cu": "_acceptance/cua-toi-ba-phan/contract.md:31",
+			"sua": "status not-run",
+			"tep": [
+				"docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md"
+			]
+		},
+		{
+			"ho_so": "cap-nhat-tuan-okr",
+			"eval": "E14",
+			"xu_ly": "sua-rang",
+			"ly_do": "/okr/cap-nhat-tuan về /okr (cua-toi-ba-phan AC-3/4, vo-khu-muc-tieu AC-3); một try bao cả lượt",
+			"can_cu": "9203b9ca2",
+			"sua": "rang/man-cap-nhat.mjs: try từng bước; đường /okr?tu=viec-cua-toi",
+			"tep": [
+				"_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+			],
+			"dot_bien": {
+				"ten": "CN-1 phần 1 bỏ đọc ?tu=",
+				"ban_va": "dot-bien/cap-nhat-tuan-okr-E14.patch",
+				"thong_diep": "E14: entry cua phien C phai viec-cua-toi, thay cua-toi"
+			}
+		},
+		{
+			"ho_so": "cap-nhat-tuan-okr",
+			"eval": "E19",
+			"xu_ly": "sua-rang",
+			"ly_do": "Loại (c) — lỗi của chính răng. Ở mốc nền ô E19 chạy lệnh chung cnt_man_chrome không đặt CHI (config.yaml:2847), nên man-cap-nhat.mjs chạy cả sáu khối trong MỘT try. Khối E6/E7 chạy trước, ném ngoại lệ ở man-cap-nhat.mjs:1059 của mốc nền ($eval ô số «[data-kr=…] input» — ô không còn ở /okr/cap-nhat-tuan vì cua-toi-ba-phan AC-2 dời bảng cập nhật vào phần 1 của /okr), try chung bắt ngoại lệ rồi bỏ mọi khối sau: log đầy đủ của lượt nền có 0 ảnh, 5 khẳng định, 4 hỏng, cả bốn là của E6 (dòng dưới). Khối E18/E19 chưa từng chạy, nên đầu ra nền không có dòng lỗi nào của E19. E19 phụ thuộc E7 đúng ở chỗ đó: chung lệnh và chung try, không chung dữ liệu hay bước; thân buocE18E19 (man-cap-nhat.mjs:1514) giữ nguyên từ mốc nền tới HEAD. Chưa chạy lại mốc nền với CHI=E18,E19 (cần cây tạm ở mốc nền và một phiên đo màn) — thay vào đó: log đầy đủ của lượt nền và lượt chạy lại ở 730af844a.",
+			"can_cu": "_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs:2060",
+			"can_cu_them": [
+				"_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs:2064",
+				"_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs:2075",
+				"_acceptance/cap-nhat-tuan-okr/evals.yaml:197",
+				"_acceptance/config.yaml:2897",
+				"_acceptance/cua-toi-ba-phan/contract.md:31",
+				"6b2447971"
+			],
+			"sua": "man-cap-nhat.mjs: thay một try bao cả lượt bằng bảng CAC_BUOC, mỗi khối một try — khối hỏng ghi «ngoai le <khối>» và khối sau vẫn chạy; evals.yaml E19 cmd đặt CHI=E18,E19 để lượt của E19 chỉ chạy khối E18/E19 (E7 khai not-run ở dòng riêng). Chạy lại ở 730af844a: mã 0, 43 khẳng định, 0 hỏng.",
+			"duoi_nen": [
+				"man-cap-nhat: 0 anh o .acceptance-runs/cap-nhat-tuan-okr/evidence/nja1l0p",
+				"man-cap-nhat: 5 khang dinh, 4 hong",
+				"  HONG: E6 buoc 1: thanh tab co 5 tab",
+				"  HONG: E6 buoc 1: tab Cap nhat tuan aria-current",
+				"  HONG: E6 buoc 1: co 4 dong KR (3 cua muc tieu cn + KR trao doi ot cung chu M)",
+				"  HONG: ngoai le: Error: Error: failed to find element matching selector \"[data-kr='cmvja1nom000eg9cfcgeaw8xh'] input\"",
+				"    at async buocE6E7 (_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs:1059:12)"
+			],
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ)",
+			"duoi_sau": [
+				"$ PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} CHI=E18,E19 bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs\"",
+				"--- exit 0 (ky vong 0)",
+				"man-cap-nhat: 6 anh o .acceptance-runs/cap-nhat-tuan-okr/evidence/nke9otg",
+				"  anh E18-step1.png",
+				"  anh E18-step2.png",
+				"  anh E18-step3.png",
+				"  anh E18-step4.png",
+				"  anh E18-step5.png",
+				"  anh E18-step6.png",
+				"man-cap-nhat: 43 khang dinh, 0 hong",
+				"phien-do: xong — mã 0"
+			],
+			"tep": [
+				"_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+			],
+			"dot_bien": {
+				"ten": "mentionUserIds rỗng",
+				"ban_va": "dot-bien/cap-nhat-tuan-okr-E19.patch",
+				"thong_diep": "E19: binh luan moi co mention M"
+			}
+		},
+		{
+			"ho_so": "chan-lai-component-ra-man",
+			"eval": "E1",
+			"xu_ly": "sua-rang",
+			"ly_do": "Loại (a) — vật đổi có chủ đích của năm hồ sơ đã ký. Neo mac_dinh 129 đặt ở c1d11fd4b (06/10, 128→129); commit đó chỉ là mốc đặt neo 129, không chứng bước 129→132. Đếm lại bằng chính moi-mac-dinh.mjs trên cây c1d11fd4b và HEAD: 129 → 132, thêm 4, mất 1. Thêm, cả bốn vào nhóm kỹ thuật (nhóm chữ người đọc vẫn 0): area-sidebar.tsx placement=\"area\" (1dac33e82, PR #489 thanh-ben-khu-dung-chung — AC-2 gọi tên placement=\"area\"); kara/artifact.tsx variant=\"card\" (96aaf882f, PR #344 soan-okr-trong-khung — AC-4 bản nháp và cột Kara thành một bề mặt liền); kara/ban-ghi.tsx size=\"sm\" (1194c4543, PR #306 khung-ban-ghi-kara — AC-11 nút tra cứu mang dấu Kara); record-parts.tsx lyDo=\"mat-ket-noi\" (6f087f98c, PR #333 khung-loi-ban-ghi-dung-ly-do — ghi chú hợp đồng: lý do mặc định «mất kết nối» để hành vi cũ giữ nguyên). Mất: tai-lieu/danh-sach.tsx nhom=\"cho\" (gỡ ở 2829c0cf0, loc-va-kieu-xem-chung — AC-5 chuyển bộ lọc Tài liệu sang nuqs).",
+			"can_cu": "1dac33e82",
+			"can_cu_them": [
+				"96aaf882f",
+				"1194c4543",
+				"6f087f98c",
+				"2829c0cf0",
+				"c1d11fd4b",
+				"_acceptance/thanh-ben-khu-dung-chung/contract.md:34",
+				"_acceptance/soan-okr-trong-khung/contract.md:30",
+				"_acceptance/khung-ban-ghi-kara/contract.md:39",
+				"_acceptance/khung-loi-ban-ghi-dung-ly-do/contract.md:55",
+				"_acceptance/loc-va-kieu-xem-chung/contract.md:42",
+				"packages/ui/src/components/area-sidebar.tsx:40",
+				"packages/ui/src/components/kara/artifact.tsx:40",
+				"packages/ui/src/components/kara/ban-ghi.tsx:22",
+				"apps/app/components/crm/record-sheet/record-parts.tsx:47"
+			],
+			"sua": "rang/lai-ra-man.mjs:9 NEO mac_dinh 129→132 (dong_bang_cu 9→10 là phần kéo theo của chu-mac-dinh-thu-vien-ngoai E9); expected E1, E2 đổi theo.",
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ)",
+			"duoi_sau": [
+				"$ node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so",
+				"--- exit 0 (ky vong 0)",
+				"gia tri mac dinh la chuoi co chu: 132 · component so huu: 70",
+				"dong trong bang gioi han vong truoc: 10",
+				"XANH: moi neo khop dia, bo duyet thay du tep git theo doi."
+			],
+			"tep": [
+				"_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs",
+				"_acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs"
+			],
+			"dot_bien": {
+				"ten": "neo-lech-mot label=Save",
+				"ban_va": "dot-bien/chan-lai-component-ra-man-E1.patch",
+				"thong_diep": "DO: neo mac_dinh ghim 132 nhung do duoc 133"
+			}
+		},
+		{
+			"ho_so": "chan-lai-component-ra-man",
+			"eval": "E2",
+			"xu_ly": "sua-rang",
+			"ly_do": "Cùng gốc E1. Loại (a) — vật đổi có chủ đích của năm hồ sơ đã ký. Neo mac_dinh 129 đặt ở c1d11fd4b (06/10, 128→129); commit đó chỉ là mốc đặt neo 129, không chứng bước 129→132. Đếm lại bằng chính moi-mac-dinh.mjs trên cây c1d11fd4b và HEAD: 129 → 132, thêm 4, mất 1. Thêm, cả bốn vào nhóm kỹ thuật (nhóm chữ người đọc vẫn 0): area-sidebar.tsx placement=\"area\" (1dac33e82, PR #489 thanh-ben-khu-dung-chung — AC-2 gọi tên placement=\"area\"); kara/artifact.tsx variant=\"card\" (96aaf882f, PR #344 soan-okr-trong-khung — AC-4 bản nháp và cột Kara thành một bề mặt liền); kara/ban-ghi.tsx size=\"sm\" (1194c4543, PR #306 khung-ban-ghi-kara — AC-11 nút tra cứu mang dấu Kara); record-parts.tsx lyDo=\"mat-ket-noi\" (6f087f98c, PR #333 khung-loi-ban-ghi-dung-ly-do — ghi chú hợp đồng: lý do mặc định «mất kết nối» để hành vi cũ giữ nguyên). Mất: tai-lieu/danh-sach.tsx nhom=\"cho\" (gỡ ở 2829c0cf0, loc-va-kieu-xem-chung — AC-5 chuyển bộ lọc Tài liệu sang nuqs).",
+			"can_cu": "1dac33e82",
+			"can_cu_them": [
+				"96aaf882f",
+				"1194c4543",
+				"6f087f98c",
+				"2829c0cf0",
+				"c1d11fd4b",
+				"_acceptance/thanh-ben-khu-dung-chung/contract.md:34",
+				"_acceptance/soan-okr-trong-khung/contract.md:30",
+				"_acceptance/khung-ban-ghi-kara/contract.md:39",
+				"_acceptance/khung-loi-ban-ghi-dung-ly-do/contract.md:55",
+				"_acceptance/loc-va-kieu-xem-chung/contract.md:42",
+				"packages/ui/src/components/area-sidebar.tsx:40",
+				"packages/ui/src/components/kara/artifact.tsx:40",
+				"packages/ui/src/components/kara/ban-ghi.tsx:22",
+				"apps/app/components/crm/record-sheet/record-parts.tsx:47"
+			],
+			"sua": "Cùng sửa E1: tổng ba nhóm so với NEO.mac_dinh 132 ở lai-ra-man.mjs:9.",
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ)",
+			"duoi_sau": [
+				"$ node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs phan-nhom",
+				"--- exit 0 (ky vong 0)",
+				"nhom chu-nguoi-doc: 0",
+				"nhom ky thuat: 125",
+				"khong ve duoc (da khai kem ly do): 7",
+				"tong: 132 · neo: 132",
+				"XANH: phan nhom do BAN VE quyet, khong danh sach ten prop nao."
+			],
+			"tep": [
+				"_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs"
+			],
+			"dot_bien": {
+				"ten": "them-mac-dinh-separator",
+				"ban_va": "dot-bien/chan-lai-component-ra-man-E2.patch",
+				"thong_diep": "DO: tong ba nhom 133 khac neo 132"
+			}
+		},
+		{
+			"ho_so": "chan-lai-component-ra-man",
+			"eval": "E7",
+			"xu_ly": "sua-rang",
+			"ly_do": "Cùng gốc E1. Loại (a) — vật đổi có chủ đích của năm hồ sơ đã ký. Neo mac_dinh 129 đặt ở c1d11fd4b (06/10, 128→129); commit đó chỉ là mốc đặt neo 129, không chứng bước 129→132. Đếm lại bằng chính moi-mac-dinh.mjs trên cây c1d11fd4b và HEAD: 129 → 132, thêm 4, mất 1. Thêm, cả bốn vào nhóm kỹ thuật (nhóm chữ người đọc vẫn 0): area-sidebar.tsx placement=\"area\" (1dac33e82, PR #489 thanh-ben-khu-dung-chung — AC-2 gọi tên placement=\"area\"); kara/artifact.tsx variant=\"card\" (96aaf882f, PR #344 soan-okr-trong-khung — AC-4 bản nháp và cột Kara thành một bề mặt liền); kara/ban-ghi.tsx size=\"sm\" (1194c4543, PR #306 khung-ban-ghi-kara — AC-11 nút tra cứu mang dấu Kara); record-parts.tsx lyDo=\"mat-ket-noi\" (6f087f98c, PR #333 khung-loi-ban-ghi-dung-ly-do — ghi chú hợp đồng: lý do mặc định «mất kết nối» để hành vi cũ giữ nguyên). Mất: tai-lieu/danh-sach.tsx nhom=\"cho\" (gỡ ở 2829c0cf0, loc-va-kieu-xem-chung — AC-5 chuyển bộ lọc Tài liệu sang nuqs).",
+			"can_cu": "1dac33e82",
+			"can_cu_them": [
+				"96aaf882f",
+				"1194c4543",
+				"6f087f98c",
+				"2829c0cf0",
+				"c1d11fd4b",
+				"_acceptance/thanh-ben-khu-dung-chung/contract.md:34",
+				"_acceptance/soan-okr-trong-khung/contract.md:30",
+				"_acceptance/khung-ban-ghi-kara/contract.md:39",
+				"_acceptance/khung-loi-ban-ghi-dung-ly-do/contract.md:55",
+				"_acceptance/loc-va-kieu-xem-chung/contract.md:42",
+				"packages/ui/src/components/area-sidebar.tsx:40",
+				"packages/ui/src/components/kara/artifact.tsx:40",
+				"packages/ui/src/components/kara/ban-ghi.tsx:22",
+				"apps/app/components/crm/record-sheet/record-parts.tsx:47"
+			],
+			"sua": "Cùng sửa E1 (lai-ra-man.mjs:9).",
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ)",
+			"duoi_sau": [
+				"$ node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so && cd packages/ui && bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx",
+				"--- exit 0 (ky vong 0)",
+				"gia tri mac dinh la chuoi co chu: 132 · component so huu: 70",
+				"dong trong bang gioi han vong truoc: 10",
+				"XANH: moi neo khop dia, bo duyet thay du tep git theo doi."
+			],
+			"tep": [
+				"_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs"
+			],
+			"dot_bien": {
+				"ten": "neo-lech-mot",
+				"ban_va": "dot-bien/chan-lai-component-ra-man-E7.patch",
+				"thong_diep": "DO: neo mac_dinh ghim 132 nhung do duoc 133"
+			}
+		},
+		{
+			"ho_so": "chan-trung-khoa-ban-nhap",
+			"eval": "E3",
+			"xu_ly": "sua-rang",
+			"ly_do": "okr-loai-hoc-tap thêm import ./okr-muc-tieu; răng chỉ vá một import tương đối",
+			"can_cu": "020b2ec69",
+			"sua": "rang/pha-thu.mjs dungBanSao: viết lại mọi from \"./x\"",
+			"tep": [
+				"_acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs"
+			],
+			"dot_bien": {
+				"ten": "chan-khoa-luon-qua",
+				"ban_va": "dot-bien/chan-trung-khoa-ban-nhap-E3.patch",
+				"thong_diep": "don-vi: ca sai chieu: trung-khoa (a)"
+			}
+		},
+		{
+			"ho_so": "chan-trung-khoa-ban-nhap",
+			"eval": "E4",
+			"xu_ly": "sua-rang",
+			"ly_do": "cùng gốc E3",
+			"can_cu": "020b2ec69",
+			"sua": "cùng sửa E3",
+			"tep": [
+				"_acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs"
+			],
+			"dot_bien": {
+				"ten": "go-superRefine",
+				"ban_va": "dot-bien/chan-trung-khoa-ban-nhap-E4.patch",
+				"thong_diep": "KHONG DO DUOC: okr-cuoc-soan.ts: moc xuat hien 0 lan, can 1: .superRefine(chanKhoaTrung)"
+			}
+		},
+		{
+			"ho_so": "chu-cuoi-cung-tien-de",
+			"eval": "E5",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "diff 058bb75f...HEAD trôi; neo PR #89",
+			"can_cu": "46a52ade5",
+			"sua": "rang/chu-la.mjs PHAM_VI tu=5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b toi=2aff077d0cb4966a90d014a9a70c91a45d5c8f6a; dòng 363, 369; expected E5 (KHÔNG sửa contract)",
+			"tep": [
+				"_acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs"
+			],
+			"dot_bien": {
+				"ten": "PV-tu-goc-cu",
+				"ban_va": "dot-bien/chu-cuoi-cung-tien-de-E5.patch",
+				"thong_diep": "RANG DO: diff cham tep ngoai pham vi"
+			},
+			"dot_bien_neo": {
+				"ten": "toi-sai",
+				"ban_va": "dot-bien/chu-cuoi-cung-tien-de-E5-neo.patch"
+			}
+		},
+		{
+			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
+			"eval": "E3",
+			"xu_ly": "sua-rang",
+			"ly_do": "Loại (a) — vật đổi có chủ đích của các hồ sơ ký sau. Neo 76·37·21 đặt ở 3f99c7055 (06/09); đếm lại bằng chính logic khai-sinh.mjs giữa 3f99c7055 và HEAD: packages/ui thêm 45 tệp component, bỏ suggestion.tsx (+44 → 120); bọc thư viện ngoài +7 → 44 — sáu tệp mới combobox-multi (c74dfc452), context-menu (29a101a4c, du-an-gantt), flow-map (7b9511288), markdown-reader (7371f8c86), radio-group (6d4703002), trinh-soan (584e6caae), và stat-card đổi sang bọc Slot của radix-ui (57c51b2e4, ghi ở d-20261023T025431Z-25 sau gộp onehub 23/10); đọc kho chuỗi +18 → 39. Con số 43 trong cột sửa cũ là trước 57c51b2e4. Chữ mặc định: combobox-multi, flow-map, trinh-soan đọc kho chuỗi (useMessages); context-menu được bộ mở nguyên bản của chan-lai-component-ra-man mount ở trạng thái mở và không sinh chữ nào (xem dòng E9); radio-group, markdown-reader, stat-card khai trong boc-ma-khong-doc.json (E4 xanh) nhưng chữ mặc định của chúng trên màn CHƯA được đo ở vòng này — E3 chỉ đếm.",
+			"can_cu": "57c51b2e4",
+			"can_cu_them": [
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25",
+				"3f99c7055",
+				"c74dfc452",
+				"29a101a4c",
+				"7b9511288",
+				"7371f8c86",
+				"6d4703002",
+				"584e6caae",
+				"_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/khai-sinh.mjs:6"
+			],
+			"sua": "rang/khai-sinh.mjs:6 NEO {component 120, boc 44, doc_kho 39}; expected E3 đổi theo.",
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ)",
+			"duoi_sau": [
+				"$ node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/khai-sinh.mjs",
+				"--- exit 0 (ky vong 0)",
+				"doc tu dia: 120 component · 44 boc thu vien ngoai · 39 doc kho chuoi dung chung",
+				"neo ghim:  120 · 44 · 39",
+				"XANH: ba con so doc tu dia bang ba con so neo."
+			],
+			"tep": [
+				"_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/khai-sinh.mjs"
+			],
+			"dot_bien": {
+				"ten": "them-component-boc-gia",
+				"ban_va": "dot-bien/chu-mac-dinh-thu-vien-ngoai-E3.patch",
+				"thong_diep": "LECH: component — do duoc 121, neo ghim 120"
+			}
+		},
+		{
+			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
+			"eval": "E4",
+			"xu_ly": "sua-rang",
+			"ly_do": "progress nay đọc kho; radio-group, markdown-reader, context-menu mới, không chuỗi mặc định",
+			"can_cu": "4a4bea376",
+			"can_cu_them": [
+				"6d4703002",
+				"7371f8c86",
+				"29a101a4c"
+			],
+			"sua": "rang/boc-ma-khong-doc.json bỏ progress, thêm 3 dòng (bản dựng sẵn scratchpad/tra-cmd/boc-ma-khong-doc.sua.json)",
+			"tep": [
+				"_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/boc-ma-khong-doc.json"
+			],
+			"dot_bien": {
+				"ten": "khai-nguyen-ban-sai-radio-group",
+				"ban_va": "dot-bien/chu-mac-dinh-thu-vien-ngoai-E4.patch",
+				"thong_diep": "HONG: radio-group.tsx khai boc CircleIcon (lucide-react) ma tren dia khong thay"
+			}
+		},
+		{
+			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
+			"eval": "E9",
+			"xu_ly": "sua-rang",
+			"ly_do": "Loại (a) — vật đổi có chủ đích của hồ sơ đã ký du-an-gantt. context-menu.tsx vào packages/ui ở 29a101a4c như phụ thuộc của @reui/gantt (gantt-bar.tsx:9, gantt-view.tsx:13 nhập nó). du-an-gantt đã ký đủ: contract status signed-off; dòng sổ S1 «Gantt dựng trên @reui/gantt cài vào packages/ui (bậc 3)» (d-20261016T082504Z-5) được niêm ở Cổng Phạm vi 16/10 (d-20261016T112059Z-26); design doc dòng 179 nêu context-menu là phụ thuộc phải cài; design-pass dòng 85 ghi đã thêm context-menu.tsx; Cổng Bằng chứng ký 18/10 (human_signoff manh 2026-10-18). Câu «Cổng Phạm vi từ chối thì gỡ cùng bản mẫu» trong 29a101a4c là điều kiện chưa xảy ra: Cổng Phạm vi đã duyệt. Không AC nào của du-an-gantt gọi tên context-menu; căn cứ là dòng sổ được niêm và AC-4 (kiểu xem Gantt) mà bộ gantt phục vụ. Menu chỉ hiện khi bấm chuột phải lên Gantt nên thuộc bảng gioi-han-bam-moi-hien.",
+			"can_cu": "_acceptance/du-an-gantt/decisions.jsonl:5",
+			"can_cu_them": [
+				"_acceptance/du-an-gantt/decisions.jsonl:26",
+				"_acceptance/du-an-gantt/contract.md:8",
+				"_acceptance/du-an-gantt/contract.md:36",
+				"_acceptance/du-an-gantt/evidence-report.md:11",
+				"docs/superpowers/specs/2026-10-16-du-an-gantt-design.md:179",
+				"_acceptance/du-an-gantt/design-pass.md:85",
+				"packages/ui/src/components/reui/gantt/gantt-bar.tsx:9",
+				"29a101a4c"
+			],
+			"sua": "rang/gioi-han-bam-moi-hien.json thêm dòng context-menu và da_do.ket_qua «context-menu.tsx: rong»; KÉO THEO chan-lai-component-ra-man: mo-nguyen-ban.mjs:9 NEO_DONG 9→10, lai-ra-man.mjs:9 dong_bang_cu 9→10. Bộ mở nguyên bản của chan-lai (E4) ở 730af844a mount context-menu ở trạng thái mở: không sinh chữ.",
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ) — hai ô: chu-mac-dinh E9 rồi chan-lai-component-ra-man E4",
+			"duoi_sau": [
+				"$ node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.mjs",
+				"--- exit 0 (ky vong 0)",
+				"bang gioi han: 10 dong · chan dem tu dia: 10 component boc-ma-khong-doc thuoc loai chi-hien-sau-khi-bam",
+				"XANH: ca 10 dong deu tro mot component that, con boc thu vien, va co dau hieu mo/dong doc duoc tu ma.",
+				"$ node _acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs",
+				"--- exit 0 (ky vong 0)",
+				"  context-menu.tsx  rong",
+				"dong doc duoc: 10 · neo doc lap: 10",
+				"XANH: ca 10 dong deu mount duoc o trang thai mo. 10 dong khong sinh chu nao; 0 dong co sinh."
+			],
+			"tep": [
+				"_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.json",
+				"_acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs",
+				"_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs"
+			],
+			"dot_bien": {
+				"ten": "go-context-menu-khoi-bang",
+				"ban_va": "dot-bien/chu-mac-dinh-thu-vien-ngoai-E9.patch",
+				"thong_diep": "THIEU: context-menu.tsx"
+			}
+		},
+		{
+			"ho_so": "cron-theo-ban-khai",
+			"eval": "E8",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "Loại (b) — vòng này theo nhánh trôi. Ô gốc đòi bản production dựng từ đúng sha HEAD; nhánh vòng không bao giờ lên production, nên ô đỏ ở mọi nhánh trừ chính production. Chủ kho chọn Hỏi-4 ở Cổng Phạm vi (d-20261022T104414Z-14, thay dòng «khai not-run» d-20261022T104031Z-4; niêm d-20261022T225833Z-16): răng đòi bản production READY mới nhất có sha chứa cặp gộp vòng cron 147b47a33 (git merge-base --is-ancestor), và chủ kho đăng nhập lại Vercel CLI một lần trên máy đo. Ô KHÔNG khai not-run: status giữ như mốc nền, chỉ expected đổi. HTTP 403 ở lượt nền là token Vercel CLI hết hạn; răng nay tự làm mới bằng bunx vercel whoami khi còn refreshToken (8a8825cf5, d-20261023T123300Z-27), và lượt ở 730af844a xanh trên bản production thật (dòng dưới). Không chọn loại (d): máy đo có token Vercel, đã đo được.",
+			"can_cu": "_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:14",
+			"can_cu_them": [
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:16",
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:27",
+				"_acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs:104",
+				"_acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs:49",
+				"147b47a33",
+				"8a8825cf5"
+			],
+			"sua": "ban-trien-khai-that.mjs: bản production READY mới nhất phải chứa cặp gộp 147b47a33 (không chứa → mã 1 «khong chua cap gop cron», sha không có trong kho → mã 2); token hết hạn mà còn refreshToken thì gọi bunx vercel whoami rồi đọc lại, vẫn hết hạn mới mã 2; expected E8 đổi theo; status không đổi. Đột biến neo (dot-bien/cron-theo-ban-khai-E8-neo.patch, sha 40 số 0) thử 24/10: mã 2 «KHONG DO DUOC: sha cap gop cron 0000000000000000000000000000000000000000 khong co trong kho».",
+			"dot_bien_neo": {
+				"ten": "CAP_GOP sai (40 số 0)",
+				"ban_va": "dot-bien/cron-theo-ban-khai-E8-neo.patch"
+			},
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ)",
+			"duoi_sau": [
+				"$ bun _acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs",
+				"--- exit 0 (ky vong 0)",
+				"ban production moi nhat: dpl_A7aZCatX5pyjP4AVRiYznktEcK5u · sha 207a8ffc5 · cap gop cron 147b47a33",
+				"nen tang dang ky: 5 · ban khai: 5",
+				"  */5 * * * *  /internal/sync/mailboxes",
+				"  0 6 * * *  /internal/sync/rates",
+				"  0 7 * * *  /internal/telemetry/rollup",
+				"  0 4 * * *  /internal/tracking/retention",
+				"  0 5 * * *  /internal/archive/prune",
+				"XANH: ban production that cua crm-onehub-api chua cap gop cron va dang ky dung 5 viec, tung cap path va nhip khop ban khai."
+			],
+			"tep": [
+				"_acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs"
+			],
+			"dot_bien": {
+				"ten": "production-khong-chua-cap-gop",
+				"ban_va": "dot-bien/cron-theo-ban-khai-E8.patch",
+				"thong_diep": "khong chua cap gop cron f148b2bb1"
+			}
+		},
+		{
+			"ho_so": "cron-theo-ban-khai",
+			"eval": "E7",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "Loại (b) — vòng này theo nhánh trôi, cộng (c) ở bước đầu. (c): răng gom đầu ra năm lệnh vào bộ đệm spawnSync, lượt nền chết ENOBUFS trước khi đếm cảnh báo. (b): con số ghim «3 cảnh báo lint apps/app» là của vòng cron, mà răng đo ở HEAD trôi — HEAD 223b6d346 ra 36 (bun run lint ở apps/app: «Found 36 warnings.», mã 0; cùng con số ở dòng app:lint của lượt dưới). Đóng «(HỎI)»: chủ kho chọn Hỏi-3 ở Cổng Phạm vi (d-20261022T104414Z-13, niêm d-20261022T225833Z-16, làm theo ở d-20261023T005230Z-21 decided_by Manh Phan) — đo ghim ở cây cặp gộp vòng cron 147b47a33^2, vòng đó không thêm cảnh báo. Máy KHÔNG chứng 33 cảnh báo thêm là nền sạch: dòng sổ Hỏi-3 khai đúng giá «nếu 36 là hồi quy phải dọn, đo ở cặp gộp sẽ thôi canh việc đó», và chọn giá đó là của chủ kho. Máy chỉ chứng: cả năm lệnh mã 0 ở HEAD; 20 trong 36 cảnh báo biome in ra đều thuộc loại vệ sinh mã (noUnusedVariables 4, noUselessFragments 4, noUnusedImports 3, useOptionalChain 3, noBarrelFile 2, noAccumulatingSpread 2, noDocumentCookie 1, useTemplate 1), 9 trong 20 ở apps/app/test; 16 cảnh báo còn lại biome không in.",
+			"can_cu": "_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:13",
+			"can_cu_them": [
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:16",
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:21",
+				"_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs:8",
+				"147b47a33",
+				"3ee639d7c"
+			],
+			"sua": "nam-lenh-chung.mjs: năm lệnh đổ thẳng ra màn (stdio inherit) thay gom vào bộ đệm; đếm cảnh báo lint apps/app ở cây tạm dựng tại 147b47a33^2 (git worktree add --detach, nối node_modules, gỡ khi xong); sha neo không có trong kho thì mã 2 «KHONG DO DUOC»; ghim 3 giữ nguyên; expected E7 đổi theo. Đột biến neo (dot-bien/cron-theo-ban-khai-E7-neo.patch, sha 40 số 0) thử 24/10 với năm lệnh thay bằng lệnh giả: mã 2 «KHONG DO DUOC: sha cap gop cron 0000000000000000000000000000000000000000 khong co trong kho».",
+			"dot_bien_neo": {
+				"ten": "CAP_GOP sai (40 số 0)",
+				"ban_va": "dot-bien/cron-theo-ban-khai-E7-neo.patch"
+			},
+			"duoi_sau_nguon": "lượt đo lại toàn bộ ở 730af844a (do-lai.mjs, 23/10 sáng, log scratchpad/do-head-log; 21 hồ sơ, 241 eval máy, 0 đỏ)",
+			"duoi_sau": [
+				"$ bun _acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs",
+				"--- exit 0 (ky vong 0)",
+				"test: ma 0",
+				"check-types: ma 0",
+				"app:lint: Found 36 warnings.",
+				"app:lint: Found 21 infos.",
+				"lint: ma 0",
+				"lint:slop: ma 0",
+				"build: ma 0",
+				"apps/app canh bao lint o cay cap gop cron 147b47a33^2: 3 · ghim: 3",
+				"XANH: ca nam lenh chung ma 0, canh bao lint dung ghim."
+			],
+			"tep": [
+				"_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs"
+			],
+			"dot_bien": {
+				"ten": "canh-bao-ghim-lech",
+				"ban_va": "dot-bien/cron-theo-ban-khai-E7.patch",
+				"thong_diep": "DO: apps/app ra 3 canh bao lint, ghim la 4."
+			}
+		},
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "E13",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "diff merge-base rỗng ở HEAD=onehub; neo PR #311",
+			"can_cu": "45d4fde524b049b17b6887292b641585a914b754",
+			"sua": "rang/san-thiet-ke.mjs tepTrongDiff: diff 591bc8fb63a6505a888f80ccde43fc498e4eed2a..a33a0d62424150945bf2dc482d050dfbaaeccb6e",
+			"tep": [
+				"_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs"
+			],
+			"dot_bien": {
+				"ten": "rang-mu-p0",
+				"ban_va": "dot-bien/danh-sach-keo-chung-E13.patch",
+				"thong_diep": "tu-thu: BO LOT tep gia"
+			},
+			"dot_bien_neo": {
+				"ten": "TOI-sai",
+				"ban_va": "dot-bien/danh-sach-keo-chung-E13-neo.patch"
+			}
+		},
+		{
+			"ho_so": "to-chuc-danh-sach-chi-tiet",
+			"eval": "E21",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "diff merge-base rỗng; neo PR #128",
+			"can_cu": "472e888085bd07c2ef47f02ecd946e7693785027",
+			"sua": "rang/san-thiet-ke.mjs moc=36f6bdb8e61cbaf23254a7fd92c34a01fe097e53, TOI=a7808bfbefc77a9bbe07468cc5b8e3b8081e7792; bỏ diff cây làm việc/untracked",
+			"tep": [
+				"_acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
+			],
+			"dot_bien": {
+				"ten": "className-tren-Button",
+				"ban_va": "dot-bien/to-chuc-danh-sach-chi-tiet-E21.patch",
+				"thong_diep": "className tren Button"
+			},
+			"dot_bien_neo": {
+				"ten": "TOI-sai",
+				"ban_va": "dot-bien/to-chuc-danh-sach-chi-tiet-E21-neo.patch"
+			}
+		},
+		{
+			"ho_so": "toan-canh-okr",
+			"eval": "E3",
+			"xu_ly": "sua-rang",
+			"ly_do": "Loại (a) — vật đổi có chủ đích của vo-khu-muc-tieu và ngan-kr-mot-cho (đều signed-off). Ba ô chạy chung một lượt man-toan-canh.mjs (EVAL rỗng chạy mọi nhóm), nên hai dòng đỏ ở mốc nền làm đỏ cả ba. «hien [data-hang-toan-canh]: het 30000ms»: răng tới bảng Toàn cảnh bằng cách bấm thẻ «Toàn cảnh» ở hàng thẻ ngang; vo-khu-muc-tieu AC-3 bỏ hàng thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý, AC-1 đưa «Sức khoẻ» vào thanh bên Mục tiêu, AC-4 cho /okr/suc-khoe dựng nội dung Toàn cảnh — bảng [data-hang-toan-canh] vẫn còn (toan-canh.tsx:105), chỉ lối vào đổi. «E23 bước 4 … thay []» là hệ quả của dòng trên: không tới được bảng nên không đọc được hàng nào. Cùng lượt còn ba chỗ theo hồ sơ ký sau: ngan-kr-mot-cho AC-1 cho bấm dòng KR ở họp tuần mở ngăn kr: thay ngăn mục tiêu (E14/E28 bước 3); /okr/suc-khoe gọi okr.* cả từ máy chủ app nên E29 đọc nhật ký cửa chặn hai phía; E10 đếm 5 thẻ số theo moi-kr-ca-cong-ty AC-1 (d-20261023T025431Z-25). Đầu ra sau sửa: dòng «E23 … hang pb:PK … thay [Phòng Chu kỳ …]» là hàng [data-hang-toan-canh] hiện lại.",
+			"can_cu": "_acceptance/vo-khu-muc-tieu/contract.md:31",
+			"can_cu_them": [
+				"_acceptance/vo-khu-muc-tieu/contract.md:29",
+				"_acceptance/vo-khu-muc-tieu/contract.md:32",
+				"_acceptance/ngan-kr-mot-cho/contract.md:33",
+				"07ea52a34",
+				"5b6be6129",
+				"apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105",
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208",
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25"
+			],
+			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.",
+			"duoi_sau_nguon": "lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log)",
+			"duoi_sau": [
+				"man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)",
+				"  nhom loc (E2, E3, E5, E10): 40 s",
+				"  nhom hop (E14, E28): 15 s",
+				"  nhom dien (E17): 5 s",
+				"  nhom tong (E19): 11 s",
+				"  nhom suc (E21): 6 s",
+				"  E23 danh sach chu ky: [{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"Năm 2026 tkdk0pu\",\"muc\":[\"Năm 2026 tkdk0pu\",\"Quý 3/2026 tkdk0pu · đã đóng\",\"Quý 4/2026 tkdk0pu · hiện tại\"]},{\"nhan\":\"Năm 2027 tkdk0pu\",\"muc\":[\"Năm 2027 tkdk0pu\"]}]",
+				"  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q3: 1 KR, Q4: 2 KR), thay [Phòng Chu kỳ tkdk0pu,50%,0 · 1 · 0,1 KR có ghi chú mới,1,1]",
+				"  E29 okr.danhSach: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  E29 okr.hopTuan: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  E29 okr.toanCanh: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  nhom ky (E23, E29): 6 s",
+				"man-toan-canh: 164 khang dinh, 0 hong, 37 anh, 84 s",
+				"phien-do: xong — mã 0"
+			],
+			"tep": [
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs",
+				"_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs"
+			],
+			"dot_bien": {
+				"ten": "TC-1 danhSach không kèm loc",
+				"ban_va": "dot-bien/toan-canh-okr-E3.patch",
+				"thong_diep": "E3: sau khi chon nguoi co loi goi okr.danhSach voi loc.phuTrach = [k]"
+			}
+		},
+		{
+			"ho_so": "toan-canh-okr",
+			"eval": "E28",
+			"xu_ly": "sua-rang",
+			"ly_do": "Loại (a) — vật đổi có chủ đích của vo-khu-muc-tieu và ngan-kr-mot-cho (đều signed-off). Ba ô chạy chung một lượt man-toan-canh.mjs (EVAL rỗng chạy mọi nhóm), nên hai dòng đỏ ở mốc nền làm đỏ cả ba. «hien [data-hang-toan-canh]: het 30000ms»: răng tới bảng Toàn cảnh bằng cách bấm thẻ «Toàn cảnh» ở hàng thẻ ngang; vo-khu-muc-tieu AC-3 bỏ hàng thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý, AC-1 đưa «Sức khoẻ» vào thanh bên Mục tiêu, AC-4 cho /okr/suc-khoe dựng nội dung Toàn cảnh — bảng [data-hang-toan-canh] vẫn còn (toan-canh.tsx:105), chỉ lối vào đổi. «E23 bước 4 … thay []» là hệ quả của dòng trên: không tới được bảng nên không đọc được hàng nào. Cùng lượt còn ba chỗ theo hồ sơ ký sau: ngan-kr-mot-cho AC-1 cho bấm dòng KR ở họp tuần mở ngăn kr: thay ngăn mục tiêu (E14/E28 bước 3); /okr/suc-khoe gọi okr.* cả từ máy chủ app nên E29 đọc nhật ký cửa chặn hai phía; E10 đếm 5 thẻ số theo moi-kr-ca-cong-ty AC-1 (d-20261023T025431Z-25). Đầu ra sau sửa: dòng «E23 … hang pb:PK … thay [Phòng Chu kỳ …]» là hàng [data-hang-toan-canh] hiện lại.",
+			"can_cu": "_acceptance/vo-khu-muc-tieu/contract.md:31",
+			"can_cu_them": [
+				"_acceptance/vo-khu-muc-tieu/contract.md:29",
+				"_acceptance/vo-khu-muc-tieu/contract.md:32",
+				"_acceptance/ngan-kr-mot-cho/contract.md:33",
+				"07ea52a34",
+				"5b6be6129",
+				"apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105",
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208",
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25"
+			],
+			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.",
+			"duoi_sau_nguon": "lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log)",
+			"duoi_sau": [
+				"man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)",
+				"  nhom loc (E2, E3, E5, E10): 40 s",
+				"  nhom hop (E14, E28): 15 s",
+				"  nhom dien (E17): 5 s",
+				"  nhom tong (E19): 11 s",
+				"  nhom suc (E21): 6 s",
+				"  E23 danh sach chu ky: [{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"Năm 2026 tkdk0pu\",\"muc\":[\"Năm 2026 tkdk0pu\",\"Quý 3/2026 tkdk0pu · đã đóng\",\"Quý 4/2026 tkdk0pu · hiện tại\"]},{\"nhan\":\"Năm 2027 tkdk0pu\",\"muc\":[\"Năm 2027 tkdk0pu\"]}]",
+				"  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q3: 1 KR, Q4: 2 KR), thay [Phòng Chu kỳ tkdk0pu,50%,0 · 1 · 0,1 KR có ghi chú mới,1,1]",
+				"  E29 okr.danhSach: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  E29 okr.hopTuan: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  E29 okr.toanCanh: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  nhom ky (E23, E29): 6 s",
+				"man-toan-canh: 164 khang dinh, 0 hong, 37 anh, 84 s",
+				"phien-do: xong — mã 0"
+			],
+			"tep": [
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs",
+				"_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs"
+			],
+			"dot_bien": {
+				"ten": "TC-2 vết mo-hop-tuan thiếu tuan",
+				"ban_va": "dot-bien/toan-canh-okr-E28.patch",
+				"thong_diep": "E28: dong mo-hop-tuan dung hinh"
+			}
+		},
+		{
+			"ho_so": "toan-canh-okr",
+			"eval": "E29",
+			"xu_ly": "sua-rang",
+			"ly_do": "Loại (a) — vật đổi có chủ đích của vo-khu-muc-tieu và ngan-kr-mot-cho (đều signed-off). Ba ô chạy chung một lượt man-toan-canh.mjs (EVAL rỗng chạy mọi nhóm), nên hai dòng đỏ ở mốc nền làm đỏ cả ba. «hien [data-hang-toan-canh]: het 30000ms»: răng tới bảng Toàn cảnh bằng cách bấm thẻ «Toàn cảnh» ở hàng thẻ ngang; vo-khu-muc-tieu AC-3 bỏ hàng thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý, AC-1 đưa «Sức khoẻ» vào thanh bên Mục tiêu, AC-4 cho /okr/suc-khoe dựng nội dung Toàn cảnh — bảng [data-hang-toan-canh] vẫn còn (toan-canh.tsx:105), chỉ lối vào đổi. «E23 bước 4 … thay []» là hệ quả của dòng trên: không tới được bảng nên không đọc được hàng nào. Cùng lượt còn ba chỗ theo hồ sơ ký sau: ngan-kr-mot-cho AC-1 cho bấm dòng KR ở họp tuần mở ngăn kr: thay ngăn mục tiêu (E14/E28 bước 3); /okr/suc-khoe gọi okr.* cả từ máy chủ app nên E29 đọc nhật ký cửa chặn hai phía; E10 đếm 5 thẻ số theo moi-kr-ca-cong-ty AC-1 (d-20261023T025431Z-25). Đầu ra sau sửa: dòng «E23 … hang pb:PK … thay [Phòng Chu kỳ …]» là hàng [data-hang-toan-canh] hiện lại.",
+			"can_cu": "_acceptance/vo-khu-muc-tieu/contract.md:31",
+			"can_cu_them": [
+				"_acceptance/vo-khu-muc-tieu/contract.md:29",
+				"_acceptance/vo-khu-muc-tieu/contract.md:32",
+				"_acceptance/ngan-kr-mot-cho/contract.md:33",
+				"07ea52a34",
+				"5b6be6129",
+				"apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105",
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208",
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25"
+			],
+			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.",
+			"duoi_sau_nguon": "lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log)",
+			"duoi_sau": [
+				"man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)",
+				"  nhom loc (E2, E3, E5, E10): 40 s",
+				"  nhom hop (E14, E28): 15 s",
+				"  nhom dien (E17): 5 s",
+				"  nhom tong (E19): 11 s",
+				"  nhom suc (E21): 6 s",
+				"  E23 danh sach chu ky: [{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"\",\"muc\":[]},{\"nhan\":\"Năm 2026 tkdk0pu\",\"muc\":[\"Năm 2026 tkdk0pu\",\"Quý 3/2026 tkdk0pu · đã đóng\",\"Quý 4/2026 tkdk0pu · hiện tại\"]},{\"nhan\":\"Năm 2027 tkdk0pu\",\"muc\":[\"Năm 2027 tkdk0pu\"]}]",
+				"  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q3: 1 KR, Q4: 2 KR), thay [Phòng Chu kỳ tkdk0pu,50%,0 · 1 · 0,1 KR có ghi chú mới,1,1]",
+				"  E29 okr.danhSach: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  E29 okr.hopTuan: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  E29 okr.toanCanh: 1 loi goi qua cua chan (trinh duyet va may chu app), cycleId [cmvkdlp3y005vhicfr2dybzut]",
+				"  nhom ky (E23, E29): 6 s",
+				"man-toan-canh: 164 khang dinh, 0 hong, 37 anh, 84 s",
+				"phien-do: xong — mã 0"
+			],
+			"tep": [
+				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs",
+				"_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs"
+			],
+			"dot_bien": {
+				"ten": "TC-3 prefetch toanCanh bằng currentId",
+				"ban_va": "dot-bien/toan-canh-okr-E29.patch",
+				"thong_diep": "E29: co it nhat 1 loi goi okr.toanCanh sau khi chon ky va moi loi goi mang cycleId cua"
+			}
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E4",
+			"xu_ly": "sua-rang",
+			"ly_do": "phụ thuộc thứ tự: đòi tổng kết E9",
+			"can_cu": "_acceptance/tro-ly-okr-nen/rang/doi-soat-that.mjs:16",
+			"sua": "cach-ly-dau-cuoi ghi sha; doi-soat tự chạy E9 khi thiếu/khác sha",
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/doi-soat-that.mjs",
+				"_acceptance/tro-ly-okr-nen/rang/cach-ly-dau-cuoi.mjs",
+				"_acceptance/tro-ly-okr-nen/rang/mau-chung.mjs"
+			],
+			"dot_bien": {
+				"ten": "so-chi-phi-gap-doi",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E4.patch",
+				"thong_diep": "so lech gateway qua 10%"
+			}
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E17",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "migration mới tính theo merge-base; model mới không cuối schema vì du-an-gantt d429e39b2, goi-y-mo-ke-hoach 34a010430 thêm sau",
+			"can_cu": "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9",
+			"sua": "rang/migration-chi-them.mjs NEN=e3dd799ad GOP=1bb45ac78; diff schema NEN..GOP; liền khối 6 model thay cuối tệp",
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/migration-chi-them.mjs"
+			],
+			"dot_bien": {
+				"ten": "DROP COLUMN",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E17.patch",
+				"thong_diep": "migration khong chi them: DROP COLUMN"
+			},
+			"dot_bien_neo": {
+				"ten": "neo-0",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E17-neo.patch"
+			}
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E22",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "git show merge-base:tien-do.ts — tệp đã dời ở HEAD",
+			"can_cu": "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9",
+			"sua": "rang/tien-do-da-doi.mjs nen=c1e37b730548a6faa9c2dbac1e0a652a32934753",
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/tien-do-da-doi.mjs"
+			],
+			"dot_bien": {
+				"ten": "nhap-duong-cu",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E22.patch",
+				"thong_diep": "con nhap duong cu: apps/api/src/okr/okr-xem.service.ts"
+			},
+			"dot_bien_neo": {
+				"ten": "neo-0",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E22-neo.patch"
+			}
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E23",
+			"xu_ly": "sua-rang",
+			"ly_do": "CONTEXT.md mục Tóm tắt tuần (#226 AC-15) và Trợ lý OKR (#230 Kara) đổi theo hồ sơ ký sau",
+			"can_cu": "e5c369cc6",
+			"can_cu_them": [
+				"923f57173"
+			],
+			"sua": "rang/tu-dien-luat.mjs: hai mục so với git show <sha>:CONTEXT.md",
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/tu-dien-luat.mjs"
+			],
+			"dot_bien": {
+				"ten": "sua-tom-tat",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E23.patch",
+				"thong_diep": "tu dien lech: Tóm tắt tuần"
+			}
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E25",
+			"xu_ly": "sua-rang",
+			"ly_do": "tro-ly-okr-tom-tat: phiên con chưa có việc vào okr.chuyen-tiep",
+			"can_cu": "853f07bd2",
+			"sua": "rang/so-phien-con-that.mjs:8 con_tro_ly=okr.chuyen-tiep",
+			"tep": [
+				"_acceptance/tro-ly-okr-nen/rang/so-phien-con-that.mjs"
+			],
+			"dot_bien": {
+				"ten": "tro-ly-ve-de-xuat",
+				"ban_va": "dot-bien/tro-ly-okr-nen-E25.patch",
+				"thong_diep": "con_tro_ly: tinhNang okr.de-xuat, can okr.chuyen-tiep"
+			}
+		},
+		{
+			"ho_so": "zalo-gui-hong-ghi-ly-do",
+			"eval": "E7",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "rang/pham-vi.mjs lấy diff merge-base với origin/onehub; ở nhánh chính diff rỗng nên mã 2. Neo cặp gộp PR #324.",
+			"can_cu": "0b62cebb90f12b700681cafae45f35a66816667f",
+			"sua": "rang/pham-vi.mjs: tu=0422d7976508e31d81923db5f8609fe5464d695d, toi=1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed thay merge-base…HEAD",
+			"tep": [
+				"_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs"
+			],
+			"dot_bien": {
+				"ten": "diff-cham-tep-la",
+				"ban_va": "dot-bien/zalo-gui-hong-ghi-ly-do-E7.patch",
+				"thong_diep": "ngoai ranh gioi: apps/app/lib/x.ts"
+			},
+			"dot_bien_neo": {
+				"ten": "TOI-sai",
+				"ban_va": "dot-bien/zalo-gui-hong-ghi-ly-do-E7-neo.patch"
+			}
+		},
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/danh-sach-keo-chung/evals.yaml"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/dieu-phoi-hai-tang/evals.yaml"
+		},
+		{
+			"ho_so": "lich-su-va-luu-tru-trang",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/lich-su-va-luu-tru-trang/evals.yaml"
+		},
+		{
+			"ho_so": "no-sau-luot-5-okr",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/no-sau-luot-5-okr/evals.yaml"
+		},
+		{
+			"ho_so": "zalo-gui-hong-ghi-ly-do",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/zalo-gui-hong-ghi-ly-do/evals.yaml"
+		}
+	],
+	"hoan_lai": [
+		{
+			"ho_so": "bo-dung-chung-nhan-chuoi",
+			"eval_do": [
+				"E4"
+			],
+			"san_pham_hong": [
+				{
+					"eval": "E4",
+					"ly_do": "8 bài test DOM mới tự khai lại type Locale thay vì nhập từ @crm/ui/lib/locale, trái AC-4 «kiểu Locale chỉ một định nghĩa» (7e65298a6 497205b20 cc777b342 0b09b2d1b 8cb5ceac1 7c61ff1e3 c697c8887 084799008).",
+					"can_cu": "_acceptance/bo-dung-chung-nhan-chuoi/contract.md:53"
+				}
+			],
+			"tin_hieu": [
+				{
+					"ma": "F1-25",
+					"tieu_de": "bo-dung-chung-nhan-chuoi E4: 8 bài test DOM tự khai lại type Locale thay vì nhập @crm/ui/lib/locale",
+					"noi_dung": "apps/app/test/{bang-crm-loc-ro,chu-man-tieng-viet,hoan-tac-loat-dung-id,lien-quan-loc-ban-da-cat,vong-doi-mot-cach-cat,luu-tru-truong-khong-hoi,dich-ten-nganh-bang-bang,tra-cuu-thuong-hieu-viet-nam}.dom.tsx — thay dòng type Locale bằng import type { Locale } from \"@crm/ui/lib/locale\"."
+				}
+			],
+			"sua_san": []
+		},
+		{
+			"ho_so": "cai-dat-con-lai-noi-tieng-viet",
+			"eval_do": [
+				"E1",
+				"E3",
+				"E6",
+				"E8",
+				"E10",
+				"E11",
+				"E12",
+				"E13",
+				"E14",
+				"E15",
+				"E17"
+			],
+			"san_pham_hong": [
+				{
+					"eval": "E8",
+					"ly_do": "Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8, chủ kho duyệt 23/10). Tên trường tự tạo ở Cài đặt › Trường vẽ trong span không mang translate=\"no\" (fields-list.tsx:407-408 và :518-519 ở HEAD). Log đầy đủ của lượt nền có đúng dòng đó: các tên trường tự tạo của dữ liệu mẫu (Account type, BDR owner, ICP fit score, Lead source, Lifecycle stage, Segment, Territory) hiện giống hệt hai lượt tiếng mà không mang translate=\"no\", trong khi dữ liệu người nhập khác như «Ada Okafor» có mang (Email, URL, Website cùng màn là nhãn kiểu trường, phần sửa răng E1 ở sua_san khai chúng). Luật buộc: CLAUDE.md «Dữ liệu người nhập không dịch, và đánh dấu để trình duyệt không tự dịch»; AC-6b của hồ sơ này (dữ liệu người nhập trên các màn Cài đặt mang translate=\"no\"). Không quyết định đã ký nào miễn: hồ sơ đổi màn là truong-chuan-o-cai-dat (6634d64c1, signed-off) — 9 AC của nó không nói gì về translate hay dịch tên trường. Thiếu: chưa có đầu ra lượt đo sau khi sửa răng (sửa răng ghi sẵn ở sua_san, chưa áp vì hồ sơ hoàn lại không chạm tệp), nên dòng chứng là log đầy đủ của lượt nền.",
+					"can_cu": "apps/app/components/crm/fields/fields-list.tsx:407",
+					"can_cu_them": [
+						"apps/app/components/crm/fields/fields-list.tsx:408",
+						"apps/app/components/crm/fields/fields-list.tsx:519",
+						"CLAUDE.md:130",
+						"CLAUDE.md:131",
+						"_acceptance/cai-dat-con-lai-noi-tieng-viet/contract.md:68",
+						"6634d64c1",
+						"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:8"
+					],
+					"duoi_nen": [
+						"   CHUA KHAI            \"Account type\" <- /settings/fields",
+						"   du-lieu-nguoi-nhap   \"Ada Okafor\" [translate=\"no\"] <- /settings/members",
+						"   CHUA KHAI            \"BDR owner\" <- /settings/fields",
+						"   CHUA KHAI            \"Email\" <- /settings/fields",
+						"   CHUA KHAI            \"ICP fit score\" <- /settings/fields",
+						"   CHUA KHAI            \"Lead source\" <- /settings/fields",
+						"   CHUA KHAI            \"Lifecycle stage\" <- /settings/fields",
+						"   CHUA KHAI            \"Segment\" <- /settings/fields",
+						"   CHUA KHAI            \"Territory\" <- /settings/fields",
+						"   CHUA KHAI            \"URL\" <- /settings/fields",
+						"   CHUA KHAI            \"Website\" <- /settings/fields",
+						"ket qua: thieu dong=0 · thua gia tri=24 · thieu thuoc tinh=0 · ngoai lat (gioi han da khai)=7 · mien tru chet=1 · route khong do duoc=1 · route lech do dai hai luot=0"
+					]
+				},
+				{
+					"eval": "E13",
+					"ly_do": "Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8). Ô E13 không cần sửa răng: lượt nền đã chỉ đúng chỗ hỏng, chỉ là đuôi 12 dòng cắt mất — log đầy đủ có «TRAN: \"Điện thoại\" — vi 57/56px · doi chung en 96/96px vua» và «TRAN: \"Trường chuẩn\" — vi 75/56px» trên /settings/fields ở 360px (dòng dưới). Chỗ hỏng: fields-list.tsx:419-425 ở HEAD (khối trường chuẩn) cắt nhãn bằng truncate. Luật buộc: AC-10 của hồ sơ này «với mọi phần tử mang nhãn dịch được scrollWidth ≤ clientWidth … không miễn trừ truncate». Không quyết định đã ký nào miễn: truong-chuan-o-cai-dat (6634d64c1, signed-off) dựng khối này, 9 AC của nó không có AC nào cho phép cắt chữ hay nói về khổ 360px (lớp cắt ngang của nó là 1280 và 375).",
+					"can_cu": "apps/app/components/crm/fields/fields-list.tsx:419",
+					"can_cu_them": [
+						"apps/app/components/crm/fields/fields-list.tsx:422",
+						"_acceptance/cai-dat-con-lai-noi-tieng-viet/contract.md:72",
+						"_acceptance/truong-chuan-o-cai-dat/contract.md:104",
+						"6634d64c1",
+						"CLAUDE.md:130",
+						"CLAUDE.md:131",
+						"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:8"
+					],
+					"duoi_nen": [
+						"-- man /settings/fields o 360px · phan tu co chu: vi=68 en=68 · nhan dich duoc=55",
+						"   TRAN CA HAI LUOT: \"Trường chuẩn · bắt buộc\" — vi 132/96px · en 131/96px — main:2/div:0/div:1/div:0/div:1/div:3/div:1/span:1",
+						"   TRAN: \"Điện thoại\" — vi 57/56px · doi chung en 96/96px vua — main:2/div:0/div:1/div:0/div:1/div:6/div:1/span:0",
+						"   TRAN: \"Trường chuẩn\" — vi 75/56px · doi chung en 96/96px vua — main:2/div:0/div:1/div:0/div:1/div:6/div:1/span:1",
+						"ket qua 360px: 447 nhan dich duoc tren 17/18 route · vi tran ma en vua=2 · tran ca hai luot=1 · en tran ma vi vua=0"
+					]
+				}
+			],
+			"tin_hieu": [
+				{
+					"ma": "F1-26",
+					"tieu_de": "cai-dat-con-lai-noi-tieng-viet E8: nhãn trường tự tạo ở Cài đặt › Trường thiếu translate=no",
+					"noi_dung": "apps/app/components/crm/fields/fields-list.tsx:407-409 và :519 vẽ tên trường tự tạo không đánh dấu không dịch; từ 6634d64c1."
+				},
+				{
+					"ma": "F1-27",
+					"tieu_de": "cai-dat-con-lai-noi-tieng-viet E13: chữ Việt bị cắt ở khổ 360px trên Cài đặt › Trường",
+					"noi_dung": "apps/app/components/crm/fields/fields-list.tsx:407-424 dùng truncate cho cột nhãn; «Điện thoại» 57/56px, «Trường chuẩn» 75/56px ở vi; từ 6634d64c1."
+				}
+			],
+			"sua_san": [
+				{
+					"eval": "E1",
+					"xu_ly": "sua-rang",
+					"sua": "khong-dich-cua-lat.json mien_dau Chung; dòng Zalo CRM Email URL Website; câu Slack mới; dungBoi thêm giaiDoan.list, fields.list, tên miền, cấu hình repo; route_khong_dung_duoc /settings/notifications; xem lại vẽ 1 /settings/api-keys",
+					"dot_bien": null,
+					"can_cu": "bfb313301"
+				},
+				{
+					"eval": "E3",
+					"xu_ly": "sua-rang",
+					"sua": "toast-cua-lat.json dời/thêm dòng; chu-ngoai-jsx.mjs tháo dien(<kho>.<khoá>)",
+					"dot_bien": null,
+					"can_cu": "d93d78670"
+				},
+				{
+					"eval": "E6",
+					"xu_ly": "sua-rang",
+					"sua": "man-that.mjs KHO ui table.noMatch",
+					"dot_bien": null,
+					"can_cu": "fb486420a"
+				},
+				{
+					"eval": "E10",
+					"xu_ly": "sua-rang",
+					"sua": "như E15 + E3",
+					"dot_bien": null,
+					"can_cu": "E15,E3"
+				},
+				{
+					"eval": "E11",
+					"xu_ly": "sua-rang",
+					"sua": "như E3",
+					"dot_bien": null,
+					"can_cu": "d93d78670"
+				},
+				{
+					"eval": "E12",
+					"xu_ly": "sua-rang",
+					"sua": "lat-cai-dat-2.json neo.file 36→44, file_quyen 11→13",
+					"dot_bien": null,
+					"can_cu": "7c451de7b"
+				},
+				{
+					"eval": "E14",
+					"xu_ly": "sua-rang",
+					"sua": "cd2_be_rong_do bọc tien-de; be-rong-do-lib.sh đếm tràn của chính vết",
+					"dot_bien": null,
+					"can_cu": "d1e3fdd4b"
+				},
+				{
+					"eval": "E15",
+					"xu_ly": "sua-rang",
+					"sua": "khong-phai-chu-nguoi-doc.json thêm data-slot,hinh,layout,aria-haspopup,cellClassName; giu_nguyen toan-quyen,keo-tin-hieu,day-lo-trinh,khung-1..3,ten-mien-noi-bo,sso-khoa-them,'px-3 py-2.5 align-middle'",
+					"dot_bien": null,
+					"can_cu": "f24c0be77"
+				},
+				{
+					"eval": "E17",
+					"xu_ly": "sua-rang",
+					"sua": "man-cai-dat-noi-tieng-viet/rang/tieu-de-cua-lat.json so_o 18→20",
+					"dot_bien": null,
+					"can_cu": "9e8461e9a"
+				}
+			]
+		},
+		{
+			"ho_so": "tong-quan-va-khung-noi-tieng-viet",
+			"eval_do": [
+				"E1",
+				"E2",
+				"E3",
+				"E4",
+				"E7",
+				"E8",
+				"E10",
+				"E11",
+				"E12",
+				"E13",
+				"E14",
+				"E15",
+				"E21",
+				"E22",
+				"E23",
+				"E24",
+				"E25"
+			],
+			"san_pham_hong": [
+				{
+					"eval": "E7",
+					"ly_do": "Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8). Lượt nền của E7 chỉ là lỗi răng (ERR_MODULE_NOT_FOUND apps/app/lib/deal-stage.ts — tệp đã gỡ khi giai-doan-thoa-thuan chuyển giai đoạn thành dữ liệu workspace ở ecb9448b4); sửa răng ghi sẵn ở sua_san E1. Chỗ hỏng chứng ở mức mã: sales-dashboard.tsx:204-208 ở HEAD bọc nhãn giai đoạn (slice.label, nay là dữ liệu workspace người quản trị nhập) bằng ForeignText lang=\"en\" mà không translate=\"no\". Luật buộc: CLAUDE.md «Dữ liệu người nhập không dịch, và đánh dấu để trình duyệt không tự dịch»; cùng giá trị ấy ở Cài đặt › Giai đoạn, giai-doan-thoa-thuan AC-13 buộc mang translate=\"no\". Không quyết định đã ký nào miễn ở Tổng quan. Lưu ý cho người ký: AC-7 của hồ sơ này viết khi nhãn giai đoạn còn là bảy giá trị cố định của lib/deal-stage.ts và loại «nhãn mang lang=en» khỏi tập ứng viên — xếp chỗ này là lỗi sản phẩm dựa trên luật dữ liệu người nhập, không dựa trên chữ của AC-7. Thiếu: không còn đầu ra lượt đo sau khi sửa răng (lượt thử không lưu log).",
+					"can_cu": "apps/app/app/(app)/[slug]/sales-dashboard.tsx:204",
+					"can_cu_them": [
+						"apps/app/app/(app)/[slug]/sales-dashboard.tsx:206",
+						"apps/app/app/(app)/[slug]/sales-dashboard.tsx:208",
+						"CLAUDE.md:130",
+						"CLAUDE.md:131",
+						"_acceptance/giai-doan-thoa-thuan/contract.md:44",
+						"_acceptance/tong-quan-va-khung-noi-tieng-viet/contract.md:49",
+						"ecb9448b4",
+						"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:8"
+					]
+				}
+			],
+			"tin_hieu": [
+				{
+					"ma": "F1-28",
+					"tieu_de": "tong-quan-va-khung-noi-tieng-viet E7: nhãn giai đoạn ở Tổng quan bọc lang=en mà không translate=no",
+					"noi_dung": "apps/app/app/(app)/[slug]/sales-dashboard.tsx:204-209 bọc nhãn giai đoạn bằng ForeignText lang=en, không translate=no; giai đoạn là dữ liệu workspace từ ecb9448b4."
+				}
+			],
+			"sua_san": [
+				{
+					"eval": "E1",
+					"xu_ly": "sua-rang",
+					"sua": "man-that.mjs:52-53 bỏ nhập apps/app/lib/deal-stage.ts; bangKhongDich lấy giai đoạn từ API giaiDoan.list; khong-dich-cua-lat.json:34 nguon api:giaiDoan.list",
+					"dot_bien": "ghim khoá deals khung-ung-dung.ts về Deals → vẽ 2 đỏ",
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E2",
+					"xu_ly": "sua-rang",
+					"sua": "như E1 rồi chạy tq_lan_noi_tiep trên cây sạch; selector nav /chat có thể lệch (59b8ba897)",
+					"dot_bien": "ghim tiêu đề ⌘K về Search",
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E3",
+					"xu_ly": "tu-het",
+					"sua": "chạy tq_lan_noi_tiep (chân bên trong xanh)",
+					"dot_bien": null,
+					"can_cu": ""
+				},
+				{
+					"eval": "E4",
+					"xu_ly": "sua-rang",
+					"sua": "khong-phai-chu-nguoi-doc.json: gỡ giữ nguyên primary/error; thêm thuoc_jsx_ky_thuat data-khoi,data-can-de-y,data-cap-loi,hinh,noi,khiHien,placement; giu_nguyen viec,viecChung,buoc,keHoach,taiLieu,ke-hoach-im,moc-ngay,member,companies,khong-quyen,dangChay,hong,Sign out failed",
+					"dot_bien": "Closed won trong TREND_CONFIG",
+					"can_cu": "bf91a6a5d"
+				},
+				{
+					"eval": "E8",
+					"xu_ly": "sua-rang",
+					"sua": "như E1 + chạy làn",
+					"dot_bien": null,
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E10",
+					"xu_ly": "sua-rang",
+					"sua": "như E4 + chạy làn",
+					"dot_bien": null,
+					"can_cu": "bf91a6a5d"
+				},
+				{
+					"eval": "E11",
+					"xu_ly": "sua-rang",
+					"sua": "dot-bien.mjs:96 regex m.tasks.pastDue(formatCount(...)); bọc tq_dot_bien qua tien-de.mjs; kèm E1, E4",
+					"dot_bien": null,
+					"can_cu": "a5530063c"
+				},
+				{
+					"eval": "E12",
+					"xu_ly": "sua-rang",
+					"sua": "như E1 + chạy làn",
+					"dot_bien": null,
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E13",
+					"xu_ly": "sua-rang",
+					"sua": "bọc tq_be_rong_do qua tien-de.mjs; kèm E1; đếm tràn của chính vết",
+					"dot_bien": null,
+					"can_cu": "d1e3fdd4b"
+				},
+				{
+					"eval": "E14",
+					"xu_ly": "sua-rang",
+					"sua": "như E1",
+					"dot_bien": null,
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E15",
+					"xu_ly": "sua-rang",
+					"sua": "bọc tq_mot_bo_thuoc qua tien-de; thay ghim cứng goc-thuoc.json bằng so sống lib a242858d0 vs hiện tại",
+					"dot_bien": null,
+					"can_cu": "31804c08c"
+				},
+				{
+					"eval": "E21",
+					"xu_ly": "sua-rang",
+					"sua": "như E1 + chạy làn",
+					"dot_bien": null,
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E22",
+					"xu_ly": "tu-het",
+					"sua": "chạy làn",
+					"dot_bien": null,
+					"can_cu": ""
+				},
+				{
+					"eval": "E23",
+					"xu_ly": "tu-het",
+					"sua": "chạy làn",
+					"dot_bien": null,
+					"can_cu": ""
+				},
+				{
+					"eval": "E24",
+					"xu_ly": "tu-het",
+					"sua": "chạy làn",
+					"dot_bien": null,
+					"can_cu": ""
+				},
+				{
+					"eval": "E25",
+					"xu_ly": "tu-het",
+					"sua": "chạy làn",
+					"dot_bien": null,
+					"can_cu": ""
+				}
+			]
+		},
+		{
+			"ho_so": "so-okr-tu-chay",
+			"eval_do": [
+				"E8",
+				"E12",
+				"E14",
+				"E23",
+				"E25"
+			],
+			"san_pham_hong": [
+				{
+					"eval": "E12",
+					"ly_do": "Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8; quyết định chuyển hồ sơ d-20261023T010937Z-24). Đầu ra đỏ ở mốc nền chỉ có «E19 buoc 4» (nút Gửi không hiện, DB không ghi): đó là lỗi thước — răng mở /okr/cap-nhat-tuan, mà cua-toi-ba-phan AC-2 dời bảng cập nhật vào phần 1 của /okr; bản vá sua-san đổi sang /okr?tu=viec-cua-toi và bộ chọn [data-phan='can-cap-nhat'], lượt sau sửa không còn dòng E19 nào hỏng. Lượt sau sửa: 168 khẳng định, 7 hỏng (dòng dưới). Lệnh của E12, E14 chạy tròn mọi nhóm (EVAL rỗng), nên khẳng định của nhóm E11/E13 cũng làm đỏ hai ô này. Bảy dòng hỏng chia ba lỗi: (1) F1-32 — bốn dòng «E11 buoc 4/10» tên chỉ số, translate=no của tên, phạm vi, khoảng ngày rỗng vì ngăn KR không vẽ phần định nghĩa; (2) F1-31 — «E11 buoc 6» sau «Quay lại» đường dẫn mất ngaySo, và «E11 buoc 7» (câu lệch đọc 3 và 2 thay 1 và 0) suy ra từ đó: bước 7 tải lại trang rồi đọc câu lệch của ngày trên đường dẫn, mà đường dẫn đã mất ngày D2 (suy từ mã răng, chưa tách đo riêng); (3) F1-30 — lỗi hydrat ở Của tôi (dòng pageerror; khác biệt CardDescription: máy chủ trả khung xương, trình duyệt dựng span data-so-tom-tat). Mọi khẳng định riêng của E12 (số đã chụp = DB, số dòng bảng = banGhiChiSo, chọn ngày gọi đúng input) đạt. Vì sao không quyết định đã ký nào cho phép: ngan-kr-mot-cho (5b6be6129, signed-off) được chủ kho cho gộp ngăn số vào ngăn KR ở Hỏi-1 của nó (d-20261020T023533Z-7) với điều kiện «chuyển thước theo luật 21: đổi đúng chỗ hoặc khai nghỉ superseded_by» — phần gộp là có chủ đích, nên bộ chọn sang ngăn kr: là sửa răng. Nhưng AC-3 của nó hứa mục «Số và nguồn» là «nội dung ngăn số hôm nay», và nó không khai superseded_by cho AC-7 của so-okr-tu-chay. Hiện mục ấy chỉ nhúng NoiDungSoKr (kr-sheet.tsx:628) còn phần định nghĩa [data-dinh-nghia] (tên chỉ số, phạm vi, khoảng ngày) chỉ ở SoKrSheet (so-kr-sheet.tsx:90); giuNgaySo (record-stack.ts:68) chỉ giữ ngaySo khi chồng ngăn còn so-kr, mà không lối nào mở so-kr nữa. AC-7 của so-okr-tu-chay vẫn hứa tên chỉ số, phạm vi, khoảng ngày và «Quay lại về ngăn số» với ngày đã chọn.",
+					"can_cu": "5b6be6129",
+					"can_cu_them": [
+						"_acceptance/ngan-kr-mot-cho/decisions.jsonl:7",
+						"_acceptance/ngan-kr-mot-cho/contract.md:40",
+						"_acceptance/so-okr-tu-chay/contract.md:38",
+						"apps/app/components/crm/record-sheet/kr-sheet.tsx:628",
+						"apps/app/components/crm/record-sheet/so-kr-sheet.tsx:90",
+						"apps/app/components/crm/record-sheet/record-stack.ts:68",
+						"_acceptance/cua-toi-ba-phan/contract.md:31",
+						"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:24"
+					],
+					"duoi_sau_nguon": "lượt man-so-tu-chay.mjs sau khi áp bản vá sửa răng ghi sẵn sua-san/so-okr-tu-chay.patch, cây 3ee639d7c, 23/10 08:03 (+07); log scratchpad/c-f28/log-so-okr-tu-chay, tóm tắt scratchpad/sau-so-okr-tu-chay.json",
+					"duoi_sau": [
+						"$ EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs\"",
+						"--- exit 1 (ky vong 0)",
+						"man-so-tu-chay: chay tron 5 eval; chay rieng: EVAL=E11 (ma: E11, E12, E13, E14, E19); chieu do: --chieu-do",
+						"man-so-tu-chay: 168 khang dinh, 7 hong, 21 anh (…)",
+						"  HONG: E11 buoc 4: ten chi so «Thoả thuận chốt được» (thay «»)",
+						"  HONG: E11 buoc 10: ten chi so mang translate=no (thay null)",
+						"  HONG: E11 buoc 4: pham vi phong ban Phòng Đối tác số sk9lu9h (thay null «»)",
+						"  HONG: E11 buoc 4: co khoang ngay (thay «»)",
+						"  HONG: E11 buoc 6: sau Quay lai URL con ngaySo=2026-10-21 va kr (thay objective:cmvk9lvma000ndncfhlz6feej,kr:cmvk9lvof000rdncf4y2e6lh6 ngaySo=null)",
+						"  HONG: E11 buoc 7: cau lech co hai so (da chup 1, tinh lai 0) — thay «Đã chụp 3 · tính lại lúc này 2 — dữ liệu đã đổi sau khi chụp», data-so-tinh-lai=2",
+						"  HONG: khong loi console (1): E13/E14 /okr?record=objective:cmvk9lvwd001adncfpudiyiqd: pageerror Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerate"
+					]
+				},
+				{
+					"eval": "E14",
+					"ly_do": "Không thuộc (a)–(d): lỗi sản phẩm thật, hoàn lại theo Hỏi-1 (d-20261022T104031Z-8; d-20261023T010937Z-24). Đầu ra đỏ ở mốc nền chỉ có «E19 buoc 4» (nút Gửi không hiện, DB không ghi): đó là lỗi thước — răng mở /okr/cap-nhat-tuan, mà cua-toi-ba-phan AC-2 dời bảng cập nhật vào phần 1 của /okr; bản vá sua-san đổi sang /okr?tu=viec-cua-toi và bộ chọn [data-phan='can-cap-nhat'], lượt sau sửa không còn dòng E19 nào hỏng. Lượt sau sửa: 168 khẳng định, 7 hỏng (dòng dưới). Lệnh của E12, E14 chạy tròn mọi nhóm (EVAL rỗng), nên khẳng định của nhóm E11/E13 cũng làm đỏ hai ô này. Lỗi thuộc nhóm của chính E14: «khong loi console (1): E13/E14 /okr?record=objective:…: pageerror Error: Hydration failed» — F1-30, ở trang Của tôi (PhanDonViDan › TheDonVi › CardDescription: máy chủ trả khung xương, trình duyệt dựng span data-so-tom-tat; tệp mạng cùng lượt dưới đây). Mọi khẳng định riêng của E14 (DB okrNguonKr bằng lựa chọn, một AgentTask okr-doc-sheet, docLoi khong-phai-so) đạt; sáu dòng hỏng còn lại thuộc nhóm E11 (xem E12). Hydrat không phải đổi có chủ đích của hồ sơ nào: không AC hay dòng sổ đã ký nào chấp nhận lỗi console trên trang này.",
+					"can_cu": "5b6be6129",
+					"can_cu_them": [
+						"_acceptance/so-okr-tu-chay/contract.md:38",
+						"_acceptance/cua-toi-ba-phan/contract.md:31",
+						"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:24"
+					],
+					"duoi_sau_nguon": "lượt man-so-tu-chay.mjs sau khi áp bản vá sửa răng ghi sẵn sua-san/so-okr-tu-chay.patch, cây 3ee639d7c, 23/10 08:03 (+07); log scratchpad/c-f28/log-so-okr-tu-chay, tóm tắt scratchpad/sau-so-okr-tu-chay.json",
+					"duoi_sau": [
+						"$ EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs\"",
+						"--- exit 1 (ky vong 0)",
+						"man-so-tu-chay: chay tron 5 eval; chay rieng: EVAL=E11 (ma: E11, E12, E13, E14, E19); chieu do: --chieu-do",
+						"man-so-tu-chay: 168 khang dinh, 7 hong, 21 anh (…)",
+						"  HONG: E11 buoc 4: ten chi so «Thoả thuận chốt được» (thay «»)",
+						"  HONG: E11 buoc 10: ten chi so mang translate=no (thay null)",
+						"  HONG: E11 buoc 4: pham vi phong ban Phòng Đối tác số sk9n4xu (thay null «»)",
+						"  HONG: E11 buoc 4: co khoang ngay (thay «»)",
+						"  HONG: E11 buoc 6: sau Quay lai URL con ngaySo=2026-10-21 va kr (thay objective:cmvk9n66n000nm8cfd43r4h9g,kr:cmvk9n67u000rm8cfp3tokwmd ngaySo=null)",
+						"  HONG: E11 buoc 7: cau lech co hai so (da chup 1, tinh lai 0) — thay «Đã chụp 3 · tính lại lúc này 2 — dữ liệu đã đổi sau khi chụp», data-so-tinh-lai=2",
+						"  HONG: khong loi console (1): E13/E14 /okr?record=objective:cmvk9n6e4001am8cffape4hgd: pageerror Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerate",
+						"--- .acceptance-runs/so-okr-tu-chay/evidence/man-so-tu-chay-network.txt (cùng lượt E14, app :4103):",
+						"2026-10-23T01:03:32.036Z pageerror Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-e",
+						"            <PhanDonViDan cycleId=\"cmvk9n62s0...\" ky={null} tenKy=\"Quý 4/2026...\">",
+						"                    <TheDonVi cay={{...}} cycleId=\"cmvk9n62s0...\" don={{loai:\"pb\",id:\"...\"}} ky={null} ...>",
+						"                              <CardDescription>",
+						"+                                 <span data-so-tom-tat=\"\">",
+						"-                                 <div",
+						"-                                   data-slot=\"skeleton\""
+					]
+				}
+			],
+			"tin_hieu": [
+				{
+					"ma": "F1-30",
+					"tieu_de": "so-okr-tu-chay E12 E14: lỗi hydrat ở trang Của tôi khi mở ngăn mục tiêu",
+					"noi_dung": "apps/app khu Của tôi — PhanDonViDan › TheDonVi › CardDescription: máy chủ trả Skeleton, trình duyệt dựng <span data-so-tom-tat>."
+				},
+				{
+					"ma": "F1-31",
+					"tieu_de": "so-okr-tu-chay E12: mất ngày đang xem sau «Quay lại»",
+					"noi_dung": "apps/app/components/crm/record-sheet/record-stack.ts:68 giuNgaySo chỉ giữ ngaySo khi chồng ngăn còn so-kr."
+				},
+				{
+					"ma": "F1-32",
+					"tieu_de": "so-okr-tu-chay E12: ngăn KR không còn hiện tên chỉ số, phạm vi, khoảng ngày",
+					"noi_dung": "apps/app/components/okr/so-kr-sheet.tsx: [data-dinh-nghia] chỉ ở đầu SoKrSheet, mục «Số và nguồn» chỉ nhúng NoiDungSoKr."
+				}
+			],
+			"sua_san": [
+				{
+					"eval": "E8",
+					"xu_ly": "sua-rang",
+					"sua": "rang/soi-ma.mjs: lấy tệp từ git ls-files; miễn trừ có tên nap.ts — bản vá ghi sẵn sua-san/so-okr-tu-chay.patch",
+					"dot_bien": {
+						"ten": "xoa-ngoai-mau: deleteMany({})",
+						"ban_va": "sua-san/so-okr-tu-chay-dot-bien-E8.patch"
+					},
+					"can_cu": "_acceptance/bo-okr-mau/contract.md:37"
+				},
+				{
+					"eval": "E23",
+					"xu_ly": "neo-co-dinh",
+					"sua": "git apply _acceptance/neo-thuoc-het-han/vao-f28-so-okr-tu-chay.patch — bản vá ghi sẵn sua-san/so-okr-tu-chay.patch",
+					"dot_bien": {
+						"ten": "dinh-co-table",
+						"ban_va": "sua-san/so-okr-tu-chay-dot-bien-E23.patch"
+					},
+					"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87"
+				},
+				{
+					"eval": "E25",
+					"xu_ly": "neo-co-dinh",
+					"sua": "cùng bản vá — bản vá ghi sẵn sua-san/so-okr-tu-chay.patch",
+					"dot_bien": {
+						"ten": "ADD COLUMN okrKeyResult",
+						"ban_va": "sua-san/so-okr-tu-chay-dot-bien-E25.patch"
+					},
+					"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87"
+				}
+			]
+		}
+	]
+}

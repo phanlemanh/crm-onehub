@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
 const TEP = process.env.TEP ?? "apps/app/test/onboarding-gate.spec.ts";
-const NEO = process.env.NEO ?? "a8572437e9d5014fd21609c8ccbb97d9654a5df9";
+const NEO = process.env.NEO ?? "c895e5bff88f9b1f6a13ffc5885c37fe0b6d7ec8";
 const MO_KHOI = /^(\s*)(it|test)(\.\w+)?\(/;
 
 function ket(ma, dong) {
@@ -29,6 +29,12 @@ function catKhoi(noiDung) {
 		i = j;
 	}
 	return { khoi };
+}
+
+try {
+	execFileSync("git", ["cat-file", "-e", `${NEO}^{commit}`], { cwd: GOC, stdio: "ignore" });
+} catch {
+	ket(2, [`KHONG DO DUOC: sha neo ${NEO} khong co trong kho`]);
 }
 
 let cu;

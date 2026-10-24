@@ -1,0 +1,11 @@
+--- a/apps/app/app/(app)/[slug]/okr/nguon-so-luat.ts
++++ b/apps/app/app/(app)/[slug]/okr/nguon-so-luat.ts
+@@ -92,7 +92,7 @@
+ 					keyResultId,
+ 					loai: g.loai,
+ 					chiSo: g.chiSo,
+-					phamVi: phamViCua(g),
++					phamVi: { kieu: "toan-cong-ty" },
+ 					bac: bacCua(g),
+ 				}
+ 			: g.loai === "bang-tinh"

@@ -339,10 +339,13 @@ evals:
       - "packages/ui/src/components/**"
       - "_acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
     expected: |
-      Danh sach tep giao dien RUT TU git diff voi base_commit (*.tsx duoi apps/app), khong viet tay;
+      Danh sach tep giao dien RUT TU git diff cua cap neo co dinh PR #128 (gop 472e888085bd07c2ef47f02ecd946e7693785027):
+      36f6bdb8e61cbaf23254a7fd92c34a01fe097e53..a7808bfbefc77a9bbe07468cc5b8e3b8081e7792, khong theo HEAD, khong lay
+      cay lam viec hay tep chua track; sha neo khong co (git cat-file -e) -> exit 2 "KHONG DO DUOC"
+      (*.tsx duoi apps/app), khong viet tay;
       moi tep chay design-gate --mode static exit 0. Quet cac tep duoi settings/organization: khong
       thuoc tinh className tren BAT KY phan tu JSX nao co ten viet hoa (thanh phan) — the HTML trần
       viet thuong chi duoc className bo cuc (flex, grid, gap, p-, m-, w-, min-w-, truncate).
-      git diff duoi packages/ui chi cham tep da khai trong ke hoach (rut dong khai tu plan).
-      CHIEU DO: tep tam trong ban guong co <Button className="justify-start"> duoi settings/
-      organization -> exit 1 voi "className tren Button".
+      git diff duoi packages/ui (cung cap neo) chi cham tep da khai trong ke hoach (rut dong khai tu plan).
+      CHIEU DO: them className="justify-start" vao mot <Button> cua settings/organization/chi-tiet-goc.tsx
+      (tep thuoc diff cua cap neo) -> exit 1 voi "className tren Button".

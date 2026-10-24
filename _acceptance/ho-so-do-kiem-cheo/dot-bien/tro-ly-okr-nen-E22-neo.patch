@@ -1,0 +1,11 @@
+--- a/_acceptance/tro-ly-okr-nen/rang/tien-do-da-doi.mjs
++++ b/_acceptance/tro-ly-okr-nen/rang/tien-do-da-doi.mjs
+@@ -9,7 +9,7 @@
+ const CU = "apps/api/src/okr/tien-do.ts";
+ const MOI = "packages/db/src/okr-tien-do.ts";
+ const HAM = ["chonChuKyHienTai", "kyVongTheoNgay", "tienDoMucTieu"];
+-const NEN = process.env.NEO_NEN ?? "c1e37b730548a6faa9c2dbac1e0a652a32934753";
++const NEN = process.env.NEO_NEN ?? "0000000000000000000000000000000000000000";
+ const DUONG_CU = [
+ 	/from\s+["']\.\/tien-do["']/,
+ 	/from\s+["'][^"']*okr\/tien-do["']/,

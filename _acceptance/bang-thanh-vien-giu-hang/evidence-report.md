@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 51a4de40d820df124d6455b7bd6d918958c1666b
+verified_commit: c04176e365aa69a4d6fd059f02daa97d4749063f
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -169,3 +169,7 @@ sha: d60133f3d91fdf51b9db5e788dc375d25de6c12a · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-04, do gộp onehub 6e7accc2 (#252) và vá thước lăn do-bang/do-khoi chống đua (51a4de40)
 run_id: repin-20261004T131201Z-36740
 sha: 51a4de40d820df124d6455b7bd6d918958c1666b · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8
+
+### Re-pin lần 3 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
+run_id: repin-20261023T100712Z-77061
+sha: c04176e365aa69a4d6fd059f02daa97d4749063f · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

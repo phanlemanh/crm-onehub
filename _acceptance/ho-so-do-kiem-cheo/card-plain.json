@@ -1,0 +1,6 @@
+{
+  "feature_plain": "Các hồ sơ đã ký mà lượt kiểm chéo ban đêm báo đỏ được đo lại; mỗi phép đo hỏng được sửa hoặc ghi lại kèm lý do, để màu xanh của chúng lại tin được.",
+  "decisions": [
+    {"id": "E6", "q": "Lý do của từng dòng sửa hay ghi lại trong danh sách có đứng vững không?", "why": "Hội đồng ba góc nhìn chưa chốt: họ cần thêm bằng chứng cho vài dòng gọi tên lỗi thật của sản phẩm — những dòng ấy không đổi tệp nào, chỉ gửi tín hiệu cho làn chủ sửa."}
+  ]
+}

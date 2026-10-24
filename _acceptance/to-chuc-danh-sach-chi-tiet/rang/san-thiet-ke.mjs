@@ -6,7 +6,8 @@ import { fileURLToPath } from "node:url";
 const GOC =
 	process.env.GOC_KHO ??
 	join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const NHANH_GOC = "origin/onehub";
+const MOC = "36f6bdb8e61cbaf23254a7fd92c34a01fe097e53";
+const TOI = "a7808bfbefc77a9bbe07468cc5b8e3b8081e7792";
 const KE_HOACH =
 	"docs/superpowers/plans/2026-09-24-to-chuc-danh-sach-chi-tiet.md";
 const DONG_KHAI = "- Thành phần dùng chung được sửa";
@@ -34,13 +35,17 @@ const git = (...doi) =>
 	execFileSync("git", ["-C", GOC, ...doi], { encoding: "utf8" }).trim();
 const docTep = (t) => readFileSync(join(GOC, t), "utf8");
 
-const moc = git("merge-base", "HEAD", NHANH_GOC);
-const doi = git("diff", "--name-only", `${moc}...HEAD`)
+for (const sha of [MOC, TOI]) {
+	const r = spawnSync("git", ["-C", GOC, "cat-file", "-e", `${sha}^{commit}`]);
+	if (r.status !== 0) {
+		console.log(`KHONG DO DUOC: khong co commit neo ${sha}`);
+		process.exit(2);
+	}
+}
+
+const khoang = `${MOC}..${TOI}`;
+const doi = git("diff", "--name-only", khoang)
 	.split("\n")
-	.concat(
-		git("diff", "--name-only").split("\n"),
-		git("ls-files", "--others", "--exclude-standard").split("\n"),
-	)
 	.filter(Boolean)
 	.filter((t, i, ds) => ds.indexOf(t) === i)
 	.filter((t) => existsSync(join(GOC, t)));
@@ -138,9 +143,8 @@ console.log(
 	`so tep duoi settings/organization da quet className: ${toChuc.length}`,
 );
 
-const ui = git("diff", "--name-only", `${moc}...HEAD`, "--", "packages/ui")
+const ui = git("diff", "--name-only", khoang, "--", "packages/ui")
 	.split("\n")
-	.concat(git("diff", "--name-only", "--", "packages/ui").split("\n"))
 	.filter(Boolean)
 	.filter((t, i, ds) => ds.indexOf(t) === i);
 const dongKhai = (t) =>
@@ -152,7 +156,7 @@ const dongKhai = (t) =>
 const keHoachKhac = git(
 	"diff",
 	"--name-only",
-	`${moc}...HEAD`,
+	khoang,
 	"--",
 	"docs/superpowers/plans",
 )

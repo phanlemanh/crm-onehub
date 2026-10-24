@@ -1,0 +1,11 @@
+--- a/apps/app/components/crm/record-sheet/so-kr-sheet.tsx
++++ b/apps/app/components/crm/record-sheet/so-kr-sheet.tsx
+@@ -368,7 +368,7 @@
+ 		queries: Array.from({ length: soTrang }, (_, i) => ({
+ 			...trpc.okr.banGhiChiSo.queryOptions({
+ 				keyResultId,
+-				ngay,
++				ngay: undefined,
+ 				trang: i + 1,
+ 			}),
+ 			placeholderData: keepPreviousData,

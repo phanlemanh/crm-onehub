@@ -1,0 +1,17 @@
+--- a/_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.json
++++ b/_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.json
+@@ -17,14 +17,6 @@
+ 			]
+ 		},
+ 		{
+-			"component": "context-menu.tsx",
+-			"nguyen_ban": [
+-				"ContextMenuPrimitive (radix-ui)",
+-				"ChevronRightIcon (lucide-react)",
+-				"CheckIcon (lucide-react)"
+-			]
+-		},
+-		{
+ 			"component": "drawer.tsx",
+ 			"nguyen_ban": [
+ 				"DrawerPrimitive (vaul)"

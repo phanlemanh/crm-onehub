@@ -1,0 +1,11 @@
+--- a/_acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs
++++ b/_acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs
+@@ -18,7 +18,7 @@
+ const PHAM_VI = {
+ 	gop: "46a52ade5b9fb48f823288f8063ec13141935d48",
+ 	tu: "5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b",
+-	toi: "2aff077d0cb4966a90d014a9a70c91a45d5c8f6a",
++	toi: "0000000000000000000000000000000000000000",
+ };
+ 
+ const CCC = {

@@ -1,0 +1,11 @@
+--- a/_acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs
++++ b/_acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs
+@@ -17,7 +17,7 @@
+ const TEP = "test/workspace-thanh-vien.spec.ts";
+ const PHAM_VI = {
+ 	gop: "46a52ade5b9fb48f823288f8063ec13141935d48",
+-	tu: "5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b",
++	tu: "058bb75f8d9766ffe7654384201642664be83c21",
+ 	toi: "2aff077d0cb4966a90d014a9a70c91a45d5c8f6a",
+ };
+ 
