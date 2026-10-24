@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Chưa có các chỉ số performance/đóng góp và góc nhìn segmentation của Agent; chưa hỗ trợ import Agent hàng loạt từ Excel/…",
+    "muon_lam": "Theo dõi năng suất và phân nhóm Agent để xác định nhóm cần kích hoạt hoặc phát triển.",
+    "da_xay_ra": "Chưa có các chỉ số performance/đóng góp và góc nhìn segmentation của Agent; chưa hỗ trợ import Agent hàng loạt từ Excel/CSV.",
+    "man": "/contacts"
+  },
+  "luc": "2026-10-21T03:09:49.715Z"
+}
