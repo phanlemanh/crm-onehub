@@ -16,7 +16,7 @@ cần giữ đã được chép vào đây.
 | --- | --- | --- |
 | `docs/findings/2026-10-22-hop-tuan/README.md` | Lời chủ kho nguyên văn 22/10 và 24/10 (§1), hiện trạng và audit Họp tuần (§2–3), Tability thật không có trang họp hay trang cập nhật riêng (§4), 37 trang hướng dẫn Tability (§5), bảng «học trực tiếp» kèm hàng nhận (§6). Có 7 ảnh OneHub và 10 ảnh Tability. | HT1–HT5, SV1 |
 | `docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md` | Nguồn số tự cập nhật của KR (đã vào kho ở #520) | NS1–NS6 |
-| Báo cáo UX khu Mục tiêu học từ Tability, https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj (riêng tư) | Vỏ, kiến trúc thông tin, tên gọi (đợt 18/10) | VK1–VK13 |
+| `docs/findings/2026-10-18-vo-khu-muc-tieu/README.md` | Tóm tắt báo cáo UX khu Mục tiêu học từ Tability (đợt 18/10): quyết định, tám nguyên tắc, điều nay lỗi thời, chỗ thiếu và hàng gánh, con trỏ ghim vào kho riêng tư `crm-onehub-nguon@88462c4` thay cho artifact riêng tư | VK1–VK18 |
 | `docs/plan/pham-vi-okr-vo-khu-1810.md`, `docs/plan/pham-vi-okr-hop-tuan-2210.md` | Hai bản phạm vi trước, đã cắt thành hàng | VK, HT |
 
 ## 1. «Lối (b)»: chỉ cập nhật một KR, qua bộ OKR
