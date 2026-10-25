@@ -1,52 +1,55 @@
+# Review findings: bam-kr-mo-chi-tiet-kr (vòng 3)
+
 ## Trong hợp đồng
 
-- **E6 miễn kiểm khối cho tệp hỗ trợ và tệp gọi nó, trái với lời hứa trong expected của E6**
-  file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs:234`
-  severity: medium
-  source: conventions
+- **KR button in «KR bạn phụ trách» keeps data-mo-muc-tieu but now opens the KR. The signed gauge ghd_man_chrome (gioi-han-duyet-cay-okr) clicks that button to open the objective sheet and turns red. AC-6 does not see it**
   AC: AC-6
-  detail: Theo expected của E6 trong evals.yaml, mọi khối diff trong bài kiểm hay thước của hồ sơ đã ký phải là đúng một cặp của cap-chu.json, hoặc là `objective:` → `kr:` ở bốn chỗ. Mục `apBangCapAnhChup` mới thêm vào chu-bai.json (dòng 10) mở hai lối miễn mà expected không nhắc tới. (a) `kiemSo` (dòng 234) và `kiemKhoi` (dòng 269) bỏ hẳn `apps/agent/test/support/cap-chu-sv6.ts`. Tệp này chứa logic thật: `theoCapChu` dùng split/join để viết lại ảnh chụp kỳ vọng của hai hồ sơ đã ký, hop-thong-bao-tren-web và thong-bao-mot-nguon-nhieu-kenh. Logic đó chỉ được giữ bằng `kiemTepHoTro` (dòng 251-262), mà hàm này chỉ kiểm hai chuỗi con có mặt trong tệp. Tệp không tồn tại thì nó trả `[]`. Sửa `thay` thành hàm trả nguyên đầu vào, hay đổi bộ lọc cặp, vẫn qua E6 miễn còn hai chuỗi đó. (b) Trong `tepGoi`, `khoiHopLe` (dòng 91-95) nhận mọi khối có mọi dòng bỏ nằm trong `dongBo` và mọi dòng thêm nằm trong `dongThem`. Khối chỉ xoá `const banChup = boTenXuong(` hay chỉ thêm dòng import cũng qua. Kết quả: lối viết lại kỳ vọng của hai hồ sơ đã ký không được thước giữ như AC-6 hứa. Cần ghi hai lối miễn này vào expected của E6, hoặc cho tệp hỗ trợ một phép kiểm hành vi, thay cho phép kiểm chuỗi con.
-
-- **Removing data-mo-muc-tieu from the KR button in «KR bạn phụ trách» breaks signed ui-check dat-okr-trong-crm E11 step 10, and AC-6 does not see it**
-  file: `apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx:83`
-  severity: medium
-  source: bugs
-  AC: AC-6
-  detail: This round's fix (f1dd62d71, acting on the S4-r1 finding) removed `data-mo-muc-tieu={mucTieu.id}` from the KR-name button in PhanKrPhuTrach. That button is rendered inside `<section data-trang-thai="ST-cuatoi-codulieu">`. The signed record dat-okr-trong-crm (status: signed-off) has eval E11 (ui-check). Its gauge `_acceptance/dat-okr-trong-crm/rang/man-okr.mjs:987-1000` asserts on exactly that attribute: `kiem("E11 buoc 10: KR cua truong o phong ban khac khong co trong KR ban phu trach", await coSel(c, `${P3} [data-kr='${OKR.o5.kr[0]}'] [data-mo-muc-tieu='${OKR.o5.id}']`))` with P3 = "[data-trang-thai='ST-cuatoi-codulieu']". Since kr[0] belongs to truong, o5 sits in the `kr` group of chiaPhanBa, not in thamGia. Inside a `[data-kr]` row (SimpleTableRow) the only element that carried data-mo-muc-tieu was this button (ChipGopY only has data-chip-gop-y). So this selector can no longer match and step 10 turns red. The loop at line 992 (`${P3} [data-mo-muc-tieu='${OKR[o].id}']` for o3/o4/o5) is also at risk for every objective where truong owns a KR. E11's paths include `apps/app/app/(app)/[slug]/okr/**`, so strict recheck will mark it stale and rerun it red at the merge gate. Nothing in this round's records (review-findings.md, decisions.jsonl, run-log.jsonl, contract.md, evidence-report.md) mentions dat-okr-trong-crm. The AC-6 scanner `rang/khong-doi-hinh.mjs` does not catch it either, because quetLop only collects evals with executor test/script (`if (["test", "script"].includes(...)) continue;`) and skips ui-check. So `--chi-tinh` and the full run both report «dat» while a signed screen gauge has been broken by this round. Either update man-okr.mjs:992/998 to `[data-mo-kr='<kr id>']`, with a fix line in the dat-okr-trong-crm decision log by the repo owner, or record it as a known break on the gate card.
-
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): bảng chủ bài chu-bai.json do tác giả tự khai, không rút từ eval của hồ sơ đã ký, nên kiemSo xanh dù hồ sơ thật chạy bài đó không có dòng sổ**
-  file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/chu-bai.json:7`
+  file: `apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx:84`
   severity: high
-  source: measurement
-  AC: AC-6
-  detail: Vòng này thay kiemSo: không còn quét mọi sổ, mà tra `const slug = chu[t]` (khong-doi-hinh.mjs:235) trong chu-bai.json viết tay. Mỗi tệp chỉ có MỘT chủ, và không có gì kiểm chủ đó có eval chạy tệp. Trong khi đó quetLop (dòng 138-167) đã tính được đúng tập hồ sơ đã ký có eval chạy tệp, mà kiemSo không dùng. Đã kiểm trên cây: (a) chu-bai.json:7 gán apps/app/test/okr-cua-toi-ba-phan.dom.tsx cho `dieu-huong-khu-muc-tieu`. Hồ sơ này không có eval nào nhắc hay chạy tệp đó (grep evals.yaml rỗng, không config key nào của nó chạy tệp), nhưng lại đúng là nơi đã ghi dòng fix d-20261024T080009Z-54. Hai hồ sơ signed-off thật sự chạy tệp này là vo-khu-muc-tieu (vkm_loi_vao_cu) và doi-nhan-khu-muc-tieu (dnk_bai_cu); không hồ sơ nào có dòng fix nhắc okr-cua-toi-ba-phan. (b) thong-bao-ghi.integration.spec.ts -t htb-kenh, tức đúng bài bị sửa ở dòng 376, còn được chu-may-sinh-ten-moi (cmst_nhac, signed-off) chạy; sổ của hồ sơ này có 0 dòng fix nhắc tệp. (c) okr-tai-co-cau.dom.tsx còn được ux-lai-thu-8c-okr (u8d_dom) chạy, và hồ sơ này không có dòng fix của vòng này. `bun khong-doi-hinh.mjs --chi-tinh` in «KET LUAN khong-doi-hinh tinh: dat», mã 0. Bảng tay được viết theo nơi đặt sổ, rồi bên đọc tra lại chính bảng đó, nên vòng tròn tự khớp. Lời hứa AC-6 «mỗi hồ sơ bị đổi có một dòng sổ fix» không được đo. Chiều đỏ xoa-so cũng chỉ xoá sổ của `dich` theo cùng bảng tay, nên không phơi được lỗ này.
+  source: bugs
+  detail: Commit 7c7120509 (lối 2) put `data-mo-muc-tieu={mucTieu.id}` back on the KR-name button, which now does `openRecord({ kind: "kr", id: k.id })`. Any signed gauge that clicks `[data-mo-muc-tieu=<mt>]` on Của tôi, for an objective where the user owns a KR, now lands on the KR sheet instead of the objective sheet. Why: chiaPhanBa moves such objectives out of thamGia, so the KR button is the only element on the page carrying that attribute. This round fixed exactly that failure in hop-thoai-giu-cho-dang-nhap/man-giu-cho.mjs, by switching to the URL `record=objective:`. The same failure is still live in `_acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs` (contract status: signed-off, eval E15/E16/E17 cmd `executors.script.ghd_man_chrome`). Lines 1478-1484: taoNhap creates draft G owned by truong, with one KR owned by truong (lines 444-465). Truong opens `/okr`. buocGioiHan → tienDeGioiHan (lines 972-989) runs `bamIm(t, "[data-mo-muc-tieu='G']")` and then waits for `[data-okr-sheet='G'][data-dau-khung]`. Only objective-sheet.tsx:1002 renders data-okr-sheet, and nothing above it carries data-mo-muc-tieu=G: PhanDonViDan has no such button, and a freshly created draft G produces no okr-cho-duyet or okr-tra-lai row in Việc. So the click opens the KR sheet, the wait times out with «khung G khong tai xong», tienDe is marked broken, and every later step of E15/E16 is skipped and recorded as broken. buocBiTraLai (moSheet at line 1265) and buocTrangThaiLoi (line 1451) use the same click. On origin/onehub the same button opened the objective, so this is a regression this round causes. E15's paths include `apps/app/app/(app)/[slug]/okr/**` and `apps/app/components/crm/record-sheet/**`, so strict recheck will mark the record stale and rerun it red at the merge gate. The AC-6 gauge `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs` does not catch it for two reasons. quetLop only takes evals with executor test or script; E16 is script, but its command file man-gioi-han-duyet.mjs contains neither «Cập nhật tuần» nor any VAT name. And THEM hand-lists only two screen gauges, dat-okr-trong-crm and hop-thoai-giu-cho-dang-nhap. Fix: update man-gioi-han-duyet.mjs to open G by URL `/okr?record=objective:${K.G}`, or click `[data-okr-sheet]` from another page, with a fix line in that record's decision log; and add ghd_man_chrome to THEM. The alternative is to record the breakage on the gate card.
+  rationale: AC-6 đòi mọi thước máy đã ký chạm tệp phan-kr-phu-trach.tsx không xấu hơn trên nền origin/onehub; thước ghd_man_chrome xanh trên nền mà đỏ sau vòng này nên AC-6 thất bại.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hàm cocSo là hàm đồng nhất chết**
+- **Hình dạng 4 (âm tính một mình): đối chứng dương «THEM <slug>» của E6 luôn đúng, không chạm luật chọn lớp**
+  Người dùng thấy gì: Công cụ kiểm tra rằng vòng này không làm hỏng các bài kiểm cũ có thể bỏ sót bài kiểm cần xét mà vẫn báo đạt. Người dùng không thấy gì ngay, nhưng một hồi quy về chữ «Cập nhật» sau này có thể lọt qua mà không ai biết.
+  Căn cứ: Chỉ làm lưới an toàn kém chặt hơn mức mong muốn, không ảnh hưởng gì tới tính năng người dùng đang dùng; sửa sau rẻ và không mất dữ liệu.
+  file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (không ghim thông điệp): chiều đỏ «hoi-quy» nhận bất kỳ mã khác 0 trên bản sao làm bằng chứng**
+  Người dùng thấy gì: Phép thử tự kiểm của công cụ kiểm tra có thể báo đạt vì một lỗi môi trường chứ không phải vì nó thật sự bắt được lỗi chữ. Người dùng không bị ảnh hưởng, chỉ là độ tin cậy của công cụ kiểm thấp hơn vẻ ngoài.
+  Căn cứ: Hậu quả nhẹ và chỉ nằm ở công cụ kiểm nội bộ, người dùng không gặp; gặp lúc chạy lại thì tự thấy và chạy lại được, sửa sau rẻ.
+  file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hàm cocSo là hàm đồng nhất chết (r2 · tệp đã đổi)**
   Người dùng thấy gì: Không ảnh hưởng gì đến người dùng; chỉ làm người đọc mã của bộ kiểm tra dễ hiểu nhầm một bước thừa.
   Căn cứ: Không đụng tới màn hình hay dữ liệu của người dùng, chỉ là một dòng thừa trong công cụ kiểm tra nên sửa hay không cũng không đổi gì cho họ.
   file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **dongSo nuốt lỗi đọc JSON của decisions.jsonl**
+- **dongSo nuốt lỗi đọc JSON của decisions.jsonl (r2 · tệp đã đổi)**
   Người dùng thấy gì: Không ảnh hưởng người dùng cuối. Khi sổ quyết định bị hỏng, bộ kiểm tra vẫn báo lỗi nhưng nói là thiếu dòng sổ chứ không nói là sổ hỏng.
   Căn cứ: Bộ kiểm tra vẫn đỏ nên không lọt lỗi nào, chỉ làm người sửa mất thêm một lúc để hiểu đúng nguyên nhân; sửa sau cũng rẻ.
   file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra) và hình dạng 3 (chuỗi có mặt thay vì quan hệ): tệp hỗ trợ cap-chu-sv6.ts được miễn quét, chỉ grep hai chuỗi trong mã nguồn; còn theoCapChu bỏ soLan và khoá, thay toàn cục**
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra) và hình dạng 3 (chuỗi có mặt thay vì quan hệ): tệp hỗ trợ cap-chu-sv6.ts được miễn quét, chỉ grep hai chuỗi trong mã nguồn; còn theoCapChu bỏ soLan và khoá, thay toàn cục (r2 · tệp đã đổi)**
   Người dùng thấy gì: Nếu sau này có thêm một chỗ chữ «Cập nhật tuần» bị đổi ngoài ý định, bộ kiểm tra có thể không phát hiện. Hiện chưa thấy người dùng nào bị ảnh hưởng.
   Căn cứ: Rủi ro chỉ xảy ra nếu có thay đổi chữ ngoài dự kiến trong tương lai, không mất dữ liệu, và bắt được lại khi rà soát chữ trên màn hình.
   file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 (chuỗi có mặt thay vì quan hệ): ngoại lệ apAnh trong khoiHopLe xét từng dòng có thuộc tập hay không, không xét đúng phép thay bọc theoCapChu**
+- **Hình dạng 3 (chuỗi có mặt thay vì quan hệ): ngoại lệ apAnh trong khoiHopLe xét từng dòng có thuộc tập hay không, không xét đúng phép thay bọc theoCapChu (r2 · tệp đã đổi)**
   Người dùng thấy gì: Bộ kiểm tra có thể chấp nhận một chỉnh sửa dở dang trong bài kiểm tra cũ mà lẽ ra phải bị chặn. Người dùng không thấy khác biệt nào trên màn hình.
   Căn cứ: Chỉ làm bộ kiểm tra nội bộ lỏng hơn dự định, không đụng tới màn hình hay dữ liệu người dùng, và siết lại sau cũng không đắt.
   file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
