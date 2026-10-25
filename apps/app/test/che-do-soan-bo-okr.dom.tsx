@@ -6,6 +6,8 @@ import type {
 	TrangThaiMucTieu,
 } from "@crm/validation/okr-muc-tieu";
 import type { DonChonOkr } from "@crm/validation/okr-tham-so";
+import userEvent from "@testing-library/user-event";
+import { act } from "react";
 import { z } from "zod";
 import {
 	cyclesOutput,
@@ -829,5 +831,273 @@ describe("vk10-quyen-loi-vao", () => {
 		);
 		await kiemKhoa(await moHop(sai));
 		expect(goiGhi().length, sai).toBe(0);
+	});
+});
+
+const { kiemDongKr } = await import(
+	"@/app/(app)/[slug]/okr/soan-bo/du-lieu-bo"
+);
+
+const MT_MOI = "mt-moi";
+
+function datGhiMoi(): void {
+	let soKr = 0;
+	dat("okr.createObjective", () => ({ id: MT_MOI, canhBao: null }));
+	dat("okr.updateObjective", (vao) => ({
+		id: idCua(vao) ?? "",
+		canhBao: null,
+	}));
+	dat("okr.createKeyResult", () => {
+		soKr += 1;
+		return { id: `kr-moi-${soKr}`, canhBao: null };
+	});
+	dat("okr.updateKeyResult", (vao) => ({
+		id: idCua(vao) ?? "",
+		canhBao: null,
+	}));
+}
+
+async function phim(chuoi: string): Promise<void> {
+	await act(async () => {
+		await userEvent
+			.setup({ document, pointerEventsCheck: 0, delay: null })
+			.keyboard(chuoi);
+	});
+	await nhip(4);
+}
+
+const oTenMtDau = () =>
+	q("[data-tai-lieu-bo] [data-dong-moi] [data-o-nhap=ten]");
+
+async function choLuuXong(sai: string): Promise<void> {
+	await cho(() => qa("[data-luu=dang-luu]").length === 0, sai);
+	await nhip(5);
+}
+
+async function moBoTrong(
+	tuyChon: TuyChonBo,
+	phuThuoc: Partial<PhuThuocSoan> = {},
+): Promise<void> {
+	const bo = boMau({ muc: [], ...tuyChon });
+	datGhiMoi();
+	await veSoan(bo.khoa, { phuThuoc });
+	await choKhung();
+	await cho(() => oTenMtDau() !== null, "vk10-viet: dong muc tieu dau");
+	await nhip(3);
+}
+
+const TEN_MT = "Tăng doanh thu khối doanh nghiệp";
+
+const KR_VIET = [
+	{
+		phim: "Doanh thu ký mới{Tab}2{Tab}3,5{Tab}tỷ ₫{Enter}",
+		title: "Doanh thu ký mới",
+		kind: "tang-toi",
+		startValue: 2,
+		targetValue: 3.5,
+		unit: "tỷ ₫",
+	},
+	{
+		phim: "Thời gian duyệt hồ sơ{Tab}10{Tab}4{Tab}ngày{Enter}",
+		title: "Thời gian duyệt hồ sơ",
+		kind: "giam-xuong",
+		startValue: 10,
+		targetValue: 4,
+		unit: "ngày",
+	},
+	{
+		phim: "Ra mắt cổng tự phục vụ{Tab}{Tab}{Tab}{Enter}",
+		title: "Ra mắt cổng tự phục vụ",
+		kind: "moc",
+		startValue: 0,
+		targetValue: 1,
+		unit: "",
+	},
+] as const;
+
+const TRUONG_KR = [
+	"title",
+	"kind",
+	"startValue",
+	"targetValue",
+	"unit",
+] as const;
+
+async function vietBangPhim(): Promise<void> {
+	expect(
+		document.activeElement !== null && document.activeElement === oTenMtDau(),
+		"vk10-viet: mo focus lech",
+	).toBe(true);
+	await phim(`${TEN_MT}{Enter}`);
+	for (const kr of KR_VIET) await phim(kr.phim);
+	await phim("Số khách hàng mới{Tab}5{Tab}{Tab}khách{Enter}");
+	await choLuuXong("vk10-viet: luu xong");
+}
+
+function kiemMucTieuMoi(o: string, nguoi: string): void {
+	const mt = goiCua("okr.createObjective");
+	expect(mt.length, `vk10-viet: ${o} so-lan lech`).toBe(1);
+	expect(mt[0]?.dauVao?.ownerUserId, `vk10-viet: ${o} ownerUserId lech`).toBe(
+		nguoi,
+	);
+}
+
+async function kiemVietBo(): Promise<void> {
+	await vietBangPhim();
+	kiemMucTieuMoi("mt", "lan");
+	const vaoMt = goiCua("okr.createObjective")[0]?.dauVao;
+	expect(JSON.stringify(vaoMt?.unit), "vk10-viet: mt unit lech").toBe(
+		JSON.stringify({ level: "phong-ban", departmentId: "P1" }),
+	);
+	expect(vaoMt?.cycleId, "vk10-viet: mt cycleId lech").toBe(KY);
+	expect(vaoMt?.kind, "vk10-viet: mt kind lech").toBe("cam-ket");
+	expect(vaoMt?.title, "vk10-viet: mt title lech").toBe(TEN_MT);
+	const kr = goiCua("okr.createKeyResult");
+	KR_VIET.forEach((kv, i) => {
+		const vao = kr[i]?.dauVao;
+		for (const truong of TRUONG_KR)
+			expect(vao?.[truong], `vk10-viet: kr-${i + 1} ${truong} lech`).toBe(
+				kv[truong],
+			);
+		expect(vao?.ownerUserId, `vk10-viet: kr-${i + 1} ownerUserId lech`).toBe(
+			"lan",
+		);
+		expect(vao?.objectiveId, `vk10-viet: kr-${i + 1} objectiveId lech`).toBe(
+			MT_MOI,
+		);
+	});
+	expect(kr.length, "vk10-viet: kr-4 goi khi thieu dich").toBe(3);
+	const dong4 = qa("[data-tai-lieu-bo] [data-dong-kr-moi]")[3];
+	expect(
+		dong4?.textContent?.includes(CHU.taiLieu.chuaLuu["thieu-dich"]) ?? false,
+		"vk10-viet: kr-4 chua-luu lech",
+	).toBe(true);
+}
+
+const O_NGUOI = [
+	{ o: "truong-tu-soan", tuyChon: { nguoiSoan: LAN }, kv: "lan" },
+	{
+		o: "quan-tri-soan-pb",
+		tuyChon: { nguoiSoan: HUNG, quanTri: true },
+		kv: "lan",
+	},
+	{
+		o: "bo-khong-truong",
+		tuyChon: {
+			don: { loai: "pb", id: "P2" },
+			nguoiSoan: HUNG,
+			quanTri: true,
+		},
+		kv: "hung",
+	},
+] satisfies { o: string; tuyChon: TuyChonBo; kv: string }[];
+
+describe("vk10-viet", () => {
+	test("vk10-viet: bo trong, chi ban phim — mot muc tieu, ba KR, KR thieu dich khong goi", async () => {
+		await moBoTrong({});
+		await kiemVietBo();
+	});
+
+	for (const o of O_NGUOI)
+		test(`vk10-viet: nguoi phu trach mac dinh — ${o.o}`, async () => {
+			await moBoTrong(o.tuyChon);
+			await phim(`${TEN_MT}{Enter}`);
+			await choLuuXong(`vk10-viet: ${o.o} luu xong`);
+			kiemMucTieuMoi(o.o, o.kv);
+		});
+
+	test("vk10-viet: mo tu nut Soan bo OKR o cau rong thi focus o dong muc tieu dau", async () => {
+		boMau({ muc: [] });
+		datGhiMoi();
+		await veTrangBo("?donOkr=pb:P1");
+		await cho(() => nutRong() !== null, "vk10-viet: nut cau rong");
+		await bam(nutRong());
+		await choKhung();
+		await cho(() => oTenMtDau() !== null, "vk10-viet: dong muc tieu dau");
+		await nhip(5);
+		expect(
+			document.activeElement !== null && document.activeElement === oTenMtDau(),
+			"vk10-viet: mo focus lech",
+		).toBe(true);
+		await phim(`${TEN_MT}{Enter}`);
+		await choLuuXong("vk10-viet: cau rong luu xong");
+		kiemMucTieuMoi("cau-rong", "lan");
+	});
+
+	test("vk10-viet: createKeyResult treo, roi o ba lan — mot lan goi, roi mot updateKeyResult chu moi nhat", async () => {
+		await moBoTrong({});
+		let traVe: (kq: { id: string; canhBao: null }) => void = () => {};
+		dat(
+			"okr.createKeyResult",
+			() =>
+				new Promise((r) => {
+					traVe = r;
+				}),
+		);
+		await phim(`${TEN_MT}{Enter}`);
+		await phim("Doanh thu ký mới{Tab}2{Tab}3,5{Tab}tỷ ₫");
+		const tenMt = oTenMtDau();
+		const tenKr = q("[data-tai-lieu-bo] [data-dong-kr-moi] [data-o-nhap=ten]");
+		const roiO = async (chu: string | null) => {
+			if (chu !== null) {
+				await act(async () => {
+					(tenKr as HTMLElement | null)?.focus();
+				});
+				await go(tenKr, chu);
+			}
+			await act(async () => {
+				(tenMt as HTMLElement | null)?.focus();
+			});
+			await nhip(3);
+		};
+		await roiO(null);
+		await roiO("Doanh thu ký mới lần hai");
+		await roiO("Doanh thu ký mới lần ba");
+		expect(
+			goiCua("okr.createKeyResult").length,
+			"vk10-viet: treo so-lan lech",
+		).toBe(1);
+		expect(
+			goiCua("okr.updateKeyResult").length,
+			"vk10-viet: treo so-lan lech",
+		).toBe(0);
+		await act(async () => {
+			traVe({ id: "kr-treo", canhBao: null });
+		});
+		await choLuuXong("vk10-viet: treo luu xong");
+		const sua = goiCua("okr.updateKeyResult");
+		expect(sua.length, "vk10-viet: treo cap-nhat lech").toBe(1);
+		expect(sua[0]?.dauVao?.id, "vk10-viet: treo cap-nhat lech").toBe("kr-treo");
+		expect(sua[0]?.dauVao?.title, "vk10-viet: treo cap-nhat lech").toBe(
+			"Doanh thu ký mới lần ba",
+		);
+		expect(
+			goiCua("okr.createKeyResult").length,
+			"vk10-viet: treo so-lan lech",
+		).toBe(1);
+	});
+});
+
+describe("vk10-viet-do", () => {
+	test("vk10-viet-do: suy kieu thay bang hang tang-toi thi kr-2 kind do", async () => {
+		await moBoTrong({}, { suyKieu: () => "tang-toi" });
+		await expect(kiemVietBo()).rejects.toThrow("vk10-viet: kr-2 kind lech");
+	});
+
+	test("vk10-viet-do: bo chan thieu dich thi kr-4 bi goi", async () => {
+		await moBoTrong(
+			{},
+			{
+				kiemDong: (d) => {
+					const kq = kiemDongKr(d);
+					return kq.loai === "chua-luu" && kq.ly === "thieu-dich"
+						? { loai: "du", kieu: "tang-toi", khoi: 5, dich: 6 }
+						: kq;
+				},
+			},
+		);
+		await expect(kiemVietBo()).rejects.toThrow(
+			"vk10-viet: kr-4 goi khi thieu dich",
+		);
 	});
 });

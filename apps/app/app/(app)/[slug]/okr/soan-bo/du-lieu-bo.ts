@@ -1,5 +1,5 @@
 import { docSoOkr, type KieuKr, SO_KR_MOC } from "@crm/validation/okr-kr";
-import type { CapMucTieu } from "@crm/validation/okr-muc-tieu";
+import type { CapMucTieu, DonViMucTieu } from "@crm/validation/okr-muc-tieu";
 import type { DonChonOkr } from "@crm/validation/okr-tham-so";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { SOAN_BO } from "./cau-hinh";
@@ -125,4 +125,21 @@ export function demCongBo(
 	ds: readonly { status: string; soKrDaLuu: number }[],
 ): number {
 	return ds.filter((d) => d.status === "nhap" && d.soKrDaLuu >= 1).length;
+}
+
+export function donViMucTieuCua(don: DonChonOkr): DonViMucTieu {
+	switch (don.loai) {
+		case "goc":
+			return { level: "onehub" };
+		case "bp":
+			return { level: "bo-phan", divisionId: don.id };
+		case "pb":
+			return { level: "phong-ban", departmentId: don.id };
+		case "nguoi":
+			return { level: "ca-nhan", personUserId: don.id };
+	}
+}
+
+export function dongKrTrong(d: DongKrNhap): boolean {
+	return [d.ten, d.khoi, d.dich, d.donVi].every((o) => o.trim() === "");
 }

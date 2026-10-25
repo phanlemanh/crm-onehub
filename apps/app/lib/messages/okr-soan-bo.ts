@@ -43,7 +43,10 @@ const vi = {
 			"thieu-dich": "Chưa lưu — thiếu đích",
 			"thieu-khoi-diem": "Chưa lưu — thiếu khởi điểm",
 			"dich-bang-khoi": "Chưa lưu — đích bằng khởi điểm",
+			"muc-tieu-chua-luu": "Chưa lưu — mục tiêu của KR chưa lưu",
 		},
+		loiLuu: "Chưa lưu được. Rời ô để thử lại.",
+		krThu: (n: string) => `KR ${n}`,
 		hoiXoa: {
 			tieuDe: (ten: string) => `Xoá mục tiêu «${ten}»?`,
 			than: "Mục tiêu nháp chưa có lịch sử sẽ mất hẳn cùng các KR của nó.",
@@ -163,7 +166,10 @@ const en: OkrSoanBoMessages = {
 			"thieu-dich": "Not saved — target missing",
 			"thieu-khoi-diem": "Not saved — start missing",
 			"dich-bang-khoi": "Not saved — target equals start",
+			"muc-tieu-chua-luu": "Not saved — the objective isn't saved yet",
 		},
+		loiLuu: "Couldn't save. Leave the field to try again.",
+		krThu: (n: string) => `KR ${n}`,
 		hoiXoa: {
 			tieuDe: (ten: string) => `Delete objective "${ten}"?`,
 			than: "A draft objective with no history is removed for good, together with its KRs.",

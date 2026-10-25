@@ -20,10 +20,12 @@ import { useState } from "react";
 import { DetailSheetHeader } from "@/components/detail-sheet";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
 import { useKhoHep } from "../soan/dung-kho-hep";
+import { BAN_NHAP_DAU, type BanNhap } from "./ban-nhap";
 import { SOAN_BO } from "./cau-hinh";
 import { usePhuThuocSoan } from "./phu-thuoc";
-import { TaiLieuBo } from "./tai-lieu-bo";
+import { type SoanTaiLieu, TaiLieuBo } from "./tai-lieu-bo";
 import { type BoSoan, useBoSoan } from "./use-bo-soan";
+import { useLuuDong } from "./use-luu-dong";
 
 type Chu = ReturnType<typeof okrSoanBoMessages>;
 type BoXong = Extract<BoSoan, { trang: "xong" }>;
@@ -90,8 +92,17 @@ function CotBen({
 	);
 }
 
-function OTaiLieu({ bo, m, alone }: { bo: BoXong; m: Chu; alone: boolean }) {
-	const chiXem = bo.quyen.loai === "chi-xem";
+function OTaiLieu({
+	bo,
+	m,
+	alone,
+	soan,
+}: {
+	bo: BoXong;
+	m: Chu;
+	alone: boolean;
+	soan: SoanTaiLieu;
+}) {
 	return (
 		<KaraDock
 			side="fill"
@@ -106,14 +117,24 @@ function OTaiLieu({ bo, m, alone }: { bo: BoXong; m: Chu; alone: boolean }) {
 							{m.chiXem[bo.quyen.lyDo]}
 						</FieldDescription>
 					) : null}
-					<TaiLieuBo mucTieu={bo.mucTieu} chiXem={chiXem} />
+					<TaiLieuBo bo={bo} soan={soan} />
 				</div>
 			</VatPhamDock>
 		</KaraDock>
 	);
 }
 
-function HaiThe({ bo, m, cauNoi }: { bo: BoXong; m: Chu; cauNoi: boolean }) {
+function HaiThe({
+	bo,
+	m,
+	cauNoi,
+	soan,
+}: {
+	bo: BoXong;
+	m: Chu;
+	cauNoi: boolean;
+	soan: SoanTaiLieu;
+}) {
 	const [the, datThe] = useState<The>("bo");
 	return (
 		<KaraDock side="fill" alone data-khung="hep">
@@ -132,7 +153,7 @@ function HaiThe({ bo, m, cauNoi }: { bo: BoXong; m: Chu; cauNoi: boolean }) {
 					<TabsTrigger value="cot">{m.theSoan.cotBen}</TabsTrigger>
 				</TabsList>
 				<TabsContent value="bo" className="flex min-h-0 flex-1 flex-col">
-					<OTaiLieu bo={bo} m={m} alone />
+					<OTaiLieu bo={bo} m={m} alone soan={soan} />
 				</TabsContent>
 				<TabsContent value="cot" className="flex min-h-0 flex-1 flex-col">
 					<CotBen m={m} cauNoi={cauNoi} motMinh />
@@ -147,11 +168,13 @@ function ThanKhung({
 	m,
 	cauNoi,
 	hep,
+	soan,
 }: {
 	bo: BoSoan;
 	m: Chu;
 	cauNoi: boolean;
 	hep: boolean;
+	soan: SoanTaiLieu;
 }) {
 	if (bo.trang === "dang-tai")
 		return (
@@ -173,11 +196,12 @@ function ThanKhung({
 				</KaraDockBody>
 			</KaraDock>
 		);
-	if (bo.quyen.loai === "chi-xem") return <OTaiLieu bo={bo} m={m} alone />;
-	if (hep) return <HaiThe bo={bo} m={m} cauNoi={cauNoi} />;
+	if (bo.quyen.loai === "chi-xem")
+		return <OTaiLieu bo={bo} m={m} alone soan={soan} />;
+	if (hep) return <HaiThe bo={bo} m={m} cauNoi={cauNoi} soan={soan} />;
 	return (
 		<div className="flex min-h-0 flex-1" data-khung="rong">
-			<OTaiLieu bo={bo} m={m} alone={false} />
+			<OTaiLieu bo={bo} m={m} alone={false} soan={soan} />
 			<CotBen m={m} cauNoi={cauNoi} motMinh={false} />
 		</div>
 	);
@@ -194,6 +218,9 @@ export function KhungSoanBo({
 	const phuThuoc = usePhuThuocSoan();
 	const bo = useBoSoan(khoaBo);
 	const hep = useKhoHep(SOAN_BO.truyVanHep);
+	const [banNhap, datBanNhap] = useState<BanNhap>(BAN_NHAP_DAU);
+	const luuDong = useLuuDong(() => m.taiLieu.loiLuu);
+	const soan: SoanTaiLieu = { banNhap, datBanNhap, luuDong };
 	const hienDau = bo.trang !== "dang-tai" || phuThuoc.tieuDeKhiTai;
 	return (
 		<>
@@ -211,7 +238,7 @@ export function KhungSoanBo({
 				className="flex min-h-0 flex-1 flex-col"
 				data-khung-soan-bo={bo.trang}
 			>
-				<ThanKhung bo={bo} m={m} cauNoi={cauNoi} hep={hep} />
+				<ThanKhung bo={bo} m={m} cauNoi={cauNoi} hep={hep} soan={soan} />
 			</div>
 		</>
 	);
