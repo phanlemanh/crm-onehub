@@ -136,7 +136,7 @@ phục vụ E6 (AC-5) · `independent: true`
 - [ ] **Step 2:** lệnh `htmb_o_so` (hai lượt TZ) → FAIL.
 - [ ] **Step 3:** viết hàm; ngày lịch VN bằng `Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Ho_Chi_Minh" })`, đếm ngày cả hai đầu; tự tin thấp đếm trên `dangBan ∪ conLai` có `tuTin === "thap"`.
 - [ ] **Step 4:** lệnh Step 2 → PASS cả hai lượt.
-- [ ] **Step 5: Phá-thử:** dùng `getDate()` theo giờ máy → đỏ ở lượt UTC «htmb-o-so: truoc-bat-dau ra 92, can —».
+- [ ] **Step 5: Phá-thử:** dùng `getDate()` theo giờ máy → đỏ ở lượt UTC «htmb-o-so: dau-ky ra —, can 92».
 - [ ] **Step 6: Commit** `feat(hop-tuan-mo-dung-bo): oSoHop dựng bốn ô của tuần`.
 
 ### Task 5: `lyDoRong` và tệp chữ

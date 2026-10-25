@@ -137,7 +137,7 @@ evals:
       VN) → «—» kèm «Bắt đầu 01/10»; 2026-12-31T05:00Z → «1»; 2027-01-01T03:00Z → «0» kèm «Đã kết thúc 31/12»;
       không dòng nào thap → Tự tin thấp «0»; mọi tuTin null → «0». Mỗi ô: không ô nào có chuỗi NaN, undefined hay
       dấu trừ đứng trước chữ số. Đếm ô = 6, mỗi lượt TZ.
-      CHIEU DO: bản sao tính ngày bằng getDate() theo giờ máy → đỏ ở lượt UTC «htmb-o-so: truoc-bat-dau ra 92, can —».
+      CHIEU DO: bản sao tính ngày bằng getDate() theo giờ máy → đỏ ở lượt UTC «htmb-o-so: dau-ky ra —, can 92».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
