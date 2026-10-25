@@ -1,4 +1,6 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, setSystemTime, test } from "bun:test";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
@@ -10,17 +12,32 @@ import {
 } from "@crm/validation/okr-bo-hop-tuan";
 import type { DonChonOkr } from "@crm/validation/okr-tham-so";
 import { okrAccessOutput } from "../src/okr/okr.contracts";
+import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
+import {
+	type HopTuanOutput,
+	hopTuanOutput,
+	type ToanCanhOutput,
+	toanCanhOutput,
+} from "../src/okr/okr-xem.contracts";
 import { orgTreeOutput } from "../src/to-chuc/to-chuc.contracts";
 import {
+	type AiHoacCookie,
 	bpMoi,
+	CHUONG_TRINH_RONG,
 	datViTri,
 	doc,
 	dungSan,
 	goi,
+	goiQuery,
+	type Json,
+	kyDangChay,
+	ma,
 	nguoiMoi,
 	ok,
 	pbMoi,
 	phienCua,
+	truongMoi,
+	ungDung,
 } from "./okr-san";
 
 dungSan();
@@ -261,6 +278,342 @@ describe("htmb-bien-bo", () => {
 			dem += 1;
 
 			expect(dem).toBe(2);
+		},
+		MA_TRAN_MS,
+	);
+});
+
+const NGAY_MS = 24 * 60 * 60 * 1000;
+const GIO_GIEO = new Date("2026-10-05T03:00:00.000Z");
+const GIO_DO = new Date("2026-10-21T05:00:00.000Z");
+const GIO_TUAN_TRUOC = new Date(GIO_DO.getTime() - 7 * NGAY_MS);
+const TEP_TOAN_CANH = join(import.meta.dir, "fixtures", "htmb-toan-canh.json");
+
+type HienThi = "cong-khai" | "gioi-han";
+
+const taoMucTieu = async (
+	cycleId: string,
+	unit: Json,
+	ownerUserId: string,
+	ai: AiHoacCookie,
+	hienThi: HienThi,
+) =>
+	ok<{ id: string }>(
+		await goi(
+			"okr.createObjective",
+			{
+				cycleId,
+				unit,
+				title: ma("htmb muc tieu"),
+				kind: "cam-ket",
+				ownerUserId,
+				participantIds: [],
+				whyNow: "",
+				hienThi,
+			},
+			ai,
+		),
+		"tao muc tieu",
+	).id;
+
+const taoKr = async (
+	objectiveId: string,
+	ownerUserId: string,
+	ai: AiHoacCookie,
+) =>
+	ok<{ id: string }>(
+		await goi(
+			"okr.createKeyResult",
+			{
+				objectiveId,
+				title: ma("htmb kr"),
+				kind: "tang-toi",
+				ownerUserId,
+				startValue: 10,
+				targetValue: 50,
+				currentValue: 20,
+				unit: "khách",
+				dueOn: null,
+				weight: 1,
+			},
+			ai,
+		),
+		"tao kr",
+	).id;
+
+async function mucTieuCoKr(
+	cycleId: string,
+	unit: Json,
+	truongDv: { nguoi: string; cookie: string },
+	soKr: number,
+	hienThi: HienThi = "cong-khai",
+	nguoiXem: string[] = [],
+): Promise<{ id: string; kr: string[] }> {
+	const id = await taoMucTieu(
+		cycleId,
+		unit,
+		truongDv.nguoi,
+		truongDv.cookie,
+		hienThi,
+	);
+	if (hienThi === "gioi-han")
+		ok(
+			await goi(
+				"okr.datHienThi",
+				{ objectiveId: id, hienThi, nguoiXem },
+				truongDv.cookie,
+			),
+			"dat gioi han",
+		);
+	const kr: string[] = [];
+	for (let i = 0; i < soKr; i += 1)
+		kr.push(await taoKr(id, truongDv.nguoi, truongDv.cookie));
+	ok(
+		await goi("okr.publishObjective", { id }, truongDv.cookie),
+		"cong bo muc tieu",
+	);
+	return { id, kr };
+}
+
+async function capNhatLuc(userId: string, keyResultId: string, luc: Date) {
+	setSystemTime(luc);
+	const svc = ungDung().get(OkrCapNhatService);
+	const { sessionId } = await svc.moCapNhat(userId, { entry: "tab" }, luc);
+	await svc.guiCapNhat(
+		userId,
+		{
+			sessionId,
+			items: [{ keyResultId, value: 30, confidence: "cao", note: "" }],
+		},
+		luc,
+	);
+}
+
+async function demSqlBoPhan(
+	cycleId: string,
+	divisionId: string,
+	luc: Date,
+): Promise<{ soKr: number; daCapNhat: number }> {
+	const [kr] = await db.$queryRaw<{ n: number }[]>`
+		SELECT count(*)::int AS n
+		FROM "okrKeyResult" k
+		JOIN "okrObjective" o ON o.id = k."objectiveId"
+		WHERE o."cycleId" = ${cycleId}
+			AND o.status = 'cong-bo'
+			AND o."hienThi" = 'cong-khai'
+			AND (
+				(o.level = 'bo-phan' AND o."divisionId" = ${divisionId})
+				OR (o.level = 'phong-ban' AND o."departmentId" IN (
+					SELECT d.id FROM department d WHERE d."divisionId" = ${divisionId}
+				))
+			)`;
+	const [lan] = await db.$queryRaw<{ n: number }[]>`
+		SELECT count(DISTINCT c."keyResultId")::int AS n
+		FROM "okrCheckIn" c
+		JOIN "okrCheckInSession" s ON s.id = c."sessionId"
+		JOIN "okrKeyResult" k ON k.id = c."keyResultId"
+		JOIN "okrObjective" o ON o.id = k."objectiveId"
+		WHERE o."cycleId" = ${cycleId}
+			AND o.status = 'cong-bo'
+			AND o."hienThi" = 'cong-khai'
+			AND (
+				(o.level = 'bo-phan' AND o."divisionId" = ${divisionId})
+				OR (o.level = 'phong-ban' AND o."departmentId" IN (
+					SELECT d.id FROM department d WHERE d."divisionId" = ${divisionId}
+				))
+			)
+			AND date_trunc('week', (s."submittedAt" AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Ho_Chi_Minh')
+				= date_trunc('week', (${luc.toISOString()}::timestamptz) AT TIME ZONE 'Asia/Ho_Chi_Minh')`;
+	return { soKr: kr?.n ?? -1, daCapNhat: lan?.n ?? -1 };
+}
+
+function latToanCanh(
+	tc: ToanCanhOutput,
+	khoaNhan: ReadonlyMap<string, string>,
+): ToanCanhOutput {
+	const tenNhan = new Map<string, string>();
+	const hang = tc.hang.flatMap((h) => {
+		if (h.key === "goc") return [h];
+		const nhanK = khoaNhan.get(h.key);
+		if (nhanK === undefined) return [];
+		const ten = nhanK.slice(nhanK.indexOf(":") + 1);
+		tenNhan.set(h.ten, ten);
+		return [{ ...h, key: nhanK, ten }];
+	});
+	const donViChuaDat = tc.tongQuan.donViChuaDat.flatMap((t) => {
+		const ten = tenNhan.get(t);
+		return ten === undefined ? [] : [ten];
+	});
+	return {
+		...tc,
+		tongQuan: {
+			...tc.tongQuan,
+			tongDonVi: tc.tongQuan.donViCongBo + donViChuaDat.length,
+			donViChuaDat,
+		},
+		hang,
+	};
+}
+
+const donCua = (khoa: string): Json => {
+	if (khoa === "goc") return { loai: "goc" };
+	const [loai, id] = khoa.split(":");
+	return { loai: loai ?? "", id: id ?? "" };
+};
+
+describe("htmb-toan-canh", () => {
+	test(
+		"htmb-toan-canh: toanCanh va hopTuan cung dem, bo rong tuanDau false",
+		async () => {
+			ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
+			const quy = await kyDangChay("htmb-tc");
+			const B = await bpMoi("htmb-tc B");
+			const P = await pbMoi("htmb-tc P", B);
+			const X = await pbMoi("htmb-tc X", null);
+			const Q = await pbMoi("htmb-tc Q", null);
+			const khoaNhan = new Map([
+				[`bp:${B}`, "bp:B"],
+				[`pb:${P}`, "pb:P"],
+				[`pb:${X}`, "pb:X"],
+				[`pb:${Q}`, "pb:Q"],
+			]);
+			const nhanCua = (khoa: string) => khoaNhan.get(khoa) ?? khoa;
+			const truongP = await truongMoi("department", P, "htmb-tc-p");
+			const truongX = await truongMoi("department", X, "htmb-tc-x");
+			const truongQ = await truongMoi("department", Q, "htmb-tc-q");
+			const xemQ = await nguoiMoi("htmb-tc-xem-q");
+			const cookieXemQ = await phienCua(xemQ);
+			const toanCanh = async (ai: AiHoacCookie) =>
+				toanCanhOutput.parse(await doc("okr.toanCanh", ai, { cycleId: quy }));
+			const hopTuan = async (
+				ai: AiHoacCookie,
+				khoa: string,
+			): Promise<HopTuanOutput> =>
+				hopTuanOutput.parse(
+					await doc("okr.hopTuan", ai, { cycleId: quy, unit: donCua(khoa) }),
+				);
+
+			const loi: string[] = [];
+			let dem = 0;
+			try {
+				setSystemTime(GIO_GIEO);
+				const mtP = await mucTieuCoKr(
+					quy,
+					{ level: "phong-ban", departmentId: P },
+					truongP,
+					3,
+				);
+				await mucTieuCoKr(
+					quy,
+					{ level: "phong-ban", departmentId: X },
+					truongX,
+					1,
+				);
+				const mtQ = await mucTieuCoKr(
+					quy,
+					{ level: "phong-ban", departmentId: Q },
+					truongQ,
+					3,
+					"gioi-han",
+					[xemQ],
+				);
+				const [krTuanNay, krTuanTruoc] = mtP.kr;
+				expect(`P co ${mtP.kr.length} KR`).toBe("P co 3 KR");
+				await capNhatLuc(truongP.nguoi, krTuanTruoc ?? "", GIO_TUAN_TRUOC);
+				await capNhatLuc(truongP.nguoi, krTuanNay ?? "", GIO_DO);
+				setSystemTime(GIO_DO);
+
+				const goc = await hopTuan("thuong", "goc");
+				if (goc.tongKr !== 0)
+					loi.push(`htmb-toan-canh: goc rong tongKr ${goc.tongKr}`);
+				if (goc.tuanDau) loi.push("htmb-toan-canh: goc rong tuanDau true");
+
+				const tc = await toanCanh("thuong");
+				const hangQ = tc.hang.find((h) => h.key === `pb:${Q}`);
+				if (hangQ !== undefined && hangQ.soKr !== 0)
+					loi.push(`htmb-toan-canh: pb:Q lo muc tieu han che (${hangQ.soKr})`);
+
+				const hangB = tc.hang.find((h) => h.key === `bp:${B}`);
+				const soB = { soKr: hangB?.soKr, daCapNhat: hangB?.daCapNhat };
+				const sql = await demSqlBoPhan(quy, B, GIO_DO);
+				if (soB.soKr !== 3 || soB.daCapNhat !== 1)
+					loi.push(
+						`htmb-toan-canh: bp:B soKr ${soB.soKr} daCapNhat ${soB.daCapNhat}, can 3 va 1`,
+					);
+				if (sql.soKr !== soB.soKr || sql.daCapNhat !== soB.daCapNhat)
+					loi.push(
+						`htmb-toan-canh: bp:B toanCanh ${JSON.stringify(soB)}, SQL ${JSON.stringify(sql)}`,
+					);
+
+				for (const khoa of [`bp:${B}`, `pb:${P}`, `pb:${X}`]) {
+					const h = tc.hang.find((x) => x.key === khoa);
+					const ht = await hopTuan("thuong", khoa);
+					dem += 1;
+					if (h === undefined) {
+						loi.push(`htmb-toan-canh: ${nhanCua(khoa)} vang trong toanCanh`);
+						continue;
+					}
+					if (ht.tongKr !== h.soKr)
+						loi.push(
+							`htmb-toan-canh: ${nhanCua(khoa)} liet ${h.soKr}, hopTuan ${ht.tongKr}`,
+						);
+					if (ht.daCapNhat !== h.daCapNhat)
+						loi.push(
+							`htmb-toan-canh: ${nhanCua(khoa)} daCapNhat ${h.daCapNhat}, hopTuan ${ht.daCapNhat}`,
+						);
+				}
+				const coKr = tc.hang
+					.filter((h) => h.soKr > 0)
+					.map((h) => nhanCua(h.key))
+					.sort()
+					.join(",");
+				if (coKr !== "bp:B,pb:P,pb:X")
+					loi.push(
+						`htmb-toan-canh: khoa co soKr > 0 la ${coKr}, can bp:B,pb:P,pb:X`,
+					);
+
+				const lat = latToanCanh(tc, khoaNhan);
+				if (process.env.HTMB_GHI === "1")
+					writeFileSync(TEP_TOAN_CANH, `${JSON.stringify(lat, null, "\t")}\n`);
+				const daGhi = existsSync(TEP_TOAN_CANH)
+					? JSON.stringify(
+							toanCanhOutput.parse(
+								JSON.parse(readFileSync(TEP_TOAN_CANH, "utf8")),
+							),
+						)
+					: "";
+				if (daGhi !== JSON.stringify(lat))
+					loi.push("htmb-toan-canh: fixture lech dau ra that");
+
+				const tcXemQ = await toanCanh(cookieXemQ);
+				const htXemQ = await hopTuan(cookieXemQ, `pb:${Q}`);
+				const moXemQ = await goiQuery("okr.objective", cookieXemQ, {
+					id: mtQ.id,
+				});
+				console.log(
+					`htmb-toan-canh: nguoi trong danh sach xem Q, pb:Q soKr ${tcXemQ.hang.find((h) => h.key === `pb:${Q}`)?.soKr ?? "vang"}, hopTuan(pb:Q) ${htXemQ.tongKr}, mo muc tieu HTTP ${moXemQ.status}`,
+				);
+
+				ok(
+					await goi(
+						"okr.datHienThi",
+						{ objectiveId: mtQ.id, hienThi: "cong-khai", nguoiXem: [] },
+						truongQ.cookie,
+					),
+					"Q cong khai",
+				);
+				const tcMo = await toanCanh("thuong");
+				const htMo = await hopTuan("thuong", `pb:${Q}`);
+				const soQMo = tcMo.hang.find((h) => h.key === `pb:${Q}`)?.soKr;
+				if (soQMo !== 3 || htMo.tongKr !== 3)
+					loi.push(
+						`htmb-toan-canh: doi chung Q cong khai soKr ${soQMo ?? "vang"}, hopTuan ${htMo.tongKr}, can 3`,
+					);
+			} finally {
+				setSystemTime();
+			}
+			expect(loi.join("\n")).toBe("");
+			expect(dem).toBe(3);
 		},
 		MA_TRAN_MS,
 	);
