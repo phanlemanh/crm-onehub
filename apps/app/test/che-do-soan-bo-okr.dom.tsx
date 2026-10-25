@@ -2441,3 +2441,148 @@ describe("vk10-cong-bo-do", () => {
 		await expect(kiemO3()).rejects.toThrow("vk10-cong-bo: o3 lech");
 	});
 });
+
+const { DetailSheet } = await import("@/components/detail-sheet");
+const { ObjectiveSheet } = await import(
+	"@/components/crm/record-sheet/objective-sheet"
+);
+
+type DiemCamNgan = Parameters<typeof ObjectiveSheet>[0]["diemCam"];
+
+const MT_NGAN = "mt-ngan";
+const KR_NGAN = ["k-n1", "k-n2", "k-n3"];
+const DON_NGAN: DonChonOkr = { loai: "pb", id: "P1" };
+const MA_TRAN_NGAN = [0, 1, 3] as const;
+
+function deXuatNgan(n: number) {
+	return Array.from({ length: n }, (_, i) =>
+		dongHien.parse({
+			id: `dx-ngan-${i}`,
+			loai: "viet-lai",
+			objectiveId: MT_NGAN,
+			keyResultId: KR_NGAN[i % KR_NGAN.length],
+			truong: "kr.title",
+			truoc: `KR ${KR_NGAN[i % KR_NGAN.length]}`,
+			sau: `Kết quả đo được ${i}`,
+			maVanDe: "kr-la-viec",
+			targetObjectiveId: null,
+			targetKeyResultId: null,
+			lyDo: "KR này là việc, chưa phải kết quả.",
+			canCu: null,
+			tenDich: null,
+		}),
+	);
+}
+
+type CaNgan = { n: number; soGopYChoThat?: number; diemCam?: DiemCamNgan };
+
+async function moNgan({ n, soGopYChoThat = n, diemCam }: CaNgan) {
+	const bo = boMau({
+		don: DON_NGAN,
+		muc: [
+			{
+				id: MT_NGAN,
+				title: "Giảm thời gian chốt sổ cuối tháng",
+				kr: KR_NGAN.map((id) => ({ id })),
+			},
+		],
+	});
+	const ct = bo.chiTiet.get(MT_NGAN);
+	if (!ct) throw new Error("vk10-ngan: thieu muc tieu mau");
+	dat("okr.objective", () => ({ ...ct, soGopYCho: soGopYChoThat }));
+	dat("okr.comments", () => ({ comments: [], dong: [] }));
+	dat("workspace.get", () => ({
+		id: "ws",
+		name: "OneHub",
+		slug: "ws",
+		viewerRole: "admin",
+		canRename: true,
+		canChangeRoles: false,
+		canManageMembers: true,
+		canIssuePasswordLink: false,
+	}));
+	dat("okr.troLySanSang", () =>
+		troLySanSangOutput.parse({ bat: true, conLaiUsd: 5 }),
+	);
+	dat("okr.troLyDanhSach", () =>
+		troLyDanhSachOutput.parse({
+			dong: deXuatNgan(n),
+			dangSoan: false,
+			maKetThuc: n > 0 ? "da-nop" : null,
+			docLuc: n > 0 ? "2026-10-25T02:12:00.000Z" : null,
+			lyDo: null,
+		}),
+	);
+	await mo(
+		<>
+			<DetailSheet onOpenChange={() => {}} open>
+				<ObjectiveSheet diemCam={diemCam} objectiveId={MT_NGAN} />
+			</DetailSheet>
+			<DoRecord />
+		</>,
+		`?record=${encodeURIComponent(`objective:${MT_NGAN}`)}`,
+	);
+	await cho(
+		() =>
+			q("[data-okr-sheet] [role=tab]") !== null &&
+			q(`[data-okr-sheet] [data-kr="${KR_NGAN[0]}"]`) !== null,
+		"vk10-ngan: khung muc tieu tai xong",
+	);
+	await cho(
+		() => goiCua("okr.troLyDanhSach").length > 0 || n === 0,
+		"vk10-ngan: doc gop y",
+	);
+	await nhip(10);
+	return bo;
+}
+
+const chipNgan = () => qa("[data-okr-sheet] [data-chip-gop-y]");
+
+async function kiemNgan(n: number, khoa: string): Promise<void> {
+	const sai = (gi: string) => `vk10-ngan: n=${n} ${gi} lech`;
+	expect(qa("[data-okr-sheet] [data-vung-kara]").length, sai("vung con")).toBe(
+		0,
+	);
+	expect(qa("[data-vung-kara]").length, sai("vung con")).toBe(0);
+	expect(qa("[data-de-xuat-neo]").length, sai("neo con")).toBe(0);
+	expect(qa("[data-okr-sheet] [data-gop-y]").length, sai("neo con")).toBe(0);
+	expect(chipNgan().length, sai("chip")).toBe(n > 0 ? 1 : 0);
+	if (n === 0) return;
+	const chip = chipNgan()[0] ?? null;
+	expect(chip?.textContent ?? "", sai("chu chip")).toContain(
+		`Kara · ${CHU.gopY.chip(String(n))}`,
+	);
+	await bam(chip);
+	await cho(() => doRecord() === `soan-bo:${khoa}`, sai("bam chip"));
+	const url = new URLSearchParams(urlDoi.at(-1) ?? "");
+	expect(url.get("record")?.split(",").at(-1), sai("bam chip")).toBe(
+		`soan-bo:${khoa}`,
+	);
+	expect(url.get("soanMt"), sai("bam chip")).toBe(MT_NGAN);
+}
+
+describe("vk10-ngan", () => {
+	for (const n of MA_TRAN_NGAN) {
+		test(`vk10-ngan: n=${n} — khong vung Kara, khong neo duoi KR, ${n > 0 ? "mot chip mo che do Soan dung bo va muc tieu" : "khong chip"}`, async () => {
+			const bo = await moNgan({ n });
+			await kiemNgan(n, bo.khoa);
+		});
+	}
+});
+
+describe("vk10-ngan-do", () => {
+	test("vk10-ngan-do: vung Kara chen lai qua diemCam.duoiKr thi n=3 do", async () => {
+		const bo = await moNgan({
+			n: 3,
+			diemCam: { duoiKr: () => <div data-vung-kara="" /> },
+		});
+		await expect(kiemNgan(3, bo.khoa)).rejects.toThrow(
+			"vk10-ngan: n=3 vung con",
+		);
+	});
+
+	test("vk10-ngan-do: chip hien khi khong co gop y cho thi n=0 do", async () => {
+		const bo = await moNgan({ n: 0, soGopYChoThat: 1 });
+		await expect(kiemNgan(0, bo.khoa)).rejects.toThrow("vk10-ngan: n=0 chip");
+	});
+});

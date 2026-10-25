@@ -24,6 +24,19 @@ function capCuaBo(don: DonChonOkr): CapBo | null {
 	}
 }
 
+export function donCuaMucTieu(mt: CapBo): DonChonOkr | null {
+	if (mt.level === "onehub") return { loai: "goc" };
+	if (mt.unitId === null) return null;
+	switch (mt.level) {
+		case "bo-phan":
+			return { loai: "bp", id: mt.unitId };
+		case "phong-ban":
+			return { loai: "pb", id: mt.unitId };
+		case "ca-nhan":
+			return { loai: "nguoi", id: mt.unitId };
+	}
+}
+
 export function chonMucTieuBo(ds: DanhSach, don: DonChonOkr): DongDs[] {
 	const cap = capCuaBo(don);
 	if (cap === null) return [];

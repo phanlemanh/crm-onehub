@@ -30,7 +30,6 @@ import {
 	ItemTitle,
 } from "@crm/ui/components/item";
 import { KaraTrace } from "@crm/ui/components/kara";
-import { KaraBusyProvider } from "@crm/ui/components/kara/busy";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -42,11 +41,12 @@ import { krTheoKara } from "@crm/validation/okr-theo-kara";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
 import { coTheCapNhat, useCapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
+import { ChipGopYKhung } from "@/app/(app)/[slug]/okr/chip-gop-y";
 import type { DiemCam } from "@/app/(app)/[slug]/okr/diem-cam";
 import { useGopYMucTieu } from "@/app/(app)/[slug]/okr/gop-y-kara";
 import { HopThoaiCanChinh } from "@/app/(app)/[slug]/okr/hop-thoai-can-chinh";
@@ -58,12 +58,8 @@ import {
 	khoaHopOkr,
 	useHopOkr,
 } from "@/app/(app)/[slug]/okr/ngan-okr-url";
-import {
-	DeXuatNeo,
-	type LoiDiKr,
-	VungKara,
-} from "@/app/(app)/[slug]/okr/nhom-kara";
 import { parseAsNeoGopY } from "@/app/(app)/[slug]/okr/okr-search-params";
+import { donCuaMucTieu } from "@/app/(app)/[slug]/okr/soan-bo/du-lieu-bo";
 import {
 	NhanTinhTrang,
 	NhanTrangThai,
@@ -537,6 +533,28 @@ function KhuGopVao({ mt }: { mt: ChiTiet }) {
 	);
 }
 
+function useNeoChipGopY(objectiveId: string) {
+	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
+	const [, setNeoKr] = useQueryState(SEARCH_PARAM.okr.neoGopYKr, parseAsString);
+	const khoKhung = useContext(CuonCaKhungContext);
+	useEffect(() => {
+		if (!neo || khoKhung === "chua-biet") return;
+		const giam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		const chip = document.querySelector<HTMLElement>(
+			`[data-okr-sheet="${CSS.escape(objectiveId)}"] [data-chip-gop-y]`,
+		);
+		if (chip) {
+			chip.scrollIntoView({
+				block: "nearest",
+				behavior: giam ? "auto" : "smooth",
+			});
+			chip.focus({ preventScroll: true });
+		}
+		void setNeo(null);
+		void setNeoKr(null);
+	}, [neo, khoKhung, objectiveId, setNeo, setNeoKr]);
+}
+
 function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
@@ -557,142 +575,77 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 		krSuaDuoc: mt.canEditKr,
 		ghiDuoc: mt.status !== "da-bo" && mt.choDuyet === null && mt.kyGhiDuoc,
 	});
-	const moKr = (di: LoiDiKr) => {
-		if (di.loai === "kr-moi") void datHopOkr({ loai: "kr-moi" });
-		else if (di.loai === "sua-kr")
-			void datHopOkr({ loai: "kr", id: di.keyResultId });
-		else void datHopOkr({ loai: "muc-tieu" });
-	};
 	const theoKara = krTheoKara(mt.trail);
 	const diemKara: DiemCam = {
-		duoiKr: (kr) => {
-			const ds = gopY.nhom.theoKr.get(kr.id) ?? [];
-			if (ds.length === 0) return null;
-			return (
-				<div className="flex flex-col gap-1">
-					{ds.map((d) => (
-						<DeXuatNeo d={d} gopY={gopY} key={d.id} moKr={moKr} />
-					))}
-				</div>
-			);
-		},
 		sauTenKr: (kr) => (theoKara.has(kr.id) ? <KaraTrace /> : null),
 	};
-	const vung = useRef<HTMLDivElement>(null);
-	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
-	const [neoKr, setNeoKr] = useQueryState(
-		SEARCH_PARAM.okr.neoGopYKr,
-		parseAsString,
-	);
-	const coVungKara = gopY.noiDung !== "tat";
-	const khoKhung = useContext(CuonCaKhungContext);
-	const datNoi = gopY.datNoi;
-	useEffect(() => {
-		if (!neo || !gopY.daTai || khoKhung === "chua-biet") return;
-		const giam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		const cach: ScrollIntoViewOptions = {
-			block: "start",
-			behavior: giam ? "auto" : "smooth",
-		};
-		const goc = vung.current?.closest("[data-okr-sheet]") ?? document;
-		const noiDen = neoKr
-			? ([...goc.querySelectorAll<HTMLElement>("[data-kara-proposal-kr]")].find(
-					(o) => o.getAttribute("data-kara-proposal-kr") === neoKr,
-				) ?? null)
-			: null;
-		if (noiDen) {
-			noiDen.scrollIntoView({ ...cach, block: "center" });
-			noiDen.focus({ preventScroll: true });
-			datNoi(noiDen.getAttribute("data-gop-y"));
-		} else if (coVungKara) vung.current?.scrollIntoView(cach);
-		void setNeo(null);
-		void setNeoKr(null);
-	}, [neo, neoKr, gopY.daTai, coVungKara, setNeo, setNeoKr, khoKhung, datNoi]);
+	useNeoChipGopY(mt.id);
 
 	return (
 		<DetailSheetBody>
-			<KaraBusyProvider busy={gopY.ban}>
-				<KhuViSao mt={mt} />
-				{gopY.nhom.viSao.length > 0 ? (
-					<div className="flex flex-col gap-1 px-5 pb-3">
-						{gopY.nhom.viSao.map((d) => (
-							<DeXuatNeo d={d} gopY={gopY} key={d.id} moKr={moKr} />
-						))}
-					</div>
-				) : null}
-				<KhuGopVao mt={mt} />
-				{coVungKara ? (
-					<DetailSheetSection>
-						<div className="scroll-mt-4" data-vung-kara ref={vung}>
-							<VungKara gopY={gopY} moKr={moKr} soKr={mt.keyResults.length} />
-						</div>
-					</DetailSheetSection>
-				) : null}
-				<DetailSheetTable>
-					<BangKr
-						diemCam={{ ...diemKara, ...diemCam }}
-						mucTieu={mt}
-						keyResults={mt.keyResults}
-						kind={mt.kind}
-						expected={mt.expected}
-						danhDauCuaToi={false}
-						hoiDoiTrong={suaNoiDung(mt) && !gopY.coHoiDoiTrong}
-						canh={demCanh(mt)}
-						nhanHanhDong={m.cotThaoTac}
-						hanhDong={
-							coMenu
-								? (kr) => (
-										<MenuKr
-											mt={mt}
-											kr={kr}
-											capNhat={() => capNhat.mo(mt, kr)}
-											sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
-											xoa={() => setXoa(kr)}
-										/>
-									)
-								: undefined
-						}
-					/>
-				</DetailSheetTable>
-				{mt.keyResults.length > 0 ? (
-					<p
-						className="px-5 pt-2 text-muted-foreground text-xs"
-						data-tien-do-tu
-					>
-						{m.tienDoTuSo(String(mt.progress), String(mt.keyResults.length))}
-					</p>
-				) : null}
-				{suaNoiDung(mt) || mt.themKrLe ? (
-					<div className="px-5 py-3">
-						<Button
-							size="sm"
-							variant="outline"
-							data-nut="them-kr"
-							aria-haspopup="dialog"
-							onClick={() => void datHopOkr({ loai: "kr-moi" })}
-						>
-							<Icon icon={Add} data-icon="inline-start" />
-							{m.themKr}
-						</Button>
-					</div>
-				) : null}
-				{capNhat.hop}
-				<ConfirmDialog
-					tone="destructive"
-					nut={m.hoiXoaKr.action}
-					thoi={m.hoiXoaKr.cancel}
-					tieuDe={dien(m.hoiXoaKr.title, { ten: xoa?.title ?? "" })}
-					than={m.hoiXoaKr.body}
-					open={xoa !== null}
-					pending={go.isPending}
-					onOpenChange={(mo) => {
-						if (!mo && !go.isPending) setXoa(null);
-					}}
-					onConfirm={() => {
-						if (xoa && !go.isPending) go.mutate({ id: xoa.id });
-					}}
+			<KhuViSao mt={mt} />
+			<KhuGopVao mt={mt} />
+			<DetailSheetTable>
+				<BangKr
+					diemCam={{ ...diemKara, ...diemCam }}
+					mucTieu={mt}
+					keyResults={mt.keyResults}
+					kind={mt.kind}
+					expected={mt.expected}
+					danhDauCuaToi={false}
+					hoiDoiTrong={suaNoiDung(mt) && !gopY.coHoiDoiTrong}
+					canh={demCanh(mt)}
+					nhanHanhDong={m.cotThaoTac}
+					hanhDong={
+						coMenu
+							? (kr) => (
+									<MenuKr
+										mt={mt}
+										kr={kr}
+										capNhat={() => capNhat.mo(mt, kr)}
+										sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
+										xoa={() => setXoa(kr)}
+									/>
+								)
+							: undefined
+					}
 				/>
-			</KaraBusyProvider>
+			</DetailSheetTable>
+			{mt.keyResults.length > 0 ? (
+				<p className="px-5 pt-2 text-muted-foreground text-xs" data-tien-do-tu>
+					{m.tienDoTuSo(String(mt.progress), String(mt.keyResults.length))}
+				</p>
+			) : null}
+			{suaNoiDung(mt) || mt.themKrLe ? (
+				<div className="px-5 py-3">
+					<Button
+						size="sm"
+						variant="outline"
+						data-nut="them-kr"
+						aria-haspopup="dialog"
+						onClick={() => void datHopOkr({ loai: "kr-moi" })}
+					>
+						<Icon icon={Add} data-icon="inline-start" />
+						{m.themKr}
+					</Button>
+				</div>
+			) : null}
+			{capNhat.hop}
+			<ConfirmDialog
+				tone="destructive"
+				nut={m.hoiXoaKr.action}
+				thoi={m.hoiXoaKr.cancel}
+				tieuDe={dien(m.hoiXoaKr.title, { ten: xoa?.title ?? "" })}
+				than={m.hoiXoaKr.body}
+				open={xoa !== null}
+				pending={go.isPending}
+				onOpenChange={(mo) => {
+					if (!mo && !go.isPending) setXoa(null);
+				}}
+				onConfirm={() => {
+					if (xoa && !go.isPending) go.mutate({ id: xoa.id });
+				}}
+			/>
 		</DetailSheetBody>
 	);
 }
@@ -870,6 +823,21 @@ function SoMucTieu({ mt }: { mt: ChiTiet }) {
 	);
 }
 
+function ChipKhung({ mt }: { mt: ChiTiet }) {
+	const donChon = donCuaMucTieu(mt);
+	if (donChon === null) return null;
+	return (
+		<ChipGopYKhung
+			mt={{
+				id: mt.id,
+				soGopYCho: mt.soGopYCho,
+				cycleId: mt.cycleId,
+				donChon,
+			}}
+		/>
+	);
+}
+
 function dauKhung(mt: ChiTiet): string {
 	if (mt.choDuyet) return mt.quyen.duyet ? "cho-nguoi-duyet" : "cho-nguoi-gui";
 	if (mt.traLaiGanNhat) return "bi-tra-lai";
@@ -1033,6 +1001,7 @@ export function ObjectiveSheet({
 						<>
 							<Badge variant="outline">{t.loai[mt.kind]}</Badge>
 							<NhanTrangThai status={mt.status} />
+							<ChipKhung mt={mt} />
 							{mt.hienThi === "gioi-han" ? (
 								<NhanGioiHan
 									soNguoiXem={mt.nguoiXem.length}

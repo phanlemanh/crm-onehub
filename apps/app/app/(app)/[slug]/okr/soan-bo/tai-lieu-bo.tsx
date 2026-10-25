@@ -11,7 +11,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 import type { KrCham, MucTieuCham } from "@crm/validation/okr-cham-bo";
 import { docSoOkr } from "@crm/validation/okr-kr";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useEffectEvent } from "react";
+import { useEffect, useEffectEvent, useRef } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
 import { useTRPC } from "@/lib/trpc/client";
@@ -47,6 +47,7 @@ import { NhoKaraSoan } from "./nho-kara-soan";
 import { usePhuThuocSoan } from "./phu-thuoc";
 import { docTheoKara, type TheoKara } from "./theo-kara";
 import type { BoSoan, MucTieuSoan } from "./use-bo-soan";
+import { useCuonToiMucTieu } from "./use-cuon-toi-mt";
 import {
 	type GhiBanNhap,
 	type MtCuaKr,
@@ -413,8 +414,10 @@ function TaiLieu({
 	const m = okrSoanBoMessages(locale);
 	const coSan = mucTieuCoHien(mucTieu, bc);
 	const moi = bc ? mucTieuMoiHien(bc.banNhap, mucTieu.length > 0) : [];
+	const goc = useRef<HTMLDivElement>(null);
+	useCuonToiMucTieu(goc);
 	return (
-		<div className="flex flex-col gap-6" data-tai-lieu-bo="">
+		<div className="flex flex-col gap-6" data-tai-lieu-bo="" ref={goc}>
 			{mucTieu.length === 0 && !chiXem ? (
 				<FieldDescription>{m.taiLieu.boTrong}</FieldDescription>
 			) : null}

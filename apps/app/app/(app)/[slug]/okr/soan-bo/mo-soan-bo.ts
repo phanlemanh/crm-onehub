@@ -2,6 +2,7 @@
 
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { ghiDuocOPha } from "@crm/validation/okr-chu-ky";
+import type { DonChonOkr } from "@crm/validation/okr-tham-so";
 import { parseAsString, useQueryState } from "nuqs";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
@@ -27,18 +28,29 @@ export type MoSoanBo = {
 	mo: (mucTieuId?: string) => void;
 };
 
-export function useMoSoanBo(q: QuyenKhuXong): MoSoanBo {
-	const m = okrSoanBoMessages(useLocale());
+export function useMoKhungSoan(): (
+	cycleId: string,
+	don: DonChonOkr,
+	mucTieuId?: string,
+) => void {
 	const moBanGhi = useOpenRecord();
 	const [, datMucTieu] = useQueryState(SEARCH_PARAM.okr.soanMt, parseAsString);
+	return (cycleId, don, mucTieuId) => {
+		void datMucTieu(mucTieuId ?? null);
+		moBanGhi({ kind: "soan-bo", id: taoKhoaBo(cycleId, don) });
+	};
+}
+
+export function useMoSoanBo(q: QuyenKhuXong): MoSoanBo {
+	const m = okrSoanBoMessages(useLocale());
+	const moKhung = useMoKhungSoan();
 	const duoc = soanBoDuoc(q);
 	return {
 		duoc,
 		lyDo: duoc ? null : m.loiVao.khoa,
 		mo: (mucTieuId) => {
 			if (!duoc) return;
-			void datMucTieu(mucTieuId ?? null);
-			moBanGhi({ kind: "soan-bo", id: taoKhoaBo(q.cycleId, q.dich.don) });
+			moKhung(q.cycleId, q.dich.don, mucTieuId);
 		},
 	};
 }

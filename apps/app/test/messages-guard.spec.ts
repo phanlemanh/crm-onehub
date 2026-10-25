@@ -230,7 +230,6 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"okr-soan-bo.taiLoi.tieuDe",
 	"okr-soan-bo.taiLoi.moTa",
 	"okr-soan-bo.taiLoi.thuLai",
-	"okr-soan-bo.gopY.chip",
 ];
 
 const GHIM_TRO_LY_OKR = {
@@ -436,6 +435,10 @@ const GHIM_OKR_SOAN_BO = {
 	],
 	"okr-soan-bo:chatLuong.dat": ["1 trên A điểm đạt", "12 trên A điểm đạt"],
 	"okr-soan-bo:gopY.chip": ["1 góp ý", "12 góp ý"],
+	"okr-soan-bo:gopY.chipAria": [
+		"Kara có 1 góp ý chờ, mở chế độ Soạn ở mục tiêu này",
+		"Kara có 12 góp ý chờ, mở chế độ Soạn ở mục tiêu này",
+	],
 	"okr-soan-bo:gopY.viSao": [
 		"Kara đọc tên, «vì sao lúc này» và các KR của 1 mục tiêu trong bộ này. Kara chỉ đọc dữ liệu OKR.",
 		"Kara đọc tên, «vì sao lúc này» và các KR của 12 mục tiêu trong bộ này. Kara chỉ đọc dữ liệu OKR.",

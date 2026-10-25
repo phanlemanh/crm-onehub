@@ -103,6 +103,8 @@ const vi = {
 		viSao: (n: string) =>
 			`Kara đọc tên, «vì sao lúc này» và các KR của ${n} mục tiêu trong bộ này. Kara chỉ đọc dữ liệu OKR.`,
 		chip: (n: string) => `${n} góp ý`,
+		chipAria: (n: string) =>
+			`Kara có ${n} góp ý chờ, mở chế độ Soạn ở mục tiêu này`,
 	},
 	congBo: {
 		nut: (n: string) => `Công bố ${n} mục tiêu`,
@@ -232,7 +234,11 @@ const en: OkrSoanBoMessages = {
 			n === "1"
 				? "Kara read the title, “why now” and the KRs of 1 objective in this set. Kara reads OKR data only."
 				: `Kara read the title, “why now” and the KRs of ${n} objectives in this set. Kara reads OKR data only.`,
-		chip: (n: string) => `${n} suggestions`,
+		chip: (n: string) => (n === "1" ? "1 suggestion" : `${n} suggestions`),
+		chipAria: (n: string) =>
+			n === "1"
+				? "Kara has 1 pending suggestion, open drafting at this objective"
+				: `Kara has ${n} pending suggestions, open drafting at this objective`,
 	},
 	congBo: {
 		nut: (n: string) => `Publish ${n} objectives`,
