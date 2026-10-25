@@ -17,11 +17,21 @@ chọn; từ đầu trang tới bảng Thoả thuận và Công ty mất 69px m�
 Nhóm A là khung khu, B là trang đơn vị, C là Của tôi, D là sơ đồ căn chỉnh, E là phần ngoài khu OKR hay
 còn chờ xác minh.
 
+## Nguồn — tóm tắt đã làm sạch
+
+Tài liệu thô (thảo luận dựng lại từ bản ghi phiên, báo cáo, ảnh) nằm ở kho riêng tư `phanlemanh/crm-onehub-nguon`,
+trang đợt `wiki/dot/okr-dieu-huong-1410.md` (băm `5c2d423878df`, commit `88462c4`). Chủ kho chốt 24/10: kho crm công khai chỉ giữ con trỏ
+ghim và bản tóm tắt đã làm sạch.
+
+- DH11 sinh từ Cổng Bằng chứng của DH3: cây tổ chức tải lỗi thì thẻ «Đơn vị bạn dẫn» hiện tiêu đề rỗng.
+- Hợp đồng DH3 đã hứa: phần lỗi chỉ hiện «Chưa tải được phần này» kèm «Thử lại», lúc tải là khung xương; tên đơn vị phải giữ.
+- Mã của DH11 đã vào onehub ở commit 639b62f78 (20/10) mà chưa có hồ sơ nghiệm thu — kiểm trước khi giao máy làm lại.
+
 <!-- <<<PHAM-VI-MA -->
 ```
 dot: okr-dieu-huong-1410
 dang: chuoi
-nguon: chủ kho yêu cầu rà UX/UI điều hướng OKR ngày 14/10; lượt rà trên production và hai bản mẫu /proto/dieu-huong-okr, /proto/so-do-can-chinh-okr
+nguon: crm-onehub-nguon:wiki/dot/okr-dieu-huong-1410.md#5c2d423878df268ce83f27a4bf9c66c0c25c7f7a
 
 - `A1` — tiêu đề khu cố định «Mục tiêu», trùng tên trên thanh bên; câu mô tả đổi theo thẻ
 - `A2` — nút «Thêm mục tiêu» ở góc phải đầu trang cùng ô chu kỳ và nút «…» (Nhập từ bảng tính, Soạn cùng Trợ lý)
