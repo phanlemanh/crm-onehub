@@ -19,6 +19,7 @@ import { GoTinHieuRacMau } from "./_modules/go-tin-hieu-rac";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
 import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
 import { HopThongBaoMau } from "./_modules/hop-thong-bao-tren-web";
+import { HopTuanTrenBangMau } from "./_modules/hop-tuan-tren-bang";
 import { KanbanViecMau } from "./_modules/kanban-viec";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
@@ -125,6 +126,7 @@ const BANG_GHEP = {
 	"viec-chung": ViecChungMau,
 	"cho-tac-nhan-lau": ChoTacNhanLauMau,
 	"ngan-kr-mot-cho": NganKrMotChoMau,
+	"hop-tuan-tren-bang": HopTuanTrenBangMau,
 } satisfies Record<string, ProtoComponent>;
 
 export const PROTO_COMPONENTS = new Map(Object.entries(BANG_GHEP));
