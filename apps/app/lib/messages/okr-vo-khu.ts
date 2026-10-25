@@ -65,6 +65,17 @@ const vi = {
 				moTa: "Máy chủ không trả danh sách việc. Thử lại sau giây lát.",
 			},
 		},
+		so: {
+			nhan: "Số của bộ OKR",
+			ngayConLai: "Ngày còn lại",
+			den: (ngay: string) => `đến ${ngay}`,
+			batDau: (ngay: string) => `Bắt đầu ${ngay}`,
+			daKetThuc: (ngay: string) => `Đã kết thúc ${ngay}`,
+			loi: {
+				tieuDe: "Không tải được số của bộ",
+				moTa: "Bảng mục tiêu bên dưới vẫn dùng được.",
+			},
+		},
 	},
 };
 
@@ -133,6 +144,17 @@ const en: OkrVoKhuMessages = {
 			loi: {
 				tieuDe: "Couldn't load tasks",
 				moTa: "The server didn't return the tasks. Try again in a moment.",
+			},
+		},
+		so: {
+			nhan: "OKR set numbers",
+			ngayConLai: "Days left",
+			den: (ngay: string) => `until ${ngay}`,
+			batDau: (ngay: string) => `Starts ${ngay}`,
+			daKetThuc: (ngay: string) => `Ended ${ngay}`,
+			loi: {
+				tieuDe: "Couldn't load this set's numbers",
+				moTa: "The objectives table below still works.",
 			},
 		},
 	},
