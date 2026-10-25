@@ -5,7 +5,7 @@ slug: bo-okr-co-so
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: draft
 approved_by: Phan Le Manh
 approved_at: 2026-10-22T02:16:39Z
 design_doc: docs/superpowers/specs/2026-10-22-bo-okr-co-so-design.md
@@ -30,7 +30,7 @@ sau khi VK3 gộp `onehub`.
 
 - AC-1: Given trưởng một phòng ban trong bộ mẫu, chu kỳ đang chạy, When mở thẻ OKR của bộ OneHub (`donOkr=goc`), của
   một bộ phận (`bp:`) và của một phòng ban (`pb:`), Then mỗi trang có đúng một hàng bốn ô nằm dưới hàng thẻ con và trên
-  bảng mục tiêu, theo thứ tự Ngày còn lại · Tiến độ · KR đã cập nhật tuần này · KR tự tin thấp; Tiến độ là `tienDo`% và
+  hàng công cụ của bảng mục tiêu (`docs/design.md` «Thứ tự một màn»), theo thứ tự Ngày còn lại · Tiến độ · KR đã cập nhật tuần này · KR tự tin thấp; Tiến độ là `tienDo`% và
   dòng mô tả nêu `kyVong`% của hàng `okr.toanCanh` cùng khoá đơn vị, cập nhật là `daCapNhat`/`soKr`, tự tin thấp là
   `tuTin.thap` của cùng hàng (bộ phận gồm cả phòng ban con, như `okr.toanCanh`), và Ngày còn lại là số ngày lịch giờ
   Việt Nam từ hôm nay tới ngày kết thúc của chu kỳ đang xem, tính cả hai đầu. (cross-layer)
@@ -41,9 +41,9 @@ sau khi VK3 gộp `onehub`.
   công bố» như Toàn cảnh; bộ chưa công bố hiện Tiến độ «—», cập nhật «0/0», tự tin thấp «0»; không ô nào in `NaN`,
   `undefined` hay số âm.
 - AC-3: Given trang một bộ của một phòng ban, When người xem bấm lần lượt thẻ Họp tuần, Việc, Sơ đồ góp vào (và Chấm
-  điểm khi có), bật chip Cần bàn, chọn một người ở mặt Người phụ trách, đổi sắp xếp, Then hàng số chỉ có ở thẻ OKR, và ở
-  thẻ OKR bốn giá trị không đổi khi lọc hay sắp xếp đổi; trang bộ cá nhân (`donOkr=nguoi:<id>`) và trang đơn vị không tìm
-  thấy không có hàng số.
+  điểm khi có), bật chip Cần bàn, chọn một người ở mặt Người phụ trách, đổi sắp xếp, Then hàng bốn ô của vòng này chỉ có ở thẻ OKR (thẻ khác có
+  thể có hàng số riêng của nó, như Họp tuần của HT1), và ở thẻ OKR bốn giá trị không đổi khi lọc hay sắp xếp đổi; trang
+  bộ cá nhân (`donOkr=nguoi:<id>`) và trang đơn vị không tìm thấy không có hàng bốn ô.
 - AC-4: Given một bộ có mục tiêu có KR, mục tiêu không KR và mục tiêu đã bỏ, When mở thẻ OKR bằng URL không mang tham
   số mở hay gập, Then mọi mục tiêu chưa bỏ có KR đều mở sẵn (nút mở mang `aria-expanded="true"`, các dòng KR hiện), mục
   tiêu không KR và mục đã bỏ không có nút mở; bấm nút mở của một dòng thì đúng dòng ấy gập, các dòng khác giữ nguyên.
@@ -60,7 +60,8 @@ sau khi VK3 gộp `onehub`.
   gọi lại `okr.toanCanh`, và bảng mục tiêu vẫn hiện, bấm được.
 - AC-8: Given thẻ OKR của một phòng ban mẫu ở chế độ sáng và tối, khổ 1440 và 375, When người ký nhìn ảnh, Then ở 1440
   bốn ô nằm một hàng, ở 375 lưới hai cột hai hàng, trang không cuộn ngang, không nhãn ô nào bị cắt mất chữ, nút Mở tất
-  cả / Gập tất cả nhìn thấy trên hàng công cụ của bảng, hàng số cùng nếp với Toàn cảnh OKR và không chữ hay viền nào chìm
+  cả / Gập tất cả nhìn thấy trên hàng công cụ của bảng mà không phải mở phần gập «Lọc» (ở 1440 cuối nhóm nút bên phải,
+  ở 375 nằm ngoài phần gập), hàng số cùng nếp với Toàn cảnh OKR và không chữ hay viền nào chìm
   vào nền. (judgment)
 - AC-9: Given vòng này đã làm, When chạy eval máy của mọi hồ sơ đã ký có thước hay bài kiểm đo bảng mục tiêu hoặc khung
   trang của trang đơn vị và trang một bộ (bước bấm mở dòng, tham số `expand`, hàng công cụ của bảng, khoảng giữa hàng
@@ -99,6 +100,14 @@ DOM test (AC-2).
 - Đổi cách `okr.toanCanh` tính số (chỉ mục tiêu đã công bố, tuần VN) — vòng này đọc nguyên.
 
 ## Notes
+
+- Mở lại Cổng Phạm vi 25/10 (dãy V4): gộp `onehub` 49843223e (VK3 #562, luật «Thứ tự một màn» và «Hàng công cụ» #564)
+  và quyết định chủ kho 24/10 D3. Ba chỗ đổi lời: AC-1 (hàng số trên hàng công cụ), AC-3 (chỉ dò hàng bốn ô của vòng
+  này — D3), AC-8 (nút thấy được không phải mở «Lọc»). Bản mẫu `/proto/bo-okr-co-so` (12 cảnh, ảnh ở `figures/proto/`).
+- «KR đã cập nhật tuần này» giữ nguyên: `CONTEXT.md` mục «Cập nhật» cho phép cụm «cập nhật tuần này» khi nói một khoảng
+  thời gian; chữ bị bỏ là danh từ «Cập nhật tuần».
+- VK19 `bo-okr-chi-don-vi` (chủ kho 25/10) đổi bảng của bộ phận thành chỉ mục tiêu riêng nhưng giữ Toàn cảnh gộp. VK8
+  không sửa `dieuKienDonVi` và đọc nguyên `okr.toanCanh`; cách ô của bộ phận đi sau VK19 là Hỏi-6 của thẻ 25/10.
 
 - Ranh giới với VK10: VK8 giữ hàng số giữa thẻ con và bảng, và biến thể mở sẵn của `DataTable`; VK10 giữ chế độ Soạn,
   nút Soạn, chip góp ý ở ngăn theo dõi. Hai hàng cùng thêm dòng vào `theo-don-vi.tsx` và `okr-vo-khu.ts` ở chỗ khác nhau.

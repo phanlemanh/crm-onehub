@@ -14,7 +14,7 @@ evals:
       1440. Ma trận viết trước 3 bộ {goc, bp:<bộ phận mẫu có phòng ban con có mục tiêu>, pb:<phòng ban của người xem>}.
       Mỗi bộ: mở /okr/bo-okr?donOkr=<khoá>, đọc [data-slot=stat-group] đầu tiên dưới hàng thẻ con; đọc okr.toanCanh
       qua API trong cùng phiên (cookie của người xem) và chu kỳ đang xem qua okr.cycles. Khẳng định từng bộ đúng một
-      hàng số, đứng sau hàng thẻ con và trước bảng (thứ tự DOM), bốn nhãn đúng thứ tự, và bốn giá trị bằng
+      hàng số, đứng sau hàng thẻ con và trước hàng công cụ của bảng (thứ tự DOM: [data-the-con-bo] < [data-hang-so-bo] < nút Gập tất cả), bốn nhãn đúng thứ tự, và bốn giá trị bằng
       (ngayConLai tính từ endsOn theo giờ VN, tienDo%, daCapNhat/soKr, tuTin.thap) của hàng key=<khoá>; mô tả Tiến độ chứa
       kyVong. In «DUNG AC-1 <khoá>: <4 giá trị>» hoặc «SAI AC-1 <khoá>: <ô> man=<x> api=<y>», mã 1.
       Gieo trước khi đo qua đường ghi thật: một lần cập nhật tuần này tự tin thấp cho một KR của phòng ban, để
@@ -66,11 +66,12 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
       - "apps/app/test/bo-okr-co-so.dom.tsx"
     expected: |
-      Ca «bco-the»: ma trận viết trước 5 cách xem {danh-sach, hop-tuan, viec, cay, cham} × có hàng số {có, không, không,
+      Ca «bco-the»: ma trận viết trước 5 cách xem {danh-sach, hop-tuan, viec, cay, cham} × có hàng bốn ô [data-hang-so-bo] {có, không, không,
       không, không} (cham ở chu kỳ pha cham-diem); 3 thao tác ở thẻ OKR {bật locNhanh=can-ban, phuTrach=<một người>,
       sap=tien-do desc} → bốn giá trị y hệt lúc chưa lọc dù số dòng bảng đổi (khẳng định số dòng đổi, để thước không
       xanh vì lọc không chạy); 2 đơn vị không có hàng {nguoi:<id>, pb:<id không có trong cây>} → không có
-      [data-slot=stat-group]. Thông điệp ghim «bco-the: <ca> lech».
+      [data-hang-so-bo]. Ca thẻ khác chỉ dò [data-hang-so-bo], không dò [data-slot=stat-group] (D3, chủ kho 24/10: Họp
+      tuần của HT1 có StatGroup riêng). Thông điệp ghim «bco-the: <ca> lech».
       CHIEU DO (ca «bco-the-do»): bản truyền rows đã lọc vào hàm dựng ô (tham số thử) → «bco-the: can-ban lech».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -188,8 +189,8 @@ evals:
     expected: |
       Cùng lần chạy E1, bộ pb, hai khổ. 1440: bốn [data-slot=stat-card] cùng offsetTop. 375 (phiên riêng của khổ):
       offsetTop tạo đúng 2 hàng × 2 ô; document.scrollingElement.scrollWidth ≤ innerWidth; mỗi nhãn ô có
-      scrollWidth ≤ clientWidth (không cắt chữ); nút «Gập tất cả» có getBoundingClientRect trong khung nhìn sau khi cuộn
-      tới. In «DUNG AC-8 <kho>: …» hoặc «SAI AC-8 <kho>: …», mã 1. Chụp bco-1440-sang, bco-1440-toi, bco-375-sang, bco-375-toi,
+      scrollWidth ≤ clientWidth (không cắt chữ); nút «Gập tất cả» có getBoundingClientRect khác 0 và trong khung nhìn sau khi cuộn
+      tới mà KHÔNG bấm nút «Lọc» (nút không nằm trong phần gập của hàng công cụ). In «DUNG AC-8 <kho>: …» hoặc «SAI AC-8 <kho>: …», mã 1. Chụp bco-1440-sang, bco-1440-toi, bco-375-sang, bco-375-toi,
       cùng hàng số Toàn cảnh OKR trong cùng phiên (bco-toan-canh-1440-sang, bco-toan-canh-375-sang) vào
       .acceptance-runs/bo-okr-co-so/evidence/ (chép vào hồ sơ chỉ khi BCO_CHEP_ANH=1).
       CHIEU DO (--chieu-do nhan-cat, bản sao): nhãn ô thêm truncate → «SAI AC-8 375: nhan cat» (ghim /SAI AC-8 375:
@@ -209,7 +210,7 @@ evals:
       - "Chạy đúng lệnh của eval với BCO_CHEP_ANH=1 (tien-de.mjs + man-bo-okr-co-so.mjs); không gọi thẳng script con"
       - "Mở ảnh _acceptance/bo-okr-co-so/evidence/bco-1440-sang.png, bco-1440-toi.png, bco-375-sang.png, bco-375-toi.png"
       - "Mở ảnh đối chiếu _acceptance/bo-okr-co-so/evidence/bco-toan-canh-1440-sang.png, bco-toan-canh-375-sang.png (hàng số Toàn cảnh OKR cùng phiên)"
-    expected: "Thẻ OKR của một phòng ban: bốn ô số ngay dưới hàng thẻ con, trên bảng mục tiêu, cùng nếp hàng số Toàn cảnh OKR trong ảnh đối chiếu — cùng khối viền ngoài, cùng đường chia ô, cùng cỡ và màu nhãn, cùng cỡ giá trị, cùng đệm trong ô; bảng bên dưới đã mở sẵn các KR. Ở 1440 bốn ô một hàng; ở 375 hai cột hai hàng, không nhãn nào bị cắt mất chữ, trang không tràn ngang. Nút Mở tất cả / Gập tất cả nhìn thấy trên hàng công cụ của bảng. Ở cả sáng và tối, chữ và viền không chìm vào nền."
+    expected: "Thẻ OKR của một phòng ban: bốn ô số ngay dưới hàng thẻ con, trên hàng công cụ của bảng mục tiêu, cùng nếp hàng số Toàn cảnh OKR trong ảnh đối chiếu — cùng khối viền ngoài, cùng đường chia ô, cùng cỡ và màu nhãn, cùng cỡ giá trị, cùng đệm trong ô; bảng bên dưới đã mở sẵn các KR. Ở 1440 bốn ô một hàng; ở 375 hai cột hai hàng, không nhãn nào bị cắt mất chữ, trang không tràn ngang. Nút Mở tất cả / Gập tất cả nhìn thấy trên hàng công cụ của bảng, ở 375 không phải mở «Lọc» mới thấy. Ở cả sáng và tối, chữ và viền không chìm vào nền."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
   - id: E13

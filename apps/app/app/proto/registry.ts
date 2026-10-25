@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
+import { BoOkrCoSoMau } from "./_modules/bo-okr-co-so";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
 import { ChoTacNhanLauMau } from "./_modules/cho-tac-nhan-lau";
@@ -63,6 +64,7 @@ import { PROTO_CATALOG } from "./catalog";
 export type ProtoComponent = (props: { state: string }) => ReactNode;
 
 const BANG_GHEP = {
+	"bo-okr-co-so": BoOkrCoSoMau,
 	"giai-doan-thoa-thuan": GiaiDoanThoaThuanProto,
 	"cua-toi-ba-phan": CuaToiBaPhanMau,
 	"dieu-huong-khu-muc-tieu": DieuHuongKhuMucTieuMau,
