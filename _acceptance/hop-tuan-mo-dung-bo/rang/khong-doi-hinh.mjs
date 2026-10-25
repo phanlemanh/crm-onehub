@@ -25,6 +25,8 @@ const TRANG_THAI_DA_KY = new Set(["signed-off", "machine-cleared"]);
 const NGUONG_TEP_CHUNG = 5;
 const HO_SO_NAY = "hop-tuan-mo-dung-bo";
 const THUOC_THEO_VONG = {
+	"khung-khong-con-dung-chu#E5":
+		"luat pham vi vong: git diff --quiet merge-base tren messages-guard.spec.ts cua vong khung-khong-con-dung-chu — nhanh nao dang ky chu moi cung do (chu kho V1-33 a)",
 	"ve-sinh-do-san-onehub#E17":
 		"soat diff merge-base..HEAD cua nhanh dang chay theo nhan vong ve-sinh-do-san-onehub (V1-25)",
 	"tro-ly-okr-tom-tat#E17":
