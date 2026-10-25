@@ -103,6 +103,7 @@ const CHO_CHUOI = "\u00abS\u00bb";
 const TRAN_LENH_MS = 30 * 60_000;
 const MA_DO = 1;
 const MA_KHONG_DO = 2;
+const DONG_DUOI_LAN_DO = 40;
 
 const git = (args, cwd = GOC) =>
 	execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
@@ -259,20 +260,63 @@ function chayMotLan(muc, cwd) {
 		maxBuffer: 64 * 1024 * 1024,
 		env: muc.evalRieng ? { ...process.env, EVAL: muc.evalRieng } : process.env,
 	});
-	return r.status ?? MA_KHONG_DO;
+	return {
+		ma: r.status ?? MA_KHONG_DO,
+		ra: `${r.stdout ?? ""}${r.stderr ?? ""}`,
+	};
 }
 
-function chay(muc, cwd, daChay) {
+function inDuoiLanDo(muc, ra) {
+	const dong = ra.split("\n").filter((d) => d.trim() !== "");
+	console.log(`DUOI LAN DO ${muc.khoa}:`);
+	for (const d of dong.slice(-DONG_DUOI_LAN_DO)) console.log(`  | ${d}`);
+}
+
+function chay(muc, cwd, daChay, { thuLaiDo = false } = {}) {
 	if (daChay.has(muc.khoa)) return daChay.get(muc.khoa);
-	let ma = chayMotLan(muc, cwd);
-	if (ma === MA_KHONG_DO) {
+	let lan = chayMotLan(muc, cwd);
+	if (lan.ma === MA_KHONG_DO) {
 		console.log(
 			`THU LAI ${muc.khoa}: lan dau ma ${MA_KHONG_DO} (khong do duoc)`,
 		);
-		ma = chayMotLan(muc, cwd);
+		lan = chayMotLan(muc, cwd);
 	}
-	daChay.set(muc.khoa, ma);
-	return ma;
+	if (thuLaiDo && lan.ma !== 0) {
+		console.log(`THU LAI CAY ${muc.khoa}: lan dau ma ${lan.ma}`);
+		lan = chayMotLan(muc, cwd);
+		if (lan.ma !== 0) inDuoiLanDo(muc, lan.ra);
+	}
+	daChay.set(muc.khoa, lan.ma);
+	return lan.ma;
+}
+
+function tuKiemThuLai() {
+	const tam = mkdtempSync(join(tmpdir(), "tbo-thu-lai-"));
+	try {
+		const dau = join(tam, "da-chay");
+		const chapChon = {
+			khoa: "chap-chon",
+			lenh: `if [ -f "${dau}" ]; then exit 0; fi; touch "${dau}"; echo CHAP-CHON-LAN-DAU; exit 1`,
+		};
+		const hongThat = {
+			khoa: "hong-that",
+			lenh: "echo HONG-THAT-DONG-LOI; exit 1",
+		};
+		const maChapChon = chay(chapChon, tam, new Map(), { thuLaiDo: true });
+		const maHong = chay(hongThat, tam, new Map(), { thuLaiDo: true });
+		const ra = [
+			maChapChon === 0
+				? "DUNG chap-chon: do mot lan roi xanh, khong ket SAI"
+				: `SAI chap-chon: ma ${maChapChon}`,
+			maHong === MA_DO
+				? "DUNG hong-that: do ca hai lan, van ket SAI"
+				: `SAI hong-that: ma ${maHong}`,
+		];
+		for (const d of ra) console.log(d);
+		return ra.every((d) => d.startsWith("DUNG")) ? 0 : MA_DO;
+	} finally {
+		rmSync(tam, { recursive: true, force: true });
+	}
 }
 
 function dungCay(dich) {
@@ -537,6 +581,7 @@ function chayTrenNen(hong) {
 }
 
 try {
+	if (process.argv.includes("--tu-kiem-thu-lai")) process.exit(tuKiemThuLai());
 	const viTri = process.argv.indexOf("--chieu-do");
 	if (viTri >= 0)
 		process.exit(chieuDo(process.argv[viTri + 1] === "tron" ? "tron" : "dong"));
@@ -562,7 +607,7 @@ try {
 	const banSao = phan.n > 1 ? dungCay("HEAD") : null;
 	try {
 		for (const m of ds) {
-			const ma = chay(m, banSao?.cay ?? GOC, daChayCay);
+			const ma = chay(m, banSao?.cay ?? GOC, daChayCay, { thuLaiDo: true });
 			if (ma === 0) console.log(`HO SO ${m.ten}: cay 0`);
 			else hong.push({ ...m, ma });
 		}
