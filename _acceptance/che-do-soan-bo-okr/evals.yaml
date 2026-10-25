@@ -323,10 +323,12 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
       - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
     expected: |
-      design-gate.mjs --mode static trên mọi tệp .tsx của okr/soan-bo/ và objective-sheet.tsx: 0 lỗi P0 (màu lạ, góc lạ,
-      className đè component @crm/ui), mã 0.
-      CHIEU DO: bản sao một tệp thêm một mã màu hex vào className → design-gate báo P0 và mã khác 0 (thông điệp ghim tên
-      luật màu của design-gate).
+      design-gate.mjs chấm HTML đã dựng của chế độ Soạn (bàn đo màn lưu HTML các trạng thái có góp ý, bộ trống, hỏi công
+      bố, chỉ xem, ở 1280 và 375) với --html … --require-html: 0 lỗi P0 (màu lạ, góc lạ, className đè component @crm/ui),
+      mã 0. design-gate trả do_duoc=false (không đo được) → san-thiet-ke.mjs in «KHONG DO DUOC: <tep>» và mã 2, không
+      bao giờ tính là đạt.
+      CHIEU DO: bản sao một tệp okr/soan-bo/ thêm một mã màu hex vào className, dựng lại HTML → design-gate báo P0 và mã
+      khác 0 (thông điệp ghim tên luật màu của design-gate).
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E19
