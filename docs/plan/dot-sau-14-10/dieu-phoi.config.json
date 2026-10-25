@@ -27,5 +27,6 @@
     ".env.example",
     "packages/ui/src/lib/messages.ts",
     "apps/app/lib/messages/*.ts"
-  ]
+  ],
+  "gop_khong_chay_lai_ci": true
 }

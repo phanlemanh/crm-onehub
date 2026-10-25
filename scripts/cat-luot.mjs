@@ -16,6 +16,10 @@
 // hành của người, không thành hàng; bốn cờ: hàng đứng chờ mốc vận hành · `du_lieu` sai giá trị · hàng đo trên
 // dữ liệu giả không đứng trên hàng sinh · mốc vận hành lặp lại chưa trỏ tự phục vụ.
 //
+// Hồ sơ _acceptance/o-mo-viec-mang-nguon/ (hàng TT3, design docs/superpowers/specs/2026-10-24-o-mo-viec-mang-nguon-design.md)
+// thêm: kho khai `tri_thuc` → khoá `nguon` của bản phạm vi phải là đường trỏ băm tới trang tri thức (`kiemNguonPhamVi` của
+// scripts/tri-thuc.mjs, nạp lười); kho không khai → răng không đổi một byte.
+//
 //   node scripts/cat-luot.mjs --root . --pham-vi <tệp> --lo-trinh <tệp>   0 xanh · 1 đỏ · 2 không chạy được
 //   node scripts/cat-luot.mjs --root . --nhip                              JSON nhịp theo hạng
 //   node scripts/cat-luot.mjs --root . --co [--tu YYYY-MM-DD] [--lo-trinh <tệp>]   JSON đồng hồ cỡ
@@ -362,9 +366,13 @@ if (isMain) {
   const homNay = process.env.ACCEPTANCE_TODAY || new Date().toISOString().slice(0, 10);
   if (!NGAY_RE.test(homNay)) thoat(2, `ACCEPTANCE_TODAY phải dạng YYYY-MM-DD (đang là «${homNay}»)`);
   const co = kiemCo(pv, data, khoang, homNay);
-  const loi = [...pv.loi, ...kq.loi, ...co.loi];
+  const pCfg = path.join(root, '_acceptance', 'config.yaml');
+  const { docTriThuc } = require(path.join(__dirname, 'tri-thuc-khoa.cjs'));
+  const ng = docTriThuc(existsSync(pCfg) ? readFileSync(pCfg, 'utf8') : '')
+    ? (await import(new URL('./tri-thuc.mjs', import.meta.url).href)).kiemNguonPhamVi({ root, nguon: pv.nguon }) : null;
+  const loi = [...pv.loi, ...kq.loi, ...co.loi, ...(ng ? ng.loi : [])];
   const ra = [`bảng phủ đợt ${pv.dot} (${pv.dang}): ${pv.ma.length} mã`, ...kq.bang.map(b => `  ${b.ma} → ${b.cho || '—'}`),
-    ...[...kq.canhBao, ...co.canhBao].map(c => `cảnh báo: ${c}`), ...loi.map(l => `lỗi: ${l}`)];
+    ...[...kq.canhBao, ...co.canhBao, ...(ng ? ng.canhBao : [])].map(c => `cảnh báo: ${c}`), ...loi.map(l => `lỗi: ${l}`)];
   process.stdout.write(ra.join('\n') + '\n');
   process.exit(loi.length ? 1 : 0);
 }

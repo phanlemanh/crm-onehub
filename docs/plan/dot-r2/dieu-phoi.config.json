@@ -61,5 +61,6 @@
     "ban_giao_pct": 90,
     "cho_ban_giao_phut": 20,
     "cho_dat_lai_phut": 45
-  }
+  },
+  "gop_khong_chay_lai_ci": true
 }
