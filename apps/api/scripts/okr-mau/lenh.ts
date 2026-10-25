@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
+import { napCaHopTuan, xoaCaHopTuan } from "./ca-hop-tuan";
 import { LoiBoMau, OKR_MAU } from "./cau-hinh";
 import { docBoOkrMau } from "./khuon";
 import { type DemBoMau, napBoOkrMau, xoaBoOkrMau } from "./nap";
@@ -9,7 +10,12 @@ export const TEP_CONG_TY = join(import.meta.dir, "cong-ty.json");
 
 const NGAY = /^\d{4}-\d{2}-\d{2}$/;
 
-export type ThamSo = { xoa: boolean; moc: Date; tep: string };
+export type ThamSo = {
+	xoa: boolean;
+	moc: Date;
+	tep: string;
+	ca: string | null;
+};
 
 function giaTriCo(args: string[], co: string): string | undefined {
 	const i = args.indexOf(co);
@@ -48,10 +54,17 @@ export function docThamSo(args: string[], bayGio = new Date()): ThamSo {
 			);
 		moc = new Date(d);
 	}
+	const ca = giaTriCo(args, OKR_MAU.co.ca);
+	if (args.includes(OKR_MAU.co.ca) && ca !== OKR_MAU.caHopTuan.ten)
+		throw new LoiBoMau(
+			OKR_MAU.ma.sai,
+			`${OKR_MAU.co.ca} nhận «${OKR_MAU.caHopTuan.ten}», nhận «${ca ?? ""}».`,
+		);
 	return {
 		xoa: args.includes(OKR_MAU.co.xoa),
 		moc,
 		tep: giaTriCo(args, OKR_MAU.co.tep) ?? TEP_CONG_TY,
+		ca: ca ?? null,
 	};
 }
 
@@ -81,6 +94,8 @@ const tomTat = (d: DemBoMau) =>
 export async function chayLenh(args: string[]): Promise<number> {
 	try {
 		const ts = docThamSo(args);
+		const caCu = await xoaCaHopTuan(db);
+		if (caCu > 0) console.log(`Đã gỡ ca Họp tuần cũ: ${caCu} hàng.`);
 		if (ts.xoa) {
 			const dem = await xoaBoOkrMau(db);
 			console.log(
@@ -95,6 +110,8 @@ export async function chayLenh(args: string[]): Promise<number> {
 		console.log(
 			`Đã nạp bộ OKR mẫu «${bo.congTy}» (tuần 6 chứa ${ts.moc.toISOString()}): ${tomTat(dem)}.`,
 		);
+		if (ts.ca === OKR_MAU.caHopTuan.ten)
+			console.log(JSON.stringify(await napCaHopTuan(db, bo)));
 		return 0;
 	} catch (loi) {
 		if (loi instanceof LoiBoMau) {
