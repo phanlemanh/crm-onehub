@@ -29,8 +29,8 @@ const KHU = "apps/app/app/(app)/[slug]/okr/theo-don-vi";
 
 const VET = {
 	"bo-nhanh": {
-		tep: `${KHU}/page.tsx`,
-		cu: "\t\tif (dich !== null) dieuHuong.redirect(dich);\n",
+		tep: "apps/app/proxy.ts",
+		cu: "\tif (hopTuan) return hopTuan;\n",
 		moi: "",
 		ghim: /SAI AC-1: \S+ khong chuyen \(200\)/,
 	},

@@ -9,6 +9,8 @@ evals:
     cmd: config:executors.script.htmb_man_duong
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx"
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/hop-tuan-proxy.ts"
       - "packages/validation/src/okr-bo-hop-tuan.ts"
       - "apps/app/next.config.ts"
       - "apps/api/scripts/okr-mau/ca-hop-tuan.ts"
@@ -31,7 +33,7 @@ evals:
       donOkr=pb:P, xemOkr=hop-tuan và kyOkr của chu kỳ đang xem, dòng vị trí là «Bộ OKR › P», MutationObserver không bắt
       dòng vị trí mang tên OneHub. In «DUNG <dong>» từng dòng; đếm dòng đã chạy = 7. KET LUAN: mã 0 mọi dòng
       DUNG, 1 có SAI, 2 không đo được.
-      CHIEU DO (--chieu-do, bản sao): page.tsx bỏ nhánh chuyển hướng → «SAI AC-1: <dong> khong chuyen (200)», mã 1;
+      CHIEU DO (--chieu-do, bản sao): proxy.ts bỏ đường chuyển Họp tuần (lưới ở page.tsx còn, chuyển phía khách sau 200) → «SAI AC-1: <dong> khong chuyen (200)», mã 1;
       --chieu-do giu-ky: nhánh chuyển bỏ kyOkr → «SAI AC-1: ky-okr mat kyOkr», mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
