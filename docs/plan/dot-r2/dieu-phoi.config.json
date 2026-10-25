@@ -9,9 +9,7 @@
   },
   "nhip_cu_phut": 10,
   "suc_khoe": {
-    "swap_gb": 8,
-    "ap_luc_muc": 2,
-    "rss_gb": 8
+    "ap_luc_muc": 2
   },
   "s4_tran_gom_phut": 60,
   "bao_ve": [
@@ -61,5 +59,6 @@
     "ban_giao_pct": 90,
     "cho_ban_giao_phut": 20,
     "cho_dat_lai_phut": 45
-  }
+  },
+  "gop_khong_chay_lai_ci": true
 }
