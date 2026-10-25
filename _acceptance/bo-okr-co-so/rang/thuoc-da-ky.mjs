@@ -41,9 +41,8 @@ const TEP_TAY = {
 		"trang-don-vi-mot-bang",
 };
 const PHEP = "Hỏi-1";
-const LA_CU_PHAP = /^[\s{}()[\];,]*$|^\/\//;
 const LOP_CHO_PHEP =
-	/data-mo-dong|aria-expanded|expand|gap|Gập tất cả|Mở tất cả|data-nut-mo-gap-tat-ca|data-hang-so-bo|stat-group|data-the-con-bo|data-kr|moSan|Enter|Space|ArrowRight|ArrowLeft|keyboard|press|\bmo\b|\bthu\b|so-muc|khoang|soBo/;
+	/data-mo-dong|aria-expanded|expand|gap|Gập tất cả|Mở tất cả|data-nut-mo-gap-tat-ca|data-hang-so-bo|hang-so|SO_NUT|khung-xuong|stat-group|data-the-con-bo|data-kr|moSan|Enter|Space|ArrowRight|ArrowLeft|keyboard|press|\bmo\b|\bthu\b|so-muc|khoang|soBo/;
 const EXECUTOR_MAY = new Set(["test", "script"]);
 const CHO_CHUOI = "\u00abS\u00bb";
 const TRAN_LENH_MS = 30 * 60_000;
@@ -359,13 +358,8 @@ function soatDoiThuoc(cwd) {
 			continue;
 		}
 		const lech = tatCa.filter((k) => !chiDoiChuoi(k));
-		const ngoaiLop = lech.filter((k) =>
-			[...k.bo, ...k.them].some(
-				(d) =>
-					d.trim() !== "" &&
-					!LA_CU_PHAP.test(d.trim()) &&
-					!LOP_CHO_PHEP.test(d),
-			),
+		const ngoaiLop = lech.filter(
+			(k) => ![...k.bo, ...k.them].some((d) => LOP_CHO_PHEP.test(d)),
 		);
 		for (const k of ngoaiLop)
 			sai.push(
