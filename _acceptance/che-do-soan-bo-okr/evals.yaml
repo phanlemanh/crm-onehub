@@ -294,7 +294,7 @@ evals:
       ngan-1280-toi; khẳng định đủ mười tệp có mặt và khác rỗng («ANH 10/10»). Khẳng định «KHO 1280: hai o · KHO 375: hai the
       · khong tran». In «SAI AC-10:
       …», mã 1.
-      CHIEU DO (EVAL=chieu-do-tran, bản sao): dòng KR không xuống hàng ở 375 (bỏ flex-wrap của dòng số) → «SAI AC-10: KHO
+      CHIEU DO (EVAL=chieu-do-tran, bản sao): dòng số của dòng KR mới không xuống hàng và giữ bề rộng ô ở 375 (bỏ flex-wrap, thêm *:shrink-0 ở DongKrMoi) → «SAI AC-10: KHO
       375: tran» (ghim /SAI AC-10: KHO 375/), mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
