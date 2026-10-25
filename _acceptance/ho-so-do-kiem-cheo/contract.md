@@ -5,10 +5,10 @@ slug: ho-so-do-kiem-cheo
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [tooling]
-status: signed-off
+status: draft
 design_doc: docs/superpowers/specs/2026-10-22-ho-so-do-kiem-cheo-design.md
-approved_by: Manh Phan
-approved_at: 2026-10-24T10:23:07Z
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: ho-so-do-kiem-cheo
@@ -35,7 +35,7 @@ của từng hồ sơ: 345 eval, 73 đỏ trên 22 hồ sơ. Nguyên nhân từn
 - AC-4: Given mọi hồ sơ có ít nhất một dòng khác `tu-het` và `san-pham-hong`, When ghim lại bằng lượt `repin-lane.mjs --write` sau mốc nền, Then mỗi hồ sơ ấy có dòng `kind: repin` mới hơn mốc nền với mọi `suites_exit` bằng 0 và mọi mã trong `evals_exit` đạt kỳ vọng, `verified_commit` bằng `sha` của dòng ấy, commit cuối chạm hồ sơ (trừ `run-log.jsonl`, `evidence-report.md`) là tổ tiên của sha ấy, và `recheck-evidence.cjs` không in VIOLATION.
 - AC-5: Given mọi hồ sơ có dòng `sua-cu-phap`, When đọc `evals.yaml` ở HEAD bằng `yaml` chuẩn và bằng `parseEvals` + `expectedExits` của kit, Then không lỗi cú pháp nào, và bản ghi của kit (id, executor, cmd, status, criterion, expected, paths, mã kỳ vọng) ở HEAD bằng đúng bản ghi ở mốc nền — sửa cú pháp không đổi nghĩa; cấy lại lỗi cú pháp cũ vào bản sao thì bộ đọc chuẩn đỏ gọi tên tệp và dòng.
 - AC-6: (judgment) Given `danh-sach.json` và `bang-truoc-sau.md` (máy sinh từ danh sách, diff và `do-lai-nen.json` — mỗi dòng xử lý kể cả `san-pham-hong`: đuôi đầu ra đỏ ở mốc nền, nguyên văn câu căn cứ đọc ở `tệp:dòng` hay thông điệp commit của sha, eval trước/sau, đầu ra đột biến; lớp khai sinh lại bảng và so từng byte), When hội đồng đọc từng dòng `khai-not-run`, `sua-rang`, `neo-co-dinh` và `san-pham-hong`, Then mỗi lý do thuộc một trong bốn loại — vật đổi có chủ đích theo một hồ sơ đã ký sau (căn cứ trích được), «vòng này» tính theo nhánh trôi, lỗi của chính răng, ô cần thứ máy đo không bao giờ có — và không dòng nào hạ một ô đang đỏ vì sản phẩm hỏng thật; mỗi dòng `san-pham-hong` nói đúng chỗ hỏng của sản phẩm.
-- AC-7: Given các dòng `san-pham-hong`, When đọc mục `hoan_lai` và cửa tín hiệu của kho, Then mỗi hồ sơ có dòng ấy nằm ở `hoan_lai` với danh sách eval đỏ, mã yêu cầu tín hiệu đã gửi qua lõi đợt kèm tiêu đề gọi tên hồ sơ và eval và nội dung nêu tệp sản phẩm hỏng, và phần sửa răng đã tra cho các ô khác của hồ sơ đó — để hàng sửa sản phẩm mang theo, không tra lại.
+- AC-7: Given các dòng `san-pham-hong`, When đọc mục `hoan_lai` và cửa tín hiệu của kho, Then mỗi hồ sơ có dòng ấy nằm ở `hoan_lai` với danh sách eval đỏ, mã yêu cầu tín hiệu đã gửi qua lõi đợt kèm tiêu đề gọi tên hồ sơ và eval và nội dung nêu tệp sản phẩm hỏng, và phần sửa răng đã tra cho các ô khác của hồ sơ đó — để hàng sửa sản phẩm mang theo, không tra lại. Hồ sơ chủ kho giao cho làn riêng nằm ở `hoan_lai` với dấu `giao_lan_rieng` trỏ một dòng quyết định có người quyết trong sổ và một lý do, không mang lỗi sản phẩm, và mọi eval đỏ của nó ở mốc nền có phần sửa răng ghi sẵn.
 
 ## Coverage
 
@@ -57,6 +57,7 @@ Quét bằng skill `morphological-scan` (preset test-matrix), 22/10.
 
 - Sửa mã sản phẩm (`apps/**`, `packages/**`) để một eval xanh lại — trừ khi chủ kho chọn lối khác ở Hỏi-1.
 - Ba hồ sơ dính lỗi sản phẩm (`bo-dung-chung-nhan-chuoi`, `cai-dat-con-lai-noi-tieng-viet`, `tong-quan-va-khung-noi-tieng-viet`) — vào `hoan_lai`, không chạm tệp (AC-7).
+- Hồ sơ `to-chuc-danh-sach-chi-tiet` — chủ kho thu F28 khỏi hồ sơ này ngày 25/10 và giao cho một làn riêng: ô E20 đo «vòng này» theo nhánh trôi nên chặn cổng trước gộp sau khi onehub đi tiếp; tệp của hồ sơ trả về đúng bản onehub, phần sửa ô E21 ghi sẵn ở `sua-san/to-chuc-danh-sach-chi-tiet.patch`.
 - Eval `ui-check`/`judgment` của các hồ sơ — làn máy không chạy chúng (giới hạn kit).
 - Hồ sơ đã ký ngoài tập đầu vào, kể cả 42 hồ sơ `vo-khu-muc-tieu` ghi là đo đường cũ.
 - Sửa kit (một mục paths chết tắt bộ lọc cả hồ sơ, `ai-elements@latest` trong răng của `nen-chat-ai-elements`) — việc của `~/dev/acceptance-gate-kit`.
