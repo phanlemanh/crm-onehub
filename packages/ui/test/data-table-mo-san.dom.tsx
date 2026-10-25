@@ -113,6 +113,15 @@ async function bam(nut: HTMLButtonElement | null) {
 	});
 }
 
+const VONG_CHO_URL = 100;
+
+async function choUrl(dat: () => boolean) {
+	for (let i = 0; i < VONG_CHO_URL && !dat(); i += 1)
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 5));
+		});
+}
+
 function lechMoSan(o: HTMLElement): string[] {
 	const loi: string[] = [];
 	for (const id of ["A", "B"])
@@ -129,6 +138,7 @@ describe("bco-mo-san", () => {
 		const o = await ve(true);
 		expect(lechMoSan(o)).toEqual([]);
 		await bam(nutDong(o, "A"));
+		await choUrl(() => url.has("gap"));
 		const loi: string[] = [];
 		if (nutDong(o, "A")?.getAttribute("aria-expanded") !== "false")
 			loi.push("bco-mo-san: A lech");
@@ -185,6 +195,7 @@ describe("bco-mo-san-nut", () => {
 		let o = await ve(true);
 		thuc.push(docBuoc(o));
 		await bam(nutDong(o, "A"));
+		await choUrl(() => danhSach("gap")?.join() === "A");
 		thuc.push(docBuoc(o));
 		const nut = nutTatCa(o);
 		expect(nut?.type).toBe("button");
@@ -194,8 +205,10 @@ describe("bco-mo-san-nut", () => {
 		nut?.focus();
 		expect(document.activeElement).toBe(nut);
 		await bam(nut);
+		await choUrl(() => !url.has("gap"));
 		thuc.push(docBuoc(o));
 		await bam(nutTatCa(o));
+		await choUrl(() => danhSach("gap")?.length === 2);
 		thuc.push(docBuoc(o));
 		const ban = url.toString();
 		act(() => root?.unmount());
@@ -251,6 +264,7 @@ describe("bco-mac-dinh", () => {
 			loi.push("bco-mac-dinh: gap-mac-dinh lech");
 		if (nutTatCa(o) !== null) loi.push("bco-mac-dinh: nut lech");
 		await bam(nutDong(o, "A"));
+		await choUrl(() => url.has("expand"));
 		if (danhSach("expand")?.join() !== "A")
 			loi.push("bco-mac-dinh: expand lech");
 		if (url.has("gap")) loi.push("bco-mac-dinh: gap lech");
