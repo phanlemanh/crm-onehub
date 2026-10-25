@@ -9,9 +9,7 @@
   },
   "nhip_cu_phut": 10,
   "suc_khoe": {
-    "swap_gb": 8,
-    "ap_luc_muc": 2,
-    "rss_gb": 8
+    "ap_luc_muc": 2
   },
   "s4_tran_gom_phut": 60,
   "bao_ve": [
