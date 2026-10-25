@@ -36,6 +36,18 @@ export const NGUON_DAU_VAO = {
 };
 export const MA_TIN_HIEU = /^F1-[0-9]+$/;
 export const NHAN_COMMIT = `(${SLUG})`;
+export const SO_QUYET_DINH = join(HO_SO_DIR, "decisions.jsonl");
+export const MA_QUYET_DINH = /^d-[0-9]{8}T[0-9]{6}Z-[0-9]+$/;
+
+export function quyetDinhCuaNguoi(tep = SO_QUYET_DINH) {
+	const ma = new Set();
+	for (const dong of readFileSync(tep, "utf8").split("\n")) {
+		if (!dong.trim()) continue;
+		const d = JSON.parse(dong);
+		if (d.decided_by && d.id) ma.add(d.id);
+	}
+	return ma;
+}
 
 const require = createRequire(import.meta.url);
 

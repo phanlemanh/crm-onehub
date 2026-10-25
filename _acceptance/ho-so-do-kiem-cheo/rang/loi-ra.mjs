@@ -1,9 +1,9 @@
 import { fileURLToPath } from "node:url";
-import { DANH_SACH, DO_LAI_NEN, docDanhSach, docJson, MA_TIN_HIEU, tapDo } from "./chung.mjs";
+import { DANH_SACH, DO_LAI_NEN, docDanhSach, docJson, MA_QUYET_DINH, MA_TIN_HIEU, quyetDinhCuaNguoi, tapDo } from "./chung.mjs";
 
 const TEP_SAN_PHAM = /(^|[\s(«])(apps|packages)\//;
 
-export function kiemLoiRa(ds, doLai) {
+export function kiemLoiRa(ds, doLai, quyetDinh = quyetDinhCuaNguoi()) {
 	const loi = [];
 	const theoHoSo = new Map(ds.hoan_lai.map((h) => [h.ho_so, h]));
 	const doTheoHoSo = new Map();
@@ -12,6 +12,15 @@ export function kiemLoiRa(ds, doLai) {
 	const dongRa = [];
 	const maDaGap = new Set();
 	for (const h of ds.hoan_lai) {
+		if (h.giao_lan_rieng) {
+			const g = h.giao_lan_rieng;
+			if (!MA_QUYET_DINH.test(String(g.quyet_dinh ?? "")) || !String(g.ly_do ?? "").trim() || !quyetDinh.has(g.quyet_dinh) || (h.san_pham_hong ?? []).length)
+				loi.push(`GIAO_LAN_RIENG_THIEU ${h.ho_so}`);
+			const daSuaG = new Set((h.sua_san ?? []).filter((s) => s.xu_ly && s.sua).map((s) => s.eval));
+			for (const ev of doTheoHoSo.get(h.ho_so) ?? []) if (!daSuaG.has(ev)) loi.push(`CHUA_TRA ${h.ho_so}:${ev}`);
+			dongRa.push(`${h.ho_so}: ${(doTheoHoSo.get(h.ho_so) ?? []).length} eval đỏ · giao làn riêng theo ${g.quyet_dinh} · ${daSuaG.size} ô có sửa răng ghi sẵn`);
+			continue;
+		}
 		const th = Array.isArray(h.tin_hieu) ? h.tin_hieu : [];
 		const hongTH =
 			!th.length ||
@@ -40,6 +49,16 @@ function tuKiem(ds, doLai) {
 	if (h) {
 		const ev = h.sua_san.shift().eval;
 		if (!kiemLoiRa(b, doLai).loi.includes(`CHUA_TRA ${h.ho_so}:${ev}`)) sai.push("bo sua_san khong ra CHUA_TRA");
+	}
+	const c = structuredClone(ds);
+	const g = c.hoan_lai.find((x) => x.giao_lan_rieng);
+	if (g) {
+		if (kiemLoiRa(c, doLai).loi.some((l) => l.startsWith(`GIAO_LAN_RIENG_THIEU ${g.ho_so}`))) sai.push("giao lan rieng nguyen ven ma ra GIAO_LAN_RIENG_THIEU");
+		g.giao_lan_rieng.quyet_dinh = "d-20000101T000000Z-1";
+		if (!kiemLoiRa(c, doLai).loi.includes(`GIAO_LAN_RIENG_THIEU ${g.ho_so}`)) sai.push("quyet dinh bia khong ra GIAO_LAN_RIENG_THIEU");
+		const e = structuredClone(ds);
+		e.hoan_lai.find((x) => x.giao_lan_rieng).giao_lan_rieng.ly_do = "";
+		if (!kiemLoiRa(e, doLai).loi.includes(`GIAO_LAN_RIENG_THIEU ${g.ho_so}`)) sai.push("bo ly_do khong ra GIAO_LAN_RIENG_THIEU");
 	}
 	return sai;
 }

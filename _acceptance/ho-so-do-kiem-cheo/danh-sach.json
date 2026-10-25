@@ -1,6 +1,6 @@
 {
 	"moc_nen": "6be0bb688900ecd8843989bd8f8b3095548b604f",
-	"ghi_chu": "Danh sách đóng của F28. Mỗi dòng một (hồ sơ, eval) đỏ ở mốc nền hoặc một evals.yaml không chuẩn; hoan_lai là ba hồ sơ dính lỗi sản phẩm thật (Hỏi-1, duyệt 23/10).",
+	"ghi_chu": "Danh sách đóng của F28. Mỗi dòng một (hồ sơ, eval) đỏ ở mốc nền hoặc một evals.yaml không chuẩn; hoan_lai là các hồ sơ dính lỗi sản phẩm thật (Hỏi-1, duyệt 23/10) và một hồ sơ chủ kho giao làn riêng (to-chuc-danh-sach-chi-tiet, 25/10).",
 	"dong": [
 		{
 			"ho_so": "ban-gieo-gop-y-sau-nop",
@@ -712,26 +712,6 @@
 			"dot_bien_neo": {
 				"ten": "TOI-sai",
 				"ban_va": "dot-bien/danh-sach-keo-chung-E13-neo.patch"
-			}
-		},
-		{
-			"ho_so": "to-chuc-danh-sach-chi-tiet",
-			"eval": "E21",
-			"xu_ly": "neo-co-dinh",
-			"ly_do": "diff merge-base rỗng; neo PR #128",
-			"can_cu": "472e888085bd07c2ef47f02ecd946e7693785027",
-			"sua": "rang/san-thiet-ke.mjs moc=36f6bdb8e61cbaf23254a7fd92c34a01fe097e53, TOI=a7808bfbefc77a9bbe07468cc5b8e3b8081e7792; bỏ diff cây làm việc/untracked",
-			"tep": [
-				"_acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
-			],
-			"dot_bien": {
-				"ten": "className-tren-Button",
-				"ban_va": "dot-bien/to-chuc-danh-sach-chi-tiet-E21.patch",
-				"thong_diep": "className tren Button"
-			},
-			"dot_bien_neo": {
-				"ten": "TOI-sai",
-				"ban_va": "dot-bien/to-chuc-danh-sach-chi-tiet-E21-neo.patch"
 			}
 		},
 		{
@@ -1460,6 +1440,36 @@
 						"ban_va": "sua-san/so-okr-tu-chay-dot-bien-E25.patch"
 					},
 					"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87"
+				}
+			]
+		},
+		{
+			"ho_so": "to-chuc-danh-sach-chi-tiet",
+			"eval_do": [
+				"E21"
+			],
+			"san_pham_hong": [],
+			"giao_lan_rieng": {
+				"quyet_dinh": "d-20261025T013643Z-87",
+				"ly_do": "Chủ kho thu F28 khỏi hồ sơ này (25/10): ô E20 đo «vòng này» bằng merge-base với origin/onehub nên đỏ trên mọi nhánh sau khi onehub đi tiếp, chặn PR #563 ở cổng trước gộp; hồ sơ giao cho một làn riêng, tệp trả về đúng bản onehub."
+			},
+			"tin_hieu": [],
+			"sua_san": [
+				{
+					"eval": "E21",
+					"xu_ly": "neo-co-dinh",
+					"sua": "rang/san-thiet-ke.mjs moc=36f6bdb8e61cbaf23254a7fd92c34a01fe097e53, TOI=a7808bfbefc77a9bbe07468cc5b8e3b8081e7792; bỏ diff cây làm việc/untracked — bản vá ghi sẵn sua-san/to-chuc-danh-sach-chi-tiet.patch",
+					"ly_do": "diff merge-base rỗng; neo PR #128",
+					"can_cu": "472e888085bd07c2ef47f02ecd946e7693785027",
+					"dot_bien": {
+						"ten": "className-tren-Button",
+						"ban_va": "sua-san/to-chuc-danh-sach-chi-tiet-dot-bien-E21.patch",
+						"thong_diep": "className tren Button"
+					},
+					"dot_bien_neo": {
+						"ten": "TOI-sai",
+						"ban_va": "sua-san/to-chuc-danh-sach-chi-tiet-dot-bien-E21-neo.patch"
+					}
 				}
 			]
 		}

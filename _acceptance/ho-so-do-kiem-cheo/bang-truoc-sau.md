@@ -1295,51 +1295,6 @@ DUNG /var/folders/6x/1dlzszm51wzbt20dn5y1lgzh0000gn/T/dsk-san-thiet-ke-rnTU6M/gi
 tu-thu: BO LOT tep gia; doi chung sach
 ```
 
-### to-chuc-danh-sach-chi-tiet:E21
-
-- Xử lý: `neo-co-dinh`
-- Lý do: diff merge-base rỗng; neo PR #128
-- Căn cứ: `472e888085bd07c2ef47f02ecd946e7693785027` — 472e88808 Merge pull request #128 from phanlemanh/feat/to-chuc-danh-sach-chi-tiet / feat(to-chuc): Cài đặt › Tổ chức theo bố cục danh sách – chi tiết
-- Sửa: rang/san-thiet-ke.mjs moc=36f6bdb8e61cbaf23254a7fd92c34a01fe097e53, TOI=a7808bfbefc77a9bbe07468cc5b8e3b8081e7792; bỏ diff cây làm việc/untracked
-
-Đầu ra đỏ ở mốc nền:
-
-```
-so tep giao dien vong nay cham: 0
-KHONG DO DUOC: khong tep giao dien nao trong diff — khong co gi de soi
-```
-
-Trước (`expected`): Danh sach tep giao dien RUT TU git diff voi base_commit (*.tsx duoi apps/app), khong viet tay;
-moi tep chay design-gate --mode static exit 0. Quet cac tep duoi settings/organization: khong
-thuoc tinh className tren BAT KY phan tu JSX nao co ten viet hoa (thanh phan) — the HTML trần
-viet thuong chi duoc className bo cuc (flex, grid, gap, p-, m-, w-, min-w-, truncate).
-git diff duoi packages/ui chi cham tep da khai trong ke hoach (rut dong khai tu plan).
-CHIEU DO: tep tam trong ban guong co <Button className="justify-start"> duoi settings/
-organization -> exit 1 voi "className tren Button".
-
-Sau (`expected`): Danh sach tep giao dien RUT TU git diff cua cap neo co dinh PR #128 (gop 472e888085bd07c2ef47f02ecd946e7693785027):
-36f6bdb8e61cbaf23254a7fd92c34a01fe097e53..a7808bfbefc77a9bbe07468cc5b8e3b8081e7792, khong theo HEAD, khong lay
-cay lam viec hay tep chua track; sha neo khong co (git cat-file -e) -> exit 2 "KHONG DO DUOC"
-(*.tsx duoi apps/app), khong viet tay;
-moi tep chay design-gate --mode static exit 0. Quet cac tep duoi settings/organization: khong
-thuoc tinh className tren BAT KY phan tu JSX nao co ten viet hoa (thanh phan) — the HTML trần
-viet thuong chi duoc className bo cuc (flex, grid, gap, p-, m-, w-, min-w-, truncate).
-git diff duoi packages/ui (cung cap neo) chi cham tep da khai trong ke hoach (rut dong khai tu plan).
-CHIEU DO: them className="justify-start" vao mot <Button> cua settings/organization/chi-tiet-goc.tsx
-(tep thuoc diff cua cap neo) -> exit 1 voi "className tren Button".
-
-Đột biến `className-tren-Button` — thông điệp ghim «className tren Button»
-
-```
-nguyên vẹn 0 · đột biến 1 · neo sai 2
-dat  packages/ui/src/components/archived-list.tsx: da khai trong ke hoach
-dat  packages/ui/src/components/dialog.tsx: da khai trong ke hoach
-dat  packages/ui/src/components/nav-item.tsx: da khai trong ke hoach
-dat  packages/ui/src/components/pick-list-dialog.tsx: da khai trong ke hoach
-dat  packages/ui/src/components/stat-tile.tsx: da khai trong ke hoach
-dat  packages/ui/test/to-chuc-thanh-phan.dom.tsx: da khai trong ke hoach
-```
-
 ### toan-canh-okr:E3
 
 - Xử lý: `sua-rang`

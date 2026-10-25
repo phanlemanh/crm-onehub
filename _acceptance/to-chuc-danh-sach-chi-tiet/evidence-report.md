@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6fdc7ed4587ef09283181bd35699a668ab3faa27
+verified_commit: fd4ed7c19a1d747430525b716a645d0a4fd7f732
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -329,7 +329,3 @@ sha: dfc8ff345842e738f421c08891eb1754198d9064 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-25, do gộp onehub 5d9e8b9c (#135 Zalo) vào nhánh — mã Zalo không chạm phòng ban
 run_id: repin-20260925T042418Z-71551
 sha: fd4ed7c19a1d747430525b716a645d0a4fd7f732 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E17 · AC không có chốt máy: AC-10
-
-### Re-pin lần 4 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
-run_id: repin-20261023T105529Z-32502
-sha: 6fdc7ed4587ef09283181bd35699a668ab3faa27 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
