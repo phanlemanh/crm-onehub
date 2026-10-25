@@ -39,10 +39,16 @@ const TEP_TAY = {
 	"apps/app/test/muc-tieu-va-kr.dom.tsx": "muc-tieu-va-kr",
 	"_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs":
 		"trang-don-vi-mot-bang",
+	"_acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs":
+		"trang-don-vi-mot-bang",
+	"_acceptance/dat-okr-trong-crm/rang/man-okr.mjs": "dat-okr-trong-crm",
+	"_acceptance/okr-to-chuc-va/rang/man-okr.mjs": "okr-to-chuc-va",
+	"_acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs":
+		"khung-cho-don-vi-mot-hinh",
 };
 const PHEP = "Hỏi-1";
 const LOP_CHO_PHEP =
-	/data-mo-dong|aria-expanded|expand|gap|Gập tất cả|Mở tất cả|data-nut-mo-gap-tat-ca|data-hang-so-bo|hang-so|SO_NUT|khung-xuong|stat-group|data-the-con-bo|data-kr|moSan|Enter|Space|ArrowRight|ArrowLeft|keyboard|press|\bmo\b|\bthu\b|so-muc|khoang|soBo/;
+	/data-mo-dong|aria-expanded|expand|gap|Gập tất cả|Mở tất cả|data-nut-mo-gap-tat-ca|data-hang-so-bo|hang-so|SO_NUT|khung-xuong|KHUNG_BANG|stat-group|data-the-con-bo|data-kr|moSan|Enter|Space|ArrowRight|ArrowLeft|keyboard|press|\bmo\b|\bthu\b|so-muc|khoang|soBo/;
 const EXECUTOR_MAY = new Set(["test", "script"]);
 const CHO_CHUOI = "\u00abS\u00bb";
 const TRAN_LENH_MS = 30 * 60_000;
