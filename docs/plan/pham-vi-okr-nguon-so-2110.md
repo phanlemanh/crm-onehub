@@ -7,7 +7,7 @@ Nguồn: hồ sơ `docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md` (mục
 ```
 dot: okr-nguon-so-2110
 dang: chuoi
-nguon: hồ sơ nghiên cứu docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md, PR #520, 21/10
+nguon: docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md
 
 - `S1` — Google Sheets lấy số theo ô cố định, giá trị cuối hàng hoặc cuối cột; chọn trang từ danh sách; xem trước nói ô đã đọc
 - `S2` — mỗi workspace một địa chỉ đọc Google riêng, không đọc vòng qua quyền chia sẻ
