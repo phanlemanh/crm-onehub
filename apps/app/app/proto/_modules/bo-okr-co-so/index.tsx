@@ -71,25 +71,28 @@ const MAC_DINH: Canh = {
 	rows: MUC_TIEU_PHONG_BAN,
 };
 
-const CANH: Record<string, Canh> = {
-	"ST-bco-coso": MAC_DINH,
-	"ST-bco-gap-mot": { ...MAC_DINH, moDau: "gap-mot" },
-	"ST-bco-dagap": { ...MAC_DINH, moDau: "gap-het" },
-	"ST-bco-bo-phan": { ...MAC_DINH, don: "boPhan", so: SO_BO_PHAN },
-	"ST-bco-dangtai": { ...MAC_DINH, hangSo: "dang-tai" },
-	"ST-bco-loi": { ...MAC_DINH, hangSo: "loi" },
-	"ST-bco-chuacongbo": { ...MAC_DINH, so: SO_CHUA_CONG_BO, rows: [] },
-	"ST-bco-chuabatdau": { ...MAC_DINH, homNay: "2026-09-28" },
-	"ST-bco-ngay-cuoi": { ...MAC_DINH, homNay: "2026-12-31" },
-	"ST-bco-daketthuc": { ...MAC_DINH, homNay: "2027-01-04" },
-	"ST-bco-the-hop-tuan": { ...MAC_DINH, the: "hop-tuan", hangSo: "khong" },
-	"ST-bco-ca-nhan": {
-		...MAC_DINH,
-		don: "caNhan",
-		so: SO_CA_NHAN,
-		rows: MUC_TIEU_CA_NHAN,
-	},
-};
+const CANH = new Map<string, Canh>([
+	["ST-bco-coso", MAC_DINH],
+	["ST-bco-gap-mot", { ...MAC_DINH, moDau: "gap-mot" }],
+	["ST-bco-dagap", { ...MAC_DINH, moDau: "gap-het" }],
+	["ST-bco-bo-phan", { ...MAC_DINH, don: "boPhan", so: SO_BO_PHAN }],
+	["ST-bco-dangtai", { ...MAC_DINH, hangSo: "dang-tai" }],
+	["ST-bco-loi", { ...MAC_DINH, hangSo: "loi" }],
+	["ST-bco-chuacongbo", { ...MAC_DINH, so: SO_CHUA_CONG_BO, rows: [] }],
+	["ST-bco-chuabatdau", { ...MAC_DINH, homNay: "2026-09-28" }],
+	["ST-bco-ngay-cuoi", { ...MAC_DINH, homNay: "2026-12-31" }],
+	["ST-bco-daketthuc", { ...MAC_DINH, homNay: "2027-01-04" }],
+	["ST-bco-the-hop-tuan", { ...MAC_DINH, the: "hop-tuan", hangSo: "khong" }],
+	[
+		"ST-bco-ca-nhan",
+		{
+			...MAC_DINH,
+			don: "caNhan",
+			so: SO_CA_NHAN,
+			rows: MUC_TIEU_CA_NHAN,
+		},
+	],
+]);
 
 const NGAY_MS = 86_400_000;
 
@@ -381,7 +384,7 @@ function TheKhac() {
 }
 
 export function BoOkrCoSoMau({ state }: { state: string }) {
-	const canh = CANH[state] ?? MAC_DINH;
+	const canh = CANH.get(state) ?? MAC_DINH;
 	return (
 		<LocaleProvider locale="vi">
 			<div data-trang-thai={state}>

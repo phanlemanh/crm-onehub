@@ -83,19 +83,19 @@ const so = (
 	daCapNhat,
 });
 
-const SO_THEO: Record<string, SoBoOutput> = {
-	goc: so(61, 27, 3, 5, 0),
-	"bp:B1": so(52, 27, 21, 33, 5),
-	"pb:P1": so(46, 27, 9, 14, 3),
-	[`nguoi:${HUNG.id}`]: so(47, 27, 4, 6, 1),
-};
+const SO_THEO = new Map<string, SoBoOutput>([
+	["goc", so(61, 27, 3, 5, 0)],
+	["bp:B1", so(52, 27, 21, 33, 5)],
+	["pb:P1", so(46, 27, 9, 14, 3)],
+	[`nguoi:${HUNG.id}`, so(47, 27, 4, 6, 1)],
+]);
 
-const MONG_THEO: Record<string, string[]> = {
-	goc: ["68", "61%", "3/5", "0"],
-	"bp:B1": ["68", "52%", "21/33", "5"],
-	"pb:P1": ["68", "46%", "9/14", "3"],
-	[`nguoi:${HUNG.id}`]: ["68", "47%", "4/6", "1"],
-};
+const MONG_THEO = new Map<string, string[]>([
+	["goc", ["68", "61%", "3/5", "0"]],
+	["bp:B1", ["68", "52%", "21/33", "5"]],
+	["pb:P1", ["68", "46%", "9/14", "3"]],
+	[`nguoi:${HUNG.id}`, ["68", "47%", "4/6", "1"]],
+]);
 
 const NHAN = [
 	"Ngày còn lại",
@@ -182,11 +182,11 @@ function lechOSo(khoa: string, mong: string[]): string[] {
 describe("bco-o-so", () => {
 	test("bco-o-so: bon bo x bon o bang so okr.soBo cua dung unit, mot hang giua the con va hang cong cu", async () => {
 		setSystemTime(new Date("2026-10-25T03:00:00Z"));
-		datKho((k) => SO_THEO[k] as SoBoOutput);
+		datKho((k) => SO_THEO.get(k) as SoBoOutput);
 		const loi: string[] = [];
 		for (const khoa of KHOA) {
 			await moBo(khoa);
-			loi.push(...lechOSo(khoa, MONG_THEO[khoa] ?? []));
+			loi.push(...lechOSo(khoa, MONG_THEO.get(khoa) ?? []));
 			if (document.body.querySelectorAll("[data-slot=stat-group]").length !== 1)
 				loi.push(`bco-o-so: ${khoa}/so-hang lech`);
 			const theCon = document.body.querySelector("[data-the-con-bo]");
@@ -201,9 +201,9 @@ describe("bco-o-so", () => {
 
 	test("bco-o-so-do: so cua goc cho moi unit thi pb lech; soKr 0 thi chua cong bo", async () => {
 		setSystemTime(new Date("2026-10-25T03:00:00Z"));
-		datKho(() => SO_THEO.goc as SoBoOutput);
+		datKho(() => SO_THEO.get("goc") as SoBoOutput);
 		await moBo("pb:P1");
-		expect(lechOSo("pb:P1", MONG_THEO["pb:P1"] ?? [])).toContain(
+		expect(lechOSo("pb:P1", MONG_THEO.get("pb:P1") ?? [])).toContain(
 			"bco-o-so: pb:P1/tien-do lech",
 		);
 		document.body.innerHTML = "";
@@ -392,13 +392,13 @@ const KY_CHAM = cyclesOutput.parse({
 });
 
 const THE = ["danh-sach", "hop-tuan", "viec", "cay", "cham"] as const;
-const THE_CO_HANG: Record<(typeof THE)[number], boolean> = {
+const THE_CO_HANG = {
 	"danh-sach": true,
 	"hop-tuan": false,
 	viec: false,
 	cay: false,
 	cham: false,
-};
+} satisfies Record<(typeof THE)[number], boolean>;
 
 const soDongMucTieu = () =>
 	document.body.querySelectorAll("[data-hang-muc-tieu]").length;
@@ -419,7 +419,7 @@ function lechThaoTac(
 describe("bco-the", () => {
 	test("bco-the: hang bon o chi o the OKR, khong doi khi loc hay sap, don vi khong thay khong co hang", async () => {
 		setSystemTime(new Date("2026-10-25T03:00:00Z"));
-		datKho((k) => SO_THEO[k] as SoBoOutput);
+		datKho((k) => SO_THEO.get(k) as SoBoOutput);
 		kho.doc.set("okr.cycles", () => KY_CHAM);
 		for (const ten of [
 			"okr.hopTuan",
