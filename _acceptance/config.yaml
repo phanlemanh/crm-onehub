@@ -3563,6 +3563,10 @@ risk_tiers:
     - "scripts/tri-thuc-nguon.cjs"
     - "scripts/tri-thuc.mjs"
     - "skills/acceptance/references/tri-thuc-template.md"
+    # TT5: lệnh tra tri thức (tri-thuc.mjs --tra) nạp tri-thuc-tra.cjs, nó nạp can-cu-s1.cjs, nó nạp luat-san-pham.cjs.
+    - "scripts/tri-thuc-tra.cjs"
+    - "scripts/can-cu-s1.cjs"
+    - "scripts/luat-san-pham.cjs"
     # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
     # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
     # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và

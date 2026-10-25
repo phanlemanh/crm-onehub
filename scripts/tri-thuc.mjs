@@ -200,6 +200,63 @@ export function kiemNguonPhamVi({ root, nguon, khuon = napKhuon() }) {
   return { loi, canhBao };
 }
 
+// Tra theo câu mô tả (hồ sơ vong-don-le-tra-tri-thuc, TT5): mọi trang nền + trang khớp chữ ở tiêu đề, giá trị frontmatter,
+// tiêu đề mục; có `slug` thì cộng đường trỏ dòng «Nguồn:» của ô và loại sổ của chính hồ sơ; cộng dòng sổ hồ sơ trước khớp.
+// → { thoat, loiChay? } | { thoat: 0, tra, trang: [{tro, tieu_de, diem|null}], so, hong, khongDoc, dongTra }
+export function traMoTa({ root, cau, slug = null, khuon = napKhuon() }) {
+  const TTT = require(path.join(__dirname, 'tri-thuc-tra.cjs'));
+  const cfg = docCauHinh(root);
+  if (!cfg) return { thoat: 2, loiChay: ['kho chưa khai tri_thuc trong _acceptance/config.yaml'] };
+  if (cfg.loi.length) return { thoat: 2, loiChay: cfg.loi };
+  if (!String(cau ?? '').trim()) return { thoat: 2, loiChay: ['câu tra rỗng — đưa câu mô tả qua stdin'] };
+  const { so, hong } = TTT.traSo({ root, cau, slug });
+  const { goc, trongKho } = giaiGoc(root, cfg);
+  const khongDoc = !trongKho && !existsSync(goc) ? dongKhongDoc(cfg) + goc : null;
+  const trang = [];
+  if (!khongDoc) {
+    const tn = TTT.thuatNgu(cau); const K = khuon.khoa;
+    const tro = p => `${trongKho ? '' : `${cfg.kho.ten}:`}${path.relative(goc, p).split(path.sep).join('/')}#${bamTep(p)}`;
+    const khoaTro = r => { const m = String(r).match(khuon.conTro); return m ? `${m[1] ? `${m[1]}:` : ''}${m[2]}` : null; };
+    const theoKhoa = new Map(); const nen = []; const khop = [];
+    for (const p of moiTep(path.join(goc, 'wiki')).filter(x => x.endsWith('.md'))) {
+      const txt = readFileSync(p, 'utf8'); const fm = docFrontmatter(txt);
+      if (!fm) continue;
+      const than = txt.replace(/\r\n?/g, '\n').split('\n');
+      const tieuDe = (than.find(l => /^# /.test(l)) || '').replace(/^# /, '').trim();
+      const muc = than.filter(l => /^#{2,3} /.test(l)).map(l => l.replace(/^#+ /, ''));
+      const r = tro(p); const o = { tro: r, tieu_de: tieuDe || path.basename(p, '.md') };
+      theoKhoa.set(khoaTro(r), r);
+      if (fm[K.loai] === 'nen') { nen.push({ ...o, diem: null }); continue; }
+      const d = TTT.diem(tn, tieuDe, Object.values(fm), muc);
+      if (d >= TTT.TRA.diemToiThieu) khop.push({ ...o, diem: d });
+    }
+    khop.sort((a, b) => b.diem - a.diem || a.tro.localeCompare(b.tro));
+    const daCo = new Set();
+    const them = o => { const k = khoaTro(o.tro); if (daCo.has(k)) return; daCo.add(k); trang.push(o); };
+    if (slug) {
+      const { napKhuonNguon, docDongNguon } = require(path.join(__dirname, 'tri-thuc-nguon.cjs'));
+      const p = path.join(root, '_acceptance', slug, 'opportunity.md');
+      const o = docDongNguon(existsSync(p) ? readFileSync(p, 'utf8') : '', napKhuonNguon());
+      for (const r of o.conTro) them({ tro: theoKhoa.get(khoaTro(r)) || r, tieu_de: '(dòng «Nguồn:» của ô)', diem: null });
+    }
+    for (const o of nen) them(o);
+    for (const o of khop.slice(0, TTT.TRA.trangToiDa)) them(o);
+  }
+  const dongTra = { tra: String(cau), trang: trang.map(t => t.tro), so: so.map(s => s.tro), ...(khongDoc ? { khong_doc: khongDoc } : {}) };
+  return { thoat: 0, tra: String(cau), trang, so, hong, khongDoc, dongTra };
+}
+function inTra(kq) {
+  const TTT = require(path.join(__dirname, 'tri-thuc-tra.cjs'));
+  const ra = [`trang (${kq.trang.length}):`];
+  if (kq.khongDoc) ra.push(`  ${kq.khongDoc}`);
+  else if (!kq.trang.length) ra.push(`  ${TTT.CO.khongLienQuan}`);
+  for (const t of kq.trang) ra.push(`- ${t.tro} — ${t.tieu_de}${t.diem == null ? '' : ` (điểm ${t.diem})`}`);
+  ra.push(`sổ hồ sơ trước (${kq.so.length}):`);
+  for (const s of kq.so) ra.push(`- ${s.tro} [${s.stage || '-'}${s.nguoi ? ', lời người' : ''}] ${s.decision}${s.can_cu ? `\n  can_cu: ${JSON.stringify(s.can_cu)}` : ''}`);
+  ra.push(`tri_thuc_tra: ${JSON.stringify(kq.dongTra)}`);
+  return ra;
+}
+
 const isMain = (() => { try { return realpathSync(process.argv[1]) === realpathSync(__filename); } catch { return false; } })();
 if (isMain) {
   const a = process.argv.slice(2);
@@ -209,7 +266,15 @@ if (isMain) {
   try {
     if (a.includes('--kiem')) kq = await kiem({ root, phamVi: lay('--pham-vi') });
     else if (a.includes('--con-tro')) kq = conTro({ root, ref: lay('--con-tro') });
-    else kq = { thoat: 2, loiChay: ['cần --kiem [--pham-vi <tệp>] hoặc --con-tro <ref>'] };
+    else if (a.includes('--tra')) {
+      let cau = ''; try { cau = readFileSync(0, 'utf8'); } catch { cau = ''; }
+      kq = traMoTa({ root, cau: cau.replace(/\n$/, ''), slug: lay('--slug') });
+      if (kq.thoat === 0) {
+        if (kq.hong) process.stderr.write(`tri-thuc: cảnh báo: bỏ ${kq.hong} dòng sổ hỏng (không đọc được JSON) khi tra sổ hồ sơ trước\n`);
+        kq.ra = a.includes('--json') ? [JSON.stringify({ tra: kq.tra, trang: kq.trang, so: kq.so, khong_doc: kq.khongDoc, tri_thuc_tra: kq.dongTra }, null, 2)] : inTra(kq);
+      }
+    }
+    else kq = { thoat: 2, loiChay: ['cần --kiem [--pham-vi <tệp>], --con-tro <ref> hoặc --tra [--slug <hồ sơ>] (câu qua stdin)'] };
   } catch (e) { kq = { thoat: 2, loiChay: [e.message] }; }
   for (const c of kq.canhBao || []) process.stdout.write(`cảnh báo: ${c}\n`);
   for (const d of kq.ra || []) process.stdout.write(d + '\n');
