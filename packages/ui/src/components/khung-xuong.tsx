@@ -303,3 +303,7 @@ export function KhungXuong({
 		</div>
 	);
 }
+
+export function HangSoDangTai({ nhan }: { nhan?: string }) {
+	return <KhungXuong hinh="hang-so" nhan={nhan} />;
+}

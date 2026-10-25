@@ -1,7 +1,7 @@
 "use client";
 
 import { StatGroup } from "@crm/ui/components/dashboard";
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
+import { HangSoDangTai } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatCard } from "@crm/ui/components/stat-card";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
@@ -53,7 +53,7 @@ export function HangSoBo({
 	if (so.isPending || chuKy === null)
 		return (
 			<div data-hang-so-bo="dang-tai">
-				<KhungXuong hinh="hang-so" nhan={m.dangTai} />
+				<HangSoDangTai nhan={m.dangTai} />
 			</div>
 		);
 	if (so.isError)

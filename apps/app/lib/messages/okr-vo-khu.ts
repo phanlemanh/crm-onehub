@@ -66,7 +66,6 @@ const vi = {
 			},
 		},
 		so: {
-			nhan: "Số của bộ OKR",
 			dangTai: "Đang tải số của bộ…",
 			ngayConLai: "Ngày còn lại",
 			den: (ngay: string) => `đến ${ngay}`,
@@ -148,7 +147,6 @@ const en: OkrVoKhuMessages = {
 			},
 		},
 		so: {
-			nhan: "OKR set numbers",
 			dangTai: "Loading this set's numbers…",
 			ngayConLai: "Days left",
 			den: (ngay: string) => `until ${ngay}`,
