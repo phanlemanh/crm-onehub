@@ -218,14 +218,8 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"record-sheet.contact.firstName",
 	"record-sheet.contact.lastName",
 	"record-sheet.deal.noDate",
-	"okr-hop-tuan-bo.hangSo.daCapNhat",
-	"okr-hop-tuan-bo.hangSo.dangBan",
-	"okr-hop-tuan-bo.hangSo.tuTinThap",
-	"okr-hop-tuan-bo.hangSo.ngayCon",
-	"okr-hop-tuan-bo.donViCoKr.tieuDe",
-	"okr-hop-tuan-bo.donViCoKr.dong",
-	"okr-hop-tuan-bo.donViCoKr.xemMoiBo",
-	"okr-hop-tuan-bo.donViCoKr.loi",
+	"okr-toan-canh.hopTuan.tuan",
+	"okr-toan-canh.hopTuan.daCapNhat",
 ];
 
 const GHIM_TRO_LY_OKR = {
