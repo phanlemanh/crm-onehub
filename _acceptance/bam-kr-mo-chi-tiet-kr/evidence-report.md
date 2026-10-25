@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 01f736f78f180827e3debc835107dacd42c4eec4
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-26 — ký Cổng Bằng chứng trên S4 vòng 5 PASS (7/7 tiêu chí; AC-6 chạy lại 244 eval của 53 hồ sơ đã ký, 236 xanh, 8 đỏ sẵn trên onehub, 0 SAI). Ngoài-1 đến Ngoài-15 theo đề xuất máy — mười ba mục ghi Known limits, Ngoài-6 chấp nhận không sửa, Ngoài-10 mở hợp đồng mới cho chữ «Cập nhật tuần» còn ở okr-config.ts và packages/ui/src/lib/messages.ts:573. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: bam-kr-mo-chi-tiet-kr

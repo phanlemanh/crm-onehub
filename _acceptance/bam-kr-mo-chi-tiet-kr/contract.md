@@ -5,7 +5,7 @@ slug: bam-kr-mo-chi-tiet-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-24-bam-kr-mo-chi-tiet-kr-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-25
@@ -81,6 +81,21 @@ hình thái); chữ (danh từ · khoảng thời gian · en) → AC-5; hồ sơ
 > Out of scope = scope-truth (Gate 1 duyệt mục này). Rationale/trade-off từng mục → 1 entry `descope` trong `decisions.jsonl`.
 
 ## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-26:
+  - Ngoài-1: Luật «chạy lại một lần» của E6 chưa có ca mẫu đỏ-rồi-xanh, và chiều đỏ chạy một bản chép riêng của vòng lặp chứ không chạy đường chính.
+  - Ngoài-2: Một script S4 sinh tự động từng bị đưa vào nhánh; đã gỡ khỏi chỉ mục ở vòng 4.
+  - Ngoài-3: E6 không chạy các thước kiểu ui-check; các thước ui-check bấm data-mo-muc-tieu đã được chạy tay 25/10.
+  - Ngoài-4: Đối chứng dương «THEM <slug>» của E6 luôn đúng, không thử luật chọn lớp theo nội dung.
+  - Ngoài-5: Chiều đỏ hồi quy nhận bất kỳ mã khác 0 trên bản sao làm bằng chứng, không ghim đúng khẳng định bị cấy.
+  - Ngoài-7: dongSo nuốt lỗi đọc sổ quyết định — mã đã gỡ khi viết lại E6 ở lối 2.
+  - Ngoài-8: Tệp hỗ trợ cap-chu-sv6.ts từng được miễn quét — luật miễn đã gỡ ở lối 2.
+  - Ngoài-9: Ngoại lệ apAnh trong khoiHopLe xét từng dòng — mã đã gỡ ở lối 2.
+  - Ngoài-11: chup-hom-nay.mjs vẫn chụp và in «ANH …» khi chờ ngăn hay phần tử hết hạn, nên ảnh minh hoạ có thể chụp nhầm màn.
+  - Ngoài-12: Số tệp E5 quét được so với chính nó, nên bỏ sót vài tệp chữ vẫn có thể báo xanh.
+  - Ngoài-13: Mục (3) của E5 chỉ đếm cụm chữ mới có mặt, chưa buộc đúng từng khoá với đúng câu.
+  - Ngoài-14: Chiều đỏ not-tobe sửa một dòng không liên quan — chiều đỏ này đã gỡ ở lối 2.
+  - Ngoài-15: E6 thiếu ca mẫu «Tuần này chưa có Cập nhật tuần nào → … qua» và không chặn khi không có tệp nào bị sửa.
 
 - Known limits — lối 2 chủ kho chọn 24/10 sau S4 vòng 2:
   - Bài kiểm của bảy hồ sơ đã ký đổi chuỗi kỳ vọng theo bảng cặp `rang/cap-chu.json`; máy không kiểm từng khối diff
