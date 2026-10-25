@@ -251,7 +251,7 @@ try {
 		const TRANG = [
 			["cua-toi", "/okr"],
 			["cap-nhat-tuan", "/okr/cap-nhat-tuan"],
-			["theo-don-vi", "/okr/theo-don-vi"],
+			["theo-don-vi", "/okr/theo-don-vi?donOkr=goc"],
 			["toan-canh", "/okr/toan-canh"],
 			["suc-khoe", "/okr/toan-canh/suc-khoe"],
 			["hoi-y", "/okr/hoi-y"],
@@ -299,7 +299,11 @@ try {
 				await tC.close();
 			}
 			for (const [the, duong] of TRANG) {
-				const t = await d.moTrang(QT, kho, `${duong}?kyOkr=${kyLap}`);
+				const t = await d.moTrang(
+					QT,
+					kho,
+					`${duong}${duong.includes("?") ? "&" : "?"}kyOkr=${kyLap}`,
+				);
 				await d.doi(
 					t,
 					(sel) => document.querySelector(sel) !== null,
@@ -474,7 +478,11 @@ try {
 			);
 			process.exit(2);
 		}
-		const t = await d.moTrang(QT, 1440, `/okr/theo-don-vi?kyOkr=${kyLap}`);
+		const t = await d.moTrang(
+			QT,
+			1440,
+			`/okr/theo-don-vi?donOkr=goc&kyOkr=${kyLap}`,
+		);
 		await d.doi(
 			t,
 			() => document.querySelector("[data-nut=them-muc-tieu]") !== null,
@@ -563,7 +571,7 @@ try {
 				requestAnimationFrame(khung);
 			});
 			const batDau = Date.now();
-			await t.goto(`${d.APP}/${d.slug()}/okr/theo-don-vi`, {
+			await t.goto(`${d.APP}/${d.slug()}/okr/theo-don-vi?donOkr=goc`, {
 				waitUntil: "load",
 				timeout: 120_000,
 			});

@@ -243,6 +243,16 @@ function kiemNghi(hoSo) {
 	return { nghi, loi };
 }
 
+function vongDaGop() {
+	const hd = spawnSync(
+		"git",
+		["-C", GOC, "show", `${GIU.nhanhNen}:_acceptance/${SLUG}/contract.md`],
+		{ encoding: "utf8" },
+	);
+	if (hd.status !== 0) return false;
+	return GIU.daKy.has(hd.stdout.match(/^status:\s*(\S+)/m)?.[1] ?? "");
+}
+
 function tepDoiCuaVong() {
 	const nen = git("merge-base", "HEAD", GIU.nhanhNen).trim();
 	const tep = git("diff", "--name-only", nen)
@@ -383,6 +393,12 @@ function chay() {
 	console.log(
 		`nen ${nen.slice(0, 9)} (${GIU.nhanhNen}) · ${tep.length} tep doi`,
 	);
+	if (vongDaGop()) {
+		console.log(
+			`VONG DA GOP: ${SLUG} da ky tren ${GIU.nhanhNen} — thuoc theo vong, khong do vong cua nhanh khac`,
+		);
+		process.exit(0);
+	}
 	const am = tapKhop(hoSo, [GIU.tepKhongCo]);
 	if (am.length !== 0) {
 		console.log(`KHONG DO DUOC: doi chung am khop ${am.map(khoa).join(", ")}`);

@@ -103,7 +103,18 @@ function khungDaGop(nhanhGop) {
 	return { goc: git("merge-base", truoc, dinh), truoc, dinh };
 }
 
-const NHANH_DH1 = "feat/dieu-huong-khu-muc-tieu";
+const dinhNhanhDaGop = (ten, nhanhGop) =>
+	coRef(nhanhGop)
+		? git("log", nhanhGop, "--merges", "--first-parent", "--format=%P%x09%s", "--grep", `/${ten}`)
+				.split("\n")
+				.map((d) => d.split("\t"))
+				.find(([, s]) => s?.endsWith(`/${ten}`))?.[0]
+				?.split(" ")[1]
+		: undefined;
+const TEN_DH1 = "feat/dieu-huong-khu-muc-tieu";
+const NHANH_DH1 = coRef(TEN_DH1)
+	? TEN_DH1
+	: (dinhNhanhDaGop(TEN_DH1, "origin/onehub") ?? TEN_DH1);
 const khung = process.env.DVB_BASE ? null : khungDaGop("origin/onehub");
 const base =
 	process.env.DVB_BASE ??

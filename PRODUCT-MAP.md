@@ -7,15 +7,15 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>7 việc"]
+  GD --> B["Sắp mở vòng<br/>6 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>159 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>180 việc"] --> GG{"Cổng Giá trị"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>160 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>182 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
-  HS["Hồ sơ hỏng<br/>2 việc"]
+  HS["Hồ sơ hỏng<br/>1 việc"]
 ```
 
 > **Bốn cổng người** — mỗi cổng là một câu hỏi chỉ người trả lời được:
@@ -43,11 +43,9 @@ flowchart TD
 - Các hồ sơ đã ký mà kiểm chéo gọi tên đỏ được đo lại, mỗi thước hỏng được sửa hoặc ghi lại có lý do (`ho-so-do-kiem-cheo`)
 - Đổi một tệp chữ khác không kéo hồ sơ giai-doan-thoa-thuan vào ghim lại: E15 chỉ theo dõi tệp chữ của màn giai đoạn (`thu-paths-e15-giai-doan`)
 - Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai (`thuoc-viec-cua-ban-do-duoc`)
-- Người dùng bàn phím hay trình đọc màn bấm «Giữ lại» hoặc gặp lỗi khi xoá tín hiệu vẫn đứng đúng dòng mình vừa thao tác, không phải dò lại từ đầu trang (`tieu-diem-sau-hop-xoa-tin-hieu`)
 
 ## Đang làm
 
-- Trưởng đơn vị bấm Họp tuần và vào thẳng bảng của bộ OKR mình dẫn, thấy hàng số của tuần ở đầu; bộ chưa có KR công bố hay chu kỳ chưa chạy thì màn nói đúng lý do và chỉ sang đơn vị có KR (`hop-tuan-mo-dung-bo`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -200,9 +198,11 @@ flowchart TD
 - Thước của hồ sơ đã ký không tự hết hạn — sửa paths chết để lưới trước-gộp bật lại bộ lọc hoá cũ ở 3 hồ sơ có thước còn sống, neo thước «vòng này» của ha-tran-thang-hoi-zalo vào cặp sha gộp, và kiểm kê phần còn lại (`thuoc-khong-tu-het-han`)
 - Thước «một chỗ khai» của K2b quét thật khu soạn: ba gốc quét khai một chỗ trong chung.mjs, đọc thư mục thật, gốc nào rỗng thì đỏ gọi tên (`thuoc-mot-cho-khai-quet-man`)
 - Đội tiếp thị chạy trọn một chiến dịch tuyển đối tác trong CRM — phân khúc, làm giàu, nhắm, tiếp cận, đo (`tiep-thi-tuyen-doi-tac`)
+- Người dùng bàn phím hay trình đọc màn bấm «Giữ lại» hoặc gặp lỗi khi xoá tín hiệu vẫn đứng đúng dòng mình vừa thao tác, không phải dò lại từ đầu trang (`tieu-diem-sau-hop-xoa-tin-hieu`)
 - Tìm và điều hướng kho tài liệu — ⌘K có dấu hay không dấu, trang nhắc tới trang này kèm câu, lọc theo đơn vị, loại, chủ, tab Sức khoẻ, dòng «N bản chờ bạn duyệt» trong nhắc sáng (`tim-va-dieu-huong-kho`)
 - «Người gửi tín hiệu hôm nay thì sáng mai thấy trang của mình đã đổi sang Đội sản phẩm đã nhận, mà không ai phải chạy lệnh» (`tin-hieu-tu-ve-kho`)
 - Toàn cảnh OKR và họp tuần — danh sách theo đơn vị có lọc ở máy chủ, cây căn chỉnh toàn công ty đi bằng bàn phím, bảng họp tuần xếp theo thứ đáng bàn, toàn cảnh cho lãnh đạo có heatmap, phần «OKR của bạn» trên Tổng quan và trang OKR của một người, màn sức khoẻ chương trình cho quản trị; các biến thể packages/ui từ bản mẫu (`toan-canh-okr`)
+- Trưởng đơn vị mở Bộ OKR, lọc Tôi dẫn, mở bộ OKR của đơn vị mình và đi giữa OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm bằng thẻ con có đường dẫn riêng (`trang-bo-okr`)
 - Trang đơn vị một bảng — chọn đơn vị bằng ô tìm kiếm thay cột cây, đọc mục tiêu trong một bảng như Thoả thuận, mở từng mục tiêu ra KR, một hàng công cụ đứng yên khi đổi cách xem, lọc nhanh «Cần bàn» và «Chưa góp vào đâu», sắp xếp theo tiến độ và tình trạng, thông tin đơn vị ở chân bảng và đơn vị trực thuộc ở cuối trang; chỉ giao diện (`trang-don-vi-mot-bang`)
 - Trang Lộ trình trong CRM hiện việc chưa hẹn mốc và tên hiển thị đúng như LO-TRINH.html, không còn cờ vàng «khối chưa mang mô hình hiển thị» (`trang-lo-trinh-mo-hinh-hien-thi`)
 - «Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi» (`trang-lo-trinh-trong-crm`)
@@ -385,6 +385,7 @@ flowchart TD
 - Nâng trần job test của CI từ 20 lên 30 phút (`tran-test-ci-30`)
 - Bộ đo của trần một-lần-uỷ-thác bắt được khi chốt chết, và kiểu tham số neo vào type công khai của eve — CỘNG bằng chứng từ mã eve cho biết vì sao ca «step chạy lại bị giết oan» KHÔNG vá được ở lớp actions.requested, ghi thành giới hạn đã khai và ghim bằng một phép đo có tên (`tran-uy-thac-chiu-chay-lai`)
 - Trang chưa có bản đề xuất mở được — một luật «ai thấy trang» cho danh sách, màn đọc và «trang nhắc tới»; màn đọc nói trang đang chờ gì theo nguồn và chỉ lối viết tay (`trang-chua-de-xuat-mo-duoc`)
+- trang máy vẽ gộp không xung đột (giữ bản mình rồi vẽ lại) và hook trước-đẩy bỏ bước nặng khi cây mã đã xanh (`trang-ve-gop-va-dau-cay`)
 - Trợ lý OKR thôi trả rỗng — phiên con bỏ khuôn kết quả nên eve không thêm final_output; tool nộp tự đóng việc, hook phiên gốc chỉ còn là lưới (`tro-ly-okr-bo-final-output`)
 - Sửa UX sau lái thử lượt 8c OKR — nhãn «Giới hạn» ở mọi danh sách mục tiêu, gỡ người báo trước OKR đang phụ trách, điều kiện chặn biết trước thì báo trước khi xác nhận, cây đơn vị đếm khớp khung, hộp gửi duyệt nêu người duyệt, người duyệt thấy lần trả lại trước, hạ «Công bố» sau khi trả lại, khung xương khi tải (lượt 8d) (`ux-lai-thu-8c-okr`)
 - Vá Trợ lý OKR sau lượt thử 30/09 — nhận vé OIDC khi kiểm khoá mô hình, khoá Gateway riêng cho Trợ lý OKR, bỏ đề xuất Căn chỉnh chồng cùng nhánh, sửa luật «KR đọc như một việc» bắt nhầm khi bỏ dấu và không để hai giọng trái nhau trong hộp sửa KR, kèm hai vá chữ (`va-tro-ly-okr-sau-thu`)
@@ -402,4 +403,3 @@ flowchart TD
 ## Hồ sơ hỏng
 
 - `ban-mau-okr` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
-- `tom-tat-tuan-dang-cho` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md

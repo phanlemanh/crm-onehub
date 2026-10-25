@@ -4,6 +4,8 @@ Chủ kho yêu cầu 18/10 rà lại khu Mục tiêu bằng cách học trực t
 «onehub» của Tability (ba kế hoạch mẫu, khoảng 120 đường dẫn), đọc mã khu Mục tiêu trên onehub, đo
 màn production ở khổ 1440. Kết quả và căn cứ nằm ở báo cáo
 https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj (phần «Vỏ», «Kiến trúc thông tin mới», «Đặt tên»).
+Artifact này riêng tư; từ 24/10 bản tóm tắt và con trỏ ghim nằm ở
+`docs/findings/2026-10-18-vo-khu-muc-tieu/README.md`. Mục chờ C1 thành hàng VK18 ngày 24/10.
 
 Ba quyết định đã chốt trong ngày, làm nền cho các mã dưới:
 
