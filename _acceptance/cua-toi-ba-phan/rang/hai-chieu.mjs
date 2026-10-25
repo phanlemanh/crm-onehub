@@ -141,9 +141,9 @@ const NHOM = {
 				ten: "thu-tu-api",
 				thay: [
 					[
-						`${OKR}/phan-don-vi-dan.tsx`,
-						"	return [\n		...theo(headOf.divisions, bpCay)",
-						'	return [\n		...headOf.departments.map((id) => ({ loai: "pb" as const, id })),\n		...theo(headOf.divisions, bpCay)',
+						"packages/validation/src/okr-bo-hop-tuan.ts",
+						"	return [\n		...theoCay(headOf.divisions, cay?.divisions ?? [])",
+						'	return [\n		...headOf.departments.map((id): DonChonOkr => ({ loai: "pb", id })),\n		...theoCay(headOf.divisions, cay?.divisions ?? [])',
 					],
 				],
 				ghim: "ctbp-don-vi-dan: the 1 la phong ban, mong bo phan",
