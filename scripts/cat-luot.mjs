@@ -367,8 +367,14 @@ if (isMain) {
   if (!NGAY_RE.test(homNay)) thoat(2, `ACCEPTANCE_TODAY phải dạng YYYY-MM-DD (đang là «${homNay}»)`);
   const co = kiemCo(pv, data, khoang, homNay);
   const pCfg = path.join(root, '_acceptance', 'config.yaml');
-  const { docTriThuc } = require(path.join(__dirname, 'tri-thuc-khoa.cjs'));
-  const ng = docTriThuc(existsSync(pCfg) ? readFileSync(pCfg, 'utf8') : '')
+  const cfgText = existsSync(pCfg) ? readFileSync(pCfg, 'utf8') : '';
+  // Bộ đọc khoá tri thức chỉ nạp khi có tệp: kho chép lớp CI theo nhãn [only-if-declared: tri_thuc] mà không khai
+  // tri thức thì không có nó (crm 25/10: nạp vô điều kiện làm răng phủ vỡ). Kho có dòng `tri_thuc:` mà thiếu tệp → dừng
+  // to, không im lặng bỏ răng nguồn.
+  const pKhoa = path.join(__dirname, 'tri-thuc-khoa.cjs');
+  if (!existsSync(pKhoa) && /^tri_thuc:/m.test(cfgText)) thoat(2, `kho khai tri_thuc mà thiếu ${pKhoa} — chép các tệp mang nhãn [only-if-declared: tri_thuc] của danh sách chép`);
+  const docTriThuc = existsSync(pKhoa) ? require(pKhoa).docTriThuc : () => null;
+  const ng = docTriThuc(cfgText)
     ? (await import(new URL('./tri-thuc.mjs', import.meta.url).href)).kiemNguonPhamVi({ root, nguon: pv.nguon }) : null;
   const loi = [...pv.loi, ...kq.loi, ...co.loi, ...(ng ? ng.loi : [])];
   const ra = [`bảng phủ đợt ${pv.dot} (${pv.dang}): ${pv.ma.length} mã`, ...kq.bang.map(b => `  ${b.ma} → ${b.cho || '—'}`),
