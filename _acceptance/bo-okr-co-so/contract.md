@@ -32,7 +32,10 @@ sau khi VK3 gộp `onehub`.
   một bộ phận (`bp:`) và của một phòng ban (`pb:`), Then mỗi trang có đúng một hàng bốn ô nằm dưới hàng thẻ con và trên
   hàng công cụ của bảng mục tiêu (`docs/design.md` «Thứ tự một màn»), theo thứ tự Ngày còn lại · Tiến độ · KR đã cập nhật tuần này · KR tự tin thấp; Tiến độ là `tienDo`% và
   dòng mô tả nêu `kyVong`% của hàng `okr.toanCanh` cùng khoá đơn vị, cập nhật là `daCapNhat`/`soKr`, tự tin thấp là
-  `tuTin.thap` của cùng hàng (bộ phận gồm cả phòng ban con, như `okr.toanCanh`), và Ngày còn lại là số ngày lịch giờ
+  `tuTin.thap` của cùng hàng, và Tiến độ cùng KR tự tin thấp bằng hai cột ấy của hàng bộ đó ở danh sách Bộ OKR
+  (`okr.danhSachBo`). Bốn số là số của chính bộ đó — đúng tập mục tiêu bảng bên dưới đang hiện: hôm nay bảng của bộ
+  phận còn gồm phòng ban con nên số cũng gồm; khi VK19 đổi bảng bộ phận thành chỉ mục tiêu riêng thì bốn ô đổi theo.
+  Số gộp của bộ phận cùng phòng ban con ở Báo cáo › Sức khoẻ. Ngày còn lại là số ngày lịch giờ
   Việt Nam từ hôm nay tới ngày kết thúc của chu kỳ đang xem, tính cả hai đầu. (cross-layer)
 - AC-2: Given hàm dựng ô và trang một bộ, When chu kỳ chưa tới ngày bắt đầu, hôm nay là ngày kết thúc, đã qua ngày kết
   thúc, kỳ vọng của hàng là null hay 0, hoặc bộ chưa công bố mục tiêu nào (không có hàng hay `soKr` 0), Then ô Ngày còn lại
@@ -107,7 +110,9 @@ DOM test (AC-2).
 - «KR đã cập nhật tuần này» giữ nguyên: `CONTEXT.md` mục «Cập nhật» cho phép cụm «cập nhật tuần này» khi nói một khoảng
   thời gian; chữ bị bỏ là danh từ «Cập nhật tuần».
 - VK19 `bo-okr-chi-don-vi` (chủ kho 25/10) đổi bảng của bộ phận thành chỉ mục tiêu riêng nhưng giữ Toàn cảnh gộp. VK8
-  không sửa `dieuKienDonVi` và đọc nguyên `okr.toanCanh`; cách ô của bộ phận đi sau VK19 là Hỏi-6 của thẻ 25/10.
+  không sửa `dieuKienDonVi`. Chủ kho 25/10 (Hỏi-6): «bộ okr sẽ đi kèm với số của chính bộ đó» — bốn ô theo tập mục tiêu
+  của bảng, bằng hàng danh sách Bộ OKR; VK19 đổi danh sách Bộ OKR sang số riêng nên phải đổi bốn ô cùng lúc, và E1 của
+  hồ sơ này đỏ nếu hai chỗ lệch. Đo bộ phận gồm phòng ban con ở Báo cáo › Sức khoẻ (Toàn cảnh).
 
 - Ranh giới với VK10: VK8 giữ hàng số giữa thẻ con và bảng, và biến thể mở sẵn của `DataTable`; VK10 giữ chế độ Soạn,
   nút Soạn, chip góp ý ở ngăn theo dõi. Hai hàng cùng thêm dòng vào `theo-don-vi.tsx` và `okr-vo-khu.ts` ở chỗ khác nhau.

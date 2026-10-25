@@ -16,7 +16,8 @@ evals:
       qua API trong cùng phiên (cookie của người xem) và chu kỳ đang xem qua okr.cycles. Khẳng định từng bộ đúng một
       hàng số, đứng sau hàng thẻ con và trước hàng công cụ của bảng (thứ tự DOM: [data-the-con-bo] < [data-hang-so-bo] < nút Gập tất cả), bốn nhãn đúng thứ tự, và bốn giá trị bằng
       (ngayConLai tính từ endsOn theo giờ VN, tienDo%, daCapNhat/soKr, tuTin.thap) của hàng key=<khoá>; mô tả Tiến độ chứa
-      kyVong. In «DUNG AC-1 <khoá>: <4 giá trị>» hoặc «SAI AC-1 <khoá>: <ô> man=<x> api=<y>», mã 1.
+      kyVong; ô Tiến độ và KR tự tin thấp bằng tienDo, tuTinThap của hàng okr.danhSachBo cùng khoá (Hỏi-6: số của chính
+      bộ đó, cùng nguồn với danh sách Bộ OKR). In «DUNG AC-1 <khoá>: <4 giá trị>» hoặc «SAI AC-1 <khoá>: <ô> man=<x> api=<y>», mã 1.
       Gieo trước khi đo qua đường ghi thật: một lần cập nhật tuần này tự tin thấp cho một KR của phòng ban, để
       daCapNhat và tuTin.thap khác 0 (bộ mẫu Quý 4 có thể chưa có lần cập nhật nào trong tuần chạy).
       CHIEU DO (--chieu-do khoa-goc, bản sao): hàng số luôn đọc hàng key=goc → «SAI AC-1 pb:<id>: tien-do» (ghim
