@@ -571,3 +571,60 @@ export function noiDungCham(
 	const tat = [...coSan, ...moi];
 	return { bo: tat.map((d) => d.cham), viTri: tat.map((d) => d.viTri) };
 }
+
+export type QuyenCongBo = Pick<
+	NonNullable<MucTieuSoan["quyen"]>,
+	"congBo" | "guiDuyet"
+>;
+
+export type MucCongBo = {
+	id: string;
+	ten: string;
+	status: MucTieuSoan["status"];
+	soKrDaLuu: number;
+	quyen: QuyenCongBo | null;
+};
+
+const idKrMoiDaLuu = (soan: SoanTaiLieu, khoaMt: string): string[] =>
+	krCua(soan.banNhap, khoaMt).flatMap((kr) => {
+		const id = soan.luuDong.id(kr.khoa);
+		return id === null ? [] : [id];
+	});
+
+export function mucCongBoCua(bo: BoXong, soan: SoanTaiLieu): MucCongBo[] {
+	const moi = mucTieuMoiHien(soan.banNhap, bo.mucTieu.length > 0).flatMap(
+		(mt) => {
+			const id = soan.luuDong.id(mt.khoa);
+			return id === null ? [] : [{ id, mt }];
+		},
+	);
+	const tenMoi = new Map(moi.map(({ id, mt }) => [id, mt.ten]));
+	const coSanId = new Set(bo.mucTieu.map((mt) => mt.id));
+	const coSan = bo.mucTieu
+		.filter((mt) => !daBoDi(soan.banNhap, mt.id))
+		.map((mt) => ({
+			id: mt.id,
+			ten:
+				tenMoi.get(mt.id) ??
+				soan.banNhap.tenCo[mt.id] ??
+				mtTheoKara(mt, soan).title,
+			status: mt.status,
+			soKrDaLuu: new Set([
+				...mt.keyResults
+					.filter((kr) => !daBoDi(soan.banNhap, kr.id))
+					.map((kr) => kr.id),
+				...idKrMoiDaLuu(soan, mt.id),
+			]).size,
+			quyen: mt.quyen,
+		}));
+	const chiMoi = moi
+		.filter(({ id }) => !coSanId.has(id))
+		.map(({ id, mt }) => ({
+			id,
+			ten: mt.ten,
+			status: "nhap" as const,
+			soKrDaLuu: idKrMoiDaLuu(soan, mt.khoa).length,
+			quyen: null,
+		}));
+	return [...coSan, ...chiMoi];
+}

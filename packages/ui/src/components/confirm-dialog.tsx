@@ -26,6 +26,7 @@ export function ConfirmDialog({
 	onCloseAutoFocus,
 	noiDung,
 	nutPhu,
+	khoaNut = false,
 }: {
 	tieuDe: string;
 	than: string;
@@ -39,6 +40,7 @@ export function ConfirmDialog({
 	onCloseAutoFocus?: (event: Event) => void;
 	noiDung?: ReactNode;
 	nutPhu?: { nut: string; onClick: () => void } | null;
+	khoaNut?: boolean;
 }) {
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -63,7 +65,7 @@ export function ConfirmDialog({
 					<AlertDialogAction
 						variant={tone ?? "destructive"}
 						data-variant={tone ?? "destructive"}
-						disabled={pending}
+						disabled={pending || khoaNut}
 						onClick={(event) => {
 							event.preventDefault();
 							onConfirm();

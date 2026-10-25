@@ -2155,3 +2155,289 @@ describe("vk10-gop-y-do", () => {
 		);
 	});
 });
+
+const nutCongBo = () => q("[data-o=tai-lieu] [data-nut=cong-bo-bo]");
+
+describe("vk10-chat-luong-cong-bo", () => {
+	test("vk10-chat-luong: nut Cong bo 1 muc tieu bat du diem N < M", async () => {
+		const sai = "vk10-chat-luong: cong bo lech";
+		await moBoChatLuong();
+		const kq = chamNoiDung(KR_Q2.title);
+		expect(kq.dat < kq.xet, "vk10-chat-luong: fixture lech").toBe(true);
+		await cho(() => nutCongBo() !== null, sai);
+		expect(nutCongBo()?.textContent, sai).toBe(CHU.congBo.nut("1"));
+		expect(nutCongBo()?.hasAttribute("disabled"), sai).toBe(false);
+	});
+});
+
+const { okrMessages } = await import("@/lib/messages/okr");
+
+const CAU_KHOA_KHOI_DIEM = okrMessages("vi").sheet.hoiCongBo.body;
+
+type QuyenGia = Partial<ObjectiveOutput["quyen"]>;
+
+const QUYEN_CONG_BO: QuyenGia = { congBo: true };
+const QUYEN_GUI_DUYET: QuyenGia = { guiDuyet: true };
+
+const TEN_MT_GO = "Mở rộng khách doanh nghiệp miền Nam";
+const TEN_KR_GO = "Khách doanh nghiệp mới ký hợp đồng";
+const TEN_MT_CO_SAN = "Giữ chân khách hàng hiện có";
+const TEN_MT_CHUA_KR = "Chuẩn hoá quy trình bàn giao";
+
+function boCongBo(quyen: QuyenGia): MucMau[] {
+	return [
+		{
+			id: "mt-cb",
+			title: "Tăng doanh thu khối doanh nghiệp",
+			status: "cong-bo",
+			kr: [{ id: "k-cb" }],
+		},
+		{
+			id: "mt-c1",
+			title: TEN_MT_CO_SAN,
+			status: "nhap",
+			kr: [{ id: "k-c1", title: "Tỷ lệ gia hạn hợp đồng", owner: LAN }],
+			quyen,
+		},
+		{
+			id: "mt-c0",
+			title: TEN_MT_CHUA_KR,
+			status: "nhap",
+			kr: [],
+			quyen,
+		},
+	];
+}
+
+function datObjectiveMoi(bo: ReturnType<typeof boMau>, quyen: QuyenGia): void {
+	const moi = chiTiet(
+		mucMau(
+			{ id: MT_MOI, title: TEN_MT_GO, kr: [{ id: "kr-moi-1" }] },
+			{ loai: "pb", id: "P1" },
+			true,
+		),
+		quyen,
+	);
+	dat("okr.objective", (vao) => {
+		const id = idCua(vao);
+		if (id === MT_MOI) return moi;
+		return id ? (bo.chiTiet.get(id) ?? null) : null;
+	});
+}
+
+async function moBoCongBo(
+	quyen: QuyenGia,
+	phuThuoc: Partial<PhuThuocSoan> = {},
+): Promise<void> {
+	const bo = boMau({
+		muc: boCongBo(quyen),
+		nguoiSoan: HUNG,
+		quanTri: true,
+	});
+	datGhiMoi();
+	datObjectiveMoi(bo, quyen);
+	dat("okr.publishObjective", (vao) => ({ id: idCua(vao), canhBao: null }));
+	dat("okr.guiDuyet", (vao) => ({ id: idCua(vao) }));
+	await veSoan(bo.khoa, { phuThuoc });
+	await choKhung();
+	await bam(q("[data-nut=them-muc-tieu-bo]"));
+	await cho(
+		() =>
+			document.activeElement !== null && document.activeElement === oTenMtDau(),
+		"vk10-cong-bo: dong moi lech",
+	);
+	await phim(`${TEN_MT_GO}{Enter}`);
+	await phim(`${TEN_KR_GO}{Tab}0{Tab}40{Tab}khách{Enter}`);
+	await choLuuXong("vk10-cong-bo: luu lech");
+	expect(
+		goiCua("okr.createKeyResult").length,
+		"vk10-cong-bo: fixture lech",
+	).toBe(1);
+}
+
+const hopCongBo = () => q("[role=alertdialog]");
+const mucTrongHop = () => qa("[role=alertdialog] [data-muc-cong-bo]");
+const oTichCua = (id: string) =>
+	q(`[role=alertdialog] [data-muc-cong-bo="${id}"] [data-slot=checkbox]`);
+const nutXacNhan = () =>
+	q("[role=alertdialog] [data-slot=alert-dialog-action]");
+const idGoi = (duong: string) =>
+	goiCua(duong)
+		.map((g) => idCua(g.dauVao) ?? "")
+		.sort()
+		.join(",");
+
+async function moHopCongBo(o: string, nhan: string): Promise<void> {
+	const sai = `vk10-cong-bo: ${o} lech`;
+	await cho(() => nutCongBo()?.textContent === nhan, sai);
+	expect(nutCongBo()?.hasAttribute("disabled"), sai).toBe(false);
+	await bam(nutCongBo());
+	await cho(() => hopCongBo() !== null, sai);
+}
+
+async function xacNhan(o: string): Promise<void> {
+	const nut = nutXacNhan();
+	if (nut === null) throw new Error(`vk10-cong-bo: ${o} lech`);
+	await bam(nut);
+	await cho(() => hopCongBo() === null, `vk10-cong-bo: ${o} lech`);
+}
+
+async function kiemO1(): Promise<void> {
+	const sai = "vk10-cong-bo: o1 lech";
+	await moHopCongBo("o1", CHU.congBo.nut("2"));
+	const ten = mucTrongHop()
+		.map((e) => e.textContent ?? "")
+		.sort()
+		.join("|");
+	expect(ten, sai).toBe([TEN_MT_CO_SAN, TEN_MT_GO].sort().join("|"));
+	for (const id of ["mt-c1", MT_MOI])
+		expect(oTichCua(id)?.getAttribute("data-state"), sai).toBe("checked");
+	expect(hopCongBo()?.textContent ?? "", sai).toContain(CAU_KHOA_KHOI_DIEM);
+	const oLai = q("[role=alertdialog] [data-o-lai-nhap]")?.textContent ?? "";
+	expect(oLai, sai).toContain(CHU.congBo.hoi.oLaiNhap);
+	expect(oLai, sai).toContain(TEN_MT_CHUA_KR);
+	expect(nutXacNhan()?.textContent, sai).toBe(CHU.congBo.nut("2"));
+	await xacNhan("o1");
+	await cho(() => goiCua("okr.publishObjective").length === 2, sai);
+	await nhip(5);
+	expect(idGoi("okr.publishObjective"), sai).toBe(
+		["mt-c1", MT_MOI].sort().join(","),
+	);
+	expect(goiCua("okr.guiDuyet").length, sai).toBe(0);
+}
+
+async function kiemO4(): Promise<void> {
+	const sai = "vk10-cong-bo: o4 lech";
+	await cho(() => q("[data-bien-nhan-cong-bo]") !== null, sai);
+	const bienNhan = q("[data-bien-nhan-cong-bo]");
+	expect(bienNhan?.textContent ?? "", sai).toContain(CHU.congBo.daCongBo("2"));
+	expect(nutCongBo(), sai).toBeNull();
+	const ve = q("[data-bien-nhan-cong-bo] [data-nut=ve-theo-doi]");
+	expect(ve?.textContent, sai).toBe(CHU.congBo.veTheoDoi);
+	await bam(ve);
+	await cho(() => doRecord() === "", sai);
+}
+
+async function kiemO1b(): Promise<void> {
+	const sai = "vk10-cong-bo: o1b lech";
+	await moHopCongBo("o1b", CHU.congBo.nut("2"));
+	await bam(oTichCua("mt-c1"));
+	expect(oTichCua("mt-c1")?.getAttribute("data-state"), sai).toBe("unchecked");
+	expect(nutXacNhan()?.textContent, sai).toBe(CHU.congBo.nut("1"));
+	await xacNhan("o1b");
+	await cho(() => goiCua("okr.publishObjective").length >= 1, sai);
+	await nhip(5);
+	expect(idGoi("okr.publishObjective"), sai).toBe(MT_MOI);
+	await cho(
+		() =>
+			(q("[data-bien-nhan-cong-bo]")?.textContent ?? "").includes(
+				CHU.congBo.daCongBo("1"),
+			),
+		sai,
+	);
+}
+
+async function kiemO2(): Promise<void> {
+	const sai = "vk10-cong-bo: o2 lech";
+	await moHopCongBo("o2", CHU.congBo.nutGuiDuyet("2"));
+	expect(nutXacNhan()?.textContent, sai).toBe(CHU.congBo.nutGuiDuyet("2"));
+	await xacNhan("o2");
+	await cho(() => goiCua("okr.guiDuyet").length === 2, sai);
+	await nhip(5);
+	expect(idGoi("okr.guiDuyet"), sai).toBe(["mt-c1", MT_MOI].sort().join(","));
+	expect(goiCua("okr.publishObjective").length, sai).toBe(0);
+	await cho(
+		() =>
+			(q("[data-bien-nhan-cong-bo]")?.textContent ?? "").includes(
+				CHU.congBo.daGuiDuyet("2"),
+			),
+		sai,
+	);
+}
+
+function datLoiLanHai(): void {
+	let lan = 0;
+	dat("okr.publishObjective", (vao) => {
+		lan += 1;
+		if (lan === 2) throw new Error("Máy chủ không trả lời");
+		return { id: idCua(vao), canhBao: null };
+	});
+}
+
+const ketQua = (id: string) =>
+	q(`[data-ket-qua-cong-bo] [data-ket-qua="${id}"]`);
+
+async function kiemO3(): Promise<void> {
+	const sai = "vk10-cong-bo: o3 lech";
+	datLoiLanHai();
+	await moHopCongBo("o3", CHU.congBo.nut("2"));
+	await xacNhan("o3");
+	await cho(() => goiCua("okr.publishObjective").length === 2, sai);
+	await cho(() => q("[data-ket-qua-cong-bo]") !== null, sai);
+	const thuNhat = goiCua("okr.publishObjective")[0];
+	const thuHai = goiCua("okr.publishObjective")[1];
+	const idMot = thuNhat ? idCua(thuNhat.dauVao) : null;
+	const idHai = thuHai ? idCua(thuHai.dauVao) : null;
+	if (idMot === null || idHai === null) throw new Error(sai);
+	expect(ketQua(idMot)?.getAttribute("data-trang"), sai).toBe("xong");
+	expect(ketQua(idHai)?.getAttribute("data-trang"), sai).toBe("loi");
+	const tenHai = idHai === MT_MOI ? TEN_MT_GO : TEN_MT_CO_SAN;
+	expect(ketQua(idHai)?.textContent ?? "", sai).toContain(tenHai);
+	const thuLai = ketQua(idHai)?.querySelector("[data-nut=thu-lai-cong-bo]");
+	expect(thuLai?.textContent, sai).toBe(CHU.congBo.thuLai);
+	expect(q("[data-bien-nhan-cong-bo]"), sai).toBeNull();
+	await bam(thuLai ?? null);
+	await cho(() => goiCua("okr.publishObjective").length === 3, sai);
+	await nhip(5);
+	const lanBa = goiCua("okr.publishObjective")[2];
+	expect(lanBa ? idCua(lanBa.dauVao) : null, sai).toBe(idHai);
+	await cho(
+		() =>
+			(q("[data-bien-nhan-cong-bo]")?.textContent ?? "").includes(
+				CHU.congBo.daCongBo("2"),
+			),
+		sai,
+	);
+}
+
+describe("vk10-cong-bo", () => {
+	test("vk10-cong-bo: o1 va o4 — dem hai muc nhap du KR, hop liet ten va o tich, cong bo dung hai id, bien nhan ve man theo doi", async () => {
+		await moBoCongBo(QUYEN_CONG_BO);
+		await kiemO1();
+		await kiemO4();
+	});
+
+	test("vk10-cong-bo: o1b — bo tich muc co san, chi cong bo muc vua go", async () => {
+		await moBoCongBo(QUYEN_CONG_BO);
+		await kiemO1b();
+	});
+
+	test("vk10-cong-bo: o2 — cong bo can duyet, nguoi bam khong duyet duoc thi gui duyet", async () => {
+		await moBoCongBo(QUYEN_GUI_DUYET);
+		await kiemO2();
+	});
+
+	test("vk10-cong-bo: o3 — lan hai loi, lan mot van cong bo, Thu lai chi goi lai id loi", async () => {
+		await moBoCongBo(QUYEN_CONG_BO);
+		await kiemO3();
+	});
+});
+
+describe("vk10-cong-bo-do", () => {
+	test("vk10-cong-bo-do: dem gom ca muc chua co KR thi o1 do", async () => {
+		await moBoCongBo(QUYEN_CONG_BO, {
+			demCongBo: (ds) => ds.filter((d) => d.status === "nhap").length,
+		});
+		await expect(kiemO1()).rejects.toThrow("vk10-cong-bo: o1 lech");
+	});
+
+	test("vk10-cong-bo-do: cong bo tat ca bo qua o tich thi o1b do", async () => {
+		await moBoCongBo(QUYEN_CONG_BO, { goiTheoOTich: false });
+		await expect(kiemO1b()).rejects.toThrow("vk10-cong-bo: o1b lech");
+	});
+
+	test("vk10-cong-bo-do: loi lan hai hoan tac lan mot tren man thi o3 do", async () => {
+		await moBoCongBo(QUYEN_CONG_BO, { giuKetQuaKhiLoi: false });
+		await expect(kiemO3()).rejects.toThrow("vk10-cong-bo: o3 lech");
+	});
+});

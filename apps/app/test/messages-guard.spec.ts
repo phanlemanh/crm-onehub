@@ -231,19 +231,6 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"okr-soan-bo.taiLoi.moTa",
 	"okr-soan-bo.taiLoi.thuLai",
 	"okr-soan-bo.gopY.chip",
-	"okr-soan-bo.congBo.nutGuiDuyet",
-	"okr-soan-bo.congBo.nutKhoa",
-	"okr-soan-bo.congBo.moTa",
-	"okr-soan-bo.congBo.hoi.tieuDe",
-	"okr-soan-bo.congBo.hoi.tieuDeGuiDuyet",
-	"okr-soan-bo.congBo.hoi.oLaiNhap",
-	"okr-soan-bo.congBo.hoi.thoi",
-	"okr-soan-bo.congBo.daCongBo",
-	"okr-soan-bo.congBo.daGuiDuyet",
-	"okr-soan-bo.congBo.daCongBoMoTa",
-	"okr-soan-bo.congBo.veTheoDoi",
-	"okr-soan-bo.congBo.loiMuc",
-	"okr-soan-bo.congBo.thuLai",
 ];
 
 const GHIM_TRO_LY_OKR = {

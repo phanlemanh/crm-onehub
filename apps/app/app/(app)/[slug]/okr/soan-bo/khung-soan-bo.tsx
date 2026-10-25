@@ -20,6 +20,7 @@ import {
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
+import { useRecordStack } from "@/components/crm/record-sheet/record-stack";
 import { DetailSheetHeader } from "@/components/detail-sheet";
 import { crmMessages } from "@/lib/messages/crm";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
@@ -27,11 +28,13 @@ import type { LoiDiKr } from "../nhom-kara";
 import { useKhoHep } from "../soan/dung-kho-hep";
 import { BAN_NHAP_DAU, type BanNhap, boChuDaGo, themKr } from "./ban-nhap";
 import { SOAN_BO } from "./cau-hinh";
+import { CongBo } from "./cong-bo";
 import type { DichDenDong } from "./den-dong";
 import { type DenDong, KhoiChatLuong } from "./khoi-chat-luong";
 import { KhoiGopY } from "./khoi-gop-y";
 import { usePhuThuocSoan } from "./phu-thuoc";
 import {
+	mucCongBoCua,
 	type NoiDungCham,
 	noiDungCham,
 	type SoanTaiLieu,
@@ -148,6 +151,7 @@ function OTaiLieu({
 	alone: boolean;
 	soan: SoanTaiLieu;
 }) {
+	const { close } = useRecordStack();
 	return (
 		<KaraDock
 			side="fill"
@@ -155,7 +159,14 @@ function OTaiLieu({
 			aria-label={m.theSoan.bo}
 			data-o="tai-lieu"
 		>
-			<VatPhamDock title={<span translate="no">{bo.ten}</span>}>
+			<VatPhamDock
+				title={<span translate="no">{bo.ten}</span>}
+				footer={
+					bo.quyen.loai === "soan" ? (
+						<CongBo mucTieu={mucCongBoCua(bo, soan)} veTheoDoi={close} />
+					) : undefined
+				}
+			>
 				<div className="flex flex-col gap-6">
 					{bo.quyen.loai === "chi-xem" ? (
 						<FieldDescription data-ly-do-chi-xem={bo.quyen.lyDo}>
