@@ -1,4 +1,14 @@
-import { afterAll, describe, expect, it, mock, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	describe,
+	expect,
+	it,
+	mock,
+	test,
+} from "bun:test";
+import { AUTH_COOKIE_PREFIX } from "@crm/auth/cookies";
+import { NextRequest } from "next/server";
 import {
 	isValidElement,
 	type ReactElement,
@@ -6,6 +16,7 @@ import {
 	Suspense,
 } from "react";
 import { type LyDoRong, lyDoRong } from "@/app/(app)/[slug]/okr/ly-do-rong";
+import { THU_TUC_HOP_TUAN } from "@/lib/hop-tuan-proxy";
 import { okrAccessOutput } from "../../api/src/okr/okr.contracts";
 import {
 	type HopTuanOutput,
@@ -14,6 +25,7 @@ import {
 import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
 import { type OSo, oSoHop } from "../app/(app)/[slug]/okr/o-so-hop";
 import { duongChuyenHopTuan } from "../app/(app)/[slug]/okr/theo-don-vi/chuyen-hop-tuan";
+import { proxy } from "../proxy";
 
 type TuTin = "cao" | "vua" | "thap" | null;
 
@@ -576,5 +588,207 @@ describe("htmb-chuyen-loi", () => {
 		expect(dich?.searchParams.get("donOkr")).toBe("pb:P1");
 		expect(dich?.searchParams.get("xemOkr")).toBe("hop-tuan");
 		expect(dich?.searchParams.get("kyOkr")).toBe("q4");
+	});
+});
+
+const SLUG_PROXY = "ws";
+const COOKIE_PROXY = `${AUTH_COOKIE_PREFIX}.session_token=abc.def`;
+const fetchThat = globalThis.fetch;
+
+type TraApi = () => Promise<Response>;
+
+type ThanApi<T> = { result: { data: T } } | { error: { message?: string } };
+
+const traJson = <T>(than: ThanApi<T>, status = 200): Response =>
+	new Response(JSON.stringify(than), {
+		status,
+		headers: { "content-type": "application/json" },
+	});
+
+const traDuLieu = <T>(data: T): Response => traJson({ result: { data } });
+
+const API_MAC_DINH = {
+	"workspace.get": async () =>
+		traDuLieu({
+			slug: SLUG_PROXY,
+			onboarded: true,
+			canRename: true,
+			viewerRole: "owner",
+		}),
+	"settings.researchKey": async () =>
+		traDuLieu({ configured: true, hint: "••••9876", canManage: true }),
+	[THU_TUC_HOP_TUAN.quyen]: async () => traDuLieu(ACCESS_P1),
+	[THU_TUC_HOP_TUAN.cay]: async () => traDuLieu(CAY_P1),
+	[THU_TUC_HOP_TUAN.nguoiXem]: async () =>
+		traDuLieu({ id: "u-xem", name: "u-xem", email: "u-xem@thu.test" }),
+} satisfies Record<string, TraApi>;
+
+const THU_TUC_THEM = Object.values(THU_TUC_HOP_TUAN);
+
+function gaApi(de: Record<string, TraApi> = {}) {
+	const dem = new Map<string, number>();
+	const bang = new Map<string, TraApi>([
+		...Object.entries(API_MAC_DINH),
+		...Object.entries(de),
+	]);
+	globalThis.fetch = (async (vao: string | URL | Request) => {
+		const thuTuc = new URL(String(vao)).pathname.split("/").at(-1) ?? "";
+		dem.set(thuTuc, (dem.get(thuTuc) ?? 0) + 1);
+		const tra = bang.get(thuTuc);
+		if (!tra) throw new Error(`htmb-proxy: goi la ${thuTuc}`);
+		return tra();
+	}) as unknown as typeof fetch;
+	return () => THU_TUC_THEM.reduce((t, k) => t + (dem.get(k) ?? 0), 0);
+}
+
+async function quaProxy(duong: string) {
+	return proxy(
+		new NextRequest(new URL(duong, "http://localhost:3000"), {
+			headers: { cookie: COOKIE_PROXY },
+		}),
+	);
+}
+
+const viTriCua = (tra: Response): URL | null => {
+	const loc = tra.headers.get("location");
+	return loc ? new URL(loc) : null;
+};
+
+type CaProxy = {
+	ten: string;
+	vao: string;
+	can: Record<string, string> | null;
+	goiThem: number;
+};
+
+const MA_TRAN_PROXY: readonly CaProxy[] = [
+	{
+		ten: "hop-tuan-khong-don",
+		vao: `/${SLUG_PROXY}/okr/bo-okr?xemOkr=hop-tuan`,
+		can: { donOkr: "pb:P1", xemOkr: "hop-tuan" },
+		goiThem: 3,
+	},
+	{
+		ten: "giu-ky",
+		vao: `/${SLUG_PROXY}/okr/bo-okr?xemOkr=hop-tuan&kyOkr=q4`,
+		can: { donOkr: "pb:P1", xemOkr: "hop-tuan", kyOkr: "q4" },
+		goiThem: 3,
+	},
+	{
+		ten: "khong-slug",
+		vao: "/okr/bo-okr?xemOkr=hop-tuan",
+		can: { donOkr: "pb:P1", xemOkr: "hop-tuan" },
+		goiThem: 3,
+	},
+	{
+		ten: "donOkr=goc",
+		vao: `/${SLUG_PROXY}/okr/bo-okr?donOkr=goc&xemOkr=hop-tuan`,
+		can: null,
+		goiThem: 0,
+	},
+	{
+		ten: "donOkr=pb:X",
+		vao: `/${SLUG_PROXY}/okr/bo-okr?donOkr=pb:X&xemOkr=hop-tuan`,
+		can: null,
+		goiThem: 0,
+	},
+	{
+		ten: "khong-xemOkr",
+		vao: `/${SLUG_PROXY}/okr/bo-okr`,
+		can: null,
+		goiThem: 0,
+	},
+	{
+		ten: "xemOkr=viec",
+		vao: `/${SLUG_PROXY}/okr/bo-okr?xemOkr=viec`,
+		can: null,
+		goiThem: 0,
+	},
+	{
+		ten: "duong-khac",
+		vao: `/${SLUG_PROXY}/companies?xemOkr=hop-tuan`,
+		can: null,
+		goiThem: 0,
+	},
+];
+
+describe("htmb-proxy", () => {
+	afterEach(() => {
+		globalThis.fetch = fetchThat;
+	});
+
+	test("proxy tra 307 truoc khi dung trang, chi cho Hop tuan khong kem don vi", async () => {
+		const loi: string[] = [];
+		let dem = 0;
+		for (const ca of MA_TRAN_PROXY) {
+			const goiThem = gaApi();
+			const tra = await quaProxy(ca.vao);
+			const viTri = viTriCua(tra);
+			if (goiThem() !== ca.goiThem)
+				loi.push(
+					`htmb-proxy: ${ca.ten} goi them ${goiThem()} API, can ${ca.goiThem}`,
+				);
+			if (ca.can === null) {
+				if (tra.status === 307 || viTri !== null)
+					loi.push(
+						`htmb-proxy: ${ca.ten} bi chuyen (${tra.status} ${viTri?.search ?? "-"})`,
+					);
+			} else if (tra.status !== 307 || viTri === null) {
+				loi.push(`htmb-proxy: ${ca.ten} khong chuyen (${tra.status})`);
+			} else {
+				if (viTri.pathname !== `/${SLUG_PROXY}/okr/bo-okr`)
+					loi.push(`htmb-proxy: ${ca.ten} chuyen sai duong ${viTri.pathname}`);
+				const thuc = Object.fromEntries(
+					[...viTri.searchParams.entries()].sort(),
+				);
+				const can = Object.fromEntries(Object.entries(ca.can).sort());
+				if (JSON.stringify(thuc) !== JSON.stringify(can))
+					loi.push(
+						`htmb-proxy: ${ca.ten} ra ${JSON.stringify(thuc)}, can ${JSON.stringify(can)}`,
+					);
+			}
+			dem += 1;
+		}
+		expect(loi).toEqual([]);
+		expect(dem).toBe(8);
+	});
+
+	test("doc API loi hay sai hinh thi proxy di tiep cho trang tu xu", async () => {
+		const HONG: [string, Record<string, TraApi>][] = [
+			[
+				"okr.access 500",
+				{ [THU_TUC_HOP_TUAN.quyen]: async () => traJson({ error: {} }, 500) },
+			],
+			[
+				"org.tree loi mang",
+				{
+					[THU_TUC_HOP_TUAN.cay]: async () => {
+						throw new Error("connect ECONNREFUSED");
+					},
+				},
+			],
+			[
+				"users.me 401",
+				{
+					[THU_TUC_HOP_TUAN.nguoiXem]: async () =>
+						traJson({ error: { message: "UNAUTHORIZED" } }, 401),
+				},
+			],
+			[
+				"org.tree sai hinh",
+				{ [THU_TUC_HOP_TUAN.cay]: async () => traDuLieu({ divisions: "x" }) },
+			],
+		];
+		const loi: string[] = [];
+		for (const [ten, de] of HONG) {
+			gaApi(de);
+			const tra = await quaProxy(`/${SLUG_PROXY}/okr/bo-okr?xemOkr=hop-tuan`);
+			if (tra.status === 307 || viTriCua(tra) !== null)
+				loi.push(
+					`htmb-proxy: ${ten} van chuyen (${tra.status} ${viTriCua(tra)?.search ?? "-"})`,
+				);
+		}
+		expect(loi).toEqual([]);
+		expect(HONG.length).toBe(4);
 	});
 });

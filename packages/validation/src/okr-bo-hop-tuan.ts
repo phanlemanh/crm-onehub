@@ -1,15 +1,27 @@
+import { z } from "zod";
 import type { DonChonOkr } from "./okr-tham-so";
 
-export type CayChonBo = {
-	divisions: { id: string; departments: { id: string }[] }[];
-	chuaXep: { id: string }[];
-	people: { id: string; primaryDepartmentId: string | null }[];
-};
+const coId = z.object({ id: z.string() });
 
-export type QuyenChonBo = {
-	canManageProgram: boolean;
-	headOf: { divisions: string[]; departments: string[] };
-};
+export const cayChonBo = z.object({
+	divisions: z.array(coId.extend({ departments: z.array(coId) })),
+	chuaXep: z.array(coId),
+	people: z.array(coId.extend({ primaryDepartmentId: z.string().nullable() })),
+});
+
+export const quyenChonBo = z.object({
+	canManageProgram: z.boolean(),
+	headOf: z.object({
+		divisions: z.array(z.string()),
+		departments: z.array(z.string()),
+	}),
+});
+
+export const nguoiXemBo = z.object({ id: z.string().min(1) });
+
+export type CayChonBo = z.infer<typeof cayChonBo>;
+
+export type QuyenChonBo = z.infer<typeof quyenChonBo>;
 
 export type NguonBoHop = "dan" | "quan-tri" | "phong-ban-chinh" | "goc";
 

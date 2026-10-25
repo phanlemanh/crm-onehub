@@ -13,12 +13,18 @@ export function thamSoCuaTrang(thamSo: ThamSoTrang): URLSearchParams {
 	return ra;
 }
 
+export function laHopTuanKhongDon(thamSo: URLSearchParams): boolean {
+	return (
+		thamSo.get(SEARCH_PARAM.okr.xem) === "hop-tuan" &&
+		!thamSo.has(SEARCH_PARAM.okr.don)
+	);
+}
+
 export function duongChuyenHopTuan(
 	thamSo: URLSearchParams,
 	don: DonChonOkr,
 ): string | null {
-	if (thamSo.get(SEARCH_PARAM.okr.xem) !== "hop-tuan") return null;
-	if (thamSo.has(SEARCH_PARAM.okr.don)) return null;
+	if (!laHopTuanKhongDon(thamSo)) return null;
 	const dich = new URLSearchParams([
 		[SEARCH_PARAM.okr.don, khoaDon(don)],
 		...thamSo,
