@@ -5,9 +5,9 @@ slug: bo-okr-co-so
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
 approved_by: Phan Le Manh
-approved_at: 2026-10-22T02:16:39Z
+approved_at: 2026-10-25T09:37:10Z
 design_doc: docs/superpowers/specs/2026-10-22-bo-okr-co-so-design.md
 ---
 
