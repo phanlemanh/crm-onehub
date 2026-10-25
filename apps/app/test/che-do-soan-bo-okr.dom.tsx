@@ -23,6 +23,7 @@ import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
 import {
 	bam,
 	cho,
+	DauTrangOkr,
 	type DauVao,
 	dat,
 	datLai,
@@ -34,6 +35,8 @@ import {
 	nhip,
 	q,
 	qa,
+	TheoDonVi,
+	urlDoi,
 } from "./khung-soan-okr";
 
 const { RecordSheetHost } = await import(
@@ -677,5 +680,154 @@ describe("vk10-quyen-do", () => {
 		await expect(kiemChiXem(2, "khong-sua")).rejects.toThrow(
 			"vk10-quyen: o2 lech",
 		);
+	});
+});
+
+const TUAN: Nguoi = {
+	id: "tuan",
+	name: "Lê Minh Tuấn",
+	email: "tuan@onehub.vn",
+};
+
+async function veTrangBo(thamSo: string): Promise<void> {
+	dat("okr.countByUnit", () => ({}));
+	await mo(
+		<>
+			<DauTrangOkr cauNoi />
+			<TheoDonVi />
+			<RecordSheetHost cauNoiOkr />
+			<DoRecord />
+		</>,
+		thamSo,
+	);
+	await nhip(10);
+}
+
+const dongSoan = () => q("[data-hop-chon-duong] [data-duong=soan]");
+const nutRong = () =>
+	q('[data-trang-thai="ST-donvi-rong"] [data-nut=soan-bo-okr]');
+const doRecord = () =>
+	q("[data-do-record]")?.getAttribute("data-do-record") ?? null;
+
+async function moHop(sai: string): Promise<Element> {
+	await cho(
+		() => q("[data-nut=them-muc-tieu]:not([disabled])") !== null,
+		`${sai}: nut them muc tieu`,
+	);
+	await bam(q("[data-nut=them-muc-tieu]"));
+	await cho(() => dongSoan() !== null, `${sai}: hop chon duong`);
+	const d = dongSoan();
+	if (!d) throw new Error(`${sai}: dong soan vang`);
+	return d;
+}
+
+async function taiLai(): Promise<void> {
+	const url = urlDoi.at(-1);
+	if (url === undefined) throw new Error("vk10-mo: url chua doi");
+	await don();
+	await veTrangBo(url);
+}
+
+describe("vk10-mo-loi-vao", () => {
+	test("vk10-mo: hop/mo va hop/tai-lai — Soan ca bo mo dung bo", async () => {
+		const bo = boMau({ muc: BO_PB, daBo: DA_BO });
+		const kv = kyVong("Phòng Kế toán · Quý 4/2026", bo.khoa, BO_PB, DA_BO);
+		await veTrangBo("?donOkr=pb:P1");
+		const d = await moHop("vk10-mo: hop/mo");
+		expect(
+			[
+				d.getAttribute("aria-disabled"),
+				d.querySelector("[data-slot=item-title]")?.textContent,
+				d.querySelector("[data-slot=item-description]")?.textContent,
+				d.querySelector("[data-slot=kara-mark]") !== null,
+			],
+			"vk10-mo: hop/mo dong lech",
+		).toEqual([null, CHU.loiVao.soanCaBo, CHU.loiVao.soanCaBoMoTa, false]);
+		await bam(d);
+		expect(
+			q("[data-hop-chon-duong]") === null,
+			"vk10-mo: hop/mo hop lech",
+		).toBe(true);
+		await kiemMo("hop/mo", kv);
+		expect(goiCua("okr.soanMo").length, "vk10-mo: hop/mo cuoc soan lech").toBe(
+			0,
+		);
+		await taiLai();
+		await kiemMo("hop/tai-lai", kv);
+	});
+
+	test("vk10-mo: rong/mo va rong/tai-lai — Soan bo OKR o cau rong mo dung bo", async () => {
+		const bo = boMau({ muc: [], daBo: DA_BO });
+		const kv = kyVong("Phòng Kế toán · Quý 4/2026", bo.khoa, [], DA_BO);
+		await veTrangBo("?donOkr=pb:P1");
+		await cho(() => nutRong() !== null, "vk10-mo: rong/mo nut lech");
+		expect(nutRong()?.textContent, "vk10-mo: rong/mo nut lech").toBe(
+			CHU.loiVao.nutRong,
+		);
+		await bam(nutRong());
+		await kiemMo("rong/mo", kv);
+		await taiLai();
+		await kiemMo("rong/tai-lai", kv);
+	});
+
+	test("vk10-mo: hop-goc/mo — bo OneHub ghi goc tuong minh trong khoa", async () => {
+		boMau({ don: { loai: "goc" }, muc: [] });
+		await veTrangBo("?donOkr=goc");
+		await bam(await moHop("vk10-mo: hop-goc/mo"));
+		await choKhung();
+		expect(doRecord(), "vk10-mo: hop-goc/mo record lech").toBe(
+			`soan-bo:${KY}~goc`,
+		);
+	});
+});
+
+describe("vk10-quyen-loi-vao", () => {
+	test("vk10-quyen: o1 khong sua duoc bo hay ky da dong thi khong co loi vao", async () => {
+		const sai = "vk10-quyen: o1 lech";
+		const kiemKhoa = async (d: Element) => {
+			expect(
+				[
+					d.getAttribute("aria-disabled"),
+					d.querySelector("[data-slot=item-description]")?.textContent,
+				],
+				sai,
+			).toEqual(["true", CHU.loiVao.khoa]);
+			await bam(d);
+			expect(doRecord(), sai).toBe("");
+			expect(q("[data-slot=sheet-content]") === null, sai).toBe(true);
+			expect(nutRong() === null, sai).toBe(true);
+		};
+
+		const bo = boMau({ nguoiSoan: TUAN, canEdit: false, muc: [] });
+		dat("okr.danhSach", () => ({ ...bo.danhSach, canCreate: true }));
+		await veTrangBo("?donOkr=pb:P1");
+		await cho(
+			() => q('[data-trang-thai="ST-donvi-rong"]') !== null,
+			`${sai} cau rong`,
+		);
+		await kiemKhoa(await moHop(sai));
+		await don();
+
+		boMau({ nguoiSoan: TUAN, canEdit: false, muc: [] });
+		await veTrangBo("?donOkr=pb:P1");
+		await cho(
+			() => q('[data-trang-thai="ST-donvi-rong"]') !== null,
+			`${sai} cau rong`,
+		);
+		expect(q("[data-nut=them-muc-tieu]")?.hasAttribute("disabled"), sai).toBe(
+			true,
+		);
+		expect(dongSoan() === null, sai).toBe(true);
+		expect(nutRong() === null, sai).toBe(true);
+		await don();
+
+		boMau({ pha: "da-dong", muc: [] });
+		await veTrangBo("?donOkr=pb:P1");
+		await cho(
+			() => q('[data-trang-thai="ST-donvi-rong"]') !== null,
+			`${sai} cau rong`,
+		);
+		await kiemKhoa(await moHop(sai));
+		expect(goiGhi().length, sai).toBe(0);
 	});
 });

@@ -1,15 +1,19 @@
 "use client";
 
+import { Button } from "@crm/ui/components/button";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
+import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { CayCanChinh } from "../cay-can-chinh";
 import { ChamDiem } from "../cham-diem";
 import { useChuKy } from "../chon-chu-ky";
 import { GOC, giaiDon } from "../don-dich";
+import { type QuyenKhu, useQuyenKhu } from "../hanh-dong-khu";
 import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
 import { HopTuan } from "../hop-tuan";
 import { KhoiKrCuaToi } from "../khoi-kr-cua-toi";
@@ -25,6 +29,7 @@ import {
 	okrParsers,
 } from "../okr-search-params";
 import { useChuyenLinkCuSoan } from "../soan/chuyen-link-cu";
+import { soanBoDuoc, useMoSoanBo } from "../soan-bo/mo-soan-bo";
 import { useTenGoc } from "../ten-goc";
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 import { BangDonVi } from "./bang";
@@ -68,6 +73,16 @@ function HopNhapTheoUrl({
 			tenDonVi={tenDonVi}
 			dong={() => void datMo(null)}
 		/>
+	);
+}
+
+function NutSoanBo({ q }: { q: Extract<QuyenKhu, { kieu: "xong" }> }) {
+	const m = okrSoanBoMessages(useLocale());
+	const soan = useMoSoanBo(q);
+	return (
+		<Button data-nut="soan-bo-okr" onClick={() => soan.mo()} variant="outline">
+			{m.loiVao.nutRong}
+		</Button>
 	);
 }
 
@@ -126,6 +141,7 @@ function KhungCachXem({
 export function TheoDonVi() {
 	useChuyenLinkCuSoan();
 	const trpc = useTRPC();
+	const quyenKhu = useQuyenKhu("theo-don-vi");
 	const [url, datUrl] = useQueryStates(okrParsers);
 	const loc: LocOkrGiaTri = locOkr(url);
 	const giaTriLoc = <T extends string>(v: T[]) => (v.length > 0 ? v : null);
@@ -290,6 +306,11 @@ export function TheoDonVi() {
 							quanTri={quanTri}
 							tenDon={dv.ten}
 							tenKy={tenKy}
+							soan={
+								quyenKhu.kieu === "xong" && soanBoDuoc(quyenKhu) ? (
+									<NutSoanBo q={quyenKhu} />
+								) : undefined
+							}
 						/>
 					}
 					rows={objectives}

@@ -61,10 +61,6 @@ const vi = {
 				ten: "Từ bảng tính",
 				moTa: "Dán nhiều mục tiêu và KR từ một bảng tính, xem trước rồi ghi.",
 			},
-			soan: {
-				ten: "Soạn cùng Kara",
-				moTa: "Trò chuyện với Kara để soạn mục tiêu và KR, rồi đưa vào bộ OKR.",
-			},
 		},
 		tiep: "Tiếp cuộc đang soạn",
 		khoa: {
@@ -841,10 +837,6 @@ const en: OkrMessages = {
 			bangTinh: {
 				ten: "From a spreadsheet",
 				moTa: "Paste several objectives and KRs from a spreadsheet, preview, then save.",
-			},
-			soan: {
-				ten: "Draft with Kara",
-				moTa: "Talk with Kara to draft objectives and KRs, then add them to the OKR set.",
 			},
 		},
 		tiep: "Continue the open draft",

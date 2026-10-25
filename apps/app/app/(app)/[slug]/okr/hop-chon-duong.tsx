@@ -1,6 +1,6 @@
 "use client";
 
-import Chat from "@carbon/icons-react/es/Chat";
+import Document from "@carbon/icons-react/es/Document";
 import DocumentImport from "@carbon/icons-react/es/DocumentImport";
 import Edit from "@carbon/icons-react/es/Edit";
 import Template from "@carbon/icons-react/es/Template";
@@ -15,14 +15,12 @@ import {
 import { Icon } from "@crm/ui/components/icon";
 import {
 	Item,
-	ItemActions,
 	ItemContent,
 	ItemDescription,
 	ItemGroup,
 	ItemMedia,
 	ItemTitle,
 } from "@crm/ui/components/item";
-import { KaraMark } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -30,12 +28,14 @@ import { parseAsBoolean, parseAsString, useQueryStates } from "nuqs";
 import type { ReactNode, RefObject } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { type QuyenKhu, useDuongTheoDonVi, useTenDon } from "./hanh-dong-khu";
 import { CAP_THEO_DON } from "./hop-thoai-muc-tieu";
 import { BoKhoaUrl } from "./ngan-okr-url";
 import { useDuongSoan } from "./soan/duong-soan";
+import { useMoSoanBo } from "./soan-bo/mo-soan-bo";
 import type { TabOkr } from "./tab-okr";
 import { locMau } from "./tu-mau";
 
@@ -87,7 +87,6 @@ function DongDuong({
 	ten,
 	moTa,
 	khoa,
-	phu,
 	onChon,
 }: {
 	duong: DuongTao;
@@ -95,7 +94,6 @@ function DongDuong({
 	ten: string;
 	moTa: string;
 	khoa: boolean;
-	phu?: ReactNode;
 	onChon: () => void;
 }) {
 	return (
@@ -113,7 +111,6 @@ function DongDuong({
 					<ItemTitle>{ten}</ItemTitle>
 					<ItemDescription unclamped>{moTa}</ItemDescription>
 				</ItemContent>
-				{phu ? <ItemActions>{phu}</ItemActions> : null}
 			</button>
 		</Item>
 	);
@@ -128,14 +125,17 @@ function NoiDungHop({
 	tab: TabOkr;
 	cauNoi: boolean;
 }) {
-	const m = okrMessages(useLocale());
+	const locale = useLocale();
+	const m = okrMessages(locale);
 	const c = m.chonDuong;
+	const loiVao = okrSoanBoMessages(locale).loiVao;
 	const router = useRouter();
 	const [, dat] = useHopChonDuong();
 	const tenDon = useTenDon(q.dich.don);
 	const toi = useDuongTheoDonVi(q.cycleId);
 	const coMau = useCoMau(q);
 	const soan = useDuongSoan({ q, cauNoi });
+	const soanBo = useMoSoanBo(q);
 	const [truoc, sau] = c.moTa.split("{ten}");
 
 	const di = (duong: Exclude<DuongTao, "soan">) => {
@@ -150,8 +150,8 @@ function NoiDungHop({
 		router.push(toi(q.dich.don, khoa));
 	};
 
-	const sd = soan.duong;
-	const soanKhoa = sd.loai === "khoa" || sd.loai === "dang-tai" || soan.dangMo;
+	const coDsCuoc = soan.soCuocDaDung > 0 && soan.donVi !== null;
+	const coTiep = soan.duong.loai === "tiep";
 	return (
 		<>
 			<DialogHeader>
@@ -189,32 +189,50 @@ function NoiDungHop({
 				/>
 				<DongDuong
 					duong="soan"
-					icon={<Icon icon={Chat} />}
-					khoa={soanKhoa}
-					moTa={sd.loai === "khoa" ? sd.lyDo : c.duong.soan.moTa}
+					icon={<Icon icon={Document} />}
+					khoa={!soanBo.duoc}
+					moTa={soanBo.lyDo ?? loiVao.soanCaBoMoTa}
 					onChon={() => {
 						void dat({ [SEARCH_PARAM.okr.chonDuong]: null });
-						soan.chon();
+						soanBo.mo();
 					}}
-					phu={<KaraMark />}
-					ten={sd.loai === "tiep" ? c.tiep : c.duong.soan.ten}
+					ten={loiVao.soanCaBo}
 				/>
 			</ItemGroup>
-			{soan.soCuocDaDung > 0 && soan.donVi ? (
-				<div>
-					<Button
-						data-nut="ds-cuoc"
-						onClick={() =>
-							void dat({
-								[SEARCH_PARAM.okr.chonDuong]: null,
-								[SEARCH_PARAM.okr.dsCuoc]: "1",
-							})
-						}
-						size="sm"
-						variant="ghost"
-					>
-						{dien(c.cuocDaSoan, { da: soan.soCuocDaDung, tran: soan.tranCuoc })}
-					</Button>
+			{coTiep || coDsCuoc ? (
+				<div className="flex flex-wrap gap-2">
+					{coTiep ? (
+						<Button
+							data-nut="tiep-cuoc"
+							disabled={soan.dangMo}
+							onClick={() => {
+								void dat({ [SEARCH_PARAM.okr.chonDuong]: null });
+								soan.chon();
+							}}
+							size="sm"
+							variant="ghost"
+						>
+							{c.tiep}
+						</Button>
+					) : null}
+					{coDsCuoc ? (
+						<Button
+							data-nut="ds-cuoc"
+							onClick={() =>
+								void dat({
+									[SEARCH_PARAM.okr.chonDuong]: null,
+									[SEARCH_PARAM.okr.dsCuoc]: "1",
+								})
+							}
+							size="sm"
+							variant="ghost"
+						>
+							{dien(c.cuocDaSoan, {
+								da: soan.soCuocDaDung,
+								tran: soan.tranCuoc,
+							})}
+						</Button>
+					) : null}
 				</div>
 			) : null}
 		</>

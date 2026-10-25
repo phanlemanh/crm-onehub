@@ -17,6 +17,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
@@ -88,14 +89,17 @@ export function Rong({
 	tenKy,
 	chuaTruong,
 	quanTri,
+	soan,
 }: {
 	tenDon: string;
 	tenKy: string;
 	chuaTruong: boolean;
 	quanTri: boolean;
+	soan?: ReactNode;
 }) {
 	const m = okrMessages(useLocale());
 	const url = useWorkspaceUrl();
+	const ganTruong = chuaTruong && quanTri;
 	return (
 		<Empty data-trang-thai="ST-donvi-rong">
 			<EmptyHeader>
@@ -110,11 +114,16 @@ export function Rong({
 					{chuaTruong ? m.rong.chuaTruong : m.rong.body}
 				</EmptyDescription>
 			</EmptyHeader>
-			{chuaTruong && quanTri ? (
+			{soan || ganTruong ? (
 				<EmptyContent>
-					<Button asChild variant="outline">
-						<Link href={url("/settings/organization")}>{m.rong.ganTruong}</Link>
-					</Button>
+					{soan}
+					{ganTruong ? (
+						<Button asChild variant="outline">
+							<Link href={url("/settings/organization")}>
+								{m.rong.ganTruong}
+							</Link>
+						</Button>
+					) : null}
 				</EmptyContent>
 			) : null}
 		</Empty>
