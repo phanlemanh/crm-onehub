@@ -225,6 +225,8 @@ import {
 	moHopTuanOutput,
 	quanhMucTieuInput,
 	quanhMucTieuOutput,
+	soBoInput,
+	soBoOutput,
 	soDoDonViOutput,
 	sucKhoeOutput,
 	toanCanhOutput,
@@ -1319,6 +1321,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.danhSachBo(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: soBoInput,
+		output: soBoOutput,
+		meta: restMeta("POST", "/okr/units/numbers", TAG),
+	})
+	soBo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soBoInput>,
+	) {
+		return this.xem.soBo(ctx.user.id, input);
 	}
 
 	@Query({
