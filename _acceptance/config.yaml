@@ -3569,6 +3569,16 @@ risk_tiers:
     - "dieu-phoi/scripts/cau-hinh.mjs"
     - "dieu-phoi/scripts/dot.mjs"
     - "skills/acceptance/references/tin-hieu-template.md"
+    # Tầng tri thức (kit TT1–TT4): cat-luot.mjs nạp tri-thuc-khoa.cjs mỗi lần chạy; khi kho khai tri_thuc, lệnh mở ô
+    # và răng nguồn của bản phạm vi nạp thêm tri-thuc-nguon.cjs, tri-thuc.mjs và khuôn tri-thuc-template.md.
+    - "scripts/tri-thuc-khoa.cjs"
+    - "scripts/tri-thuc-nguon.cjs"
+    - "scripts/tri-thuc.mjs"
+    - "skills/acceptance/references/tri-thuc-template.md"
+    # TT5: lệnh tra tri thức (tri-thuc.mjs --tra) nạp tri-thuc-tra.cjs, nó nạp can-cu-s1.cjs, nó nạp luat-san-pham.cjs.
+    - "scripts/tri-thuc-tra.cjs"
+    - "scripts/can-cu-s1.cjs"
+    - "scripts/luat-san-pham.cjs"
     # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
     # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
     # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và
@@ -3665,6 +3675,16 @@ capture:
 tin_hieu:
   nguon: [tin-hieu/crm]
   gom: tin-hieu/gom
+
+# Tầng tri thức (kit TT1): nghiên cứu thô của crm sống ở kho RIÊNG TƯ crm-onehub-nguon, vì kho này công khai —
+# tài liệu thô không bao giờ vào đây. Đường kho riêng tính từ checkout chính (cha của git-common-dir), nên mọi
+# worktree dưới .claude/worktrees/ cùng trỏ một bản. Máy chưa có bản thì máy in lệnh clone, không chặn.
+tri_thuc:
+  cong_khai: true
+  kho:
+    ten: crm-onehub-nguon
+    duong: ../crm-onehub-nguon
+    remote: https://github.com/phanlemanh/crm-onehub-nguon.git
 
 # Nhánh production của kho (kit 2.28.0, X2s): ô production của dải tóm tắt đọc mã đã chấm có nằm trên
 # origin/<nhánh> không. Gộp vào onehub là tự lên production.
