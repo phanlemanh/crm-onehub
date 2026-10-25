@@ -57,7 +57,7 @@ evals:
       {«—», «0/0», «0»}. Mỗi ô một khẳng định; thêm khẳng định chung: chuỗi bốn ô không chứa NaN, undefined, «-<số>».
       Thông điệp ghim «bco-bien: <ca> lech».
       Biên giờ: homNay = 23:30 giờ VN ngày endsOn (16:30Z) vẫn là «1»; 00:10 giờ VN hôm sau (17:10Z hôm trước) là «0».
-      CHIEU DO (ca «bco-bien-do»): bản tính ngày theo UTC (tham số thử) → «bco-bien: 23:30-vn lech»; bản không cộng ngày
+      CHIEU DO (ca «bco-bien-do»): bản tính ngày theo UTC (tham số thử) → «bco-bien: 00:10-vn lech»; bản không cộng ngày
       cuối → «bco-bien: dung-endsOn lech».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -109,8 +109,8 @@ evals:
       chưa bỏ có KR; hai mục vừa gieo không có nút mở. In «DUNG AC-4 mo-san: <n>/<n> KR · da-bo khong nut · khong-kr khong
       nut» hoặc «SAI AC-4 <ca>: man=<x> api=<y>», mã 1.
       CHIEU DO (--chieu-do khong-mo-san, bản sao): BangDonVi bỏ moSan → «SAI AC-4 mo-san: man=0» (ghim /SAI AC-4
-      mo-san/), mã 1; (--chieu-do mo-moi-dong, bản sao): isExpandable của BangDonVi luôn true → «SAI AC-4 da-bo» (ghim
-      /SAI AC-4 da-bo/), mã 1.
+      mo-san/), mã 1; (--chieu-do mo-moi-dong, bản sao): isExpandable của BangDonVi luôn true → «SAI AC-4 khong-kr» (ghim
+      /SAI AC-4 (da-bo|khong-kr)/; mục tiêu đã bỏ nằm ở nhóm Đã bỏ, không trong bảng), mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
