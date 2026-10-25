@@ -150,11 +150,11 @@ export const DIEM_DA_NHAN: DiemKiem[] = DIEM_MOI.map((d) =>
 	d.id === "d3" || d.id === "d5" ? { ...d, dat: true } : d,
 );
 
-export const CAU_DIEM: Record<string, string> = {
-	d3: "«Gọi 300 cuộc cho khách tiềm năng» bắt đầu từ 0",
-	d5: "«Gọi 300 cuộc cho khách tiềm năng» là việc, không phải kết quả",
-	d6: "Ba KR cùng đẩy một chiều — thêm một KR giữ chất lượng",
-};
+export const CAU_DIEM = new Map([
+	["d3", "«Gọi 300 cuộc cho khách tiềm năng» bắt đầu từ 0"],
+	["d5", "«Gọi 300 cuộc cho khách tiềm năng» là việc, không phải kết quả"],
+	["d6", "Ba KR cùng đẩy một chiều — thêm một KR giữ chất lượng"],
+]);
 
 export const GOP_Y: GopY[] = [
 	{

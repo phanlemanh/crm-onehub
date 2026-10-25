@@ -90,7 +90,7 @@ function KhoiChatLuong({ diem }: { diem: DiemKiem[] }) {
 										<ItemTitle>
 											<StatusIndicator tone="warning" size="sm" label={d.cau} />
 										</ItemTitle>
-										<ItemDescription>{CAU_DIEM[d.id]}</ItemDescription>
+										<ItemDescription>{CAU_DIEM.get(d.id)}</ItemDescription>
 									</ItemContent>
 									<ItemActions>
 										<Button variant="ghost" size="sm" type="button">
