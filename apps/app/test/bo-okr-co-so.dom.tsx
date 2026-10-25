@@ -499,7 +499,7 @@ function lechTai(cheDo: "treo" | "loi"): string[] {
 	const loi: string[] = [];
 	const nhom = hangSo();
 	if (cheDo === "treo") {
-		if (nhom?.getAttribute("aria-busy") !== "true")
+		if (nhom?.querySelector("[aria-busy='true']") === null)
 			loi.push("bco-tai: aria-busy lech");
 		if (nhom?.querySelectorAll("[data-slot=skeleton]").length !== 12)
 			loi.push("bco-tai: khung-xuong lech");

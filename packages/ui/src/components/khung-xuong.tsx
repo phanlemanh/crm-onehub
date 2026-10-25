@@ -1,8 +1,10 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@crm/ui/components/card";
+import { StatGroup } from "@crm/ui/components/dashboard";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
+import { StatCard } from "@crm/ui/components/stat-card";
 import type { ReactNode } from "react";
 
 const KHUNG_XUONG = {
@@ -10,6 +12,7 @@ const KHUNG_XUONG = {
 	danhSach: { dong: 6 },
 	the: { the: 2, hang: 3 },
 	tongQuan: { oSo: 4, hang: 5 },
+	hangSo: { oSo: 4 },
 	chiTiet: { doan: 3 },
 	bangHaiDong: { hang: 5 },
 } as const;
@@ -24,6 +27,7 @@ export type HinhKhungXuong =
 	| "danh-sach"
 	| "the"
 	| "tong-quan"
+	| "hang-so"
 	| "chi-tiet"
 	| "bang-hai-dong";
 
@@ -110,6 +114,22 @@ function TongQuan() {
 				</CardContent>
 			</Card>
 		</div>
+	);
+}
+
+function HangSo() {
+	return (
+		<StatGroup>
+			{day(KHUNG_XUONG.hangSo.oSo, "o-so").map((k) => (
+				<StatCard
+					data-khung-hang="o-so"
+					description={<Skeleton className="h-4 w-24" />}
+					key={k}
+					label={<Skeleton className="h-4 w-20" />}
+					value={<Skeleton className="h-8 w-14" />}
+				/>
+			))}
+		</StatGroup>
 	);
 }
 
@@ -243,6 +263,7 @@ function Than({ hinh, cot }: { hinh: HinhKhungXuong; cot: 1 | 2 }) {
 	if (hinh === "danh-sach") return <DanhSach />;
 	if (hinh === "the") return <The cot={cot} />;
 	if (hinh === "tong-quan") return <TongQuan />;
+	if (hinh === "hang-so") return <HangSo />;
 	return <ChiTiet />;
 }
 

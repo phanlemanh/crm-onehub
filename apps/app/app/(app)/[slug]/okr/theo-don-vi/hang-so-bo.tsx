@@ -1,8 +1,8 @@
 "use client";
 
 import { StatGroup } from "@crm/ui/components/dashboard";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { Skeleton } from "@crm/ui/components/skeleton";
 import { StatCard } from "@crm/ui/components/stat-card";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { homNayVN } from "@crm/validation/ngay-vn";
@@ -11,9 +11,7 @@ import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { useTRPC } from "@/lib/trpc/client";
 import type { DonChonOkr } from "../okr-search-params";
-import { type ChuOSo, type KhungChuKy, type MaOSo, oSoBo } from "./o-so-bo";
-
-const MA_O: MaOSo[] = ["ngay-con-lai", "tien-do", "da-cap-nhat", "tu-tin-thap"];
+import { type ChuOSo, type KhungChuKy, oSoBo } from "./o-so-bo";
 
 function useChuOSo(): ChuOSo {
 	const locale = useLocale();
@@ -39,21 +37,6 @@ function useChuOSo(): ChuOSo {
 	};
 }
 
-function KhungXuongSo() {
-	return (
-		<StatGroup aria-busy="true" data-hang-so-bo="dang-tai">
-			{MA_O.map((ma) => (
-				<StatCard
-					description={<Skeleton className="h-4 w-24" />}
-					key={ma}
-					label={<Skeleton className="h-4 w-20" />}
-					value={<Skeleton className="h-8 w-14" />}
-				/>
-			))}
-		</StatGroup>
-	);
-}
-
 export function HangSoBo({
 	cycleId,
 	unit,
@@ -67,7 +50,12 @@ export function HangSoBo({
 	const chu = useChuOSo();
 	const trpc = useTRPC();
 	const so = useQuery(trpc.okr.soBo.queryOptions({ cycleId, unit }));
-	if (so.isPending || chuKy === null) return <KhungXuongSo />;
+	if (so.isPending || chuKy === null)
+		return (
+			<div data-hang-so-bo="dang-tai">
+				<KhungXuong hinh="hang-so" nhan={m.dangTai} />
+			</div>
+		);
 	if (so.isError)
 		return (
 			<VungTaiLoi
