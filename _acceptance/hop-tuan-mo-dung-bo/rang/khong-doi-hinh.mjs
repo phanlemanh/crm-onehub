@@ -114,7 +114,7 @@ function tepCuaLenh(lenh) {
 function evalMayCua(slug, cauHinh) {
 	const evals = parseEvals(
 		readFileSync(join(GOC, "_acceptance", slug, "evals.yaml"), "utf8"),
-		["executor", "cmd", "status"],
+		["executor", "cmd", "status", "expected_exit"],
 	);
 	return evals.flatMap((e) => {
 		if (!EXECUTOR_MAY.has(String(e.executor).trim())) return [];
@@ -125,7 +125,10 @@ function evalMayCua(slug, cauHinh) {
 		const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
 		if (lenh === "")
 			throw new Error(`khong giai duoc ${slug}#${e.id} (${ref})`);
-		return [{ slug, id: e.id, lenh, tep: tepCuaLenh(lenh) }];
+		const kyVong = Number(String(e.expected_exit ?? "0").trim());
+		if (!Number.isInteger(kyVong))
+			throw new Error(`expected_exit khong phai so nguyen o ${slug}#${e.id}`);
+		return [{ slug, id: e.id, lenh, kyVong, tep: tepCuaLenh(lenh) }];
 	});
 }
 
@@ -170,6 +173,7 @@ function quetLop() {
 				ten: `${e.slug}#${e.id}`,
 				lenh: e.lenh,
 				evalRieng,
+				kyVong: e.kyVong,
 				khoa: evalRieng ? `${e.lenh}\u0000EVAL=${evalRieng}` : e.lenh,
 			};
 		});
@@ -470,12 +474,12 @@ function chayTrenNen(hong) {
 		const daChayNen = new Map();
 		for (const m of hong) {
 			const nen = chay(m, goc.cay, daChayNen);
-			const xauHon = nen === 0;
+			const xauHon = nen === m.kyVong;
 			if (xauHon) sai += 1;
 			console.log(
 				`${xauHon ? "SAI AC-10: " : ""}HO SO ${m.ten}: cay ${m.ma} · nen ${nen}`,
 			);
-			if (nen !== 0) console.log(`DO SAN TREN NEN ${m.ten}`);
+			if (nen !== m.kyVong) console.log(`DO SAN TREN NEN ${m.ten}`);
 		}
 	} finally {
 		donCay(goc);
@@ -506,11 +510,19 @@ try {
 		for (const m of lop.muc) console.log(`MUC ${m.ten}`);
 		process.exit(sai === 0 ? 0 : MA_DO);
 	}
+	const viTriChi = process.argv.indexOf("--chi");
+	const chi =
+		viTriChi < 0
+			? null
+			: new Set((process.argv[viTriChi + 1] ?? "").split(",").filter(Boolean));
 	const daChayCay = new Map();
 	const hong = [];
-	for (const m of lop.muc) {
+	for (const m of lop.muc.filter((x) => !chi || chi.has(x.ten))) {
 		const ma = chay(m, GOC, daChayCay);
-		if (ma === 0) console.log(`HO SO ${m.ten}: cay 0`);
+		if (ma === m.kyVong || ma === 0)
+			console.log(
+				`HO SO ${m.ten}: cay ${ma}${ma === 0 ? "" : ` (dung ma da khai expected_exit ${m.kyVong})`}`,
+			);
 		else hong.push({ ...m, ma });
 	}
 	sai += chayTrenNen(hong);
