@@ -50,6 +50,7 @@
 		"./okr-hien-thi": "./src/okr-hien-thi.ts",
 		"./okr-khep": "./src/okr-khep.ts",
 		"./okr-kiem": "./src/okr-kiem.ts",
+		"./okr-cham-bo": "./src/okr-cham-bo.ts",
 		"./okr-kiem-de-xuat": "./src/okr-kiem-de-xuat.ts",
 		"./okr-kiem-ban-nhap": "./src/okr-kiem-ban-nhap.ts",
 		"./okr-tom-gon-ky": "./src/okr-tom-gon-ky.ts",
