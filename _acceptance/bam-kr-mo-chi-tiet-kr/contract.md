@@ -5,10 +5,10 @@ slug: bam-kr-mo-chi-tiet-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: draft
 design_doc: docs/superpowers/specs/2026-10-24-bam-kr-mo-chi-tiet-kr-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-10-25
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: bam-kr-mo-chi-tiet-kr
@@ -88,6 +88,13 @@ hình thái); chữ (danh từ · khoảng thời gian · en) → AC-5; hồ sơ
   - Thước màn `hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs` mở ngăn mục tiêu thẳng bằng
     `/okr?record=objective:<id>` thay cho bấm tên KR ở Của tôi: tên KR nay mở KR, và Của tôi của người dùng mẫu không
     còn nút nào mở mục tiêu. Thước đó thôi đo đường bấm vào; các bước trong ngăn giữ nguyên. Một dòng sổ `fix`.
+- Known limits — lối A chủ kho chọn 25/10 sau S4 vòng 3:
+  - Thước màn `gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs` mở ngăn mục tiêu G bằng URL như thước giữ chỗ, cùng
+    lý do. Bộ quét `ngan-kr-mot-cho/rang/quet-loi.mjs` thêm bốn ô ma trận cho bốn chỗ mở KR của vòng này. Mỗi hồ sơ một
+    dòng sổ `fix`.
+  - Năm thước bấm `data-mo-muc-tieu` đã đỏ sẵn trên onehub 25/10, hỏng y hệt trên cây SV6: `okr-cua-toi-tach-theo-doi`,
+    `cap-nhat-tuan-okr` (thước màn), `ux-lai-thu-8c-okr`, `tro-ly-okr-de-xuat`, `the-gop-y-okr`. E6 in chúng «đỏ sẵn
+    trên nền»; vòng này không sửa.
 
 - Không migration, không thủ tục API mới; chỉ `apps/app` và nhãn tin nhắc ở `apps/agent`.
 - AC-4: `bang-kr.tsx` có sẵn `SoViecKr` mở KR bằng `useOpenRecord()`; tên KR dùng cùng đường, `Button variant="link"`

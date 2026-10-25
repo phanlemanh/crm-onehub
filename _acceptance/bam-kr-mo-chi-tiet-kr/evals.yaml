@@ -116,7 +116,8 @@ evals:
     expected: |
       khong-doi-hinh.mjs QUÉT LỚP LÚC CHẠY (khuôn gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs): mọi hồ sơ signed-off
       hay machine-cleared có eval test/script (không not-run) mà tệp trong lệnh đã giải chứa «Cập nhật tuần», chạm một trong
-      phan-kr-phu-trach, cay-can-chinh, viec-cua-toi, bang-kr, tin-nhac, hoặc bị vòng sửa; cộng hai thước màn viết trước:
+      phan-kr-phu-trach, cay-can-chinh, viec-cua-toi, bang-kr, tin-nhac, bấm dấu data-mo-muc-tieu (nút tên KR và «Mở KR»
+      vẫn mang dấu đó — chủ kho chọn 25/10 sau S4 vòng 3), hoặc bị vòng sửa; cộng hai thước màn viết trước:
       dat-okr-trong-crm (dok_man_chrome) và hop-thoai-giu-cho-dang-nhap (hg_man_that). In «quet lop: <n> ho so, <k> eval».
       (1) Chạy các mục trên cây; mục đỏ chạy lại trên worktree origin/onehub: «SAI AC-6: <slug>#<E> nen 0, cay <m>» khi nền 0
       mà cây khác 0, «DO SAN TREN NEN <slug>#<E>» khi nền đỏ; mục xanh in «DUNG <slug>#<E>». (2)

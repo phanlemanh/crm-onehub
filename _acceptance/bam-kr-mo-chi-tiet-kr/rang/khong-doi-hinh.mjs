@@ -29,6 +29,7 @@ const VAT = [
 	"tin-nhac",
 ];
 const CHU_CU = "Cập nhật tuần";
+const DAU_MO = "data-mo-muc-tieu";
 const THEM = [
 	["dat-okr-trong-crm", "dok_man_chrome"],
 	["hop-thoai-giu-cho-dang-nhap", "hg_man_that"],
@@ -97,7 +98,11 @@ export function quetLop(daSua) {
 			const thuoc = tepLenh.some((t) => {
 				if (daSua.includes(t)) return true;
 				const than = readFileSync(join(GOC, t), "utf8");
-				return than.includes(CHU_CU) || VAT.some((v) => than.includes(v));
+				return (
+					than.includes(CHU_CU) ||
+					than.includes(DAU_MO) ||
+					VAT.some((v) => than.includes(v))
+				);
 			});
 			if (thuoc) lop.push({ slug, ten: `${slug}#${e.id}`, lenh, tep: tepLenh });
 		}
