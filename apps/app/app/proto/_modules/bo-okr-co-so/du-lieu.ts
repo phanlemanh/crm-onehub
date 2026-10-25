@@ -269,6 +269,7 @@ export const MUC_TIEU_PHONG_BAN: MucTieuBco[] = [
 
 export const MUC_TIEU_CA_NHAN: MucTieuBco[] = [
 	MUC_TIEU_PHONG_BAN[0] as MucTieuBco,
+	MUC_TIEU_PHONG_BAN[4] as MucTieuBco,
 ];
 
 export const SO_PHONG_BAN: HangSoBco = {
@@ -285,6 +286,14 @@ export const SO_BO_PHAN: HangSoBco = {
 	daCapNhat: 21,
 	soKr: 33,
 	tuTinThap: 5,
+};
+
+export const SO_CA_NHAN: HangSoBco = {
+	tienDo: 47,
+	kyVong: 27,
+	daCapNhat: 4,
+	soKr: 6,
+	tuTinThap: 1,
 };
 
 export const SO_CHUA_CONG_BO: HangSoBco = {

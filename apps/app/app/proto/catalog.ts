@@ -31,7 +31,7 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-bco-ngay-cuoi", nhan: "Hôm nay là ngày cuối chu kỳ" },
 			{ id: "ST-bco-daketthuc", nhan: "Chu kỳ đã kết thúc" },
 			{ id: "ST-bco-the-hop-tuan", nhan: "Thẻ Họp tuần — không có hàng số" },
-			{ id: "ST-bco-ca-nhan", nhan: "Bộ cá nhân — không có hàng số" },
+			{ id: "ST-bco-ca-nhan", nhan: "Bộ cá nhân — số của chính bộ" },
 		],
 	},
 	{

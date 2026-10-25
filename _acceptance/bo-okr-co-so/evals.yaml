@@ -11,11 +11,13 @@ evals:
       - "_acceptance/bo-okr-co-so/rang/man-bo-okr-co-so*.mjs"
     expected: |
       man-bo-okr-co-so.mjs trên phiên đo riêng (tien-de.mjs), bộ OKR mẫu, người xem là trưởng một phòng ban mẫu, khổ
-      1440. Ma trận viết trước 3 bộ {goc, bp:<bộ phận mẫu có phòng ban con có mục tiêu>, pb:<phòng ban của người xem>}.
-      Mỗi bộ: mở /okr/bo-okr?donOkr=<khoá>, đọc [data-slot=stat-group] đầu tiên dưới hàng thẻ con; đọc okr.toanCanh
-      qua API trong cùng phiên (cookie của người xem) và chu kỳ đang xem qua okr.cycles. Khẳng định từng bộ đúng một
+      1440. Ma trận viết trước 4 bộ {goc, bp:<bộ phận mẫu có phòng ban con có mục tiêu>, pb:<phòng ban của người xem>,
+      nguoi:<người xem>}.
+      Mỗi bộ: mở /okr/bo-okr?donOkr=<khoá>, đọc [data-slot=stat-group] đầu tiên dưới hàng thẻ con; đọc okr.toanCanh,
+      okr.danhSachBo và okr.danhSach (không lọc) qua API trong cùng phiên (cookie của người xem) và chu kỳ đang xem qua okr.cycles. Khẳng định từng bộ đúng một
       hàng số, đứng sau hàng thẻ con và trước hàng công cụ của bảng (thứ tự DOM: [data-the-con-bo] < [data-hang-so-bo] < nút Gập tất cả), bốn nhãn đúng thứ tự, và bốn giá trị bằng
-      (ngayConLai tính từ endsOn theo giờ VN, tienDo%, daCapNhat/soKr, tuTin.thap) của hàng key=<khoá>; mô tả Tiến độ chứa
+      (ngayConLai tính từ endsOn theo giờ VN, tienDo%, daCapNhat/soKr, tuTin.thap) của hàng key=<khoá> (với nguoi: tienDo = trung bình làm tròn progress của các
+      dòng okr.danhSach chưa bỏ đã công bố, soKr = tổng KR của chúng — tính độc lập trong thước); mô tả Tiến độ chứa
       kyVong; ô Tiến độ và KR tự tin thấp bằng tienDo, tuTinThap của hàng okr.danhSachBo cùng khoá (Hỏi-6: số của chính
       bộ đó, cùng nguồn với danh sách Bộ OKR). In «DUNG AC-1 <khoá>: <4 giá trị>» hoặc «SAI AC-1 <khoá>: <ô> man=<x> api=<y>», mã 1.
       Gieo trước khi đo qua đường ghi thật: một lần cập nhật tuần này tự tin thấp cho một KR của phòng ban, để
@@ -32,13 +34,13 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
       - "apps/app/test/bo-okr-co-so.dom.tsx"
     expected: |
-      apps/app/test/bo-okr-co-so.dom.tsx ca «bco-o-so»: dựng TheoDonVi với trpc giả trả okr.toanCanh ba hàng khác số
-      (goc, bp:B, pb:P) và chu kỳ có endsOn cố định; đồng hồ ghim (setSystemTime) giữa chu kỳ. Ma trận viết trước 3 bộ ×
-      4 ô = 12 khẳng định: giá trị ô bằng số của đúng hàng khoá bộ đang xem, thứ tự nhãn đúng, đúng một
+      apps/app/test/bo-okr-co-so.dom.tsx ca «bco-o-so»: dựng TheoDonVi với trpc giả trả okr.soBo khác số theo từng
+      unit (goc, bp:B, pb:P, nguoi:U) và chu kỳ có endsOn cố định; đồng hồ ghim (setSystemTime) giữa chu kỳ. Ma trận viết trước 4 bộ ×
+      4 ô = 16 khẳng định: giá trị ô bằng số okr.soBo của đúng unit bộ đang xem (input của lần gọi mang unit ấy), thứ tự nhãn đúng, đúng một
       [data-slot=stat-group] nằm giữa thanh thẻ con và bảng. Thông điệp ghim «bco-o-so: <khoá>/<ô> lech».
-      CHIEU DO (ca «bco-o-so-do», cùng fixture): bản dựng chọn hàng theo khoá cố định goc (tham số thử của hàm chọn hàng)
-      → khẳng định đỏ «bco-o-so: pb:P/tien-do lech»; và fixture hàng toanCanh của pb:P bị bỏ → ô hiện trạng thái chưa
-      công bố chứ không mượn số hàng khác.
+      CHIEU DO (ca «bco-o-so-do», cùng fixture): bản gọi okr.soBo với unit cố định goc (tham số thử)
+      → khẳng định đỏ «bco-o-so: pb:P/tien-do lech»; và okr.soBo trả soKr 0 cho pb:P → ô hiện trạng thái chưa công bố
+      chứ không mượn số bộ khác.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
@@ -70,7 +72,7 @@ evals:
       Ca «bco-the»: ma trận viết trước 5 cách xem {danh-sach, hop-tuan, viec, cay, cham} × có hàng bốn ô [data-hang-so-bo] {có, không, không,
       không, không} (cham ở chu kỳ pha cham-diem); 3 thao tác ở thẻ OKR {bật locNhanh=can-ban, phuTrach=<một người>,
       sap=tien-do desc} → bốn giá trị y hệt lúc chưa lọc dù số dòng bảng đổi (khẳng định số dòng đổi, để thước không
-      xanh vì lọc không chạy); 2 đơn vị không có hàng {nguoi:<id>, pb:<id không có trong cây>} → không có
+      xanh vì lọc không chạy); 1 đơn vị không có hàng {pb:<id không có trong cây>} → không có
       [data-hang-so-bo]. Ca thẻ khác chỉ dò [data-hang-so-bo], không dò [data-slot=stat-group] (D3, chủ kho 24/10: Họp
       tuần của HT1 có StatGroup riêng). Thông điệp ghim «bco-the: <ca> lech».
       CHIEU DO (ca «bco-the-do»): bản truyền rows đã lọc vào hàm dựng ô (tham số thử) → «bco-the: can-ban lech».
@@ -169,11 +171,11 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
       - "apps/app/test/bo-okr-co-so.dom.tsx"
     expected: |
-      Ca «bco-tai»: trpc giả với okr.toanCanh treo (promise không xong) → 4 ô khung xương trong [data-slot=stat-group]
-      (aria-busy), dòng vị trí «Bộ OKR» và hàng thẻ con trong DOM, bảng mục tiêu hiện (danhSach đã xong). okr.toanCanh
-      lỗi → VungTaiLoi chỗ hàng số với nút Thử lại; bấm nút → số lần gọi okr.toanCanh tăng 1; bảng mục tiêu vẫn có dòng và
+      Ca «bco-tai»: trpc giả với okr.soBo treo (promise không xong) → 4 ô khung xương trong [data-slot=stat-group]
+      (aria-busy), dòng vị trí «Bộ OKR» và hàng thẻ con trong DOM, bảng mục tiêu hiện (danhSach đã xong). okr.soBo
+      lỗi → VungTaiLoi chỗ hàng số với nút Thử lại; bấm nút → số lần gọi okr.soBo tăng 1; bảng mục tiêu vẫn có dòng và
       nút mở dòng bấm được. Thông điệp ghim «bco-tai: <ca> lech».
-      CHIEU DO (ca «bco-tai-do»): bản để lỗi toanCanh rơi xuống Loi toàn thẻ (tham số thử) → «bco-tai: bang-van-hien
+      CHIEU DO (ca «bco-tai-do»): bản để lỗi okr.soBo rơi xuống Loi toàn thẻ (tham số thử) → «bco-tai: bang-van-hien
       lech».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -239,4 +241,23 @@ evals:
       nen». In «DUNG AC-9: <n> ho so, <k> do san tren nen», mã 0; còn lại mã 1.
       CHIEU DO (--chieu-do doi-khang-dinh, bản sao): sửa thêm một khẳng định số trong một thước của danh sách →
       «SAI AC-9 <tep>: doi ngoai lop cho phep» (ghim /SAI AC-9 \S+: doi ngoai lop cho phep/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bco_api_so_bo
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/okr-so-bo.spec.ts"
+    expected: |
+      apps/api/test/okr-so-bo.spec.ts ca «bco-so-bo» trên cơ sở dữ liệu thử: gieo qua đường ghi thật một chu kỳ đang chạy,
+      một bộ phận có một phòng ban con, mục tiêu đã công bố ở goc, bp, pb và một mục tiêu cá nhân của người U, một mục tiêu
+      phòng ban có KR do U phụ trách, một mục tiêu nháp của U; một lần cập nhật tuần này tự tin thấp cho một KR của U.
+      Ma trận viết trước 4 unit {goc, bp:B, pb:P, nguoi:U} × 5 trường {tienDo, kyVong, soKr, daCapNhat, tuTin.thap}:
+      goc, bp, pb bằng hàng okr.toanCanh cùng khoá; nguoi:U bằng số viết tay của ca (tính trên mục tiêu cá nhân và mục
+      tiêu phòng ban có KR của U, không đếm mục tiêu nháp). Thông điệp ghim «bco-so-bo: <unit>/<truong> lech».
+      CHIEU DO (ca «bco-so-bo-do»): thủ tục tra hàng okr.toanCanh theo khoá thay vì tính trên tập của bộ (tham số thử)
+      → «bco-so-bo: nguoi:U/soKr lech».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

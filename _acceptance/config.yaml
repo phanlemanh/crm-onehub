@@ -96,6 +96,7 @@ executors:
     bco_dom_the: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-co-so.dom.tsx -t bco-the
     bco_dom_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-co-so.dom.tsx -t bco-tai
     bco_ui_mo_san: cd packages/ui && bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/data-table-mo-san.dom.tsx
+    bco_api_so_bo: 'bun run test -- "cd apps/api && bun test test/okr-so-bo.spec.ts -t bco-so-bo"'
     ltc_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t loc
     ltc_khoan_dung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t khoan-dung
     ltc_chi_doc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t chi-doc

@@ -40,6 +40,7 @@ import {
 	MUC_TIEU_PHONG_BAN,
 	type MucTieuBco,
 	SO_BO_PHAN,
+	SO_CA_NHAN,
 	SO_CHUA_CONG_BO,
 	SO_PHONG_BAN,
 } from "./du-lieu";
@@ -85,7 +86,7 @@ const CANH: Record<string, Canh> = {
 	"ST-bco-ca-nhan": {
 		...MAC_DINH,
 		don: "caNhan",
-		hangSo: "khong",
+		so: SO_CA_NHAN,
 		rows: MUC_TIEU_CA_NHAN,
 	},
 };
