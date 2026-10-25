@@ -5,7 +5,11 @@ import { fileURLToPath } from "node:url";
 
 const TEP = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP), "..", "..", "..");
-const RA = join(GOC, "_acceptance/bam-kr-mo-chi-tiet-kr/evidence/hom-nay");
+const RA = join(
+	GOC,
+	"_acceptance/bam-kr-mo-chi-tiet-kr/evidence",
+	process.env.THU_MUC_ANH ?? "hom-nay",
+);
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
 const MAN = {
