@@ -323,12 +323,15 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
       - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
     expected: |
-      design-gate.mjs chấm HTML đã dựng của chế độ Soạn (bàn đo màn lưu HTML các trạng thái có góp ý, bộ trống, hỏi công
-      bố, chỉ xem, ở 1280 và 375) với --html … --require-html: 0 lỗi P0 (màu lạ, góc lạ, className đè component @crm/ui),
-      mã 0. design-gate trả do_duoc=false (không đo được) → san-thiet-ke.mjs in «KHONG DO DUOC: <tep>» và mã 2, không
-      bao giờ tính là đạt.
-      CHIEU DO: bản sao một tệp okr/soan-bo/ thêm một mã màu hex vào className, dựng lại HTML → design-gate báo P0 và mã
-      khác 0 (thông điệp ghim tên luật màu của design-gate).
+      san-thiet-ke.mjs dựng lại HTML của chế độ Soạn mỗi lượt (bàn đo màn EVAL=E16 trong phiên đo riêng; 8 tệp: có góp ý,
+      bộ trống, hỏi công bố, chỉ xem × 1280|375; mỗi phần tử mang màu, nền, cỡ chữ trình duyệt đã tính, dấu
+      data-kieu-da-tinh) rồi chấm từng tệp bằng design-gate.mjs --mode dom: 0 lỗi P0 (low-contrast, gray-on-color,
+      text-overflow, broken-image, body-text-viewport-edge), «KET LUAN vk10 san thiet ke: 8/8 HTML, 0 P0», mã 0. Thiếu tệp,
+      tệp cũ hơn lượt, thiếu dấu data-kieu-da-tinh, hay design-gate trả do_duoc=false (ví dụ tệp .tsx) → «KHONG DO DUOC:
+      <tep>», mã 2, không bao giờ tính là đạt. Màu ngoài bảng, góc lạ, className đè component @crm/ui không có luật P0 của
+      design-gate — phần ấy do E17 (judgment, ảnh) đo.
+      CHIEU DO (--chieu-do, bản sao): thêm text-[#e5e5e5] vào dòng điểm của khối Chất lượng, dựng lại HTML → design-gate báo
+      «P0 low-contrast» kèm mã màu đã chèn, mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E19
