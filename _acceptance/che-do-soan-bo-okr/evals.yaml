@@ -146,7 +146,7 @@ evals:
     expected: |
       Ca «vk10-gop-y»: bộ hai mục tiêu, Kara bật. Bấm «Nhờ Kara đọc bộ» → troLyDeXuat gọi đúng 2 lần với hai objectiveId;
       trong lúc chờ có «Kara đang đọc bộ OKR này…»; trả về hai đề xuất → cột bên có một `KaraProposalGroup` với đúng một
-      nhãn Kara và hai thẻ; bấm «Thay câu» → troLyQuyet với quyết «nhan»; dòng KR trong tài liệu đổi sang chữ mới và có
+      nhãn Kara và hai thẻ; bấm nút nhận của thẻ (data-hanh-dong=nhan, chữ theo hậu quả — «Đổi tên KR» với đề xuất viết lại tên KR) → troLyQuyet với quyết «nhan»; dòng KR trong tài liệu đổi sang chữ mới và có
       dấu «đổi theo Kara»; thẻ thành biên nhận có «Hoàn tác»; bấm Hoàn tác → lời gọi trả chữ cũ (updateKeyResult với title
       cũ, như gop-y-kara.ts) và dòng về chữ cũ. Ma trận viết trước 3 trạng thái Kara {tắt, hết lượt, lỗi} → `KaraState`
       đúng loại và khối Chất lượng vẫn có «N trên M». Thông điệp ghim «vk10-gop-y: <buoc> lech».
