@@ -1,6 +1,10 @@
 import { db } from "@crm/db";
 import { PRIORITY } from "@crm/db/agent-tasks";
 import { ghiDaBaoAi, LOAI_NHAC_AI, type ViecAi } from "@crm/db/ai-nhac";
+import {
+	type CaiDatHieuLuc,
+	docCaiDatThongBao,
+} from "@crm/db/cai-dat-thong-bao";
 import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
 import { KHOA_MUC_OKR, laViecOkr } from "@crm/db/okr-nhac";
 import {
@@ -21,7 +25,7 @@ import {
 	khoaDonOkr,
 	THAM_SO_OKR,
 } from "@crm/validation/okr-tham-so";
-import { khoaThongBao } from "@crm/validation/thong-bao";
+import { khoaThongBao, macDinhDayRa } from "@crm/validation/thong-bao";
 import { sendSlackMessage } from "./run-runtime";
 import { slackAccessToken } from "./slack-connection";
 import { completeTask } from "./tasks";
@@ -40,7 +44,19 @@ const CACH_XEM_HOP_TUAN = "hop-tuan" satisfies CachXemOkr;
 
 const CHU_DE = /^user:(.+):\d{4}-\d{2}-\d{2}$/;
 
-export type KetQuaNhac = "da-gui" | "khong-slack" | "khong-khop" | "khong-viec";
+export type KetQuaNhac =
+	| "da-gui"
+	| "da-tat-het"
+	| "khong-slack"
+	| "khong-khop"
+	| "khong-viec";
+
+export function locDayRa(
+	viec: ViecNhac[],
+	caiDat: (loai: string) => CaiDatHieuLuc,
+): ViecNhac[] {
+	return viec.filter((v) => caiDat(v.loai).dayRa);
+}
 
 export type PhuThuocGui = {
 	fetcher?: typeof fetch;
@@ -109,7 +125,7 @@ function maCuaAnToan(userId: string, ds: ViecNhac[]): MucNhac[] {
 	});
 }
 
-function conMaDuoc(userId: string, ds: ViecNhac[]): ViecNhac[] {
+export function conMaDuoc(userId: string, ds: ViecNhac[]): ViecNhac[] {
 	const sauTru = truKrIm(ds);
 	return ds.filter(
 		(v, i) => maCuaAnToan(userId, [sauTru[i] ?? v]).length === 1,
@@ -145,7 +161,7 @@ export async function lenLichNhac(
 	return { ghi: count };
 }
 
-function appUrlMacDinh(): string | null {
+export function appUrlMacDinh(): string | null {
 	const dau = process.env.APP_URL?.split(",")[0]?.trim().replace(/\/+$/, "");
 	return dau || null;
 }
@@ -195,6 +211,14 @@ export async function duongMo(appUrl: string | null): Promise<LienKet> {
 	const ctx = await xuongSlug(appUrl);
 	if (!ctx) return () => null;
 	return (v) => `${ctx.appUrl}/${ctx.slug}${duongTrongApp(v)}`;
+}
+
+export async function lienKetDuongDan(
+	appUrl: string | null,
+): Promise<(duongDan: string) => string | null> {
+	const ctx = await xuongSlug(appUrl);
+	if (!ctx) return () => null;
+	return (duongDan) => `${ctx.appUrl}/${ctx.slug}${duongDan}`;
 }
 
 export async function lienKetKeHoach(): Promise<
@@ -266,6 +290,27 @@ export async function chayNhac(
 		return dong(task.id, slack ? "khong-khop" : "khong-slack");
 	}
 
+	const guiDuoc = locDayRa(
+		viec,
+		await docCaiDatThongBao(db, userId, macDinhDayRa),
+	);
+	if (guiDuoc.length === 0) {
+		await db.agentTask.update({
+			where: { id: task.id },
+			data: {
+				payload: {
+					...payload,
+					mucTinh,
+					thongBaoLoi,
+					daGuiKhoa: [],
+					kenh: kenh.kenh,
+					lechKenh: kenh.lech,
+				},
+			},
+		});
+		return dong(task.id, "da-tat-het");
+	}
+
 	const { name: ten } = await db.user.findUniqueOrThrow({
 		where: { id: userId },
 		select: { name: true },
@@ -275,8 +320,15 @@ export async function chayNhac(
 	);
 	const daGui =
 		kenh.kenh === "zalo"
-			? await guiQuaZalo(token, kenh.zaloUserId, ten, viec, lienKet, deps)
-			: await guiQuaSlack(kenh.slackUserId, ten, viec, lienKet, task.id, deps);
+			? await guiQuaZalo(token, kenh.zaloUserId, ten, guiDuoc, lienKet, deps)
+			: await guiQuaSlack(
+					kenh.slackUserId,
+					ten,
+					guiDuoc,
+					lienKet,
+					task.id,
+					deps,
+				);
 	await db.agentTask.update({
 		where: { id: task.id },
 		data: {
@@ -285,6 +337,7 @@ export async function chayNhac(
 				mucTinh,
 				thongBaoLoi,
 				daGui: daGui.map(maViec),
+				daGuiKhoa: daGui.map((v) => khoaThongBao(v, now)),
 				kenh: kenh.kenh,
 				lechKenh: kenh.lech,
 			},

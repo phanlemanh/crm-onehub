@@ -4,7 +4,7 @@ import { type CachLocTruong, cachLocTruong } from "@crm/db/fields-shape";
 import type { DataTableFacet } from "@crm/ui/components/data-table";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import type { Locale } from "@crm/ui/lib/locale";
-import { GIA_TRI_TRONG } from "@crm/validation/bo-loc-truong";
+import { GIA_TRI_CO_TEP, GIA_TRI_TRONG } from "@crm/validation/bo-loc-truong";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import type { TruongLoc } from "@/components/data-table/list-search-params";
@@ -40,6 +40,11 @@ function luaChonTheoCach(
 				{ value: "next-month", label: m.closing.nextMonth },
 				{ value: "later", label: m.closing.later },
 				trong(m.locTruong.trong),
+			];
+		case "coTep":
+			return [
+				{ value: GIA_TRI_CO_TEP, label: m.tepTruong.loc.coTep },
+				trong(m.tepTruong.loc.chuaCoTep),
 			];
 		default:
 			return [trong(m.locTruong.trong)];

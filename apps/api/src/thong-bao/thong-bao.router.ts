@@ -1,5 +1,6 @@
 import {
 	danhSachThongBaoInput,
+	luuCaiDatThongBaoInput,
 	moThongBaoInput,
 } from "@crm/validation/thong-bao";
 import { Inject } from "@nestjs/common";
@@ -16,9 +17,11 @@ import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
+	caiDatThongBaoOutput,
 	chuongThongBaoOutput,
 	danhSachThongBaoOutput,
 	docHetThongBaoOutput,
+	luuCaiDatThongBaoOutput,
 	moThongBaoOutput,
 } from "./thong-bao.contracts";
 import { ThongBaoService } from "./thong-bao.service";
@@ -70,5 +73,25 @@ export class ThongBaoRouter {
 	})
 	docHet(@Ctx() ctx: AuthedTrpcContext) {
 		return this.thongBao.docHet(ctx.user.id, new Date());
+	}
+
+	@Query({
+		output: caiDatThongBaoOutput,
+		meta: restMeta("GET", "/thong-bao/cai-dat", TAG),
+	})
+	caiDat(@Ctx() ctx: AuthedTrpcContext) {
+		return this.thongBao.caiDat(ctx.user.id);
+	}
+
+	@Mutation({
+		input: luuCaiDatThongBaoInput,
+		output: luuCaiDatThongBaoOutput,
+		meta: restMeta("POST", "/thong-bao/cai-dat", TAG),
+	})
+	luuCaiDat(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof luuCaiDatThongBaoInput>,
+	) {
+		return this.thongBao.luuCaiDat(ctx.user.id, input.loai, input.dayRa);
 	}
 }

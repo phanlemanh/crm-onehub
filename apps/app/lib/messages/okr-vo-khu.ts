@@ -114,7 +114,7 @@ const en: OkrVoKhuMessages = {
 		viTri: "OKR sets",
 		the: {
 			nhan: "Parts of the OKR set",
-			"danh-sach": "OKR",
+			"danh-sach": "OKRs",
 			viec: "Tasks",
 		},
 		viec: {

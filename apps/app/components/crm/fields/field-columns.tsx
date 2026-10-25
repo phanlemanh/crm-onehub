@@ -6,7 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useTRPC } from "@/lib/trpc/client";
 import type { FieldEntity } from "./fields-entity";
-import { anDuoiTheoKieu, canhTheoKieu, OTruongBang } from "./kieu-truong";
+import {
+	anDuoiTheoKieu,
+	canhTheoKieu,
+	giaTriTrongHang,
+	type HangCoTruong,
+	OTruongBang,
+} from "./kieu-truong";
 
 function nhanTrongO(
 	giaTri: string | number | boolean | null,
@@ -16,7 +22,7 @@ function nhanTrongO(
 	return [{ value: nhan, label: nhan }];
 }
 
-type WithFields = { fields: Record<string, string | number | boolean | null> };
+type WithFields = HangCoTruong;
 
 export function useFieldColumns<Row extends WithFields>(
 	entity: FieldEntity,
@@ -45,7 +51,7 @@ export function useFieldColumns<Row extends WithFields>(
 				cell: (row: Row) => (
 					<OTruongBang
 						kieu={field.type}
-						giaTri={row.fields[field.key] ?? null}
+						giaTri={giaTriTrongHang(field.type, row, field.key)}
 						luaChon={nhanTrongO(row.fields[field.key] ?? null)}
 						nguoiDung={members}
 					/>

@@ -39,10 +39,11 @@ import type { Locale } from "@crm/ui/lib/locale";
 import type { NghiaTrangThai } from "@crm/ui/lib/status-tone";
 import { toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { NGAY_VN } from "@crm/validation/ngay-vn";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import { tenMan } from "@/lib/tin-hieu/ten-man";
+import { tieuDiemNutThaoTac } from "@/lib/tin-hieu/tieu-diem";
 
 export type TrangThaiDong = {
 	nhan: string;
@@ -131,6 +132,7 @@ export function DanhSachTinHieu({
 	const [hoiXoa, setHoiXoa] = useState<DongTinHieu | null>(
 		() => dong.find((d) => d.id === hoiXoaBanDau) ?? null,
 	);
+	const moTu = useRef<string | null>(hoiXoa?.ma ?? null);
 	const gio = (d: DongTinHieu) => GIO[locale].format(new Date(d.guiLuc));
 	const thongBao = (
 		<span aria-live="polite" className="sr-only" data-da-xoa="">
@@ -165,7 +167,10 @@ export function DanhSachTinHieu({
 				<DropdownMenuItem
 					data-xoa-tin-hieu={d.ma}
 					disabled={!d.coTheXoa}
-					onSelect={() => setHoiXoa(d)}
+					onSelect={() => {
+						moTu.current = d.ma;
+						setHoiXoa(d);
+					}}
 					variant="destructive"
 				>
 					{m.xoa}
@@ -275,7 +280,10 @@ export function DanhSachTinHieu({
 					) : null
 				}
 				nut={m.xoaNut}
-				onCloseAutoFocus={(e) => e.preventDefault()}
+				onCloseAutoFocus={(e) => {
+					e.preventDefault();
+					if (moTu.current) tieuDiemNutThaoTac(moTu.current);
+				}}
 				onConfirm={() => {
 					if (hoiXoa) onXoa(hoiXoa.id);
 					setHoiXoa(null);

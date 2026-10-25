@@ -1,0 +1,46 @@
+mot-luot: da cho 1203s de toi luot
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_chi_tiet_cong_ty_hai_cot_do · app http://localhost:4800 · api http://localhost:4481
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+API cua phien do khoi lai voi kho Blob gia http://localhost:51384
+$ bun scripts/dev-session.ts "ctcgo31yqtkkgo320@thu.test"
+gieo: 3 truong Tep, 2 cong ty, 1 lien he, 1 thoa thuan, 3 tep ten 60 ky tu (ctcgo31y)
+  do buoc 1 (1440): noi dung tab 978px, chi tiet 978px, 16 hang thuoc tinh, 7 hang hai cot
+  anh ctc-cong-ty-1440.png
+  do buoc 1 (768): noi dung tab 575px, chi tiet 575px, 16 hang thuoc tinh, 7 hang hai cot
+  anh ctc-cong-ty-768.png
+buoc 1: dat
+  do buoc 2: 1 o Tep rong 808px, 1 dong tep, 2 nut, ten 60 ky tu
+  do buoc 2: vung keo tha rong 808px, cung hang true
+  anh ctc-o-tep-1440.png
+buoc 2: dat
+  do buoc 3 (cong-ty): vung 333px, chu 1 dong, duoi nut true, mo ta 299px
+  anh ctc-keo-tha-cong-ty-375.png
+  do buoc 3 (lien-he): vung 333px, chu 1 dong, duoi nut true, mo ta 299px
+  anh ctc-keo-tha-lien-he-375.png
+  do buoc 3 (thoa-thuan): vung 333px, chu 1 dong, duoi nut true, mo ta 299px
+  anh ctc-keo-tha-thoa-thuan-375.png
+  do buoc 3: 3 ngan da do
+buoc 3: dat
+  do buoc 4: 207 phan tu trong ngan, tran 0, bo qua 1 hang the con trong khung cuon ngang [data-tab-dinh], [data-tab-cuon-ngang]
+buoc 4: dat
+  do buoc 5 (lien-he): o Tep 808px, 5 hang hai cot, keo tha cung hang true
+  anh ctc-lien-he-1440.png
+  do buoc 5 (thoa-thuan): o Tep 808px, 3 hang hai cot, keo tha cung hang true
+  anh ctc-thoa-thuan-1440.png
+buoc 5: dat
+  do buoc 6 (trong): muc dau «Chi tiết», kara cho 938px, luoi chi tiet 938px, web vang
+  anh ctc-cong-ty-trong-1440.png
+  do buoc 6 (co): lien ket co, kara cho co
+buoc 6: dat
+  do buoc 7: vung 608px, cung hang true
+  anh ctc-tai-lieu-1440.png
+buoc 7: dat
+do-bo-cuc: dat
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+
+[exited with code 0]

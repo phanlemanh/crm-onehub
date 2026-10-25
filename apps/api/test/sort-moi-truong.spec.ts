@@ -104,7 +104,7 @@ const GIA_TRI = {
 	URL: { nho: "a.vn", hoa: "m.vn", lon: "y.vn" },
 	EMAIL: { nho: "a@x.vn", hoa: "m@x.vn", lon: "y@x.vn" },
 	PHONE: { nho: "0901", hoa: "0905", lon: "0909" },
-} satisfies Record<Exclude<FieldTypeName, "CHECKBOX">, BaGiaTri>;
+} satisfies Record<Exclude<FieldTypeName, "CHECKBOX" | "FILE">, BaGiaTri>;
 
 const KIEU_SAP = Object.keys(GIA_TRI) as (keyof typeof GIA_TRI)[];
 

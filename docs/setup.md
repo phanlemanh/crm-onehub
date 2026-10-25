@@ -172,6 +172,41 @@ bỏ qua vì là OKR thật của công ty — đã vào lịch sử git thì kh
 đo đó cũng nằm ngoài git (xem trên). Điều kiện bật góp ý đọc từ con số của lượt đo đó, đặt cạnh
 con số của bộ `mau/`.
 
+## Bộ hợp đồng mẫu
+
+```
+bun run hop-dong:mau
+```
+
+Lệnh gắn sáu hợp đồng mẫu vào ô Tệp «Hợp đồng» của các thoả thuận mẫu, để Kara có hợp đồng
+mà đọc khi chưa phòng ban nào tải hợp đồng thật lên. Nó tạo một công ty «Công ty Đối tác Mẫu A
+· mẫu», bảy thoả thuận «HĐ mẫu … · mẫu» (sáu cái có tệp, một cái không có để thử bộ lọc «Chưa có
+tệp»), trường «Hợp đồng» kiểu Tệp trên Thoả thuận nếu chưa có, và một người dùng mẫu
+`hop-dong@mau.onehub.test` (quản trị) đứng tên tải tệp. Mọi thứ đi qua service thật và đường
+tải lên của ô Tệp — xin chữ ký, PUT lên kho tệp, ghi nhận — như trình duyệt làm; chỉ người dùng
+mẫu được ghi thẳng vào bảng, vì kho không có đường tạo người ngoài đăng nhập.
+
+**Cần trước:** workspace đã có (đăng nhập một lần, hoặc `cd apps/api && bun run dev:session <thư>`),
+`TEP_BAN_GHI_BLOB_TOKEN` trong `.env` (kho Blob riêng tư của ô Tệp), và kho đã có kiểu trường Tệp
+(`bun run db:migrate`). Thiếu thứ nào thì lệnh dừng với câu nói cách sửa và không ghi gì: mã 6
+khi kho tệp chưa bật, mã 4 khi thiếu workspace hay trường «Hợp đồng» đã có với kiểu khác.
+
+**Chạy lại an toàn:** byte của sáu tệp cố định, và ô Tệp gặp lại đúng tệp thì trả tệp cũ, nên chạy
+lại không nhân đôi tệp, bản ghi hay trường; dòng in của mỗi tệp đổi từ «đã gắn» sang «đã có».
+Lần chạy bị ngắt giữa chừng thì chạy lại là đủ: tệp tải dở được lượt dọn hằng ngày xoá sau hạn
+phiếu.
+
+**Không bao giờ chạy trên production:** lệnh dùng cùng bộ chặn với `okr:mau` — từ chối với mã 2
+khi `NODE_ENV=production`, `VERCEL_ENV` là `production` hay `preview`, hay cơ sở dữ liệu không ở
+máy cục bộ (kể cả qua `?host=`), trước khi chạm kho hay kho tệp; không cờ nào vượt được.
+
+**Đáp án cho Kara:** sáu tệp và đáp án nằm ở `packages/db/mau/hop-dong/`. `dap-an.json` ghi cho mỗi
+tệp ngày ký, ngày hết hạn và giá trị (đồng), đoạn chữ đúng như viết trong tệp, và tệp có đọc được
+chữ không (bản quét HD5 thì không). Đọc bằng `boHopDongMau()` của `@crm/validation/hop-dong-mau`.
+Hai chỗ cố ý làm khó: hết hạn của HD2 phải suy («ngày ký + 12 tháng − 1 ngày»), và phụ lục HD6 nhắc
+ngày ký của HD1. Sửa nội dung thì sửa `apps/agent/scripts/sinh-hop-dong-mau.ts` rồi dựng lại trên
+máy có phông Arial (`cd apps/agent && bun scripts/sinh-hop-dong-mau.ts`), commit cả byte lẫn đáp án.
+
 ## Google Cloud
 
 - **Enable the Gmail API and the Google Calendar API** on the project.
@@ -429,12 +464,28 @@ hơn một nhóm trên năm:
 bun run tin-hieu:do-gom
 ```
 
-Việc cài một lần trước lượt thật đầu tiên:
+Phiên gom đọc chữ người ngoài nhập, nên nó chỉ được làm đúng việc gom (`scripts/tin-hieu/gom-cau-hinh.ts`, khối
+`GOM.moHinh`):
+
+- môi trường của phiên chỉ có khoá mô hình, và Claude Code gỡ cả khoá đó khỏi mọi lệnh con; không token GitHub nào;
+- phiên chỉ chạy được đúng các lệnh kit liệt trong lời dặn, chỉ sửa bản gom lượt đã định và các tệp lộ trình, không
+  git, không mạng, không MCP, không hook, không đọc tệp ngoài kho và gói kit;
+- trước khi gọi phiên, lượt quét bản checkout và thư mục nhà tìm token; thấy thì đỏ «token nằm trên đĩa»;
+- phiên đổi cấu hình, hook hay ref của git thì lượt đỏ «phiên gom đổi siêu dữ liệu git» trước lệnh git kế tiếp;
+- trước khi đẩy, lượt quét nội dung đề xuất tìm khoá (nguyên văn và base64); thấy thì đỏ và không đẩy;
+- token chỉ đi tới lời gọi `git fetch`, `git push` và `gh` của lượt.
+
+Nhật ký mỗi lượt có dòng «phiên gom bị từ chối N lời gọi» kèm tên công cụ: số khác 0 nghĩa là skill cần một lệnh
+chưa liệt, hoặc một tín hiệu đã dặn phiên làm việc bị cấm — đọc tín hiệu của lượt đó trước khi chạy lại. Vòng này chưa
+có phép đo Claude Code chặn thật và chưa cách ly ở tầng hệ điều hành (Known limits của `gia-co-gom-tin-hieu`).
+
+Việc cài một lần trước lượt thật đầu tiên (sau khi `gia-co-gom-tin-hieu` gộp):
 
 1. Đặt bí mật kho `ANTHROPIC_API_KEY` — một khoá API riêng cho lịch gom, có trần chi tiêu tháng đặt
    ở bảng điều khiển của nhà cung cấp mô hình. Nội dung tín hiệu đi tới nhà cung cấp mô hình từ đây.
 2. Cấp cho bí mật `TIN_HIEU_TOKEN` (đã có từ lịch kéo về) quyền đọc kho `phanlemanh/acceptance-gate-kit`
-   — lịch cài gói kit từ đó.
+   — lịch cài gói kit từ đó. Token chỉ cần ghi nội dung và PR của `phanlemanh/crm-onehub` cộng đọc kho kit — một token
+   fine-grained hai kho, không quyền `workflow`.
 3. Chạy tay lịch «Tín hiệu gom» một lần ở tab Actions và mở PR nó tạo.
 
 ## Secrets hygiene
@@ -504,6 +555,26 @@ A rebuild drops the database and re-runs every migration, and it says which of t
 two reasons fired. Force one with `bun run db:test --reset`. Nothing else in the
 repo may drop a database, and this may only because the `_test` suffix is checked
 first.
+
+### A test's own server listens on 127.0.0.1
+
+Every HTTP server a test opens for itself listens on `127.0.0.1`, never on every
+address: `Bun.serve({ port: 0, hostname: "127.0.0.1", … })`, and a Nest app built in
+a test calls `app.listen(0, "127.0.0.1")` right where it is built, before
+`supertest` or `fetch` reaches it. The test then calls `http://127.0.0.1:<port>`,
+not `localhost`.
+
+The reason is Colima. Its `limactl` holds a port on `127.0.0.1` inside the
+ephemeral range (49333 one week, 51536 the next). A server that asks for port 0
+without a hostname binds every address, and macOS can still hand it that exact
+port, because the two binds are on different addresses. The test's request to
+`127.0.0.1:<port>` then lands on `limactl`, which answers with something that is
+not HTTP, and Bun fails with `Malformed_HTTP_Response` — at random, on whichever
+test drew the port. A server that binds `127.0.0.1` is refused that port, so port 0
+never hands it out. `supertest` opens its own server without a hostname, once per
+request, whenever the app it is given is not listening yet; that is why every Nest
+app listens as soon as it is built. `_acceptance/test-nghe-127/rang/quet.mjs`
+checks the test tree for all three.
 
 ### Screen measurements get a database of their own
 

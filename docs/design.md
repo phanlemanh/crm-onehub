@@ -74,6 +74,10 @@ Trong `apps/app`, mỗi mẫu dưới đây đã có thứ thay, và bị trả 
 | `AlertDialog` ráp tay để hỏi lại | `ConfirmDialog` |
 | Nút Huỷ trong hộp thoại gọi thẳng hàm đóng | Bọc bằng `DialogClose asChild` (`SheetClose`, `DrawerClose`) để bộ giữ thay đổi thấy được |
 | `className` đổi màu, góc, khoảng cách của một component `@crm/ui` | biến thể mới trong `packages/ui` |
+| `ToggleGroup spacing={0}` hay hàng nút tự ghép làm thanh lọc | chip của mục «Hàng công cụ» |
+| hàng chip trong `CardContent` | hàng công cụ trên bề mặt |
+| mục gập «Đang theo dõi (n)», «Đã bỏ (n)» dưới bảng | chip hay nút bật tắt trên hàng công cụ |
+| ô chọn đơn vị trên hàng công cụ, lưới thẻ «đơn vị trực thuộc» dưới bảng | menu ở mắt xích cuối của dòng vị trí |
 
 Bảng này sẽ thành một luật `anti-slop` trong `tools/oxlint`. Tới lúc đó, nó được
 kiểm bằng mắt ở review.
@@ -110,7 +114,7 @@ mục này ở những gì nó nói riêng.
 
 ### Thanh bên khu và thẻ con
 
-Hai cách đi giữa các trang con, mỗi cách cho một việc:
+Ba cách đi giữa các trang, mỗi cách cho một việc:
 
 - **Thanh bên khu** (`AreaSidebar` của `packages/ui`): các nơi đến ngang hàng của
   một **khu** mà người đi qua lại — Cài đặt, Hội thoại, Mục tiêu. Đặt một lần trong
@@ -125,11 +129,18 @@ Hai cách đi giữa các trang con, mỗi cách cho một việc:
   một trang — một bộ OKR (OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm), một bản ghi.
   Cùng tiêu đề trang, không nhóm, ít thẻ.
 
-Câu hỏi để chọn: người đang đổi **nơi** trong khu, hay đổi **phần** của cùng một vật?
-Đổi nơi → thanh bên khu; đổi phần → thẻ con.
+- **Dòng vị trí** (`Breadcrumb`): đổi sang **một vật khác cùng loại** — bộ OKR của
+  đơn vị cha, ngang hàng hay trực thuộc; bản ghi kế. Mắt xích cuối mở một menu liệt
+  các vật cùng loại gần nó. Đây là đường duy nhất: không đặt thêm ô chọn vật trên
+  hàng công cụ, không đặt lưới thẻ «đơn vị trực thuộc» dưới nội dung.
 
-Một màn có tối đa một thanh bên khu và một hàng thẻ con; thẻ con không lồng thẻ con,
-và không dựng hàng thẻ ngang thứ hai để thay một nhóm của thanh bên.
+Câu hỏi để chọn: người đang đổi **nơi** trong khu, đổi **phần** của cùng một vật, hay
+đổi sang **vật khác cùng loại**? Đổi nơi → thanh bên khu; đổi phần → thẻ con; đổi vật
+→ dòng vị trí.
+
+Một màn có tối đa một thanh bên khu, một dòng vị trí và một hàng thẻ con; thẻ con
+không lồng thẻ con, và không dựng hàng thẻ ngang thứ hai để thay một nhóm của thanh
+bên.
 
 ### Thẻ con của trang
 
@@ -138,15 +149,39 @@ Khi một màn có nhiều trang con (mỗi thẻ là một đường dẫn riê
 `aria-current="page"` ở thẻ đang mở, số đếm là `Badge variant="secondary"`. Thanh
 thẻ nằm ngay dưới đầu trang.
 
-### Chip lọc và chuyển kiểu xem
+### Thứ tự một màn
 
-- Lọc một danh sách theo vài giá trị: `ToggleGroup variant="outline" size="sm"`.
-  Số đếm trong từng mục là chữ phụ `text-muted-foreground tabular-nums`, không
-  `opacity-*`.
+Chủ kho yêu cầu 25/10, sau khi bốn màn của khu Mục tiêu đặt lọc ở bốn chỗ khác nhau.
+Mọi màn xếp từ trên xuống theo đúng thứ tự này, mỗi tầng có đúng một chỗ, tầng
+không cần thì bỏ:
+
+1. **Đầu trang** — mục «Khung trang» ở trên.
+2. **Dòng vị trí** — chỉ ở trang của một vật; đổi sang vật cùng loại ở đây.
+3. **Thẻ con** — các phần của vật.
+4. **Hàng công cụ** — một hàng duy nhất, ngay trên bề mặt nội dung, nằm ngoài
+   `Card`. Bên trái là chip: phạm vi trước (Tất cả · Tôi dẫn · Đang theo dõi), rồi
+   trạng thái hay tín hiệu. Bên phải, theo thứ tự: Lọc · Sắp xếp · Cột · kiểu xem
+   (`ViewSwitch`) · Đã bỏ / Đã lưu trữ.
+5. **Nội dung** — một bề mặt (bảng, danh sách, sơ đồ).
+6. **Chân** — số đếm và phân trang của chính bề mặt ấy. Không gì khác dưới chân.
+
+### Hàng công cụ
+
+- **Mọi lọc ở hàng công cụ.** Không đặt hàng chip trong `Card` hay `CardContent`,
+  giữa hai bảng hay dưới bảng.
+- **Một tập con của cùng danh sách là một giá trị lọc**, không phải một nhóm gập dưới
+  bảng: đang theo dõi, đáng bàn, đã bỏ, đã lưu trữ. Đã bỏ và Đã lưu trữ là nút bật tắt
+  ở cuối hàng (`docs/vong-doi.md`), không lẫn vào danh sách chính.
+- **Một kiểu chip**: `ToggleGroup variant="outline" size="sm"`, khoảng cách mặc
+  định, số đếm qua prop `count`. Không `spacing={0}` để dính thành một thanh, không
+  `StatGroup` hay nút tự ghép làm lọc. Chọn một hay nhiều giá trị đều cùng hình.
+- **Số đếm trên chip bằng số hàng khi chọn chip đó.** Ô số tổng quan (`StatGroup`)
+  là để đọc, không bấm để lọc.
 - Giá trị lọc ghi lên đường dẫn bằng `nuqs`, như các màn `DataTable`. Không tự
   ghép chuỗi truy vấn rồi `router.push`.
 - Chuyển kiểu xem (bảng, Kanban, theo đơn vị…): `ViewSwitch` — nút trên máy
   tính, ô chọn trên điện thoại. Không tự ghép `ToggleGroup`.
+- Dưới `md` hàng công cụ cuộn ngang trong chính nó; trang không cuộn ngang.
 
 ### Danh sách
 
@@ -164,6 +199,19 @@ cảnh OKR.
 - Mục nằm trong `Card`: `CardTitle` và `CardDescription` trong `CardHeader`.
 - Mục không nằm trong thẻ: `SectionHeading`. Không `<h2>`–`<h4>` tự đặt cỡ chữ
   (xem bảng «Dấu hiệu vẽ tay» ở trên).
+
+### Bấm vào KR và cập nhật
+
+Chủ kho chốt 24/10/2026, theo lối Tability: cập nhật đi qua bộ OKR, không có trang
+cập nhật riêng. Bối cảnh ở `docs/findings/2026-10-22-hop-tuan/README.md` (mục 1 và 8).
+Chỗ còn lệch theo dõi ở các hàng SV1, SV6, SV7 của `docs/plan/lo-trinh-okr.json`.
+
+- **Bấm một mục tiêu ở bất kỳ đâu thì mở chi tiết mục tiêu.**
+- **Bấm một KR ở bất kỳ đâu thì mở chi tiết KR** (`openRecord({ kind: "kr" })`). Luật này áp cả trong chi tiết mục
+  tiêu, ở Sơ đồ, Của tôi và Việc. Không mở mục tiêu chứa KR thay cho chính KR.
+- **Chỉ có một form cập nhật: hộp cập nhật một KR.** Đường chính là chi tiết KR › «Cập nhật». Nút tắt «Cập nhật»
+  trên dòng KR được giữ, nhưng phải mở đúng hộp đó. Không đặt ô nhập trên dòng, và không gửi nhiều KR một lần.
+- **Họp tuần là thẻ con của bộ OKR**, không phải mục trên thanh bên khu.
 
 ### Màu trạng thái
 

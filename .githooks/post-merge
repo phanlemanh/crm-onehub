@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+CAY="$(git rev-parse --show-toplevel)"
+HOOK_CAY="$CAY/.githooks/post-merge"
+if [ -f "$HOOK_CAY" ] && [ "$(realpath "$0")" != "$(realpath "$HOOK_CAY")" ]; then
+	exec bash "$HOOK_CAY" "$@"
+fi
+
+[ -f "$CAY/scripts/trang-ve-gop.mjs" ] || exit 0
+node "$CAY/scripts/trang-ve-gop.mjs" sau-gop
+exit 0

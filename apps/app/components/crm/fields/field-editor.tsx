@@ -5,6 +5,7 @@ import Close from "@carbon/icons-react/es/Close";
 import {
 	FIELD_TYPES,
 	fieldKeyFromLabel,
+	karaDienDuoc,
 	locDuocTheoKieu,
 } from "@crm/db/fields-shape";
 import { Button } from "@crm/ui/components/button";
@@ -57,6 +58,7 @@ type Draft = {
 	options: { id?: string; label: string }[];
 	agentFilled: boolean;
 	agentBrief: string;
+	required: boolean;
 	showOnSheet: boolean;
 	showOnTable: boolean;
 	showOnFilter: boolean;
@@ -79,6 +81,7 @@ function draftFrom(field: FieldRecord | undefined): Draft {
 			})) ?? [],
 		agentFilled: field?.agentFilled ?? true,
 		agentBrief: field?.agentBrief ?? "",
+		required: field?.required ?? false,
 		showOnSheet: field?.showOnSheet ?? true,
 		showOnTable: field?.showOnTable ?? false,
 		showOnFilter: field?.showOnFilter ?? false,
@@ -155,6 +158,7 @@ export function FieldEditor({
 	const agentId = useId();
 	const typeId = useId();
 	const optionsId = useId();
+	const requiredId = useId();
 
 	const [draft, setDraft] = useState<Draft>(() => draftFrom(field));
 
@@ -183,15 +187,17 @@ export function FieldEditor({
 	const key = field?.key ?? fieldKeyFromLabel(draft.label);
 	const saving = create.isPending || update.isPending;
 	const filterable = locDuocTheoKieu(draft.type);
+	const karaDien = karaDienDuoc(draft.type);
 
 	const save = () => {
 		const payload = {
 			label: draft.label,
 			type: draft.type,
 			options: draft.options.filter((option) => option.label.trim() !== ""),
-			agentFilled: draft.agentFilled,
-			agentBrief: draft.agentBrief.trim() || null,
-			showOnSheet: draft.showOnSheet,
+			agentFilled: karaDien && draft.agentFilled,
+			agentBrief: karaDien ? draft.agentBrief.trim() || null : null,
+			required: draft.required,
+			showOnSheet: draft.required || draft.showOnSheet,
 			showOnTable: draft.showOnTable,
 			showOnFilter: filterable && draft.showOnFilter,
 		};
@@ -201,7 +207,7 @@ export function FieldEditor({
 			return;
 		}
 
-		create.mutate({ ...payload, entity, required: false });
+		create.mutate({ ...payload, entity });
 	};
 
 	return (
@@ -228,30 +234,32 @@ export function FieldEditor({
 					</Field>
 				</div>
 
-				<div className={SECTION}>
-					<Field orientation="horizontal">
-						<div className="flex min-w-0 flex-1 flex-col gap-0.5">
-							<FieldLabel htmlFor={agentId}>{copy.agentLabel}</FieldLabel>
-							<FieldDescription>{copy.agentHelp}</FieldDescription>
-						</div>
-						<Switch
-							id={agentId}
-							checked={draft.agentFilled}
-							onCheckedChange={(agentFilled) => patch({ agentFilled })}
-						/>
-					</Field>
+				{karaDien ? (
+					<div className={SECTION}>
+						<Field orientation="horizontal">
+							<div className="flex min-w-0 flex-1 flex-col gap-0.5">
+								<FieldLabel htmlFor={agentId}>{copy.agentLabel}</FieldLabel>
+								<FieldDescription>{copy.agentHelp}</FieldDescription>
+							</div>
+							<Switch
+								id={agentId}
+								checked={draft.agentFilled}
+								onCheckedChange={(agentFilled) => patch({ agentFilled })}
+							/>
+						</Field>
 
-					<Field>
-						<FieldLabel htmlFor={briefId}>{copy.briefLabel}</FieldLabel>
-						<Textarea
-							id={briefId}
-							rows={3}
-							value={draft.agentBrief}
-							onChange={(event) => patch({ agentBrief: event.target.value })}
-						/>
-						<FieldDescription>{copy.briefHelp}</FieldDescription>
-					</Field>
-				</div>
+						<Field>
+							<FieldLabel htmlFor={briefId}>{copy.briefLabel}</FieldLabel>
+							<Textarea
+								id={briefId}
+								rows={3}
+								value={draft.agentBrief}
+								onChange={(event) => patch({ agentBrief: event.target.value })}
+							/>
+							<FieldDescription>{copy.briefHelp}</FieldDescription>
+						</Field>
+					</div>
+				) : null}
 
 				<div className={SECTION}>
 					<Field>
@@ -347,10 +355,25 @@ export function FieldEditor({
 					) : null}
 				</div>
 
+				<div className={SECTION}>
+					<Field orientation="horizontal">
+						<div className="flex min-w-0 flex-1 flex-col gap-0.5">
+							<FieldLabel htmlFor={requiredId}>{copy.requiredLabel}</FieldLabel>
+							<FieldDescription>{copy.requiredHelp}</FieldDescription>
+						</div>
+						<Switch
+							id={requiredId}
+							checked={draft.required}
+							onCheckedChange={(required) => patch({ required })}
+						/>
+					</Field>
+				</div>
+
 				<div className="flex flex-col gap-2.5 border-b px-5 py-4">
 					<FieldLabel className="items-center gap-2 font-normal">
 						<Checkbox
-							checked={draft.showOnSheet}
+							checked={draft.required || draft.showOnSheet}
+							disabled={draft.required}
 							onCheckedChange={(checked) =>
 								patch({ showOnSheet: checked === true })
 							}

@@ -10,6 +10,7 @@ import { LOC_GOP_Y } from "@crm/validation/okr-tham-so";
 import { z } from "zod";
 import { MUC_TIN_CAN_CHINH } from "./can-chinh";
 import { donViChon, mucTieuOutput, type NutCanChinh } from "./okr.contracts";
+import { lienKet } from "./okr-canh-kr.contracts";
 import { OKR_XEM } from "./okr-xem.config";
 
 const ma = z.string().trim().min(1).max(120);
@@ -376,6 +377,7 @@ const viecBo = z.object({
 	id: z.string(),
 	loai: z.enum(LOAI_VIEC_KR),
 	tieuDe: z.string(),
+	lienKet: lienKet.nullable(),
 	nguoiLam: nguoiGon.nullable(),
 	hanNgay: z.string().nullable(),
 	xong: z.boolean(),

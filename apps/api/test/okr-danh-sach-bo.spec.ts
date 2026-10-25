@@ -1,6 +1,11 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
-import { type DanDonVi, gopDanhSachBo } from "../src/okr/bo-okr";
+import {
+	type DanDonVi,
+	gopDanhSachBo,
+	type HangViecBo,
+	viecBoTu,
+} from "../src/okr/bo-okr";
 import type {
 	DanhSachBoOutput,
 	HangBo,
@@ -709,5 +714,83 @@ describe("tbo-viec", () => {
 		expect(
 			idViec(cuaB).includes(viecB) ? [] : ["tbo-viec: viec cua B khong hien"],
 		).toEqual([]);
+	});
+});
+
+describe("tbo-viec-lien-ket", () => {
+	const goc = {
+		id: "v1",
+		tieuDe: "",
+		nguoiLamUserId: null,
+		hanNgay: null,
+		xongLuc: null,
+		campaignId: null,
+		planId: null,
+		nguoiLam: null,
+		campaign: null,
+		plan: null,
+	};
+	const hang = {
+		viec: { ...goc, loai: "viec", tieuDe: "Gọi khách" },
+		song: {
+			...goc,
+			loai: "chien-dich",
+			campaignId: "c1",
+			campaign: { id: "c1", name: "Chiến dịch Q4", status: "RUNNING" },
+		},
+		xoa: { ...goc, loai: "chien-dich", campaignId: "c2" },
+		keHoachXoa: { ...goc, loai: "ke-hoach", planId: "p2" },
+	} satisfies Record<string, HangViecBo>;
+	const ra = (vai: "admin" | "okr") =>
+		Object.fromEntries(
+			Object.entries(hang).map(([k, h]) => {
+				const v = viecBoTu(h, vai);
+				return [k, { tieuDe: v.tieuDe, lienKet: v.lienKet }];
+			}),
+		);
+
+	test("tbo-viec-lien-ket: viec lien ket mang lienKet de man ghi nhan da xoa hay khong co quyen, viec thuong lienKet null", () => {
+		expect(ra("admin")).toEqual({
+			viec: { tieuDe: "Gọi khách", lienKet: null },
+			song: {
+				tieuDe: "Chiến dịch Q4",
+				lienKet: {
+					loai: "chien-dich",
+					coQuyen: true,
+					id: "c1",
+					ten: "Chiến dịch Q4",
+					trangThai: "dang-chay",
+				},
+			},
+			xoa: {
+				tieuDe: "",
+				lienKet: {
+					loai: "chien-dich",
+					coQuyen: true,
+					id: null,
+					ten: null,
+					trangThai: "da-xoa",
+				},
+			},
+			keHoachXoa: {
+				tieuDe: "",
+				lienKet: {
+					loai: "ke-hoach",
+					coQuyen: true,
+					id: null,
+					ten: null,
+					trangThai: "da-xoa",
+				},
+			},
+		});
+		expect(ra("okr")).toEqual({
+			viec: { tieuDe: "Gọi khách", lienKet: null },
+			song: { tieuDe: "", lienKet: { loai: "chien-dich", coQuyen: false } },
+			xoa: { tieuDe: "", lienKet: { loai: "chien-dich", coQuyen: false } },
+			keHoachXoa: {
+				tieuDe: "",
+				lienKet: { loai: "ke-hoach", coQuyen: false },
+			},
+		});
 	});
 });

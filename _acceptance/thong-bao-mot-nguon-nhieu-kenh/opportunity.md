@@ -25,7 +25,7 @@ Vì sao: Zalo và Slack đang là đường đi riêng của tác nhân; rẽ ch
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi (ngưỡng đề xuất — chốt ở Cổng Đáng)
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox
+- Câu hỏi phép đo trả lời: đã đạt «Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi» chưa? (chốt bởi Manh Phan 2026-10-24)
+- Kết quả nào là SỐNG: Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi
+- Kết quả nào là CHẾT: chưa đạt «Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi» khi hết timebox
 - Timebox: [đề xuất] 2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)

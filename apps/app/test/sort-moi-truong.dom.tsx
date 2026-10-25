@@ -114,6 +114,7 @@ const DAP_AN_SAP = {
 	EMAIL: true,
 	PHONE: true,
 	USER: true,
+	FILE: false,
 } satisfies Record<(typeof FIELD_TYPES)[number], boolean>;
 
 const DAP_AN_AN = {
@@ -123,6 +124,7 @@ const DAP_AN_AN = {
 	URL: "md",
 	EMAIL: "md",
 	PHONE: "md",
+	FILE: "md",
 	TEXT: "lg",
 	LONG_TEXT: "lg",
 	DATE: "lg",
@@ -288,7 +290,7 @@ describe("smt-cot-sap", () => {
 			act(() => root?.unmount());
 			khung?.remove();
 		}
-		if (soO !== 30) throw new Error(`smt cot sap: thieu o ${soO}`);
+		if (soO !== 33) throw new Error(`smt cot sap: thieu o ${soO}`);
 
 		const chieuMacDinh = dealsSearchParams.config.defaultDir;
 		const o = await mo(<DealsTable />);
@@ -315,7 +317,7 @@ describe("smt-cot-sap", () => {
 		].map((el) => (el.textContent ?? "").trim());
 		if (!muc.includes("Trường NUMBER"))
 			throw new Error("smt cot sap: menu thieu");
-		expect(soO).toBe(30);
+		expect(soO).toBe(33);
 	});
 });
 
@@ -374,9 +376,9 @@ describe("smt-an-theo-kieu", () => {
 				throw new Error(`smt an theo kieu: chuan ${ten} ${id} ${thuc}`);
 			soO += 1;
 		}
-		if (soO !== 11 + 30 + 12)
+		if (soO !== 12 + 33 + 12)
 			throw new Error(`smt an theo kieu: thieu o ${soO}`);
-		expect(soO).toBe(53);
+		expect(soO).toBe(57);
 	});
 });
 

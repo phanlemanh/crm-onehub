@@ -228,6 +228,18 @@ function dongBo(n: number, ds: string): string {
 	return `pre-push: chỉ tệp T1 (${n} tệp) — bỏ ${ds}; ${DUOI}`;
 }
 
+function dongRong(k: number, ds: string): string {
+	return `pre-push: lần đẩy chỉ mang phần của onehub (${k} tệp), PR không tự thêm tệp nào — bỏ ${ds}; ${DUOI}`;
+}
+
+function dongChiT1(n: number, k: number): string {
+	return `pre-push: chỉ tệp T1 trong phần PR tự thêm (${n} tệp; ${k} tệp của onehub không tính) — bỏ test, build; ${DUOI}`;
+}
+
+function dongNang(n: number, k: number, loai: string, ds: string): string {
+	return `pre-push: phần PR tự thêm (${n} tệp; ${k} tệp của onehub không tính) có ${loai} (${ds}) — chạy đủ năm bước.`;
+}
+
 function dongMoi(kho: Kho, nhanh: string): string {
 	return `refs/heads/${nhanh} ${git(kho.goc, "rev-parse", "HEAD")} refs/heads/${nhanh} ${Z}`;
 }
@@ -339,7 +351,7 @@ const CA: Ca[] = [
 					k,
 					`refs/heads/x ${git(k.goc, "rev-parse", "HEAD")} refs/heads/x ${cu}`,
 				),
-			).toEqual({ ma: 0, ra: "", loi: "" });
+			).toEqual({ ma: 0, ra: BO, loi: dongRong(1, "test, build") });
 		},
 	},
 	{
@@ -752,5 +764,428 @@ describe("pre-push-t1 verify", () => {
 		const r = verify(k, "--bo-qua", BO);
 		expect(r.ma).toBe(1);
 		expect(r.ra).toContain("vi_sao");
+	}, 60_000);
+});
+
+const TV = "tệp ngoài T1";
+const MD = "tệp T1 mà mã đọc";
+const GH = "tệp dưới .github/";
+const B_TS: [string, string] = ["apps/api/b.ts", "export const b = 1;\n"];
+
+function nhanhX(k: Kho, ...them: [string, string][]): string {
+	git(k.goc, "checkout", "-q", "-b", "x");
+	const cu = commit(k.goc, ["docs/a.md", "a\n"], ...them);
+	git(k.goc, "push", "-q", "origin", "x");
+	return cu;
+}
+
+function onehubThem(k: Kho, ...tep: [string, string][]): string {
+	git(k.goc, "checkout", "-q", "onehub");
+	const h = commit(k.goc, ...tep);
+	git(k.goc, "push", "-q", "origin", "onehub");
+	git(k.goc, "checkout", "-q", "x");
+	return h;
+}
+
+function gop(k: Kho, ...co: string[]): void {
+	git(k.goc, "merge", "-q", "--no-edit", ...co, "onehub");
+}
+
+function gopXungDot(k: Kho, ...giai: [string, string][]): void {
+	spawnSync("git", ["merge", "-q", "--no-edit", "onehub"], {
+		cwd: k.goc,
+		env: envSach({}),
+		encoding: "utf8",
+	});
+	for (const [d, c] of giai) ghi(k.goc, d, c);
+	git(k.goc, "add", "--", ...giai.map(([d]) => d));
+	git(k.goc, "commit", "-q", "--no-edit");
+}
+
+function suaGop(k: Kho, ...tep: [string, string][]): void {
+	for (const [d, c] of tep) ghi(k.goc, d, c);
+	git(k.goc, "add", "--", ...tep.map(([d]) => d));
+	git(k.goc, "commit", "-q", "--amend", "--no-edit");
+}
+
+function dongX(k: Kho, cu: string): string {
+	return `refs/heads/x ${git(k.goc, "rev-parse", "HEAD")} refs/heads/x ${cu}`;
+}
+
+function nen(k: Kho): string {
+	return git(k.goc, "merge-base", "HEAD", "refs/remotes/origin/onehub");
+}
+
+type KhoGop = { k: Kho; cu: string };
+
+function khoG1(): KhoGop {
+	const k = dungKho([], {});
+	const cu = nhanhX(k);
+	onehubThem(k, B_TS);
+	gop(k);
+	return { k, cu };
+}
+
+const CA_GOP: Ca[] = [
+	{
+		ten: "G1 gop onehub mang ma",
+		chay: () => {
+			const { k, cu } = khoG1();
+			expect(git(k.goc, "diff", "--name-only", cu, "HEAD")).toBe(
+				"apps/api/b.ts",
+			);
+			expect(git(k.goc, "diff", "--name-only", nen(k), "HEAD")).toBe(
+				"docs/a.md",
+			);
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: BO,
+				loi: dongRong(1, "test, build"),
+			});
+		},
+	},
+	{
+		ten: "G2 commit gop them docs",
+		chay: () => {
+			const { k, cu } = khoG1();
+			suaGop(k, ["docs/c.md", "c\n"]);
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: BO,
+				loi: dongChiT1(1, 1),
+			});
+		},
+	},
+	{
+		ten: "G3 commit gop sua ma",
+		chay: () => {
+			const { k, cu } = khoG1();
+			suaGop(k, ["apps/api/a.ts", "export const a = 9;\n"]);
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(1, 1, TV, "apps/api/a.ts"),
+			});
+		},
+	},
+	{
+		ten: "G4 giai xung dot ghep hai ban",
+		chay: () => {
+			const k = dungKho([], {});
+			const cu = nhanhX(k, ["apps/api/a.ts", "export const a = 2;\n"]);
+			onehubThem(k, ["apps/api/a.ts", "export const a = 3;\n"], B_TS);
+			gopXungDot(k, ["apps/api/a.ts", "export const a = 5;\n"]);
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(1, 1, TV, "apps/api/a.ts"),
+			});
+		},
+	},
+	{
+		ten: "G5 gop lay ban onehub cho tep PR tung sua",
+		chay: () => {
+			const k = dungKho([], {});
+			const cu = nhanhX(k, ["apps/api/a.ts", "export const a = 2;\n"]);
+			onehubThem(k, ["apps/api/a.ts", "export const a = 3;\n"], B_TS);
+			gop(k, "-X", "theirs");
+			expect(
+				git(k.goc, "diff", "--name-only", cu, "HEAD").split("\n"),
+			).toContain("apps/api/a.ts");
+			expect(
+				git(k.goc, "diff", "--name-only", nen(k), "HEAD").split("\n"),
+			).not.toContain("apps/api/a.ts");
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(1, 1, TV, "apps/api/a.ts"),
+			});
+		},
+	},
+	{
+		ten: "G6 onehub di tiep sau lan gop",
+		chay: () => {
+			const { k, cu } = khoG1();
+			const dong = dongX(k, cu);
+			onehubThem(k, ["apps/api/b.ts", "export const b = 2;\n"]);
+			expect(phanLoai(k, dong)).toEqual({
+				ma: 0,
+				ra: BO,
+				loi: dongRong(1, "test, build"),
+			});
+		},
+	},
+	{
+		ten: "G7 gop nhanh khong thuoc onehub",
+		chay: () => {
+			const k = dungKho([], {});
+			git(k.goc, "checkout", "-q", "-b", "y");
+			commit(k.goc, ["apps/api/c.ts", "export const c = 1;\n"]);
+			git(k.goc, "checkout", "-q", "onehub");
+			const cu = nhanhX(k);
+			git(k.goc, "merge", "-q", "--no-edit", "y");
+			expect(phanLoai(k, dongX(k, cu))).toEqual({ ma: 0, ra: "", loi: "" });
+		},
+	},
+	{
+		ten: "G8 gop roi sua them docs",
+		chay: () => {
+			const { k, cu } = khoG1();
+			commit(k.goc, ["docs/d.md", "d\n"]);
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: BO,
+				loi: dongChiT1(1, 1),
+			});
+		},
+	},
+	{
+		ten: "G9 ref moi co dinh gop",
+		chay: () => {
+			const k = dungKho([], {});
+			git(k.goc, "checkout", "-q", "-b", "x");
+			commit(k.goc, ["docs/a.md", "a\n"]);
+			onehubThem(k, B_TS);
+			gop(k);
+			expect(phanLoai(k, dongMoi(k, "x"))).toEqual({
+				ma: 0,
+				ra: BO,
+				loi: dongBo(1, "test, build"),
+			});
+		},
+	},
+	{
+		ten: "G10 phan rieng co LO-TRINH.html",
+		chay: () => {
+			const k = dungKho([], {});
+			const cu = nhanhX(k, ["LO-TRINH.html", "x\n"]);
+			onehubThem(k, ["LO-TRINH.html", "o\n"], B_TS);
+			gopXungDot(k, ["LO-TRINH.html", "z\n"]);
+			expect(
+				git(k.goc, "diff", "--name-only", cu, "HEAD").split("\n"),
+			).toContain("LO-TRINH.html");
+			expect(
+				git(k.goc, "diff", "--name-only", nen(k), "HEAD").split("\n"),
+			).toContain("LO-TRINH.html");
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(1, 1, MD, "LO-TRINH.html"),
+			});
+		},
+	},
+	{
+		ten: "G11 thieu origin/onehub",
+		chay: () => {
+			const { k, cu } = khoG1();
+			git(k.goc, "update-ref", "-d", "refs/remotes/origin/onehub");
+			expect(phanLoai(k, dongX(k, cu))).toEqual({ ma: 0, ra: "", loi: "" });
+		},
+	},
+	{
+		ten: "G12 hai dong, gop va ref moi chi docs",
+		chay: () => {
+			const { k, cu } = khoG1();
+			const x = dongX(k, cu);
+			git(k.goc, "checkout", "-q", "-b", "z", "onehub");
+			commit(k.goc, ["docs/e.md", "e\n"]);
+			expect(phanLoai(k, x, dongMoi(k, "z"))).toEqual({
+				ma: 0,
+				ra: BO,
+				loi: dongChiT1(1, 1),
+			});
+		},
+	},
+	{
+		ten: "G13 hai dong, dong kia sua tep cua onehub",
+		chay: () => {
+			const { k, cu } = khoG1();
+			const x = dongX(k, cu);
+			git(k.goc, "checkout", "-q", "-b", "w", "onehub");
+			commit(k.goc, ["apps/api/b.ts", "export const b = 7;\n"]);
+			expect(phanLoai(k, x, dongMoi(k, "w"))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: "",
+			});
+		},
+	},
+	{
+		ten: "G14 commit gop sua ci.yml",
+		chay: () => {
+			const { k, cu } = khoG1();
+			suaGop(k, [".github/workflows/ci.yml", "name: CI\n"]);
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(1, 1, GH, ".github/workflows/ci.yml"),
+			});
+			const md = khoG1();
+			suaGop(md.k, [".github/ghi-chu.md", "g\n"], ["docs/c.md", "c\n"]);
+			expect(phanLoai(md.k, dongX(md.k, md.cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(2, 1, GH, ".github/ghi-chu.md"),
+			});
+			const ma = khoG1();
+			suaGop(
+				ma.k,
+				[".github/workflows/ci.yml", "name: CI\n"],
+				["apps/api/a.ts", "export const a = 9;\n"],
+			);
+			expect(phanLoai(ma.k, dongX(ma.k, ma.cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(2, 1, GH, ".github/workflows/ci.yml"),
+			});
+		},
+	},
+	{
+		ten: "G15 day lai cung sha",
+		chay: () => {
+			const { k } = khoG1();
+			const h = git(k.goc, "rev-parse", "HEAD");
+			expect(phanLoai(k, `refs/heads/x ${h} refs/heads/x ${h}`)).toEqual({
+				ma: 0,
+				ra: "",
+				loi: "",
+			});
+		},
+	},
+	{
+		ten: "G16 commit cuc bo chua day roi gop",
+		chay: () => {
+			const k = dungKho([], {});
+			const cu = nhanhX(k);
+			commit(k.goc, ["apps/api/c.ts", "export const c = 1;\n"]);
+			onehubThem(k, B_TS);
+			gop(k);
+			expect(phanLoai(k, dongX(k, cu))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: dongNang(1, 1, TV, "apps/api/c.ts"),
+			});
+		},
+	},
+];
+
+function khoDongGop(sua: Sua): KhoGop {
+	const k = dungKho([], sua);
+	const cu = nhanhX(k);
+	onehubThem(k, B_TS, ["packages/env/x.ts", "export const x = 1;\n"]);
+	gop(k);
+	return { k, cu };
+}
+
+describe("pre-push-t1 gop", () => {
+	test("gop-onehub: ma tran viet truoc co 16 ca", () => {
+		expect(CA_GOP.length).toBe(16);
+	});
+
+	for (const ca of CA_GOP) test(`gop-onehub: ${ca.ten}`, ca.chay, 60_000);
+
+	test("dong-gop (a): phan PR tu them rong", () => {
+		const { k, cu } = khoDongGop({});
+		expect(phanLoai(k, dongX(k, cu))).toEqual({
+			ma: 0,
+			ra: BO,
+			loi: dongRong(2, "test, build"),
+		});
+	}, 60_000);
+
+	test("dong-gop (b): phan PR tu them chi T1", () => {
+		const k = dungKho([], {});
+		const cu = nhanhX(k);
+		onehubThem(k, B_TS);
+		gop(k);
+		suaGop(k, ["docs/c.md", "c\n"], ["docs/d.md", "d\n"]);
+		expect(phanLoai(k, dongX(k, cu))).toEqual({
+			ma: 0,
+			ra: BO,
+			loi: dongChiT1(2, 1),
+		});
+	}, 60_000);
+
+	test("dong-gop (c): phan PR tu them co bon tep ma", () => {
+		const { k, cu } = khoG1();
+		suaGop(
+			k,
+			["apps/api/m1.ts", "export const m = 1;\n"],
+			["apps/api/m2.ts", "export const m = 2;\n"],
+			["apps/api/m3.ts", "export const m = 3;\n"],
+			["apps/api/m4.ts", "export const m = 4;\n"],
+		);
+		expect(phanLoai(k, dongX(k, cu))).toEqual({
+			ma: 0,
+			ra: "",
+			loi: dongNang(
+				4,
+				1,
+				TV,
+				"apps/api/m1.ts, apps/api/m2.ts, apps/api/m3.ts +1",
+			),
+		});
+	}, 60_000);
+
+	test("dong-gop (d): khai chi bo build", () => {
+		const { k, cu } = khoDongGop({ ".githooks/gate-shape.json": chiBoBuild });
+		expect(phanLoai(k, dongX(k, cu))).toEqual({
+			ma: 0,
+			ra: "build",
+			loi: dongRong(2, "build"),
+		});
+	}, 60_000);
+
+	test("hinh-gop: khoi t1Only khai luat gop", () => {
+		const hinh = JSON.parse(
+			readFileSync(join(GOC_KHO, ".githooks/gate-shape.json"), "utf8"),
+		);
+		expect(hinh.t1Only.skip).toEqual(["test", "build"]);
+		expect(hinh.t1Only.classifier).toBe("scripts/pre-push-t1.mjs");
+		expect(hinh.t1Only.sameRuleAs).toBe(".github/scripts/phan-loai.mjs");
+		expect(hinh.t1Only.vi_sao).toContain("phần PR tự thêm");
+		expect(hinh.t1Only.vi_sao).toContain("merge-base");
+	});
+
+	test("hinh-gop (b): vi_sao ta ve dau tu xa", () => {
+		const hinh = JSON.parse(
+			readFileSync(join(NGUON, ".githooks/gate-shape.json"), "utf8"),
+		);
+		expect(hinh.t1Only.vi_sao).toContain("merge-base(nền, sha từ xa)");
+		expect(hinh.t1Only.vi_sao).not.toContain(
+			"không khác bản onehub tại merge-base(đỉnh",
+		);
+	});
+});
+
+describe("pre-push-t1 hook gop", () => {
+	test("day-gop (a): chi gop onehub bo test va build", () => {
+		const { k } = khoG1();
+		const r = day(k, "x", "");
+		expect(r.ma).toBe(0);
+		expect(r.ra.split("\n")).toContain(dongRong(1, "test, build"));
+		expect(soBun(k)).toEqual(BA);
+		expect(r.ra).not.toContain("pre-push: bun run test");
+		expect(r.ra).not.toContain("pre-push: bun run build");
+		expect(r.ra).toContain("pre-push: gate matches its shape");
+		expect(
+			r.ra.split("\n").some((d) => d.startsWith("  skipped: test, build")),
+		).toBe(true);
+	}, 60_000);
+
+	test("day-gop (b): commit gop co ma chay du nam", () => {
+		const { k } = khoG1();
+		suaGop(k, ["apps/api/a.ts", "export const a = 9;\n"]);
+		const r = day(k, "x", "");
+		expect(r.ma).toBe(0);
+		expect(soBun(k)).toEqual(NAM);
+	}, 60_000);
+
+	test("day-gop (c): commit gop co ma va test gia do thi chan", () => {
+		const { k } = khoG1();
+		suaGop(k, ["apps/api/a.ts", "export const a = 9;\n"]);
+		const r = day(k, "x", "test");
+		expect(r.ma).not.toBe(0);
+		expect(r.ra).toContain("`bun run test` failed");
 	}, 60_000);
 });

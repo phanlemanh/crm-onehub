@@ -1,0 +1,3 @@
+{
+  "feature_plain": "Bộ test trên CI được chạy tới 30 phút thay vì 20, nên lượt chậm mà không hỏng không còn bị cắt ngang, người làm không phải bấm chạy lại PR."
+}

@@ -75,6 +75,14 @@ export {
 	workspaceRoleOf,
 } from "./organization";
 export {
+	coTheXoaTep,
+	LY_DO_KHONG_MO_TEP,
+	type LyDoKhongMoTep,
+	type NguoiXinTep,
+	type QuyenMoTep,
+	quyenMoTep,
+} from "./quyen-tep";
+export {
 	docDuocPhamVi,
 	isWorkspaceAdmin,
 	isWorkspaceRole,

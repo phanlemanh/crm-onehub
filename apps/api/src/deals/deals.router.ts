@@ -11,6 +11,7 @@ import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
+import { docPhamViYeuCau } from "../trpc/pham-vi-yeu-cau";
 import {
 	dealAttachContactInput,
 	dealBoardInput,
@@ -66,8 +67,11 @@ export class DealsRouter {
 		output: dealDetailOutput,
 		meta: restMeta("GET", "/deals/{id}", ["Deals"]),
 	})
-	async byId(@Input("id") id: string) {
-		return this.deals.byId(id);
+	async byId(@Ctx() ctx: AuthedTrpcContext, @Input("id") id: string) {
+		return this.deals.byId(id, {
+			id: ctx.user.id,
+			role: docPhamViYeuCau(ctx).role,
+		});
 	}
 
 	@Mutation({

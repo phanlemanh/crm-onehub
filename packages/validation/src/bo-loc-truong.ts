@@ -12,6 +12,8 @@ export type MocNgay = (typeof MOC_NGAY)[number];
 
 export const GIA_TRI_TRONG = "none";
 
+export const GIA_TRI_CO_TEP = "some";
+
 export const TIEN_TO_LOC = {
 	chua: "has:",
 	tu: "gte:",
@@ -23,6 +25,7 @@ export type LocTruong =
 	| { cach: "khoang"; tu: number | null; den: number | null; trong: boolean }
 	| { cach: "moc"; moc: MocNgay[]; trong: boolean }
 	| { cach: "tich"; co: boolean[] }
+	| { cach: "coTep"; co: boolean; trong: boolean }
 	| { cach: "luaChon" | "nguoi"; id: string[]; trong: boolean };
 
 export class LocTruongError extends Error {
@@ -47,6 +50,7 @@ type MotGia =
 	| { loai: "den"; so: number }
 	| { loai: "moc"; moc: MocNgay }
 	| { loai: "tich"; co: boolean }
+	| { loai: "coTep" }
 	| { loai: "id"; id: string };
 
 function docMotGia(cach: CachLocTruong, gia: string): MotGia | null {
@@ -57,6 +61,10 @@ function docMotGia(cach: CachLocTruong, gia: string): MotGia | null {
 	}
 
 	if (gia === GIA_TRI_TRONG) return { loai: "trong" };
+
+	if (cach === "coTep") {
+		return gia === GIA_TRI_CO_TEP ? { loai: "coTep" } : null;
+	}
 
 	if (cach === "chua") {
 		if (!gia.startsWith(TIEN_TO_LOC.chua)) return null;
@@ -124,6 +132,12 @@ export function phanTichLocTruong(
 			return {
 				cach,
 				co: cacGia.flatMap((gia) => (gia.loai === "tich" ? [gia.co] : [])),
+			};
+		case "coTep":
+			return {
+				cach,
+				co: cacGia.some((gia) => gia.loai === "coTep"),
+				trong,
 			};
 		default:
 			return {

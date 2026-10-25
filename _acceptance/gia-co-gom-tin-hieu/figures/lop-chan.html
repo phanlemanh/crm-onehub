@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bốn lớp chặn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1440px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 56rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1100px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ lớp chặn · gia-co-gom-tin-hieu · Cổng Phạm vi</p>
+    <h1>Bốn lớp giữa một tín hiệu và PR đề xuất</h1>
+    <p class="sub">Chữ người ngoài gõ vào cửa tín hiệu có thể mang lời dặn cài sẵn, và phiên gom đọc nó khi không ai trông. Vòng này đặt bốn lớp chặn nối tiếp giữa tín hiệu đó và thứ duy nhất được rời máy — một PR nháp đề xuất. Lớp nào bắt được thì lượt dừng, nói lý do, và không đẩy gì lên.</p>
+
+    <svg viewBox="0 0 1400 344" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- Dashed boundary: OS isolation, deferred -->
+      <rect x="184" y="108" width="192" height="168" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="280" y="248" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Cách ly hệ điều hành —</text>
+      <text x="280" y="262" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">để sau (Hỏi-2)</text>
+
+      <!-- Measurement bracket over layers 1 + 2 -->
+      <path d="M400 72 V64 H792 V72" fill="none" stroke="#006B4F" stroke-width="1"/>
+      <path d="M596 64 V80" fill="none" stroke="#006B4F" stroke-width="1"/>
+      <text x="596" y="48" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phép thử với Claude Code thật <tspan font-family="'Geist Mono', monospace" font-size="10" font-weight="500">· AC-8 · Hỏi-1</tspan></text>
+
+      <!-- ARROWS (before boxes) -->
+      <path d="M160 176 H206" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M352 176 H398" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M584 176 H606" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M792 176 H814" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M1000 176 H1022" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M1208 176 H1246" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <!-- Input: signal -->
+      <rect x="32" y="132" width="128" height="88" rx="6" fill="#fafafa"/>
+      <rect x="32" y="132" width="128" height="88" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <rect x="40" y="140" width="56" height="16" rx="2" fill="transparent" stroke="rgba(102,102,102,0.40)" stroke-width="0.8"/>
+      <text x="68" y="152" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐẦU VÀO</text>
+      <text x="96" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tín hiệu có</text>
+      <text x="96" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lời dặn cài sẵn</text>
+      <text x="96" y="210" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chữ người ngoài gõ</text>
+
+      <!-- Session -->
+      <rect x="208" y="132" width="144" height="88" rx="6" fill="#fafafa"/>
+      <rect x="208" y="132" width="144" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="216" y="140" width="68" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="250" y="152" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">PHIÊN MÁY</text>
+      <text x="280" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phiên gom</text>
+      <text x="280" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">(Claude Code)</text>
+      <text x="280" y="210" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chạy không người trông</text>
+
+      <!-- Layer 1 -->
+      <rect x="400" y="88" width="184" height="176" rx="6" fill="#fafafa"/>
+      <rect x="400" y="88" width="184" height="176" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="412" y="100" width="128" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="476" y="112" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỚP 1 · TRONG PHIÊN</text>
+      <text x="412" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Không khoá</text>
+      <text x="412" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">trong tầm tay</text>
+      <text x="412" y="180" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Phiên chỉ nhận khoá mô hình,</text>
+      <text x="412" y="196" fill="#575757" font-size="10" font-family="'Geist', sans-serif">và Claude Code gỡ khoá đó</text>
+      <text x="412" y="212" fill="#575757" font-size="10" font-family="'Geist', sans-serif">khỏi mọi lệnh con</text>
+      <text x="412" y="228" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Không token nào nằm trên đĩa</text>
+      <text x="412" y="252" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">AC-1 · AC-4 · AC-5</text>
+
+      <!-- Layer 2 -->
+      <rect x="608" y="88" width="184" height="176" rx="6" fill="#fafafa"/>
+      <rect x="608" y="88" width="184" height="176" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="620" y="100" width="128" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="684" y="112" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỚP 2 · TRONG PHIÊN</text>
+      <text x="620" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chỉ đúng</text>
+      <text x="620" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">việc gom</text>
+      <text x="620" y="180" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Chỉ chạy lệnh kit nguyên văn</text>
+      <text x="620" y="196" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Chỉ sửa bản gom và lộ trình</text>
+      <text x="620" y="212" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Không mạng, không hook</text>
+      <text x="620" y="228" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Không đọc tệp ngoài kho</text>
+      <text x="620" y="252" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">AC-2 · AC-3</text>
+
+      <!-- Layer 3 -->
+      <rect x="816" y="88" width="184" height="176" rx="6" fill="#fafafa"/>
+      <rect x="816" y="88" width="184" height="176" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="828" y="100" width="116" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="886" y="112" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỚP 3 · SAU PHIÊN</text>
+      <text x="828" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Lịch không chạy</text>
+      <text x="828" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">thứ phiên để lại</text>
+      <text x="828" y="180" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Phiên đổi cấu hình hay hook</text>
+      <text x="828" y="196" fill="#575757" font-size="10" font-family="'Geist', sans-serif">của git → lượt dừng ngay,</text>
+      <text x="828" y="212" fill="#575757" font-size="10" font-family="'Geist', sans-serif">trước lệnh git kế tiếp</text>
+      <text x="828" y="228" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Thứ phiên cài vào không chạy</text>
+      <text x="828" y="252" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">AC-6</text>
+
+      <!-- Layer 4 -->
+      <rect x="1024" y="88" width="184" height="176" rx="6" fill="#fafafa"/>
+      <rect x="1024" y="88" width="184" height="176" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="1036" y="100" width="144" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1108" y="112" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỚP 4 · TRƯỚC KHI ĐẨY</text>
+      <text x="1036" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Không đẩy khoá</text>
+      <text x="1036" y="180" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Quét mọi thứ sắp gửi đi:</text>
+      <text x="1036" y="196" fill="#575757" font-size="10" font-family="'Geist', sans-serif">trúng khoá → dừng, không đẩy</text>
+      <text x="1036" y="212" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Chỉ đẩy nhánh đề xuất,</text>
+      <text x="1036" y="228" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không chạm nhánh nào khác</text>
+      <text x="1036" y="252" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">AC-7 · AC-3</text>
+
+      <!-- Output: draft PR -->
+      <rect x="1248" y="132" width="120" height="88" rx="6" fill="#fafafa"/>
+      <rect x="1248" y="132" width="120" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="1256" y="140" width="104" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="1308" y="152" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐẦU RA DUY NHẤT</text>
+      <text x="1308" y="184" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">PR nháp</text>
+      <text x="1308" y="200" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đề xuất</text>
+
+      <!-- Legend -->
+      <line x1="32" y1="296" x2="1368" y2="296" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="328" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="120" y="316" width="16" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="144" y="328" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Lớp chặn — bắt được thì lượt dừng, không đẩy gì</text>
+
+      <rect x="520" y="316" width="16" height="16" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="544" y="328" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Nét đứt — không làm ở vòng này</text>
+
+      <path d="M800 332 V320 H816 V332" fill="none" stroke="#006B4F" stroke-width="1"/>
+      <text x="828" y="328" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Ngoặc xanh — phép thử đo xem lớp đó có giữ thật không</text>
+    </svg>
+  </div>
+</body>
+</html>

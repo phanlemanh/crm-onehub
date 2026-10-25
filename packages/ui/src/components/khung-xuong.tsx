@@ -167,7 +167,6 @@ function HangCongCuHaiDong({ thanhCongCu }: { thanhCongCu?: ReactNode }) {
 			<div className={LOP_HANG_CONG_CU} data-khung-hang="thanh-cong-cu">
 				<div className={LOP_KHOI_TRAI} data-hang-cong-cu-don-vi-khung>
 					<Skeleton className="h-7 w-full sm:w-72" />
-					<Skeleton className="h-7 w-32 md:w-68" />
 				</div>
 				<XuongPhaiHang />
 			</div>

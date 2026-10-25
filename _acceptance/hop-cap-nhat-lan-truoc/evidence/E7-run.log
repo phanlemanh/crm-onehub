@@ -1,0 +1,35 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_suspicious_matsumoto_c64c22_do · app http://localhost:4887 · api http://localhost:4619
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+GHI NAP okr:mau --moc 2026-10-23: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-10-23T05:00:00.000Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ, 2 trang tài liệu.
+GHI CA M=mau-okr-mt-q4-kd-nam-1 K=mau-okr-kr-q4-kd-nam-1-k1 ghi chu 200 ky tu
+DUNG 1440: khoi lan truoc co ghi chu
+DUNG 1440: ghi chu 200 ky tu nguyen van (200)
+DUNG 1440: ghi chu khong bi dich
+DUNG 1440: hop khong tran ngang
+DUNG 1440: khoi va ghi chu nam trong mep hop
+DUNG 1440: doi chung do — chen khoi rong vao khoi lan truoc thi hop va khoi bao tran (hop tran true, khoi vuot mep hop true)
+DUNG 1440: ba cau goi y (3)
+DUNG 1440: trang khong cuon ngang (false)
+DUNG 1440: doi chung do — chen khoi rong thi bao tran
+DUNG 1440: nut gui nam trong khung nhin
+ANH _acceptance/hop-cap-nhat-lan-truoc/evidence/hct-1440.png
+DUNG 375: khoi lan truoc co ghi chu
+DUNG 375: ghi chu 200 ky tu nguyen van (200)
+DUNG 375: ghi chu khong bi dich
+DUNG 375: hop khong tran ngang
+DUNG 375: khoi va ghi chu nam trong mep hop
+DUNG 375: doi chung do — chen khoi rong vao khoi lan truoc thi hop va khoi bao tran (hop tran true, khoi vuot mep hop true)
+DUNG 375: ba cau goi y (3)
+DUNG 375: trang khong cuon ngang (false)
+DUNG 375: doi chung do — chen khoi rong thi bao tran
+DUNG 375: nut gui nam trong khung nhin
+ANH _acceptance/hop-cap-nhat-lan-truoc/evidence/hct-375.png
+DUNG du 2 anh (2)
+KET LUAN: 21 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0
