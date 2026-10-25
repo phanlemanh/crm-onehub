@@ -10,11 +10,15 @@ const textareaVariants = cva(
 				default: "",
 				composer:
 					"resize-none rounded-none border-transparent bg-transparent px-1 py-0 text-base leading-6 shadow-none ring-0 hover:border-transparent focus-visible:border-transparent focus-visible:ring-0 disabled:bg-transparent sm:text-[15px] dark:bg-transparent dark:shadow-none dark:disabled:bg-transparent",
+				"tai-lieu":
+					"resize-none rounded-none border-transparent bg-transparent px-0 py-0 text-foreground shadow-none ring-0 hover:border-transparent focus-visible:border-transparent focus-visible:ring-0 disabled:cursor-default disabled:bg-transparent disabled:opacity-100 dark:bg-transparent dark:shadow-none dark:disabled:bg-transparent",
 			},
 			size: {
 				default: "min-h-16",
 				sm: "min-h-8",
 				composer: "max-h-40 min-h-6",
+				"tieu-de": "min-h-7 font-semibold text-base leading-7 md:text-base",
+				dong: "min-h-6 text-sm leading-6 md:text-sm",
 			},
 		},
 		defaultVariants: { variant: "default", size: "default" },
