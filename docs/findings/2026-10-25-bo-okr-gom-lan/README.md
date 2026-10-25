@@ -240,8 +240,9 @@ Hồ sơ đã ký sẽ phải đổi khi các hàng trên làm theo luật mới
 - **VK3 `trang-bo-okr`**:
   - AC-10 đã ghi «ô chọn đơn vị» là chỗ lệch bản mẫu được chấp nhận;
   - AC-7 hứa «liên kết Đơn vị con mang `donOkr=goc`».
-- **HT1** AC-6: danh sách «Đơn vị có KR» trong màn rỗng. Đó là nội dung của màn rỗng, không phải lưới điều hướng
-  thường trực, nên **có thể giữ**. Ghi ra để Cổng 2 của HT1 không bị bắt nhầm.
+- **HT1** AC-6: danh sách «Đơn vị có KR» trong màn rỗng bộ OneHub. HT1 gộp với phạm vi đã duyệt. Chủ kho 25/10
+  (phiên V1, «Đồng ý theo khuyến nghị»): VK19 chuyển danh sách này sang menu ở dòng vị trí. Bốn điểm HT1 mà VK19
+  gánh ghi ở `ghi_chu` của VK19: số gộp và số riêng ở E7, E8; thứ tự AC-2; chiều đỏ E8; màn rỗng OneHub.
 - Mọi thước đếm `NhomDaBo`, `[data-don-vi-con]`, `[data-chip-tinh-trang]`.
 
 Luật trong tài liệu chỉ được kiểm bằng mắt ở review, và chính vì thế bốn màn trên đã lọt. Muốn màn mới không tự chế
