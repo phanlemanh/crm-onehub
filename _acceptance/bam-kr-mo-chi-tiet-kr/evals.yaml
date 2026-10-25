@@ -119,7 +119,8 @@ evals:
       phan-kr-phu-trach, cay-can-chinh, viec-cua-toi, bang-kr, tin-nhac, bấm dấu data-mo-muc-tieu (nút tên KR và «Mở KR»
       vẫn mang dấu đó — chủ kho chọn 25/10 sau S4 vòng 3), hoặc bị vòng sửa; cộng hai thước màn viết trước:
       dat-okr-trong-crm (dok_man_chrome) và hop-thoai-giu-cho-dang-nhap (hg_man_that). In «quet lop: <n> ho so, <k> eval».
-      (1) Chạy các mục trên cây; mục đỏ chạy lại trên worktree origin/onehub: «SAI AC-6: <slug>#<E> nen 0, cay <m>» khi nền 0
+      (1) Chạy các mục trên cây; mục đỏ chạy lại một lần trên cây — lần hai mã 0 thì in «CHAP CHON <slug>#<E>: cay <m> lan
+      1, 0 lan 2» và tính là xanh (chủ kho chọn 25/10 sau S4 vòng 4, như làn ghim lại của kit); mục còn đỏ chạy lại trên worktree origin/onehub: «SAI AC-6: <slug>#<E> nen 0, cay <m>» khi nền 0
       mà cây khác 0, «DO SAN TREN NEN <slug>#<E>» khi nền đỏ; mục xanh in «DUNG <slug>#<E>». (2)
       apps/agent/test/fixtures/tin-nhac-truoc-tb1.json không đổi so origin/onehub (thêm, sửa hay xoá) — đổi → «SAI AC-6: ANH
       CHUP LICH SU DOI». Đối chứng dương: hai thước màn có mặt trong lớp («THEM <slug>»).

@@ -5,10 +5,10 @@ slug: bam-kr-mo-chi-tiet-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: draft
 design_doc: docs/superpowers/specs/2026-10-24-bam-kr-mo-chi-tiet-kr-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-10-25
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: bam-kr-mo-chi-tiet-kr
@@ -93,8 +93,16 @@ hình thái); chữ (danh từ · khoảng thời gian · en) → AC-5; hồ sơ
     lý do. Bộ quét `ngan-kr-mot-cho/rang/quet-loi.mjs` thêm bốn ô ma trận cho bốn chỗ mở KR của vòng này. Mỗi hồ sơ một
     dòng sổ `fix`.
   - Năm thước bấm `data-mo-muc-tieu` đã đỏ sẵn trên onehub 25/10, hỏng y hệt trên cây SV6: `okr-cua-toi-tach-theo-doi`,
-    `cap-nhat-tuan-okr` (thước màn), `ux-lai-thu-8c-okr`, `tro-ly-okr-de-xuat`, `the-gop-y-okr`. E6 in chúng «đỏ sẵn
-    trên nền»; vòng này không sửa.
+    `cap-nhat-tuan-okr` (thước màn), `ux-lai-thu-8c-okr`, `tro-ly-okr-de-xuat`, `the-gop-y-okr`. Vòng này không sửa.
+    Bốn thước trong số đó, trừ `cap-nhat-tuan-okr`, là eval `ui-check`. AC-6 chỉ phủ eval `test` và `script`, nên E6 không
+    chạy bốn thước này; chúng được chạy tay ngày 25/10.
+- Known limits — lối A chủ kho chọn 25/10 sau S4 vòng 4:
+  - E6 chạy lại một lần mỗi mục đỏ trên cây trước khi so với nền. Lần hai xanh thì in «CHAP CHON» và tính là xanh, như làn
+    ghim lại của kit. Thước `canh-kr-okr/rang/man-canh-kr.mjs` chập chờn ngay trên cây SV6: chạy riêng hai lần, lần đầu đỏ
+    1/163 vì lỗi hydration trên `/okr`, lần sau xanh 163/163. Một lỗi thật đỏ ở cả hai lần thì vẫn là «SAI»; chiều đỏ
+    hồi quy giữ điều đó.
+  - Hai thước `ui-check` khác cũng bấm `data-mo-muc-tieu`, chạy tay ngày 25/10, hỏng y hệt trên onehub sạch, vòng này không
+    sửa: `va-tro-ly-okr-sau-thu` (tràn ngang 454>390 ở khổ 390) và `gop-y-dung-cho` (E2: `aria-expanded` của hàng A không đổi).
 
 - Không migration, không thủ tục API mới; chỉ `apps/app` và nhãn tin nhắc ở `apps/agent`.
 - AC-4: `bang-kr.tsx` có sẵn `SoViecKr` mở KR bằng `useOpenRecord()`; tên KR dùng cùng đường, `Button variant="link"`

@@ -224,7 +224,8 @@ function chieuDo(kieu) {
 		let sai = 0;
 		try {
 			for (const m of lop) {
-				const cay = chay(m.lenh, sao.cay, new Map());
+				const lan1 = chay(m.lenh, sao.cay, new Map());
+				const cay = lan1 === 0 ? 0 : chay(m.lenh, sao.cay, new Map());
 				const nen = cay === 0 ? 0 : chay(m.lenh, goc.cay, new Map());
 				if (nen === 0 && cay !== 0) {
 					sai += 1;
@@ -262,7 +263,15 @@ try {
 		process.exit(sai === 0 ? 0 : MA_DO);
 	}
 	const daChayCay = new Map();
-	const cay = lop.map((m) => ({ ...m, ma: chay(m.lenh, GOC, daChayCay) }));
+	const lan1 = lop.map((m) => ({ ...m, ma: chay(m.lenh, GOC, daChayCay) }));
+	const daChayLai = new Map();
+	const cay = lan1.map((m) => {
+		if (m.ma === 0) return m;
+		const lai = chay(m.lenh, GOC, daChayLai);
+		if (lai === 0)
+			console.log(`CHAP CHON ${m.ten}: cay ${m.ma} lan 1, 0 lan 2`);
+		return { ...m, ma: lai };
+	});
 	for (const m of cay.filter((x) => x.ma === 0)) console.log(`DUNG ${m.ten}`);
 	const doCay = cay.filter((m) => m.ma !== 0);
 	if (doCay.length > 0) {
