@@ -580,7 +580,8 @@ _Avoid_: xoá hẳn, xoá luôn, purge
 Vì sao: hai chữ cho cùng một việc ở hai màn làm người ta tưởng là hai việc.
 
 **Bỏ · Dùng lại**: kết cục của một mục tiêu OKR đã có lịch sử. **Bỏ** khép mục tiêu —
-không sửa được, không tính vào tiến độ, cất vào dòng gập «Đã bỏ (n)» cuối danh sách.
+không sửa được, không tính vào tiến độ, ra khỏi danh sách chính; tìm lại bằng nút
+«Đã bỏ (n)» trên hàng công cụ (từ 25/10, trước đó là dòng gập cuối danh sách).
 **Dùng lại** đưa mục tiêu đã bỏ về Nháp khi chu kỳ còn nhận ghi; muốn nó chạy lại
 thì gửi duyệt hay công bố lại như mới. Chốt 2026-10-07.
 _Avoid_: lưu trữ (cho mục tiêu), huỷ, khôi phục (cho mục tiêu đã bỏ)
