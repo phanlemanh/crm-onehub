@@ -2,6 +2,7 @@
 
 import { chamBo } from "@crm/validation/okr-cham-bo";
 import { createContext, useContext } from "react";
+import { oDenDong } from "./den-dong";
 import { chonMucTieuBo, demCongBo, kiemDongKr, suyKieuKr } from "./du-lieu-bo";
 
 export type PhuThuocSoan = {
@@ -11,6 +12,7 @@ export type PhuThuocSoan = {
 	luuKhi: "roi-o" | "moi-phim";
 	khoaSoCongBo: boolean;
 	chamBo: typeof chamBo;
+	oDenDong: typeof oDenDong;
 	docLaiSauNhan: boolean;
 	chatLuongKhiKaraTat: "hien" | "an";
 	demCongBo: typeof demCongBo;
@@ -29,6 +31,7 @@ export const PHU_THUOC_MAC_DINH: PhuThuocSoan = Object.freeze({
 	luuKhi: "roi-o",
 	khoaSoCongBo: true,
 	chamBo,
+	oDenDong,
 	docLaiSauNhan: true,
 	chatLuongKhiKaraTat: "hien",
 	demCongBo,

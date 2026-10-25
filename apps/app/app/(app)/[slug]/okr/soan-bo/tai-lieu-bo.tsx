@@ -8,6 +8,8 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Separator } from "@crm/ui/components/separator";
 import { Textarea } from "@crm/ui/components/textarea";
 import type { Locale } from "@crm/ui/lib/locale";
+import type { KrCham, MucTieuCham } from "@crm/validation/okr-cham-bo";
+import { docSoOkr } from "@crm/validation/okr-kr";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useEffectEvent } from "react";
 import { okrMessages } from "@/lib/messages/okr";
@@ -30,6 +32,7 @@ import {
 	themKr,
 	themMucTieu,
 } from "./ban-nhap";
+import { SOAN_BO } from "./cau-hinh";
 import {
 	DongKrDoc,
 	DongKrMoi,
@@ -38,7 +41,7 @@ import {
 	TrangThaiDong,
 } from "./dong-kr";
 import { DongMucTieuMoi, MenuMucTieu } from "./dong-muc-tieu";
-import { type DongKrNhap, dongKrTrong } from "./du-lieu-bo";
+import { type DongKrNhap, dongKrTrong, type suyKieuKr } from "./du-lieu-bo";
 import { usePhuThuocSoan } from "./phu-thuoc";
 import type { BoSoan, MucTieuSoan } from "./use-bo-soan";
 import {
@@ -197,12 +200,20 @@ function CauKhoa({ mt, khoa }: { mt: MucTieuSoan; khoa: KhoaMucTieu }) {
 	return null;
 }
 
-function krCoHien(mt: MucTieuSoan, bc: BoiCanh | null) {
+function krCoHien(mt: MucTieuSoan, bc: SoanTaiLieu | null) {
 	return bc
 		? mt.keyResults.filter(
 				(kr) => !bc.luuDong.daLuu.has(kr.id) && !daBoDi(bc.banNhap, kr.id),
 			)
 		: mt.keyResults;
+}
+
+function mucTieuCoHien(mucTieu: MucTieuSoan[], bc: SoanTaiLieu | null) {
+	return bc
+		? mucTieu.filter(
+				(mt) => !bc.luuDong.daLuu.has(mt.id) && !daBoDi(bc.banNhap, mt.id),
+			)
+		: mucTieu;
 }
 
 function DanhSachKrCo({
@@ -363,11 +374,7 @@ function TaiLieu({
 }) {
 	const locale = useLocale();
 	const m = okrSoanBoMessages(locale);
-	const coSan = bc
-		? mucTieu.filter(
-				(mt) => !bc.luuDong.daLuu.has(mt.id) && !daBoDi(bc.banNhap, mt.id),
-			)
-		: mucTieu;
+	const coSan = mucTieuCoHien(mucTieu, bc);
 	const moi = bc ? mucTieuMoiHien(bc.banNhap, mucTieu.length > 0) : [];
 	return (
 		<div className="flex flex-col gap-6" data-tai-lieu-bo="">
@@ -422,4 +429,102 @@ export function TaiLieuBo({
 	if (bo.quyen.loai === "chi-xem" || soan === null)
 		return <TaiLieu mucTieu={bo.mucTieu} chiXem bc={null} />;
 	return <TaiLieuSoan bo={bo} soan={soan} />;
+}
+
+export type ViTriCham = { mt: string; kr: readonly string[] };
+
+export type NoiDungCham = { bo: MucTieuCham[]; viTri: ViTriCham[] };
+
+type KrDem = { cham: KrCham; dong: string };
+
+const soCua = (chu: string): number | null =>
+	chu.trim() === "" ? null : docSoOkr(chu);
+
+function krMoiCham(
+	kr: KrNhap,
+	nguoiMacDinh: string,
+	suyKieu: typeof suyKieuKr,
+): KrDem {
+	const khoi = soCua(kr.khoi);
+	const dich = soCua(kr.dich);
+	return {
+		cham: {
+			title: kr.ten,
+			kind: kr.kieu ?? suyKieu(khoi, dich) ?? SOAN_BO.kieuKhiChuaRo,
+			startValue: khoi,
+			targetValue: dich,
+			ownerUserId: kr.nguoi ?? nguoiMacDinh,
+		},
+		dong: `[data-dong-kr-moi="${kr.khoa}"]`,
+	};
+}
+
+const krMoiCua = (
+	soan: SoanTaiLieu,
+	khoaMt: string,
+	nguoiMacDinh: string,
+	suyKieu: typeof suyKieuKr,
+): KrDem[] =>
+	krCua(soan.banNhap, khoaMt)
+		.filter((kr) => !dongKrTrong(kr))
+		.map((kr) => krMoiCham(kr, nguoiMacDinh, suyKieu));
+
+function krCoCham(kr: MucTieuSoan["keyResults"][number], soan: SoanTaiLieu) {
+	const sua = soan.banNhap.krCo[kr.id];
+	return {
+		cham: {
+			title: sua?.ten ?? kr.title,
+			kind: kr.kind,
+			startValue: sua?.khoi === undefined ? kr.startValue : soCua(sua.khoi),
+			targetValue: sua?.dich === undefined ? kr.targetValue : soCua(sua.dich),
+			ownerUserId: kr.owner.id,
+		},
+		dong: `[data-dong-kr="${kr.id}"]`,
+	};
+}
+
+type DongCham = { cham: MucTieuCham; viTri: ViTriCham };
+
+function dongCham(
+	title: string,
+	whyNow: string,
+	mt: string,
+	krs: KrDem[],
+): DongCham {
+	return {
+		cham: { title, whyNow, keyResults: krs.map((k) => k.cham) },
+		viTri: { mt, kr: krs.map((k) => k.dong) },
+	};
+}
+
+export function noiDungCham(
+	bo: BoXong,
+	soan: SoanTaiLieu,
+	suyKieu: typeof suyKieuKr,
+): NoiDungCham {
+	const coSan = mucTieuCoHien(bo.mucTieu, soan).map((mt) =>
+		dongCham(
+			soan.banNhap.tenCo[mt.id] ?? mt.title,
+			mt.whyNow,
+			`[data-dong-mt="${mt.id}"]`,
+			[
+				...krCoHien(mt, soan).map((kr) => krCoCham(kr, soan)),
+				...(mt.status === "nhap"
+					? krMoiCua(soan, mt.id, bo.nguoiMacDinh, suyKieu)
+					: []),
+			],
+		),
+	);
+	const moi = mucTieuMoiHien(soan.banNhap, bo.mucTieu.length > 0)
+		.map((mt) =>
+			dongCham(
+				mt.ten,
+				"",
+				`[data-dong-moi="${mt.khoa}"]`,
+				krMoiCua(soan, mt.khoa, bo.nguoiMacDinh, suyKieu),
+			),
+		)
+		.filter((d) => d.cham.title.trim() !== "" || d.cham.keyResults.length > 0);
+	const tat = [...coSan, ...moi];
+	return { bo: tat.map((d) => d.cham), viTri: tat.map((d) => d.viTri) };
 }

@@ -1513,3 +1513,262 @@ describe("vk10-quyen-dong-do", () => {
 		);
 	});
 });
+
+const { chamBo } = await import("@crm/validation/okr-cham-bo");
+
+const KR_Q1 = {
+	id: "k-q1",
+	title: "Doanh thu khối doanh nghiệp",
+	kind: "tang-toi",
+	startValue: 2,
+	targetValue: 3.5,
+	unit: "tỷ ₫",
+} satisfies KrMau;
+
+const KR_Q2 = {
+	id: "k-q2",
+	title: "Gọi 300 cuộc cho khách tiềm năng",
+	kind: "tang-toi",
+	startValue: 0,
+	targetValue: 300,
+	unit: "cuộc",
+} satisfies KrMau;
+
+const KR_Q3 = {
+	id: "k-q3",
+	title: "Tỷ lệ khách hài lòng",
+	kind: "giu-tren",
+	startValue: 85,
+	targetValue: 90,
+	unit: "%",
+} satisfies KrMau;
+
+const KR_CHAT_LUONG = [KR_Q1, KR_Q2, KR_Q3];
+
+const TEN_MT_CHAT_LUONG = "Tăng doanh thu khối doanh nghiệp";
+const TEN_KR_SUA = "Tỷ lệ chuyển đổi khách tiềm năng";
+
+const BO_CHAT_LUONG: MucMau[] = [
+	{
+		id: "mt-chat-luong",
+		title: TEN_MT_CHAT_LUONG,
+		status: "nhap",
+		kr: KR_CHAT_LUONG,
+		quyen: { congBo: true },
+	},
+];
+
+function chamNoiDung(tenKr2: string) {
+	return chamBo([
+		{
+			title: TEN_MT_CHAT_LUONG,
+			whyNow: "",
+			keyResults: KR_CHAT_LUONG.map((k) => ({
+				title: k.id === "k-q2" ? tenKr2 : k.title,
+				kind: k.kind,
+				startValue: k.startValue,
+				targetValue: k.targetValue,
+				ownerUserId: LAN.id,
+			})),
+		},
+	]);
+}
+
+const khoiChatLuong = () => q("[data-o=cot-ben] [data-khoi=chat-luong]");
+const chuDiem = () =>
+	khoiChatLuong()?.querySelector("[data-diem]")?.textContent ?? null;
+const diemCon = () => [
+	...(khoiChatLuong()?.querySelectorAll("[data-diem-con]") ?? []),
+];
+
+async function moBoChatLuong(
+	phuThuoc: Partial<PhuThuocSoan> = {},
+): Promise<void> {
+	const bo = boMau({ muc: BO_CHAT_LUONG });
+	datGhiMoi();
+	await veSoan(bo.khoa, { phuThuoc });
+	await choKhung();
+	await cho(
+		() => khoiChatLuong()?.querySelector("[data-diem]") != null,
+		"vk10-chat-luong: khoi lech",
+	);
+}
+
+async function goNgay(o: Element | null, chuMoi: string): Promise<void> {
+	if (!(o instanceof HTMLTextAreaElement))
+		throw new Error("vk10-chat-luong: o ten lech");
+	const datGia = Object.getOwnPropertyDescriptor(
+		HTMLTextAreaElement.prototype,
+		"value",
+	)?.set;
+	await act(async () => {
+		datGia?.call(o, chuMoi);
+		o.dispatchEvent(new Event("input", { bubbles: true }));
+	});
+}
+
+function kiemDiemCon(
+	kq: ReturnType<typeof chamBo>,
+	buoc: string,
+	tenKr2: string,
+): void {
+	const sai = `vk10-chat-luong: ${buoc} diem-con lech`;
+	const dong = diemCon();
+	expect(dong.length, sai).toBe(kq.loi.length);
+	kq.loi.forEach((loi, i) => {
+		const chuDong = dong[i]?.textContent ?? "";
+		const kr = loi.kr === null ? null : KR_CHAT_LUONG[loi.kr];
+		const tenDong = kr?.id === "k-q2" ? tenKr2 : kr?.title;
+		expect(chuDong.includes(CHU.chatLuong.luat[loi.ma]), sai).toBe(true);
+		expect(chuDong.includes(tenDong ?? TEN_MT_CHAT_LUONG), sai).toBe(true);
+	});
+}
+
+async function kiemChatLuong(): Promise<void> {
+	const truoc = chamNoiDung(KR_Q2.title);
+	expect(truoc.dat < truoc.xet, "vk10-chat-luong: fixture lech").toBe(true);
+	expect(chuDiem(), "vk10-chat-luong: diem lech").toBe(
+		CHU.chatLuong.dat(String(truoc.dat), String(truoc.xet)),
+	);
+	expect(
+		khoiChatLuong()?.querySelector("[data-slot=kara-mark]") ?? null,
+		"vk10-chat-luong: dau kara lech",
+	).toBeNull();
+	kiemDiemCon(truoc, "truoc", KR_Q2.title);
+
+	const viTriViec = truoc.loi.findIndex(
+		(l) => l.ma === "kr-la-viec" && l.kr === 1,
+	);
+	const nutDen = diemCon()[viTriViec]?.querySelector("[data-nut=den-dong]");
+	expect(nutDen?.textContent, "vk10-chat-luong: nut den dong lech").toBe(
+		CHU.chatLuong.denDong,
+	);
+	await bam(nutDen ?? null);
+	expect(
+		document.activeElement !== null &&
+			document.activeElement === oKr("k-q2", "ten"),
+		"vk10-chat-luong: den dong sai o",
+	).toBe(true);
+
+	const soGoi = goi.length;
+	await goNgay(oKr("k-q2", "ten"), TEN_KR_SUA);
+	const sau = chamNoiDung(TEN_KR_SUA);
+	expect(sau.dat, "vk10-chat-luong: fixture sau lech").toBe(truoc.dat + 1);
+	expect(chuDiem(), "vk10-chat-luong: khong cap nhat").toBe(
+		CHU.chatLuong.dat(String(sau.dat), String(sau.xet)),
+	);
+	expect(goi.length, "vk10-chat-luong: goi may chu lech").toBe(soGoi);
+	kiemDiemCon(sau, "sau", TEN_KR_SUA);
+}
+
+describe("vk10-chat-luong", () => {
+	test("vk10-chat-luong: N tren M bang ham cham tren noi dung dang hien, doi ngay khi go, den dong dung o", async () => {
+		await moBoChatLuong();
+		await kiemChatLuong();
+	});
+
+	test("vk10-chat-luong: 12 tren 12 khi hai KR tang toi va mot KR giu tren khong loi", () => {
+		const kq = chamBo([
+			{
+				title: TEN_MT_CHAT_LUONG,
+				whyNow: "",
+				keyResults: [
+					{ ...KR_Q1, ownerUserId: LAN.id },
+					{
+						...KR_Q1,
+						title: "Khách hàng doanh nghiệp mới",
+						ownerUserId: LAN.id,
+					},
+					{ ...KR_Q3, ownerUserId: LAN.id },
+				],
+			},
+		]);
+		expect(
+			CHU.chatLuong.dat(String(kq.dat), String(kq.xet)),
+			"vk10-chat-luong: vi du hop dong lech",
+		).toBe("12 trên 12 điểm đạt");
+	});
+
+	test("vk10-chat-luong: bo trong thi cau go muc tieu dau tien", async () => {
+		await moBoTrong({});
+		expect(
+			khoiChatLuong()?.querySelector("[data-cham-trong]")?.textContent ?? null,
+			"vk10-chat-luong: bo trong lech",
+		).toBe(CHU.chatLuong.chuaCo);
+	});
+});
+
+async function bamThe(ten: string): Promise<void> {
+	const the = qa("[role=tab]").find((t) => t.textContent === ten);
+	if (!(the instanceof HTMLElement)) throw new Error(`khong thay the ${ten}`);
+	await act(async () => {
+		the.dispatchEvent(
+			new MouseEvent("mousedown", { bubbles: true, button: 0 }),
+		);
+	});
+	await nhip(3);
+}
+
+async function voiKhoHep(viec: () => Promise<void>): Promise<void> {
+	const goc = window.matchMedia;
+	const hep = (query: string) => ({ ...goc(query), matches: true });
+	Object.defineProperty(window, "matchMedia", {
+		value: hep,
+		writable: true,
+		configurable: true,
+	});
+	try {
+		await viec();
+	} finally {
+		Object.defineProperty(window, "matchMedia", {
+			value: goc,
+			writable: true,
+			configurable: true,
+		});
+	}
+}
+
+describe("vk10-chat-luong-hep", () => {
+	test("vk10-chat-luong: kho hep — Den dong o the cot ben chuyen ve the Bo OKR va focus dung o", async () => {
+		await voiKhoHep(async () => {
+			const sai = "vk10-chat-luong: hep den dong lech";
+			const bo = boMau({ muc: BO_CHAT_LUONG });
+			datGhiMoi();
+			await veSoan(bo.khoa);
+			await choKhung();
+			await cho(() => q("[data-khung=hep]") !== null, sai);
+			await bamThe(CHU.theSoan.cotBen);
+			const nutDen = q(
+				"[data-khoi=chat-luong] [data-diem-con^='kr-la-viec:0:1'] [data-nut=den-dong]",
+			);
+			await bam(nutDen);
+			expect(
+				document.activeElement !== null &&
+					document.activeElement === oKr("k-q2", "ten"),
+				sai,
+			).toBe(true);
+		});
+	});
+});
+
+describe("vk10-chat-luong-do", () => {
+	test("vk10-chat-luong-do: diem doc tu hang thay vi ham cham thi khong cap nhat", async () => {
+		const hang = chamNoiDung(KR_Q2.title);
+		await moBoChatLuong({ chamBo: () => hang });
+		await expect(kiemChatLuong()).rejects.toThrow(
+			"vk10-chat-luong: khong cap nhat",
+		);
+	});
+
+	test("vk10-chat-luong-do: den dong tro o dau tien thi sai o", async () => {
+		await moBoChatLuong({
+			oDenDong: (goc) => {
+				const o = goc.querySelector("[data-o-nhap]");
+				return o instanceof HTMLElement ? o : null;
+			},
+		});
+		await expect(kiemChatLuong()).rejects.toThrow(
+			"vk10-chat-luong: den dong sai o",
+		);
+	});
+});
