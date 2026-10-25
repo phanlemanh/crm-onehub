@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d403a78797777bac13fd466678416f4d576179bb
+verified_commit: af18f068e26b7d35589459e8062337afac57e12c
 human_signoff: Phan Le Manh 2026-10-23 — ký lại Cổng Bằng chứng trên vòng chấm 3 (PASS, 16 eval, 7 suite xanh) sau bản sửa lỗi Của tôi không chuyển trang tìm thấy sau lượt ký 22/10; Ngoài-3 và Ngoài-9 mở hợp đồng mới, 11 mục ghi Known limits
 ---
 
@@ -259,3 +259,7 @@ sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-25, do hoá cũ do so-do-toan-vung (VK6) sau gộp onehub 49843223e — thước sửa tại chỗ theo V3-25 A, V3-27 B, V3-33, V3-38, V3-39 A, C1 lối b; AC-10 chứng ở bước ghim lại
 run_id: repin-20261025T052030Z-41118
 sha: d403a78797777bac13fd466678416f4d576179bb · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E5, E16 · diff chạm vật đo ngoài làn máy: E5, E16 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · chập chờn (đỏ lần đầu, đạt khi chạy lại): trang-bo-okr E2 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-25, do V3-44 A: bài đường cũ VK6 chạy tiến trình riêng (.dom.tsx) sau CI #567 đỏ
+run_id: repin-20261025T125204Z-55247
+sha: af18f068e26b7d35589459e8062337afac57e12c · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E5, E16 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
