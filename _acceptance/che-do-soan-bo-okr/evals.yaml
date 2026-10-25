@@ -338,12 +338,13 @@ evals:
       - "_acceptance/*/evals.yaml"
       - "apps/app/test/**"
     expected: |
-      khong-doi-hinh.mjs (khuôn `rang/giu-ho-so.mjs` của VK7): danh sách viết trước 12 hồ sơ — gop-y-dung-cho,
+      khong-doi-hinh.mjs (khuôn `rang/giu-ho-so.mjs` của VK7): danh sách viết trước 16 hồ sơ — gop-y-dung-cho,
       kara-gop-y-luot-2, gan-tay-va-kara-co-ly-do, nen-kara, muc-tieu-va-kr, okr-to-chuc-va, soan-okr-cung-tro-ly,
-      soan-okr-song-lai, soan-okr-trong-khung, khung-soan-chan-lien-ket, mot-nut-tao-muc-tieu, trang-bo-okr. (0) Lệnh quét
+      soan-okr-song-lai, soan-okr-trong-khung, khung-soan-chan-lien-ket, mot-nut-tao-muc-tieu, trang-bo-okr,
+      dieu-huong-khu-muc-tieu, khung-okr-truoc-r1, okr-soat-anh-luot-3, trang-don-vi-mot-bang. (0) Lệnh quét
       các tệp thước và bài kiểm của mọi hồ sơ đã ký theo mẫu {data-vung-kara, VungKara, DeXuatNeo, data-de-xuat-neo,
       data-nhom-soan, NutSoan, «Soạn cùng Kara», «Thêm mục tiêu», câu rỗng của bộ (data-cau-rong-bo)} → khẳng định «QUET <n>
-      = DANH SACH 12»; hồ sơ khớp mẫu mà vắng khỏi danh sách in «SAI AC-11: lot <ho so>». (1) Chạy mọi eval test/script không
+      khop, deu trong DANH SACH 16»; hồ sơ khớp mẫu mà vắng khỏi danh sách in «SAI AC-11: lot <ho so>». (1) Chạy mọi eval test/script không
       not-run của từng hồ sơ trên cây vòng và trên worktree origin/onehub; SAI khi nền 0 mà cây khác 0, «DO SAN TREN NEN» khi
       nền đỏ. (2) Ô nào khai not-run trong vòng này phải mang superseded_by che-do-soan-bo-okr#AC-7 và có trong bảng
       `rang/anh-xa-nghi.json`. (3) `git diff` các tệp thước của những hồ sơ ấy chỉ đổi chuỗi bộ chọn hay chuỗi chữ, và mỗi hồ

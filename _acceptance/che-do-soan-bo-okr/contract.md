@@ -91,7 +91,8 @@ KR có tên ≥3 ký tự, khởi điểm và đích là số (hay KR mốc). Đ
 - AC-11: Given vòng này đã làm, When chạy eval máy của các hồ sơ đã ký có thước chạm khối Kara của khung chi tiết mục tiêu
   hay lối Soạn — đúng danh sách viết trước: `gop-y-dung-cho`, `kara-gop-y-luot-2`, `gan-tay-va-kara-co-ly-do`, `nen-kara`,
   `muc-tieu-va-kr`, `okr-to-chuc-va`, `soan-okr-cung-tro-ly`, `soan-okr-song-lai`, `soan-okr-trong-khung`,
-  `khung-soan-chan-lien-ket`, `mot-nut-tao-muc-tieu`, `trang-bo-okr` — và lệnh quét của eval không thấy hồ sơ đã ký nào
+  `khung-soan-chan-lien-ket`, `mot-nut-tao-muc-tieu`, `trang-bo-okr`, `dieu-huong-khu-muc-tieu`, `khung-okr-truoc-r1`,
+  `okr-soat-anh-luot-3`, `trang-don-vi-mot-bang` — và lệnh quét của eval không thấy hồ sơ đã ký nào
   khác khớp mẫu, Then mọi mục không xấu hơn trên nền `origin/onehub` (mục đỏ sẵn trên nền in «đỏ sẵn
   trên nền»); ô đo khối Kara cũ được thay khai `superseded_by: che-do-soan-bo-okr#AC-7`; mọi thay đổi trong thước của các
   hồ sơ ấy chỉ là đổi bộ chọn hay chuỗi, mỗi hồ sơ một dòng sổ `fix` mang `decided_by` chủ kho và cặp đo hai chiều.
