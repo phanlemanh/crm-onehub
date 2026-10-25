@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Lần đẩy ngay sau khi gộp onehub vào nhánh PR chỉ xét phần PR tự thêm; phần đó rỗng hoặc chỉ là tài liệu thì bỏ hai bước dài (test, build), vẫn chạy ba bước kiểm nhanh. Đã chứng trên cây thật và trên 412 lần gộp thật (6 → 38 lần đi nhẹ).",
+  "scope_plain": "Bốn thứ cố ý để ngoài vòng, như đã duyệt ở Cổng Phạm vi:"
+}

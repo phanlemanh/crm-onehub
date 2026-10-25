@@ -125,6 +125,7 @@ async function tatCa(n: Nguoi): Promise<DongTatCa[]> {
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	pb.kd = (
 		await db.department.create({
 			data: { name: `${TIEN_TO} Kinh doanh`, position: 9101 },

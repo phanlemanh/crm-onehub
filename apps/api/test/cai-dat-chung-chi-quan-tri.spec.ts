@@ -249,6 +249,7 @@ beforeAll(async () => {
 		metadata: null,
 	};
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	demVerify = spyOn(app.get(ResearchKeyService), "verify").mockResolvedValue({
 		outcome: "valid",
 	});
@@ -450,7 +451,7 @@ describe("ccq-cong-that", () => {
 			"admin bi day: required",
 		);
 
-		const server = await app.listen(0, "127.0.0.1");
+		const server = app.getHttpServer();
 		const { port } = server.address() as AddressInfo;
 		const apiUrl = `http://127.0.0.1:${port}`;
 		const [choMember, choAdmin] = await Promise.all([

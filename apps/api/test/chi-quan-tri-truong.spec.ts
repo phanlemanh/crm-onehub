@@ -262,7 +262,7 @@ beforeAll(async () => {
 		imports: [AppModule],
 	}).compile();
 	app = modul.createNestApplication({ bodyParser: false });
-	await app.init();
+	await app.listen(0, "127.0.0.1");
 
 	await moPhien("owner", "owner");
 	const adminId = await moPhien("admin", "admin");

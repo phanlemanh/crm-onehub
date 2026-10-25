@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660
+verified_commit: 9b246f0a57bae04226f308c1d481f95b31a15217
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -495,3 +495,15 @@ sha: 19567f1d3fc85ee36994b60051cecdd88b7b6028 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 24 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
 run_id: repin-20261020T130437Z-49516
 sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 25 — 2026-10-22, do VK9 mot-nut-tao-muc-tieu: khai superseded_by cho eval DOM gãy, bàn đo màn qua hộp Thêm mục tiêu (V2-20 b2)
+run_id: repin-20261022T224734Z-81705
+sha: f28f4ba412ec6e954970c6eccbf75eb5e909a72e · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 26 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: hoá cũ lại sau gộp onehub (#547)
+run_id: repin-20261023T043846Z-81133
+sha: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · chập chờn (đỏ lần đầu, đạt khi chạy lại): khung-soan-chan-lien-ket E8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 27 — 2026-10-24, do VK3 trang-bo-okr sửa thước và vật — ghim lại sau chữ ký, ba thước theo «duyệt cả ba» (9b246f0a5)
+run_id: repin-20261024T133834Z-50324
+sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

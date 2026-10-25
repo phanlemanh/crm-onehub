@@ -10,6 +10,7 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { KhoiLoaiThongBao } from "@/components/thong-bao/khoi-loai-thong-bao";
 import { getLocale } from "@/lib/locale/server";
 import { nhacQuaZaloMessages } from "@/lib/messages/nhac-qua-zalo";
 import { requireSession } from "@/lib/session";
@@ -50,7 +51,11 @@ async function ThongBao() {
 	await requireSession();
 	const t = nhacQuaZaloMessages(await getLocale());
 	const queryClient = getServerQueryClient();
-	await queryClient.prefetchQuery(getServerTrpc().zalo.cuaToi.queryOptions());
+	const trpcMayChu = getServerTrpc();
+	await Promise.all([
+		queryClient.prefetchQuery(trpcMayChu.zalo.cuaToi.queryOptions()),
+		queryClient.prefetchQuery(trpcMayChu.thongBao.caiDat.queryOptions()),
+	]);
 
 	return (
 		<HydrateClient>
@@ -71,6 +76,7 @@ async function ThongBao() {
 					<KhoiKenh />
 				</section>
 				<KhoiDongTroLyOkr />
+				<KhoiLoaiThongBao />
 			</div>
 		</HydrateClient>
 	);

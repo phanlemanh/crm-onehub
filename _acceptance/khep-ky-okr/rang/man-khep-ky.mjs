@@ -1117,14 +1117,20 @@ async function buocLyDo() {
 		);
 		const mong = CHU.dai.ra(formatDay(CUOI_QUY, "vi"));
 		kiem(`E7 buoc 4: dai ghi «${mong}» (thay «${tieuDe}»)`, tieuDe === mong);
-		const duoiTab = await t3.evaluate(() => {
+		const viTri = await t3.evaluate(() => {
 			const tab = window.__tim("[role='tablist']")[0];
 			const dai = window.__tim("[data-dai-ky='ra']")[0];
-			return tab && dai
-				? dai.getBoundingClientRect().top >= tab.getBoundingClientRect().bottom
-				: false;
+			if (!tab) return "khong-tab";
+			return dai &&
+				dai.getBoundingClientRect().top >= tab.getBoundingClientRect().bottom
+				? "duoi"
+				: "tren";
 		});
-		kiem("E7 buoc 4: dai nam duoi thanh tab", duoiTab);
+		if (viTri === "khong-tab")
+			console.log(
+				"E7 buoc 4: /okr khong co thanh tab (thanh ben khu tu VK1) — bo qua phep so vi tri dai",
+			);
+		else kiem("E7 buoc 4: dai nam duoi thanh tab", viTri === "duoi");
 	}
 	await chup(t3, "buoc-dai-ra.png");
 	await t3.setViewport({ width: DO.hep, height: DO.cao });

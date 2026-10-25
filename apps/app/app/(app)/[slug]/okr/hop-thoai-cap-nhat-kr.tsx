@@ -37,6 +37,7 @@ import { toast } from "sonner";
 import { loiDuongDan } from "@/components/crm/record-sheet/kr-bang-chung";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
+import { okrLanTruocMessages } from "@/lib/messages/okr-lan-truoc";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -50,7 +51,9 @@ import {
 	OGiaTri,
 	oBanDau,
 } from "./cap-nhat-tuan/cap-nhat-tuan";
+import { KhoiLanTruoc } from "./khoi-lan-truoc";
 import type { KetQua, KrCapNhat } from "./kieu";
+import type { LanTruocKr } from "./lan-truoc-kr";
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
 type DienBien = RouterOutputs["okr"]["dienBien"];
@@ -176,6 +179,7 @@ export function krCapNhatTuSheet(mt: ChiTiet, kr: KetQua): KrCapNhat {
 
 export function HopThoaiCapNhatKr({
 	kr,
+	lanTruoc,
 	chuTen,
 	ghiHo,
 	sessionId,
@@ -184,6 +188,7 @@ export function HopThoaiCapNhatKr({
 	dong,
 }: {
 	kr: KrCapNhat;
+	lanTruoc: LanTruocKr | null;
 	chuTen: string;
 	ghiHo: boolean;
 	sessionId: string | null;
@@ -283,6 +288,7 @@ export function HopThoaiCapNhatKr({
 						</AlertDescription>
 					</Alert>
 				) : null}
+				{lanTruoc ? <KhoiLanTruoc kr={kr} lan={lanTruoc} /> : null}
 				<form
 					id={`${ma}-form`}
 					onSubmit={(e) => {
@@ -295,7 +301,7 @@ export function HopThoaiCapNhatKr({
 							datGiaTri={(giaTri) => setO({ ...o, giaTri })}
 							khoa={khoa}
 							kr={kr}
-							lan={lan}
+							lan={null}
 							loi={loi}
 							so={so}
 							tuDongFocus
@@ -344,6 +350,7 @@ export function HopThoaiCapNhatKr({
 						/>
 						<OGhiChu
 							datGhiChu={(ghiChu) => setO({ ...o, ghiChu })}
+							goiY={okrLanTruocMessages(locale).goiY}
 							id={kr.keyResultId}
 							khoa={khoa}
 							value={o.ghiChu}

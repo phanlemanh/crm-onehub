@@ -5,7 +5,7 @@ slug: trang-bo-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-21T14:07:05Z
 design_doc: docs/superpowers/specs/2026-10-21-trang-bo-okr-design.md
@@ -98,3 +98,10 @@ AC-7. Pha chấm điểm chỉ đo bằng DOM test (AC-4) vì bộ mẫu không 
 - Bộ OKR cá nhân (`nguoi:`) trong trang danh sách.
 
 ## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-23:
+  - Ngoài-1: Ở thẻ Việc của một bộ OKR, việc thuộc mục tiêu đã bỏ nằm lẫn với việc của mục tiêu đang chạy, chưa có dòng «Đã bỏ» riêng.
+  - Ngoài-2: Ở thẻ Việc của bộ OKR, việc quá hạn hay có người làm đã rời nhóm chưa mang dấu cảnh báo như ở phiếu bản ghi.
+  - Ngoài-3: Đường dẫn cũ mở bản nháp Soạn mà không có tham số đơn vị mở ra danh sách các bộ, không mở bản nháp và không báo lỗi.
+  - Ngoài-4: Một đơn vị có thể hiện trong «Đang theo dõi» vì người xem theo dõi một mục tiêu nháp hay đã bỏ, trong khi cột Mục tiêu ghi ít hơn.
+  - Ngoài-7: Phép soát «không xấu hơn trước» bỏ sót các eval chạy cả bộ hay qua script bọc, nên hồi quy ở đó có thể lọt.

@@ -16,6 +16,7 @@ import {
 	vietTep,
 } from "../../../packages/validation/src/tin-hieu.ts";
 import { GOM } from "../gom-cau-hinh.ts";
+import type { chayGom } from "../gom-lich.ts";
 
 export const GOC_CRM = path.resolve(import.meta.dir, "..", "..", "..");
 export const KHOA_GIA = "sk-test-KHOA-BI-MAT";
@@ -196,7 +197,18 @@ export type CheDo =
 	| "khong-commit"
 	| "ba-nhom"
 	| "thoat-1"
-	| "ngu";
+	| "ngu"
+	| "chi-duoc-phep"
+	| "tu-choi"
+	| "git-fsmonitor"
+	| "git-hook"
+	| "git-remote"
+	| "git-ref"
+	| "git-info"
+	| "lot-ten-nhom"
+	| "lot-cau-giao-b64"
+	| "lot-ly-do"
+	| "lot-tep-b64";
 
 export const TEN_NHOM = {
 	G1: "Người gửi xem được trọn bảng tín hiệu trên màn hẹp",
@@ -206,18 +218,33 @@ export const TEN_NHOM = {
 
 const CLAUDE_GIA = (d: string) => `#!/usr/bin/env bun
 import { execFileSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync, writeFileSync, appendFileSync, rmSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, appendFileSync, rmSync, copyFileSync } from "node:fs";
 const D = ${JSON.stringify(d)};
-writeFileSync(D + "/argv.json", JSON.stringify(process.argv.slice(2)));
+const argv = process.argv.slice(2);
+writeFileSync(D + "/argv.json", JSON.stringify(argv));
+writeFileSync(D + "/env.json", JSON.stringify(process.env));
+const iCd = argv.indexOf("--settings");
+if (iCd >= 0 && existsSync(argv[iCd + 1])) copyFileSync(argv[iCd + 1], D + "/cai-dat.json");
 const cheDo = readFileSync(D + "/che-do", "utf8").trim();
+const b64 = (s) => Buffer.from(s).toString("base64");
+const docMoi = (ten) => existsSync(D + "/" + ten) ? readFileSync(D + "/" + ten, "utf8") : "";
 if (cheDo === "thoat-1") { console.error("loi mo hinh gia " + (process.env.ANTHROPIC_API_KEY ?? "")); process.exit(1); }
 if (cheDo === "ngu") { await Bun.sleep(30000); process.exit(0); }
 if (cheDo === "khong-gom") process.exit(0);
-const cg = JSON.parse(execFileSync("node", [process.env.AG + "/scripts/tin-hieu.mjs", "--root", ".", "--chua-gom"], { encoding: "utf8" }));
+const caiDat = existsSync(D + "/cai-dat.json") ? JSON.parse(readFileSync(D + "/cai-dat.json", "utf8")) : null;
+const lenhDuoc = (caiDat?.permissions?.allow ?? []).filter((a) => a.startsWith("Bash(")).map((a) => a.slice(5, -1));
+const chayDuoc = (duoiLenh) => {
+  const l = lenhDuoc.find((x) => x.endsWith(duoiLenh));
+  if (!l) throw new Error("khong co lenh duoc phep: " + duoiLenh);
+  const [bin, ...ts] = l.split(" ");
+  return execFileSync(bin, ts, { encoding: "utf8" });
+};
+const cg = JSON.parse(cheDo === "chi-duoc-phep" ? chayDuoc("--chua-gom") : execFileSync("node", [process.env.AG + "/scripts/tin-hieu.mjs", "--root", ".", "--chua-gom"], { encoding: "utf8" }));
 const ids = cg.tin_hieu.map((t) => t.id).sort((a, b) => Number(a.split("-")[1]) - Number(b.split("-")[1]));
 const ten = ${JSON.stringify(TEN_NHOM)};
-const so = readdirSync("tin-hieu/gom").filter((f) => f.endsWith(".md")).length + 1;
+const so = readdirSync("tin-hieu/gom").filter((f) => f.endsWith(".md") && readFileSync("tin-hieu/gom/" + f, "utf8").length).length + 1;
 const dot = "tin-hieu-dot-" + so;
+const tepGom = process.env.TIN_HIEU_BAN_GOM || "tin-hieu/gom/" + dot + ".md";
 const con = [...ids];
 const phu = cg.da_giao.length ? con.shift() : null;
 const le = con.pop();
@@ -228,37 +255,58 @@ let g3 = [];
 if (cheDo === "ba-nhom") { const ba = Math.ceil(con.length / 3); g1 = con.slice(0, ba); g2 = con.slice(ba, 2 * ba); g3 = con.slice(2 * ba); }
 if (cheDo === "bo-sot") g1 = g1.slice(1);
 if (cheDo === "hai-cho") g2 = [...g2, g1[0]];
-const tenG1 = cheDo === "lot-ma" ? ten.G1 + " (" + ids[0] + ")" : ten.G1;
+const tenG1 = cheDo === "lot-ma" ? ten.G1 + " (" + ids[0] + ")" : cheDo === "lot-ten-nhom" ? ten.G1 + " " + process.env.ANTHROPIC_API_KEY : ten.G1;
 const ma = (xs) => xs.map((x) => "\`" + x + "\`").join(", ");
 const dong = ["dot: " + dot, "dang: chuoi", "nguon: cửa tín hiệu — lịch gom", "truc: ket-qua", "den: " + new Date().toISOString(), "",
   "- \`G1\` — " + tenG1, "  - tín hiệu: " + ma(g1)];
 if (g2.length) dong.push("- \`G2\` — " + ten.G2, "  - tín hiệu: " + ma(g2));
 if (g3.length) dong.push("- \`G3\` — " + ten.G3, "  - tín hiệu: " + ma(g3));
-dong.push("", "- lẻ \`" + le + "\` — lời cảm ơn, không phải điều cần làm");
+dong.push("", "- lẻ \`" + le + "\` — lời cảm ơn, không phải điều cần làm" + (cheDo === "lot-ly-do" ? " " + process.env.ANTHROPIC_API_KEY : ""));
 if (phu) dong.push("- đã phủ \`" + phu + "\` — " + cg.da_giao[0].slug);
-writeFileSync("tin-hieu/gom/" + dot + ".md", dong.join("\\n") + "\\n");
-if (cheDo === "hai-gom") writeFileSync("tin-hieu/gom/" + dot + "-b.md", dong.join("\\n").replace("dot: " + dot, "dot: " + dot + "-b") + "\\n");
+writeFileSync(tepGom, dong.join("\\n") + "\\n");
+if (cheDo === "hai-gom") writeFileSync(tepGom.replace(/\\.md$/, "-b.md"), dong.join("\\n").replace("dot: " + dot, "dot: " + dot + "-b") + "\\n");
+if (cheDo === "lot-tep-b64") writeFileSync(tepGom, readFileSync(tepGom, "utf8") + "\\n<!-- " + b64(process.env.ANTHROPIC_API_KEY ?? "") + " -->\\n");
 const lt = JSON.parse(readFileSync(${JSON.stringify(TEP_LO_TRINH)}, "utf8"));
 const nhom = ["G1", ...(g2.length ? ["G2"] : []), ...(g3.length ? ["G3"] : [])];
 for (const n of nhom) {
   if (cheDo === "hang-sai" && n === nhom[nhom.length - 1]) continue;
-  lt.hang.push({ ma: dot + "-" + n, slug: dot + "-" + n.toLowerCase(), ten: ten[n], cau_giao: "«" + ten[n] + "»", hang: "T2", dot, phu: [n] });
+  const cauGiao = "«" + ten[n] + "»" + (cheDo === "lot-cau-giao-b64" && n === "G1" ? " " + b64(docMoi("token")) : "");
+  lt.hang.push({ ma: dot + "-" + n, slug: dot + "-" + n.toLowerCase(), ten: ten[n], cau_giao: cauGiao, hang: "T2", dot, phu: [n] });
 }
 writeFileSync(${JSON.stringify(TEP_LO_TRINH)}, JSON.stringify(lt, null, 1) + "\\n");
 if (cheDo === "ngoai-commit") writeFileSync("apps/app/package.json", '{"doi":1}\\n');
 if (cheDo === "ngoai-config") appendFileSync("_acceptance/config.yaml", "# doi\\n");
 if (cheDo === "ngoai-chua-theo-doi") writeFileSync("scripts/x.ts", "export {};\\n");
-if (cheDo === "khong-commit") process.exit(0);
-const them = ["tin-hieu/gom", ${JSON.stringify(TEP_LO_TRINH)}];
-if (cheDo === "ngoai-commit") them.push("apps/app/package.json");
-execFileSync("git", ["add", "--", ...them]);
+if (cheDo === "ngoai-commit") execFileSync("git", ["add", "--", "apps/app/package.json"]);
 if (cheDo === "xoa-tin-hieu") execFileSync("git", ["rm", "--quiet", "tin-hieu/crm/crm-1.json"]);
-execFileSync("git", ["commit", "--quiet", "-m", "gom"]);
+const gd = execFileSync("git", ["rev-parse", "--absolute-git-dir"], { encoding: "utf8" }).trim();
+const moi = (ten) => D + "/" + ten;
+if (cheDo === "git-fsmonitor") appendFileSync(gd + "/config", "[core]\\n\\tfsmonitor = touch " + moi("A") + "\\n");
+if (cheDo === "git-hook") { mkdirSync(gd + "/hooks", { recursive: true }); writeFileSync(gd + "/hooks/pre-push", "#!/bin/sh\\ntouch " + moi("B") + "\\n"); chmodSync(gd + "/hooks/pre-push", 0o755); }
+if (cheDo === "git-remote") appendFileSync(gd + "/config", '[remote "ra"]\\n\\turl = ' + (docMoi("origin-hai") || "/khong-co") + "\\n");
+if (cheDo === "git-ref") { const h = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(); mkdirSync(gd + "/refs/heads", { recursive: true }); writeFileSync(gd + "/refs/heads/ngoai", h + "\\n"); }
+if (cheDo === "git-info") { mkdirSync(gd + "/info", { recursive: true }); writeFileSync(gd + "/info/attributes", "* filter=ngoai\\n"); }
+if (cheDo === "tu-choi") process.stdout.write(JSON.stringify({ type: "result", permission_denials: [{ tool_name: "Bash", tool_use_id: "x", tool_input: { command: "node -e DOI-SO-MOI" } }, { tool_name: "WebFetch", tool_use_id: "y", tool_input: { url: "https://DOI-SO-MOI.test" } }] }));
+if (cheDo === "chi-duoc-phep") { try { chayDuoc("--rang"); } catch { process.exit(1); } }
+if (cheDo === "chi-duoc-phep") process.stdout.write(JSON.stringify({ type: "result", permission_denials: [] }));
 `;
+
+export type CaiDatPhien = {
+	permissions: {
+		allow: string[];
+		deny: string[];
+		blockReadsOutsideWorkingDirectories?: boolean;
+	};
+	disableAllHooks?: boolean;
+};
 
 export type ClaudeGia = {
 	bin: string;
+	thuMuc: string;
 	datCheDo: (c: CheDo) => void;
+	datMoi: (ten: string, noiDung: string) => void;
+	env: () => Record<string, string>;
+	caiDat: () => CaiDatPhien | null;
 	argv: () => string[] | null;
 	daGoi: () => boolean;
 	xoaVet: () => void;
@@ -271,9 +319,17 @@ export function claudeGia(cheDo: CheDo = "dung"): ClaudeGia {
 	chmodSync(bin, 0o755);
 	writeFileSync(path.join(d, "che-do"), cheDo);
 	const tep = path.join(d, "argv.json");
+	const docJson = <T>(ten: string): T | null =>
+		existsSync(path.join(d, ten))
+			? (JSON.parse(readFileSync(path.join(d, ten), "utf8")) as T)
+			: null;
 	return {
 		bin,
+		thuMuc: d,
 		datCheDo: (c) => writeFileSync(path.join(d, "che-do"), c),
+		datMoi: (ten, noiDung) => writeFileSync(path.join(d, ten), noiDung),
+		env: () => docJson<Record<string, string>>("env.json") ?? {},
+		caiDat: () => docJson<CaiDatPhien>("cai-dat.json"),
 		argv: () =>
 			existsSync(tep)
 				? (JSON.parse(readFileSync(tep, "utf8")) as string[])
@@ -297,6 +353,7 @@ import { appendFileSync, existsSync, readFileSync, writeFileSync } from "node:fs
 const D = ${JSON.stringify(d)};
 const a = process.argv.slice(2);
 appendFileSync(D + "/log", JSON.stringify(a) + "\\n");
+appendFileSync(D + "/env-log", JSON.stringify({ a, GH_TOKEN: process.env.GH_TOKEN ?? null }) + "\\n");
 if (existsSync(D + "/loi-list") && a[0] === "pr" && a[1] === "list") { process.stdout.write(readFileSync(D + "/loi-list", "utf8")); process.exit(0); }
 const ds = JSON.parse(readFileSync(D + "/prs.json", "utf8"));
 const lay = (c) => { const i = a.indexOf(c); return i < 0 ? null : a[i + 1]; };
@@ -319,6 +376,7 @@ process.exit(0);
 export type GhGia = {
 	bin: string;
 	nhatKy: () => string[][];
+	nhatKyEnv: () => { a: string[]; GH_TOKEN: string | null }[];
 	prs: () => PrGia[];
 	datPr: (ds: PrGia[]) => void;
 	doiTrangThai: (so: number, state: PrGia["state"], mergedAt?: string) => void;
@@ -335,6 +393,15 @@ export function ghGia(): GhGia {
 		JSON.parse(readFileSync(path.join(d, "prs.json"), "utf8")) as PrGia[];
 	return {
 		bin,
+		nhatKyEnv: () =>
+			existsSync(path.join(d, "env-log"))
+				? readFileSync(path.join(d, "env-log"), "utf8")
+						.split("\n")
+						.filter(Boolean)
+						.map(
+							(l) => JSON.parse(l) as { a: string[]; GH_TOKEN: string | null },
+						)
+				: [],
 		nhatKy: () =>
 			existsSync(path.join(d, "log"))
 				? readFileSync(path.join(d, "log"), "utf8")
@@ -430,4 +497,42 @@ export function quaNhanhHangCho(
 	);
 	g(kho.seed, ["branch", "--quiet", "-D", "tin-hieu/keo-ve"]);
 	g(kho.seed, ["push", "--quiet", "origin", GOM.nhanhChinh]);
+}
+
+export const GOC_TEST = path.resolve(import.meta.dir, "..");
+const VALIDATION = path.resolve(
+	GOC_TEST,
+	"..",
+	"..",
+	"packages",
+	"validation",
+	"src",
+	"tin-hieu-gom.ts",
+);
+
+export type Tiem = {
+	tep: "gom-lich.ts" | "gom-than-pr.ts" | "gom-cau-hinh.ts";
+	tu: string;
+	thanh: string;
+};
+
+export async function banTiem(sua: Tiem[]): Promise<typeof chayGom> {
+	const d = thuMuc("tiem");
+	for (const t of ["gom-lich.ts", "gom-than-pr.ts", "gom-cau-hinh.ts"]) {
+		let s = readFileSync(path.join(GOC_TEST, t), "utf8").replaceAll(
+			"../../packages/validation/src/tin-hieu-gom.ts",
+			VALIDATION,
+		);
+		for (const x of sua.filter((y) => y.tep === t)) {
+			const so = s.split(x.tu).length - 1;
+			if (so !== 1)
+				throw new Error(`nhát tiêm không khớp đúng một chỗ (${so}): ${x.tu}`);
+			s = s.replace(x.tu, x.thanh);
+		}
+		writeFileSync(path.join(d, t), s);
+	}
+	const m = (await import(path.join(d, "gom-lich.ts"))) as {
+		chayGom: typeof chayGom;
+	};
+	return m.chayGom;
 }

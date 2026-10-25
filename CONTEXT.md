@@ -345,6 +345,7 @@ Vì sao: "đăng ký" nghe như ghi danh vào phễu; theo dõi không đổi ai
 ngày, việc quá hạn và việc sắp hạn người đó thực hiện, việc đang chờ người đó đánh
 giá, gợi ý mở kế hoạch đang chờ người đó; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm kênh Zalo 2026-09-23,
 thêm Việc 2026-10-13.
+Loại người đó đã tắt ở mục «Loại thông báo» không vào tin; mục ấy vẫn có thông báo trong chuông (TB2, 2026-10-23).
 _Avoid_: thông báo, notification
 Vì sao: thông báo là từng mục nằm trong chuông của CRM (mục **Thông báo**); nhắc
 buổi sáng là một tin gom gửi ra Zalo hay Slack — gọi lẫn thì người dùng đi tìm
@@ -355,9 +356,23 @@ trên đầu trang và ở trang Thông báo; có đã đọc hay chưa, và b�
 làm. Mỗi mục của nhắc buổi sáng thành một thông báo cho mọi người — kể cả người chưa
 nối Zalo hay Slack. Khác **Nhắc buổi sáng**: nhắc là một tin gom gửi qua một kênh
 ngoài CRM; thông báo là từng mục, lưu lại trong CRM. Chốt 2026-10-14 (TB1).
+Zalo hay Slack chỉ chuyển tiếp thông báo theo cài đặt loại thông báo của người nhận; chuông luôn nhận đủ mọi loại, không tắt được. Mở rộng 2026-10-23 (TB2).
 _Avoid_: notification, tin báo
 Vì sao: chữ «nhắc» đã là tên của tin gom gửi ra Zalo hay Slack — một dòng trong chuông không gọi là nhắc; chuông cần một chữ
 riêng để người dùng biết dòng nào nằm trong CRM.
+
+**Cần làm**: mức của một loại thông báo khi nó chờ chính người nhận làm một việc —
+duyệt, cập nhật, trả lời, việc hay bước quá hạn hoặc sắp hạn, đối soát lệch. Dùng để
+xếp nhóm ở mục «Loại thông báo» trên trang Nhắc buổi sáng. Chốt 2026-10-23 (TB2).
+_Avoid_: việc cần làm, việc phải làm
+Vì sao: «việc cần làm» đã bị cấm vì lẫn với **Việc** (bản ghi giao cho người); «Cần
+làm» là mức của thông báo, không phải một bản ghi việc.
+
+**Để biết**: mức của một loại thông báo khi nó chỉ báo tin, không đòi người nhận làm
+gì — được giao mục tiêu, được ghi nhận, tóm tắt tuần, Kara dựng xong, tín hiệu đổi chỗ.
+Chốt 2026-10-23 (TB2).
+_Avoid_: thông tin, FYI
+Vì sao: «thông tin» quá rộng; «Để biết» nói thẳng người nhận chỉ cần nắm.
 
 **Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
 sáng, trả lời mã nối, nhận ra người đã nối, gửi tin thử khi người bấm «Gửi thử
@@ -476,6 +491,14 @@ Vì sao: màn Cài đặt hiện CẢ trường chuẩn lẫn trường tự t�
 tạo" vào nhãn là nói hẹp hơn thứ người thấy; ba từ còn lại là tiếng của nhà khác,
 hoặc nửa Việt nửa Anh.
 
+**Tệp** (kiểu trường): kiểu trường giữ tệp tải lên — hợp đồng, bản quét, ảnh —
+gắn vào một thoả thuận, công ty hay liên hệ. Một ô Tệp giữ tối đa 10 tệp PDF, DOCX,
+PNG hay JPG. Ai thấy bản ghi cũng thấy tên và số tệp; mở hay tải tệp là việc của
+quản trị. Chốt 2026-10-21.
+_Avoid_: tệp đính kèm, attachment, file, tài liệu
+Vì sao: «tài liệu» đã là trang của Kho tài liệu; «đính kèm» gợi một thư gửi đi,
+còn ô này nằm trên bản ghi như mọi trường khác.
+
 **Bộ phận**: cấp trên của cây tổ chức OneHub; một bộ phận chứa nhiều phòng ban.
 Cây có đúng hai cấp cố định dưới gốc OneHub — bộ phận, rồi phòng ban — và là cây
 dùng chung cho cả CRM: Điều phối 30 ngày, OKR, báo cáo và bộ lọc cùng đọc một
@@ -557,7 +580,8 @@ _Avoid_: xoá hẳn, xoá luôn, purge
 Vì sao: hai chữ cho cùng một việc ở hai màn làm người ta tưởng là hai việc.
 
 **Bỏ · Dùng lại**: kết cục của một mục tiêu OKR đã có lịch sử. **Bỏ** khép mục tiêu —
-không sửa được, không tính vào tiến độ, cất vào dòng gập «Đã bỏ (n)» cuối danh sách.
+không sửa được, không tính vào tiến độ, ra khỏi danh sách chính; tìm lại bằng nút
+«Đã bỏ (n)» trên hàng công cụ (từ 25/10, trước đó là dòng gập cuối danh sách).
 **Dùng lại** đưa mục tiêu đã bỏ về Nháp khi chu kỳ còn nhận ghi; muốn nó chạy lại
 thì gửi duyệt hay công bố lại như mới. Chốt 2026-10-07.
 _Avoid_: lưu trữ (cho mục tiêu), huỷ, khôi phục (cho mục tiêu đã bỏ)
@@ -650,15 +674,18 @@ Vì sao: «loại» đã là chữ của mục tiêu — cam kết hay tham vọ
 cùng một hộp thoại thì người đọc không biết ô nào nói về cái gì. «Công thức» gợi
 người dùng tự viết phép tính, mà kiểu KR là một lựa chọn trong sáu.
 
-**Cập nhật tuần**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và
-một dòng ghi chú, mỗi tuần một lần. Lần cập nhật chỉ thêm, không sửa lần cũ. Màn
-«Cập nhật tuần của tôi» gom mọi KR một người phụ trách. Là chữ chốt cho
-«check-in». Chốt 2026-09-24.
-_Avoid_: check-in, báo cáo tuần, điểm danh
-Vì sao: «check-in» để nguyên thì màn lẫn tiếng; «báo cáo tuần» gợi một văn bản
-gửi lên để duyệt, còn cập nhật là một con số và một dòng; «điểm danh» nói có mặt,
-không nói tiến độ. Số tự chảy từ CRM vào KR không phải cập nhật tuần — mức tự tin
-và ghi chú vẫn do người ghi.
+**Cập nhật**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và một
+dòng ghi chú. Ghi lúc nào cũng được, mỗi lần thành một dòng; lần cập nhật chỉ thêm,
+không sửa lần cũ. Ghi bằng hộp cập nhật một KR, mở từ chi tiết KR. Nhịp hằng tuần là
+khuyến nghị vận hành, đến qua tin nhắc 08:30 và Họp tuần, không phải luật của dữ
+liệu. Cụm «cập nhật tuần này» vẫn đúng khi nói một khoảng thời gian. Là chữ chốt
+cho «check-in». Chốt 2026-09-24; bỏ chữ «tuần» khỏi tên 2026-10-24.
+_Avoid_: check-in, Cập nhật tuần, báo cáo tuần, điểm danh
+Vì sao: «check-in» để nguyên thì màn lẫn tiếng. «Cập nhật tuần» làm người ta tưởng
+mỗi tuần chỉ ghi được một lần, trong khi dữ liệu không có khoá duy nhất theo tuần.
+«Báo cáo tuần» gợi một văn bản gửi lên để duyệt, còn cập nhật chỉ là một con số và
+một dòng. «Điểm danh» nói có mặt, không nói tiến độ. Số tự chảy từ CRM vào KR không
+phải cập nhật, vì mức tự tin và ghi chú vẫn do người ghi.
 
 **Mức tự tin**: phán đoán của người phụ trách, ghi ở mỗi lần cập nhật tuần, rằng
 KR sẽ tới đích khi chu kỳ khép. Người chọn; máy không chọn thay. Chốt 2026-09-24.
@@ -699,6 +726,25 @@ _Avoid_: kế hoạch, plan, bảng OKR, trang đơn vị
 Vì sao: «kế hoạch» đã là chữ của Kế hoạch 30 ngày (khuôn kế hoạch, kế hoạch im); «trang
 đơn vị» gọi tên cái trang chứ không gọi tên vật — người ta mở một bộ OKR, không mở một
 đơn vị.
+
+**Tôi dẫn · Đang theo dõi (lọc phạm vi)**: bộ lọc phạm vi của khu Mục tiêu — ba chip
+Tất cả · Tôi dẫn · Đang theo dõi, ghi trên đường dẫn. Mọi màn của khu lọc theo phạm vi
+dùng đúng ba chữ này: Bộ OKR, Cập nhật gần đây và các màn sau. **Tôi dẫn** là các bộ
+của đơn vị người xem làm trưởng; trưởng một bộ phận không kéo theo các phòng ban con, và
+bộ OneHub không thuộc Tôi dẫn của ai. **Đang theo dõi** là các bộ có ít nhất một mục tiêu
+người xem theo dõi. Chốt 2026-10-24 (Manh Phan).
+_Avoid_: Bộ OKR bạn dẫn, Bạn theo dõi, của tôi, yêu thích
+Vì sao: một khái niệm mang hai bộ chữ trên hai màn cạnh nhau thì người ta tưởng là hai
+bộ lọc; «Của tôi» đã là tên một nơi đến trên thanh bên.
+
+**Cập nhật gần đây**: mục ở đầu thanh bên khu Mục tiêu, cạnh Của tôi — dòng tin mọi
+lần cập nhật KR trong chu kỳ đang chọn, mới nhất trước, lọc Tất cả · Tôi dẫn · Đang theo
+dõi. Trả lời ngay tại dòng tin; bấm một dòng thì mở chi tiết KR. Học từ «Recent updates»
+của Tability. Chốt 2026-10-18 cùng vỏ khu; mục từ ghi 2026-10-24.
+_Avoid_: bảng tin, hoạt động gần đây, nhật ký, feed
+Vì sao: tên gọi đúng thứ người ta đọc — các lần cập nhật — và «Cập nhật» đã là chữ chốt
+cho lần ghi của một KR. «Hoạt động» rộng hơn: gồm cả bình luận và sửa mục tiêu, trùng
+với Lịch sử. «Feed» lẫn tiếng.
 
 **Báo cáo (khu Mục tiêu)**: nhóm thứ hai trên thanh bên khu Mục tiêu, cho mọi vai, kể
 cả «chỉ OKR» — nơi nhìn ngang cả công ty trong một chu kỳ: **Sức khoẻ** (ô số, bảng đơn
@@ -1292,6 +1338,13 @@ hiệu của mình, nhãn «Đã lưu trữ», và vẫn tự xoá được. Kh�
 _Avoid_: gỡ (khi ý là lưu trữ), ẩn, xoá, đánh dấu rác
 Vì sao: «gỡ» và «ẩn» trong từ điển là chữ của quyền, liên kết và chu kỳ; «xoá» là mất thật — tín hiệu lưu trữ thì lấy
 lại được.
+
+**Đổi chỗ (tín hiệu)**: điều trang «Tín hiệu đã gửi» hiện cho một tín hiệu đổi khác — vào nhóm, đổi nhóm, thành việc,
+việc đổi trạng thái (chưa bắt đầu, đang làm, đã giao), để riêng, để sau, đã có việc lo. Lần đầu tín hiệu hiện ở «Đang
+xem xét» không phải đổi chỗ. Mỗi lần đổi chỗ người gửi nhận một thông báo trong chuông. Chốt 2026-10-22 tại bước thiết
+kế của `trang-thai-tin-hieu-song`.
+_Avoid_: đổi trạng thái (khi ý là cả nhóm lẫn việc), cập nhật tín hiệu
+Vì sao: «trạng thái» của một tín hiệu dễ đọc thành chỉ nhãn; «chỗ» gồm cả nhóm và việc mà người gửi theo dõi.
 
 **Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
 của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè

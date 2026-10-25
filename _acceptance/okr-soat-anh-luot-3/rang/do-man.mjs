@@ -1,5 +1,11 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
@@ -155,7 +161,9 @@ async function donTheoSo(so) {
 	await db.okrKeyResult.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrParticipant.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrObjective.deleteMany({ where: { id: { in: moiMt } } });
-	await db.okrCycle.deleteMany({ where: { id: { in: so.chuKy }, kind: "quy" } });
+	await db.okrCycle.deleteMany({
+		where: { id: { in: so.chuKy }, kind: "quy" },
+	});
 	await db.okrCycle.deleteMany({ where: { id: { in: so.chuKy } } });
 	await db.okrProgramConfig.deleteMany({
 		where: { version: { gt: so.phienBan } },
@@ -277,8 +285,9 @@ async function hoi(duong) {
 
 async function taoChuKy(vao) {
 	await lam("okr.createCycle", vao);
-	const id = (await hoi("okr.cycles")).cycles.find((x) => x.name === vao.name)
-		.id;
+	const id = (await hoi("okr.cycles")).cycles.find(
+		(x) => x.name === vao.name,
+	).id;
 	so.chuKy.push(id);
 	ghiSoGieo(so);
 	return id;
@@ -376,27 +385,26 @@ async function buocNhap() {
 		`/okr/theo-don-vi?donOkr=goc&kyOkr=${OKR.quy}`,
 	);
 	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
-	const MUC_NHAP = "[role='menuitem'][data-nut='nhap-bang-tinh']";
-	let coNut = await hien(t, "[data-nut='them-cach']");
+	const NUT_THEM = "[data-slot=page-shell-actions] [data-nut='them-muc-tieu']";
+	const MUC_NHAP = "[data-hop-chon-duong] [data-duong='bang-tinh']";
+	let coNut =
+		(await hien(t, NUT_THEM)) && (await t.$eval(NUT_THEM, (e) => !e.disabled));
 	if (coNut) {
-		await t.$eval("[data-nut='them-cach']", (e) =>
-			e.dispatchEvent(
-				new PointerEvent("pointerdown", {
-					bubbles: true,
-					cancelable: true,
-					button: 0,
-					isPrimary: true,
-					pointerType: "mouse",
-				}),
-			),
-		);
+		await t.$eval(NUT_THEM, (e) => e.click());
 		coNut =
 			(await hien(t, MUC_NHAP)) &&
-			(await t.$eval(MUC_NHAP, (e) => !e.hasAttribute("data-disabled")));
+			(await t.$eval(
+				MUC_NHAP,
+				(e) => e.getAttribute("aria-disabled") !== "true",
+			));
 	}
 	if (!coNut) {
 		for (const ma of MA_TRAN.filter((m) => m.startsWith("nhap-")))
-			ghi(ma, false, "khong thay nut «Nhập từ bảng tính» o don vi OneHub");
+			ghi(
+				ma,
+				false,
+				"khong thay dong «Từ bảng tính» trong hop «Thêm mục tiêu» o don vi OneHub",
+			);
 		await t.close();
 		return;
 	}
@@ -430,7 +438,9 @@ async function buocNhap() {
 			});
 			const hang = [...vo.querySelectorAll("tbody tr")];
 			const dong = (n) =>
-				hang.find((h) => h.querySelector("td")?.textContent.trim() === String(n));
+				hang.find(
+					(h) => h.querySelector("td")?.textContent.trim() === String(n),
+				);
 			const o5 = dong(5)?.querySelectorAll("td")[7];
 			const r5 = o5?.getBoundingClientRect();
 			const o1 = dong(1)?.querySelectorAll("td")[1];
@@ -639,7 +649,10 @@ async function buocNhap() {
 async function doThe(trang) {
 	return trang.evaluate(() => {
 		const nav = [...document.querySelectorAll("nav")].find(
-			(n) => !n.closest("aside") && n.offsetParent !== null && n.querySelector("[aria-current='page']"),
+			(n) =>
+				!n.closest("aside") &&
+				n.offsetParent !== null &&
+				n.querySelector("[aria-current='page']"),
 		);
 		const the = nav?.querySelector("[aria-current='page']");
 		if (!nav || !the) return null;
@@ -702,14 +715,21 @@ async function buocCaiDat() {
 		return true;
 	}, okr.href);
 	if (!bam) {
-		ghi("caidat-390-bam-the", false, "khong thay the «Chương trình OKR» tren hang the");
+		ghi(
+			"caidat-390-bam-the",
+			false,
+			"khong thay the «Chương trình OKR» tren hang the",
+		);
 	} else {
 		await doi(t, (duoi) => location.pathname.endsWith(duoi), okr.href);
 		await doi(t, () =>
 			[...document.querySelectorAll("nav")].some(
 				(n) =>
 					!n.closest("aside") &&
-					n.querySelector("[aria-current='page']")?.getAttribute("href")?.endsWith("/settings/okr"),
+					n
+						.querySelector("[aria-current='page']")
+						?.getAttribute("href")
+						?.endsWith("/settings/okr"),
 			),
 		);
 		let truoc = -1;
@@ -719,7 +739,11 @@ async function buocCaiDat() {
 			if (d && d.cuon === truoc) break;
 			truoc = d?.cuon ?? -1;
 		}
-		ghiThe("caidat-390-bam-the", mCaiDat.thanhBen.chuongTrinhOkr, await doThe(t));
+		ghiThe(
+			"caidat-390-bam-the",
+			mCaiDat.thanhBen.chuongTrinhOkr,
+			await doThe(t),
+		);
 	}
 	await t.close();
 
@@ -745,7 +769,10 @@ async function buocChuKy() {
 		}
 		if (coO) {
 			await t.click("[data-chon-chu-ky]");
-			await doi(t, () => document.querySelectorAll("[role='option']").length > 0);
+			await doi(
+				t,
+				() => document.querySelectorAll("[role='option']").length > 0,
+			);
 			await cho(300);
 		}
 		if (rong === RONG) {
@@ -779,7 +806,11 @@ async function buocGoiY() {
 		t.$eval("[data-sheet-mo-chu-ky] [data-o-ten]", (e) => e.placeholder);
 	const canNam = `Năm ${NAM}`;
 	const chuNam = coO ? await goiY() : "";
-	ghi("goiy-nam", chuNam === canNam, `placeholder «${chuNam}» (can «${canNam}»)`);
+	ghi(
+		"goiy-nam",
+		chuNam === canNam,
+		`placeholder «${chuNam}» (can «${canNam}»)`,
+	);
 	await chup(t, "mo-chu-ky-1440.png");
 	const canQuy = `Quý ${QUY_KE}/${NAM_QUY_KE}`;
 	let chuQuy = "";
@@ -799,7 +830,11 @@ async function buocGoiY() {
 			chuQuy = await goiY();
 		}
 	}
-	ghi("goiy-quy", chuQuy === canQuy, `placeholder «${chuQuy}» (can «${canQuy}»)`);
+	ghi(
+		"goiy-quy",
+		chuQuy === canQuy,
+		`placeholder «${chuQuy}» (can «${canQuy}»)`,
+	);
 	await t.close();
 	const h = await moTrang(HEP, CAO_HEP, "/settings/okr?moChuKy=true");
 	await hien(h, "[data-sheet-mo-chu-ky] [data-o-ten]");

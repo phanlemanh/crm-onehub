@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkNodeTest } from "./gate-shape-node-test.mjs";
@@ -235,6 +235,41 @@ function checkOxlint(checker, log, problems, report) {
 	report.push(`  ${checker.id}: ${gate.files} files, ${gate.rules} rules`);
 }
 
+function checkDaChung(khai, daChung, ledger, log, problems, report) {
+	const asked = [...daChung].join(" ");
+	if (!khai) {
+		problems.push(
+			`the gate skipped ${asked} as already proven, but .githooks/da-chung.json is missing`,
+		);
+		return;
+	}
+	if (!khai.viSao) {
+		problems.push(
+			".githooks/da-chung.json has no vi_sao — say why skipping a proven tree is safe",
+		);
+	}
+	const declared = new Map(shape.checkers.map((c) => [c.id, c]));
+	for (const id of daChung) {
+		const checker = declared.get(id);
+		if (!checker) {
+			problems.push(
+				`this push's ticket skips '${id}' as already proven, which is not a declared checker`,
+			);
+			continue;
+		}
+		const ran =
+			checker.kind === "oxlint"
+				? lastCoverage(log) !== null
+				: ledger.runs.some((run) => run.task === id);
+		if (ran) {
+			problems.push(
+				`checker '${id}' is declared proven for this tree, but it ran`,
+			);
+		}
+	}
+	report.push(`  skipped: ${asked} — cây mã đã xanh, theo phiếu của lần đẩy này`);
+}
+
 function die(problems) {
 	console.error("");
 	console.error("  The gate no longer matches .githooks/gate-shape.json.");
@@ -258,7 +293,16 @@ const before =
 		: [];
 
 const shape = readShape();
-const boQua = new Set(arg("--bo-qua").split(/\s+/).filter(Boolean));
+const boQuaTong = new Set(arg("--bo-qua").split(/\s+/).filter(Boolean));
+const daChungMod = existsSync(join(ROOT, ".githooks", "da-chung.json"))
+	? await import("./pre-push-da-chung.mjs")
+	: null;
+const phieu =
+	daChungMod && beforeFile && existsSync(beforeFile)
+		? daChungMod.docPhieu(ROOT, statSync(beforeFile).mtimeMs)
+		: null;
+const daChung = new Set(phieu?.daChung ?? []);
+const boQua = phieu ? new Set(phieu.t1) : boQuaTong;
 const roots = allRoots(shape.roots);
 const packages = readPackages(roots);
 const ledger = readLedger(before);
@@ -280,10 +324,22 @@ for (const run of ledger.runs) {
 	}
 }
 
+if (phieu) {
+	const tong = [...new Set([...phieu.t1, ...phieu.daChung])].sort().join(" ");
+	const asked = [...boQuaTong].sort().join(" ");
+	if (tong !== asked) {
+		problems.push(
+			`the gate skipped '${asked}' but this push's ticket says '${tong}'`,
+		);
+	}
+}
+
 if (boQua.size > 0) checkSkip(shape, boQua, ledger, problems, report);
+if (daChung.size > 0)
+	checkDaChung(daChungMod.docKhai(ROOT), daChung, ledger, log, problems, report);
 
 for (const checker of shape.checkers) {
-	if (boQua.has(checker.id)) continue;
+	if (boQuaTong.has(checker.id)) continue;
 	if (checker.kind === "turbo") {
 		checkTurbo(checker, packages, ledger, problems, report);
 	} else if (checker.kind === "oxlint") {
@@ -301,7 +357,20 @@ for (const checker of shape.checkers) {
 
 for (const file of ledger.files) rmSync(file, { force: true });
 
+if (phieu) daChungMod.xoaPhieu(ROOT);
 if (problems.length > 0) die(problems);
+
+if (phieu) {
+	const ran = shape.checkers
+		.map((c) => c.id)
+		.filter((id) => !boQuaTong.has(id));
+	if (ran.length > 0) {
+		for (const sha of phieu.refs) daChungMod.ghiDau(ROOT, sha, ran);
+		report.push(
+			`  proven: ${ran.join(", ")} for ${phieu.refs.map((s) => s.slice(0, 9)).join(", ")}`,
+		);
+	}
+}
 
 console.log(
 	`pre-push: gate matches its shape across ${packages.length} packages`,

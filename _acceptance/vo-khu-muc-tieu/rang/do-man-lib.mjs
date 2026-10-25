@@ -23,7 +23,7 @@ export const DO = {
 		mayTinh: { ten: "1280", rong: 1280, cao: 800 },
 		dienThoai: { ten: "375", rong: 375, cao: 812 },
 	},
-	soMuc: 5,
+	soMuc: 6,
 	toiDaChuyen: 1,
 	cho: {
 		taiMs: CHO_TAI,

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hỏi-2 · ai xoá được · tep-theo-chu-ban-ghi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body { font-family: var(--font-sans); background: var(--color-paper); color: var(--color-ink); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1100px; width: 100%; }
+    .eyebrow { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.5rem; }
+    h1 { font-family: var(--font-serif); font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.4rem; }
+    .subtitle { color: var(--color-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem; }
+    .diagram { overflow-x: auto; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <p class="eyebrow">Hỏi-2 · tep-theo-chu-ban-ghi · AC-4</p>
+    <h1>Ai xoá được tệp khỏi ô — ba lối</h1>
+    <p class="subtitle">Ba người × ba tệp, trước và sau khi Q đổi Phụ trách từ A sang B.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 1000 632" role="img" aria-labelledby="f2-title f2-desc" xmlns="http://www.w3.org/2000/svg">
+        <title id="f2-title">Ai xoá được tệp khỏi ô — ba lối</title>
+        <desc id="f2-desc">Khuyến nghị: trước khi đổi Q và A xoá cả ba tệp, B chỉ fB; sau khi đổi Q và B xoá cả ba, A chỉ fA. Lối a, luật DA19: trước và sau như nhau, Q cả ba, A chỉ fA, B chỉ fB. Lối b: trước Q và A cả ba, B không; sau Q và B cả ba, A không.</desc>
+        <rect width="1000" height="632" fill="#fafafa"/>
+        <rect x="20" y="56" width="320" height="496" rx="8" fill="rgba(0,107,79,0.06)" stroke="#006B4F" stroke-width="1.2"/>
+        <text x="32" y="80" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">KHUYẾN NGHỊ</text>
+        <text x="32" y="100" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Ai xoá được</text>
+        <text x="32" y="116" fill="#575757" font-size="10" font-family="'Geist', sans-serif">quản trị + người đang phụ trách + người tải</text>
+        <rect x="32" y="132" width="296" height="148" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+        <text x="48" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Trước khi đổi</text>
+        <text x="312" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">phụ trách: A</text>
+        <text x="132" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fA</text>
+        <text x="204" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fB</text>
+        <text x="276" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fQ</text>
+        <line x1="48" y1="188" x2="312" y2="188" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="56" y="206" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">Q</text>
+        <rect x="104" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="132" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="176" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="204" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="248" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="276" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <line x1="48" y1="216" x2="312" y2="216" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="56" y="234" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">A</text>
+        <rect x="104" y="222" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="132" y="234" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="176" y="222" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="204" y="234" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="248" y="222" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="276" y="234" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <line x1="48" y1="244" x2="312" y2="244" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="56" y="262" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">B</text>
+        <text x="132" y="262" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <rect x="176" y="250" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="204" y="262" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="276" y="262" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <rect x="32" y="296" width="296" height="148" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+        <text x="48" y="320" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Sau khi đổi sang B</text>
+        <text x="312" y="320" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">phụ trách: B</text>
+        <text x="132" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fA</text>
+        <text x="204" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fB</text>
+        <text x="276" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fQ</text>
+        <line x1="48" y1="352" x2="312" y2="352" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="56" y="370" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">Q</text>
+        <rect x="104" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="132" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="176" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="204" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="248" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="276" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <line x1="48" y1="380" x2="312" y2="380" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="56" y="398" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">A</text>
+        <rect x="104" y="386" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="132" y="398" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="204" y="398" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <text x="276" y="398" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <line x1="48" y1="408" x2="312" y2="408" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="56" y="426" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">B</text>
+        <rect x="104" y="414" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="132" y="426" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="176" y="414" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="204" y="426" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="248" y="414" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="276" y="426" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="32" y="476" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">VÌ SAO KHUYÊN</text>
+        <text x="32" y="496" fill="#171717" font-size="10" font-family="'Geist', sans-serif">Người phụ trách nay mở được tệp nên dọn được</text>
+        <text x="32" y="512" fill="#171717" font-size="10" font-family="'Geist', sans-serif">tệp sai trong bản ghi của mình; người tải giữ</text>
+        <text x="32" y="528" fill="#171717" font-size="10" font-family="'Geist', sans-serif">quyền sửa lỗi tải nhầm của chính họ như DA19.</text>
+        <text x="352" y="80" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LỐI A · LUẬT DA19</text>
+        <text x="352" y="100" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Ai xoá được</text>
+        <text x="352" y="116" fill="#575757" font-size="10" font-family="'Geist', sans-serif">quản trị + người tải</text>
+        <rect x="352" y="132" width="296" height="148" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+        <text x="368" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Trước khi đổi</text>
+        <text x="632" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">phụ trách: A</text>
+        <text x="452" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fA</text>
+        <text x="524" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fB</text>
+        <text x="596" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fQ</text>
+        <line x1="368" y1="188" x2="632" y2="188" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="376" y="206" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">Q</text>
+        <rect x="424" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="452" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="496" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="524" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="568" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="596" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <line x1="368" y1="216" x2="632" y2="216" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="376" y="234" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">A</text>
+        <rect x="424" y="222" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="452" y="234" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="524" y="234" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <text x="596" y="234" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <line x1="368" y1="244" x2="632" y2="244" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="376" y="262" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">B</text>
+        <text x="452" y="262" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <rect x="496" y="250" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="524" y="262" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="596" y="262" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <rect x="352" y="296" width="296" height="148" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+        <text x="368" y="320" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Sau khi đổi sang B</text>
+        <text x="632" y="320" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">phụ trách: B</text>
+        <text x="452" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fA</text>
+        <text x="524" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fB</text>
+        <text x="596" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fQ</text>
+        <line x1="368" y1="352" x2="632" y2="352" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="376" y="370" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">Q</text>
+        <rect x="424" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="452" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="496" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="524" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="568" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="596" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <line x1="368" y1="380" x2="632" y2="380" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="376" y="398" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">A</text>
+        <rect x="424" y="386" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="452" y="398" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="524" y="398" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <text x="596" y="398" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <line x1="368" y1="408" x2="632" y2="408" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="376" y="426" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">B</text>
+        <text x="452" y="426" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <rect x="496" y="414" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="524" y="426" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="596" y="426" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <text x="352" y="476" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">GIÁ</text>
+        <text x="352" y="496" fill="#171717" font-size="10" font-family="'Geist', sans-serif">Người phụ trách thấy tệp đồng nghiệp tải nhầm</text>
+        <text x="352" y="512" fill="#171717" font-size="10" font-family="'Geist', sans-serif">mà phải nhờ quản trị xoá.</text>
+        <text x="672" y="80" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LỐI B · XOÁ NHƯ MỞ</text>
+        <text x="672" y="100" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Ai xoá được</text>
+        <text x="672" y="116" fill="#575757" font-size="10" font-family="'Geist', sans-serif">quản trị + người phụ trách</text>
+        <rect x="672" y="132" width="296" height="148" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+        <text x="688" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Trước khi đổi</text>
+        <text x="952" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">phụ trách: A</text>
+        <text x="772" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fA</text>
+        <text x="844" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fB</text>
+        <text x="916" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fQ</text>
+        <line x1="688" y1="188" x2="952" y2="188" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="696" y="206" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">Q</text>
+        <rect x="744" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="772" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="816" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="844" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="888" y="194" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="916" y="206" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <line x1="688" y1="216" x2="952" y2="216" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="696" y="234" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">A</text>
+        <rect x="744" y="222" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="772" y="234" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="816" y="222" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="844" y="234" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="888" y="222" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="916" y="234" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <line x1="688" y1="244" x2="952" y2="244" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="696" y="262" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">B</text>
+        <text x="772" y="262" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <text x="844" y="262" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <text x="916" y="262" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <rect x="672" y="296" width="296" height="148" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+        <text x="688" y="320" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Sau khi đổi sang B</text>
+        <text x="952" y="320" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">phụ trách: B</text>
+        <text x="772" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fA</text>
+        <text x="844" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fB</text>
+        <text x="916" y="344" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">fQ</text>
+        <line x1="688" y1="352" x2="952" y2="352" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="696" y="370" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">Q</text>
+        <rect x="744" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="772" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="816" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="844" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="888" y="358" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="916" y="370" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <line x1="688" y1="380" x2="952" y2="380" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="696" y="398" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">A</text>
+        <text x="772" y="398" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <text x="844" y="398" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <text x="916" y="398" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không</text>
+        <line x1="688" y1="408" x2="952" y2="408" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="696" y="426" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">B</text>
+        <rect x="744" y="414" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="772" y="426" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="816" y="414" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="844" y="426" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <rect x="888" y="414" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="916" y="426" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="672" y="476" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">GIÁ</text>
+        <text x="672" y="496" fill="#171717" font-size="10" font-family="'Geist', sans-serif">Một luật cho hai nút, giá là người tải nhầm vào</text>
+        <text x="672" y="512" fill="#171717" font-size="10" font-family="'Geist', sans-serif">bản ghi người khác không tự gỡ được.</text>
+        <line x1="32" y1="568" x2="968" y2="568" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+        <text x="32" y="588" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+        <rect x="120" y="576" width="56" height="16" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="148" y="588" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">xoá được</text>
+        <text x="184" y="588" fill="#575757" font-size="10" font-family="'Geist', sans-serif">người ở hàng xoá được tệp ở cột</text>
+        <text x="384" y="588" fill="#666666" font-size="9" font-family="'Geist', sans-serif">không</text>
+        <text x="416" y="588" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không xoá được</text>
+        <text x="32" y="612" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Q quản trị · A phụ trách, B nhân viên trước khi đổi · fA, fB, fQ: tệp do A, B, Q tải lên</text>
+      </svg>
+    </div>
+  </main>
+</body>
+</html>

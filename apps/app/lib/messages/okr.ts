@@ -18,7 +18,6 @@ const vi = {
 		chuaDan:
 			"Bạn chưa dẫn đơn vị nào nên chưa thêm được mục tiêu: mục tiêu thuộc về đơn vị và do trưởng đơn vị đặt.",
 		loiQuyen: "Chưa tải được quyền của bạn — tải lại trang để thử lại.",
-		themCach: "Thêm cách tạo mục tiêu",
 	},
 	moTa: {
 		"cua-toi":
@@ -47,7 +46,37 @@ const vi = {
 	danhSach: "Danh sách",
 	cayCanChinh: "Sơ đồ góp vào",
 	themMucTieu: "Thêm mục tiêu",
-	nhapBangTinh: "Nhập từ bảng tính",
+	chonDuong: {
+		moTa: "Mục tiêu mới của {ten}. Chọn cách bắt đầu.",
+		duong: {
+			tuViet: {
+				ten: "Tự viết",
+				moTa: "Gõ câu mục tiêu, chọn loại và người phụ trách.",
+			},
+			tuMau: {
+				ten: "Từ mẫu",
+				moTa: "Chọn một mẫu quản trị soạn sẵn cho cấp này rồi điền số của bạn.",
+			},
+			bangTinh: {
+				ten: "Từ bảng tính",
+				moTa: "Dán nhiều mục tiêu và KR từ một bảng tính, xem trước rồi ghi.",
+			},
+			soan: {
+				ten: "Soạn cùng Kara",
+				moTa: "Trò chuyện với Kara để soạn mục tiêu và KR, rồi đưa vào bộ OKR.",
+			},
+		},
+		tiep: "Tiếp cuộc đang soạn",
+		khoa: {
+			chuaCoMau:
+				"Chưa có mẫu cho cấp này. Quản trị thêm mẫu ở Cài đặt › OKR; trong lúc đó, chọn Tự viết.",
+			ngoaiPha:
+				"Chỉ mở khi chu kỳ đang lập kế hoạch. Trong lúc đó, chọn Tự viết hay Từ mẫu.",
+			caNhan:
+				"Soạn cùng Kara chỉ mở cho bộ phận, phòng ban và OneHub. Với mục tiêu cá nhân, chọn Tự viết.",
+		},
+		cuocDaSoan: "Các cuộc đã soạn ({da}/{tran})",
+	},
 	phuTrach: "Phụ trách",
 	gopVao: (n: number) => `góp vào ${n} chỗ`,
 	cuaToi: "Của tôi",
@@ -767,7 +796,6 @@ const en: OkrMessages = {
 		chuaDan:
 			"You don't lead a unit yet, so you can't add objectives: objectives belong to a unit and its head sets them.",
 		loiQuyen: "Couldn't load your permissions — reload the page to try again.",
-		themCach: "More ways to add objectives",
 	},
 	moTa: {
 		"cua-toi":
@@ -799,7 +827,37 @@ const en: OkrMessages = {
 	danhSach: "List",
 	cayCanChinh: "Contribution map",
 	themMucTieu: "Add objective",
-	nhapBangTinh: "Import from spreadsheet",
+	chonDuong: {
+		moTa: "New objective for {ten}. Choose how to start.",
+		duong: {
+			tuViet: {
+				ten: "Write it yourself",
+				moTa: "Type the objective, pick its type and owner.",
+			},
+			tuMau: {
+				ten: "From a template",
+				moTa: "Pick a template an admin prepared for this level, then fill in your numbers.",
+			},
+			bangTinh: {
+				ten: "From a spreadsheet",
+				moTa: "Paste several objectives and KRs from a spreadsheet, preview, then save.",
+			},
+			soan: {
+				ten: "Draft with Kara",
+				moTa: "Talk with Kara to draft objectives and KRs, then add them to the OKR set.",
+			},
+		},
+		tiep: "Continue the open draft",
+		khoa: {
+			chuaCoMau:
+				"No templates for this level yet. Admins add them in Settings › OKR; meanwhile, write it yourself.",
+			ngoaiPha:
+				"Only open while the cycle is in planning. Meanwhile, write it yourself or use a template.",
+			caNhan:
+				"Draft with Kara is for divisions, departments and OneHub. For a personal objective, write it yourself.",
+		},
+		cuocDaSoan: "Past drafts ({da}/{tran})",
+	},
 	phuTrach: "Owner",
 	gopVao: (n: number) =>
 		n === 1 ? "contributes to 1 place" : `contributes to ${n} places`,

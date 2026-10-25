@@ -7,6 +7,7 @@ import {
 	Prisma as PrismaNamespace,
 	type RecordSource,
 } from "@crm/db";
+import { ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { caNhanCoSo, caNhanTrungSo } from "@crm/db/so-dien-thoai";
 import { ghiGoDoXoa } from "@crm/db/viec-ghi";
@@ -41,6 +42,7 @@ import {
 import { tachDaLuuTru, thoaThuanDaLuuTru } from "../crm/da-luu-tru";
 import { blankToNull, normalizeEmail, toCents } from "../crm/values";
 import { InjectDatabase } from "../database/database.constants";
+import type { NguoiGoiTep } from "../fields/field-files-quyen";
 import { FieldsService } from "../fields/fields.service";
 import {
 	activityFacetCounts,
@@ -192,6 +194,10 @@ export class ContactsService {
 			"CONTACT",
 			rows.map((row) => row.id),
 		);
+		const soTep = await this.fields.soTepTheoBanGhi(
+			"CONTACT",
+			rows.map((row) => row.id),
+		);
 
 		return {
 			rows: rows.map((row) => ({
@@ -200,6 +206,7 @@ export class ContactsService {
 				createdAt: row.createdAt.toISOString(),
 				archivedAt: row.archivedAt?.toISOString() ?? null,
 				fields: tableFields.get(row.id) ?? {},
+				soTepTheoTruong: soTep.get(row.id) ?? {},
 			})),
 			total,
 			facetCounts,
@@ -216,7 +223,7 @@ export class ContactsService {
 		});
 	}
 
-	async byId(id: string) {
+	async byId(id: string, nguoiGoi?: NguoiGoiTep) {
 		const contact = await this.db.contact.findUnique({
 			where: { id },
 			select: {
@@ -302,6 +309,7 @@ export class ContactsService {
 			...rest,
 			company,
 			fields: await this.fields.valuesFor("CONTACT", id),
+			tepTheoTruong: await this.fields.tepTheoBanGhi("CONTACT", id, nguoiGoi),
 			queued: await this.queue.isQueued({ contactId: id }),
 			createdAt: createdAt.toISOString(),
 			archivedAt: archivedAt?.toISOString() ?? null,
@@ -331,6 +339,8 @@ export class ContactsService {
 	}
 
 	async create(input: ContactCreateInput) {
+		const truong = input.fields ?? {};
+		await this.fields.kiemBatBuocLucTao(this.db, "CONTACT", truong);
 		const email = normalizeEmail(input.email ?? "");
 		const phone = phoneOf(input.phone);
 		if (phone) await this.refuseTakenPhone(phone);
@@ -368,6 +378,9 @@ export class ContactsService {
 					email,
 					phone,
 					title: blankToNull(input.title ?? ""),
+					linkedinUrl: blankToNull(input.linkedinUrl ?? ""),
+					twitterUrl: blankToNull(input.twitterUrl ?? ""),
+					githubUrl: blankToNull(input.githubUrl ?? ""),
 					companyId,
 					ownerId: input.ownerId ?? null,
 				},
@@ -380,6 +393,7 @@ export class ContactsService {
 					createdAt: true,
 				},
 			});
+			await this.fields.ghiTruongLucTao(tx, "CONTACT", created.id, truong);
 			await emit({
 				type: "contact.created",
 				record: { kind: "contact", id: created.id },
@@ -401,7 +415,7 @@ export class ContactsService {
 			"Added by a rep, with nothing on the record yet",
 		);
 		this.fields
-			.queueBackfillForNewRecord("CONTACT", contact.id)
+			.queueBackfillForNewRecord("CONTACT", contact.id, truong)
 			.catch((error: Error) => {
 				this.logger.error(
 					{
@@ -467,6 +481,7 @@ export class ContactsService {
 			targets: StampTargets;
 			name: string;
 			suppressed: boolean;
+			tepXoa: string[];
 		} | null;
 
 		try {
@@ -494,6 +509,7 @@ export class ContactsService {
 				await tx.agentEvent.deleteMany({ where: { contactId: id } });
 
 				await ghiGoDoXoa(tx, { contactId: id }, new Date());
+				const tepXoa = await ghiChoXoaTheoTep(tx, { contactId: id });
 
 				const contact = await tx.contact.delete({
 					where: { id },
@@ -514,7 +530,7 @@ export class ContactsService {
 					});
 				}
 
-				return { targets, name, suppressed: suppress !== null };
+				return { targets, name, suppressed: suppress !== null, tepXoa };
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -522,6 +538,7 @@ export class ContactsService {
 
 		if (!deleted) return null;
 
+		await this.fields.donTepNgay(deleted.tepXoa);
 		await this.stamp.recomputeAfterDelete(deleted.targets, { contactId: id });
 
 		this.logger.log({

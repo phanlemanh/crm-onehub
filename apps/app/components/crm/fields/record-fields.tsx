@@ -19,6 +19,7 @@ import {
 import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 import { type MoTaTruong, OTruongPhieu } from "./kieu-truong";
+import type { DichOTep, TepOTep } from "./o-tep";
 
 type RecordFieldOption = { id: string; label: string };
 
@@ -51,13 +52,34 @@ export function FieldsCog({ kind }: { kind: EntityKind }) {
 	);
 }
 
+export type NguCanhTep = DichOTep & { tep: Record<string, TepOTep[]> };
+
+export function nguCanhTepCua(
+	entity: DichOTep["entity"],
+	banGhi: {
+		id: string;
+		archivedAt: string | null;
+		owner: { name: string } | null;
+		tepTheoTruong: Record<string, TepOTep[]>;
+	},
+): NguCanhTep {
+	return {
+		entity,
+		recordId: banGhi.id,
+		luuTru: banGhi.archivedAt !== null,
+		phuTrach: banGhi.owner?.name ?? null,
+		tep: banGhi.tepTheoTruong,
+	};
+}
+
 export function moTaTruongTuTao(
 	field: RecordFieldEntry,
 	luu: (khoa: string, giaTri: FieldValueJson) => void,
 	dangLuu: (khoa: string) => boolean,
 	nguoiDung: Owner[] | undefined,
+	nguCanhTep?: NguCanhTep,
 ): MoTaTruong {
-	return {
+	const moTa: MoTaTruong = {
 		khoa: field.key,
 		nhan: field.label,
 		kieu: field.type,
@@ -71,35 +93,41 @@ export function moTaTruongTuTao(
 		luu: (giaTri) => luu(field.key, giaTri),
 		dangLuu: dangLuu(field.key),
 	};
+	if (!nguCanhTep) return moTa;
+	moTa.tep = nguCanhTep.tep[field.key] ?? [];
+	moTa.dichTep = {
+		entity: nguCanhTep.entity,
+		recordId: nguCanhTep.recordId,
+		luuTru: nguCanhTep.luuTru,
+		phuTrach: nguCanhTep.phuTrach ?? null,
+	};
+	return moTa;
 }
 
-export function RecordFields({
-	fields,
+export function OTruongTuTao({
+	field,
 	saving,
 	onSave,
+	nguoiDung,
+	nguCanhTep,
 }: {
-	fields: RecordFieldEntry[];
+	field: RecordFieldEntry;
 	saving: (key: string) => boolean;
 	onSave: (values: Record<string, FieldValueJson>, khoa: string) => void;
+	nguoiDung: Owner[] | undefined;
+	nguCanhTep?: NguCanhTep;
 }) {
-	const trpc = useTRPC();
-	const users = useQuery(trpc.users.list.queryOptions());
+	if (!field.showOnSheet) return null;
 
 	return (
-		<>
-			{fields
-				.filter((field) => field.showOnSheet)
-				.map((field) => (
-					<OTruongPhieu
-						key={field.id}
-						moTa={moTaTruongTuTao(
-							field,
-							(khoa, giaTri) => onSave({ [khoa]: giaTri }, khoa),
-							saving,
-							users.data,
-						)}
-					/>
-				))}
-		</>
+		<OTruongPhieu
+			moTa={moTaTruongTuTao(
+				field,
+				(khoa, giaTri) => onSave({ [khoa]: giaTri }, khoa),
+				saving,
+				nguoiDung,
+				nguCanhTep,
+			)}
+		/>
 	);
 }

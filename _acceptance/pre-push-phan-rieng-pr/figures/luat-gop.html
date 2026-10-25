@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luật gộp của pre-push</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .frame { max-width: 1240px; width: 100%; }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .scroll { overflow-x: auto; }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng · pre-push-phan-rieng-pr · AC-1 · AC-2 · AC-3 · AC-6</p>
+    <h1>Lần đẩy mang onehub mới: pre-push chỉ xét phần PR tự thêm</h1>
+
+    <div class="scroll">
+    <svg viewBox="0 0 1104 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="176" y1="128" x2="224" y2="128" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="432" y1="128" x2="480" y2="128" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="704" y1="128" x2="752" y2="128" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="328" y1="184" x2="328" y2="240" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="912" y1="156" x2="912" y2="196" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="912" y1="292" x2="912" y2="332" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 752 356 H 548 Q 540 356 540 364 V 492" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 752 404 H 588 Q 580 404 580 412 V 492" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="816" y1="428" x2="816" y2="492" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="444" y="104" width="24" height="16" rx="2" fill="#fafafa"/>
+      <text x="456" y="116" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CÓ</text>
+      <rect x="336" y="204" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="340" y="216" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.08em">KHÔNG</text>
+
+      <rect x="636" y="332" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="660" y="344" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">RỖNG</text>
+      <rect x="652" y="380" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="680" y="392" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CHỈ T1</text>
+      <rect x="824" y="452" width="148" height="16" rx="2" fill="#fafafa"/>
+      <text x="828" y="464" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.02em">t1_ma_doc · .github · mã</text>
+
+      <rect x="32" y="100" width="144" height="56" rx="28" fill="#fafafa"/>
+      <rect x="32" y="100" width="144" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="104" y="126" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Một dòng stdin</text>
+      <text x="104" y="142" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">sha từ xa · đỉnh</text>
+
+      <polygon points="328,72 432,128 328,184 224,128" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="328" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có sha từ xa</text>
+      <text x="328" y="132" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">dùng được và có</text>
+      <text x="328" y="148" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">origin/onehub?</text>
+
+      <rect x="128" y="240" width="400" height="56" rx="28" fill="#fafafa"/>
+      <rect x="128" y="240" width="400" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="328" y="264" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Luật cũ: xét cả phần tăng</text>
+      <text x="328" y="282" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ref mới · sha không có trong kho · onehub vắng</text>
+
+      <rect x="480" y="100" width="224" height="56" rx="6" fill="#fafafa"/>
+      <rect x="480" y="100" width="224" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="592" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nền</text>
+      <text x="592" y="142" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">nền = merge-base(đỉnh, onehub)</text>
+
+      <rect x="752" y="100" width="320" height="56" rx="6" fill="#fafafa"/>
+      <rect x="752" y="100" width="320" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="912" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phần tăng</text>
+      <text x="912" y="142" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tăng = diff(sha từ xa, đỉnh)</text>
+
+      <rect x="752" y="196" width="320" height="96" rx="6" fill="#fafafa"/>
+      <rect x="752" y="196" width="320" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="912" y="220" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hai vế riêng của PR</text>
+      <text x="912" y="242" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">riêng_sau = diff(nền, đỉnh)</text>
+      <text x="912" y="258" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">∪</text>
+      <text x="912" y="274" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">riêng_trước = diff(merge-base(nền, sha từ xa), sha từ xa)</text>
+
+      <rect x="752" y="332" width="320" height="96" rx="6" fill="#fafafa"/>
+      <rect x="752" y="332" width="320" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="912" y="354" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phần PR tự thêm</text>
+      <text x="912" y="372" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">S = tăng ∩ (riêng_sau ∪ riêng_trước)</text>
+      <text x="912" y="392" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">tệp của onehub = tăng − S, không tính</text>
+      <text x="912" y="408" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không có onehub mới → S = tăng (tự rút về luật cũ)</text>
+
+      <rect x="440" y="492" width="240" height="56" rx="28" fill="#fafafa"/>
+      <rect x="440" y="492" width="240" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="560" y="516" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bỏ test, build</text>
+      <text x="560" y="532" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">còn check-types · lint · lint:slop</text>
+
+      <rect x="752" y="492" width="320" height="56" rx="28" fill="#fafafa"/>
+      <rect x="752" y="492" width="320" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="912" y="516" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đủ năm bước</text>
+      <text x="912" y="532" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">cả test và build, ~30 phút</text>
+
+      <path d="M 1040 572 V 556" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="1040" cy="552" r="2" fill="#171717"/>
+      <text x="1072" y="588" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">Ca #523: tăng 24 tệp, 23 tệp của onehub không tính;</text>
+      <text x="1072" y="608" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">S chỉ còn LO-TRINH.html (t1_ma_doc) → vẫn đủ năm bước.</text>
+
+      <line x1="32" y1="636" x2="1072" y2="636" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="656" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI · HÌNH CHỈ LOẠI NÚT</text>
+
+      <rect x="32" y="672" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="64" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đầu vào / kết cục (bầu dục)</text>
+
+      <rect x="236" y="672" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="268" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước tính (chữ nhật)</text>
+
+      <polygon points="416,678 428,672 440,678 428,684" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="452" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Điều kiện (thoi)</text>
+
+      <rect x="584" y="672" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="616" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Tập xét của luật mới</text>
+
+      <line x1="752" y1="678" x2="780" y2="678" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="782" cy="678" r="2" fill="#171717"/>
+      <text x="792" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Ca thật</text>
+
+      <text x="1072" y="682" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-1 · AC-2 · AC-3 · AC-6</text>
+    </svg>
+    </div>
+  </div>
+</body>
+</html>

@@ -104,21 +104,20 @@ export type HangViecBo = HangViec & {
 
 type ViecBo = NhomViecBo["viec"][number];
 
-function tieuDeViec(h: HangViecBo, role: WorkspaceRole): string {
-	if (h.loai === "viec") return h.tieuDe;
-	const lk = lienKetChoVai(role, {
-		loai: h.loai,
-		campaign: h.campaign,
-		plan: h.plan,
-	});
-	return lk.coQuyen ? (lk.ten ?? "") : "";
-}
-
 export function viecBoTu(h: HangViecBo, role: WorkspaceRole): ViecBo {
+	const lk =
+		h.loai === "viec"
+			? null
+			: lienKetChoVai(role, {
+					loai: h.loai,
+					campaign: h.campaign,
+					plan: h.plan,
+				});
 	return {
 		id: h.id,
 		loai: h.loai,
-		tieuDe: tieuDeViec(h, role),
+		tieuDe: lk === null ? h.tieuDe : lk.coQuyen ? (lk.ten ?? "") : "",
+		lienKet: lk,
 		nguoiLam: h.nguoiLam,
 		hanNgay: ngayCuaCot(h.hanNgay),
 		xong: h.xongLuc !== null,

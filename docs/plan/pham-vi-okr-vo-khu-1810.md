@@ -4,6 +4,8 @@ Chủ kho yêu cầu 18/10 rà lại khu Mục tiêu bằng cách học trực t
 «onehub» của Tability (ba kế hoạch mẫu, khoảng 120 đường dẫn), đọc mã khu Mục tiêu trên onehub, đo
 màn production ở khổ 1440. Kết quả và căn cứ nằm ở báo cáo
 https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj (phần «Vỏ», «Kiến trúc thông tin mới», «Đặt tên»).
+Artifact này riêng tư; từ 24/10 bản tóm tắt và con trỏ ghim nằm ở
+`docs/findings/2026-10-18-vo-khu-muc-tieu/README.md`. Mục chờ C1 thành hàng VK18 ngày 24/10.
 
 Ba quyết định đã chốt trong ngày, làm nền cho các mã dưới:
 
@@ -20,11 +22,24 @@ Phạm vi 14/10 (`pham-vi-okr-dieu-huong-1410.md`, hàng DH1–DH5, DH11) đã g
 đứng trên kết quả thật của chúng. Nhóm A là tên gọi, V là vỏ, B là chỗ làm việc trong vỏ, C là phần
 còn chờ người chốt.
 
+## Nguồn — tóm tắt đã làm sạch
+
+Tài liệu thô (thảo luận dựng lại từ bản ghi phiên, báo cáo, ảnh) nằm ở kho riêng tư `phanlemanh/crm-onehub-nguon`,
+trang đợt `wiki/dot/okr-vo-khu-1810.md` (băm `ebd6ec1f8b12`, commit `88462c4`). Chủ kho chốt 24/10: kho crm công khai chỉ giữ con trỏ
+ghim và bản tóm tắt đã làm sạch.
+
+- VK3 (trang Bộ OKR): thanh bên không chứa đơn vị; phạm vi và chu kỳ nằm trên đường dẫn; thẻ con OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm, Chấm điểm chỉ ở pha chấm.
+- VK6 (sơ đồ toàn vùng): dựng trên khung vẽ sơ đồ sẵn có, không giới hạn bề rộng, đầu trang một hàng, có chế độ toàn màn hình thu thanh bên.
+- VK8 (bộ OKR có số): bốn ô — ngày còn lại, tiến độ so với kỳ vọng, KR đã cập nhật tuần này, KR tự tin thấp; cách tính «kỳ vọng» còn phải xác định.
+- VK10 (chế độ soạn): qua bước thiết kế trên bản bấm được trước Cổng Phạm vi; giữ các nút duyệt hiện có.
+- VK12 (cập nhật gần đây): dùng dữ liệu cập nhật, theo dõi và trao đổi sẵn có; chưa chốt nơi lưu trả lời.
+- Còn mở: danh sách tên (VK-C1), Của tôi có liệt người chưa cập nhật (VK-C2), khổ điện thoại chưa đo.
+
 <!-- <<<PHAM-VI-MA -->
 ```
 dot: okr-vo-khu-1810
 dang: chuoi
-nguon: chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability; báo cáo artifact AJuRPQDJK7ZB9GLKus6Tpj và bản mẫu /proto/vo-khu-muc-tieu
+nguon: crm-onehub-nguon:wiki/dot/okr-vo-khu-1810.md#ebd6ec1f8b129770249fb32ef6e17be070b8ce30
 
 - `A2` — đổi nhãn trên màn theo ba tên đã chốt (Góp vào, đơn vị gốc OneHub, Lấy ý kiến), cả bản tiếng Anh
 - `A3` — câu báo lỗi của máy chủ và tin nhắc buổi sáng dùng tên mới

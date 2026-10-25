@@ -89,7 +89,7 @@ export function DauTrangOkr({
 		thamSo[SEARCH_PARAM.okr.xem] === null;
 	return (
 		<LuoiDauTrangOkr
-			ghiChu={laDanhSachBo ? null : <DongLyDoKhu q={q} />}
+			ghiChu={laDanhSachBo ? null : <DongLyDoKhu q={q} tab={tab} />}
 			hanhDong={
 				laDanhSachBo ? (
 					<NutHoiKara />

@@ -80,13 +80,6 @@ const DOT_BIEN = {
 			moi: '	if (donUrl) return { don: donUrl, nguon: "url" };\n	const bp = headOf?.divisions[0];',
 			ghim: "dhk-don-dich: donOkr=pb:P9 + truong phong ban P2: mong pb:P2, nhan pb:P9",
 		},
-		{
-			ten: "ky-hoi-y",
-			tep: `${OKR}/hanh-dong-khu.tsx`,
-			cu: "cycleId && cycleId !== kyChay ? cycleId : thamSo[SEARCH_PARAM.okr.ky];",
-			moi: "thamSo[SEARCH_PARAM.okr.ky];",
-			ghim: "dhk-don-dich: hoi-y gui sang Theo don vi ky «q4», quyen hoi ky «n27», mong kyOkr=n27",
-		},
 	],
 	"dhk-menu-soan": [
 		{

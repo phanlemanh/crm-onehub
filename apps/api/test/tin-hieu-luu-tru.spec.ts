@@ -140,6 +140,7 @@ const don = () => db.tinHieu.deleteMany({});
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	pb.kd = (
 		await db.department.create({
 			data: { name: `${TIEN_TO} Kinh doanh`, position: 9301 },
@@ -287,7 +288,6 @@ describe("gtr-keo-ve", () => {
 		await luuTru("owner", L.id);
 		await luuTru("owner", K.id);
 		await khoiPhuc("admin", K.id);
-		await app.listen(0);
 		const url = await app.getUrl();
 		const goc = mkdtempSync(join(tmpdir(), "gtr-lenh-"));
 		try {

@@ -142,6 +142,7 @@ const DAU_VAO_HOP_LE = {
 	"tinHieu.keoVe": {},
 	"thongBao.moMot": { id: "khong-co" },
 	"thongBao.docHet": {},
+	"thongBao.luuCaiDat": { loai: "okr-duoc-giao", dayRa: true },
 	"settings.setAgentModel": { modelId: null },
 	"settings.setResearchKey": { apiKey: "ctx_thu_khong_that_du_dai_1234567890" },
 	"settings.setArchiveRetention": { days: 30 },
@@ -480,6 +481,7 @@ const THU_TUC_OKR_LUOT_HOI_DAP = [
 	"hoiTangLuot",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
+const THU_TUC_OKR_LUOT_MOI_KR = ["moiKr"].map((t) => `okr.${t}`);
 const THU_TUC_SUA_AN_CHU_KY = {
 	"okr.suaChuKy": suaChuKyInput,
 	"okr.goChuKy": goChuKyInput,
@@ -528,6 +530,7 @@ const TU_PHUC_VU = [
 	"tinHieu.xoa",
 	"thongBao.moMot",
 	"thongBao.docHet",
+	"thongBao.luuCaiDat",
 ];
 const KHAI_2XX = [
 	"GET /",
@@ -664,6 +667,7 @@ const duongCua = (location: string | null) =>
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	spyOn(app.get(BackfillService), "auto").mockResolvedValue({ started: false });
 	workspace = new WorkspaceService(db, {
 		workspaceChanged: async () => undefined,
@@ -1195,7 +1199,7 @@ describe("vai-chi-okr", () => {
 			const cookieMember = await dangNhap(member.email);
 			const khoaTruoc = await readContextDevKey(db);
 			await writeContextDevKey(db, "lan-do-khong-phai-khoa-that");
-			const server = await app.listen(0, "127.0.0.1");
+			const server = app.getHttpServer();
 			const { port } = server.address() as AddressInfo;
 			const apiUrl = `http://127.0.0.1:${port}`;
 			for (const p of [
@@ -1624,6 +1628,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_TRANG_BO,
 				...THU_TUC_OKR_LUOT_HOI_DAP,
 				...THU_TUC_OKR_LUOT_HOI_Y,
+				...THU_TUC_OKR_LUOT_MOI_KR,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 				...Object.keys(THU_TUC_DON_OKR),
 			].sort(),
@@ -2162,6 +2167,12 @@ const THU_TU_DOC_OKR = {
 	},
 	"okr.thanhVien": { vao: () => undefined, K: "vang", khac: 200 },
 	"okr.toanCanh": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.moiKr": {
+		vao: (s: SanDoc) => ({ cycleId: s.ky, loc: {} }),
+		K: "chua-G",
+		dau: "tieuDeKr",
+		khac: 200,
+	},
 	"okr.transferPreview": {
 		vao: (_s, k) => ({ fromUserId: k }),
 		K: "vang",
