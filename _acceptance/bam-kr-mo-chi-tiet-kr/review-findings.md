@@ -1,27 +1,35 @@
-# Review findings: bam-kr-mo-chi-tiet-kr (vòng 3)
+# Review findings: bam-kr-mo-chi-tiet-kr (vòng 4)
 
 ## Trong hợp đồng
 
-- **KR button in «KR bạn phụ trách» keeps data-mo-muc-tieu but now opens the KR. The signed gauge ghd_man_chrome (gioi-han-duyet-cay-okr) clicks that button to open the objective sheet and turns red. AC-6 does not see it**
-  AC: AC-6
-  file: `apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx:84`
-  severity: high
-  source: bugs
-  detail: Commit 7c7120509 (lối 2) put `data-mo-muc-tieu={mucTieu.id}` back on the KR-name button, which now does `openRecord({ kind: "kr", id: k.id })`. Any signed gauge that clicks `[data-mo-muc-tieu=<mt>]` on Của tôi, for an objective where the user owns a KR, now lands on the KR sheet instead of the objective sheet. Why: chiaPhanBa moves such objectives out of thamGia, so the KR button is the only element on the page carrying that attribute. This round fixed exactly that failure in hop-thoai-giu-cho-dang-nhap/man-giu-cho.mjs, by switching to the URL `record=objective:`. The same failure is still live in `_acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs` (contract status: signed-off, eval E15/E16/E17 cmd `executors.script.ghd_man_chrome`). Lines 1478-1484: taoNhap creates draft G owned by truong, with one KR owned by truong (lines 444-465). Truong opens `/okr`. buocGioiHan → tienDeGioiHan (lines 972-989) runs `bamIm(t, "[data-mo-muc-tieu='G']")` and then waits for `[data-okr-sheet='G'][data-dau-khung]`. Only objective-sheet.tsx:1002 renders data-okr-sheet, and nothing above it carries data-mo-muc-tieu=G: PhanDonViDan has no such button, and a freshly created draft G produces no okr-cho-duyet or okr-tra-lai row in Việc. So the click opens the KR sheet, the wait times out with «khung G khong tai xong», tienDe is marked broken, and every later step of E15/E16 is skipped and recorded as broken. buocBiTraLai (moSheet at line 1265) and buocTrangThaiLoi (line 1451) use the same click. On origin/onehub the same button opened the objective, so this is a regression this round causes. E15's paths include `apps/app/app/(app)/[slug]/okr/**` and `apps/app/components/crm/record-sheet/**`, so strict recheck will mark the record stale and rerun it red at the merge gate. The AC-6 gauge `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs` does not catch it for two reasons. quetLop only takes evals with executor test or script; E16 is script, but its command file man-gioi-han-duyet.mjs contains neither «Cập nhật tuần» nor any VAT name. And THEM hand-lists only two screen gauges, dat-okr-trong-crm and hop-thoai-giu-cho-dang-nhap. Fix: update man-gioi-han-duyet.mjs to open G by URL `/okr?record=objective:${K.G}`, or click `[data-okr-sheet]` from another page, with a fix line in that record's decision log; and add ghd_man_chrome to THEM. The alternative is to record the breakage on the gate card.
-  rationale: AC-6 đòi mọi thước máy đã ký chạm tệp phan-kr-phu-trach.tsx không xấu hơn trên nền origin/onehub; thước ghd_man_chrome xanh trên nền mà đỏ sau vòng này nên AC-6 thất bại.
+Không có finding nào map được vào AC.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 4 (âm tính một mình): đối chứng dương «THEM <slug>» của E6 luôn đúng, không chạm luật chọn lớp**
+- **A generated S4 workflow script under the git-ignored .acceptance-runs/ folder was force-committed into the PR**
+  Người dùng thấy gì: Người dùng không thấy khác biệt nào: bấm KR và chữ «Cập nhật» vẫn chạy đúng. Chỉ có một tệp sinh tự động thừa bị đưa vào nhánh, làm bản so sánh của PR dài thêm hơn ba nghìn dòng.
+  Căn cứ: Hậu quả với người dùng là không có, không mất hay lộ dữ liệu; chỉ làm PR cồng kềnh hơn và người duyệt có thể gỡ tệp đó ra sau mà không ảnh hưởng gì.
+  file: `.acceptance-runs/wf/acceptance-verify-bam-kr-mo-chi-tiet-kr-r3.js`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 — tuyên quét LỚP «mọi thước bấm data-mo-muc-tieu» nhưng lớp thật bỏ toàn bộ thước ui-check, và không có danh sách viết trước để đếm**
+  Người dùng thấy gì: Một số bài kiểm màn của các tính năng OKR cũ, vốn bấm vào mục tiêu, không được vòng này chạy lại nên nếu chúng hỏng vì KR nay mở chi tiết KR thì chưa ai biết. Người dùng thật vẫn bấm KR và mục tiêu bình thường, chỉ có mạng lưới kiểm tra thủng một lỗ.
+  Căn cứ: Lỗi nằm ở công cụ kiểm tra chứ không ở màn hình người dùng, nên không mất dữ liệu và người dùng không gặp lỗi tức thì; năm bài kiểm liên quan đã đỏ sẵn từ trước vòng này và hợp đồng đã ghi nhận, nên ghi thành hạn chế đã biết rồi xử lý ở việc riêng là hợp lý.
+  file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
+  severity: high
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): đối chứng dương «THEM <slug>» của E6 luôn đúng, không chạm luật chọn lớp (r3 · tệp đã đổi)**
   Người dùng thấy gì: Công cụ kiểm tra rằng vòng này không làm hỏng các bài kiểm cũ có thể bỏ sót bài kiểm cần xét mà vẫn báo đạt. Người dùng không thấy gì ngay, nhưng một hồi quy về chữ «Cập nhật» sau này có thể lọt qua mà không ai biết.
   Căn cứ: Chỉ làm lưới an toàn kém chặt hơn mức mong muốn, không ảnh hưởng gì tới tính năng người dùng đang dùng; sửa sau rẻ và không mất dữ liệu.
   file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (không ghim thông điệp): chiều đỏ «hoi-quy» nhận bất kỳ mã khác 0 trên bản sao làm bằng chứng**
+- **Hình dạng 4 (không ghim thông điệp): chiều đỏ «hoi-quy» nhận bất kỳ mã khác 0 trên bản sao làm bằng chứng (r3 · tệp đã đổi)**
   Người dùng thấy gì: Phép thử tự kiểm của công cụ kiểm tra có thể báo đạt vì một lỗi môi trường chứ không phải vì nó thật sự bắt được lỗi chữ. Người dùng không bị ảnh hưởng, chỉ là độ tin cậy của công cụ kiểm thấp hơn vẻ ngoài.
   Căn cứ: Hậu quả nhẹ và chỉ nằm ở công cụ kiểm nội bộ, người dùng không gặp; gặp lúc chạy lại thì tự thấy và chạy lại được, sửa sau rẻ.
   file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
