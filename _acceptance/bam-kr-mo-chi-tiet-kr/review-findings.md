@@ -1,21 +1,28 @@
-# Review findings: bam-kr-mo-chi-tiet-kr (vòng 4)
+# Review findings: bam-kr-mo-chi-tiet-kr (round 5)
 
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC.
+(không có finding nào map được vào AC)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **A generated S4 workflow script under the git-ignored .acceptance-runs/ folder was force-committed into the PR**
+- **Hình dạng 4 (âm tính một mình, không đối chứng dương): luật mới «chạy lại một lần, lần hai mã 0 thì in CHAP CHON và tính là xanh» không có ca nào chạy qua, và CHIEU DO chạy một bản chép riêng của vòng lặp chứ không chạy đường chính (r5 · tệp đã đổi)**
+  Người dùng thấy gì: Hành vi bấm KR và đổi chữ cho người dùng không bị ảnh hưởng. Chỉ có công cụ kiểm của đội có thể không phát hiện nếu cơ chế thử lại cho các mục đỏ chập chờn bị viết sai sau này.
+  Căn cứ: Không đụng tới thứ người dùng thấy hay dùng, chỉ làm thước kiểm nội bộ kém chặt hơn ở một nhánh hiếm, và thêm ca đối chứng sau này rẻ, không mất dữ liệu.
+  file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **A generated S4 workflow script under the git-ignored .acceptance-runs/ folder was force-committed into the PR (r4)**
   Người dùng thấy gì: Người dùng không thấy khác biệt nào: bấm KR và chữ «Cập nhật» vẫn chạy đúng. Chỉ có một tệp sinh tự động thừa bị đưa vào nhánh, làm bản so sánh của PR dài thêm hơn ba nghìn dòng.
   Căn cứ: Hậu quả với người dùng là không có, không mất hay lộ dữ liệu; chỉ làm PR cồng kềnh hơn và người duyệt có thể gỡ tệp đó ra sau mà không ảnh hưởng gì.
   file: `.acceptance-runs/wf/acceptance-verify-bam-kr-mo-chi-tiet-kr-r3.js`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 5 — tuyên quét LỚP «mọi thước bấm data-mo-muc-tieu» nhưng lớp thật bỏ toàn bộ thước ui-check, và không có danh sách viết trước để đếm**
+- **Hình dạng 5 — tuyên quét LỚP «mọi thước bấm data-mo-muc-tieu» nhưng lớp thật bỏ toàn bộ thước ui-check, và không có danh sách viết trước để đếm (r4 · tệp đã đổi)**
   Người dùng thấy gì: Một số bài kiểm màn của các tính năng OKR cũ, vốn bấm vào mục tiêu, không được vòng này chạy lại nên nếu chúng hỏng vì KR nay mở chi tiết KR thì chưa ai biết. Người dùng thật vẫn bấm KR và mục tiêu bình thường, chỉ có mạng lưới kiểm tra thủng một lỗ.
   Căn cứ: Lỗi nằm ở công cụ kiểm tra chứ không ở màn hình người dùng, nên không mất dữ liệu và người dùng không gặp lỗi tức thì; năm bài kiểm liên quan đã đỏ sẵn từ trước vòng này và hợp đồng đã ghi nhận, nên ghi thành hạn chế đã biết rồi xử lý ở việc riêng là hợp lý.
   file: `_acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs`
