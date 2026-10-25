@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f
+verified_commit: d403a78797777bac13fd466678416f4d576179bb
 human_signoff: Phan Le Manh 2026-10-20 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 15/15 eval, 7/7 lệnh suite, hội đồng E14 đạt; vòng 1 REJECT đã sửa). Ngoài-1, 3, 4, 5 ghi Known limits; Ngoài-2 chấp nhận, không sửa; đồng ý cắt; Treo phê hết.
 ---
 
@@ -256,3 +256,7 @@ sha: e61caf2faf124f5b835b281c653b732303de45b3 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-23, do hoá cũ do so-do-toan-vung (VK6) — thước sửa tại chỗ theo V3-25 A, V3-27 B, V3-30; AC-10 chứng ở bước ghim lại
 run_id: repin-20261023T053547Z-88592
 sha: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→so-do-toan-vung#AC-6 · ngoài làn máy: E14, E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-25, do hoá cũ do so-do-toan-vung (VK6) sau gộp onehub 49843223e — thước sửa tại chỗ theo V3-25 A, V3-27 B, V3-33, V3-38, V3-39 A, C1 lối b; AC-10 chứng ở bước ghim lại
+run_id: repin-20261025T052030Z-41118
+sha: d403a78797777bac13fd466678416f4d576179bb · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→so-do-toan-vung#AC-6 · ngoài làn máy: E14, E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · chập chờn (đỏ lần đầu, đạt khi chạy lại): trang-bo-okr E2 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
