@@ -1723,7 +1723,7 @@
       "ten_ngan": "Lọc chung",
       "ngay": "2026-10-09",
       "cau_giao": "«Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc»",
-      "ghi_chu": "Khảo sát 09/10. Phạm vi: số đếm trong chip thành prop của packages/ui (hôm nay opacity-60 ở onboarding/danh-muc-cong-cu.tsx, text-muted-foreground ở tai-lieu/danh-sach-trang.tsx:193); lọc Tài liệu sang nuqs (danh-sach-trang.tsx:109,184 tự ghép chuỗi); Thoả thuận và Onboarding dùng ViewSwitch. Hai câu cho Cổng Phạm vi: «thẻ trạng thái» chọn một điều khiển (hôm nay menu thả của DataTable ở Thoả thuận, ToggleGroup ở Onboarding, Tabs gạch chân ở OKR và Tài liệu); bảng DataTable trên điện thoại cuộn ngang (Thoả thuận) hay thành thẻ dọc (Tài liệu). Chạm deals-table.tsx nên đứng sau V2.",
+      "ghi_chu": "Khảo sát 09/10. Phạm vi: số đếm trong chip thành prop của packages/ui (hôm nay opacity-60 ở onboarding/danh-muc-cong-cu.tsx, text-muted-foreground ở tai-lieu/danh-sach-trang.tsx:193); lọc Tài liệu sang nuqs (danh-sach-trang.tsx:109,184 tự ghép chuỗi); Thoả thuận và Onboarding dùng ViewSwitch. Hai câu cho Cổng Phạm vi: «thẻ trạng thái» chọn một điều khiển (hôm nay menu thả của DataTable ở Thoả thuận, ToggleGroup ở Onboarding, Tabs gạch chân ở OKR và Tài liệu); bảng DataTable trên điện thoại cuộn ngang (Thoả thuận) hay thành thẻ dọc (Tài liệu). Chạm deals-table.tsx nên đứng sau V2. Chủ kho 25/10 «Đồng ý hết theo khuyến nghị» (docs/findings/2026-10-25-bo-okr-gom-lan/README.md mục 6): luật «Thứ tự một màn» và «Hàng công cụ» của docs/design.md trả lời câu thẻ trạng thái — chip ToggleGroup ở một hàng công cụ ngoài Card. Hàng này nhận thêm: All KRs dính chip thành thanh (okr/moi-kr/moi-kr.tsx:113, spacing={0}) và tách Lọc, Cột sang hàng khác; Map đặt chip trong Card (okr/cay-can-chinh.tsx:218) nếu VK6 gộp mà còn; và luật anti-slop trong tools/oxlint cấm ToggleGroup spacing={0}, ToggleGroup trong CardContent, mục gập có số đếm sau bảng.",
       "buoc_ke": "R2 — lên production 31/10 (tạm); sau NM1 (V2 đã gộp)",
       "trang_thai": "chưa mở"
     },
@@ -3690,7 +3690,7 @@
       "vi_sao": "Hôm nay có hai đường cập nhật: bảng hàng loạt ở Của tôi (phan-can-cap-nhat.tsx → BangCapNhat, lối nhac · viec-cua-toi · cua-toi trong LOI_VAO) và hộp một KR từ ngăn KR; tin nhắc «N KR chờ» dẫn tới /okr?tu=nhac (nhac-ke-hoach.ts:192-193). Tability không có trang cập nhật riêng: My focus liệt KR, cập nhật trong ngăn KR (README hop-tuan §4, ảnh tab/t09-my-focus.jpg, tab/t03-ngan-kr.jpg).",
       "bat_khi": "Của tôi không còn bảng cập nhật hàng loạt; tin nhắc, Của tôi, ngăn KR và dòng bộ OKR đều mở cùng hộp một KR; bấm tin nhắc «N KR chờ» tới KR chứ không tới /okr?tu=nhac",
       "ly_do": "Chủ kho chốt 24/10 ở phiên HT1 (Cổng Phạm vi hop-tuan-mo-dung-bo), nguyên văn «Lối (b), nhưng tôi hỏi lúc research tability đã quyết định như vậy, nhưng phiên này không giữ được gì từ quyết định research». Câu hỏi gốc 22/10: «Tôi nhớ Tability cập nhật trực tiếp trong bộ okr giúp đơn giản hóa chứ không có trang riêng?». Nghiên cứu: docs/findings/2026-10-22-hop-tuan/README.md §1, §4, §6. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §1.",
-      "ghi_chu": "Lật hàng đã ký DH3 cua-toi-ba-phan (#443, 15/10): eval đo bảng hàng loạt của DH3 cần superseded_by trỏ hàng này. Đi sau HT2 (nút cập nhật trên dòng Họp tuần, ‹ › theo bảng). Bản mẫu /proto/hop-tuan-mo-dung-bo, commit 5ebcd43dc trên feat/hop-tuan-mo-dung-bo (ST-htmb-ngan-kr, ST-htmb-hop-cap-nhat, «Cần cập nhật tuần này»). Mã Tability có hộp cập nhật hàng loạt (modals.bulkCheckin) nhưng không phải lối chính; chủ kho chọn bỏ. Đọc Known limits HT3 Ngoài-4, Ngoài-5 (bản phạm vi §6) trước khi chạm đường «lần trước».",
+      "ghi_chu": "Lật hàng đã ký DH3 cua-toi-ba-phan (#443, 15/10): eval đo bảng hàng loạt của DH3 cần superseded_by trỏ hàng này. Đi sau HT2 (nút cập nhật trên dòng Họp tuần, ‹ › theo bảng). Bản mẫu /proto/hop-tuan-mo-dung-bo, commit 5ebcd43dc trên feat/hop-tuan-mo-dung-bo (ST-htmb-ngan-kr, ST-htmb-hop-cap-nhat, «Cần cập nhật tuần này»). Mã Tability có hộp cập nhật hàng loạt (modals.bulkCheckin) nhưng không phải lối chính; chủ kho chọn bỏ. Đọc Known limits HT3 Ngoài-4, Ngoài-5 (bản phạm vi §6) trước khi chạm đường «lần trước». Chủ kho 25/10 chọn Q5 (a) của docs/findings/2026-10-25-bo-okr-gom-lan/README.md: bỏ mục gập «Đang theo dõi (n)» khỏi Của tôi (okr/cua-toi.tsx:64), theo dõi xem ở Bộ OKR › Đang theo dõi.",
       "dot": "okr-sau-vo-khu-2410",
       "phu": [
         "LB"
@@ -3870,16 +3870,17 @@
       "ngay": "2026-10-24",
       "thu_tu": 104.81,
       "dung_tren": [
-        "VK8"
+        "VK8",
+        "VK19"
       ],
       "ten": "Cột phải của bộ OKR",
       "ten_ngan": "Cột phải bộ",
       "vai": "Trưởng đơn vị",
-      "cau_giao": "«Trưởng đơn vị mở bộ OKR của đơn vị mình và thấy ở cột phải đơn vị góp vào mục tiêu nào của cấp trên cùng các đơn vị trực thuộc, bấm một dòng để mở mục tiêu hay bộ OKR ấy»",
+      "cau_giao": "«Trưởng đơn vị mở bộ OKR của đơn vị mình và thấy ở cột phải đơn vị góp vào mục tiêu nào của cấp trên, bấm một dòng để mở mục tiêu ấy»",
       "vi_sao": "Muốn biết đơn vị góp vào đâu, hôm nay phải mở từng mục tiêu, khoảng hai bấm mỗi mục tiêu; danh sách đơn vị trực thuộc chỉ có ở cách xem cũ của Theo đơn vị. Nghiên cứu 18/10 đặt khối «Góp vào» và «Đơn vị trực thuộc» ở cột phải trang một bộ, như cột quan hệ của trang Plan trên Tability: «Thấy đơn vị góp vào đâu» từ 2 bấm còn 0 (báo cáo 18/10, «Trước và sau theo việc hằng tuần», «Bảng chuyển chỗ»).",
-      "bat_khi": "Trang một bộ có cột phải với hai khối Góp vào và Đơn vị trực thuộc từ md trở lên, xếp dưới thẻ OKR ở khổ điện thoại; mỗi dòng bấm được; bộ chưa góp vào đâu và đơn vị không có đơn vị con mỗi trường hợp có câu rỗng riêng",
+      "bat_khi": "Trang một bộ có cột phải với khối Góp vào từ md trở lên, xếp dưới thẻ OKR ở khổ điện thoại; mỗi dòng bấm được; bộ chưa góp vào đâu có câu rỗng riêng",
       "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C2 cột phải bộ (Góp vào · Đơn vị trực thuộc): cắt hàng sau VK8». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
-      "ghi_chu": "Khối «Hỏi nhanh Kara» của bản mẫu 18/10 không thuộc hàng này: lần đối chiếu 24/10 không trình nó. Đọc dữ liệu căn chỉnh và cây tổ chức có sẵn, không đổi lược đồ. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/cot-phai-bo-okr (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "ghi_chu": "Chủ kho 25/10 «Đồng ý hết theo khuyến nghị» cho Q7 của docs/findings/2026-10-25-bo-okr-gom-lan/README.md: khối «Đơn vị trực thuộc» rời hàng này, đơn vị trực thuộc chỉ đi qua menu ở mắt xích cuối của dòng vị trí (docs/design.md «Thanh bên khu và thẻ con», hàng VK19). Khối «Hỏi nhanh Kara» của bản mẫu 18/10 không thuộc hàng này: lần đối chiếu 24/10 không trình nó. Đọc dữ liệu căn chỉnh và cây tổ chức có sẵn, không đổi lược đồ. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/cot-phai-bo-okr (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
       "dot": "okr-doi-chieu-vo-khu-2410",
       "phu": [
         "DC2"
@@ -3957,6 +3958,25 @@
         "C1"
       ],
       "tieu_chi": 10
+    },
+    {
+      "ma": "VK19",
+      "slug": "bo-okr-chi-don-vi",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-25",
+      "thu_tu": 104.805,
+      "dung_tren": [
+        "HT1"
+      ],
+      "ten": "Bộ OKR chỉ của một đơn vị",
+      "ten_ngan": "Bộ một đơn vị",
+      "vai": "Trưởng bộ phận",
+      "cau_giao": "«Trưởng khối mở bộ OKR của khối mình chỉ thấy mục tiêu của khối, và sang bộ của từng phòng bằng dòng vị trí»",
+      "vi_sao": "Mở bộ của một bộ phận (donOkr=bp:<id>) thì bảng gom cả mục tiêu của mọi phòng ban con, không cột đơn vị, rồi chính các phòng ấy hiện lần nữa ở lưới «Đơn vị trực thuộc» dưới bảng. Nguyên nhân: dieuKienDonVi ở apps/api/src/okr/okr-xem.service.ts:168-179 mở bp sang phòng ban con, dùng cho cả bốn thẻ con (danhSach :282, viecCuaBo :465, hopTuan :657, bangCham okr-khep.service.ts:630); pb và goc không gom. Bộ mẫu: Khối Kinh doanh 1 mục tiêu riêng hiện 15, Khối Hỗ trợ 0 riêng hiện 10 trong khi danh sách Bộ OKR ghi 0. Trang một bộ còn ba đường sang đơn vị khác (dòng vị trí, ô chọn đơn vị, lưới trực thuộc) và mục gập «Đã bỏ (n)» kẹp giữa bảng và lưới.",
+      "bat_khi": "okr.danhSach, viecCuaBo, hopTuan, bangCham với bp:<id> chỉ trả mục tiêu cấp bộ phận của bộ phận ấy; hàng bộ phận ở danh sách Bộ OKR có tiến độ và KR tự tin thấp là số riêng, khớp cột Mục tiêu; trang một bộ không còn ô chọn đơn vị và lưới đơn vị trực thuộc, mắt xích cuối của dòng vị trí mở menu đơn vị cha, ngang hàng và trực thuộc; Đã bỏ là nút cuối hàng công cụ; bộ phận chưa có mục tiêu riêng có câu rỗng riêng; Toàn cảnh vẫn gộp phòng ban con",
+      "ly_do": "Chủ kho 25/10 nguyên văn «Đồng ý hết theo khuyến nghị» cho Q1 (a) bỏ gộp ở mọi thẻ con, Q2 (a) số riêng ở danh sách Bộ OKR, Q3 (a) hàng mới sau HT1, Q4 đổi AC-1 đã ký của toan-canh-okr và thước gop-y-dung-cho, Q6 Đã bỏ thành nút, Q7 đơn vị trực thuộc qua dòng vị trí. Báo cáo: docs/findings/2026-10-25-bo-okr-gom-lan/README.md mục 4–6.",
+      "ghi_chu": "Hồ sơ đã ký phải đổi luật, mỗi hồ sơ một dòng sổ fix decided_by chủ kho, đo hai chiều: toan-canh-okr AC-1 và E1 (okr-toan-canh.spec.ts «bp gồm con», chiều đỏ lật); gop-y-dung-cho (gop-y-dung-cho.spec.ts:75-76 đổi bp:BP_KD sang pb của phòng chứa M1, M2); tro-ly-okr-tom-tat theo E1; trang-bo-okr AC-7 (liên kết Đơn vị con) và AC-10 (ô chọn đơn vị), thêm ca bộ phận vào E5. Đứng sau HT1 vì HT1 AC-6 và chiều đỏ E8 giữ hopTuan(bp) gồm phòng ban con — lật ở hàng này; danh sách «Đơn vị có KR» trong màn rỗng của HT1 là nội dung, giữ. Toàn cảnh giữ gộp (toan-canh-okr AC-5, quyết định 04/10). Đi trước VK15 để cột phải dựng trên tập mục tiêu đúng. Luật chủ kho 24/10 (docs/proto.md): S1 dựng /proto/bo-okr-chi-don-vi trên dữ liệu mẫu dày, chủ kho bấm thử trước Cổng 1."
     }
   ],
   "chan_troi": [
