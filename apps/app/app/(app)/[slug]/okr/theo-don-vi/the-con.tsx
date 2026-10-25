@@ -34,6 +34,10 @@ export function hrefThe({
 	return `${goc}?${q.toString()}`;
 }
 
+export function useGocBoOkr(): string {
+	return useWorkspaceUrl()("/okr/bo-okr");
+}
+
 export function TheConBo({
 	don,
 	ky,
@@ -54,7 +58,7 @@ export function TheConBo({
 		cay: okrMessages(locale).cayCanChinh,
 		cham: okrKhepMessages(locale).cham.cachXem,
 	} satisfies Record<CachXem, string>;
-	const goc = useWorkspaceUrl()("/okr/bo-okr");
+	const goc = useGocBoOkr();
 	return (
 		<Tabs value={xem}>
 			<div className="max-w-full overflow-x-auto" data-the-con-bo="">
