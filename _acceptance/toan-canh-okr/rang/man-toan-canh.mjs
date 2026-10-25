@@ -1594,9 +1594,9 @@ async function buocHopTuan() {
 	await toi(t, `${hopTuan}&tuTinOkr=thap`);
 	await taiLai(t);
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
-	await bamChu(t, "[role='radio']", CHU.danhSach);
+	await bamSel(t, "[data-the-con-bo] a[data-the='danh-sach']");
 	await hienSel(t, "[data-muc-tieu]");
-	await bamChu(t, "[role='radio']", CHU.hopTuan);
+	await bamSel(t, "[data-the-con-bo] a[data-the='hop-tuan']");
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
 	await cho(1500);
 	kiem(
@@ -2010,7 +2010,7 @@ async function buocChuKy() {
 	);
 	await chup(t, "E23-buoc-chon-ky-2.png");
 
-	await bamChu(t, "[role='radio']", CHU.hopTuan);
+	await bamSel(t, "[data-the-con-bo] a[data-the='hop-tuan']");
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
 	await cho(600);
 	const ht = await chuTrang(t);

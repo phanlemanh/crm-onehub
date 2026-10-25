@@ -107,6 +107,30 @@ const MA_KHONG_DO = 2;
 const git = (args, cwd = GOC) =>
 	execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
 
+let khungDaTinh = null;
+function khungLuot() {
+	if (khungDaTinh) return khungDaTinh;
+	const gop = git([
+		"log",
+		NHANH_GOC,
+		"--first-parent",
+		"--merges",
+		"--format=%H %P%x09%s",
+		"--grep",
+		`/feat/${HO_SO_NAY}`,
+	])
+		.split("\n")
+		.map((d) => d.split("\t"))
+		.find(([, t]) => t?.endsWith(`/feat/${HO_SO_NAY}`))?.[0];
+	if (gop) {
+		const [, cha1, cha2] = gop.split(" ");
+		khungDaTinh = { tu: git(["merge-base", cha1, cha2]), den: cha2 };
+	} else {
+		khungDaTinh = { tu: git(["merge-base", "HEAD", NHANH_GOC]), den: "HEAD" };
+	}
+	return khungDaTinh;
+}
+
 function hoSoDaKy() {
 	const goc = join(GOC, "_acceptance");
 	return readdirSync(goc, { withFileTypes: true })
@@ -169,9 +193,9 @@ function quetLop() {
 			chamCache.set(t, MAU_DUONG.test(readFileSync(join(GOC, t), "utf8")));
 		return chamCache.get(t);
 	};
-	const coSo = git(["merge-base", "HEAD", NHANH_GOC]);
+	const k = khungLuot();
 	const doi = new Set(
-		git(["diff", "--name-only", `${coSo}...HEAD`])
+		git(["diff", "--name-only", `${k.tu}...${k.den}`])
 			.split("\n")
 			.filter(Boolean),
 	);
@@ -382,12 +406,11 @@ function khoiDiff(diff) {
 const chiDoiChuoi = (k) =>
 	chuanHoa(k.bo.join("\n")) === chuanHoa(k.them.join("\n"));
 
-function soatDoiThuoc(cwd) {
-	const coSo = git(["merge-base", "HEAD", NHANH_GOC], cwd);
+function soatDoiThuoc(cwd, k = khungLuot()) {
 	const sai = [];
 	for (const [tep, cacHoSo] of quetLop().tepCua) {
 		if (!LA_THUOC.test(tep)) continue;
-		const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", tep], cwd);
+		const diff = git(["diff", "-U0", `${k.tu}...${k.den}`, "--", tep], cwd);
 		if (diff === "") continue;
 		const viet = VIET_LAI[tep] ?? null;
 		const tatCa = khoiDiff(diff);
@@ -454,7 +477,8 @@ function chieuDo(kieu) {
 	const tam = mkdtempSync(join(tmpdir(), "tbo-khong-doi-do-"));
 	const sao = join(tam, "crm");
 	try {
-		git(["worktree", "add", "--detach", "--quiet", sao, "HEAD"]);
+		const truoc = git(["rev-parse", "HEAD"]);
+		git(["worktree", "add", "--detach", "--quiet", sao, truoc]);
 		const tep = TEP_CHIEU_DO;
 		const duong = join(sao, tep);
 		const doi = (kieu === "tron" ? tronVoiChuoi : themDongLogic)(
@@ -476,7 +500,7 @@ function chieuDo(kieu) {
 			],
 			sao,
 		);
-		const sai = soatDoiThuoc(sao);
+		const sai = soatDoiThuoc(sao, { tu: truoc, den: "HEAD" });
 		for (const s of sai) console.log(s);
 		const ghim = `SAI AC-11: DOI LOGIC ${tep}:${doi.so} `;
 		const bat = sai.some((s) => s.startsWith(ghim));
