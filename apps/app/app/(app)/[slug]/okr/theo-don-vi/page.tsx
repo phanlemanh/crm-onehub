@@ -1,4 +1,6 @@
+import { boHopTuan } from "@crm/validation/okr-bo-hop-tuan";
 import type { Metadata } from "next";
+import * as dieuHuong from "next/navigation";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -9,11 +11,16 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
+import {
+	duongChuyenHopTuan,
+	type ThamSoTrang,
+	thamSoCuaTrang,
+} from "./chuyen-hop-tuan";
 import { DanhSachBo } from "./danh-sach-bo";
 import { KhungDangTaiDonVi } from "./hang-cong-cu";
 import { TheoDonVi } from "./theo-don-vi";
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+type SearchParams = Promise<ThamSoTrang>;
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: tieuDeTrinhDuyet(await getLocale(), "theo-don-vi") };
@@ -37,7 +44,7 @@ export default function TheoDonViPage({
 }
 
 async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
-	await requireSession();
+	const phien = await requireSession();
 
 	const thamSo = await loadOkrSearchParams(searchParams);
 	const laDanhSach =
@@ -45,6 +52,19 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 		thamSo[SEARCH_PARAM.okr.xem] === null;
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
+	if (
+		thamSo[SEARCH_PARAM.okr.xem] === "hop-tuan" &&
+		thamSo[SEARCH_PARAM.okr.don] === null
+	) {
+		const [access, cay, tho] = await Promise.all([
+			queryClient.fetchQuery(trpc.okr.access.queryOptions()),
+			queryClient.fetchQuery(trpc.org.tree.queryOptions()),
+			searchParams,
+		]);
+		const { don } = boHopTuan({ access, cay, userId: phien.user.id });
+		const dich = duongChuyenHopTuan(thamSoCuaTrang(tho), don);
+		if (dich !== null) dieuHuong.redirect(dich);
+	}
 	const [cycles] = await Promise.all([
 		queryClient.fetchQuery(trpc.okr.cycles.queryOptions()).catch(() => null),
 		queryClient.prefetchQuery(trpc.okr.access.queryOptions()),

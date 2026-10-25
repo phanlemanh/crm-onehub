@@ -1,10 +1,19 @@
-import { describe, expect, it, test } from "bun:test";
+import { afterAll, describe, expect, it, mock, test } from "bun:test";
+import {
+	isValidElement,
+	type ReactElement,
+	type ReactNode,
+	Suspense,
+} from "react";
 import { type LyDoRong, lyDoRong } from "@/app/(app)/[slug]/okr/ly-do-rong";
+import { okrAccessOutput } from "../../api/src/okr/okr.contracts";
 import {
 	type HopTuanOutput,
 	hopTuanOutput,
 } from "../../api/src/okr/okr-xem.contracts";
+import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
 import { type OSo, oSoHop } from "../app/(app)/[slug]/okr/o-so-hop";
+import { duongChuyenHopTuan } from "../app/(app)/[slug]/okr/theo-don-vi/chuyen-hop-tuan";
 
 type TuTin = "cao" | "vua" | "thap" | null;
 
@@ -273,5 +282,299 @@ describe("htmb-ly-do-ham", () => {
 			dem += 1;
 		}
 		expect(dem).toBe(5);
+	});
+});
+
+const DON_P1 = { loai: "pb", id: "P1" } as const;
+
+type CaChuyen = {
+	ten: string;
+	vao: string;
+	can: Record<string, string> | null;
+};
+
+const MA_TRAN_CHUYEN: readonly CaChuyen[] = [
+	{
+		ten: "hop-tuan-khong-don",
+		vao: "xemOkr=hop-tuan",
+		can: { donOkr: "pb:P1", xemOkr: "hop-tuan" },
+	},
+	{
+		ten: "giu-ky",
+		vao: "xemOkr=hop-tuan&kyOkr=q4",
+		can: { donOkr: "pb:P1", xemOkr: "hop-tuan", kyOkr: "q4" },
+	},
+	{ ten: "donOkr=goc bi chuyen", vao: "donOkr=goc&xemOkr=hop-tuan", can: null },
+	{
+		ten: "donOkr=pb:X bi chuyen",
+		vao: "donOkr=pb:X&xemOkr=hop-tuan",
+		can: null,
+	},
+	{ ten: "xemOkr=viec bi chuyen", vao: "xemOkr=viec", can: null },
+	{ ten: "khong tham so bi chuyen", vao: "", can: null },
+];
+
+describe("htmb-chuyen", () => {
+	test("duongChuyenHopTuan chi chuyen Hop tuan khong kem don vi", () => {
+		const loi: string[] = [];
+		let dem = 0;
+		for (const ca of MA_TRAN_CHUYEN) {
+			const ra = duongChuyenHopTuan(new URLSearchParams(ca.vao), DON_P1);
+			if (ca.can === null) {
+				if (ra !== null) loi.push(`htmb-chuyen: ${ca.ten}`);
+			} else if (ra === null || !ra.startsWith("?")) {
+				loi.push(`htmb-chuyen: ${ca.ten} khong chuyen`);
+			} else {
+				const thuc = Object.fromEntries(new URLSearchParams(ra.slice(1)));
+				if (JSON.stringify(thuc) !== JSON.stringify(ca.can))
+					loi.push(
+						`htmb-chuyen: ${ca.ten} ra ${JSON.stringify(thuc)}, can ${JSON.stringify(ca.can)}`,
+					);
+			}
+			dem += 1;
+		}
+		expect(loi).toEqual([]);
+		expect(dem).toBe(6);
+	});
+});
+
+describe("htmb-bien-chuyen", () => {
+	test("kyOkr khong ton tai giu nguyen va dich khong chuyen lan nua", () => {
+		const ra = duongChuyenHopTuan(
+			new URLSearchParams("xemOkr=hop-tuan&kyOkr=khong-co&phuTrachOkr=u1"),
+			DON_P1,
+		);
+		expect(ra, "htmb-bien-chuyen: khong chuyen").not.toBeNull();
+		const dich = new URLSearchParams((ra ?? "").slice(1));
+		expect(dich.get("kyOkr"), "htmb-bien-chuyen: mat kyOkr").toBe("khong-co");
+		expect(dich.get("phuTrachOkr"), "htmb-bien-chuyen: mat tham so khac").toBe(
+			"u1",
+		);
+		expect(
+			duongChuyenHopTuan(dich, DON_P1),
+			"htmb-bien-chuyen: dich chuyen lan nua",
+		).toBeNull();
+	});
+});
+
+const nguoi = (id: string) => ({ id, name: id, email: `${id}@thu.test` });
+
+const ACCESS_P1 = okrAccessOutput.parse({
+	canManageProgram: true,
+	headOf: { divisions: [], departments: ["P1"] },
+});
+
+const CAY_P1 = orgTreeOutput.parse({
+	divisions: [
+		{
+			id: "B",
+			name: "Bộ phận B",
+			moTa: "",
+			position: 0,
+			head: null,
+			okrMo: 0,
+			departments: [
+				{
+					id: "P1",
+					name: "Phòng P1",
+					moTa: "",
+					position: 0,
+					divisionId: "B",
+					head: nguoi("u-xem"),
+					stepCount: 0,
+					okrMo: 0,
+					people: [{ ...nguoi("u-xem"), primary: true }],
+				},
+			],
+		},
+	],
+	chuaXep: [],
+	chuaCoPhongBan: [],
+	people: [
+		{
+			...nguoi("u-xem"),
+			primaryDepartmentId: "P1",
+			secondaryDepartmentIds: [],
+			managerOverrideId: null,
+			manager: null,
+			managerSource: "khong-co",
+			chucDanh: "",
+		},
+	],
+	archived: { divisions: [], departments: [] },
+	coverage: { members: 1, withPrimary: 1, departmentsWithoutHead: 0 },
+});
+
+type XuLy = () => Promise<unknown>;
+const xuLyGia = new Map<string, XuLy>();
+let dangGia = false;
+
+const trpcGia = new Proxy(
+	{},
+	{
+		get: (_d, nhom: string) =>
+			new Proxy(
+				{},
+				{
+					get: (_c, thuTuc: string) => ({
+						queryOptions: () => ({ queryKey: [`${nhom}.${thuTuc}`] }),
+					}),
+				},
+			),
+	},
+);
+
+const goiGia = (o: { queryKey: string[] }) =>
+	(xuLyGia.get(o.queryKey[0] ?? "") ?? (async () => null))();
+
+const queryClientGia = {
+	fetchQuery: goiGia,
+	prefetchQuery: async (o: { queryKey: string[] }) => {
+		await goiGia(o).catch(() => undefined);
+	},
+};
+
+const navigationThat = await import("next/dist/client/components/navigation");
+mock.module("next/navigation", () => ({ ...navigationThat }));
+const sessionThat = await import("@/lib/session");
+mock.module("@/lib/session", () => ({
+	...sessionThat,
+	requireSession: async () =>
+		dangGia
+			? { user: { id: "u-xem", email: "u-xem@thu.test", name: "u-xem" } }
+			: sessionThat.requireSession(),
+}));
+mock.module("@/components/page-transition", () => ({
+	PageTransition: ({ children }: { children: ReactNode }) => children,
+}));
+mock.module("@/lib/trpc/hydrate", () => ({
+	HydrateClient: ({ children }: { children: unknown }) => children,
+}));
+mock.module("@/lib/trpc/server", () => ({
+	getServerTrpc: () => trpcGia,
+	getServerQueryClient: () => queryClientGia,
+	getServerTrpcClient: () => ({}),
+}));
+
+const { default: TheoDonViPage } = await import(
+	"@/app/(app)/[slug]/okr/theo-don-vi/page"
+);
+const { getURLFromRedirectError } = await import(
+	"next/dist/client/components/redirect"
+);
+const { isRedirectError } = await import(
+	"next/dist/client/components/redirect-error"
+);
+
+afterAll(() => {
+	dangGia = false;
+	xuLyGia.clear();
+});
+
+function timSuspense(nut: ReactNode): ReactElement | null {
+	if (Array.isArray(nut)) {
+		for (const con of nut) {
+			const thay = timSuspense(con);
+			if (thay) return thay;
+		}
+		return null;
+	}
+	if (!isValidElement(nut)) return null;
+	if (nut.type === Suspense) return nut;
+	return timSuspense((nut.props as { children?: ReactNode }).children);
+}
+
+type PropsNoiDung = { searchParams: Promise<Record<string, string>> };
+type NoiDungTrang = (p: PropsNoiDung) => Promise<ReactNode>;
+
+async function goiTrang(tham: Record<string, string>): Promise<ReactNode> {
+	const cay = TheoDonViPage({ searchParams: Promise.resolve(tham) });
+	const s = timSuspense(cay);
+	const noiDung = s ? (s.props as { children?: ReactNode }).children : null;
+	if (!isValidElement<PropsNoiDung>(noiDung))
+		throw new Error(
+			"htmb-chuyen-loi: page.tsx khong co noi dung trong Suspense",
+		);
+	const ham = noiDung.type as NoiDungTrang;
+	return ham(noiDung.props);
+}
+
+function datGia(v: { access: XuLy; tree: XuLy }) {
+	dangGia = true;
+	xuLyGia.clear();
+	xuLyGia.set("okr.access", v.access);
+	xuLyGia.set("org.tree", v.tree);
+}
+
+async function ketCuc(tham: Record<string, string>) {
+	try {
+		return { tra: await goiTrang(tham), loi: null };
+	} catch (loi) {
+		return {
+			tra: null,
+			loi: loi instanceof Error ? loi : new Error(String(loi)),
+		};
+	}
+}
+
+const TRANG = "http://localhost/ws/okr/bo-okr?xemOkr=hop-tuan";
+
+const dichTho = (loi: Error | null): string | null =>
+	isRedirectError(loi) ? getURLFromRedirectError(loi) : null;
+
+function dichCua(loi: Error | null): URL | null {
+	const tho = dichTho(loi);
+	return tho === null ? null : new URL(tho, TRANG);
+}
+
+const HOP_TUAN = { xemOkr: "hop-tuan" };
+
+describe("htmb-chuyen-loi", () => {
+	test("okr.access loi thi trang nem chinh loi ay", async () => {
+		const hong = new Error("okr.access hong");
+		datGia({
+			access: async () => {
+				throw hong;
+			},
+			tree: async () => CAY_P1,
+		});
+		const kq = await ketCuc(HOP_TUAN);
+		if (kq.loi !== hong)
+			throw new Error(
+				`htmb-chuyen-loi: loi roi ve goc (${dichCua(kq.loi)?.search ?? String(kq.loi)})`,
+			);
+	});
+
+	test("org.tree loi thi trang nem chinh loi ay", async () => {
+		const hong = new Error("org.tree hong");
+		datGia({
+			access: async () => ACCESS_P1,
+			tree: async () => {
+				throw hong;
+			},
+		});
+		const kq = await ketCuc(HOP_TUAN);
+		if (kq.loi !== hong)
+			throw new Error(
+				`htmb-chuyen-loi: org.tree loi roi ve goc (${dichCua(kq.loi)?.search ?? String(kq.loi)})`,
+			);
+	});
+
+	test("doi chung: ca hai binh thuong thi chuyen sang bo cua nguoi xem", async () => {
+		datGia({ access: async () => ACCESS_P1, tree: async () => CAY_P1 });
+		const kq = await ketCuc({ ...HOP_TUAN, kyOkr: "q4" });
+		const dich = dichCua(kq.loi);
+		expect(
+			dich,
+			`htmb-chuyen-loi: khong NEXT_REDIRECT (${String(kq.loi)})`,
+		).not.toBeNull();
+		expect(
+			dichTho(kq.loi)?.startsWith("?"),
+			"htmb-chuyen-loi: dich roi khoi trang bo OKR",
+		).toBe(true);
+		expect(dich?.pathname).toBe("/ws/okr/bo-okr");
+		expect(dich?.searchParams.get("donOkr")).toBe("pb:P1");
+		expect(dich?.searchParams.get("xemOkr")).toBe("hop-tuan");
+		expect(dich?.searchParams.get("kyOkr")).toBe("q4");
 	});
 });
