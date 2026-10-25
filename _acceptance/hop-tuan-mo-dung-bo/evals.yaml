@@ -184,7 +184,7 @@ evals:
       3, daCapNhat 1 (KR chỉ có lần tuần trước KHÔNG tính), khớp hai lệnh đếm SQL trên OkrKeyResult và OkrCheckIn tuần
       này giờ VN. QUAN HỆ, ma trận viết trước mọi khoá có soKr > 0 trong toanCanh (bp:B, pb:P, pb:X = 3 ô): với mỗi
       khoá, hopTuan(khoá).tongKr = soKr và hopTuan(khoá).daCapNhat = daCapNhat của hàng toanCanh. Hàng pb:Q soKr 0 hoặc
-      vắng. Đối chứng dương: người xem trong danh sách được xem → hàng pb:Q soKr 3 và hopTuan(pb:Q).tongKr 3. Ghi hoặc so
+      vắng. Đối chứng dương: đổi mục tiêu Q sang công khai (okr.datHienThi) → hàng pb:Q soKr 3 và hopTuan(pb:Q).tongKr 3; người trong danh sách được xem vẫn thấy pb:Q soKr 0 (số gộp bỏ mục tiêu hạn chế với mọi người, docs/api.md). Ghi hoặc so
       byte test/fixtures/htmb-toan-canh.json (đầu ra toanCanh của người xem thường) cho E7.
       CHIEU DO: bản sao bỏ lọc hạn chế ở toanCanh → đỏ «htmb-toan-canh: pb:Q lo muc tieu han che (3)»; bản sao
       hopTuan(bp) bỏ phòng ban con → đỏ «htmb-toan-canh: bp:B liet 3, hopTuan 0»; bản sao trả lại every() trên mảng rỗng
