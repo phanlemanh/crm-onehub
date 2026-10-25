@@ -90,7 +90,7 @@ function readlinkOr(p) {
 	}
 }
 
-function dungSao(ten) {
+export function dungSao(ten) {
 	const tam = mkdtempSync(join(tmpdir(), `vk10-${ten}-`));
 	const sao = join(tam, "crm");
 	git(["worktree", "add", "--detach", "--quiet", sao, "HEAD"]);
@@ -112,7 +112,7 @@ function dungSao(ten) {
 	return { tam, sao };
 }
 
-function donSao({ tam, sao }) {
+export function donSao({ tam, sao }) {
 	try {
 		execFileSync("git", ["worktree", "remove", "--force", sao], {
 			cwd: GOC,
@@ -125,7 +125,7 @@ function donSao({ tam, sao }) {
 	} catch {}
 }
 
-function chayTrongSao(sao, maEval) {
+export function chayTrongSao(sao, maEval) {
 	const env = { ...process.env, ...KARA_GIA, EVAL: maEval };
 	for (const k of [
 		"DATABASE_URL",

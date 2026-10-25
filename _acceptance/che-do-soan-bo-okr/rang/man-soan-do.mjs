@@ -877,6 +877,60 @@ const HTML_DA_DUNG = () => {
 			}
 		})
 		.join("\n");
+	const cv = document.createElement("canvas");
+	cv.width = 1;
+	cv.height = 1;
+	const cx = cv.getContext("2d", { willReadFrequently: true });
+	const kenh = (mau) => {
+		cx.clearRect(0, 0, 1, 1);
+		cx.fillStyle = "rgba(0, 0, 0, 0)";
+		cx.fillStyle = mau;
+		cx.fillRect(0, 0, 1, 1);
+		const [r, g, b, a] = cx.getImageData(0, 0, 1, 1).data;
+		return [r, g, b, a / 255];
+	};
+	const tron = ([r, g, b, a], nen) =>
+		[r, g, b].map((k, i) => Math.round(k * a + nen[i] * (1 - a)));
+	const rgb = ([r, g, b]) => `rgb(${r}, ${g}, ${b})`;
+	const TRANG = [255, 255, 255];
+	const nenCua = new Map();
+	const nen = (e) => {
+		if (!e) return TRANG;
+		if (nenCua.has(e)) return nenCua.get(e);
+		const rieng = kenh(getComputedStyle(e).backgroundColor);
+		const kq =
+			rieng[3] === 0 ? nen(e.parentElement) : tron(rieng, nen(e.parentElement));
+		nenCua.set(e, kq);
+		return kq;
+	};
+	const kieu = (e) => {
+		const s = getComputedStyle(e);
+		const coNen = kenh(s.backgroundColor)[3] > 0;
+		const an =
+			s.display === "none"
+				? "display: none; "
+				: s.visibility === "hidden"
+					? "visibility: hidden; "
+					: "";
+		const anh =
+			s.backgroundImage === "none"
+				? ""
+				: `background-image: ${s.backgroundImage}; background-clip: ${s.backgroundClip}; `;
+		const mauNen = coNen ? rgb(nen(e)) : "rgba(0, 0, 0, 0)";
+		return `${an}color: ${rgb(tron(kenh(s.color), nen(e)))}; background-color: ${mauNen}; ${anh}font-size: ${s.fontSize}; font-weight: ${s.fontWeight};`;
+	};
+	const nuong = (goc) => {
+		const ban = goc.cloneNode(true);
+		const that = [goc, ...goc.querySelectorAll("*")];
+		const sao = [ban, ...ban.querySelectorAll("*")];
+		that.forEach((e, i) => {
+			sao[i].setAttribute(
+				"style",
+				`${sao[i].getAttribute("style") ?? ""}; ${kieu(e)}`,
+			);
+		});
+		return ban.outerHTML;
+	};
 	const lop = [
 		...document.querySelectorAll(
 			"[role='dialog'], [role='alertdialog'], [data-slot$='overlay']",
@@ -885,10 +939,10 @@ const HTML_DA_DUNG = () => {
 		.filter(
 			(e) => !e.parentElement?.closest("[role='dialog'], [role='alertdialog']"),
 		)
-		.map((e) => e.outerHTML)
+		.map(nuong)
 		.join("\n");
 	const h = document.documentElement;
-	return `<!doctype html>\n<html lang="${h.lang}" class="${h.className}" style="${h.getAttribute("style") ?? ""}">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<style>\n${css}\n</style>\n</head>\n<body class="${document.body.className}">\n${lop}\n</body>\n</html>\n`;
+	return `<!doctype html>\n<html lang="${h.lang}" class="${h.className}" style="${h.getAttribute("style") ?? ""}; ${kieu(h)}" data-kieu-da-tinh="">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<style>\n${css}\n</style>\n</head>\n<body class="${document.body.className}" style="${kieu(document.body)}">\n${lop}\n</body>\n</html>\n`;
 };
 
 const daLuuHtml = [];
