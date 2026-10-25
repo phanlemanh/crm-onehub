@@ -1,3 +1,4 @@
+import type { TruongVietLai } from "@crm/validation/okr-tro-ly";
 import type { DongKrNhap } from "./du-lieu-bo";
 
 export type KrNhap = DongKrNhap & { khoa: string };
@@ -133,4 +134,21 @@ export function datFocus(bn: BanNhap, khoa: string): BanNhap {
 
 export function lanFocus(bn: BanNhap, khoa: string): number | null {
 	return bn.focus?.khoa === khoa ? bn.focus.lan : null;
+}
+
+export function boChuDaGo(
+	bn: BanNhap,
+	id: string,
+	truong: TruongVietLai,
+): BanNhap {
+	if (truong === "title" && id in bn.tenCo) {
+		const { [id]: _bo, ...tenCo } = bn.tenCo;
+		return { ...bn, tenCo };
+	}
+	const sua = bn.krCo[id];
+	if (truong === "kr.title" && sua?.ten !== undefined) {
+		const { ten: _ten, ...con } = sua;
+		return { ...bn, krCo: { ...bn.krCo, [id]: con } };
+	}
+	return bn;
 }

@@ -2,9 +2,11 @@
 
 import { FieldDescription } from "@crm/ui/components/field";
 import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
-import { KaraMark } from "@crm/ui/components/kara";
-import { KaraDock, KaraDockBody } from "@crm/ui/components/kara/dock";
-import { KaraState } from "@crm/ui/components/kara/state";
+import {
+	KaraDock,
+	KaraDockBody,
+	KaraDockFooter,
+} from "@crm/ui/components/kara/dock";
 import { VatPhamDock } from "@crm/ui/components/kara/vat-pham";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Separator } from "@crm/ui/components/separator";
@@ -21,11 +23,13 @@ import { flushSync } from "react-dom";
 import { DetailSheetHeader } from "@/components/detail-sheet";
 import { crmMessages } from "@/lib/messages/crm";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
+import type { LoiDiKr } from "../nhom-kara";
 import { useKhoHep } from "../soan/dung-kho-hep";
-import { BAN_NHAP_DAU, type BanNhap } from "./ban-nhap";
+import { BAN_NHAP_DAU, type BanNhap, boChuDaGo, themKr } from "./ban-nhap";
 import { SOAN_BO } from "./cau-hinh";
 import type { DichDenDong } from "./den-dong";
 import { type DenDong, KhoiChatLuong } from "./khoi-chat-luong";
+import { KhoiGopY } from "./khoi-gop-y";
 import { usePhuThuocSoan } from "./phu-thuoc";
 import {
 	type NoiDungCham,
@@ -33,13 +37,20 @@ import {
 	type SoanTaiLieu,
 	TaiLieuBo,
 } from "./tai-lieu-bo";
-import { type BoSoan, useBoSoan } from "./use-bo-soan";
+import { type DocLaiKara, ghiTheoKara, type TheoKara } from "./theo-kara";
+import { type BoSoan, type MucTieuSoan, useBoSoan } from "./use-bo-soan";
 import { loaiLoiLuu, useLuuDong } from "./use-luu-dong";
 
 type Chu = ReturnType<typeof okrSoanBoMessages>;
 type BoXong = Extract<BoSoan, { trang: "xong" }>;
 
 type ChatLuong = { noiDung: NoiDungCham; den: (dich: DichDenDong) => void };
+
+type GopYCot = {
+	mucTieu: MucTieuSoan[];
+	docLai: DocLaiKara;
+	moKr: (objectiveId: string, di: LoiDiKr) => void;
+};
 
 const THE = ["bo", "cot"] as const;
 type The = (typeof THE)[number];
@@ -77,43 +88,52 @@ function CotBen({
 	cauNoi,
 	motMinh,
 	chatLuong,
+	gopY,
 	truocDenDong,
 }: {
 	m: Chu;
 	cauNoi: boolean;
 	motMinh: boolean;
 	chatLuong: ChatLuong;
+	gopY: GopYCot;
 	truocDenDong: () => void;
 }) {
+	const phuThuoc = usePhuThuocSoan();
 	return (
-		<KaraDock
-			side={motMinh ? "fill" : "rail"}
-			alone={motMinh}
-			aria-label={m.theSoan.cotBen}
-			data-o="cot-ben"
+		<KhoiGopY
+			mucTieu={gopY.mucTieu}
+			cauNoi={cauNoi}
+			docLai={gopY.docLai}
+			moKr={(id, di) => {
+				truocDenDong();
+				gopY.moKr(id, di);
+			}}
 		>
-			<KaraDockBody>
-				<div className="flex flex-col gap-5">
-					<KhoiChatLuong
-						bo={chatLuong.noiDung.bo}
-						denDong={denDongCua(chatLuong, truocDenDong)}
-					/>
-					<Separator />
-					<section className="flex flex-col gap-3" data-khoi="gop-y-kara">
-						{cauNoi ? (
-							<>
-								<KaraMark />
-								<p className="text-muted-foreground text-sm">
-									{m.gopY.chuaDoc}
-								</p>
-							</>
-						) : (
-							<KaraState kind="unconfigured" description={m.gopY.tat} />
-						)}
-					</section>
-				</div>
-			</KaraDockBody>
-		</KaraDock>
+			{({ khoi, nut, karaTat }) => (
+				<KaraDock
+					side={motMinh ? "fill" : "rail"}
+					alone={motMinh}
+					aria-label={m.theSoan.cotBen}
+					data-o="cot-ben"
+				>
+					<KaraDockBody>
+						<div className="flex flex-col gap-5">
+							{karaTat && phuThuoc.chatLuongKhiKaraTat === "an" ? null : (
+								<>
+									<KhoiChatLuong
+										bo={chatLuong.noiDung.bo}
+										denDong={denDongCua(chatLuong, truocDenDong)}
+									/>
+									<Separator />
+								</>
+							)}
+							{khoi}
+						</div>
+					</KaraDockBody>
+					{nut ? <KaraDockFooter divided>{nut}</KaraDockFooter> : null}
+				</KaraDock>
+			)}
+		</KhoiGopY>
 	);
 }
 
@@ -155,12 +175,14 @@ function HaiThe({
 	cauNoi,
 	soan,
 	chatLuong,
+	gopY,
 }: {
 	bo: BoXong;
 	m: Chu;
 	cauNoi: boolean;
 	soan: SoanTaiLieu;
 	chatLuong: ChatLuong;
+	gopY: GopYCot;
 }) {
 	const [the, datThe] = useState<The>("bo");
 	return (
@@ -182,12 +204,17 @@ function HaiThe({
 				<TabsContent value="bo" className="flex min-h-0 flex-1 flex-col">
 					<OTaiLieu bo={bo} m={m} alone soan={soan} />
 				</TabsContent>
-				<TabsContent value="cot" className="flex min-h-0 flex-1 flex-col">
+				<TabsContent
+					value="cot"
+					forceMount
+					className="flex min-h-0 flex-1 flex-col data-[state=inactive]:hidden"
+				>
 					<CotBen
 						m={m}
 						cauNoi={cauNoi}
 						motMinh
 						chatLuong={chatLuong}
+						gopY={gopY}
 						truocDenDong={() => flushSync(() => datThe("bo"))}
 					/>
 				</TabsContent>
@@ -203,6 +230,7 @@ function ThanKhung({
 	hep,
 	soan,
 	den,
+	gopY,
 }: {
 	bo: BoSoan;
 	m: Chu;
@@ -210,6 +238,7 @@ function ThanKhung({
 	hep: boolean;
 	soan: SoanTaiLieu;
 	den: (dich: DichDenDong) => void;
+	gopY: Omit<GopYCot, "mucTieu">;
 }) {
 	const phuThuoc = usePhuThuocSoan();
 	if (bo.trang === "dang-tai")
@@ -238,9 +267,17 @@ function ThanKhung({
 		noiDung: noiDungCham(bo, soan, phuThuoc.suyKieu),
 		den,
 	};
+	const gopYCot: GopYCot = { ...gopY, mucTieu: bo.mucTieu };
 	if (hep)
 		return (
-			<HaiThe bo={bo} m={m} cauNoi={cauNoi} soan={soan} chatLuong={chatLuong} />
+			<HaiThe
+				bo={bo}
+				m={m}
+				cauNoi={cauNoi}
+				soan={soan}
+				chatLuong={chatLuong}
+				gopY={gopYCot}
+			/>
 		);
 	return (
 		<div className="flex min-h-0 flex-1" data-khung="rong">
@@ -250,6 +287,7 @@ function ThanKhung({
 				cauNoi={cauNoi}
 				motMinh={false}
 				chatLuong={chatLuong}
+				gopY={gopYCot}
 				truocDenDong={() => {}}
 			/>
 		</div>
@@ -287,17 +325,42 @@ export function KhungSoanBo({
 	const bo = useBoSoan(khoaBo);
 	const hep = useKhoHep(SOAN_BO.truyVanHep);
 	const [banNhap, datBanNhap] = useState<BanNhap>(BAN_NHAP_DAU);
+	const [theoKara, datTheoKara] = useState<TheoKara>({});
 	const luuDong = useLuuDong((loi) =>
 		loaiLoiLuu(loi) === "so"
 			? crmMessages(locale).truongKieu.tuChoi.so
 			: m.taiLieu.loiLuu,
 	);
-	const soan: SoanTaiLieu = { banNhap, datBanNhap, luuDong };
+	const soan: SoanTaiLieu = {
+		banNhap,
+		datBanNhap,
+		luuDong,
+		theoKara,
+		cauNoi,
+	};
 	const hienDau = bo.trang !== "dang-tai" || phuThuoc.tieuDeKhiTai;
 	const soanDuoc = bo.trang === "xong" && bo.quyen.loai === "soan";
 	const goc = useRef<HTMLDivElement>(null);
 	const den = (dich: DichDenDong) => {
 		if (goc.current) phuThuoc.oDenDong(goc.current, dich)?.focus();
+	};
+	const docLai: DocLaiKara = (id, chu) => {
+		datTheoKara((cu) => ghiTheoKara(cu, id, chu));
+		datBanNhap((bn) => boChuDaGo(bn, id, chu.truong));
+	};
+	const moKr = (objectiveId: string, di: LoiDiKr) => {
+		const nhap =
+			bo.trang === "xong" &&
+			bo.mucTieu.some((mt) => mt.id === objectiveId && mt.status === "nhap");
+		if (di.loai === "kr-moi" && nhap) {
+			datBanNhap((bn) => themKr(bn, objectiveId));
+			return;
+		}
+		den(
+			di.loai === "sua-kr"
+				? { dong: `[data-dong-kr="${di.keyResultId}"]`, truong: "title" }
+				: { dong: `[data-dong-mt="${objectiveId}"]`, truong: "title" },
+		);
 	};
 	return (
 		<>
@@ -326,6 +389,7 @@ export function KhungSoanBo({
 					hep={hep}
 					soan={soan}
 					den={den}
+					gopY={{ docLai, moKr }}
 				/>
 			</div>
 		</>

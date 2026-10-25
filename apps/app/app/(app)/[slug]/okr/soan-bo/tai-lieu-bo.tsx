@@ -34,6 +34,7 @@ import {
 } from "./ban-nhap";
 import { SOAN_BO } from "./cau-hinh";
 import {
+	DauTheoKara,
 	DongKrDoc,
 	DongKrMoi,
 	giaKrCo,
@@ -42,7 +43,9 @@ import {
 } from "./dong-kr";
 import { DongMucTieuMoi, MenuMucTieu } from "./dong-muc-tieu";
 import { type DongKrNhap, dongKrTrong, type suyKieuKr } from "./du-lieu-bo";
+import { NhoKaraSoan } from "./nho-kara-soan";
 import { usePhuThuocSoan } from "./phu-thuoc";
+import { docTheoKara, type TheoKara } from "./theo-kara";
 import type { BoSoan, MucTieuSoan } from "./use-bo-soan";
 import {
 	type GhiBanNhap,
@@ -57,9 +60,36 @@ export type SoanTaiLieu = {
 	banNhap: BanNhap;
 	datBanNhap: (doi: (bn: BanNhap) => BanNhap) => void;
 	luuDong: LuuDong;
+	theoKara: TheoKara;
+	cauNoi: boolean;
 };
 
+type KrSoan = MucTieuSoan["keyResults"][number];
+
+function krTheoKara(kr: KrSoan, soan: SoanTaiLieu | null): KrSoan {
+	const chu = soan ? docTheoKara(soan.theoKara, kr.id, "kr.title") : null;
+	return chu ? { ...kr, title: chu.giaTri } : kr;
+}
+
+function mtTheoKara(mt: MucTieuSoan, soan: SoanTaiLieu | null): MucTieuSoan {
+	const chu = soan ? docTheoKara(soan.theoKara, mt.id, "title") : null;
+	return chu ? { ...mt, title: chu.giaTri } : mt;
+}
+
+function dauKr(kr: KrSoan, soan: SoanTaiLieu | null): boolean {
+	if (soan === null || soan.banNhap.krCo[kr.id]?.ten !== undefined)
+		return false;
+	return docTheoKara(soan.theoKara, kr.id, "kr.title")?.dau === true;
+}
+
+function dauMt(mt: MucTieuSoan, soan: SoanTaiLieu | null): boolean {
+	if (soan === null || soan.banNhap.tenCo[mt.id] !== undefined) return false;
+	return docTheoKara(soan.theoKara, mt.id, "title")?.dau === true;
+}
+
 type BoiCanh = SoanTaiLieu & {
+	bo: BoXong;
+	boTrong: boolean;
 	ghi: GhiBanNhap;
 	nguoi: ComboboxOption[];
 	nguoiMacDinh: string;
@@ -202,9 +232,11 @@ function CauKhoa({ mt, khoa }: { mt: MucTieuSoan; khoa: KhoaMucTieu }) {
 
 function krCoHien(mt: MucTieuSoan, bc: SoanTaiLieu | null) {
 	return bc
-		? mt.keyResults.filter(
-				(kr) => !bc.luuDong.daLuu.has(kr.id) && !daBoDi(bc.banNhap, kr.id),
-			)
+		? mt.keyResults
+				.filter(
+					(kr) => !bc.luuDong.daLuu.has(kr.id) && !daBoDi(bc.banNhap, kr.id),
+				)
+				.map((kr) => krTheoKara(kr, bc))
 		: mt.keyResults;
 }
 
@@ -242,6 +274,7 @@ function DanhSachKrCo({
 						khoaSo={khoa.so}
 						trangThai={bc ? bc.luuDong.trangThai(kr.id) : null}
 						xoaDuoc={bc !== null && mt.status === "nhap"}
+						theoKara={dauKr(kr, bc)}
 						onDoi={(phan) => {
 							if (bc === null) return;
 							bc.datBanNhap((bn) => suaKrCo(bn, kr.id, phan));
@@ -262,7 +295,7 @@ function DanhSachKrCo({
 }
 
 function KhoiMucTieuDoc({
-	mt,
+	mt: mtGoc,
 	chiXem,
 	locale,
 	bc,
@@ -272,6 +305,7 @@ function KhoiMucTieuDoc({
 	locale: Locale;
 	bc: BoiCanh | null;
 }) {
+	const mt = mtTheoKara(mtGoc, bc);
 	const m = okrMessages(locale);
 	const phuThuoc = usePhuThuocSoan();
 	const khoa = khoaCua(mt, chiXem, phuThuoc.khoaSoCongBo);
@@ -329,6 +363,7 @@ function KhoiMucTieuDoc({
 					if (themDuoc) moKrMoi(bc, mt.id);
 				}}
 			/>
+			{dauMt(mtGoc, bc) ? <DauTheoKara /> : null}
 			{bc ? <TrangThaiDong trangThai={bc.luuDong.trangThai(mt.id)} /> : null}
 			{bc ? <CauKhoa mt={mt} khoa={khoa} /> : null}
 			<DanhSachKrCo mt={mt} khoa={khoa} locale={locale} bc={bc} />
@@ -350,6 +385,8 @@ function useBoiCanh(bo: BoXong, soan: SoanTaiLieu): BoiCanh {
 	const ghi = useGhiBanNhap(bo, soan.luuDong, soan.datBanNhap);
 	return {
 		...soan,
+		bo,
+		boTrong: bo.mucTieu.length === 0,
 		ghi,
 		xoaDuoc: (id) => bo.mucTieu.find((mt) => mt.id === id)?.quyen?.xoa ?? true,
 		nguoi: (users.data ?? []).map((u) => ({
@@ -398,16 +435,22 @@ function TaiLieu({
 			{bc ? (
 				<>
 					<Separator />
-					<Button
-						variant="ghost"
-						size="sm"
-						type="button"
-						className="w-fit"
-						data-nut="them-muc-tieu-bo"
-						onClick={() => bc.datBanNhap(themMucTieu)}
-					>
-						{m.taiLieu.themMucTieu}
-					</Button>
+					<NhoKaraSoan
+						bo={bc.bo}
+						cauNoi={bc.cauNoi}
+						hien={bc.boTrong}
+						them={
+							<Button
+								variant="ghost"
+								size="sm"
+								type="button"
+								data-nut="them-muc-tieu-bo"
+								onClick={() => bc.datBanNhap(themMucTieu)}
+							>
+								{m.taiLieu.themMucTieu}
+							</Button>
+						}
+					/>
 				</>
 			) : null}
 		</div>
@@ -504,7 +547,7 @@ export function noiDungCham(
 ): NoiDungCham {
 	const coSan = mucTieuCoHien(bo.mucTieu, soan).map((mt) =>
 		dongCham(
-			soan.banNhap.tenCo[mt.id] ?? mt.title,
+			soan.banNhap.tenCo[mt.id] ?? mtTheoKara(mt, soan).title,
 			mt.whyNow,
 			`[data-dong-mt="${mt.id}"]`,
 			[

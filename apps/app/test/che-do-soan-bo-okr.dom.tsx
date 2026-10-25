@@ -1772,3 +1772,386 @@ describe("vk10-chat-luong-do", () => {
 		);
 	});
 });
+
+const {
+	dongHien,
+	troLyDanhSachOutput,
+	troLyDeXuatOutput,
+	troLyQuyetOutput,
+	troLySanSangOutput,
+} = await import("../../api/src/okr/okr.contracts");
+const { okrGopYMessages } = await import("@/lib/messages/okr-gop-y");
+
+const CHU_GOP_Y = okrGopYMessages("vi");
+
+type SanSangGia = z.input<typeof troLySanSangOutput>;
+type LyDoGia = z.input<typeof troLyDanhSachOutput>["lyDo"];
+
+const KARA_TAT: SanSangGia = { bat: false, lyDo: "don-vi-chua-bat" };
+
+beforeEach(() => {
+	dat("okr.troLySanSang", () => troLySanSangOutput.parse(KARA_TAT));
+	dat("okr.troLyDanhSach", () =>
+		troLyDanhSachOutput.parse({
+			dong: [],
+			dangSoan: false,
+			maKetThuc: null,
+			docLuc: null,
+			lyDo: KARA_TAT.bat ? null : KARA_TAT.lyDo,
+		}),
+	);
+});
+
+const KR_DOI = {
+	truoc: "Gọi 300 cuộc cho khách tiềm năng",
+	sau: "Khách tiềm năng đồng ý gặp lần hai",
+};
+
+const BO_GOP_Y: MucMau[] = [
+	{
+		id: "mt-g1",
+		title: "Mở rộng tệp khách doanh nghiệp ở miền Bắc",
+		kr: [
+			{ id: "k-g1", title: KR_DOI.truoc, startValue: 0, targetValue: 300 },
+			{
+				id: "k-g2",
+				title: "Doanh thu khách mới",
+				startValue: 2,
+				targetValue: 5,
+			},
+		],
+	},
+	{
+		id: "mt-g2",
+		title: "Giữ chân khách hàng hiện có",
+		kr: [
+			{
+				id: "k-g3",
+				title: "Làm 20 buổi thăm khách",
+				startValue: 0,
+				targetValue: 20,
+			},
+			{
+				id: "k-g4",
+				title: "Tỷ lệ gia hạn hợp đồng",
+				startValue: 70,
+				targetValue: 90,
+			},
+		],
+	},
+];
+
+const DE_XUAT_BO = [
+	dongHien.parse({
+		id: "dx-1",
+		loai: "viet-lai",
+		objectiveId: "mt-g1",
+		keyResultId: "k-g1",
+		truong: "kr.title",
+		truoc: KR_DOI.truoc,
+		sau: KR_DOI.sau,
+		maVanDe: "kr-la-viec",
+		targetObjectiveId: null,
+		targetKeyResultId: null,
+		lyDo: "Số cuộc gọi là việc; số khách gặp lần hai đo được kết quả.",
+		canCu: null,
+		tenDich: null,
+	}),
+	dongHien.parse({
+		id: "dx-2",
+		loai: "viet-lai",
+		objectiveId: "mt-g2",
+		keyResultId: "k-g3",
+		truong: "kr.title",
+		truoc: "Làm 20 buổi thăm khách",
+		sau: "Khách được thăm gia hạn trước hạn",
+		maVanDe: "kr-la-viec",
+		targetObjectiveId: null,
+		targetKeyResultId: null,
+		lyDo: "Buổi thăm là việc; gia hạn là kết quả.",
+		canCu: null,
+		tenDich: null,
+	}),
+];
+
+const vaoMucTieu = z.object({ objectiveId: z.string() });
+const mucTieuCua = (vao: DauVao): string | null => {
+	const kq = vaoMucTieu.safeParse(vao);
+	return kq.success ? kq.data.objectiveId : null;
+};
+
+type KaraGia = {
+	daDoc: boolean;
+	tha: (() => void)[];
+	mocDanhSach: number | null;
+};
+
+function datKara({
+	sanSang = { bat: true, conLaiUsd: 5 },
+	lyDo = null,
+	maKetThuc = null,
+}: {
+	sanSang?: SanSangGia;
+	lyDo?: LyDoGia;
+	maKetThuc?: string | null;
+} = {}): KaraGia {
+	const kara: KaraGia = { daDoc: false, tha: [], mocDanhSach: null };
+	dat("okr.troLySanSang", () => troLySanSangOutput.parse(sanSang));
+	dat("okr.troLyDanhSach", (vao) =>
+		troLyDanhSachOutput.parse({
+			dong: kara.daDoc
+				? DE_XUAT_BO.filter((d) => d.objectiveId === mucTieuCua(vao))
+				: [],
+			dangSoan: false,
+			maKetThuc: kara.daDoc ? "da-nop" : maKetThuc,
+			docLuc: kara.daDoc ? "2026-10-25T02:12:00.000Z" : null,
+			lyDo,
+		}),
+	);
+	dat(
+		"okr.troLyDeXuat",
+		() =>
+			new Promise((xong) => {
+				kara.tha.push(() =>
+					xong(
+						troLyDeXuatOutput.parse({
+							bat: true,
+							taskId: "viec-1",
+							dungLai: false,
+						}),
+					),
+				);
+			}),
+	);
+	dat("okr.troLyQuyet", () => troLyQuyetOutput.parse({ ok: true }));
+	dat("okr.updateKeyResult", (vao) => ({ id: idCua(vao) }));
+	return kara;
+}
+
+const cotBen = () => q("[data-o=cot-ben]");
+const khoiGopY = () => q("[data-o=cot-ben] [data-khoi=gop-y-kara]");
+const nutDocBo = () => q("[data-o=cot-ben] [data-nut=nho-kara-doc]");
+const chuDiemCot = () =>
+	cotBen()?.querySelector("[data-khoi=chat-luong] [data-diem]")?.textContent ??
+	null;
+
+async function choGio(xong: () => boolean, sai: string, ms = 4000) {
+	const het = Date.now() + ms;
+	while (Date.now() < het) {
+		if (xong()) return;
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 50));
+		});
+	}
+	if (!xong()) throw new Error(sai);
+}
+
+async function moBoGopY(
+	phuThuoc: Partial<PhuThuocSoan>,
+	kara: () => KaraGia,
+): Promise<KaraGia> {
+	const bo = boMau({ muc: BO_GOP_Y });
+	const k = kara();
+	await veSoan(bo.khoa, { phuThuoc });
+	await choKhung();
+	return k;
+}
+
+async function buocGopY(kara: KaraGia): Promise<void> {
+	await cho(() => nutDocBo() !== null, "vk10-gop-y: nut doc bo lech");
+	expect(nutDocBo()?.textContent, "vk10-gop-y: nut doc bo lech").toBe(
+		CHU.gopY.nhoDoc,
+	);
+	await bam(nutDocBo());
+	await cho(
+		() => goiCua("okr.troLyDeXuat").length >= 2,
+		"vk10-gop-y: de-xuat lech",
+	);
+	const daNho = goiCua("okr.troLyDeXuat").map((g) => mucTieuCua(g.dauVao));
+	expect(daNho.length, "vk10-gop-y: de-xuat lech").toBe(2);
+	expect(new Set(daNho), "vk10-gop-y: de-xuat lech").toEqual(
+		new Set(["mt-g1", "mt-g2"]),
+	);
+	await choGio(
+		() => (khoiGopY()?.textContent ?? "").includes(CHU.gopY.dangDoc),
+		"vk10-gop-y: dang doc lech",
+	);
+
+	kara.daDoc = true;
+	kara.mocDanhSach = goiCua("okr.troLyDanhSach").length;
+	await act(async () => {
+		for (const tha of kara.tha.splice(0)) tha();
+	});
+	await cho(
+		() => qa("[data-o=cot-ben] [data-gop-y]").length === 2,
+		"vk10-gop-y: the lech",
+	);
+	const nhom = qa("[data-o=cot-ben] [data-slot=kara-proposal-group]");
+	expect(nhom.length, "vk10-gop-y: nhom lech").toBe(1);
+	expect(nhom[0]?.closest("[hidden]") ?? null, "vk10-gop-y: nhom lech").toBe(
+		null,
+	);
+	expect(
+		nhom[0]?.querySelectorAll("[data-gop-y]").length,
+		"vk10-gop-y: the lech",
+	).toBe(2);
+	expect(
+		khoiGopY()?.querySelectorAll("[data-slot=kara-label]").length,
+		"vk10-gop-y: nhan lech",
+	).toBe(1);
+	expect(
+		khoiGopY()?.querySelectorAll("[data-slot=kara-mark]").length,
+		"vk10-gop-y: nhan lech",
+	).toBe(1);
+
+	const nutNhan = q('[data-gop-y="dx-1"] [data-hanh-dong=nhan]');
+	expect(nutNhan?.textContent, "vk10-gop-y: nut nhan lech").toBe(
+		CHU_GOP_Y.de.doiTenKr,
+	);
+	await bam(nutNhan);
+	await cho(
+		() => goiCua("okr.troLyQuyet").length === 1,
+		"vk10-gop-y: quyet lech",
+	);
+	expect(
+		goiCua("okr.troLyQuyet")[0]?.dauVao,
+		"vk10-gop-y: quyet lech",
+	).toMatchObject({ deXuatId: "dx-1", cach: "nhan" });
+	await cho(
+		() => q('[data-gop-y="dx-1"] [data-slot=proposed-change-receipt]') !== null,
+		"vk10-gop-y: bien nhan lech",
+	);
+	await nhip(5);
+	expect(giaTri(oKr("k-g1", "ten")), "vk10-gop-y: dong khong doi").toBe(
+		KR_DOI.sau,
+	);
+	expect(
+		q('[data-dong-kr="k-g1"] [data-slot=kara-trace]') !== null,
+		"vk10-gop-y: dau lech",
+	).toBe(true);
+	expect(
+		q('[data-dong-kr="k-g1"] [data-slot=kara-trace]')?.textContent ?? "",
+		"vk10-gop-y: dau lech",
+	).toContain(CHU.taiLieu.theoKara);
+
+	const nutHoan = q(
+		'[data-gop-y="dx-1"] [data-slot=proposed-change-receipt] button',
+	);
+	expect(nutHoan !== null, "vk10-gop-y: hoan tac lech").toBe(true);
+	await bam(nutHoan);
+	await cho(
+		() => goiCua("okr.updateKeyResult").length === 1,
+		"vk10-gop-y: hoan tac lech",
+	);
+	expect(
+		goiCua("okr.updateKeyResult")[0]?.dauVao,
+		"vk10-gop-y: hoan tac lech",
+	).toEqual({ id: "k-g1", title: KR_DOI.truoc });
+	await cho(
+		() => giaTri(oKr("k-g1", "ten")) === KR_DOI.truoc,
+		"vk10-gop-y: dong ve cu lech",
+	);
+	expect(
+		q('[data-dong-kr="k-g1"] [data-slot=kara-trace]'),
+		"vk10-gop-y: dau sau hoan tac lech",
+	).toBeNull();
+}
+
+async function choHetHoi(kara: KaraGia): Promise<void> {
+	const moc = kara.mocDanhSach;
+	if (moc === null) return;
+	await choGio(
+		() => goiCua("okr.troLyDanhSach").length >= moc + 4,
+		"vk10-gop-y: hoi lai lech",
+	).catch(() => undefined);
+}
+
+async function kiemGopY(phuThuoc: Partial<PhuThuocSoan> = {}): Promise<void> {
+	const kara = await moBoGopY(phuThuoc, () => datKara());
+	try {
+		await buocGopY(kara);
+	} finally {
+		await choHetHoi(kara);
+	}
+}
+
+const O_KARA = [
+	{
+		o: "tat",
+		sanSang: { bat: false, lyDo: "don-vi-chua-bat" },
+		lyDo: "don-vi-chua-bat",
+		maKetThuc: null,
+		kind: "unconfigured",
+	},
+	{
+		o: "het-luot",
+		sanSang: { bat: false, lyDo: "het-tran-ngay" },
+		lyDo: "het-tran-ngay",
+		maKetThuc: null,
+		kind: "off",
+	},
+	{
+		o: "loi",
+		sanSang: { bat: true, conLaiUsd: 5 },
+		lyDo: null,
+		maKetThuc: "loi",
+		kind: "error",
+	},
+] as const satisfies readonly {
+	o: string;
+	sanSang: SanSangGia;
+	lyDo: LyDoGia;
+	maKetThuc: string | null;
+	kind: string;
+}[];
+
+async function kiemOKara(
+	o: (typeof O_KARA)[number],
+	phuThuoc: Partial<PhuThuocSoan> = {},
+): Promise<void> {
+	await moBoGopY(phuThuoc, () =>
+		datKara({ sanSang: o.sanSang, lyDo: o.lyDo, maKetThuc: o.maKetThuc }),
+	);
+	await cho(
+		() => khoiGopY()?.querySelector(`[data-kara-state=${o.kind}]`) != null,
+		`vk10-gop-y: ${o.o} trang thai lech`,
+	);
+	expect(
+		khoiGopY()?.querySelectorAll("[data-kara-state]").length,
+		`vk10-gop-y: ${o.o} trang thai lech`,
+	).toBe(1);
+	expect(
+		goiCua("okr.troLyDeXuat").length,
+		`vk10-gop-y: ${o.o} de-xuat lech`,
+	).toBe(0);
+	expect(chuDiemCot() ?? "", `vk10-gop-y: ${o.o} an chat luong`).toMatch(
+		/^\d+ trên \d+ điểm đạt$/,
+	);
+}
+
+describe("vk10-gop-y", () => {
+	test("vk10-gop-y: nho Kara doc bo — moi muc tieu mot lan, mot nhom, nhan doi dong ngay, hoan tac ve chu cu", async () => {
+		await kiemGopY();
+	});
+
+	for (const o of O_KARA)
+		test(`vk10-gop-y: ma tran Kara ${o.o} — KaraState ${o.kind}, khoi Chat luong van cham`, async () => {
+			await kiemOKara(o);
+		});
+});
+
+describe("vk10-gop-y-do", () => {
+	test("vk10-gop-y-do: tai lieu khong doc lai de xuat da nhan thi dong khong doi", async () => {
+		await expect(kiemGopY({ docLaiSauNhan: false })).rejects.toThrow(
+			"vk10-gop-y: dong khong doi",
+		);
+	});
+
+	test("vk10-gop-y-do: Kara tat ma khoi Chat luong bi an", async () => {
+		const tat = O_KARA[0];
+		expect(tat.o, "vk10-gop-y: tat lech").toBe("tat");
+		await expect(kiemOKara(tat, { chatLuongKhiKaraTat: "an" })).rejects.toThrow(
+			"vk10-gop-y: tat an chat luong",
+		);
+	});
+});

@@ -10,6 +10,7 @@ import {
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { InputGroup, InputGroupInput } from "@crm/ui/components/input-group";
+import { KaraTrace } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { Textarea } from "@crm/ui/components/textarea";
@@ -69,6 +70,10 @@ export function focusDongTren(o: HTMLElement): void {
 	ten[ten.indexOf(o) - 1]?.focus();
 }
 
+export function DauTheoKara() {
+	return <KaraTrace label={okrSoanBoMessages(useLocale()).taiLieu.theoKara} />;
+}
+
 export function DongKrDoc({
 	kr,
 	gia,
@@ -76,6 +81,7 @@ export function DongKrDoc({
 	khoaSo,
 	trangThai,
 	xoaDuoc,
+	theoKara,
 	onDoi,
 	onRoi,
 	onXoa,
@@ -86,6 +92,7 @@ export function DongKrDoc({
 	khoaSo: boolean;
 	trangThai: TrangThaiLuu | null;
 	xoaDuoc: boolean;
+	theoKara: boolean;
 	onDoi: (phan: Partial<DongKrNhap>) => void;
 	onRoi: () => void;
 	onXoa: () => void;
@@ -159,6 +166,7 @@ export function DongKrDoc({
 						data-o-nhap="don-vi"
 					/>
 				</InputGroup>
+				{theoKara ? <DauTheoKara /> : null}
 			</div>
 			{trangThai ? <TrangThaiDong trangThai={trangThai} /> : null}
 		</li>

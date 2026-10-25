@@ -99,6 +99,9 @@ const vi = {
 		khongCo: "Kara không thấy chỗ nào cần sửa",
 		khongCoMoTa: "Mọi KR đã đo kết quả, có khởi điểm và có đối trọng.",
 		tat: "Quản trị chưa bật Kara cho đơn vị này. Điểm chất lượng vẫn chấm như thường.",
+		viecDoc: "đọc bộ OKR này",
+		viSao: (n: string) =>
+			`Kara đọc tên, «vì sao lúc này» và các KR của ${n} mục tiêu trong bộ này. Kara chỉ đọc dữ liệu OKR.`,
 		chip: (n: string) => `${n} góp ý`,
 	},
 	congBo: {
@@ -224,6 +227,11 @@ const en: OkrSoanBoMessages = {
 		khongCoMoTa:
 			"Every KR measures a result, has a start value and a counterbalance.",
 		tat: "An admin hasn't turned Kara on for this unit. Quality checks still run as usual.",
+		viecDoc: "read this OKR set",
+		viSao: (n: string) =>
+			n === "1"
+				? "Kara read the title, “why now” and the KRs of 1 objective in this set. Kara reads OKR data only."
+				: `Kara read the title, “why now” and the KRs of ${n} objectives in this set. Kara reads OKR data only.`,
 		chip: (n: string) => `${n} suggestions`,
 	},
 	congBo: {
