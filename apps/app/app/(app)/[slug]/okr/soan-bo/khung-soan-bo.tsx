@@ -1,6 +1,7 @@
 "use client";
 
 import { FieldDescription } from "@crm/ui/components/field";
+import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { KaraMark } from "@crm/ui/components/kara";
 import { KaraDock, KaraDockBody } from "@crm/ui/components/kara/dock";
 import { KaraState } from "@crm/ui/components/kara/state";
@@ -16,8 +17,9 @@ import {
 	TabsTrigger,
 } from "@crm/ui/components/tabs";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DetailSheetHeader } from "@/components/detail-sheet";
+import { crmMessages } from "@/lib/messages/crm";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
 import { useKhoHep } from "../soan/dung-kho-hep";
 import { BAN_NHAP_DAU, type BanNhap } from "./ban-nhap";
@@ -25,7 +27,7 @@ import { SOAN_BO } from "./cau-hinh";
 import { usePhuThuocSoan } from "./phu-thuoc";
 import { type SoanTaiLieu, TaiLieuBo } from "./tai-lieu-bo";
 import { type BoSoan, useBoSoan } from "./use-bo-soan";
-import { useLuuDong } from "./use-luu-dong";
+import { loaiLoiLuu, useLuuDong } from "./use-luu-dong";
 
 type Chu = ReturnType<typeof okrSoanBoMessages>;
 type BoXong = Extract<BoSoan, { trang: "xong" }>;
@@ -207,6 +209,24 @@ function ThanKhung({
 	);
 }
 
+function HoiKhiDong({ chuaLuu }: { chuaLuu: boolean }) {
+	const m = okrSoanBoMessages(useLocale());
+	const loiHoi = useMemo(
+		() => ({
+			tieuDe: m.hoiDong.tieuDe,
+			than: m.hoiDong.than,
+			nut: m.hoiDong.bo,
+			thoi: m.hoiDong.oLai,
+		}),
+		[m],
+	);
+	const khai = useKhaiThayDoi(loiHoi);
+	useEffect(() => {
+		khai(chuaLuu);
+	}, [khai, chuaLuu]);
+	return null;
+}
+
 export function KhungSoanBo({
 	khoaBo,
 	cauNoi,
@@ -214,16 +234,25 @@ export function KhungSoanBo({
 	khoaBo: string;
 	cauNoi: boolean;
 }) {
-	const m = okrSoanBoMessages(useLocale());
+	const locale = useLocale();
+	const m = okrSoanBoMessages(locale);
 	const phuThuoc = usePhuThuocSoan();
 	const bo = useBoSoan(khoaBo);
 	const hep = useKhoHep(SOAN_BO.truyVanHep);
 	const [banNhap, datBanNhap] = useState<BanNhap>(BAN_NHAP_DAU);
-	const luuDong = useLuuDong(() => m.taiLieu.loiLuu);
+	const luuDong = useLuuDong((loi) =>
+		loaiLoiLuu(loi) === "so"
+			? crmMessages(locale).truongKieu.tuChoi.so
+			: m.taiLieu.loiLuu,
+	);
 	const soan: SoanTaiLieu = { banNhap, datBanNhap, luuDong };
 	const hienDau = bo.trang !== "dang-tai" || phuThuoc.tieuDeKhiTai;
+	const soanDuoc = bo.trang === "xong" && bo.quyen.loai === "soan";
 	return (
 		<>
+			<HoiKhiDong
+				chuaLuu={soanDuoc && phuThuoc.hoiKhiDongChuaLuu && luuDong.coChuaLuu}
+			/>
 			<DetailSheetHeader
 				title={hienDau ? m.dauKhung.tieuDe : null}
 				description={

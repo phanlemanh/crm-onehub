@@ -1101,3 +1101,415 @@ describe("vk10-viet-do", () => {
 		);
 	});
 });
+
+const { crmMessages } = await import("@/lib/messages/crm");
+const { nut } = await import("./khung-soan-okr");
+
+const CAU_SO = crmMessages("vi").truongKieu.tuChoi.so;
+
+const BO_SUA: MucMau[] = [
+	{
+		id: "mt-nhap",
+		status: "nhap",
+		kr: [
+			{
+				id: "k-n1",
+				title: "Doanh thu ký mới",
+				startValue: 2,
+				targetValue: 5,
+				unit: "tỷ ₫",
+			},
+			{
+				id: "k-n2",
+				title: "Khách hàng mới",
+				startValue: 10,
+				targetValue: 20,
+				unit: "khách",
+			},
+		],
+		quyen: { xoa: true },
+	},
+	{
+		id: "mt-cong-bo",
+		status: "cong-bo",
+		kr: [
+			{ id: "k-c1", startValue: 1, targetValue: 4, unit: "lần" },
+			{
+				id: "k-c2",
+				title: "Ra mắt cổng tự phục vụ",
+				kind: "moc",
+				startValue: 0,
+				targetValue: 1,
+				unit: "",
+			},
+		],
+	},
+	{ id: "mt-cho", status: "cho-duyet", kr: [{ id: "k-d1" }] },
+];
+
+const DA_BO_SUA: MucMau[] = [{ id: "mt-bo", kr: [{ id: "k-bo" }] }];
+
+const loiMayChu = (message: string) =>
+	Object.assign(new Error(message), { data: { code: "BAD_REQUEST" } });
+
+async function focusVao(o: Element | null): Promise<void> {
+	await act(async () => {
+		(o as HTMLElement | null)?.focus();
+	});
+	await nhip(3);
+}
+
+async function sua(o: Element | null, chu: string): Promise<void> {
+	await focusVao(o);
+	await go(o, chu);
+}
+
+const oTenMt = (id: string) =>
+	q(`[data-dong-mt="${id}"] textarea[data-o-nhap=ten]`);
+const oKr = (id: string, o: string) =>
+	q(`[data-dong-kr="${id}"] [data-o-nhap=${o}]`);
+const oNhapCua = (chon: string) =>
+	qa(`${chon} textarea, ${chon} input`).filter(
+		(e): e is HTMLTextAreaElement | HTMLInputElement =>
+			e instanceof HTMLTextAreaElement || e instanceof HTMLInputElement,
+	);
+const giaTri = (o: Element | null) =>
+	o instanceof HTMLTextAreaElement || o instanceof HTMLInputElement
+		? o.value
+		: null;
+
+async function moBoSua(
+	phuThuoc: Partial<PhuThuocSoan> = {},
+	muc: MucMau[] = BO_SUA,
+): Promise<void> {
+	const bo = boMau({ muc, daBo: DA_BO_SUA });
+	datGhiMoi();
+	await veSoan(bo.khoa, { phuThuoc });
+	await choKhung();
+	await cho(() => oTenMt("mt-nhap") !== null, "vk10-sua: dong mt-nhap");
+}
+
+async function kiemSuaO1(): Promise<void> {
+	const sai = "vk10-sua: o1 lech";
+	const ten = oTenMt("mt-nhap");
+	await sua(ten, "Tăng doanh thu sửa lần một");
+	await go(ten, "Tăng doanh thu sửa lần hai");
+	await focusVao(oTenMt("mt-cong-bo"));
+	await choLuuXong(sai);
+	const lan = goiCua("okr.updateObjective");
+	expect(lan.length, sai).toBe(1);
+	expect(lan[0]?.dauVao?.id, sai).toBe("mt-nhap");
+	expect(lan[0]?.dauVao?.title, sai).toBe("Tăng doanh thu sửa lần hai");
+}
+
+async function kiemSuaO2(): Promise<void> {
+	const sai = "vk10-sua: o2 lech";
+	await sua(oKr("k-n1", "ten"), "Doanh thu ký mới khối doanh nghiệp");
+	await focusVao(oTenMt("mt-cong-bo"));
+	await choLuuXong(sai);
+	const lan = goiCua("okr.updateKeyResult");
+	expect(lan.length, sai).toBe(1);
+	expect(lan[0]?.dauVao?.id, sai).toBe("k-n1");
+	expect(lan[0]?.dauVao?.title, sai).toBe("Doanh thu ký mới khối doanh nghiệp");
+	expect(
+		Object.keys(lan[0]?.dauVao ?? {})
+			.sort()
+			.join(","),
+		sai,
+	).toBe("id,title");
+}
+
+function kiemSuaO5(): void {
+	const sai = "vk10-sua: o5 lech";
+	const ten = oTenMt("mt-cong-bo");
+	expect(ten instanceof HTMLTextAreaElement && !ten.disabled, sai).toBe(true);
+	const so = oNhapCua('[data-dong-mt="mt-cong-bo"] [data-o-so]');
+	expect(so.length, sai).toBeGreaterThan(0);
+	expect(
+		so.every((o) => o.disabled),
+		sai,
+	).toBe(true);
+	expect(
+		q('[data-dong-mt="mt-cong-bo"] [data-cau-khoa="so"]')?.textContent ?? null,
+		sai,
+	).toBe(CHU.taiLieu.khoaSo);
+}
+
+async function moMenuMt(id: string, sai: string): Promise<void> {
+	const nutMenu = q(`[data-dong-mt="${id}"] [data-nut=menu-muc-tieu]`);
+	if (!(nutMenu instanceof HTMLElement)) throw new Error(sai);
+	await act(async () => {
+		nutMenu.dispatchEvent(
+			new PointerEvent("pointerdown", {
+				bubbles: true,
+				button: 0,
+				pointerType: "mouse",
+			}),
+		);
+	});
+	await cho(() => q("[data-nut=xoa-muc-tieu]") !== null, sai);
+}
+
+describe("vk10-sua", () => {
+	test("vk10-sua: o1 sua ten muc tieu nhap roi o — updateObjective dung mot lan", async () => {
+		await moBoSua();
+		await kiemSuaO1();
+	});
+
+	test("vk10-sua: o2 sua ten KR nhap — updateKeyResult dung mot lan, chi truong doi", async () => {
+		await moBoSua();
+		await kiemSuaO2();
+	});
+
+	test("vk10-sua: o3 Backspace o dau dong KR trong — removeKeyResult, focus dong tren", async () => {
+		const sai = "vk10-sua: o3 lech";
+		await moBoSua();
+		for (const o of ["ten", "khoi", "dich", "don-vi"])
+			await sua(oKr("k-n2", o), "");
+		await focusVao(oKr("k-n2", "ten"));
+		await phim("{Backspace}");
+		await choLuuXong(sai);
+		const lan = goiCua("okr.removeKeyResult");
+		expect(lan.length, sai).toBe(1);
+		expect(lan[0]?.dauVao?.id, sai).toBe("k-n2");
+		expect(q('[data-dong-kr="k-n2"]'), sai).toBeNull();
+		expect(
+			document.activeElement !== null &&
+				document.activeElement === oKr("k-n1", "ten"),
+			sai,
+		).toBe(true);
+		expect(goiGhi().length, sai).toBe(1);
+	});
+
+	test("vk10-sua: o4 Xoa muc tieu nhap — ConfirmDialog roi xoaMucTieu", async () => {
+		const sai = "vk10-sua: o4 lech";
+		await moBoSua();
+		await moMenuMt("mt-nhap", sai);
+		await bam(q("[data-nut=xoa-muc-tieu]"));
+		await cho(() => q("[role=alertdialog]") !== null, sai);
+		const hop = q("[role=alertdialog]");
+		expect(hop?.textContent ?? "", sai).toContain(
+			CHU.taiLieu.hoiXoa.tieuDe("Mục tiêu mt-nhap"),
+		);
+		expect(goiCua("okr.xoaMucTieu").length, sai).toBe(0);
+		await bam(nut(CHU.taiLieu.hoiXoa.nut, hop ?? document.body));
+		await choLuuXong(sai);
+		const lan = goiCua("okr.xoaMucTieu");
+		expect(lan.length, sai).toBe(1);
+		expect(lan[0]?.dauVao?.id, sai).toBe("mt-nhap");
+		expect(q('[data-dong-mt="mt-nhap"]'), sai).toBeNull();
+		expect(q('[data-dong-mt="mt-cong-bo"]') !== null, sai).toBe(true);
+	});
+
+	test("vk10-sua: o5-o7 cong bo khoa so, cho duyet khoa ca dong, da bo vang", async () => {
+		await moBoSua();
+		kiemSuaO5();
+		const sai6 = "vk10-sua: o6 lech";
+		const cho = oNhapCua('[data-dong-mt="mt-cho"]');
+		expect(cho.length, sai6).toBeGreaterThan(1);
+		expect(
+			cho.every((o) => o.disabled),
+			sai6,
+		).toBe(true);
+		expect(
+			q('[data-dong-mt="mt-cho"] [data-cau-khoa="cho-duyet"]')?.textContent ??
+				null,
+			sai6,
+		).toBe(CHU.taiLieu.khoaChoDuyet);
+		expect(
+			q('[data-dong-mt="mt-cho"] [data-nut=menu-muc-tieu]'),
+			sai6,
+		).toBeNull();
+		expect(q('[data-dong-mt="mt-bo"]'), "vk10-sua: o7 lech").toBeNull();
+	});
+
+	test("vk10-sua: rf2 luu loi vi cho duyet — doc lai, khoa ca dong, giu chu, mot lan goi", async () => {
+		const sai = "vk10-sua: rf2 lech";
+		const sau = boMau({
+			muc: BO_SUA.map((m) =>
+				m.id === "mt-nhap" ? { ...m, status: "cho-duyet" as const } : m,
+			),
+			daBo: DA_BO_SUA,
+		}).danhSach;
+		const bo = boMau({ muc: BO_SUA, daBo: DA_BO_SUA });
+		datGhiMoi();
+		dat("okr.updateObjective", () => {
+			dat("okr.danhSach", () => sau);
+			throw loiMayChu("Mục tiêu đang chờ duyệt nên không sửa được.");
+		});
+		await veSoan(bo.khoa);
+		await choKhung();
+		const docTruoc = goiCua("okr.danhSach").length;
+		await sua(oTenMt("mt-nhap"), "Tăng doanh thu khi đang chờ");
+		await focusVao(oTenMt("mt-cong-bo"));
+		await choLuuXong(sai);
+		await cho(
+			() => oNhapCua('[data-dong-mt="mt-nhap"]').every((o) => o.disabled),
+			sai,
+		);
+		expect(goiCua("okr.danhSach").length - docTruoc, sai).toBe(1);
+		expect(giaTri(oTenMt("mt-nhap")), sai).toBe("Tăng doanh thu khi đang chờ");
+		await focusVao(oTenMt("mt-nhap"));
+		await focusVao(oTenMt("mt-cong-bo"));
+		await choLuuXong(sai);
+		expect(goiCua("okr.updateObjective").length, sai).toBe(1);
+	});
+
+	test("vk10-sua: rf4 Backspace o KR trong cua muc tieu cong bo — khong removeKeyResult", async () => {
+		const sai = "vk10-sua: rf4 lech";
+		await moBoSua();
+		await sua(oKr("k-c2", "ten"), "");
+		await focusVao(oKr("k-c2", "ten"));
+		await phim("{Backspace}");
+		await nhip(5);
+		expect(goiCua("okr.removeKeyResult").length, sai).toBe(0);
+		expect(q('[data-dong-kr="k-c2"]') !== null, sai).toBe(true);
+	});
+});
+
+describe("vk10-sua-do", () => {
+	test("vk10-sua-do: bo khoa so cong bo thi o5 do", async () => {
+		await moBoSua({ khoaSoCongBo: false });
+		expect(() => kiemSuaO5()).toThrow("vk10-sua: o5 lech");
+	});
+
+	test("vk10-sua-do: luu theo phim thi o1 do", async () => {
+		await moBoSua({ luuKhi: "moi-phim" });
+		await expect(kiemSuaO1()).rejects.toThrow("vk10-sua: o1 lech");
+	});
+});
+
+async function kiemLuuLoiO3(): Promise<void> {
+	const sai = "vk10-tai: o3 lech";
+	dat("okr.createKeyResult", () => {
+		throw loiMayChu(
+			"targetValue: Too big: expected number to be <=1000000000000",
+		);
+	});
+	await phim(`${TEN_MT}{Enter}`);
+	await phim("Doanh thu ký mới{Tab}2{Tab}3,5{Tab}tỷ ₫{Enter}");
+	await choLuuXong(sai);
+	expect(goiCua("okr.createKeyResult").length, sai).toBe(1);
+	const dong = qa("[data-tai-lieu-bo] [data-dong-kr-moi]")[0] ?? null;
+	const o = (ten: string) =>
+		dong?.querySelector(`[data-o-nhap=${ten}]`) ?? null;
+	expect(
+		["ten", "khoi", "dich", "don-vi"].map((ten) => giaTri(o(ten))).join("|"),
+		sai,
+	).toBe("Doanh thu ký mới|2|3,5|tỷ ₫");
+	expect(dong?.textContent?.includes(CAU_SO) ?? false, sai).toBe(true);
+	await focusVao(o("ten"));
+	await focusVao(oTenMtDau());
+	await choLuuXong(sai);
+	expect(goiCua("okr.createKeyResult").length, sai).toBe(2);
+}
+
+describe("vk10-tai-luu", () => {
+	test("vk10-tai: o3 luu loi sai kieu so — giu chu, cau theo kieu o, roi o lai goi lai mot lan", async () => {
+		await moBoTrong({});
+		await kiemLuuLoiO3();
+	});
+});
+
+describe("vk10-tai-luu-do", () => {
+	test("vk10-tai-do: loi luu xoa chu dong thi o3 do", async () => {
+		await moBoTrong({}, { giuChuKhiLoiLuu: false });
+		await expect(kiemLuuLoiO3()).rejects.toThrow("vk10-tai: o3 lech");
+	});
+});
+
+async function bamLopPhu(): Promise<void> {
+	const lop = q("[data-slot='sheet-overlay'],[data-slot='drawer-overlay']");
+	if (!(lop instanceof HTMLElement)) throw new Error("khong thay lop phu");
+	await act(async () => {
+		lop.dispatchEvent(
+			new PointerEvent("pointerdown", {
+				bubbles: true,
+				button: 0,
+				pointerType: "mouse",
+			}),
+		);
+		lop.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+		lop.click();
+	});
+	await nhip(5);
+}
+
+async function esc(): Promise<void> {
+	await act(async () => {
+		(document.activeElement ?? document.body).dispatchEvent(
+			new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+		);
+	});
+	await nhip(5);
+}
+
+const khungMo = () => q("[data-khung-soan-bo]") !== null;
+const hopHoiDong = () =>
+	qa("[role=alertdialog]").find((h) =>
+		h.textContent?.includes(CHU.hoiDong.tieuDe),
+	) ?? null;
+
+async function vietDongThieuDich(): Promise<void> {
+	await phim(`${TEN_MT}{Enter}`);
+	await phim("Doanh thu ký mới{Tab}2");
+	await choLuuXong("vk10-quyen: dong luu xong");
+}
+
+const oDongMoi = (ten: string) =>
+	q(`[data-tai-lieu-bo] [data-dong-kr-moi] [data-o-nhap=${ten}]`);
+
+async function kiemHoiKhiDong(): Promise<void> {
+	const sai = "vk10-quyen: dong khong hoi";
+	await focusVao(oTenMtDau());
+	await choLuuXong(sai);
+	expect(
+		q("[data-tai-lieu-bo] [data-dong-kr-moi]")?.getAttribute("data-luu"),
+		"vk10-quyen: dong chua-luu lech",
+	).toBe("chua-luu");
+	await bamLopPhu();
+	expect(khungMo(), sai).toBe(true);
+	await esc();
+	expect(hopHoiDong() !== null, sai).toBe(true);
+	expect(khungMo(), sai).toBe(true);
+	await bam(nut(CHU.hoiDong.oLai, hopHoiDong() ?? document.body));
+	expect(hopHoiDong(), "vk10-quyen: huy lech").toBeNull();
+	expect(khungMo(), "vk10-quyen: huy lech").toBe(true);
+	expect(
+		[giaTri(oDongMoi("ten")), giaTri(oDongMoi("khoi"))].join("|"),
+		"vk10-quyen: huy lech",
+	).toBe("Doanh thu ký mới|2");
+}
+
+describe("vk10-quyen-dong", () => {
+	test("vk10-quyen: dong chua luu — lop phu khong dong, Esc hoi Bo dong chua luu, Huy giu chu", async () => {
+		await moBoTrong({});
+		await vietDongThieuDich();
+		await kiemHoiKhiDong();
+	});
+
+	test("vk10-quyen: rf1 focus trong o dich trong, Esc van hoi", async () => {
+		const sai = "vk10-quyen: rf1 lech";
+		await moBoTrong({});
+		await phim(`${TEN_MT}{Enter}`);
+		await phim("Doanh thu ký mới{Tab}2{Tab}");
+		expect(
+			document.activeElement !== null &&
+				document.activeElement === oDongMoi("dich"),
+			sai,
+		).toBe(true);
+		await esc();
+		expect(hopHoiDong() !== null, sai).toBe(true);
+		expect(khungMo(), sai).toBe(true);
+	});
+});
+
+describe("vk10-quyen-dong-do", () => {
+	test("vk10-quyen-do: dong thang khi con dong chua luu", async () => {
+		await moBoTrong({}, { hoiKhiDongChuaLuu: false });
+		await vietDongThieuDich();
+		await expect(kiemHoiKhiDong()).rejects.toThrow(
+			"vk10-quyen: dong khong hoi",
+		);
+	});
+});

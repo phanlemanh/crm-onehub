@@ -21,7 +21,7 @@ import { okrMessages } from "@/lib/messages/okr";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
 import { hienSo } from "../hop-thoai-kr";
 import type { KrNhap } from "./ban-nhap";
-import type { DongKrNhap } from "./du-lieu-bo";
+import { type DongKrNhap, dongKrTrong } from "./du-lieu-bo";
 import { usePhuThuocSoan } from "./phu-thuoc";
 import type { MucTieuSoan } from "./use-bo-soan";
 import type { LyChuaLuu, TrangThaiLuu } from "./use-luu-dong";
@@ -32,53 +32,135 @@ function chuSo(kr: KrSoan, so: number, locale: Locale): string {
 	return kr.kind === "moc" ? "" : hienSo(so, locale);
 }
 
+export function giaKrCo(
+	kr: KrSoan,
+	sua: Partial<DongKrNhap> | undefined,
+	locale: Locale,
+): DongKrNhap {
+	return {
+		ten: sua?.ten ?? kr.title,
+		khoi: sua?.khoi ?? chuSo(kr, kr.startValue, locale),
+		dich: sua?.dich ?? chuSo(kr, kr.targetValue, locale),
+		donVi: sua?.donVi ?? kr.unit,
+		kieu: kr.kind,
+		nguoi: kr.owner.id,
+	};
+}
+
+export function laBackspaceXoa(
+	e: KeyboardEvent<HTMLTextAreaElement>,
+	gia: DongKrNhap,
+): boolean {
+	const o = e.currentTarget;
+	return (
+		e.key === "Backspace" &&
+		!e.nativeEvent.isComposing &&
+		o.selectionStart === 0 &&
+		o.selectionEnd === 0 &&
+		dongKrTrong(gia)
+	);
+}
+
+export function focusDongTren(o: HTMLElement): void {
+	const khoi = o.closest("[data-dong-mt], [data-dong-moi]");
+	const ten = khoi
+		? [...khoi.querySelectorAll<HTMLElement>("[data-o-nhap=ten]")]
+		: [];
+	ten[ten.indexOf(o) - 1]?.focus();
+}
+
 export function DongKrDoc({
 	kr,
-	khoa,
-	locale,
+	gia,
+	khoaTen,
+	khoaSo,
+	trangThai,
+	xoaDuoc,
+	onDoi,
+	onRoi,
+	onXoa,
 }: {
 	kr: KrSoan;
-	khoa: boolean;
-	locale: Locale;
+	gia: DongKrNhap;
+	khoaTen: boolean;
+	khoaSo: boolean;
+	trangThai: TrangThaiLuu | null;
+	xoaDuoc: boolean;
+	onDoi: (phan: Partial<DongKrNhap>) => void;
+	onRoi: () => void;
+	onXoa: () => void;
 }) {
+	const locale = useLocale();
 	const m = okrMessages(locale).hopThoai;
+	const dangBo = useRef(false);
+	const doi = (phan: Partial<DongKrNhap>, khoa: boolean) => {
+		if (!khoa) onDoi(phan);
+	};
 	return (
-		<li className="flex flex-col gap-2 border-l py-1 pl-4" data-dong-kr={kr.id}>
+		<li
+			className="flex flex-col gap-2 border-l py-1 pl-4"
+			data-dong-kr={kr.id}
+			data-luu={trangThai?.loai}
+			onKeyDown={(e) => {
+				if (!laEnterGhi(e)) return;
+				e.preventDefault();
+				onRoi();
+			}}
+			onBlur={(e) => {
+				if (!dangBo.current && roiKhoi(e)) onRoi();
+			}}
+		>
 			<Textarea
 				variant="tai-lieu"
 				size="dong"
 				rows={1}
 				aria-label={m.tenKr}
-				defaultValue={kr.title}
-				disabled={khoa}
+				value={gia.ten}
+				onChange={(e) => doi({ ten: e.target.value }, khoaTen)}
+				onKeyDown={(e) => {
+					if (!xoaDuoc || khoaTen || !laBackspaceXoa(e, gia)) return;
+					e.preventDefault();
+					dangBo.current = true;
+					onXoa();
+					focusDongTren(e.currentTarget);
+				}}
+				disabled={khoaTen}
 				translate="no"
+				data-o-nhap="ten"
 			/>
 			<div className="flex flex-wrap items-center gap-2" data-o-so={kr.id}>
 				<InputGroup className="w-24">
 					<InputGroupInput
 						aria-label={m.khoiDiem}
-						defaultValue={chuSo(kr, kr.startValue, locale)}
+						value={gia.khoi}
+						onChange={(e) => doi({ khoi: e.target.value }, khoaSo)}
 						inputMode="decimal"
-						disabled={khoa}
+						disabled={khoaSo}
+						data-o-nhap="khoi"
 					/>
 				</InputGroup>
 				<InputGroup className="w-24">
 					<InputGroupInput
 						aria-label={m.dich}
-						defaultValue={chuSo(kr, kr.targetValue, locale)}
+						value={gia.dich}
+						onChange={(e) => doi({ dich: e.target.value }, khoaSo)}
 						inputMode="decimal"
-						disabled={khoa}
+						disabled={khoaSo}
+						data-o-nhap="dich"
 					/>
 				</InputGroup>
 				<InputGroup className="w-28">
 					<InputGroupInput
 						aria-label={m.donViDo}
-						defaultValue={kr.unit}
-						disabled={khoa}
+						value={gia.donVi}
+						onChange={(e) => doi({ donVi: e.target.value }, khoaSo)}
+						disabled={khoaSo}
 						translate="no"
+						data-o-nhap="don-vi"
 					/>
 				</InputGroup>
 			</div>
+			{trangThai ? <TrangThaiDong trangThai={trangThai} /> : null}
 		</li>
 	);
 }
@@ -142,6 +224,7 @@ export function DongKrMoi({
 	onDoi,
 	onEnter,
 	onRoi,
+	onXoa,
 }: {
 	kr: KrNhap;
 	thuTu: number;
@@ -153,12 +236,14 @@ export function DongKrMoi({
 	onDoi: (phan: Partial<DongKrNhap>) => void;
 	onEnter: () => void;
 	onRoi: () => void;
+	onXoa: () => void;
 }) {
 	const locale = useLocale();
 	const m = okrSoanBoMessages(locale);
 	const okr = okrMessages(locale);
 	const phuThuoc = usePhuThuocSoan();
 	const ten = useRef<HTMLTextAreaElement>(null);
+	const dangBo = useRef(false);
 	useEffect(() => {
 		if (lanFocus !== null) ten.current?.focus();
 	}, [lanFocus]);
@@ -176,7 +261,7 @@ export function DongKrMoi({
 				onEnter();
 			}}
 			onBlur={(e) => {
-				if (roiKhoi(e)) onRoi();
+				if (!dangBo.current && roiKhoi(e)) onRoi();
 			}}
 		>
 			<div className="flex items-start gap-2">
@@ -192,6 +277,13 @@ export function DongKrMoi({
 					placeholder={m.taiLieu.goKr}
 					value={kr.ten}
 					onChange={(e) => onDoi({ ten: e.target.value })}
+					onKeyDown={(e) => {
+						if (!laBackspaceXoa(e, kr)) return;
+						e.preventDefault();
+						dangBo.current = true;
+						onXoa();
+						focusDongTren(e.currentTarget);
+					}}
 					translate="no"
 					data-o-nhap="ten"
 				/>

@@ -28,11 +28,21 @@ const HANG_TRONG: Hang = { dangChay: false, cho: null, id: null, doi: [] };
 
 const YEN: TrangThaiLuu = { loai: "yen" };
 
+const O_SO_MAY_CHU = /(^|\s)(startValue|targetValue|currentValue): /;
+
+export type LoaiLoiLuu = "so" | "khac";
+
+export function loaiLoiLuu(loi: Error): LoaiLoiLuu {
+	return O_SO_MAY_CHU.test(loi.message) ? "so" : "khac";
+}
+
 export type LuuDong = {
 	luu: (khoa: KhoaDong, viec: ViecLuu) => void;
 	guiMotLan: (khoa: KhoaDong, dau: string, viec: ViecLuu) => void;
 	trangThai: (khoa: KhoaDong) => TrangThaiLuu;
 	chuaLuu: (khoa: KhoaDong, ly: LyChuaLuu | null) => void;
+	danhDauGo: (khoa: KhoaDong, coChu: boolean) => void;
+	quen: (khoa: readonly KhoaDong[]) => void;
 	id: (khoa: KhoaDong) => string | null;
 	choId: (khoa: KhoaDong) => Promise<string | null>;
 	dangLuu: (khoa: KhoaDong) => boolean;
@@ -47,6 +57,16 @@ export function useLuuDong(cauLoi: (loi: Error) => string): LuuDong {
 		new Map(),
 	);
 	const [ids, datIds] = useState<ReadonlyMap<KhoaDong, string>>(new Map());
+	const [dangGo, datDangGo] = useState<ReadonlySet<KhoaDong>>(new Set());
+
+	const doiGo = (khoa: KhoaDong, coChu: boolean) =>
+		datDangGo((cu) => {
+			if (cu.has(khoa) === coChu) return cu;
+			const moi = new Set(cu);
+			if (coChu) moi.add(khoa);
+			else moi.delete(khoa);
+			return moi;
+		});
 
 	const layHang = (khoa: KhoaDong): Hang =>
 		hang.current.get(khoa) ?? HANG_TRONG;
@@ -87,6 +107,7 @@ export function useLuuDong(cauLoi: (loi: Error) => string): LuuDong {
 	}
 
 	const luu = (khoa: KhoaDong, viec: ViecLuu) => {
+		doiGo(khoa, false);
 		const h = layHang(khoa);
 		if (h.dangChay) {
 			ghiHang(khoa, { ...h, cho: viec });
@@ -103,6 +124,7 @@ export function useLuuDong(cauLoi: (loi: Error) => string): LuuDong {
 	};
 
 	const guiMotLan = (khoa: KhoaDong, dau: string, viec: ViecLuu) => {
+		doiGo(khoa, false);
 		if (daGui.current.get(khoa) === dau) return;
 		nhoGui(khoa, dau);
 		luu(khoa, async (id) => {
@@ -126,9 +148,18 @@ export function useLuuDong(cauLoi: (loi: Error) => string): LuuDong {
 		});
 
 	const chuaLuu = (khoa: KhoaDong, ly: LyChuaLuu | null) => {
+		doiGo(khoa, false);
 		const cu = trang.get(khoa) ?? YEN;
 		if (ly === null && cu.loai !== "chua-luu") return;
 		datTrangThai(khoa, ly === null ? YEN : { loai: "chua-luu", ly });
+	};
+
+	const quen = (khoa: readonly KhoaDong[]) => {
+		const bo = new Set(khoa);
+		const loc = <T>(cu: ReadonlyMap<KhoaDong, T>) =>
+			new Map([...cu].filter(([k]) => !bo.has(k)));
+		datTrang(loc);
+		datDangGo((cu) => new Set([...cu].filter((k) => !bo.has(k))));
 	};
 
 	return {
@@ -136,12 +167,16 @@ export function useLuuDong(cauLoi: (loi: Error) => string): LuuDong {
 		guiMotLan,
 		trangThai: (khoa) => trang.get(khoa) ?? YEN,
 		chuaLuu,
+		danhDauGo: doiGo,
+		quen,
 		id: (khoa) => layHang(khoa).id,
 		choId,
 		dangLuu: (khoa) => layHang(khoa).dangChay,
-		daLuu: new Set(ids.values()),
-		coChuaLuu: [...trang.values()].some(
-			(t) => t.loai === "chua-luu" || t.loai === "loi",
-		),
+		daLuu: new Set([...ids].flatMap(([khoa, id]) => (khoa === id ? [] : [id]))),
+		coChuaLuu:
+			dangGo.size > 0 ||
+			[...trang.values()].some(
+				(t) => t.loai === "chua-luu" || t.loai === "loi",
+			),
 	};
 }

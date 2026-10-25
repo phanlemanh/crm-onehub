@@ -27,6 +27,7 @@ const vi = {
 		themMucTieu: "Thêm mục tiêu",
 		themKr: "Thêm KR",
 		xoaMucTieu: "Xoá",
+		thaoTacMucTieu: "Thao tác với mục tiêu",
 		daLuu: "Đã lưu nháp",
 		dangLuu: "Đang lưu…",
 		boTrong:
@@ -150,6 +151,7 @@ const en: OkrSoanBoMessages = {
 		themMucTieu: "Add objective",
 		themKr: "Add KR",
 		xoaMucTieu: "Delete",
+		thaoTacMucTieu: "Objective actions",
 		daLuu: "Draft saved",
 		dangLuu: "Saving…",
 		boTrong:

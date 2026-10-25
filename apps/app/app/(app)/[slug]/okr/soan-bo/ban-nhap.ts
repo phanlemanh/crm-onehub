@@ -7,6 +7,9 @@ export type MtNhap = { khoa: string; ten: string };
 export type BanNhap = {
 	moi: readonly MtNhap[];
 	kr: Readonly<Record<string, readonly KrNhap[]>>;
+	tenCo: Readonly<Record<string, string>>;
+	krCo: Readonly<Record<string, Partial<DongKrNhap>>>;
+	boDi: readonly string[];
 	focus: { khoa: string; lan: number } | null;
 	dem: number;
 };
@@ -16,6 +19,9 @@ export const KHOA_MT_DAU = "moi-0";
 export const BAN_NHAP_DAU: BanNhap = {
 	moi: [],
 	kr: {},
+	tenCo: {},
+	krCo: {},
+	boDi: [],
 	focus: { khoa: KHOA_MT_DAU, lan: 0 },
 	dem: 1,
 };
@@ -26,11 +32,36 @@ export function mucTieuMoiHien(
 	bn: BanNhap,
 	boCoMucTieu: boolean,
 ): readonly MtNhap[] {
-	return bn.moi.length === 0 && !boCoMucTieu ? [MT_DAU] : bn.moi;
+	if (bn.moi.length === 0 && !boCoMucTieu) return [MT_DAU];
+	return bn.moi.filter((mt) => !daBoDi(bn, mt.khoa));
 }
 
 export function krCua(bn: BanNhap, khoaMt: string): readonly KrNhap[] {
-	return bn.kr[khoaMt] ?? [];
+	return (bn.kr[khoaMt] ?? []).filter((kr) => !daBoDi(bn, kr.khoa));
+}
+
+export function daBoDi(bn: BanNhap, khoa: string): boolean {
+	return bn.boDi.includes(khoa);
+}
+
+export function boDong(bn: BanNhap, khoa: string): BanNhap {
+	return daBoDi(bn, khoa) ? bn : { ...bn, boDi: [...bn.boDi, khoa] };
+}
+
+export function giuDong(bn: BanNhap, khoa: string): BanNhap {
+	return { ...bn, boDi: bn.boDi.filter((k) => k !== khoa) };
+}
+
+export function suaTenCo(bn: BanNhap, id: string, ten: string): BanNhap {
+	return { ...bn, tenCo: { ...bn.tenCo, [id]: ten } };
+}
+
+export function suaKrCo(
+	bn: BanNhap,
+	id: string,
+	phan: Partial<DongKrNhap>,
+): BanNhap {
+	return { ...bn, krCo: { ...bn.krCo, [id]: { ...bn.krCo[id], ...phan } } };
 }
 
 const krTrong = (khoa: string): KrNhap => ({

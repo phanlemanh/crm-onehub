@@ -16,6 +16,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { ChamTrangThai } from "../tien-do-kr";
 import {
 	type BanNhap,
+	daBoDi,
 	datFocus,
 	type KrNhap,
 	krCua,
@@ -23,13 +24,21 @@ import {
 	type MtNhap,
 	mucTieuMoiHien,
 	suaKr,
+	suaKrCo,
 	suaMucTieu,
+	suaTenCo,
 	themKr,
 	themMucTieu,
 } from "./ban-nhap";
-import { DongKrDoc, DongKrMoi, laEnterGhi } from "./dong-kr";
-import { DongMucTieuMoi } from "./dong-muc-tieu";
-import type { DongKrNhap } from "./du-lieu-bo";
+import {
+	DongKrDoc,
+	DongKrMoi,
+	giaKrCo,
+	laEnterGhi,
+	TrangThaiDong,
+} from "./dong-kr";
+import { DongMucTieuMoi, MenuMucTieu } from "./dong-muc-tieu";
+import { type DongKrNhap, dongKrTrong } from "./du-lieu-bo";
 import { usePhuThuocSoan } from "./phu-thuoc";
 import type { BoSoan, MucTieuSoan } from "./use-bo-soan";
 import {
@@ -52,6 +61,7 @@ type BoiCanh = SoanTaiLieu & {
 	nguoi: ComboboxOption[];
 	nguoiMacDinh: string;
 	moiPhim: boolean;
+	xoaDuoc: (id: string) => boolean;
 };
 
 function DanhSachKrMoi({
@@ -68,6 +78,7 @@ function DanhSachKrMoi({
 	if (krs.length === 0) return null;
 	const doi = (kr: KrNhap, phan: Partial<DongKrNhap>) => {
 		datBanNhap((bn) => suaKr(bn, mt.khoa, kr.khoa, phan));
+		luuDong.danhDauGo(kr.khoa, !dongKrTrong({ ...kr, ...phan }));
 		if (bc.moiPhim) ghi.luuKr(mt, { ...kr, ...phan });
 	};
 	const enter = (kr: KrNhap, i: number) => {
@@ -92,6 +103,7 @@ function DanhSachKrMoi({
 					onDoi={(phan) => doi(kr, phan)}
 					onEnter={() => enter(kr, i)}
 					onRoi={() => ghi.luuKr(mt, kr)}
+					onXoa={() => ghi.xoaKr(kr.khoa, luuDong.id(kr.khoa))}
 				/>
 			))}
 		</ol>
@@ -131,8 +143,23 @@ function KhoiMucTieuMoi({ mt, bc }: { mt: MtNhap; bc: BoiCanh }) {
 				ten={mt.ten}
 				lanFocus={lanFocus(bc.banNhap, mt.khoa)}
 				trangThai={luuDong.trangThai(mt.khoa)}
+				menu={
+					id !== null && bc.xoaDuoc(id) ? (
+						<MenuMucTieu
+							ten={mt.ten}
+							onXoa={() =>
+								ghi.xoaMucTieu(
+									mt.khoa,
+									id,
+									krCua(bc.banNhap, mt.khoa).map((kr) => kr.khoa),
+								)
+							}
+						/>
+					) : null
+				}
 				onDoi={(ten) => {
 					bc.datBanNhap((bn) => suaMucTieu(bn, mt.khoa, ten));
+					luuDong.danhDauGo(mt.khoa, ten.trim() !== "");
 					if (bc.moiPhim) ghi.luuMucTieu({ ...mt, ten });
 				}}
 				onEnter={() => {
@@ -146,57 +173,158 @@ function KhoiMucTieuMoi({ mt, bc }: { mt: MtNhap; bc: BoiCanh }) {
 	);
 }
 
-function KhoiMucTieuDoc({
+type KhoaMucTieu = { ten: boolean; so: boolean };
+
+function khoaCua(
+	mt: MucTieuSoan,
+	chiXem: boolean,
+	khoaSoCongBo: boolean,
+): KhoaMucTieu {
+	const ten = chiXem || (mt.status !== "nhap" && mt.status !== "cong-bo");
+	return { ten, so: ten || (mt.status === "cong-bo" && khoaSoCongBo) };
+}
+
+function CauKhoa({ mt, khoa }: { mt: MucTieuSoan; khoa: KhoaMucTieu }) {
+	const m = okrSoanBoMessages(useLocale()).taiLieu;
+	if (mt.status === "cho-duyet")
+		return (
+			<FieldDescription data-cau-khoa="cho-duyet">
+				{m.khoaChoDuyet}
+			</FieldDescription>
+		);
+	if (mt.status === "cong-bo" && khoa.so)
+		return <FieldDescription data-cau-khoa="so">{m.khoaSo}</FieldDescription>;
+	return null;
+}
+
+function krCoHien(mt: MucTieuSoan, bc: BoiCanh | null) {
+	return bc
+		? mt.keyResults.filter(
+				(kr) => !bc.luuDong.daLuu.has(kr.id) && !daBoDi(bc.banNhap, kr.id),
+			)
+		: mt.keyResults;
+}
+
+function DanhSachKrCo({
 	mt,
 	khoa,
 	locale,
 	bc,
 }: {
 	mt: MucTieuSoan;
-	khoa: boolean;
+	khoa: KhoaMucTieu;
+	locale: Locale;
+	bc: BoiCanh | null;
+}) {
+	const krHien = krCoHien(mt, bc);
+	if (krHien.length === 0) return null;
+	return (
+		<ol className="flex flex-col gap-2">
+			{krHien.map((kr) => {
+				const gia = giaKrCo(kr, bc?.banNhap.krCo[kr.id], locale);
+				return (
+					<DongKrDoc
+						key={kr.id}
+						kr={kr}
+						gia={gia}
+						khoaTen={khoa.ten}
+						khoaSo={khoa.so}
+						trangThai={bc ? bc.luuDong.trangThai(kr.id) : null}
+						xoaDuoc={bc !== null && mt.status === "nhap"}
+						onDoi={(phan) => {
+							if (bc === null) return;
+							bc.datBanNhap((bn) => suaKrCo(bn, kr.id, phan));
+							bc.luuDong.danhDauGo(kr.id, true);
+							if (bc.moiPhim)
+								bc.ghi.luuKrCo(mt, kr, { ...gia, ...phan }, khoa.so);
+						}}
+						onRoi={() => {
+							if (bc !== null && !khoa.ten)
+								bc.ghi.luuKrCo(mt, kr, gia, khoa.so);
+						}}
+						onXoa={() => bc?.ghi.xoaKr(kr.id, kr.id)}
+					/>
+				);
+			})}
+		</ol>
+	);
+}
+
+function KhoiMucTieuDoc({
+	mt,
+	chiXem,
+	locale,
+	bc,
+}: {
+	mt: MucTieuSoan;
+	chiXem: boolean;
 	locale: Locale;
 	bc: BoiCanh | null;
 }) {
 	const m = okrMessages(locale);
+	const phuThuoc = usePhuThuocSoan();
+	const khoa = khoaCua(mt, chiXem, phuThuoc.khoaSoCongBo);
 	const themDuoc = bc !== null && mt.status === "nhap";
-	const krHien = bc
-		? mt.keyResults.filter((kr) => !bc.luuDong.daLuu.has(kr.id))
-		: mt.keyResults;
+	const ten = bc?.banNhap.tenCo[mt.id] ?? mt.title;
+	const xoaDuoc = bc !== null && mt.status === "nhap" && mt.quyen?.xoa === true;
+	const luuTen = (chu: string) => {
+		if (bc !== null && !khoa.ten) bc.ghi.luuTenCo(mt, chu);
+	};
 	return (
 		<section
 			className="flex flex-col gap-3"
 			data-dong-mt={mt.id}
+			data-luu={bc ? bc.luuDong.trangThai(mt.id).loai : undefined}
 			aria-label={mt.title}
 		>
 			<div className="flex flex-wrap items-center gap-2">
 				<ChamTrangThai status={mt.status} />
 				<Badge variant="outline">{m.loai[mt.kind]}</Badge>
+				{xoaDuoc && bc ? (
+					<div className="ml-auto">
+						<MenuMucTieu
+							ten={ten}
+							onXoa={() =>
+								bc.ghi.xoaMucTieu(mt.id, mt.id, [
+									...mt.keyResults.map((kr) => kr.id),
+									...krCua(bc.banNhap, mt.id).map((kr) => kr.khoa),
+								])
+							}
+						/>
+					</div>
+				) : null}
 			</div>
 			<Textarea
 				variant="tai-lieu"
 				size="tieu-de"
 				rows={1}
 				aria-label={m.hopThoai.tenMucTieu}
-				defaultValue={mt.title}
-				disabled={khoa}
+				value={ten}
+				disabled={khoa.ten}
 				translate="no"
+				data-o-nhap="ten"
+				onChange={(e) => {
+					if (bc === null || khoa.ten) return;
+					const chu = e.target.value;
+					bc.datBanNhap((bn) => suaTenCo(bn, mt.id, chu));
+					bc.luuDong.danhDauGo(mt.id, true);
+					if (bc.moiPhim) luuTen(chu);
+				}}
+				onBlur={() => luuTen(ten)}
 				onKeyDown={(e) => {
-					if (bc === null || !themDuoc || !laEnterGhi(e)) return;
+					if (bc === null || !laEnterGhi(e)) return;
 					e.preventDefault();
-					moKrMoi(bc, mt.id);
+					luuTen(ten);
+					if (themDuoc) moKrMoi(bc, mt.id);
 				}}
 			/>
-			{krHien.length > 0 ? (
-				<ol className="flex flex-col gap-2">
-					{krHien.map((kr) => (
-						<DongKrDoc key={kr.id} kr={kr} khoa={khoa} locale={locale} />
-					))}
-				</ol>
-			) : null}
+			{bc ? <TrangThaiDong trangThai={bc.luuDong.trangThai(mt.id)} /> : null}
+			{bc ? <CauKhoa mt={mt} khoa={khoa} /> : null}
+			<DanhSachKrCo mt={mt} khoa={khoa} locale={locale} bc={bc} />
 			{bc !== null && themDuoc ? (
 				<DanhSachKrMoi
 					mt={{ khoa: mt.id, idCoSan: mt.id }}
-					dau={krHien.length}
+					dau={krCoHien(mt, bc).length}
 					bc={bc}
 				/>
 			) : null}
@@ -208,10 +336,11 @@ function useBoiCanh(bo: BoXong, soan: SoanTaiLieu): BoiCanh {
 	const trpc = useTRPC();
 	const phuThuoc = usePhuThuocSoan();
 	const users = useQuery(trpc.users.list.queryOptions());
-	const ghi = useGhiBanNhap(bo, soan.luuDong);
+	const ghi = useGhiBanNhap(bo, soan.luuDong, soan.datBanNhap);
 	return {
 		...soan,
 		ghi,
+		xoaDuoc: (id) => bo.mucTieu.find((mt) => mt.id === id)?.quyen?.xoa ?? true,
 		nguoi: (users.data ?? []).map((u) => ({
 			value: u.id,
 			label: u.name,
@@ -235,7 +364,9 @@ function TaiLieu({
 	const locale = useLocale();
 	const m = okrSoanBoMessages(locale);
 	const coSan = bc
-		? mucTieu.filter((mt) => !bc.luuDong.daLuu.has(mt.id))
+		? mucTieu.filter(
+				(mt) => !bc.luuDong.daLuu.has(mt.id) && !daBoDi(bc.banNhap, mt.id),
+			)
 		: mucTieu;
 	const moi = bc ? mucTieuMoiHien(bc.banNhap, mucTieu.length > 0) : [];
 	return (
@@ -246,7 +377,7 @@ function TaiLieu({
 			{coSan.map((mt, i) => (
 				<div key={mt.id} className="flex flex-col gap-6">
 					{i > 0 ? <Separator /> : null}
-					<KhoiMucTieuDoc mt={mt} khoa={chiXem} locale={locale} bc={bc} />
+					<KhoiMucTieuDoc mt={mt} chiXem={chiXem} locale={locale} bc={bc} />
 				</div>
 			))}
 			{bc
