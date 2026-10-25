@@ -66,6 +66,7 @@ export const MOC_THE = {
 		"ST-hoptuan-tuandau",
 		"ST-hoptuan-yenang",
 		"ST-hoptuan-codulieu",
+		"ST-hoptuan-chua-kr",
 	],
 	viec: ["ST-bo-viec", "ST-bo-viec-rong"],
 	cay: ["ST-donvi-caycanchinh", "ST-donvi-rong"],
