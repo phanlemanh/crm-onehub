@@ -50,6 +50,22 @@ const LOP_DUOC_PHEP = [
 		bo: "{tham:{[THAM.xem]:«S»},ten:n.tenGoc},",
 		them: "{tham:{[THAM.xem]:«S»,[THAM.don]:«S»(n.pb.id)},ten:n.pb.name},",
 	},
+	{
+		ten: "cua-toi-ba-phan ctbp-don-vi-dan: chuoi dot bien thu-tu-api tro loi goi thuTuDanTheoCay (V1-33 a)",
+		tep: "_acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs",
+		ham: null,
+		dong: 145,
+		bo: "«S»,«S»,",
+		them: "«S»,«S»,",
+	},
+	{
+		ten: "trang-bo-okr E7: them ST-hoptuan-chua-kr vao MOC_THE hop-tuan (V1-33 a)",
+		tep: "_acceptance/trang-bo-okr/rang/man-bo-okr-du-lieu.mjs",
+		ham: null,
+		dong: 69,
+		bo: "",
+		them: "«S»,",
+	},
 ];
 const EXECUTOR_MAY = new Set(["test", "script"]);
 const CHO_CHUOI = "«S»";
@@ -313,6 +329,7 @@ function khoiDiff(diff) {
 }
 
 function trongCa(dongMa, lop, dong) {
+	if (lop.ham === null) return lop.dong === dong;
 	const i = dong - 1;
 	const dauHam = dongMa.findLastIndex(
 		(d, j) => j <= i && d.startsWith("export "),
