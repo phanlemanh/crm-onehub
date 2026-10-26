@@ -466,6 +466,10 @@ function chieuDo(kieu) {
 	}
 }
 
+function datMa(ma, kyVong) {
+	return ma === kyVong || ma === 0;
+}
+
 function chayTrenNen(hong) {
 	if (hong.length === 0) return 0;
 	let sai = 0;
@@ -474,12 +478,12 @@ function chayTrenNen(hong) {
 		const daChayNen = new Map();
 		for (const m of hong) {
 			const nen = chay(m, goc.cay, daChayNen);
-			const xauHon = nen === m.kyVong;
+			const xauHon = datMa(nen, m.kyVong);
 			if (xauHon) sai += 1;
 			console.log(
 				`${xauHon ? "SAI AC-10: " : ""}HO SO ${m.ten}: cay ${m.ma} · nen ${nen}`,
 			);
-			if (nen !== m.kyVong) console.log(`DO SAN TREN NEN ${m.ten}`);
+			if (!xauHon) console.log(`DO SAN TREN NEN ${m.ten}`);
 		}
 	} finally {
 		donCay(goc);
@@ -515,11 +519,19 @@ try {
 		viTriChi < 0
 			? null
 			: new Set((process.argv[viTriChi + 1] ?? "").split(",").filter(Boolean));
+	if (chi) {
+		const coTen = new Set(lop.muc.map((m) => m.ten));
+		const lac = [...chi].filter((ten) => !coTen.has(ten));
+		if (chi.size === 0 || lac.length > 0)
+			throw new Error(
+				`--chi khong khop eval nao trong lop: ${chi.size === 0 ? "(rong)" : lac.join(",")}`,
+			);
+	}
 	const daChayCay = new Map();
 	const hong = [];
 	for (const m of lop.muc.filter((x) => !chi || chi.has(x.ten))) {
 		const ma = chay(m, GOC, daChayCay);
-		if (ma === m.kyVong || ma === 0)
+		if (datMa(ma, m.kyVong))
 			console.log(
 				`HO SO ${m.ten}: cay ${ma}${ma === 0 ? "" : ` (dung ma da khai expected_exit ${m.kyVong})`}`,
 			);
