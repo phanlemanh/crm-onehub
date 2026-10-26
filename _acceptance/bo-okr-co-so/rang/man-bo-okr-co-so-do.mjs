@@ -136,7 +136,9 @@ const DOC_HANG = () => {
 		return { nhan: la[0] ?? "", gia: la[1] ?? "", moTa: la[2] ?? "" };
 	});
 	const theCon = document.querySelector("[data-the-con-bo]");
-	const nut = document.querySelector("[data-nut-mo-gap-tat-ca]");
+	const nut =
+		document.querySelector("[data-nut-mo-gap-tat-ca]") ??
+		document.querySelector("[data-slot=page-shell-content] table");
 	const truoc = (a, b) =>
 		a !== null &&
 		b !== null &&
