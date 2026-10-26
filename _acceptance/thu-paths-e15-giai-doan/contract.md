@@ -5,9 +5,9 @@ slug: thu-paths-e15-giai-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-10-16T05:50:40Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-16-thu-paths-e15-giai-doan-design.md
 ---
 
@@ -37,8 +37,9 @@ của `docs/plan/lo-trinh-okr.json`).
   và mốc cố định `5ac01b453` (đỉnh `onehub` lúc dựng; chủ kho chọn lối A ở P1-26), When kiểm, Then (a) danh sách bằng
   đúng tập luật chọn tại mốc — hồ sơ có eval judgment thiếu `paths` ở cây mốc, không ở trạng thái
   `da-cham-boi-thuc-te`, thêm `paths` xong thì không hoá cũ ở cây mốc hoặc chưa ghim — trừ hồ sơ hoá cũ ở HEAD do PR khác,
-  mỗi hồ sơ bị trừ được in tên và lý do, và không bị vòng này chạm; (b) danh sách có `thu-haiku-tro-ly-okr`, hồ sơ chủ kho
-  gọi tên (`ghim-thuoc-soi-xem-okr` thuộc nhóm bị trừ: thêm `paths` ở lần ghim kế của chính nó); và (c) mọi eval judgment
+  mỗi hồ sơ bị trừ được in tên và lý do, và không bị vòng này chạm; (b) mỗi hồ sơ chủ kho gọi tên (`thu-haiku-tro-ly-okr`,
+  `ghim-thuoc-soi-xem-okr`) có trong danh sách hoặc thuộc nhóm bị trừ ở (a), in tên và lý do; hồ sơ thuộc nhóm bị trừ thêm
+  `paths` ở lần ghim kế của chính nó; và (c) mọi eval judgment
   của các hồ sơ trong danh sách, không khai `not-run` và có `inputs` giải được, có `paths` chứa mọi input đã quy về gốc kho
   (input khai tương đối thư mục hồ sơ được giải từ thư mục hồ sơ).
 - AC-4: Given diff `evals.yaml` từ merge-base tới HEAD, When so từng eval của mọi hồ sơ, Then ngoài E15 của
@@ -105,6 +106,9 @@ của `docs/plan/lo-trinh-okr.json`).
 - Hai hồ sơ chủ kho gọi tên (`thu-haiku-tro-ly-okr` E8, `ghim-thuoc-soi-xem-okr` E3) chờ P0 gộp #436 và PR thu-haiku.
   Lúc dựng mà chúng không thoả luật chọn (thêm `paths` xong vẫn hoá cũ) thì máy dừng, hỏi chủ kho: ghim lại chúng trong
   PR, hay để tới lần ghim kế — không tự bỏ chúng khỏi danh sách.
+- 26/10, sau gộp onehub 5ff537e4c: `thu-haiku-tro-ly-okr`, `ba-ho-so-do-san`, `ngan-ho-so-trong-lo-trinh` hoá cũ ở HEAD do PR
+  khác (`.env.example`, `.githooks/pre-push`, các tệp trang Lộ trình) nên ra khỏi danh sách theo (a); eval judgment E8 của
+  `thu-haiku-tro-ly-okr` đọc `.env.example`, nên làm tươi nó cần chấm lại hồ sơ ấy, không phải ghim lại.
 - Hỏi-1, Hỏi-2: xem design doc mục «Hỏi chủ kho».
 - Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
   - Ngoài-1: Mô tả trong hồ sơ nghiệm thu về dòng kết quả cuối của một bước kiểm đã cũ so với dòng thật mà công cụ in ra. Kết quả kiểm vẫn đúng, chỉ có chữ mô tả lệch nên người đọc đối chiếu có thể thấy khác nhau.

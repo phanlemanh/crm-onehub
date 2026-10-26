@@ -60,14 +60,15 @@ evals:
       - "lib/eval-yaml.cjs"
     expected: |
       exit 0. Ba phần, một lệnh (them-paths.mjs --kiem --ho-so @danh-sach.txt --phai-co
-      thu-haiku-tro-ly-okr --kiem-danh-sach):
+      thu-haiku-tro-ly-okr,ghim-thuoc-soi-xem-okr --kiem-danh-sach):
       (a) --kiem-danh-sach tính lại luật chọn KHÔNG đọc danh-sach.txt, tại MỐC CỐ ĐỊNH 5ac01b453 (hằng MOC_DANH_SACH, đỉnh
       onehub lúc dựng, lối A ở P1-26): ứng viên = hồ sơ có eval judgment thiếu paths ở cây mốc, trừ da-cham-boi-thuc-te; giả
       lập chèn paths rồi xét bộ lọc (staleByPaths, tệp đổi từ verified_commit tới mốc trừ _acceptance/ và t1_skip_globs, cây
       git ls-tree của mốc): chưa ghim hoặc SACH thì thuộc luật; hồ sơ thuộc luật mà ở HEAD hoá cũ do PR khác thì in
       «LOAI_TRU <slug>: hoa cu o HEAD do PR khac (<n> tep)» và không tính vào luật — rồi so với danh-sach.txt: thiếu →
-      «THIEU_TRONG_DANH_SACH <slug>», thừa → «THUA_TRONG_DANH_SACH <slug>», mã 1; hôm nay 6 thuộc luật, 2 loại trừ;
-      (b) --phai-co: mỗi slug khai phải có trong danh sách, in «CO_TEN <slug>», thiếu → «KHONG_CO_TEN <slug>», mã 1;
+      «THIEU_TRONG_DANH_SACH <slug>», thừa → «THUA_TRONG_DANH_SACH <slug>», mã 1; 26/10 trên onehub 5ff537e4c: 3 thuộc luật, 5 loại trừ;
+      (b) --phai-co: mỗi slug khai phải có trong danh sách («CO_TEN <slug>») hoặc thuộc nhóm loại trừ của (a)
+      («CO_TEN_LOAI_TRU <slug>: <lý do>»), không ở đâu → «KHONG_CO_TEN <slug>», mã 1;
       (c) mọi eval judgment không khai not-run, có inputs giải được, của hồ sơ trong danh sách có paths chứa mọi input quy
       về gốc kho: «kiem: <n> eval judgment co paths phu inputs · 0 hong». Hồ sơ trong danh sách không có eval judgment
       nào → mã 2 «KHONG DO DUOC: ho so khong co eval judgment nao: <slug>».
@@ -169,8 +170,9 @@ evals:
       trước chỉ được nhận khi lưới không in dòng nào cho nó ở cây trước (không tệp nào đổi từ lúc ghim; in «KHONG_CO_TEP_DOI
       <slug>»), còn lưới có in mà không hoá cũ thì «KHONG_O_TAP_TRUOC <slug>», mã 1;
       (b) tập sau ⊆ tập trước (không hồ sơ mới thành hoá cũ); (c) số sau < số trước; (d) không hồ sơ trong danh sách còn
-      dòng KHONG_AP eval-ngoai-may-thieu-paths với id là eval judgment. In «pmc: truoc <a> · sau <b> · roi <danh sách> ·
-      moi 0». Merge-base trùng HEAD (nhánh đã gộp) → «da gop, khong so», mã 0. Gỡ worktree tạm khi xong hay bị ngắt.
+      dòng KHONG_AP eval-ngoai-may-thieu-paths với id là eval judgment. Chính hồ sơ thu-paths-e15-giai-doan không tính vào
+      tập nào ở cả hai cây (bỏ khi lưới in nó hoá cũ, kèm «BO_CHINH thu-paths-e15-giai-doan: …»). In «pmc: truoc <a> · sau <b> ·
+      roi <danh sách> · moi 0». Merge-base trùng HEAD (nhánh đã gộp) → «da gop, khong so», mã 0. Gỡ worktree tạm khi xong hay bị ngắt.
       CHIỀU ĐỎ (dot-bien.mjs, commit trong worktree tạm): xoá khối paths vừa thêm của tat-preview-agent-okr#E9 → mã 1
       «VAN_HOA_CU tat-preview-agent-okr» và «KHONG_AP_JUDGMENT tat-preview-agent-okr#E9».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
