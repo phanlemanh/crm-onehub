@@ -9,8 +9,8 @@ import {
 } from "@crm/ui/components/kara/dock";
 import { VatPhamDock } from "@crm/ui/components/kara/vat-pham";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { Separator } from "@crm/ui/components/separator";
-import { Skeleton } from "@crm/ui/components/skeleton";
 import {
 	Tabs,
 	TabsContent,
@@ -58,23 +58,6 @@ type GopYCot = {
 const THE = ["bo", "cot"] as const;
 type The = (typeof THE)[number];
 const laThe = (v: string): v is The => (THE as readonly string[]).includes(v);
-
-function KhungXuong() {
-	return (
-		<div className="flex flex-col gap-6" data-cho-tai="">
-			{SOAN_BO.dongCho.map((id) => (
-				<div key={id} className="flex flex-col gap-3">
-					<Skeleton className="h-4 w-24" />
-					<Skeleton className="h-7 w-2/3" />
-					<div className="flex flex-col gap-2 border-l pl-4">
-						<Skeleton className="h-6 w-1/2" />
-						<Skeleton className="h-8 w-64" />
-					</div>
-				</div>
-			))}
-		</div>
-	);
-}
 
 function denDongCua({ noiDung, den }: ChatLuong, truoc: () => void): DenDong {
 	return (mucTieu, kr, truong) => {
@@ -256,7 +239,7 @@ function ThanKhung({
 		return (
 			<KaraDock side="fill" alone aria-label={m.theSoan.bo} data-o="tai-lieu">
 				<KaraDockBody>
-					<KhungXuong />
+					<KhungXuong hinh="danh-sach" />
 				</KaraDockBody>
 			</KaraDock>
 		);

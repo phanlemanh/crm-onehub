@@ -270,7 +270,7 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
       - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
     expected: |
-      Ca «vk10-tai»: ba ô — (1) thủ tục đọc bộ treo: có khung xương `[data-cho-tai]`, tiêu đề «Soạn bộ OKR» và tên bộ hiện;
+      Ca «vk10-tai»: ba ô — (1) thủ tục đọc bộ treo: có khung xương `[data-khung-xuong]` (`KhungXuong` chung của `@crm/ui`), tiêu đề «Soạn bộ OKR» và tên bộ hiện;
       (2) thủ tục đọc trả lỗi: có «Chưa mở được bộ OKR», một câu, nút Thử lại; bấm → thủ tục đọc gọi thêm đúng 1 lần; (3)
       createKeyResult trả lỗi sai kiểu số: dòng còn nguyên chữ đã gõ, câu «Ô này nhận số, ví dụ 1.234,5» (chữ từ
       lib/messages), rời ô lần nữa → gọi lại đúng 1 lần. Thông điệp ghim «vk10-tai: o<n> lech».

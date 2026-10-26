@@ -588,7 +588,7 @@ describe("vk10-mo-do", () => {
 const treo = () => new Promise<never>(() => {});
 
 function kiemTaiO1(ten: string): void {
-	expect(q("[data-cho-tai]"), "vk10-tai: o1 lech").not.toBeNull();
+	expect(q("[data-khung-xuong]"), "vk10-tai: o1 lech").not.toBeNull();
 	expect(khungChu(), "vk10-tai: o1 lech").toContain(CHU.dauKhung.tieuDe);
 	expect(khungChu(), "vk10-tai: o1 lech").toContain(ten);
 }

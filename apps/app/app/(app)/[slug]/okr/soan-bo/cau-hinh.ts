@@ -5,6 +5,5 @@ export const SOAN_BO = {
 	khoHaiThe: KHO_HAI_THE,
 	truyVanHep: `(max-width: ${KHO_HAI_THE - 1}px)`,
 	dauTachKhoa: "~",
-	dongCho: ["mot", "hai"],
 	kieuKhiChuaRo: "tang-toi",
 } as const;
