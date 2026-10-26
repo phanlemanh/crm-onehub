@@ -8,8 +8,8 @@ import {
 	KaraDockFooter,
 } from "@crm/ui/components/kara/dock";
 import { VatPhamDock } from "@crm/ui/components/kara/vat-pham";
-import { useLocale } from "@crm/ui/components/locale-provider";
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Separator } from "@crm/ui/components/separator";
 import {
 	Tabs,
