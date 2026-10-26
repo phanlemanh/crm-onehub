@@ -1,0 +1,11 @@
+--- a/packages/validation/src/okr-cuoc-soan.ts
++++ b/packages/validation/src/okr-cuoc-soan.ts
+@@ -81,7 +81,7 @@
+ 			.min(BAN_NHAP_TRAN.mucTieu.min)
+ 			.max(BAN_NHAP_TRAN.mucTieu.max),
+ 	})
+-	.superRefine(chanKhoaTrung);
++	;
+ 
+ export type KrNhap = z.infer<typeof krNhap>;
+ export type MucTieuNhap = z.infer<typeof mucTieuNhap>;

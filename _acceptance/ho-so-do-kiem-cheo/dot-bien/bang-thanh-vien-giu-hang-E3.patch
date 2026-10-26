@@ -1,0 +1,10 @@
+--- a/apps/app/app/(app)/[slug]/settings/members/members-table.tsx
++++ b/apps/app/app/(app)/[slug]/settings/members/members-table.tsx
+@@ -368,6 +368,7 @@
+ 					getRowId={(row) => row.id}
+ 					loading={members.isFetching}
+ 					empty={t.bang.trong}
++					filteredEmpty={t.bang.trong}
+ 					searchActive={input.q !== ""}
+ 					onClearFilters={() =>
+ 						applyView({ ...currentView, q: "", filters: {} })

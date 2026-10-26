@@ -60,7 +60,8 @@ trang của DH1.
 
 - **Xoá hẳn trang cũ** — chết: tin nhắc Zalo đã gửi mang đường `/okr/cap-nhat-tuan?tu=nhac` sẽ thành trang 404.
 - **Mở phiên ngay khi tải Của tôi** — mỗi lượt xem đẻ một dòng phiên chưa gửi; bảng phiên hôm nay chỉ có lượt người
-  thật sự vào cập nhật. Mở khi bấm giữ nghĩa đó.
+  thật sự vào cập nhật. Mở khi bấm giữ nghĩa đó. Ô `cap-nhat-tuan-okr/E7` (phiên mở lúc tải màn, entry «tab») được
+  AC-2 của hồ sơ này thay — ghi nhận ở F28 `ho-so-do-kiem-cheo`, 23/10.
 - **Phần 3 giữ bảng mục tiêu** — câu giao của hàng là «KR mình phụ trách»; bảng mục tiêu lại lặp phần 2 với trưởng
   đơn vị. Mục tiêu không có KR của mình đi vào nhóm thu gọn để không mất.
 - **API mới cho «đơn vị bạn dẫn»** — không cần: `okr.access.headOf` và `okr.danhSach` đủ, và ghi chú của hàng chốt

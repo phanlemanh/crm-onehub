@@ -1,0 +1,11 @@
+--- a/apps/app/components/crm/record-sheet/objective-trao-doi.tsx
++++ b/apps/app/components/crm/record-sheet/objective-trao-doi.tsx
+@@ -301,7 +301,7 @@
+ 						objectiveId,
+ 						keyResultId: vao.keyResultId ?? undefined,
+ 						body: vao.body,
+-						mentionUserIds: vao.mentionUserIds,
++						mentionUserIds: [],
+ 					},
+ 					{ onSuccess: xong(datLai) },
+ 				);

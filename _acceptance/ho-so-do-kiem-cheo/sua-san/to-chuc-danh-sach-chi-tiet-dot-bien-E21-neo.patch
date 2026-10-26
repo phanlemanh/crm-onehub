@@ -1,0 +1,11 @@
+--- a/_acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs
++++ b/_acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs
+@@ -7,7 +7,7 @@
+ 	process.env.GOC_KHO ??
+ 	join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+ const MOC = "36f6bdb8e61cbaf23254a7fd92c34a01fe097e53";
+-const TOI = "a7808bfbefc77a9bbe07468cc5b8e3b8081e7792";
++const TOI = "0000000000000000000000000000000000000000";
+ const KE_HOACH =
+ 	"docs/superpowers/plans/2026-09-24-to-chuc-danh-sach-chi-tiet.md";
+ const DONG_KHAI = "- Thành phần dùng chung được sửa";

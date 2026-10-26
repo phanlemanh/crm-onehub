@@ -1,0 +1,474 @@
+{
+	"ban-gieo-gop-y-sau-nop:E4": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"neo gop e7afcb8b7: b5301e7ad..133e52d56 · 31 tep · ranh gioi chep",
+			"   ngoai-ranh-gioi:apps/app/lib/x.ts",
+			"DO: 1 vi pham ranh gioi"
+		]
+	},
+	"bang-thanh-vien-giu-hang:E1": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+			"-- tiền đề làn đo: đã dọn contextDevApiKey",
+			"-- tiền đề làn đo: đã dọn ảnh đại diện",
+			"phien-do: kho crm_cay_do · app http://localhost:4403 · api http://localhost:4734",
+			"$ bun scripts/dev-session.ts ada@trycomp.ai",
+			"phien-do: xong — mã 2"
+		]
+	},
+	"bang-thanh-vien-giu-hang:E2": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+			"-- tiền đề làn đo: đã dọn contextDevApiKey",
+			"-- tiền đề làn đo: đã dọn ảnh đại diện",
+			"phien-do: kho crm_cay_do · app http://localhost:4155 · api http://localhost:4637",
+			"$ bun scripts/dev-session.ts ada@trycomp.ai",
+			"phien-do: xong — mã 2"
+		]
+	},
+	"bang-thanh-vien-giu-hang:E3": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+			"-- tiền đề làn đo: đã dọn contextDevApiKey",
+			"-- tiền đề làn đo: đã dọn ảnh đại diện",
+			"phien-do: kho crm_cay_do · app http://localhost:4499 · api http://localhost:4237",
+			"$ bun scripts/dev-session.ts ada@trycomp.ai",
+			"phien-do: xong — mã 2"
+		]
+	},
+	"bang-thanh-vien-giu-hang:E4": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+			"-- tiền đề làn đo: đã dọn contextDevApiKey",
+			"-- tiền đề làn đo: đã dọn ảnh đại diện",
+			"phien-do: kho crm_cay_do · app http://localhost:4769 · api http://localhost:4375",
+			"$ bun scripts/dev-session.ts ada@trycomp.ai",
+			"phien-do: xong — mã 2"
+		]
+	},
+	"bang-thanh-vien-giu-hang:E5": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+			"-- tiền đề làn đo: đã dọn contextDevApiKey",
+			"-- tiền đề làn đo: đã dọn ảnh đại diện",
+			"phien-do: kho crm_cay_do · app http://localhost:4899 · api http://localhost:4499",
+			"$ bun scripts/dev-session.ts ada@trycomp.ai",
+			"phien-do: xong — mã 2"
+		]
+	},
+	"bang-thanh-vien-giu-hang:E6": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+			"-- tiền đề làn đo: đã dọn contextDevApiKey",
+			"-- tiền đề làn đo: đã dọn ảnh đại diện",
+			"phien-do: kho crm_cay_do · app http://localhost:4722 · api http://localhost:4872",
+			"$ bun scripts/dev-session.ts ada@trycomp.ai",
+			"phien-do: xong — mã 2"
+		]
+	},
+	"bang-thanh-vien-giu-hang:E7": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+			"-- tiền đề làn đo: đã dọn contextDevApiKey",
+			"-- tiền đề làn đo: đã dọn ảnh đại diện",
+			"phien-do: kho crm_cay_do · app http://localhost:4782 · api http://localhost:4414",
+			"$ bun scripts/dev-session.ts ada@trycomp.ai",
+			"phien-do: xong — mã 2"
+		]
+	},
+	"bo-dung-khong-ket:E9": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"HEAD 500k: dat",
+			"HEAD session-limit: dat",
+			"HEAD outputSchema: khong dat",
+			"HEAD cho re du tep (thieu: khong): dat",
+			"merge-base truot 5 dieu: SESSION_LIMITS, 128k, 500k, session-limit, cho re du tep",
+			"tai-lieu khong dat"
+		]
+	},
+	"bo-xuong-kara:E10": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"OK  so lech co muc artifact.tsx",
+			"OK  so lech co muc task.tsx",
+			"OK  song artifact.tsx qua kara/",
+			"SAI MO COI: task.tsx",
+			"SAI mo-coi ma 1, CHET (0)",
+			"DO: 2 muc sai"
+		]
+	},
+	"ca-chap-chon-cach-ly:E5": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1"
+		]
+	},
+	"ca-chap-chon-cach-ly:E7": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1"
+		]
+	},
+	"ca-chap-chon-con-lai:E6": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"ngoai ranh gioi: apps/agent/agent/lib/tasks.ts",
+			"PHAM VI: 27 tep, 1 ngoai ranh gioi"
+		]
+	},
+	"cai-dat-chung-chi-quan-tri:E8": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"SAI so khoi cu 42, con nguyen 41",
+			"KET LUAN: 41 DUNG, 2 SAI — ma thoat 1",
+			" 43 pass",
+			" 0 fail",
+			" 67 expect() calls",
+			"Ran 43 tests across 1 file. [130.00ms]"
+		]
+	},
+	"cap-nhat-tuan-okr:E14": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"$ bun scripts/dev-session.ts \"c2nkn9fzv@thu.test\"",
+			"$ bun scripts/dev-session.ts \"hnkn9fzv@thu.test\"",
+			"$ bun scripts/dev-session.ts \"rnkn9fzv@thu.test\"",
+			"$ bun scripts/dev-session.ts \"unkn9fzv@thu.test\"",
+			"$ bun scripts/dev-session.ts \"dinkn9fzv@thu.test\"",
+			"phien-do: xong — mã 1"
+		]
+	},
+	"cap-nhat-tuan-okr:E19": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"$ bun scripts/dev-session.ts \"c2nknanh1@thu.test\"",
+			"$ bun scripts/dev-session.ts \"hnknanh1@thu.test\"",
+			"$ bun scripts/dev-session.ts \"rnknanh1@thu.test\"",
+			"$ bun scripts/dev-session.ts \"unknanh1@thu.test\"",
+			"$ bun scripts/dev-session.ts \"dinknanh1@thu.test\"",
+			"phien-do: xong — mã 1"
+		]
+	},
+	"chan-lai-component-ra-man:E1": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"tap loai tru ghim ten: node_modules · .next · dist · build — 1122 file nguon",
+			"gia tri mac dinh la chuoi co chu: 133 · component so huu: 71",
+			"dong trong bang gioi han vong truoc: 10",
+			"tep git theo doi duoi goc: 1122",
+			"DO: neo mac_dinh ghim 132 nhung do duoc 133"
+		]
+	},
+	"chan-lai-component-ra-man:E2": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"nhom chu-nguoi-doc: 0",
+			"nhom ky thuat: 126",
+			"khong ve duoc (da khai kem ly do): 7",
+			"tong: 133 · neo: 132",
+			"DO: tong ba nhom 133 khac neo 132"
+		]
+	},
+	"chan-lai-component-ra-man:E7": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"tap loai tru ghim ten: node_modules · .next · dist · build — 1122 file nguon",
+			"gia tri mac dinh la chuoi co chu: 133 · component so huu: 71",
+			"dong trong bang gioi han vong truoc: 10",
+			"tep git theo doi duoi goc: 1122",
+			"DO: neo mac_dinh ghim 132 nhung do duoc 133"
+		]
+	},
+	"chan-trung-khoa-ban-nhap:E3": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			" 0 pass",
+			" 1 filtered out",
+			" 2 fail",
+			" 2 expect() calls",
+			"Ran 2 tests across 1 file. [609.00ms]",
+			"error: script \"test\" exited with code 1"
+		]
+	},
+	"chan-trung-khoa-ban-nhap:E4": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"KHONG DO DUOC: okr-cuoc-soan.ts: moc xuat hien 0 lan, can 1: .superRefine(chanKhoaTrung)"
+		]
+	},
+	"chu-cuoi-cung-tien-de:E5": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"chu-la --chan pham-vi · goc 058bb75f",
+			"diff 058bb75f...2aff077d (gop 46a52ade5): 136 tep, ngoai pham vi: 6",
+			"RANG DO: diff cham tep ngoai pham vi: apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx, apps/app/app/(app)/[slug]/companies/companies-table.tsx, apps/app/app/(app)/[slug]/settings/members/members-table.tsx, packages/ui/src/components/button.tsx, packages/ui/src/components/data-table.tsx, packages/ui/test/data-table-locale.spec.tsx"
+		]
+	},
+	"chu-mac-dinh-thu-vien-ngoai:E3": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"   Danh sach boc sinh tu CAU LENH NHAP trong file, khong go tay ten goi — lech nghia la mot ben sai, doc ten file de biet ben nao.",
+			"   boc: accordion.tsx <- lucide-react, radix-ui",
+			"   boc: alert-dialog.tsx <- radix-ui",
+			"   boc: async-action.tsx <- lucide-react, motion/react",
+			"   boc: avatar.tsx <- radix-ui",
+			"   boc: calendar.tsx <- lucide-react"
+		]
+	},
+	"chu-mac-dinh-thu-vien-ngoai:E4": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"bang: 29 dong · chan dem tu dia: 29 component boc-ma-khong-doc",
+			"   HONG: radio-group.tsx khai boc CircleIcon (lucide-react) ma tren dia khong thay — dia thay RadioGroupPrimitive (radix-ui)"
+		]
+	},
+	"chu-mac-dinh-thu-vien-ngoai:E9": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 2,
+		"neo": null,
+		"duoiDotBien": [
+			"bang gioi han: 9 dong · chan dem tu dia: 10 component boc-ma-khong-doc thuoc loai chi-hien-sau-khi-bam",
+			"   THIEU: context-menu.tsx",
+			"KHONG DO DUOC: bang lech voi dia — mot bang khai mot dong khong duoc di qua nhu mot bang da ke het."
+		]
+	},
+	"cron-theo-ban-khai:E8": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"ban production moi nhat: dpl_A7aZCatX5pyjP4AVRiYznktEcK5u · sha 207a8ffc5 · cap gop cron f148b2bb1",
+			"DO: ban production moi nhat (sha 207a8ffc5) khong chua cap gop cron f148b2bb1"
+		]
+	},
+	"cron-theo-ban-khai:E7": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"• turbo 2.10.8",
+			"• turbo 2.10.8",
+			"• turbo 2.10.8",
+			"$ oxlint --format=default",
+			"• turbo 2.10.8",
+			"DO: apps/app ra 3 canh bao lint, ghim la 4."
+		]
+	},
+	"danh-sach-keo-chung:E13": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"DUNG apps/app/app/(app)/[slug]/settings/organization/chi-tiet-bo-phan.tsx: p0 0",
+			"DUNG apps/app/app/(app)/[slug]/settings/organization/chi-tiet-goc.tsx: p0 0",
+			"DUNG apps/app/app/(app)/[slug]/settings/organization/danh-sach-keo.tsx: p0 0",
+			"DUNG packages/ui/src/components/sortable-list.tsx: p0 0",
+			"DUNG /var/folders/6x/1dlzszm51wzbt20dn5y1lgzh0000gn/T/dsk-san-thiet-ke-rnTU6M/gia-xam-tren-mau.tsx: p0 0 (gray-on-color)",
+			"tu-thu: BO LOT tep gia; doi chung sach"
+		]
+	},
+	"to-chuc-danh-sach-chi-tiet:E21": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"dat  packages/ui/src/components/archived-list.tsx: da khai trong ke hoach",
+			"dat  packages/ui/src/components/dialog.tsx: da khai trong ke hoach",
+			"dat  packages/ui/src/components/nav-item.tsx: da khai trong ke hoach",
+			"dat  packages/ui/src/components/pick-list-dialog.tsx: da khai trong ke hoach",
+			"dat  packages/ui/src/components/stat-tile.tsx: da khai trong ke hoach",
+			"dat  packages/ui/test/to-chuc-thanh-phan.dom.tsx: da khai trong ke hoach"
+		]
+	},
+	"toan-canh-okr:E3": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"$ bun scripts/dev-session.ts \"btkndt61@thu.test\"",
+			"$ bun scripts/dev-session.ts \"ptkndt61@thu.test\"",
+			"$ bun scripts/dev-session.ts \"qtkndt61@thu.test\"",
+			"$ bun scripts/dev-session.ts \"ktkndt61@thu.test\"",
+			"$ bun scripts/dev-session.ts \"otkndt61@thu.test\"",
+			"phien-do: xong — mã 1"
+		]
+	},
+	"toan-canh-okr:E28": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"$ bun scripts/dev-session.ts btknotoc@thu.test",
+			"$ bun scripts/dev-session.ts ptknotoc@thu.test",
+			"$ bun scripts/dev-session.ts qtknotoc@thu.test",
+			"$ bun scripts/dev-session.ts ktknotoc@thu.test",
+			"$ bun scripts/dev-session.ts otknotoc@thu.test",
+			"phien-do: xong — mã 1"
+		]
+	},
+	"toan-canh-okr:E29": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"$ bun scripts/dev-session.ts \"btknsr1a@thu.test\"",
+			"$ bun scripts/dev-session.ts \"ptknsr1a@thu.test\"",
+			"$ bun scripts/dev-session.ts \"qtknsr1a@thu.test\"",
+			"$ bun scripts/dev-session.ts \"ktknsr1a@thu.test\"",
+			"$ bun scripts/dev-session.ts \"otknsr1a@thu.test\"",
+			"phien-do: xong — mã 1"
+		]
+	},
+	"tro-ly-okr-nen:E4": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"{\"lan\":3,\"batDau\":\"2026-10-23T05:55:07.497Z\",\"ketThuc\":\"2026-10-23T05:55:19.534Z\",\"phien\":[\"wrun_01M5KN7K4RFGN1HGRTT9B667RQ\",\"wrun_01M5KN7NNKXQ0WVY17XGYK1FEC\"],\"soBuoc\":4,\"soSoUsd\":0.019353,\"soConUsd\":0.010456,\"outcome\":\"da-nop\",\"luotSinh\":{\"goc\":[\"gen_01M5KN7KGTDBWYV1KAMRX18BAP\",\"gen_01M5KN7W6SB6X1WCTZG582HNKG\"],\"con\":[\"gen_01M5KN7P1H74XA2CEPZ52CF17G\",\"gen_01M5KN7SFZBE548T1JF6P5DSA0\"]},\"soDeXuat\":2}",
+			"pass 3/3 · sha 730af844ae2abce4ddbff7f028a415ea8fa4a044+8c9fdcf657288971",
+			"{\"khung\":{\"tu\":\"2026-10-23T05:54:43.072Z\",\"den\":\"2026-10-23T05:55:19.534Z\"},\"soLuotSinh\":12,\"soBuocSo\":12,\"soSoUsd\":0.05961999999999999,\"soGatewayUsd\":0.030708,\"lechPhanTram\":94.2,\"phienCon\":{\"soUsd\":0.032674999999999996,\"gatewayUsd\":0.0167865},\"nhaCungCapGoc\":[\"vertex\"],\"nhaCungCapCon\":[\"vertex\"],\"baoCaoTheoGio\":[]}",
+			"so 0.059620 · gateway 0.030708 · lech 94.2% · 12 luot sinh, 12 buoc trong so",
+			"chieu do: bo dong phien con khoi so thi lech 12.3%",
+			"so lech gateway qua 10%"
+		]
+	},
+	"tro-ly-okr-nen:E17": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"migration khong chi them: DROP COLUMN"
+		]
+	},
+	"tro-ly-okr-nen:E22": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"con nhap duong cu: apps/api/src/okr/okr-xem.service.ts"
+		]
+	},
+	"tro-ly-okr-nen:E23": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"tu dien lech: Tóm tắt tuần"
+		]
+	},
+	"tro-ly-okr-nen:E25": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": null,
+		"duoiDotBien": [
+			"phien con khong ghi so: con_khong_so (doi chung, dung ky vong)",
+			"{\"phienGoc\":\"wrun_01M5KN8X5ZS0RGJRTQKKH6QBF2\",\"soDong\":5,\"theoPhien\":[{\"ten\":\"goc\",\"dong\":[\"crm.nghien-cuu\",\"crm.nghien-cuu\"],\"phienCha\":null},{\"ten\":\"con_tro_ly\",\"dong\":[\"okr.de-xuat\"],\"phienCha\":\"wrun_01M5KN8X5ZS0RGJRTQKKH6QBF2\"},{\"ten\":\"con_runner\",\"dong\":[\"crm.tac-nhan\"],\"phienCha\":\"wrun_01M5KN8X5ZS0RGJRTQKKH6QBF2\"},{\"ten\":\"con_builder\",\"dong\":[\"crm.dung-tac-nhan\"],\"phienCha\":\"wrun_01M5KN8X5ZS0RGJRTQKKH6QBF2\"},{\"ten\":\"con_khong_so\",\"dong\":[],\"phienCha\":null}],\"soBuocGhiLai\":6}",
+			"con_tro_ly: tinhNang okr.de-xuat, can okr.chuyen-tiep"
+		]
+	},
+	"zalo-gui-hong-ghi-ly-do:E7": {
+		"loi": [],
+		"nguyenVen": 0,
+		"dotBien": 1,
+		"neo": 2,
+		"duoiDotBien": [
+			"doi chung: diff rong -> ma 2",
+			"doi chung: ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts",
+			"ngoai ranh gioi: apps/app/lib/x.ts"
+		]
+	}
+}

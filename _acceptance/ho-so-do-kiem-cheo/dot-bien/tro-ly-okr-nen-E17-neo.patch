@@ -1,0 +1,11 @@
+--- a/_acceptance/tro-ly-okr-nen/rang/migration-chi-them.mjs
++++ b/_acceptance/tro-ly-okr-nen/rang/migration-chi-them.mjs
+@@ -19,7 +19,7 @@
+ 	process.env.TEP_SCHEMA ?? join(GOC, "packages/db/prisma/schema.prisma");
+ const NEO = {
+ 	nen: process.env.NEO_NEN ?? "e3dd799ad9379038f618a243c6c479638f8e88b8",
+-	gop: process.env.NEO_GOP ?? "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9",
++	gop: process.env.NEO_GOP ?? "0000000000000000000000000000000000000000",
+ };
+ const MODEL_MOI = [
+ 	"OkrDeXuat",

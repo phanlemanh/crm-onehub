@@ -6,7 +6,8 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
-const NHANH = process.env.NHANH_GOC ?? "origin/onehub";
+const TU = "591bc8fb63a6505a888f80ccde43fc498e4eed2a";
+const TOI = "a33a0d62424150945bf2dc482d050dfbaaeccb6e";
 
 function git(...a) {
 	return execFileSync("git", ["-C", GOC, ...a], { encoding: "utf8" }).trim();
@@ -30,8 +31,20 @@ function gocKit() {
 }
 
 export function tepTrongDiff() {
-	const moc = git("merge-base", "HEAD", NHANH);
-	return git("diff", "--name-only", "--diff-filter=AM", moc)
+	for (const sha of [TU, TOI]) {
+		const r = spawnSync("git", [
+			"-C",
+			GOC,
+			"cat-file",
+			"-e",
+			`${sha}^{commit}`,
+		]);
+		if (r.status !== 0) {
+			console.log(`KHONG DO DUOC: khong co commit neo ${sha}`);
+			process.exit(2);
+		}
+	}
+	return git("diff", "--name-only", "--diff-filter=AM", TU, TOI)
 		.split("\n")
 		.filter(
 			(t) =>

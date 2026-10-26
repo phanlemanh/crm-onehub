@@ -1,0 +1,11 @@
+--- a/apps/app/app/(app)/[slug]/okr/toan-canh/page.tsx
++++ b/apps/app/app/(app)/[slug]/okr/toan-canh/page.tsx
+@@ -53,7 +53,7 @@
+ 	const quanTri = access?.canManageProgram === true;
+ 	await Promise.all([
+ 		cycleId
+-			? queryClient.prefetchQuery(trpc.okr.toanCanh.queryOptions({ cycleId }))
++			? queryClient.prefetchQuery(trpc.okr.toanCanh.queryOptions({ cycleId: cycles?.currentId ?? cycleId }))
+ 			: null,
+ 		quanTri && cycleId
+ 			? queryClient.prefetchQuery(trpc.okr.sucKhoe.queryOptions({ cycleId }))

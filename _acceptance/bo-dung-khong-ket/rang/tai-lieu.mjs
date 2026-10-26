@@ -7,9 +7,22 @@ const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const TAI_LIEU = "docs/agent.md";
 const MUC_BO_DUNG = "## Team-agent builder and runner";
 const MUC_RE = "### Chỗ rẽ có tên";
+const NEO_GOC = "13477d5f8f8b75555120f438a5095e8f2940935c";
+const NEO_TOI = "ac6a3ab36239260dac1773e33c86e5d3843e32b4";
 
 function git(...thamSo) {
 	return execFileSync("git", ["-C", GOC, ...thamSo], { encoding: "utf8" });
+}
+
+function kiemNeo() {
+	for (const sha of [NEO_GOC, NEO_TOI]) {
+		try {
+			git("cat-file", "-e", `${sha}^{commit}`);
+		} catch {
+			console.log(`KHONG DO DUOC: khong co commit neo ${sha}`);
+			process.exit(2);
+		}
+	}
 }
 
 function docTaiLieu(ref) {
@@ -38,8 +51,7 @@ function cacMuc(noiDung, tieuDe) {
 }
 
 function tapTepRe() {
-	const goc = git("merge-base", "HEAD", "origin/onehub").trim();
-	const doi = git("diff", "--name-only", goc, "HEAD")
+	const doi = git("diff", "--name-only", NEO_GOC, NEO_TOI)
 		.split("\n")
 		.filter(Boolean);
 	const hang = new Set(
@@ -71,14 +83,14 @@ function kiem(noiDung, tapRe) {
 	};
 }
 
+kiemNeo();
 const tapRe = tapTepRe();
 const dau = kiem(docTaiLieu(null), tapRe);
 for (const [dieu, dat] of Object.entries(dau)) {
 	console.log(`HEAD ${dieu}: ${dat ? "dat" : "khong dat"}`);
 }
 
-const goc = git("merge-base", "HEAD", "origin/onehub").trim();
-const cu = kiem(docTaiLieu(goc), tapRe);
+const cu = kiem(docTaiLieu(NEO_GOC), tapRe);
 const cuTruot = Object.entries(cu).filter(([, dat]) => !dat);
 console.log(
 	`merge-base truot ${cuTruot.length} dieu: ${cuTruot.map(([dieu]) => dieu.split(" (")[0]).join(", ") || "khong dieu nao (sai)"}`,
