@@ -1,0 +1,27 @@
+[
+	{
+		"cu": "quyet-gop-y-noi-dung-ly-do#E3",
+		"moi": "E8",
+		"ly": "câu lỗi quyết góp ý tiếng Việt theo mã — thẻ góp ý nay ở cột bên chế độ Soạn"
+	},
+	{
+		"cu": "quyet-gop-y-noi-dung-ly-do#E4",
+		"moi": "E8",
+		"ly": "câu lỗi quyết góp ý tiếng Anh theo mã — thẻ góp ý nay ở cột bên chế độ Soạn"
+	},
+	{
+		"cu": "quyet-gop-y-noi-dung-ly-do#E5",
+		"moi": "E8",
+		"ly": "câu thử lại khi chưa sẵn sàng hay 5xx — thẻ góp ý nay ở cột bên chế độ Soạn"
+	},
+	{
+		"cu": "gan-tay-va-kara-co-ly-do#E10",
+		"moi": "E8",
+		"ly": "thẻ đề xuất căn chỉnh (mức tin, vì sao, căn cứ, ba nút) — DeXuatNeo nay ở cột bên chế độ Soạn"
+	},
+	{
+		"cu": "mot-nut-tao-muc-tieu#E13",
+		"moi": "E1",
+		"ly": "dòng Soạn của hộp Thêm mục tiêu nay mở chế độ Soạn cả bộ thay cho okr.soanMo (AC-1, Hỏi-2)"
+	}
+]

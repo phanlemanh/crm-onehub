@@ -94,8 +94,12 @@ KR có tên ≥3 ký tự, khởi điểm và đích là số (hay KR mốc). Đ
   `khung-soan-chan-lien-ket`, `mot-nut-tao-muc-tieu`, `trang-bo-okr`, `dieu-huong-khu-muc-tieu`, `khung-okr-truoc-r1`,
   `okr-soat-anh-luot-3`, `trang-don-vi-mot-bang`, `quyet-gop-y-noi-dung-ly-do` — và lệnh quét của eval không thấy hồ sơ đã ký nào
   khác khớp mẫu, Then mọi mục không xấu hơn trên nền `origin/onehub` (mục đỏ sẵn trên nền in «đỏ sẵn
-  trên nền»); ô đo khối Kara cũ được thay khai `superseded_by: che-do-soan-bo-okr#AC-7`; mọi thay đổi trong thước của các
-  hồ sơ ấy chỉ là đổi bộ chọn hay chuỗi, mỗi hồ sơ một dòng sổ `fix` mang `decided_by` chủ kho và cặp đo hai chiều.
+  trên nền»); ô đo khối Kara cũ được thay khai `superseded_by: che-do-soan-bo-okr#AC-7` (ô đo lối soạn cũ của hộp,
+  `mot-nut-tao-muc-tieu/E13`, trỏ `che-do-soan-bo-okr#AC-1`); mọi thay đổi trong thước của các hồ sơ ấy là đổi bộ chọn
+  hay chuỗi, hoặc thuộc năm lớp chủ kho duyệt (V1-41): (1) xoá trọn một ca mà mọi eval chạy nó đã nghỉ, (2) gỡ mục đột
+  biến trỏ đoạn mã đã gỡ hay chỉ eval đã nghỉ bắt được, (3) đổi dữ liệu mẫu đã kê, (4) lật khẳng định và đổi đối chứng
+  dương đã kê của `mot-nut-tao-muc-tieu`, (5) eval thước theo vòng loại khỏi lượt chạy có lý do; mỗi hồ sơ một dòng sổ
+  `fix` mang `decided_by` chủ kho, nêu tệp và ca, và cặp đo hai chiều.
 
 ## Coverage
 

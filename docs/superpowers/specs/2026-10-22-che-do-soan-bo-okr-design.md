@@ -172,6 +172,38 @@ và quyết định 09/10 «Soạn OKR thành khung bản ghi»; tài liệu bê
   hai chiều. Lối khác: giữ khối Kara cũ sau chip dạng mở rộng — thước cũ còn xanh nhưng ngưỡng «chỉ còn một chip» không
   đạt.
 
+## Eval cũ → AC mới (AC-11, V1-41)
+
+Chủ kho «V1-41: duyệt theo khuyên» (26/10). Mỗi ô dưới đây khai `status: not-run` và `superseded_by` trỏ AC của hồ sơ
+này; ca bài của nó được xoá trọn. Bảng máy đọc là `_acceptance/che-do-soan-bo-okr/rang/anh-xa-nghi.json`.
+
+| Eval cũ | AC mới | Eval đo lại | Hành vi |
+| --- | --- | --- | --- |
+| `gop-y-dung-cho/E5` | AC-7 | E12 | đồng bộ số chip và số đề xuất trong khung chi tiết |
+| `gop-y-dung-cho/E8` | AC-7 | E12 | góp ý neo dưới KR, «Vì sao», cuộn tới vùng Kara |
+| `gop-y-dung-cho/E11` | AC-7 | E8 | nhận, sửa rồi nhận, hoàn tác đề xuất |
+| `gop-y-dung-cho/E13` | AC-7 | E8 | bỏ qua đề xuất |
+| `gop-y-dung-cho/E14` | AC-7 | E8 | khoá đề xuất khác khi đang gửi |
+| `gop-y-dung-cho/E16` | AC-7 | E12 | focus trong vùng Kara của khung |
+| `gop-y-dung-cho/E17` | AC-7 | E8 | bảy trạng thái của nhóm Kara trong khung |
+| `kara-gop-y-luot-2/E1` | AC-7 | E8 | vùng Kara là DetailSheetSection, ba KaraProposal |
+| `kara-gop-y-luot-2/E2` | AC-7 | E8 | vùng tải lỗi |
+| `kara-gop-y-luot-2/E3` | AC-7 | E8 | «Nhờ Kara» bị từ chối hay lỗi |
+| `kara-gop-y-luot-2/E4` | AC-7 | E8 | Kara đọc quá hạn |
+| `kara-gop-y-luot-2/E5` | AC-7 | E8 | Kara tắt, ba lý do |
+| `kara-gop-y-luot-2/E6` | AC-7 | E8 | câu lỗi dưới đề xuất |
+| `kara-gop-y-luot-2/E7` | AC-7 | E8 | căn chỉnh nhận rồi hoàn tác |
+| `kara-gop-y-luot-2/E8` | AC-7 | E8 | hai lần hoàn tác |
+| `kara-gop-y-luot-2/E9` | AC-7 | E12 | chip danh sách sau «Nhờ Kara» trong khung |
+| `kara-gop-y-luot-2/E10b` | AC-7 | E8 | nút «Nhờ Kara» cho người sửa được KR |
+| `kara-gop-y-luot-2/E13` | AC-7 | E12 | neo KR từ URL trong vùng Kara |
+| `kara-gop-y-luot-2/E14` | AC-7 | E8 | khuôn ngày giờ trên bảy bề mặt của vùng Kara |
+| `quyet-gop-y-noi-dung-ly-do/E3` | AC-7 | E8 | câu lỗi quyết góp ý tiếng Việt theo mã |
+| `quyet-gop-y-noi-dung-ly-do/E4` | AC-7 | E8 | câu lỗi quyết góp ý tiếng Anh theo mã |
+| `quyet-gop-y-noi-dung-ly-do/E5` | AC-7 | E8 | câu thử lại khi chưa sẵn sàng hay 5xx |
+| `gan-tay-va-kara-co-ly-do/E10` | AC-7 | E8 | thẻ đề xuất căn chỉnh: mức tin, vì sao, căn cứ, ba nút |
+| `mot-nut-tao-muc-tieu/E13` | AC-1 | E1 | dòng Soạn của hộp gọi okr.soanMo, mở cuộc soạn cũ |
+
 ## Ngoài phạm vi
 
 - Kara viết nháp ngay trong cột bên của chế độ Soạn (hợp nhất cuộc soạn vào tài liệu).

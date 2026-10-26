@@ -350,11 +350,19 @@ evals:
       (0) Lệnh quét
       các tệp thước và bài kiểm của mọi hồ sơ đã ký theo mẫu {data-vung-kara, VungKara, DeXuatNeo, data-de-xuat-neo,
       data-nhom-soan, NutSoan, «Soạn cùng Kara», «Thêm mục tiêu», câu rỗng của bộ (data-cau-rong-bo)} → khẳng định «QUET <n>
-      khop, deu trong DANH SACH 17»; hồ sơ khớp mẫu mà vắng khỏi danh sách in «SAI AC-11: lot <ho so>». (1) Chạy mọi eval test/script không
-      not-run của từng hồ sơ trên cây vòng và trên worktree origin/onehub; SAI khi nền 0 mà cây khác 0, «DO SAN TREN NEN» khi
-      nền đỏ. (2) Ô nào khai not-run trong vòng này phải mang superseded_by che-do-soan-bo-okr#AC-7 và có trong bảng
-      `rang/anh-xa-nghi.json`. (3) `git diff` các tệp thước của những hồ sơ ấy chỉ đổi chuỗi bộ chọn hay chuỗi chữ, và mỗi hồ
-      sơ bị đổi có một dòng sổ fix mang decided_by. In «GIU <ho so>» hay «SAI AC-11: <ho so>#<E> …», mã 1 khi có SAI.
+      khop, deu trong DANH SACH 17»; hồ sơ khớp mẫu mà vắng khỏi danh sách in «SAI AC-11: lot <ho so>». Tệp quét: `rang/**`
+      của hồ sơ, tệp `test/` nêu trong lệnh của eval còn chạy và các tệp test chúng nhập tương đối. (1) Chạy mọi eval
+      test/script không not-run của từng hồ sơ trên cây vòng và trên worktree origin/onehub, trừ eval thước theo vòng kê
+      trong bảng `THUOC_THEO_VONG` có lý do (in «THUOC THEO VONG <ho so>#<E>: <ly do>»; lớp 5 của V1-41); SAI khi nền 0 mà
+      cây khác 0, «DO SAN TREN NEN» khi nền đỏ. (2) Ô nào khai not-run trong vòng này phải mang superseded_by
+      che-do-soan-bo-okr#AC-7 — riêng mot-nut-tao-muc-tieu#E13 trỏ che-do-soan-bo-okr#AC-1 — và có trong bảng
+      `rang/anh-xa-nghi.json` trỏ một eval có thật của hồ sơ này. (3) `git diff` merge-base các tệp thước của những hồ sơ ấy:
+      mỗi khối chỉ đổi chuỗi (giống nhau sau khi thay mọi chuỗi bằng «S»), `evals.yaml` chỉ thêm dòng `status: not-run` /
+      `superseded_by:`, hoặc khối khớp một mục của bảng `LOP_DUOC_PHEP` theo bốn lớp V1-41 — xoá trọn ca có tên kê sẵn mà
+      mọi eval kê kèm đã nghỉ trong vòng (lớp 1), gỡ dòng mục đột biến kê sẵn (lớp 2), đổi dữ liệu mẫu kê đúng dòng (lớp
+      3), lật khẳng định và đổi đối chứng dương kê đúng dòng của mot-nut-tao-muc-tieu (lớp 4); và mỗi hồ sơ bị đổi có một
+      dòng sổ fix mới trong vòng, decided_by chủ kho, nêu tệp. In «GIU <ho so>» hay «SAI AC-11: <ho so>#<E> …», mã 1 khi
+      có SAI.
       CHIEU DO (cùng tệp, --chieu-do): bản sao một eval của gop-y-dung-cho khai not-run không superseded_by → «SAI AC-11:
       gop-y-dung-cho#<E> nghi khong co chu» (ghim), mã 1; và danh sách bỏ mot-nut-tao-muc-tieu → «SAI AC-11: lot
       mot-nut-tao-muc-tieu» (ghim), mã 1.
