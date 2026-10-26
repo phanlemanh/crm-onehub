@@ -46,6 +46,8 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.gy_dong_bo_ui
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; gop-y-dung-cho.dom.tsx -t dong-bo: danh sách + khung chi tiết với tRPC giả trả troLyDanhSach parse bằng schema output thật của thủ tục (import từ apps/api, không object viết tay) — ma trận viết trước {soGopYCho 3, 3 dòng chờ → không gọi; soGopYCho 3, 2 dòng chờ → gọi useCrmCache().okr đúng objectiveId đúng một lần; soGopYCho 2, 2 dòng chờ và một biên nhận đã quyết trong phiên → không gọi}, đếm chỉ dòng đến từ troLyDanhSach (mọi dòng thủ tục trả đều là chờ), không đếm biên nhận; okr-lam-moi.spec.ts (đọc hai phía cache.okr) xanh. Chiều đỏ ghim: bản sao bỏ phép so số dòng phải làm bài đỏ 'khong lam moi danh sach khi lech'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/lib/trpc/cache.ts", "apps/app/test/gop-y-dung-cho.dom.tsx"]
@@ -71,6 +73,8 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.gy_neo
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; gop-y-dung-cho.dom.tsx -t neo dựng ObjectiveSheet thật với tRPC giả (okr.objective parse bằng objectiveOutput thật, troLyDanhSach parse bằng output thật) — ma trận toàn phần viết trước, mỗi phần tử một dòng góp ý {viết lại title → trong [data-nhom-kara], viết lại whyNow → ngay sau khu Vì sao lúc này, viết lại kr.title KR1 → trong hàng [data-duoi-kr=KR1] là anh liền sau [data-kr=KR1], hỏi không gắn KR → trong [data-nhom-kara], hỏi kr-la-viec KR3 → [data-duoi-kr=KR3], căn chỉnh → trong [data-nhom-kara]}: mỗi phần tử nằm đúng chỗ, là [data-slot=proposed-change][data-density=inline], không có tổ tiên [data-slot=card] hay [role=alert] trong khung; [data-nhom-kara] đứng trước bảng KR; nhãn «Kara · 6 góp ý chờ»; nút «Vì sao?» mở ô chứa lý do và «Đọc lúc»; viết lại có <del> tên cũ, <ins> tên mới, nút đúng chữ «Đổi tên KR», «Sửa», «Bỏ qua»; câu hỏi thieu-doi-trong có «Thêm KR đối trọng», kr-la-viec có «Sửa KR này», cả hai có «Bỏ qua». Số khẳng định chỗ neo = 6 (in ra). Chiều đỏ ghim: bản sao đặt mọi góp ý vào nhóm Kara phải làm bài đỏ 'neo sai: kr.title'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", "apps/app/test/gop-y-dung-cho.dom.tsx"]
@@ -96,6 +100,8 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.gy_nhan
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; gop-y-dung-cho.dom.tsx -t nhan-hoan-tac: bấm «Đổi tên KR» → troLyQuyet giả nhận {deXuatId, cach:'nhan'}; dòng biên nhận [data-slot=proposed-change-receipt] chữ «Đã đổi tên KR theo Kara» có nút «Hoàn tác»; khi okr.objective giả trả tên mới và trail Kara → hàng KR1 mang tên mới và [data-slot=kara-trace]; nhãn «Kara · 2 góp ý chờ»; «Sửa» → gõ 'Tên khác' → «Đổi tên KR» → {cach:'sua', giaTri:'Tên khác'}; «Hoàn tác» → okr.updateKeyResult giả nhận {id:KR1, title:<truoc>}, dòng đọc «Đã hoàn tác», không còn nút Hoàn tác; tab Vết hiện «theo đề xuất của Kara». Chiều đỏ ghim: bản sao không gửi giaTri khi sửa phải làm bài đỏ 'sua mat gia tri'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/app/(app)/[slug]/okr/bang-vet.tsx", "apps/app/lib/messages/okr-gop-y.ts", "apps/app/test/gop-y-dung-cho.dom.tsx"]
@@ -113,6 +119,8 @@ evals:
     criterion: AC-8
     executor: test
     cmd: config:executors.test.gy_bo_qua_ui
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; gop-y-dung-cho.dom.tsx -t bo-qua — ma trận toàn phần viết trước: viết lại tên KR + năm mã vấn đề (kr-la-viec, thieu-doi-trong, khong-do-duoc, trung-y, muc-tieu-la-so) → mỗi phần tử bấm «Bỏ qua» → dòng [data-decided=skipped] chữ đúng bảng viết trước («Đã bỏ qua tên Kara đề xuất: «<sau>»», «Đã bỏ qua câu hỏi của Kara: <tóm tắt của mã>»), không có nút «Hoàn tác», nhãn giảm 1. Số khẳng định = 6. Chiều đỏ ghim: bản sao in tên KR thay tóm tắt phải làm bài đỏ 'bien nhan khong noi noi dung: kr-la-viec'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", "apps/app/lib/messages/okr-gop-y.ts", "apps/app/test/gop-y-dung-cho.dom.tsx"]
@@ -121,6 +129,8 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.gy_khoa
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; gop-y-dung-cho.dom.tsx -t khoa-gui: ba đề xuất; troLyQuyet giả treo bằng một promise giữ tay → trong lúc treo mọi button của hai đề xuất kia disabled (đếm, so số viết trước), đề xuất đang gửi có Spinner; thả promise → không button nào của hai đề xuất còn lại disabled; troLyQuyet trả TRPCError CONFLICT → troLyDanhSach được gọi lại, đề xuất biến mất, không toast lỗi, không [data-slot=field-error]; trả lỗi khác → [data-slot=field-error] nằm trong đúng [data-gop-y=<id>] và nút mở lại. Chiều đỏ ghim: bản sao chỉ khoá đề xuất đang gửi phải làm bài đỏ 'de xuat khac khong khoa: 4/4 nut mo'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/test/gop-y-dung-cho.dom.tsx"]
@@ -137,6 +147,8 @@ evals:
     criterion: AC-10
     executor: test
     cmd: config:executors.test.gy_focus_khung
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; gop-y-dung-cho.dom.tsx -t focus-khung: trong DetailSheet thật đang mở, sửa tại chỗ rồi Esc → khung vẫn mở (onOpenChange không được gọi) và focus ở «Sửa»; thứ tự Tab từ nút «Vì sao?» đi qua mọi nút đề xuất theo thứ tự DOM nhìn thấy (so mảng data-hanh-dong viết trước). Chiều đỏ ghim: bản sao để Esc nổi bọt phải làm bài đỏ 'esc dong khung'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/components/crm/record-sheet/objective-sheet.tsx", "packages/ui/src/components/proposed-change.tsx", "apps/app/test/gop-y-dung-cho.dom.tsx"]
@@ -145,6 +157,8 @@ evals:
     criterion: AC-11
     executor: test
     cmd: config:executors.test.gy_trang_thai_kara
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; gop-y-dung-cho.dom.tsx -t trang-thai-kara — ma trận toàn phần viết trước theo bảng trạng thái của design doc: {chưa gọi, đang đọc (dangSoan), rỗng, lỗi (maKetThuc lỗi), hết lượt (het-tran-ngay), tạm nghỉ (het-tran-thang), chưa bật (don-vi-chua-bat)} → mỗi phần tử đúng [data-nhom-kara=<trạng thái>] và đúng chữ viết trước (vd «Kara đang đọc Mục tiêu này…», «Kara không thấy chỗ nào cần sửa», «Kara chưa đọc được Mục tiêu này», «Bạn đã dùng hết lượt góp ý hôm nay…»), chưa bật → không có [data-nhom-kara]; trong mọi phần tử có tối đa một [data-nut=nho-kara] và nó chứa icon tia sáng; textContent của danh sách, khung, hai hộp Sửa và tab Vết không chứa «Trợ lý OKR». Số phần tử = 7. Chiều đỏ ghim: bản sao vẽ Spinner trần khi đang đọc phải làm bài đỏ 'dang doc khong dung ThinkingIndicator'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/lib/messages/okr-gop-y.ts", "apps/app/test/gop-y-dung-cho.dom.tsx"]
