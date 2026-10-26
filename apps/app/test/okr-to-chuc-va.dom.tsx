@@ -562,7 +562,7 @@ describe("khoi-phuc-toast", () => {
 });
 
 describe("neo-kara", () => {
-	const MT = mucTieu("mt-kara", { canEdit: true });
+	const MT = mucTieu("mt-kara", { canEdit: true, soGopYCho: 1 });
 	const CT = () =>
 		chiTiet(MT, {
 			canEditKr: MT.keyResults.map((k) => k.id),
@@ -597,7 +597,7 @@ describe("neo-kara", () => {
 			HTMLElement.prototype.scrollIntoView = function (this: HTMLElement) {
 				goiCuon.push({
 					coKhung: document.querySelector("[data-cuon-ca-khung]") !== null,
-					laVung: this.hasAttribute("data-vung-kara"),
+					laVung: this.hasAttribute("data-chip-gop-y"),
 				});
 			};
 			window.innerWidth = kho.rong;
