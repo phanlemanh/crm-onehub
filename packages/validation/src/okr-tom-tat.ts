@@ -1,4 +1,5 @@
 import {
+	LY_DO_TAM_DUNG_TOM_TAT,
 	MUC_TU_TIN,
 	TRANG_THAI_QUAN_TRI_TOM_TAT,
 } from "@crm/db/okr-tro-ly-danh-muc";
@@ -87,10 +88,21 @@ export const banHienTomTat = z.object({
 	phanHoiCuaToi: z.boolean().nullable(),
 });
 
+export const choBanTomTat = z.discriminatedUnion("kieu", [
+	z.object({ kieu: z.literal("toi-luc"), luc: z.iso.datetime() }),
+	z.object({ kieu: z.literal("dang-xep") }),
+	z.object({
+		kieu: z.literal("tam-dung"),
+		lyDo: z.enum(LY_DO_TAM_DUNG_TOM_TAT),
+		moLai: ngay.nullable(),
+	}),
+]);
+
 export const troLyTomTatOutput = z.object({
 	ban: banHienTomTat.nullable(),
 	dangSoan: z.boolean(),
 	chuaCapNhat: z.boolean(),
+	choBan: choBanTomTat.optional(),
 });
 
 export const troLyTomTatPhanHoiInput = z.object({
@@ -140,6 +152,7 @@ export const troLyTomTatQuanTriOutput = z.object({
 
 export type TroLyTomTatInput = z.infer<typeof troLyTomTatInput>;
 export type BanHienTomTat = z.infer<typeof banHienTomTat>;
+export type ChoBanTomTat = z.infer<typeof choBanTomTat>;
 export type TroLyTomTatOutput = z.infer<typeof troLyTomTatOutput>;
 export type TroLyTomTatPhanHoiInput = z.infer<typeof troLyTomTatPhanHoiInput>;
 export type TroLyTomTatPhanHoiOutput = z.infer<typeof troLyTomTatPhanHoiOutput>;

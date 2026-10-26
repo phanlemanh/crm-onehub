@@ -13,6 +13,7 @@ import {
 } from "@crm/db/okr-hien-thi";
 import {
 	banTuanChoQuanTri,
+	choBanDauTomTat,
 	docTomTatChoNguoiXem,
 	nacTomTatPhong,
 	trangThaiTuan,
@@ -749,7 +750,10 @@ export class TroLyOkrService {
 			docTomTatChoNguoiXem(this.db, { ...v, nguoiXem: userId }, LUAT_TOM_TAT),
 			trangThaiTuan(this.db, v, LUAT_TOM_TAT),
 		]);
-		return { ban, ...tuan };
+		if (ban !== null || tuan.dangSoan || tuan.chuaCapNhat)
+			return { ban, ...tuan };
+		const choBan = await choBanDauTomTat(this.db, v);
+		return choBan ? { ban, ...tuan, choBan } : { ban, ...tuan };
 	}
 
 	async troLyTomTatPhanHoi(

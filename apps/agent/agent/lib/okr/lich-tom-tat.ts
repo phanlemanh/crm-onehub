@@ -3,7 +3,12 @@ import { db, type Prisma } from "@crm/db";
 import { PRIORITY } from "@crm/db/agent-tasks";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
-import { dungGoiTomTat, trangThaiTuan } from "@crm/db/okr-tom-tat";
+import {
+	dungGoiTomTat,
+	gioXepCua,
+	thuCapNhatCuaNgayXep,
+	trangThaiTuan,
+} from "@crm/db/okr-tom-tat";
 import {
 	cauHinhAiLuc,
 	LY_DO_VIEC_OKR,
@@ -12,19 +17,12 @@ import {
 import {
 	type CauHinhAi,
 	type DonViMucTieu,
-	GIO_MS,
-	MINUTE_MS,
 	NGAY_MS,
 	nacCuaDonVi,
 	nacCuaViec,
 	OKR_TOM_TAT,
 } from "@crm/db/okr-tro-ly-danh-muc";
-import {
-	dauNgayVN,
-	dauTuanVN,
-	ngayVN,
-	thuTrongTuan,
-} from "@crm/db/onboarding-nhac";
+import { dauNgayVN, dauTuanVN, ngayVN } from "@crm/db/onboarding-nhac";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { LUAT_TOM_TAT } from "@crm/validation/okr-kiem-tom-tat";
 import type { LeasedTask } from "../tasks";
@@ -34,14 +32,6 @@ const LOAI_TOM_TAT = "okr-tom-tat-tuan" as const;
 const PHA_CHAY = "dang-chay" satisfies PhaChuKy;
 
 type Tx = Prisma.TransactionClient;
-
-function gioXepCua(luc: Date): Date {
-	return new Date(
-		dauNgayVN(luc).getTime() +
-			OKR_TOM_TAT.gioXep.gio * GIO_MS +
-			OKR_TOM_TAT.gioXep.phut * MINUTE_MS,
-	);
-}
 
 function ngayKe(luc: Date): Date {
 	return dauNgayVN(new Date(dauNgayVN(luc).getTime() + NGAY_MS));
@@ -124,7 +114,7 @@ async function xepTrongNgay(
 	const chuKy = await tx.okrCycle.findMany({
 		where: {
 			phase: PHA_CHAY,
-			updateWeekday: thuTrongTuan(homQua),
+			updateWeekday: thuCapNhatCuaNgayXep(task.dueAt),
 			...KY_CON_HIEN,
 		},
 		select: { id: true },
