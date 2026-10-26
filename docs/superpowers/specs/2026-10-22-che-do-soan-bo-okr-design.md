@@ -203,6 +203,10 @@ này; ca bài của nó được xoá trọn. Bảng máy đọc là `_acceptanc
 | `quyet-gop-y-noi-dung-ly-do/E5` | AC-7 | E8 | câu thử lại khi chưa sẵn sàng hay 5xx |
 | `gan-tay-va-kara-co-ly-do/E10` | AC-7 | E8 | thẻ đề xuất căn chỉnh: mức tin, vì sao, căn cứ, ba nút |
 | `mot-nut-tao-muc-tieu/E13` | AC-1 | E1 | dòng Soạn của hộp gọi okr.soanMo, mở cuộc soạn cũ |
+| `nen-kara/E3` | AC-7 | E8 | gợi ý thông tin của Cá nhân là thẻ gọn, Nhận chính, Bác mờ (trỏ chuyển từ `gop-y-dung-cho#AC-5`, V1-47) |
+| `the-gop-y-okr/E4` | AC-7 | E8 | «Mở KR này» ở câu hỏi gắn KR (trỏ chuyển từ `gop-y-dung-cho#AC-5`, V1-47) |
+| `the-gop-y-okr/E5` | AC-7 | E8 | thẻ căn chỉnh chờ: «Căn chỉnh» chính, «Bác» cuối hàng (trỏ chuyển từ `gop-y-dung-cho#AC-5`, V1-47) |
+| `khung-tao-okr-nhu-deal/E11` | AC-7 | E8 | «Mở KR này» ghi URL hopOkr=kr (trỏ chuyển từ `gop-y-dung-cho#AC-5`, V1-47) |
 
 ## Ngoài phạm vi
 
