@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: ho-so-do-kiem-cheo
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 221add3b8c0d54c7063999269bd9b01167ef2227
-human_signoff:
+human_signoff: Manh Phan 2026-10-26
 ---
 
 # Evidence Report: ho-so-do-kiem-cheo
@@ -134,7 +134,7 @@ Panel giữ nguyên từ round 5 — inputs không đổi, không chấm lại; 
     - spec-alignment — các dòng sua_san có xu_ly sua-rang hoặc neo-co-dinh trong hoan_lai (cai-dat-con-lai-noi-tieng-viet, tong-quan-va-khung-noi-tieng-viet, so-okr-tu-chay): mỗi dòng cần ly_do loại (a)-(d) kèm căn cứ là AC hoặc dòng sổ, và khối «Đầu ra đỏ ở mốc nền» trong bang-truoc-sau.md.
     - spec-alignment — toan-canh-okr:E3, E28, E29: đầu ra lượt man-toan-canh.mjs chạy sau lần đổi răng 26/10 trên HEAD hiện tại, dán dòng «N khẳng định, 0 hỏng» vào duoi_sau.
     - spec-alignment — tro-ly-okr-nen:E25 và bang-thanh-vien-giu-hang:E1 đến E7: dòng AC hoặc dòng sổ của tro-ly-okr-tom-tat quy định phiên con ghi okr.chuyen-tiep thay okr.de-xuat; trích AC-1, AC-3 của datatable-loc-ro và câu giải thích dùng chung lệnh với E5.
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Manh Phan 2026-10-26
 
 ## Known limits
 
