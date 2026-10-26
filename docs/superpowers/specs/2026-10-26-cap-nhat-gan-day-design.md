@@ -70,12 +70,14 @@ Thủ tục chỉ đọc mới `okr.capNhatGanDay` (`POST /okr/updates/list`) tr
 - Mỗi dòng: `checkInId`, thời điểm, người cập nhật, chủ KR khi cập nhật thay (`onBehalf`), KR (id, tên, kiểu, đơn vị
   đo), mục tiêu (id, tên), bộ (khoá, tên), giá trị, mức tự tin, ghi chú, `moiNhat` (đây là lần mới nhất của KR), và
   khi `moiNhat` thì `traLoi`: bình luận của mục tiêu gắn đúng KR ấy có `createdAt` từ thời điểm của lần này trở đi, cũ
-  trước.
+  trước, và `mentionNguoiCapNhat`: id người viết lần ấy, rỗng khi đó là chính người xem hay người ấy không còn là thành
+  viên (Hỏi-2).
 - Số truy vấn cố định: quyền (một), theo dõi (một), ba lần đếm, một trang, một lần tìm lần mới nhất của các KR trên
   trang, một lần đọc bình luận của các KR ấy, một lần đọc tên người.
 
-Trả lời đi qua `okr.addComment` sẵn có với `{ objectiveId, keyResultId, body, mentionUserIds: [] }` — không thêm đường
-ghi. Lần trả lời vì vậy hiện ngay ở thẻ Trao đổi của mục tiêu, mang nhãn KR, và chịu mọi luật sẵn có (chu kỳ đã ẩn,
+Trả lời đi qua `okr.addComment` sẵn có với `{ objectiveId, keyResultId, body, mentionUserIds }` — không thêm đường
+ghi. `mentionUserIds` là `[mentionNguoiCapNhat]` khi có (Hỏi-2, soạn theo khuyến nghị): người viết lần cập nhật nhận tin
+«được nhắc tên» qua đường sẵn có của bản tin sáng; người trả lời không tự chọn nhắc tên. Lần trả lời vì vậy hiện ngay ở thẻ Trao đổi của mục tiêu, mang nhãn KR, và chịu mọi luật sẵn có (chu kỳ đã ẩn,
 quyền xem, độ dài).
 
 ### Màn hình
@@ -85,7 +87,7 @@ quyền xem, độ dài).
 - Trang `/okr/cap-nhat-gan-day`: `page.tsx` dựng tiêu đề và một câu mô tả; nội dung `PageShell width="page"` (một cột
   chữ, `docs/design.md`).
 - Hàng công cụ: `ToggleGroup variant="outline" size="sm"` ba chip, `count` từ `facetCounts`, ghi `phamViBo` lên đường
-  dẫn bằng `parseAsPhamViBo` của VK3 (mặc định «Tất cả»). Trang hiện tại ghi ở tham số trang bằng `nuqs`.
+  dẫn bằng `parseAsPhamViBo` của VK3 (mặc định «Tất cả» — Hỏi-1, soạn theo khuyến nghị). Trang hiện tại ghi ở tham số trang bằng `nuqs`.
 - Dòng tin: `ItemGroup` các `Item variant="outline"`; ảnh người, «<người> [thay cho <chủ KR>] · <thời điểm>», tên KR
   (nút mở chi tiết KR), «<mục tiêu> · <bộ>», giá trị theo kiểu KR (`giaTri` như Lịch sử KR), `ConfidenceIndicator`, ghi
   chú. Lần mới nhất: các lần trả lời rồi nút «Trả lời» mở ô `InputGroup` (Huỷ · Gửi). Lần cũ: «Có lần cập nhật mới
