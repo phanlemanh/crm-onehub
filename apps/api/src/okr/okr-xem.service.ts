@@ -392,11 +392,12 @@ export class OkrXemService {
 		userId: string,
 		cycleId: string,
 		them: Prisma.OkrObjectiveWhereInput,
+		pham: PhamDoc = "so-gop",
 	): Promise<{ ds: MucTieuTinh[]; tuanKy: string[] }> {
 		const where = { cycleId, status: "cong-bo", AND: [them] };
 		const [congBo, lan, tuanKy] = await Promise.all([
-			this.okr.docMucTieu(this.db, where, userId, q, "so-gop"),
-			this.lanCuaKr(where, "so-gop"),
+			this.okr.docMucTieu(this.db, where, userId, q, pham),
+			this.lanCuaKr(where, pham),
 			this.tuanCuaKy(cycleId),
 		]);
 		const so = this.krSoCua(congBo, lan);
@@ -432,11 +433,16 @@ export class OkrXemService {
 		homNay = new Date(),
 	): Promise<SoBoOutput> {
 		const q = await this.quyenOkr.quyen(userId);
+		const pham: PhamDoc =
+			input.unit.loai === "nguoi"
+				? { nguCanh: this.quyenOkr.nguCanhXem(q, userId) }
+				: "so-gop";
 		const { ds, tuanKy } = await this.mucTieuTinh(
 			q,
 			userId,
 			input.cycleId,
 			this.dieuKienDonVi(input.unit, q),
+			pham,
 		);
 		const { tienDo, kyVong, soMucTieu, soKr, tuTin, daCapNhat } = dungHangSo(
 			"",

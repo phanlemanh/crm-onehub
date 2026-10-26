@@ -35,6 +35,7 @@ type San = {
 	A: string;
 	U: Nguoi;
 	quanTri: Nguoi;
+	ngoai: Nguoi;
 };
 
 const idCua = (tra: Awaited<ReturnType<typeof goi>>, nhan: string) =>
@@ -158,7 +159,24 @@ async function gieo(): Promise<San> {
 	const krThap = caNhan.kr[0];
 	if (krThap === undefined) throw new Error("bco: thieu KR thap");
 	await capNhatThap(krThap, U.cookie);
-	return { ky, X, A, U, quanTri };
+	const gioiHan = await mucTieu(
+		ky,
+		{ level: "ca-nhan", personUserId: U.nguoi },
+		U,
+		[U.nguoi],
+		true,
+	);
+	ok(
+		await goi(
+			"okr.datHienThi",
+			{ objectiveId: gioiHan.id, hienThi: "gioi-han", nguoiXem: [] },
+			U.cookie,
+		),
+		"gioi han",
+	);
+	const n = await nguoiMoi("bco-ngoai");
+	const ngoai = { nguoi: n, cookie: await phienCua(n) };
+	return { ky, X, A, U, quanTri, ngoai };
 }
 
 let hua: Promise<San> | null = null;
@@ -194,7 +212,7 @@ function mongDoiNguoi(ds: DanhSachOutput): MongDoi {
 		kyVong: trungBinh(
 			congBo.flatMap((m) => (m.expected === null ? [] : [m.expected])),
 		),
-		soKr: 3,
+		soKr: 4,
 		daCapNhat: 1,
 		thap: 1,
 	};
@@ -289,5 +307,18 @@ describe("bco-so-bo", () => {
 			`bco-so-bo: nguoi:${(await san()).U.nguoi}/soKr lech`,
 		);
 		expect(loi.every((l) => l.includes("nguoi:"))).toBe(true);
+	});
+
+	test("bco-so-bo-do: dem bo ca nhan tren tap cong khai (so-gop) thi bo sot muc tieu gioi han va soKr lech", async () => {
+		const s = await san();
+		const { maTran, soTheo } = await docMaTran(s);
+		const congKhai = await doc<SoBoOutput>("okr.soBo", s.ngoai.cookie, {
+			cycleId: s.ky,
+			unit: { loai: "nguoi", id: s.U.nguoi },
+		});
+		const loi = lech(maTran, (u) =>
+			u.loai === "nguoi" ? congKhai : (soTheo.get(khoa(u)) ?? null),
+		);
+		expect(loi).toContain(`bco-so-bo: nguoi:${s.U.nguoi}/soKr lech`);
 	});
 });
