@@ -173,14 +173,42 @@ function evalMayCua(slug, cauHinh) {
 	return evals.flatMap((e) => {
 		if (!EXECUTOR_MAY.has(String(e.executor).trim())) return [];
 		if (String(e.status ?? "").trim() === "not-run") return [];
-		const ref = String(e.cmd ?? "")
-			.trim()
-			.replace(/^config:/, "");
-		const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
-		if (lenh === "")
-			throw new Error(`khong giai duoc ${slug}#${e.id} (${ref})`);
+		const lenh = giaiLenh(cauHinh, slug, e);
 		return [{ slug, id: e.id, lenh, tep: tepCuaLenh(lenh) }];
 	});
+}
+
+function giaiLenh(cauHinh, slug, e) {
+	const cmd = String(e.cmd ?? "").trim();
+	if (!cmd.startsWith("config:")) {
+		if (cmd === "") throw new Error(`khong giai duoc ${slug}#${e.id} (rong)`);
+		return cmd;
+	}
+	const ref = cmd.replace(/^config:/, "");
+	const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
+	if (lenh === "") throw new Error(`khong giai duoc ${slug}#${e.id} (${ref})`);
+	return lenh;
+}
+
+function tuKiemLenh() {
+	const cauHinh = readFileSync(join(GOC, "_acceptance", "config.yaml"), "utf8");
+	const ra = [];
+	const viet = evalMayCua("cap-nhat-tuan-okr", cauHinh).find(
+		(m) => m.id === "E14",
+	);
+	ra.push(
+		viet?.lenh.includes("tien-de.mjs")
+			? "DUNG viet-thang: cap-nhat-tuan-okr#E14 giai thanh lenh nguyen van"
+			: `SAI viet-thang: ${viet?.lenh ?? "khong co E14"}`,
+	);
+	try {
+		giaiLenh(cauHinh, "gia", { id: "E0", cmd: "config:executors.khong.co" });
+		ra.push("SAI khoa-sai: khoa config khong co ma van giai duoc");
+	} catch (loi) {
+		ra.push(`DUNG khoa-sai: van nem «${loi.message}»`);
+	}
+	for (const d of ra) console.log(d);
+	return ra.every((d) => d.startsWith("DUNG")) ? 0 : MA_DO;
 }
 
 let lopDaQuet = null;
@@ -582,6 +610,7 @@ function chayTrenNen(hong) {
 
 try {
 	if (process.argv.includes("--tu-kiem-thu-lai")) process.exit(tuKiemThuLai());
+	if (process.argv.includes("--tu-kiem-lenh")) process.exit(tuKiemLenh());
 	const viTri = process.argv.indexOf("--chieu-do");
 	if (viTri >= 0)
 		process.exit(chieuDo(process.argv[viTri + 1] === "tron" ? "tron" : "dong"));
