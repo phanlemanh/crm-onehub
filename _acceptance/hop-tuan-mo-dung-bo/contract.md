@@ -5,7 +5,7 @@ slug: hop-tuan-mo-dung-bo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-23-hop-tuan-mo-dung-bo-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-24
@@ -169,6 +169,17 @@ rời».
 - Đổi tin sáng hay thông báo trong app (`apps/agent`).
 
 ## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-26:
+  - Ngoài-1: Lời mô tả của E12 trong evals.yaml chưa nói rằng mã bằng expected_exit hoặc 0 đều là đạt, nên người đọc hồ sơ có thể hiểu khác cách thước chạy.
+  - Ngoài-2: Chạy thử E12 với `--chi` gõ sai hay rỗng từng báo đạt mà không đo gì; đã sửa ở 1950658fd, nay báo không đo được.
+  - Ngoài-3: Cùng gốc với Ngoài-2 (thiếu đối chứng dương khi `--chi` không khớp); đã sửa cùng commit.
+  - Ngoài-4: Nếu sau này phần quyền ở máy chủ đổi hình dạng mà bản chép ở packages/validation không đổi theo, việc tự chuyển Họp tuần về bộ của mình có thể tắt mà không ai được báo.
+  - Ngoài-5: Khi không đọc được quyền hay cây tổ chức của người xem, trang Bộ OKR hiện màn lỗi thay vì mở một bộ mặc định; tải lại là vào được.
+  - Ngoài-6: Lệnh nạp dữ liệu mẫu có thể xoá nhầm chu kỳ hay phòng ban do người tự đặt tên bắt đầu bằng «Ca Họp tuần» trên máy dev hay máy đo; production bị chặn.
+  - Ngoài-9: Khi tải chu kỳ hay cây tổ chức lỗi, màn Họp tuần lặng lẽ mất hàng bốn số, có thể nói sai lý do trống và thiếu tên bộ hay chu kỳ trong câu, không có thông báo lỗi hay nút thử lại.
+  - Ngoài-10: Bài kiểm danh sách «Đơn vị có KR» dựng dữ liệu bằng tay, nên nếu thứ tự đơn vị trên màn thật bị đảo thì bài kiểm vẫn báo đạt.
+  - Ngoài-11: Phép đo «dòng vị trí không từng hiện tên bộ gốc» thiếu đối chứng dương, nên có thể bỏ sót một lần nháy sai tên bộ.
 
 - Không loại bản ghi mới, không nút xoá, không trạng thái kết thúc — ba câu của `docs/vong-doi.md` không áp.
 - Không migration, không thủ tục mới: bộ mặc định tính ở `page.tsx` từ `okr.access` và `org.tree`; danh sách đơn vị có
