@@ -6,6 +6,8 @@ const NANG = process.env.CUA_CHAN_NANG ?? process.env.API_URL ?? "http://localho
 const NANG_URL = new URL(NANG);
 
 let chanThuTuc = null;
+const NHAT_KY_TOI_DA = 5000;
+const nhatKy = [];
 
 function thuTucTrongDuong(duong) {
 	const m = duong.match(/^\/api\/trpc\/([^?]+)/);
@@ -51,7 +53,31 @@ const server = createServer(async (req, res) => {
 		return;
 	}
 
+	if (req.method === "GET" && url.pathname === "/__cua-chan/nhat-ky") {
+		res.writeHead(200, { "content-type": "application/json" });
+		res.end(JSON.stringify({ ok: true, goi: nhatKy }));
+		return;
+	}
+
+	if (req.method === "POST" && url.pathname === "/__cua-chan/xoa-nhat-ky") {
+		await docThan(req);
+		nhatKy.length = 0;
+		res.writeHead(200, { "content-type": "application/json" });
+		res.end(JSON.stringify({ ok: true }));
+		return;
+	}
+
 	const than = await docThan(req);
+
+	const thuTuc = thuTucTrongDuong(url.pathname);
+	if (thuTuc.length > 0) {
+		nhatKy.push({
+			luc: Date.now(),
+			thuTuc,
+			input: url.searchParams.get("input"),
+		});
+		if (nhatKy.length > NHAT_KY_TOI_DA) nhatKy.shift();
+	}
 
 	if (
 		chanThuTuc !== null &&

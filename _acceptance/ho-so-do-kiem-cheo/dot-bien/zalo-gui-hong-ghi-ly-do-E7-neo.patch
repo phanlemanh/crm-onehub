@@ -1,0 +1,11 @@
+--- a/_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs
++++ b/_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs
+@@ -8,7 +8,7 @@
+ const CHI_THEM = "_acceptance/config.yaml";
+ const MA_KHONG_DO = 2;
+ const TU = "0422d7976508e31d81923db5f8609fe5464d695d";
+-const TOI = "1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed";
++const TOI = "0000000000000000000000000000000000000000";
+ 
+ class KhongDo extends Error {}
+ 

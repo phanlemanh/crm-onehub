@@ -11,7 +11,7 @@ const NHIP_MS = 300;
 const TRAN_LUOT_MS = 300_000;
 const TRE_MS = [0, 3_000, 6_000, 10_000, 15_000];
 const LOI_MO_COI = "dang co eve dev khong phai cua bai thu";
-const MOC_DON = "\t\t\t\tawait dungMoCoi(khoa);\n";
+const MOC_DON = "\tawait dungMoCoi(daGianh);\n";
 const KHOA = join(GOC, "node_modules", ".cache", "crm-eve-khoa");
 
 const daThay = new Set();

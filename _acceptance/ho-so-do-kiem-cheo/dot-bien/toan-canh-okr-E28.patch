@@ -1,0 +1,11 @@
+--- a/apps/api/src/okr/okr-xem.service.ts
++++ b/apps/api/src/okr/okr-xem.service.ts
+@@ -633,7 +633,7 @@
+ 					objectiveId: null,
+ 					keyResultId: null,
+ 					at: homNay,
+-					after: { donVi, tuan },
++					after: { donVi },
+ 				},
+ 			});
+ 			return { ghi: true };

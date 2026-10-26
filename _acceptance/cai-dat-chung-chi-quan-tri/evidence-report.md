@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 81f13ffce80b3c3237b262bc0b39a36befec80c5
+verified_commit: e0389b2a953d782c9f58f04cc8c119e7a47f1d88
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -182,3 +182,11 @@ none — every multi-run eval is uniform
 Round 1: SUITE bun_run_test thất bại và E9 ui-check không đo được (hết giờ chờ hydrate) — REJECT, quay lại triển khai.
 Round 2: Toàn bộ eval đạt — PASS, nhưng nhánh sau đó gộp thêm onehub (#136) nên cây đã trôi khỏi bản đã ký, cần verify lại.
 Round 3: BLOCKED — E9 không được đo vì phiên verify trước nhận nhầm một nhiệm vụ khác (yêu cầu gộp PR ngoài phạm vi) và đã đúng đắn từ chối thay vì tự đo bừa; chạy lại vòng mới ở round 4.
+
+### Re-pin lần 1 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
+run_id: repin-20261023T105529Z-32502
+sha: 6fdc7ed4587ef09283181bd35699a668ab3faa27 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-24, do hoá cũ do gộp origin/onehub a971d21be vào nhánh F28 (lượt 3, từng hồ sơ)
+run_id: repin-20261024T182422Z-97721
+sha: e0389b2a953d782c9f58f04cc8c119e7a47f1d88 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

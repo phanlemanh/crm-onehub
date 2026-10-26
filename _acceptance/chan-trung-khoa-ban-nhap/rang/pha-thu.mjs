@@ -82,6 +82,9 @@ function dungBanSao(thuMuc, cheDo) {
 		'from "./okr-kr"',
 		`from ${JSON.stringify(OKR_KR)}`,
 		"okr-cuoc-soan.ts",
+	).replace(
+		/from "\.\/([^"]+)"/g,
+		(_, ten) => `from ${JSON.stringify(join(VALIDATION, "src", ten))}`,
 	);
 	if (cheDo === "do")
 		nguon = thayMotLan(nguon, MOC_REFINE, "", "okr-cuoc-soan.ts");
