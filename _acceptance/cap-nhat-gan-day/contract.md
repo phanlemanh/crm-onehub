@@ -5,9 +5,9 @@ slug: cap-nhat-gan-day
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-10-26T14:13:02Z
 design_doc: docs/superpowers/specs/2026-10-26-cap-nhat-gan-day-design.md
 ---
 
