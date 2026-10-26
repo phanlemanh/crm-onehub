@@ -487,13 +487,21 @@ describe("cng-mo-kr", () => {
 		await dongNgan();
 		expect(san.url().get("phamViBo")).toBe("toi-dan");
 		const mo = qs("[data-mo-tra-loi]");
-		if (mo) await bamChuot(mo);
+		if (!mo) throw new Error("khong co nut Tra loi");
+		await bamChuot(mo);
 		const o = qs("[data-o-tra-loi] textarea");
 		if (!o) throw new Error("khong co o tra loi");
 		await bamChuot(o);
+		await goChu(o, "abc");
+		const gui = qs("[data-gui-tra-loi]");
+		if (!gui) throw new Error("khong co nut Gui");
+		await bamChuot(gui);
+		await cho(() => goiCua("okr.addComment").length === 1, "da gui tra loi");
 		await nhip(5);
-		expect(qs("[data-than-ngan-kr]")).toBeNull();
-		expect(san.url().get("record")).toBeNull();
+		expect({
+			ngan: qs("[data-than-ngan-kr]"),
+			record: san.url().get("record"),
+		}).toEqual({ ngan: null, record: null });
 	});
 });
 

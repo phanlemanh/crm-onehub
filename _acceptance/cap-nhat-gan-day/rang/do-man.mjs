@@ -233,11 +233,19 @@ async function doKho375(t) {
 				el.scrollWidth > el.clientWidth + 1
 			);
 		}).length;
+		const dongNhieu = ten.filter((el) => {
+			const r = document.createRange();
+			r.selectNodeContents(el);
+			return (
+				new Set([...r.getClientRects()].map((x) => Math.round(x.top))).size >= 2
+			);
+		}).length;
 		return {
 			tran: document.documentElement.scrollWidth - window.innerWidth,
 			chip,
 			biCat,
 			soTen: ten.length,
+			dongNhieu,
 		};
 	}, PHA);
 }
@@ -248,12 +256,20 @@ async function e16(n) {
 		width: DO.kho.dienThoai.rong,
 		height: DO.kho.dienThoai.cao,
 	});
-	await mo(t, duongTrang(n), DONG);
+	const r = await mo(t, duongTrang(n), DONG);
+	const lech = [];
+	if (!r.thay) {
+		bao(false, "", "SAI AC-9 khong thay dong tin o 375");
+		return;
+	}
 	const dau = await doKho375(t);
-	await t.trang.click(`${DONG} [data-mo-tra-loi]`).catch(() => null);
+	await t.trang.click(`${DONG} [data-mo-tra-loi]`);
+	if (!(await choThay(t.trang, "[data-o-tra-loi]")))
+		lech.push("o tra loi khong mo");
 	await nghi(DO.cho.langMs);
 	const mo_ = await doKho375(t);
-	const lech = [];
+	if (dau.soTen === 0) lech.push("khong co ten KR nao");
+	if (dau.dongNhieu === 0) lech.push("khong ten KR nao xuong dong");
 	for (const [ten, d] of [
 		["tat-ca", dau],
 		["o-tra-loi", mo_],

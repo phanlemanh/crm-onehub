@@ -27,6 +27,7 @@ import {
 	capNhatGanDayOutput,
 	type DongCapNhat,
 } from "../src/okr/okr-cap-nhat-gan-day.contracts";
+import { OKR } from "../src/okr/okr-config";
 import { OKR_XEM } from "../src/okr/okr-xem.config";
 import { donSanKhep } from "./okr-khep-san";
 import {
@@ -558,6 +559,7 @@ describe("cng-trang", () => {
 				100,
 			);
 			const sau = await demTruyVan();
+			expect(truoc).toBeGreaterThanOrEqual(TRANG_CNG.truyVanToiThieu);
 			expect(`truoc=${truoc} sau=${sau}`).toBe(`truoc=${truoc} sau=${truoc}`);
 		},
 	);
@@ -649,7 +651,21 @@ describe("cng-tra-loi", () => {
 	});
 
 	test("chu ky da an: tra loi bi tu choi bang cau cua may chu", async () => {
-		const truoc = maCua(await moiTrang("quan"));
+		const guiKh = (body: string) =>
+			goi(
+				"okr.addComment",
+				{
+					objectiveId: san.mucTieu.get("kh") ?? "",
+					keyResultId: san.kr.get("kh"),
+					body,
+					mentionUserIds: [],
+				},
+				san.cookie.B,
+			);
+		const truocAn = await guiKh("Trả lời khi chu kỳ còn hiện");
+		expect(`truoc an: HTTP ${truocAn.status}`).toBe("truoc an: HTTP 200");
+		const dongKhac = maCua(await moiTrang("quan", "tat-ca", san.ky.khac));
+		expect(dongKhac).toEqual(["l-kh"]);
 		ok(
 			await goi("okr.anChuKy", {
 				id: san.ky.khac,
@@ -657,19 +673,14 @@ describe("cng-tra-loi", () => {
 			}),
 			"an ky khac",
 		);
-		const tra = await goi(
-			"okr.addComment",
-			{
-				objectiveId: san.mucTieu.get("kh") ?? "",
-				keyResultId: san.kr.get("kh"),
-				body: "Trả lời vào chu kỳ đã ẩn",
-				mentionUserIds: [],
-			},
-			san.cookie.B,
+		const tra = await guiKh("Trả lời vào chu kỳ đã ẩn");
+		expect(`${tra.status} ${tra.loi}`).toBe(
+			`400 ${OKR.thongDiep.chuKy.kyDaAn}`,
 		);
-		expect(tra.status).not.toBe(200);
-		expect(tra.loi.length).toBeGreaterThan(0);
-		expect(maCua(await moiTrang("quan"))).toEqual(truoc);
+		const binhLuan = await db.okrComment.count({
+			where: { body: "Trả lời vào chu kỳ đã ẩn" },
+		});
+		expect(binhLuan).toBe(0);
 	});
 
 	test("nguoi cap nhat khong con la thanh vien thi khong nhac", async () => {

@@ -175,4 +175,5 @@ export const TRANG_CNG = {
 	themPhien: 8,
 	themKrMoiPhien: 5,
 	themDonVi: 3,
+	truyVanToiThieu: 8,
 } as const;
