@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 938c2f430a111234071aac844de83b7c917b4843
+verified_commit: 396409faaf30dc62041ef1806d28d312e1925223
 run_id: s4r1-20260906T102507Z-35290
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -215,3 +215,7 @@ sha: e0389b2a953d782c9f58f04cc8c119e7a47f1d88 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-26, do hoá cũ do gộp origin/onehub 485bdc710 vào nhánh F28
 run_id: repin-20261026T040558Z-88000
 sha: 938c2f430a111234071aac844de83b7c917b4843 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-26, do hoá cũ do gộp origin/onehub 1478ac08a và sửa răng toan-canh-okr theo trang-bo-okr
+run_id: repin-20261026T080827Z-59889
+sha: 396409faaf30dc62041ef1806d28d312e1925223 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
