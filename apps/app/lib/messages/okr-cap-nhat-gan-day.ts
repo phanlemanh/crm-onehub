@@ -4,7 +4,7 @@ const vi = {
 	tieuDe: "Cập nhật gần đây",
 	moTa: "Mọi lần cập nhật KR trong chu kỳ, mới nhất trước — đọc trước buổi họp tuần và trả lời ngay dưới lần cập nhật.",
 	locPhamVi: "Lọc theo phạm vi",
-	thayCho: (ten: string) => `thay cho ${ten}`,
+	thayCho: (ten: string) => `cập nhật thay ${ten}`,
 	coMoiHon: "Có lần cập nhật mới hơn — trả lời ở đó.",
 	traLoi: "Trả lời",
 	oTraLoi: (ten: string) => `Trả lời lần cập nhật của ${ten}`,
