@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: af18f068e26b7d35589459e8062337afac57e12c
+verified_commit: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c
 human_signoff: "Phan Le Manh 2026-10-13 — ký Cổng Bằng chứng trên vòng chấm 3 (13/13 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; ghim lại bằng làn máy repin-20261013T130715Z-53425 sau sửa kiểu). Ngoài-1, 2, 6, 7 ghi Known limits; Ngoài-5 mở hợp đồng mới; Ngoài-3, 4, 8, 9 chấp nhận, không sửa; đồng ý cắt; Treo phê hết"
 ---
 
@@ -259,3 +259,7 @@ sha: d403a78797777bac13fd466678416f4d576179bb · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-25, do V3-44 A: bài đường cũ VK6 chạy tiến trình riêng (.dom.tsx) sau CI #567 đỏ
 run_id: repin-20261025T125204Z-55247
 sha: af18f068e26b7d35589459e8062337afac57e12c · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E4, E5, E6, E7, E8, E11 · thay bởi hồ sơ đã ký: E3→so-do-toan-vung#AC-6, E4→so-do-toan-vung#AC-6, E5→so-do-toan-vung#AC-6, E6→so-do-toan-vung#AC-6, E7→so-do-toan-vung#AC-6, E8→so-do-toan-vung#AC-6, E11→so-do-toan-vung#AC-6 · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4, AC-5, AC-6, AC-7, AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-26, do hoá cũ do gộp origin/onehub 5ff537e4c (#571 KDH) vào VK6; thước E15 nhận cmd viết thẳng (V3-55 a) (lượt 1/2)
+run_id: repin-20261026T153905Z-92888
+sha: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E4, E5, E6, E7, E8, E11 · thay bởi hồ sơ đã ký: E3→so-do-toan-vung#AC-6, E4→so-do-toan-vung#AC-6, E5→so-do-toan-vung#AC-6, E6→so-do-toan-vung#AC-6, E7→so-do-toan-vung#AC-6, E8→so-do-toan-vung#AC-6, E11→so-do-toan-vung#AC-6 · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4, AC-5, AC-6, AC-7, AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
