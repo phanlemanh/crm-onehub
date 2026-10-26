@@ -36,6 +36,10 @@
 		"hinh": "tong-quan"
 	},
 	{
+		"tep": "apps/app/app/(app)/[slug]/okr/soan-bo/khung-soan-bo.tsx",
+		"hinh": "danh-sach"
+	},
+	{
 		"tep": "apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx",
 		"hinh": "bang-hai-dong"
 	},

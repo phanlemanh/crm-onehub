@@ -135,6 +135,7 @@ export function quetHinhTheoMan(
 		const canCo = [
 			...tepGoc.map((t) => TEP_DOI.get(t) ?? t),
 			`${TIEN_SLUG}tai-lieu/page.tsx`,
+			`${TIEN_SLUG}okr/soan-bo/khung-soan-bo.tsx`,
 		];
 		for (const t of canCo) {
 			if (!trongBang.has(t)) loi.push(`kmc-quet: bang hinh thieu ${t}`);
@@ -431,7 +432,7 @@ describe("khong-vong-quay", () => {
 describe("hinh-theo-man", () => {
 	test("bang hinh bang dung tap tep goc va moi tep dung hinh", () => {
 		const goc = tepGocCoVongQuay();
-		expect(BANG_HINH.length).toBe(38);
+		expect(BANG_HINH.length).toBe(39);
 		if (goc === null) {
 			expect(quetHinhTheoMan(DOC, BANG_HINH, goc, TEP)).toEqual([GHI_CHU_NONG]);
 			return;
