@@ -308,3 +308,19 @@ evals:
       OkrTraoDoiService, khong chen bang). Nap lai lan hai: hai so dem khong doi.
       CHIEU DO: ban sao nap chen thang okrComment.createMany -> do "binh luan mau khong co vet" ghim so; ban sao bo xoa
       theo doi cu truoc khi nap -> do "nap lai nhan doi theo doi".
+
+  - id: E16
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cng_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-gan-day/**"
+      - "_acceptance/cap-nhat-gan-day/rang/do-man.mjs"
+    expected: |
+      Cung ban do cua E3 tren phien do, khung 375x812: document.documentElement.scrollWidth - innerWidth == 0 tren trang
+      Cap nhat gan day (Tat ca, va khi o tra loi dang mo); hang chip [data-loc-pham-vi] co scrollWidth >= clientWidth va
+      overflow-x cuon trong chinh no; ten KR dai nhat tren trang (do bang so dong cua phan tu ten KR, getClientRects)
+      chiem >= 2 dong va khong mang text-overflow ellipsis. In "DUNG AC-9 375: tran ngang 0, chip cuon, ten KR xuong
+      dong". Lech -> "SAI AC-9 <gi>", ma 1.
+      CHIEU DO: pha-thu CNG_PHA=tran (ban do chen mot phan tu rong 500px vao vung noi dung truoc khi do) -> "SAI AC-9
+      tran ngang <n>"; CNG_PHA=cat-ten (gan truncate cho ten KR truoc khi do) -> "SAI AC-9 ten KR bi cat".

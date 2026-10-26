@@ -1,0 +1,41 @@
+{
+  "feature_plain": "Trưởng đơn vị mở «Cập nhật gần đây» ở đầu thanh bên Mục tiêu, đọc mọi lần cập nhật KR của chu kỳ mới nhất trước, lọc theo bộ mình dẫn hay đang theo dõi, và trả lời ngay dưới lần cập nhật mới nhất của mỗi KR.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ có mục «Cập nhật gần đây» ngay dưới «Của tôi» trên thanh bên Mục tiêu, giữ chu kỳ đang chọn khi bấm sang."},
+    {"id": "AC-2", "p": "Sẽ hiện một dòng cho mỗi lần cập nhật KR của chu kỳ, mới nhất trước: ai cập nhật (và cập nhật thay cho ai), KR, mục tiêu, bộ OKR, con số, mức tự tin, ghi chú, lúc nào."},
+    {"id": "AC-4", "p": "Sẽ lọc bằng ba chip Tất cả · Tôi dẫn · Đang theo dõi, mỗi chip mang đúng số dòng sẽ hiện khi chọn nó; Tôi dẫn là bộ của đơn vị mình làm trưởng, Đang theo dõi là bộ có mục tiêu mình theo dõi."},
+    {"id": "AC-5", "p": "Sẽ chia trang 20 dòng, nhớ chip và trang trên đường dẫn để chép gửi người khác hay tải lại vẫn đúng; mở trang trần thì ở chip Tất cả."},
+    {"id": "AC-6", "p": "Sẽ cho trả lời ngay dưới lần cập nhật mới nhất của mỗi KR; câu trả lời hiện ngay dưới dòng và cũng nằm ở thẻ Trao đổi của mục tiêu, người viết lần cập nhật được nhắc tên."},
+    {"id": "AC-7", "p": "Sẽ mở chi tiết KR khi bấm vào một dòng, ngay trên trang, như mọi chỗ bấm KR khác."},
+    {"id": "AC-8", "p": "Sẽ có đủ màn chờ, màn lỗi có Thử lại, màn chưa có chu kỳ, màn rỗng và màn rỗng theo chip có nút «Xem tất cả», tiêu đề trang luôn còn."},
+    {"id": "AC-9", "p": "Sẽ đọc được trên máy tính và điện thoại: ở điện thoại không tràn ngang, hàng chip cuộn trong chính nó, tên KR dài xuống dòng."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Sẽ KHÔNG để lộ lần cập nhật của một OKR giới hạn cho người không được xem — kể cả qua con số trên chip."},
+    {"id": "AC-10", "p": "Sẽ KHÔNG chèn dữ liệu mẫu thẳng vào bảng: bộ OKR mẫu có thêm theo dõi và câu trả lời đi qua đường ghi thật, nạp lại không nhân đôi."},
+    {"id": "OOS-1", "p": "KHÔNG trả lời trên lần cập nhật cũ và KHÔNG thả cảm xúc — để cho hàng HT5."},
+    {"id": "OOS-2", "p": "KHÔNG cho tự chọn nhắc tên ai trong câu trả lời — vẫn làm ở thẻ Trao đổi của mục tiêu."},
+    {"id": "OOS-3", "p": "KHÔNG hiện lần cập nhật của mục tiêu cá nhân, nháp hay đã bỏ."},
+    {"id": "OOS-4", "p": "KHÔNG gom theo tuần, KHÔNG tìm kiếm, KHÔNG lọc theo một bộ hay một người, KHÔNG lọc «cấp dưới»."},
+    {"id": "OOS-5", "p": "KHÔNG sửa hay xoá lần cập nhật từ dòng tin."},
+    {"id": "OOS-6", "p": "KHÔNG thêm loại thông báo mới — người viết lần cập nhật nhận tin qua đường nhắc tên sẵn có."}
+  ],
+  "scope_plain": "Những phần để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã soi đủ sáu loại người xem — trưởng phòng ban, trưởng bộ phận, thành viên, quản trị, người chỉ được xem một phần, vai chỉ OKR — ở AC-3 (không lộ OKR giới hạn) và AC-4 (ba chip)."},
+    {"i": 1, "p": "Đã soi mọi nguồn của một dòng: mục tiêu OneHub, bộ phận, phòng ban được hiện; cá nhân, nháp, đã bỏ, chu kỳ khác không hiện; cập nhật thay ghi rõ thay cho ai — ở AC-2 (đủ mọi lần cập nhật)."},
+    {"i": 2, "p": "Đã soi ba chip, trang đầu và trang sau, đổi chu kỳ, đường dẫn chép tay — ở AC-4 (ba chip) và AC-5 (trang và đường dẫn)."},
+    {"i": 3, "p": "Đã soi việc trên một dòng: đọc, mở chi tiết KR, trả lời lần mới nhất, lần cũ không trả lời được, trả lời bị từ chối — ở AC-6 (trả lời) và AC-7 (mở KR); cảm xúc để cho HT5."},
+    {"i": 4, "p": "Đã soi sáu trạng thái màn ở cả khổ máy tính và điện thoại — ở AC-8 (trạng thái) và AC-9 (hai khổ)."},
+    {"i": 5, "p": "Đã soi hai lối vào: thanh bên và đường dẫn chép tay — ở AC-1 (thanh bên) và AC-5 (đường dẫn)."},
+    {"i": 6, "p": "Giả định chờ anh gạch: một chu kỳ cả công ty có thể tới hàng chục nghìn lần cập nhật, nên chia trang và đếm ở máy chủ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Lựa chọn «Đang theo dõi tính theo cả bộ, không theo từng mục tiêu» được dẫn bằng câu từ điển nói về «Tôi dẫn». Đã sửa: dẫn đúng câu từ điển anh chốt 24/10 định nghĩa «Đang theo dõi» là các bộ có mục tiêu mình theo dõi."},
+    {"i": 1, "p": "Chưa ai quyết ai được báo khi có người trả lời; hôm nay người viết lần cập nhật không theo dõi mục tiêu sẽ không biết. Đẩy lên anh thành Hỏi-2, hợp đồng soạn theo khuyến nghị tự nhắc tên họ."},
+    {"i": 2, "p": "Chip mặc định (Hỏi-1) chưa được ghi vào tiêu chí nào nên không có thước. Đã sửa: AC-5 ghi mặc định theo khuyến nghị, có phép đo cho đường dẫn trần."},
+    {"i": 3, "p": "Phép đo «không lộ OKR giới hạn» chỉ thử ở chip Tất cả. Đã sửa: thêm cảnh người xem hẹp theo dõi một mục tiêu cùng phòng ban, đo cả chip Đang theo dõi."},
+    {"i": 4, "p": "Câu trả lời chưa được thử trên bản chạy thật từ đầu tới cuối. Đã sửa: bàn đo màn gửi một câu trả lời thật và đếm nó hiện dưới dòng mà không tải lại trang; bài kiểm máy chủ ghim chung một đồng hồ cho lần cập nhật và câu trả lời."}
+  ],
+  "decisions_plain": []
+}

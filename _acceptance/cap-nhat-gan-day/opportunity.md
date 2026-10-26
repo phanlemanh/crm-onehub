@@ -28,7 +28,7 @@ Vì sao: Lần cập nhật chỉ đọc được trong thẻ Trao đổi của 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi» khi hết timebox
-- Timebox: [đề xuất] 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Câu hỏi phép đo trả lời: đã đạt «Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi» chưa?
+- Kết quả nào là SỐNG: Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi
+- Kết quả nào là CHẾT: chưa đạt «Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi» khi hết timebox
+- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
