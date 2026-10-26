@@ -268,7 +268,7 @@ async function gieo(): Promise<void> {
 				"okr.addComment",
 				{
 					objectiveId: san.mucTieu.get(c.mucTieu) ?? "",
-					...(c.kr ? { keyResultId: san.kr.get(c.kr) } : {}),
+					keyResultId: c.kr ? san.kr.get(c.kr) : undefined,
 					body: `Bình luận ${c.ma}`,
 					mentionUserIds: [],
 				},
