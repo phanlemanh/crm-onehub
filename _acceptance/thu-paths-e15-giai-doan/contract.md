@@ -5,7 +5,7 @@ slug: thu-paths-e15-giai-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-26T14:13:25Z
 design_doc: docs/superpowers/specs/2026-10-16-thu-paths-e15-giai-doan-design.md
@@ -124,3 +124,7 @@ của `docs/plan/lo-trinh-okr.json`).
   - Ngoài-11: Khi công cụ kiểm tra gặp lỗi giữa chừng, nó để lại một bản sao kho tạm trên máy. Chỉ tốn chỗ và gây rối nhẹ, không ảnh hưởng người dùng sản phẩm.
   - Ngoài-12: Bài thử có thể báo xanh dù hai phép thử chưa chạy, nếu sau này một hồ sơ khác thay đổi. Hiện tại chưa xảy ra.
   - Ngoài-13: Bài thử kiểm tra chính bộ kiểm tra không phủ hết mọi trường hợp đã hứa và chạy một lệnh khác với lệnh đã ký. Bộ kiểm tra có thể bỏ sót lỗi mà vẫn báo là bắt được hết.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-27:
+  - Ngoài-1: Hai con số của tính năng đẩy thông báo nằm ở hai nơi trong mã, nên người chỉnh độ dài lời báo lỗi phải sửa cả hai; người dùng không thấy khác biệt.
+  - Ngoài-2: Khi Kara đang soạn tóm tắt tuần, màn OKR chỉ hiện một dòng chữ thường, nên người đọc màn bằng giọng nói không biết là còn đang chờ.
+  - Ngoài-3: Khi hai lần cập nhật một KR trùng đúng giờ, hộp cập nhật có thể hiện hai mức tự tin khác nhau cho cùng một «lần trước»; số liệu thật không đổi.
