@@ -1,5 +1,100 @@
 [
 	{
+		"cu": "gop-y-dung-cho#E5",
+		"moi": "E12",
+		"ly": "đồng bộ số chip và số đề xuất trong khung chi tiết"
+	},
+	{
+		"cu": "gop-y-dung-cho#E8",
+		"moi": "E12",
+		"ly": "góp ý neo dưới KR, «Vì sao», cuộn tới vùng Kara"
+	},
+	{
+		"cu": "gop-y-dung-cho#E11",
+		"moi": "E8",
+		"ly": "nhận, sửa rồi nhận, hoàn tác đề xuất"
+	},
+	{
+		"cu": "gop-y-dung-cho#E13",
+		"moi": "E8",
+		"ly": "bỏ qua đề xuất"
+	},
+	{
+		"cu": "gop-y-dung-cho#E14",
+		"moi": "E8",
+		"ly": "khoá đề xuất khác khi đang gửi"
+	},
+	{
+		"cu": "gop-y-dung-cho#E16",
+		"moi": "E12",
+		"ly": "focus trong vùng Kara của khung"
+	},
+	{
+		"cu": "gop-y-dung-cho#E17",
+		"moi": "E8",
+		"ly": "bảy trạng thái của nhóm Kara trong khung"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E1",
+		"moi": "E8",
+		"ly": "vùng Kara là DetailSheetSection, ba KaraProposal"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E2",
+		"moi": "E8",
+		"ly": "vùng tải lỗi"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E3",
+		"moi": "E8",
+		"ly": "«Nhờ Kara» bị từ chối hay lỗi"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E4",
+		"moi": "E8",
+		"ly": "Kara đọc quá hạn"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E5",
+		"moi": "E8",
+		"ly": "Kara tắt, ba lý do"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E6",
+		"moi": "E8",
+		"ly": "câu lỗi dưới đề xuất"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E7",
+		"moi": "E8",
+		"ly": "căn chỉnh nhận rồi hoàn tác"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E8",
+		"moi": "E8",
+		"ly": "hai lần hoàn tác"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E9",
+		"moi": "E12",
+		"ly": "chip danh sách sau «Nhờ Kara» trong khung"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E10b",
+		"moi": "E8",
+		"ly": "nút «Nhờ Kara» cho người sửa được KR"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E13",
+		"moi": "E12",
+		"ly": "neo KR từ URL trong vùng Kara"
+	},
+	{
+		"cu": "kara-gop-y-luot-2#E14",
+		"moi": "E8",
+		"ly": "khuôn ngày giờ trên bảy bề mặt của vùng Kara"
+	},
+	{
 		"cu": "quyet-gop-y-noi-dung-ly-do#E3",
 		"moi": "E8",
 		"ly": "câu lỗi quyết góp ý tiếng Việt theo mã — thẻ góp ý nay ở cột bên chế độ Soạn"

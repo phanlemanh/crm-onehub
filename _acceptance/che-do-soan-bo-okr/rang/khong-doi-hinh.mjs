@@ -172,6 +172,258 @@ const LOP_DUOC_PHEP = [
 			`\`mnt-khoa: doi chung dong soan khong mo che do Soan khi co quyen ($\{sanSoan.url().get("record")})\`,`,
 		],
 	},
+	{
+		lop: 1,
+		ten: "gop-y-dung-cho: xoa tron ca vung Kara da go (gop-y-dung-cho-khung.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-khung.tsx",
+		kieu: "xoa-ca",
+		ca: [
+			"CONFLICT doc lai danh sach, loi khac hien dung cho",
+			"Esc trong o sua khong dong khung va tra focus ve Sua",
+			"Tab tu Vi sao di qua moi nut de xuat theo thu tu nhin thay",
+			"Vi sao mo ly do va gio doc; viet lai co del/ins va dung ba nut; cau hoi co loi di",
+			"bay trang thai cua nhom Kara trong khung chi tiet",
+			"bien nhan da quyet trong phien khong lam lech so dem",
+			"bo qua sau loai, bien nhan noi dung, khong hoan tac, nhan giam",
+			"bo-qua",
+			"dang gui thi moi de xuat khac khoa, xong thi mo",
+			"dong-bo",
+			"focus-khung",
+			"khoa-gui",
+			"lam moi danh sach dung mot lan khi so chip lech so dong cho",
+			"neo",
+			"nhan, sua roi nhan, hoan tac va dau theo Kara",
+			"nhan-hoan-tac",
+			"sau loai gop y nam dung cho, inline, khong the hay canh bao",
+		],
+		evals: [
+			"gop-y-dung-cho#E5",
+			"gop-y-dung-cho#E8",
+			"gop-y-dung-cho#E11",
+			"gop-y-dung-cho#E13",
+			"gop-y-dung-cho#E14",
+			"gop-y-dung-cho#E16",
+			"gop-y-dung-cho#E17",
+		],
+	},
+	{
+		lop: 1,
+		ten: "gop-y-dung-cho: thu ten nhap chi ca da xoa dung (gop-y-dung-cho-khung.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-khung.tsx",
+		kieu: "nhap",
+	},
+	{
+		lop: 1,
+		ten: "gop-y-dung-cho: xoa tron ca vung Kara da go (gop-y-dung-cho-ra-soat.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-ra-soat.tsx",
+		kieu: "xoa-ca",
+		ca: [
+			"Kara doc xong trong khung thi chip danh sach va so cua Muc tieu lam moi theo so moi",
+			"co neoGopY thi cuon toi vung Kara khi vung da hien roi xoa co; mo kieu khac khong cuon",
+			"doc qua han thi Thu lai mo duoc va nho lai Kara",
+			"dong-bo",
+			"focus-khung",
+			"mo khung khi chip danh sach con dem cu thi danh sach doc lai va chip ve so khung hien (AC-3)",
+			"muc tieu cho duyet: gop y van hien nhung nut quyet khoa co ly do, khong nut nho; muc tieu da bo khong co vung Kara",
+			"neo",
+			"quyet de xuat dau nhom giu cho va focus o Hoan tac sau khi danh sach doc lai",
+			"quyet het roi nho Kara doc lai thi hien dang doc va bao loi khi lan doc lai hong",
+			"trang-thai-kara",
+		],
+		evals: [
+			"gop-y-dung-cho#E5",
+			"gop-y-dung-cho#E8",
+			"gop-y-dung-cho#E11",
+			"gop-y-dung-cho#E13",
+			"gop-y-dung-cho#E14",
+			"gop-y-dung-cho#E16",
+			"gop-y-dung-cho#E17",
+		],
+	},
+	{
+		lop: 1,
+		ten: "gop-y-dung-cho: thu ten nhap chi ca da xoa dung (gop-y-dung-cho-ra-soat.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-ra-soat.tsx",
+		kieu: "nhap",
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: xoa tron ca vung Kara da go (gop-y-dung-cho-luot-2-khung.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2-khung.tsx",
+		kieu: "xoa-ca",
+		ca: [
+			"k3-khung vung la DetailSheetSection nhu vung ben canh, mot tia sang, ba KaraProposal, Kara ban thi nut quyet khoa",
+			"k3-nho-loi",
+			"k3-nho-loi Nho Kara bi tu choi hay loi thi vung hien KaraState loi voi cau san pham va Thu lai",
+			"k3-qua-han",
+			"k3-qua-han doc xong muon: qua tran van hoi lai cham, Kara doc xong thi bo loi va hien gop y",
+			"k3-qua-han khung mo luc Kara dang doc va khong bam Nho: duoi tran con dang doc, qua tran sang loi co Thu lai",
+			"k3-tai-loi",
+			"k3-tai-loi giu gop y khi hoi lai loi: da co danh sach thi lan hoi lai hong khong xoa gop y",
+			"k3-tai-loi vung con, KaraState loi voi cau tai loi, Thu lai chi tai lai danh sach",
+			"k3-tat",
+			"k3-tat 3 ly do x 2 trang thai vung: KaraState off noi ly do, khong Thu lai xam, nut tro toi cau ly do",
+			"k3-tat thu lai khi chua biet san sang: doc san sang loi thi Thu lai doc lai san sang, khong im lang",
+		],
+		evals: [
+			"kara-gop-y-luot-2#E1",
+			"kara-gop-y-luot-2#E2",
+			"kara-gop-y-luot-2#E3",
+			"kara-gop-y-luot-2#E4",
+			"kara-gop-y-luot-2#E5",
+			"kara-gop-y-luot-2#E6",
+			"kara-gop-y-luot-2#E7",
+			"kara-gop-y-luot-2#E8",
+			"kara-gop-y-luot-2#E9",
+			"kara-gop-y-luot-2#E10b",
+			"kara-gop-y-luot-2#E13",
+			"kara-gop-y-luot-2#E14",
+		],
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: thu ten nhap chi ca da xoa dung (gop-y-dung-cho-luot-2-khung.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2-khung.tsx",
+		kieu: "nhap",
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: xoa tron ca vung Kara da go (gop-y-dung-cho-luot-2-dan.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2-dan.tsx",
+		kieu: "xoa-ca",
+		ca: [
+			"k3-neo-kr id la: khong co gop y cua KR do thi cuon toi vung Kara, bo ca hai khoa, khong lam noi dong nao",
+			"k3-neo-kr khung mo tu URL neo KR: focus va lam noi gop y dau tien cua dung KR",
+			"k3-nhieu-kr",
+			"k3-nhieu-kr nguoi sua duoc hai KR, khong sua duoc Muc tieu: nut Nho hien, Nho gui ca Muc tieu khong kem keyResultId",
+		],
+		evals: [
+			"kara-gop-y-luot-2#E1",
+			"kara-gop-y-luot-2#E2",
+			"kara-gop-y-luot-2#E3",
+			"kara-gop-y-luot-2#E4",
+			"kara-gop-y-luot-2#E5",
+			"kara-gop-y-luot-2#E6",
+			"kara-gop-y-luot-2#E7",
+			"kara-gop-y-luot-2#E8",
+			"kara-gop-y-luot-2#E9",
+			"kara-gop-y-luot-2#E10b",
+			"kara-gop-y-luot-2#E13",
+			"kara-gop-y-luot-2#E14",
+		],
+		phu: ["const cuonGoc = HTMLElement.prototype.scrollIntoView;"],
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: thu ten nhap chi ca da xoa dung (gop-y-dung-cho-luot-2-dan.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2-dan.tsx",
+		kieu: "nhap",
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: xoa tron ca vung Kara da go (gop-y-dung-cho-luot-2-dong.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2-dong.tsx",
+		kieu: "xoa-ca",
+		ca: [
+			"k3-can-chinh",
+			"k3-can-chinh Hoan tac loi thi cau loi duoi bien nhan, bien nhan con",
+			"k3-can-chinh nhan -> lam moi -> Hoan tac: go dung lien ket vua tao, khong bao gio go lien ket co tu truoc",
+			"k3-chip",
+			"k3-chip nho Kara roi dong khung khi Kara con doc: chip danh sach va Cua toi doi so moi khong tai lai trang",
+			"k3-hai-hoan",
+			"k3-hai-hoan hoan tac KR1 roi KR2 truoc khi lan dau xong: moi KR ve dung luc lan cua no xong, loi nam duoi dung KR",
+			"k3-loi-dong",
+			"k3-loi-dong 4 hanh dong x 4 loai loi: cau san pham duoi gop y, khong ma tho",
+		],
+		evals: [
+			"kara-gop-y-luot-2#E1",
+			"kara-gop-y-luot-2#E2",
+			"kara-gop-y-luot-2#E3",
+			"kara-gop-y-luot-2#E4",
+			"kara-gop-y-luot-2#E5",
+			"kara-gop-y-luot-2#E6",
+			"kara-gop-y-luot-2#E7",
+			"kara-gop-y-luot-2#E8",
+			"kara-gop-y-luot-2#E9",
+			"kara-gop-y-luot-2#E10b",
+			"kara-gop-y-luot-2#E13",
+			"kara-gop-y-luot-2#E14",
+		],
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: thu ten nhap chi ca da xoa dung (gop-y-dung-cho-luot-2-dong.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2-dong.tsx",
+		kieu: "nhap",
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: xoa tron ca vung Kara da go (gop-y-dung-cho-luot-2-ngay-gio.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2-ngay-gio.tsx",
+		kieu: "xoa-ca",
+		ca: [
+			"k3-ngay-gio",
+			"k3-ngay-gio bay be mat x hai tieng cung mot khuon ngay gio, gio Viet Nam",
+		],
+		evals: [
+			"kara-gop-y-luot-2#E1",
+			"kara-gop-y-luot-2#E2",
+			"kara-gop-y-luot-2#E3",
+			"kara-gop-y-luot-2#E4",
+			"kara-gop-y-luot-2#E5",
+			"kara-gop-y-luot-2#E6",
+			"kara-gop-y-luot-2#E7",
+			"kara-gop-y-luot-2#E8",
+			"kara-gop-y-luot-2#E9",
+			"kara-gop-y-luot-2#E10b",
+			"kara-gop-y-luot-2#E13",
+			"kara-gop-y-luot-2#E14",
+		],
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: thu ten nhap chi ca da xoa dung (gop-y-dung-cho-luot-2-ngay-gio.tsx)",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2-ngay-gio.tsx",
+		kieu: "nhap",
+	},
+	{
+		lop: 1,
+		ten: "kara-gop-y-luot-2: bo nhap hai tep chi con ca da xoa",
+		tep: "apps/app/test/gop-y-dung-cho-luot-2.dom.tsx",
+		kieu: "xoa",
+		dong: [
+			'await import("./gop-y-dung-cho-luot-2-dong");',
+			'await import("./gop-y-dung-cho-luot-2-ngay-gio");',
+		],
+	},
+	{
+		lop: 2,
+		ten: "kara-gop-y-luot-2: CHAN chi con k3_nhieu_kr (cac khoa khac da nghi)",
+		tep: "_acceptance/kara-gop-y-luot-2/rang/dot-bien.mjs",
+		kieu: "doi",
+		bo: [
+			'"k3_khung", "k3_tai_loi", "k3_nho_loi", "k3_qua_han", "k3_tat", "k3_loi_dong",',
+			'"k3_can_chinh", "k3_hai_hoan", "k3_chip", "k3_nhieu_kr", "k3_nhieu_kr_ui", "k3_neo_kr",',
+		],
+		them: ['"k3_nhieu_kr",'],
+	},
+	{
+		lop: 2,
+		ten: "kara-gop-y-luot-2: go muc dot bien (a)-(e), (g), (h) chi eval da nghi bat duoc",
+		tep: "_acceptance/kara-gop-y-luot-2/rang/dot-bien.mjs",
+		kieu: "xoa",
+		dau: [
+			'const OKR = "apps/app/app/(app)/[slug]/okr";',
+			"const noi = (...buoc) =>",
+			'{ ten: "(a) ',
+			'{ ten: "(b) ',
+			'{ ten: "(c) ',
+			'{ ten: "(d) ',
+			'{ ten: "(e) ',
+			'{ ten: "(g) ',
+			'{ ten: "(h) ',
+		],
+	},
 ];
 const TEN_CA = /\b(?:describe|test)\(\s*(["'`])((?:(?!\1)[^\\]|\\.)*)\1/g;
 const TRANG_THAI_DA_KY = new Set(["signed-off", "machine-cleared"]);
@@ -534,8 +786,35 @@ const trungKhop = (a, b) =>
 function khoiDoiChuoi(tep, k) {
 	if (tep.endsWith("evals.yaml"))
 		return k.bo.length === 0 && k.them.every((d) => DONG_YAML_NGHI.test(d));
+	if (gon(k.bo).length === 0 && gon(k.them).length === 0) return true;
 	if (k.bo.length === 0 || k.them.length === 0) return false;
 	return chuanHoa(k.bo.join("\n")) === chuanHoa(k.them.join("\n"));
+}
+
+const DONG_NHAP =
+	/^(?:import\b|\}? ?from\b|\} from\b|[\w$]+,?$|const \{[^}]*\} = await import\(|\);?$|["'][^"']+["']\s*\)?;?$)/;
+
+function tenNhap(ds) {
+	const chuoi = ds.join("\n");
+	const mo = [...chuoi.matchAll(/["']([^"']+)["']/g)].map((m) => m[1]);
+	const ten = chuoi
+		.replace(/["'][^"']*["']/g, "")
+		.match(/[\w$]+/g)
+		?.filter((t) => !["import", "from", "type", "const", "await"].includes(t));
+	return { mo: new Set(mo), ten: new Set(ten ?? []) };
+}
+
+function laThuNhap(k) {
+	const bo = gon(k.bo);
+	const them = gon(k.them);
+	if (bo.length === 0 || ![...bo, ...them].every((d) => DONG_NHAP.test(d)))
+		return false;
+	const truoc = tenNhap(bo);
+	const sau = tenNhap(them);
+	return (
+		[...sau.ten].every((t) => truoc.ten.has(t)) &&
+		[...sau.mo].every((t) => truoc.mo.has(t))
+	);
 }
 
 function lopCuaKhoi(tep, k, nghiMoi) {
@@ -545,12 +824,17 @@ function lopCuaKhoi(tep, k, nghiMoi) {
 		LOP_DUOC_PHEP.filter((l) => l.tep === tep).find((l) => {
 			if (l.kieu === "doi")
 				return trungKhop(bo, l.bo) && trungKhop(them, l.them);
+			if (l.kieu === "nhap") return laThuNhap(k);
 			if (them.length > 0 || bo.length === 0) return false;
-			if (l.kieu === "xoa") return bo.every((d) => l.dong.includes(d));
+			if (l.kieu === "xoa")
+				return bo.every((d) =>
+					l.dong ? l.dong.includes(d) : l.dau.some((x) => d.startsWith(x)),
+				);
 			const ca = [...k.bo.join("\n").matchAll(TEN_CA)].map((m) => m[2]);
+			const khai =
+				ca.length === 0 && (l.phu ?? []).some((x) => bo[0].startsWith(x));
 			return (
-				ca.length > 0 &&
-				ca.every((c) => l.ca.includes(c)) &&
+				(khai || (ca.length > 0 && ca.every((c) => l.ca.includes(c)))) &&
 				l.evals.every((e) => nghiMoi.has(e))
 			);
 		}) ?? null
