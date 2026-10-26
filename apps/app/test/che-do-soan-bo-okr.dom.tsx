@@ -395,6 +395,16 @@ afterEach(async () => {
 	await don();
 });
 
+async function phaiDo(viec: Promise<void>, cau: string): Promise<void> {
+	let chu = "khong do";
+	try {
+		await viec;
+	} catch (e) {
+		chu = e instanceof Error ? e.message : String(e);
+	}
+	expect(chu, cau).toContain(cau);
+}
+
 describe("vk10-khoa", () => {
 	test("vk10-khoa: khoa bo di ve dung chu ky va don vi", () => {
 		expect(
@@ -548,12 +558,13 @@ describe("vk10-mo-do", () => {
 		const bo = boMau({ muc: BO_PB, daBo: DA_BO });
 		const khac = taoKhoaBo(KY, { loai: "pb", id: "P2" });
 		await veSoan(khac);
-		await expect(
+		await phaiDo(
 			kiemMo(
 				"url/tai-lai",
 				kyVong("Phòng Pháp chế · Quý 4/2026", khac, BO_PB, DA_BO),
 			),
-		).rejects.toThrow("vk10-mo: tap muc tieu lech");
+			"vk10-mo: tap muc tieu lech",
+		);
 		expect(khac, "vk10-mo: khoa khac trung khoa bo").not.toBe(bo.khoa);
 	});
 
@@ -564,12 +575,13 @@ describe("vk10-mo-do", () => {
 				chonMucTieu: (ds, d) => [...chonMucTieuBo(ds, d), ...ds.daBo],
 			},
 		});
-		await expect(
+		await phaiDo(
 			kiemMo(
 				"url/tai-lai",
 				kyVong("Phòng Kế toán · Quý 4/2026", bo.khoa, BO_PB, DA_BO),
 			),
-		).rejects.toThrow("vk10-mo: da-bo hien");
+			"vk10-mo: da-bo hien",
+		);
 	});
 });
 
@@ -679,9 +691,7 @@ describe("vk10-quyen-do", () => {
 	test("vk10-quyen-do: bo co chi xem cho URL thang", async () => {
 		const bo = boMau({ nguoiSoan: HUNG, canEdit: false, muc: BO_XEM });
 		await veSoan(bo.khoa, { phuThuoc: { chiXemTheoQuyen: false } });
-		await expect(kiemChiXem(2, "khong-sua")).rejects.toThrow(
-			"vk10-quyen: o2 lech",
-		);
+		await phaiDo(kiemChiXem(2, "khong-sua"), "vk10-quyen: o2 lech");
 	});
 });
 
@@ -1081,7 +1091,7 @@ describe("vk10-viet", () => {
 describe("vk10-viet-do", () => {
 	test("vk10-viet-do: suy kieu thay bang hang tang-toi thi kr-2 kind do", async () => {
 		await moBoTrong({}, { suyKieu: () => "tang-toi" });
-		await expect(kiemVietBo()).rejects.toThrow("vk10-viet: kr-2 kind lech");
+		await phaiDo(kiemVietBo(), "vk10-viet: kr-2 kind lech");
 	});
 
 	test("vk10-viet-do: bo chan thieu dich thi kr-4 bi goi", async () => {
@@ -1096,9 +1106,7 @@ describe("vk10-viet-do", () => {
 				},
 			},
 		);
-		await expect(kiemVietBo()).rejects.toThrow(
-			"vk10-viet: kr-4 goi khi thieu dich",
-		);
+		await phaiDo(kiemVietBo(), "vk10-viet: kr-4 goi khi thieu dich");
 	});
 });
 
@@ -1375,7 +1383,7 @@ describe("vk10-sua-do", () => {
 
 	test("vk10-sua-do: luu theo phim thi o1 do", async () => {
 		await moBoSua({ luuKhi: "moi-phim" });
-		await expect(kiemSuaO1()).rejects.toThrow("vk10-sua: o1 lech");
+		await phaiDo(kiemSuaO1(), "vk10-sua: o1 lech");
 	});
 });
 
@@ -1414,7 +1422,7 @@ describe("vk10-tai-luu", () => {
 describe("vk10-tai-luu-do", () => {
 	test("vk10-tai-do: loi luu xoa chu dong thi o3 do", async () => {
 		await moBoTrong({}, { giuChuKhiLoiLuu: false });
-		await expect(kiemLuuLoiO3()).rejects.toThrow("vk10-tai: o3 lech");
+		await phaiDo(kiemLuuLoiO3(), "vk10-tai: o3 lech");
 	});
 });
 
@@ -1508,9 +1516,7 @@ describe("vk10-quyen-dong-do", () => {
 	test("vk10-quyen-do: dong thang khi con dong chua luu", async () => {
 		await moBoTrong({}, { hoiKhiDongChuaLuu: false });
 		await vietDongThieuDich();
-		await expect(kiemHoiKhiDong()).rejects.toThrow(
-			"vk10-quyen: dong khong hoi",
-		);
+		await phaiDo(kiemHoiKhiDong(), "vk10-quyen: dong khong hoi");
 	});
 });
 
@@ -1755,9 +1761,7 @@ describe("vk10-chat-luong-do", () => {
 	test("vk10-chat-luong-do: diem doc tu hang thay vi ham cham thi khong cap nhat", async () => {
 		const hang = chamNoiDung(KR_Q2.title);
 		await moBoChatLuong({ chamBo: () => hang });
-		await expect(kiemChatLuong()).rejects.toThrow(
-			"vk10-chat-luong: khong cap nhat",
-		);
+		await phaiDo(kiemChatLuong(), "vk10-chat-luong: khong cap nhat");
 	});
 
 	test("vk10-chat-luong-do: den dong tro o dau tien thi sai o", async () => {
@@ -1767,9 +1771,7 @@ describe("vk10-chat-luong-do", () => {
 				return o instanceof HTMLElement ? o : null;
 			},
 		});
-		await expect(kiemChatLuong()).rejects.toThrow(
-			"vk10-chat-luong: den dong sai o",
-		);
+		await phaiDo(kiemChatLuong(), "vk10-chat-luong: den dong sai o");
 	});
 });
 
@@ -2142,7 +2144,8 @@ describe("vk10-gop-y", () => {
 
 describe("vk10-gop-y-do", () => {
 	test("vk10-gop-y-do: tai lieu khong doc lai de xuat da nhan thi dong khong doi", async () => {
-		await expect(kiemGopY({ docLaiSauNhan: false })).rejects.toThrow(
+		await phaiDo(
+			kiemGopY({ docLaiSauNhan: false }),
 			"vk10-gop-y: dong khong doi",
 		);
 	});
@@ -2150,7 +2153,8 @@ describe("vk10-gop-y-do", () => {
 	test("vk10-gop-y-do: Kara tat ma khoi Chat luong bi an", async () => {
 		const tat = O_KARA[0];
 		expect(tat.o, "vk10-gop-y: tat lech").toBe("tat");
-		await expect(kiemOKara(tat, { chatLuongKhiKaraTat: "an" })).rejects.toThrow(
+		await phaiDo(
+			kiemOKara(tat, { chatLuongKhiKaraTat: "an" }),
 			"vk10-gop-y: tat an chat luong",
 		);
 	});
@@ -2428,17 +2432,17 @@ describe("vk10-cong-bo-do", () => {
 		await moBoCongBo(QUYEN_CONG_BO, {
 			demCongBo: (ds) => ds.filter((d) => d.status === "nhap").length,
 		});
-		await expect(kiemO1()).rejects.toThrow("vk10-cong-bo: o1 lech");
+		await phaiDo(kiemO1(), "vk10-cong-bo: o1 lech");
 	});
 
 	test("vk10-cong-bo-do: cong bo tat ca bo qua o tich thi o1b do", async () => {
 		await moBoCongBo(QUYEN_CONG_BO, { goiTheoOTich: false });
-		await expect(kiemO1b()).rejects.toThrow("vk10-cong-bo: o1b lech");
+		await phaiDo(kiemO1b(), "vk10-cong-bo: o1b lech");
 	});
 
 	test("vk10-cong-bo-do: loi lan hai hoan tac lan mot tren man thi o3 do", async () => {
 		await moBoCongBo(QUYEN_CONG_BO, { giuKetQuaKhiLoi: false });
-		await expect(kiemO3()).rejects.toThrow("vk10-cong-bo: o3 lech");
+		await phaiDo(kiemO3(), "vk10-cong-bo: o3 lech");
 	});
 });
 
@@ -2576,13 +2580,11 @@ describe("vk10-ngan-do", () => {
 			n: 3,
 			diemCam: { duoiKr: () => <div data-vung-kara="" /> },
 		});
-		await expect(kiemNgan(3, bo.khoa)).rejects.toThrow(
-			"vk10-ngan: n=3 vung con",
-		);
+		await phaiDo(kiemNgan(3, bo.khoa), "vk10-ngan: n=3 vung con");
 	});
 
 	test("vk10-ngan-do: chip hien khi khong co gop y cho thi n=0 do", async () => {
 		const bo = await moNgan({ n: 0, soGopYChoThat: 1 });
-		await expect(kiemNgan(0, bo.khoa)).rejects.toThrow("vk10-ngan: n=0 chip");
+		await phaiDo(kiemNgan(0, bo.khoa), "vk10-ngan: n=0 chip");
 	});
 });
