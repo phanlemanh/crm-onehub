@@ -148,10 +148,11 @@ function evalMayCua(slug, cauHinh) {
 	return evals.flatMap((e) => {
 		if (!EXECUTOR_MAY.has(String(e.executor).trim())) return [];
 		if (String(e.status ?? "").trim() === "not-run") return [];
-		const ref = String(e.cmd ?? "")
-			.trim()
-			.replace(/^config:/, "");
-		const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
+		const cmd = String(e.cmd ?? "").trim();
+		const ref = cmd.replace(/^config:/, "");
+		const lenh = String(
+			cmd.startsWith("config:") ? (resolveConfigKey(cauHinh, ref) ?? "") : cmd,
+		).trim();
 		if (lenh === "")
 			throw new Error(`khong giai duoc ${slug}#${e.id} (${ref})`);
 		return [{ slug, id: e.id, lenh, tep: tepCuaLenh(lenh) }];
@@ -382,6 +383,12 @@ function khoiDiff(diff) {
 const chiDoiChuoi = (k) =>
 	chuanHoa(k.bo.join("\n")) === chuanHoa(k.them.join("\n"));
 
+const coOGoc = (coSo, tep, cwd) =>
+	spawnSync("git", ["cat-file", "-e", `${coSo}:${tep}`], {
+		cwd,
+		stdio: "ignore",
+	}).status === 0;
+
 function soatDoiThuoc(cwd) {
 	const coSo = git(["merge-base", "HEAD", NHANH_GOC], cwd);
 	const sai = [];
@@ -389,6 +396,10 @@ function soatDoiThuoc(cwd) {
 		if (!LA_THUOC.test(tep)) continue;
 		const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", tep], cwd);
 		if (diff === "") continue;
+		if (!coOGoc(coSo, tep, cwd)) {
+			console.log(`THUOC MOI ${tep}: chua co o goc nhanh, khong soat`);
+			continue;
+		}
 		const viet = VIET_LAI[tep] ?? null;
 		const tatCa = khoiDiff(diff);
 		if (
