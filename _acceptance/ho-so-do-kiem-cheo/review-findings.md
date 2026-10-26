@@ -1,28 +1,26 @@
-# Review findings — ho-so-do-kiem-cheo (round 4)
+# Review findings: ho-so-do-kiem-cheo (round 5)
 
 ## Trong hợp đồng
-
-(không có finding nào map được vào AC ở vòng này)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The new 'handed to a separate lane' exception never reaches the human reviewers who are supposed to check it**
+- **The new 'handed to a separate lane' exception never reaches the human reviewers who are supposed to check it (r4)**
   Người dùng thấy gì: Hồ sơ được chủ kho giao cho làn riêng sẽ không hiện trong bảng trước/sau mà hội đồng và người ký đọc. Nếu dấu giao làn riêng bị dùng để né một lỗi sản phẩm thật thì không ai thấy lý do ghi kèm.
   Căn cứ: Chỉ có một hồ sơ dùng dấu này và quyết định của chủ kho đã ghi trong sổ, nên rủi ro thấp; nếu thiếu thì người ký vẫn mở sổ quyết định xem được, và sửa sau rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/bang.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (một mình chiều âm): CHUA_TRA ở nhánh giao_lan_rieng không có ca tự kiểm nào chứng được nó báo đỏ**
+- **Hình dạng 4 (một mình chiều âm): CHUA_TRA ở nhánh giao_lan_rieng không có ca tự kiểm nào chứng được nó báo đỏ (r4)**
   Người dùng thấy gì: Nếu bước kiểm hồ sơ giao làn riêng bị hỏng âm thầm, lượt chạy vẫn báo không có lỗi, nên có thể bỏ sót một hồ sơ thiếu phần sửa ghi sẵn. Người dùng cuối không bị ảnh hưởng trực tiếp, chỉ độ tin cậy của bộ kiểm giảm.
   Căn cứ: Đây là công cụ kiểm nội bộ, không làm mất dữ liệu của người dùng; chỉ một hồ sơ bị ảnh hưởng và thêm phép thử sau này rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 (chỉ kiểm chuỗi có mặt trong khi lời hứa là quan hệ): «sửa ghi sẵn» của to-chuc E21 chỉ được kiểm là có hai chuỗi không rỗng**
+- **Hình dạng 3 (chỉ kiểm chuỗi có mặt trong khi lời hứa là quan hệ): «sửa ghi sẵn» của to-chuc E21 chỉ được kiểm là có hai chuỗi không rỗng (r4)**
   Người dùng thấy gì: Phần sửa ghi sẵn cho hồ sơ giao làn riêng có thể trỏ tới một bản vá không tồn tại mà bộ kiểm vẫn cho qua. Làn nhận việc sau có thể mở ra thấy phần sửa không dùng được.
   Căn cứ: Lỗi chỉ lộ ra khi làn riêng bắt tay vào sửa và họ tự phát hiện ngay, không mất dữ liệu hay ảnh hưởng người dùng cuối; sửa sau rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
@@ -43,7 +41,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **The hsdk_chieu_do executor remains in config, but no eval uses it any more (r3)**
+- **The hsdk_chieu_do executor remains in config, but no eval uses it any more (r3 · tệp đã đổi)**
   Người dùng thấy gì: Còn sót một dòng cấu hình không còn eval nào dùng tới trong tệp cấu hình chung. Nó không làm gì và không ảnh hưởng người dùng.
   Căn cứ: Dòng thừa vô hại, không đổi hành vi nào, bỏ hay giữ đều không ai thấy; công sửa không xứng với lợi ích.
   file: `_acceptance/config.yaml`
@@ -57,14 +55,14 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 2 (dữ liệu ghi sẵn, không đi vòng ghi rồi đọc): lời hỏi E6 bắt hội đồng đọc «đầu ra đột biến» lấy từ chieu-do-ket-qua.json cũ (38/38), trong khi lượt mới nhất cho 36/38 (r3 · tệp đã đổi)**
+- **Hình dạng 2 (dữ liệu ghi sẵn, không đi vòng ghi rồi đọc): lời hỏi E6 bắt hội đồng đọc «đầu ra đột biến» lấy từ chieu-do-ket-qua.json cũ (38/38), trong khi lượt mới nhất cho 36/38 (r3)**
   Người dùng thấy gì: Câu hỏi giao cho hội đồng vẫn yêu cầu xem kết quả kiểm tra cũ, nên họ có thể dựa vào số liệu đã lỗi thời khi phán xét. Người dùng sản phẩm không bị ảnh hưởng.
   Căn cứ: Là sai lệch nhỏ trong cách trình bằng chứng cho người chấm, tự phát hiện được vì hợp đồng đã ghi, không mất dữ liệu nào.
   file: `_acceptance/ho-so-do-kiem-cheo/evals.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 2 (dữ liệu ghi sẵn, không đi vòng ghi rồi đọc): bỏ --tai-lap thì E1 chỉ còn so hai tệp tự khai với nhau, và mốc nền chỉ dựa vào trường sha do chính tệp ghi (r3)**
+- **Hình dạng 2 (dữ liệu ghi sẵn, không đi vòng ghi rồi đọc): bỏ --tai-lap thì E1 chỉ còn so hai tệp tự khai với nhau, và mốc nền chỉ dựa vào trường sha do chính tệp ghi (r3 · tệp đã đổi)**
   Người dùng thấy gì: Bước kiểm tra danh sách hồ sơ đỏ giờ chỉ so hai tệp do người viết hồ sơ ghi, không dựng lại phép đo từ đầu. Nếu tệp ghi sai thì kiểm tra này không phát hiện được.
   Căn cứ: Giới hạn này đã được chủ kho chấp nhận có chủ đích vì phép đo lại không ổn định, và không ảnh hưởng người dùng hay dữ liệu.
   file: `_acceptance/config.yaml`
@@ -106,7 +104,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Sửa răng đổi khẳng định của các eval ui-check không có dòng danh sách, lời eval đã ký nay nói ngược với răng (r1)**
+- **Sửa răng đổi khẳng định của các eval ui-check không có dòng danh sách, lời eval đã ký nay nói ngược với răng (r1 · tệp đã đổi)**
   Người dùng thấy gì: Mô tả các bước kiểm của vài màn Toàn cảnh OKR và Cập nhật tuần đã cũ so với phép đo đang chạy. Người chấm bằng mắt đọc theo lời cũ có thể chấm lệch.
   Căn cứ: Chỉ gây hiểu nhầm cho người chấm chứ không làm hỏng tính năng nào của người dùng, và sửa lời mô tả sau vẫn rẻ.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
@@ -120,7 +118,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Đo toan-canh-okr nay dựa vào nhật ký của cửa chặn thuộc hồ sơ khác, nhưng paths không khai tệp đó (r1)**
+- **Đo toan-canh-okr nay dựa vào nhật ký của cửa chặn thuộc hồ sơ khác, nhưng paths không khai tệp đó (r1 · tệp đã đổi)**
   Người dùng thấy gì: Nếu sau này ai đó sửa công cụ chặn dùng chung, phép đo màn Toàn cảnh OKR có thể không được chạy lại tự động. Một lỗi mới có thể lọt qua mà không ai thấy ngay.
   Căn cứ: Rủi ro nằm ở tương lai và chỉ ảnh hưởng công cụ kiểm, người dùng không mất dữ liệu, thêm một dòng khai báo sau là xong.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
@@ -141,7 +139,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **Expected của chính hồ sơ ho-so-do-kiem-cheo lệch với răng đã viết (r1 · tệp đã đổi)**
+- **Expected của chính hồ sơ ho-so-do-kiem-cheo lệch với răng đã viết (r1)**
   Người dùng thấy gì: Phần mô tả những gì các bài kiểm của đợt rà này chứng minh hơi khác với cách chúng thực sự chạy. Người ký đọc mô tả có thể tin rằng kiểm chặt hơn thực tế.
   Căn cứ: Chỉ làm lệch cách hiểu của người duyệt nội bộ, không ảnh hưởng người dùng sản phẩm, và chỉnh lại câu chữ về sau rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/evals.yaml`
@@ -162,7 +160,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **loi-ra.mjs misses duplicate signal codes inside one hoan_lai entry (r1 · tệp đã đổi)**
+- **loi-ra.mjs misses duplicate signal codes inside one hoan_lai entry (r1)**
   Người dùng thấy gì: Hai tín hiệu trùng mã trong cùng một hồ sơ hoàn lại có thể không bị báo. Hậu quả là sổ tín hiệu có hai dòng trùng mã.
   Căn cứ: Hiếm gặp, chỉ gây rối sổ nội bộ và dễ thấy bằng mắt khi đọc danh sách, nên không đáng sửa riêng.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
@@ -176,14 +174,14 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **dungCayTam leaks the temporary worktree when bun install or db:generate fails (r1 · tệp đã đổi)**
+- **dungCayTam leaks the temporary worktree when bun install or db:generate fails (r1)**
   Người dùng thấy gì: Khi bước cài đặt của công cụ đo thất bại, một thư mục làm việc tạm bị bỏ lại trên máy dev. Không ảnh hưởng người dùng sản phẩm.
   Căn cứ: Chỉ để lại rác trên máy dev trong ca lỗi hiếm, xoá tay được bằng một lệnh, không đáng mở việc riêng.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/chung.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 3 (chỉ kiểm chuỗi có mặt): CHUA_TRA chỉ đòi xu_ly và sua khác rỗng, không đòi tệp và đột biến như lời hứa (r1 · tệp đã đổi)**
+- **Hình dạng 3 (chỉ kiểm chuỗi có mặt): CHUA_TRA chỉ đòi xu_ly và sua khác rỗng, không đòi tệp và đột biến như lời hứa (r1)**
   Người dùng thấy gì: Với các hồ sơ có lỗi sản phẩm được giao lại cho hàng sau, phần sửa gợi ý có thể thiếu chỉ dẫn tệp nào và cách chứng minh. Người làm hàng sau phải tự tra thêm.
   Căn cứ: Không làm hỏng gì cho người dùng, chỉ khiến việc sửa sau tốn thêm công tra cứu, và các lỗi sản phẩm vẫn được ghi đủ để theo dõi.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
@@ -225,7 +223,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo lời khai thay vì đầu ra): TIN_HIEU_VANG chỉ đọc tin_hieu khai trong danh-sach.json, không đọc cửa tín hiệu (r1 · tệp đã đổi)**
+- **Hình dạng 1 (đo lời khai thay vì đầu ra): TIN_HIEU_VANG chỉ đọc tin_hieu khai trong danh-sach.json, không đọc cửa tín hiệu (r1)**
   Người dùng thấy gì: Công cụ chỉ kiểm tín hiệu báo lỗi sản phẩm theo đúng khuôn đã ghi, chứ không đối chiếu với tín hiệu đã thật sự gửi. Một mã bịa đúng khuôn vẫn qua được.
   Căn cứ: Nếu tín hiệu không đến nơi thì lỗi sản phẩm có thể bị quên, nhưng người ký đối chiếu được bằng mắt và giới hạn này đã được khai trước.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
@@ -239,7 +237,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Sửa răng đổi khẳng định của các eval ui-check không có dòng danh sách, lời eval đã ký nay nói ngược với răng (r1)**
+- **Sửa răng đổi khẳng định của các eval ui-check không có dòng danh sách, lời eval đã ký nay nói ngược với răng (r1 · tệp đã đổi)**
   Người dùng thấy gì: Mô tả các bước kiểm của vài màn Toàn cảnh OKR và Cập nhật tuần đã cũ so với phép đo đang chạy. Người chấm bằng mắt đọc theo lời cũ có thể chấm lệch.
   Căn cứ: Chỉ gây hiểu nhầm cho người chấm chứ không làm hỏng tính năng nào của người dùng, và sửa lời mô tả sau vẫn rẻ.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
@@ -253,7 +251,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Đo toan-canh-okr nay dựa vào nhật ký của cửa chặn thuộc hồ sơ khác, nhưng paths không khai tệp đó (r1)**
+- **Đo toan-canh-okr nay dựa vào nhật ký của cửa chặn thuộc hồ sơ khác, nhưng paths không khai tệp đó (r1 · tệp đã đổi)**
   Người dùng thấy gì: Nếu sau này ai đó sửa công cụ chặn dùng chung, phép đo màn Toàn cảnh OKR có thể không được chạy lại tự động. Một lỗi mới có thể lọt qua mà không ai thấy ngay.
   Căn cứ: Rủi ro nằm ở tương lai và chỉ ảnh hưởng công cụ kiểm, người dùng không mất dữ liệu, thêm một dòng khai báo sau là xong.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
@@ -274,7 +272,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **Expected của chính hồ sơ ho-so-do-kiem-cheo lệch với răng đã viết (r1 · tệp đã đổi)**
+- **Expected của chính hồ sơ ho-so-do-kiem-cheo lệch với răng đã viết (r1)**
   Người dùng thấy gì: Phần mô tả những gì các bài kiểm của đợt rà này chứng minh hơi khác với cách chúng thực sự chạy. Người ký đọc mô tả có thể tin rằng kiểm chặt hơn thực tế.
   Căn cứ: Chỉ làm lệch cách hiểu của người duyệt nội bộ, không ảnh hưởng người dùng sản phẩm, và chỉnh lại câu chữ về sau rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/evals.yaml`
@@ -295,7 +293,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **loi-ra.mjs misses duplicate signal codes inside one hoan_lai entry (r1 · tệp đã đổi)**
+- **loi-ra.mjs misses duplicate signal codes inside one hoan_lai entry (r1)**
   Người dùng thấy gì: Hai tín hiệu trùng mã trong cùng một hồ sơ hoàn lại có thể không bị báo. Hậu quả là sổ tín hiệu có hai dòng trùng mã.
   Căn cứ: Hiếm gặp, chỉ gây rối sổ nội bộ và dễ thấy bằng mắt khi đọc danh sách, nên không đáng sửa riêng.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
@@ -309,14 +307,14 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **dungCayTam leaks the temporary worktree when bun install or db:generate fails (r1 · tệp đã đổi)**
+- **dungCayTam leaks the temporary worktree when bun install or db:generate fails (r1)**
   Người dùng thấy gì: Khi bước cài đặt của công cụ đo thất bại, một thư mục làm việc tạm bị bỏ lại trên máy dev. Không ảnh hưởng người dùng sản phẩm.
   Căn cứ: Chỉ để lại rác trên máy dev trong ca lỗi hiếm, xoá tay được bằng một lệnh, không đáng mở việc riêng.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/chung.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 3 (chỉ kiểm chuỗi có mặt): CHUA_TRA chỉ đòi xu_ly và sua khác rỗng, không đòi tệp và đột biến như lời hứa (r1 · tệp đã đổi)**
+- **Hình dạng 3 (chỉ kiểm chuỗi có mặt): CHUA_TRA chỉ đòi xu_ly và sua khác rỗng, không đòi tệp và đột biến như lời hứa (r1)**
   Người dùng thấy gì: Với các hồ sơ có lỗi sản phẩm được giao lại cho hàng sau, phần sửa gợi ý có thể thiếu chỉ dẫn tệp nào và cách chứng minh. Người làm hàng sau phải tự tra thêm.
   Căn cứ: Không làm hỏng gì cho người dùng, chỉ khiến việc sửa sau tốn thêm công tra cứu, và các lỗi sản phẩm vẫn được ghi đủ để theo dõi.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
@@ -358,11 +356,13 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo lời khai thay vì đầu ra): TIN_HIEU_VANG chỉ đọc tin_hieu khai trong danh-sach.json, không đọc cửa tín hiệu (r1 · tệp đã đổi)**
+- **Hình dạng 1 (đo lời khai thay vì đầu ra): TIN_HIEU_VANG chỉ đọc tin_hieu khai trong danh-sach.json, không đọc cửa tín hiệu (r1)**
   Người dùng thấy gì: Công cụ chỉ kiểm tín hiệu báo lỗi sản phẩm theo đúng khuôn đã ghi, chứ không đối chiếu với tín hiệu đã thật sự gửi. Một mã bịa đúng khuôn vẫn qua được.
   Căn cứ: Nếu tín hiệu không đến nơi thì lỗi sản phẩm có thể bị quên, nhưng người ký đối chiếu được bằng mắt và giới hạn này đã được khai trước.
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
   severity: low
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
