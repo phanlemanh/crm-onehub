@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 772ed0f7058d90df61745ecdf3e3b9970a224a07
+verified_commit: ae0cbcc0b43094b04fe3b343c9f440097c5a3eea
 human_signoff: Phan Le Manh 2026-10-23
 ---
 
@@ -310,3 +310,7 @@ sha: d403a78797777bac13fd466678416f4d576179bb · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-26, do ghim lại bằng làn eval
 run_id: repin-20261026T101849Z-81544
 sha: 772ed0f7058d90df61745ecdf3e3b9970a224a07 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E17, E18 · thay bởi hồ sơ đã ký: E17→kiem-cheo-sau-gop#AC-6, E18→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E14 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-26, do hoá cũ do gộp origin/onehub 5ff537e4c (#571 KDH) vào VK6; thước E15 nhận cmd viết thẳng (V3-55 a) (lượt 2/2)
+run_id: repin-20261026T155633Z-79086
+sha: ae0cbcc0b43094b04fe3b343c9f440097c5a3eea · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E17, E18 · thay bởi hồ sơ đã ký: E17→kiem-cheo-sau-gop#AC-6, E18→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E14 · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
