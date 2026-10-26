@@ -1,14 +1,13 @@
 ---
 schema_version: 2
 feature_slug: ho-so-do-kiem-cheo
-verdict: PASS
+verdict: PENDING-JUDGMENT
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e0389b2a953d782c9f58f04cc8c119e7a47f1d88
-human_signoff: Manh Phan 2026-10-24
+verified_commit: 748505ad5ad3dbeb3d25a3a49a64eaacf368ea01
+human_signoff:
 ---
 
 # Evidence Report: ho-so-do-kiem-cheo
@@ -22,107 +21,120 @@ human_signoff: Manh Phan 2026-10-24
 | E6 | AC-6 | judgment | UNCERTAIN |
 | E7 | AC-7 | script | PASS |
 
-Ghi chú: round 3 chạy sau khi chủ kho thu phạm vi ngày 24/10 (AC-1 bỏ vế tái lập, AC-3 ra Known limits và eval E3 rời evals.yaml). E7 là carry-forward từ round 1 (delta không chạm paths của eval, round này không chạy lại). Không có lệnh đỏ nào, kể cả lệnh không gắn eval. Verdict là PENDING-JUDGMENT vì E6 là mục judgment chưa có người chốt; panel E6 giữ nguyên từ round 2.
+Năm eval máy đều xanh ở vòng 4. Eval E6 (judgment) còn UNCERTAIN ở cả ba góc nhìn của hội đồng và chưa có người chốt, nên kết luận chung là PENDING-JUDGMENT.
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-ho-so-do-kiem-cheo-E1-r3
+  run_id: minted-ho-so-do-kiem-cheo-E1-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_danh_sach
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
   output: |
-    danh-sach: 27 hồ sơ đầu vào · 345 eval máy · 39 dòng + 34 eval hoàn lại = 73 đỏ ở mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f
+    danh-sach: 27 hồ sơ đầu vào · 345 eval máy · 38 dòng + 35 eval hoàn lại = 73 đỏ ở mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f
 
 - eval: E2
-  run_id: minted-ho-so-do-kiem-cheo-E2-r3
+  run_id: minted-ho-so-do-kiem-cheo-E2-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_khai_du
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
   output: |
-    khai-du: 93 tệp đổi ngoài hồ sơ này, 23 eval đổi, mọi thay đổi có dòng danh sách
+    khai-du: 93 tệp đổi ngoài hồ sơ này, 22 eval đổi, mọi thay đổi có dòng danh sách
 
 - eval: E4
-  run_id: minted-ho-so-do-kiem-cheo-E4-r3
+  run_id: minted-ho-so-do-kiem-cheo-E4-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_ghim_xanh
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
   output: |
-    ghim-xanh: 21/21 hồ sơ
+    ghim-xanh: 20/20 hồ sơ
 
 - eval: E5
-  run_id: minted-ho-so-do-kiem-cheo-E5-r3
+  run_id: minted-ho-so-do-kiem-cheo-E5-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hsdk_yaml_chuan
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
   output: |
     yaml-chuan: 5/5 hồ sơ đạt
 
 - eval: E7
-  run_id: minted-ho-so-do-kiem-cheo-E7-r1
+  run_id: minted-ho-so-do-kiem-cheo-E7-r4
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.script.hsdk_loi_ra
-  verified_at: 2026-10-23T16:02:37Z
-  carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
-
-### Judgment
-
-- eval: E6
-  judged_by: hội đồng judge (fresh context), panel giữ nguyên từ round 2 — inputs không đổi, không chấm lại; rationale xem round 2
-  verdict: UNCERTAIN
-  rationale: Cả ba góc nhìn đều chưa chốt được; các dòng san-pham-hong chưa có đủ bằng chứng đo để xác nhận đúng chỗ hỏng và đúng loại.
-  votes:
-    - domain-correctness: UNCERTAIN (r2)
-    - operational-feasibility: UNCERTAIN (r2)
-    - spec-alignment: UNCERTAIN (r2)
-  required_evidence:
-    - tong-quan-va-khung-noi-tieng-viet:E7 — log một lượt man-that.mjs sau khi áp sửa răng E1 (bỏ nhập apps/app/lib/deal-stage.ts, lấy giai đoạn từ giaiDoan.list), cho thấy nhãn giai đoạn ở sales-dashboard.tsx:204-208 thiếu translate="no", kèm dòng sổ hay AC đã ký nói rõ nhãn đó phải mang translate="no" (AC-7 ở contract.md:49 đang loại nhãn lang="en").
-    - so-okr-tu-chay:E12 và E14 — hai lượt tách ô (EVAL=E12, EVAL=E14) với bản vá sua-san/so-okr-tu-chay.patch, toàn văn _acceptance/ngan-kr-mot-cho/contract.md:40 (AC-3), và lượt chạy lỗi hydrat trên cây mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f; tệp:dòng chứa chỗ hydrat lệch (grep data-so-tom-tat apps/app).
-    - cron-theo-ban-khai:E7 — chốt khác còn canh số cảnh báo lint apps/app ở HEAD, hoặc dòng sổ của chủ kho (có decided_by) nói ô E7 không còn canh HEAD.
-    - bo-dung-chung-nhan-chuoi:E4, hoan_lai.sua_san (cai-dat-con-lai-noi-tieng-viet, tong-quan-va-khung-noi-tieng-viet, so-okr-tu-chay), cap-nhat-tuan-okr:E14, chu-mac-dinh-thu-vien-ngoai:E3 — ly_do phân loại và căn cứ trích được cho từng dòng, log đầy đủ lượt nền, và bảng gán từng tệp component mới trong packages/ui với hồ sơ đã ký.
-  human_override: Đạt — Manh Phan 2026-10-24
+  verified_at: 2026-10-26T02:27:46Z
+  output: |
+    loi-ra: 5 hồ sơ hoàn lại, 0 lỗi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_api-r3
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_api-r4
   exit_code: 0
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_app_filter_crm_ui-r4
   exit_code: 0
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_agent_filter_crm_aut-r4
   exit_code: 0
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_test_filter_agent_okr_filter_crm-r4
   exit_code: 0
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
 
 - cmd: bun run lint:slop
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_lint_slop-r3
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-ho-so-do-kiem-cheo-SUITE-bunx_turbo_run_build_force-r3
+  run_id: minted-ho-so-do-kiem-cheo-SUITE-bunx_turbo_run_build_force-r4
   exit_code: 0
-  verified_at: 2026-10-24T10:25:01Z
+  verified_at: 2026-10-26T02:27:46Z
+
+### Hội đồng judgment (đề xuất, chờ người chốt)
+
+Hội đồng đề xuất cho E6 là UNCERTAIN: cả ba góc nhìn đều UNCERTAIN, không có phiếu bất đồng.
+
+- eval: E6
+  judged_by: judge-subagent (fresh context) — ba góc nhìn domain-correctness, operational-feasibility, spec-alignment
+  verdict: UNCERTAIN
+  rationale: Phần lớn dòng khối dong thuộc loại (a)/(b)/(c) có căn cứ trích được, và không dòng nào hạ một ô trong khi đầu ra cho thấy sản phẩm hỏng. Nhưng một số dòng có căn cứ mỏng hoặc chưa đo (chu-mac-dinh-thu-vien-ngoai:E3 và E4, tong-quan-va-khung-noi-tieng-viet:E7, so-okr-tu-chay:E12, cap-nhat-tuan-okr:E7 và E14, tro-ly-okr-nen:E25, cron-theo-ban-khai:E7), và các dòng sua_san của hồ sơ hoàn lại chỉ có một dòng sửa kèm sha, chưa có loại (a)–(d) hay khối đầu ra đỏ ở mốc nền.
+  required_evidence:
+    - chu-mac-dinh-thu-vien-ngoai:E3 — danh sách `git diff --name-status 3f99c7055..HEAD -- packages/ui/src/components` (kèm các tệp đọc kho chuỗi) gắn từng tệp với một hồ sơ đã ký và AC hay dòng sổ của hồ sơ đó; neo component đi từ 76 lên 120 (+44), bọc thư viện từ 37 lên 44, đọc kho chuỗi từ 21 lên 39 (+18).
+    - chu-mac-dinh-thu-vien-ngoai:E4 — đầu ra mount thật của radio-group.tsx và markdown-reader.tsx (chạy _acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs) cho thấy hai tệp không sinh chữ mặc định, nhất là mục «Nguồn» của chú thích trong markdown-reader; thiếu thì dòng khai «không chuỗi mặc định» mâu thuẫn với lời thừa nhận ở E3.
+    - chan-lai-component-ra-man:E1/E2/E7 — câu AC hoặc dòng sổ trong soan-okr-trong-khung (artifact variant="card") và khung-ban-ghi-kara (ban-ghi size="sm") gọi tên hai prop mặc định mới; neo mac_dinh đi từ 129 lên 132.
+    - tong-quan-va-khung-noi-tieng-viet:E7 (san-pham-hong) — đầu ra lượt đo _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs trên HEAD sau khi áp bản vá sua_san E1, cho thấy nhãn giai đoạn ở sales-dashboard.tsx:204-208 thiếu translate="no"; kèm một dòng sổ hay câu AC xác nhận ngoại lệ lang=en của AC-7 không còn hiệu lực sau giai-doan-thoa-thuan. Hiện đầu ra nền chỉ là lỗi nạp module deal-stage.ts và chỗ hỏng chỉ chứng bằng đọc mã.
+    - so-okr-tu-chay:E12 (san-pham-hong) — log một lượt `EVAL=E12 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-okr-tu-chay/rang/man-so-tu-chay.mjs"` sau khi áp so-okr-tu-chay.patch; nếu E12 vẫn đỏ riêng thì giữ san-pham-hong, nếu xanh thì chuyển sang loại (c) như đã làm với cap-nhat-tuan-okr:E19.
+    - cap-nhat-tuan-okr:E6 — không có dòng nào trong danh-sach.json dù log nền của E19 cho thấy 4 khẳng định E6 hỏng; cần trạng thái và lệnh của E6 trong _acceptance/cap-nhat-tuan-okr/evals.yaml.
+    - cap-nhat-tuan-okr:E7 và E14 — dòng HONG nguyên văn của chính ô đó trong log đầy đủ của lượt nền (đuôi hiện chỉ có dòng dev-session), cùng đầu ra sau sửa với CHI=E13,E14.
+    - bang-thanh-vien-giu-hang:E1-E7 — câu AC-1 và AC-3 của datatable-loc-ro (đường dẫn contract.md và số dòng), cùng đầu ra do-bang.mjs sau sửa cho thấy câu table.noMatch và nút Bỏ lọc được tìm thấy và không có sai.
+    - cron-theo-ban-khai:E7 — toàn bộ đầu ra lint của apps/app ở HEAD (36 cảnh báo, trong đó 16 cảnh báo biome không in) để thấy ghim 3 đo ở 147b47a33^2 không che lỗi vệ sinh mã nào của HEAD.
+    - tro-ly-okr-nen:E25 (cùng E23, E17) — AC hoặc dòng sổ trong _acceptance/tro-ly-okr-tom-tat (contract.md hay decisions.jsonl) cho phép ghi sổ chi phí phiên con đổi từ okr.de-xuat sang okr.chuyen-tiep; hiện chỉ có sha 853f07bd2.
+    - bo-dung-chung-nhan-chuoi:E4 (san-pham-hong) — một câu từ decisions.jsonl hoặc contract.md nói rõ không quyết định đã ký nào cho phép tám bài test tự khai lại type Locale.
+    - Các dòng sua_san của cai-dat-con-lai-noi-tieng-viet (E1, E3, E6, E10, E11, E12, E14, E15, E17), tong-quan-va-khung-noi-tieng-viet (E1 đến E25), so-okr-tu-chay (E8, E23, E25) và to-chuc-danh-sach-chi-tiet:E21 — mỗi dòng cần một khối trong bang-truoc-sau.md có đuôi đầu ra đỏ ở mốc nền 6be0bb68 (từ do-lai-nen.json) và một câu ly_do nêu loại (a)/(b)/(c)/(d); riêng các dòng nới neo (cai-dat-con-lai-noi-tieng-viet:E12 file 36 sang 44 và file_quyen 11 sang 13; E17 so_o 18 sang 20; E15 và E4 thêm vào danh sách cho phép) cần AC hoặc dòng sổ của hồ sơ ký sau.
+  human_override:  # chi nguoi ghi
+
+Phiếu từng góc nhìn:
+
+- domain-correctness: UNCERTAIN — Trong hai tệp này không có dòng nào hạ một ô trong khi đầu ra cho thấy sản phẩm hỏng. Khai-not-run của cap-nhat-tuan-okr:E7 bám đúng chữ AC-2 của cua-toi-ba-phan; các dòng neo-co-dinh thuộc loại (b); các dòng sửa răng của bang-thanh-vien-giu-hang, cai-dat-chung-chi-quan-tri, toan-canh-okr, bo-xuong-kara thuộc loại (a) hoặc (c) với căn cứ trích được. Nhưng bốn chỗ căn cứ còn mỏng hoặc chưa đo (chu-mac-dinh-thu-vien-ngoai:E3, chan-lai-component-ra-man:E1/E2/E7, tong-quan-va-khung-noi-tieng-viet:E7, so-okr-tu-chay:E12) và cap-nhat-tuan-okr không có dòng cho E6, nên chưa đủ để phán PASS.
+- operational-feasibility: UNCERTAIN — Phần lớn dòng thuộc loại (a)/(b)/(c) có căn cứ và đột biến ghim, nhưng chưa đủ để kết luận cho cả danh sách. Các dòng còn hở: tong-quan-va-khung-noi-tieng-viet:E7 (hỏng sản phẩm chỉ dựa vào đọc mã, AC-7 đã ký loại nhãn lang=en khỏi phép đo); chu-mac-dinh-thu-vien-ngoai:E3 và E4 (hạ neo +44 tệp và +18 chỗ đọc kho chuỗi mà chỉ nêu tên 7 tệp; E4 khai radio-group và markdown-reader «không chuỗi mặc định» trong khi E3 thừa nhận chữ của chúng chưa đo); bang-thanh-vien-giu-hang:E1-E7 và cap-nhat-tuan-okr:E14 (căn cứ chỉ là sha, không có đầu ra sau khi sửa); cron-theo-ban-khai:E7 (đo ghim ở cây khác trong khi HEAD ra 36 cảnh báo lint so với 3 ghim, 16 cảnh báo chưa in).
+- spec-alignment: UNCERTAIN — Phần lớn dòng khối dong có đúng loại (a)/(b)/(c) kèm AC hoặc dòng sổ trích được, và năm dòng san-pham-hong nêu đúng tệp và hành vi. Nhưng các dòng sua_san của hồ sơ hoàn lại (sua-rang, neo-co-dinh, tu-het) chỉ có một dòng «sua» và một sha, không có loại (a)–(d) và không có khối đầu ra đỏ ở mốc nền trong bang-truoc-sau.md; bốn dòng ở khối dong có căn cứ yếu là chu-mac-dinh-thu-vien-ngoai:E3, tro-ly-okr-nen:E25, cap-nhat-tuan-okr:E7 và cap-nhat-tuan-okr:E14; bo-dung-chung-nhan-chuoi:E4 chưa nêu rõ không quyết định đã ký nào cho phép tám bài test tự khai lại type Locale.
 
 ## Known limits
 
@@ -130,26 +142,23 @@ Ghi chú: round 3 chạy sau khi chủ kho thu phạm vi ngày 24/10 (AC-1 bỏ 
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+none — không eval nào được đo xanh ở cả hai phía: năm eval máy (E1, E2, E4, E5, E7) đều có baseline n-a vì là eval mới, không chạy được trên code cũ (lý do ở mục dưới). Bảy lệnh suite xanh là hàng rào hồi quy bình thường, không liệt kê.
 
-Lưu ý: cả bốn eval máy chạy ở round này đều có baseline n-a (không đo được), nên danh sách trên rỗng do không có dữ liệu so sánh chứ không do đã chứng minh có phân biệt.
+### Baseline khong do
 
-Baseline khong do:
-- bun _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs co o cay dang kiem nhung chua co o merge-base 86d6114eaa7f3082fe5b502d654f045ddb32af51 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/ho-so-do-kiem-cheo/rang/khai-du.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/khai-du.mjs co o cay dang kiem nhung chua co o merge-base 86d6114eaa7f3082fe5b502d654f045ddb32af51 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/ho-so-do-kiem-cheo/rang/ghim-xanh.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/ghim-xanh.mjs co o cay dang kiem nhung chua co o merge-base 86d6114eaa7f3082fe5b502d654f045ddb32af51 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/ho-so-do-kiem-cheo/rang/yaml-chuan.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/yaml-chuan.mjs co o cay dang kiem nhung chua co o merge-base 86d6114eaa7f3082fe5b502d654f045ddb32af51 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs co o cay dang kiem nhung chua co o merge-base 6adaf11e015353352c1f98dc7a3ee0d346780804 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/ho-so-do-kiem-cheo/rang/khai-du.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/khai-du.mjs co o cay dang kiem nhung chua co o merge-base 6adaf11e015353352c1f98dc7a3ee0d346780804 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/ho-so-do-kiem-cheo/rang/ghim-xanh.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/ghim-xanh.mjs co o cay dang kiem nhung chua co o merge-base 6adaf11e015353352c1f98dc7a3ee0d346780804 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/ho-so-do-kiem-cheo/rang/yaml-chuan.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/yaml-chuan.mjs co o cay dang kiem nhung chua co o merge-base 6adaf11e015353352c1f98dc7a3ee0d346780804 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs: bo qua baseline: tep _acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs co o cay dang kiem nhung chua co o merge-base 6adaf11e015353352c1f98dc7a3ee0d346780804 — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval máy chạy một lần, xác định, và đều xanh; không eval nào có pass_rate lẫn lộn.
 
 ## Iterations
 
-Round 1: E1 tái lập hỏng, E3 quá trần 30 phút, E6 hội đồng không qua; E2, E4, E5 xanh; E7 xanh (16:02:37Z). Trả về triển khai (sửa tái lập, khai lệnh chạy dài, bằng chứng cho hội đồng).
-Round 2: E1 chạy hết với trần 240 phút nhưng tập đỏ khi tái lập lệch hai ô (cron-theo-ban-khai:E8, tro-ly-okr-nen:E9); E3 bắt đúng 36 trên 38 đột biến, hai ô sai thông điệp (cron-theo-ban-khai:E7, tro-ly-okr-nen:E4); E6 vẫn chưa chốt; E2, E4, E5 và bảy lệnh suite xanh; E7 mang từ round 1. Trả về triển khai.
-Round 3: sau khi chủ kho thu phạm vi 24/10 (AC-1 chỉ đo phần tất định, AC-3 và E3 ra Known limits của hợp đồng), E1, E2, E4, E5 và bảy lệnh suite xanh; E7 mang từ round 1; E6 giữ panel round 2, chưa chốt nên chờ người ở Cổng 2.
-
-### Re-pin lần 1 — 2026-10-24, do hoá cũ do gộp origin/onehub a971d21be vào nhánh F28 (lượt 3, từng hồ sơ)
-run_id: repin-20261024T182422Z-97721
-sha: e0389b2a953d782c9f58f04cc8c119e7a47f1d88 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E6 (E6 không khai paths) · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+Round 1: E1 đỏ và E3 chưa chạy xong trong trần 30 phút. Trả về triển khai.
+Round 2: chạy lại cả bảy eval (E1–E7, gồm E3 và E6); chi tiết ở run-log.jsonl.
+Round 3: E3 rời bộ eval sau khi chủ kho thu F28 khỏi to-chuc-danh-sach-chi-tiet; E1, E2, E4, E5, E7 và hội đồng E6 chạy lại.
+Round 4: sau khi ký lại Cổng Phạm vi, năm eval máy và bảy lệnh suite đều xanh; E6 còn UNCERTAIN ở cả ba góc nhìn, chờ người chốt ở Cổng Bằng chứng.
