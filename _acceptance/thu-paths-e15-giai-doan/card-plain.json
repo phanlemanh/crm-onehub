@@ -1,4 +1,4 @@
 {
-  "feature_plain": "Một PR chỉ sửa chữ ở màn khác thôi bị đòi ghim lại giai-doan-thoa-thuan, và 8 hồ sơ thôi bị coi là cũ chỉ vì một eval chấm tay không khai tệp nó đọc; lưới trước gộp thật giảm 245 → 241 hồ sơ hoá cũ (đo trên 7 hồ sơ đầu).",
-  "analyst_plain": "Mọi phép đo máy đạt sau ba lượt; lượt 1 kẹt vì phép thử đột biến chạy quá 30 phút, lượt 2 và 3 sửa bốn chỗ thước chưa chứng đủ lời hứa của AC-3, AC-6, AC-7."
+  "feature_plain": "Một PR chỉ sửa chữ ở màn khác thôi bị đòi ghim lại hồ sơ màn giai đoạn thoả thuận, và vài hồ sơ đã ký thôi bị coi là cũ chỉ vì một eval chấm tay không khai tệp nó đọc.",
+  "analyst_plain": "Lượt 4 (17/10) đỏ hai phép đo: bộ đếm hồ sơ hoá cũ tính nhầm chính hồ sơ này là hồ sơ mới hoá cũ, và bộ đột biến đỏ theo vì cặp đối chứng của nó dựa trên đúng bộ đếm ấy. Tiêu chí không đổi; chỗ hỏng là thước."
 }
