@@ -2,7 +2,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, realpathSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { docDanhSach, verifiedCommit } from "./hoa-cu-theo-paths.mjs";
 
@@ -10,6 +10,7 @@ const GOC =
 	process.env.GOC_KHO ??
 	join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const Y = createRequire(import.meta.url)(join(GOC, "lib", "eval-yaml.cjs"));
+const CHINH = basename(join(dirname(fileURLToPath(import.meta.url)), ".."));
 const git = (...a) =>
 	execFileSync("git", ["-C", GOC, ...a], { maxBuffer: 1 << 30 }).toString();
 
@@ -48,7 +49,8 @@ function chayPmc(cay) {
 		].map((m) => m[1]),
 	);
 	for (const s of hoaCu) coTepDoi.add(s);
-	return { hoaCu, khongAp, coTepDoi };
+	const boChinh = hoaCu.delete(CHINH);
+	return { hoaCu, khongAp, coTepDoi, boChinh };
 }
 
 function laJudgment(slug, id) {
@@ -88,6 +90,10 @@ function chay() {
 		git("worktree", "add", "--detach", "--quiet", cay, mb);
 		const truoc = chayPmc(cay);
 		const sau = chayPmc(GOC);
+		if (truoc.boChinh || sau.boChinh)
+			console.log(
+				`BO_CHINH ${CHINH}: ho so dang cham khong vao tap (truoc ${truoc.boChinh ? 1 : 0} · sau ${sau.boChinh ? 1 : 0})`,
+			);
 		let hong = 0;
 		const daKy = chon.filter((s) => verifiedCommit(s));
 		const roi = [];

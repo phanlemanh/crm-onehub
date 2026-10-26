@@ -47,6 +47,7 @@ const lenh = {
 		DS,
 		"--phai-co",
 		"tat-preview-agent-okr",
+		"--kiem-danh-sach",
 	],
 	E4: [`${RANG}/chi-them-paths.mjs`, "--ho-so", DS],
 	E5: [`${RANG}/hoa-cu-theo-paths.mjs`, "--ho-so", DS],

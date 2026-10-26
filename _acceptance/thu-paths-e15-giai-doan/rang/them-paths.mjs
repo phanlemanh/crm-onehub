@@ -247,10 +247,12 @@ function kiemThieu(ke) {
 	return xau;
 }
 
-function kiemPhaiCo(chon, phaiCo) {
+function kiemPhaiCo(chon, phaiCo, loaiTru = []) {
 	let hong = 0;
 	for (const s of phaiCo) {
+		const tru = loaiTru.find((x) => x.slug === s);
 		if (chon.includes(s)) console.log(`CO_TEN ${s}`);
+		else if (tru) console.log(`CO_TEN_LOAI_TRU ${s}: ${tru.ly_do}`);
 		else {
 			hong += 1;
 			console.log(`KHONG_CO_TEN ${s}`);
@@ -298,8 +300,8 @@ export function luatDocLap() {
 	return { moc, luat: luat.sort(), loaiTru };
 }
 
-function kiemDanhSach(chon) {
-	const { moc, luat, loaiTru } = luatDocLap();
+function kiemDanhSach(chon, doc = luatDocLap()) {
+	const { moc, luat, loaiTru } = doc;
 	let hong = 0;
 	for (const x of loaiTru) console.log(`LOAI_TRU ${x.slug}: ${x.ly_do}`);
 	for (const s of luat)
@@ -420,9 +422,13 @@ function chay() {
 		if (!chon) khongDo("--kiem can --ho-so");
 		const keToanKho = lapKeHoach();
 		let hong = kiemThieu(locHoSo(keToanKho, chon));
+		const doc = process.argv.includes("--kiem-danh-sach")
+			? luatDocLap()
+			: null;
 		const phaiCo = doiSo("--phai-co");
-		if (phaiCo != null) hong += kiemPhaiCo(chon, docDanhSach(phaiCo));
-		if (process.argv.includes("--kiem-danh-sach")) hong += kiemDanhSach(chon);
+		if (phaiCo != null)
+			hong += kiemPhaiCo(chon, docDanhSach(phaiCo), doc?.loaiTru);
+		if (doc) hong += kiemDanhSach(chon, doc);
 		return hong;
 	}
 	khongDo("can --ke | --ghi | --kiem | --kiem-bo-qua | --kiem-bo-qua-lop");
