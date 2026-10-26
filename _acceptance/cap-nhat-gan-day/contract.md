@@ -5,7 +5,7 @@ slug: cap-nhat-gan-day
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-26T14:13:02Z
 design_doc: docs/superpowers/specs/2026-10-26-cap-nhat-gan-day-design.md
@@ -78,3 +78,9 @@ Quét bằng `morphological-scan` (preset entity-feature, `_acceptance/cap-nhat-
 - Hai thước của hồ sơ đã ký đổi trong làn này theo quyết định chủ kho 24/10: `vo-khu-muc-tieu/rang/do-man-lib.mjs` (D7) và `ngan-kr-mot-cho/rang/quet-loi.mjs` (D8); mỗi hồ sơ một dòng sổ `fix`, ghim lại hai hồ sơ ở đuôi vòng.
 - Lệch bản mẫu vo-khu-muc-tieu (`ManCapNhat`): chip dùng chữ «Tôi dẫn · Đang theo dõi» (C5) thay «Bộ OKR bạn dẫn · Bạn theo dõi»; trả lời qua ô mở dưới dòng thay nút trơn.
 - Phiên làm là MacBook Pro, làm thay dãy V3 của đợt vo-khu-muc-tieu; PR xếp gộp sau bốn PR của Mac Studio (#567, #566, #560, #568).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-27:
+  - Ngoài-2: Ô trả lời không chặn câu quá dài lúc gõ; máy chủ báo lỗi sau khi bấm Gửi, chữ đã gõ vẫn giữ.
+  - Ngoài-3: Dòng báo lỗi khi gửi trả lời vẽ riêng, có thể lệch nhẹ về hình và cách trình đọc màn hình đọc so với ô bình luận ở chỗ khác.
+  - Ngoài-4: Khi trình duyệt tự dịch trang, chữ người đang gõ trong ô trả lời có thể bị dịch nhầm, còn câu «cập nhật thay …» lại không được dịch.
+  - Ngoài-5: Lần trả lời ở trang này trông hơi khác cùng bình luận đó ở thẻ Trao đổi của mục tiêu về cách xếp và cỡ chữ.
+  - Ngoài-7: Bài kiểm danh sách trang của khu Mục tiêu không cảnh báo nếu trang Cập nhật gần đây bị xoá nhầm khỏi danh sách.
