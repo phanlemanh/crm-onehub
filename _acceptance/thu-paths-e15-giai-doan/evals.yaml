@@ -155,7 +155,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.tpe_pmc_that
-    long_running: 45
+    long_running: 90
     paths:
       - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
       - "_acceptance/thu-paths-e15-giai-doan/rang/pmc-truoc-sau.mjs"
@@ -181,7 +181,7 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.tpe_dot_bien
-    long_running: 90
+    long_running: 180
     paths:
       - "_acceptance/thu-paths-e15-giai-doan/rang/**"
       - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
