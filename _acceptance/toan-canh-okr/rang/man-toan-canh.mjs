@@ -1499,7 +1499,7 @@ async function buocCay() {
 	await chup(p, "E5-buoc-cay-5.png");
 	await p.close();
 
-	const u = await moTrang(cookie.truongP1, RONG, theoDonVi());
+	const u = await moTrang(cookie.truongP1, RONG, theoDonVi("donOkr=goc"));
 	await hienSel(u, "[data-chon-don-vi]");
 	await u.evaluate(
 		(m) => {
@@ -1771,9 +1771,9 @@ async function buocHopTuan() {
 	await toi(t, `${hopTuan}&tuTinOkr=thap`);
 	await taiLai(t);
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
-	await bamChu(t, "[role='radio']", CHU.danhSach);
+	await bamSel(t, "[data-the='danh-sach']");
 	await hienSel(t, "[data-muc-tieu]");
-	await bamChu(t, "[role='radio']", CHU.hopTuan);
+	await bamSel(t, "[data-the='hop-tuan']");
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
 	await cho(1500);
 	kiem(
@@ -2193,7 +2193,7 @@ async function buocChuKy() {
 	);
 	await chup(t, "E23-buoc-chon-ky-2.png");
 
-	await bamChu(t, "[role='radio']", CHU.hopTuan);
+	await bamSel(t, "[data-the='hop-tuan']");
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
 	await cho(600);
 	const ht = await chuTrang(t);

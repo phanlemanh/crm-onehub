@@ -728,9 +728,10 @@
 				"5b6be6129",
 				"apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105",
 				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208",
-				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25"
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25",
+				"7bbfbc00c2c078b2077c33570ab61e359214945d"
 			],
-			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.",
+			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0. Sau gộp onehub 26/10 (trang-bo-okr 7bbfbc00c đổi trang theo đơn vị: không tham số donOkr thì hiện danh sách bộ OKR, cách xem thành thẻ con data-the): răng mở trang đơn vị với donOkr=goc và bấm [data-the='danh-sach'] / [data-the='hop-tuan'] thay nút radio.",
 			"duoi_sau_nguon": "lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log)",
 			"duoi_sau": [
 				"man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)",
@@ -772,9 +773,10 @@
 				"5b6be6129",
 				"apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105",
 				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208",
-				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25"
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25",
+				"7bbfbc00c2c078b2077c33570ab61e359214945d"
 			],
-			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.",
+			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0. Sau gộp onehub 26/10 (trang-bo-okr 7bbfbc00c đổi trang theo đơn vị: không tham số donOkr thì hiện danh sách bộ OKR, cách xem thành thẻ con data-the): răng mở trang đơn vị với donOkr=goc và bấm [data-the='danh-sach'] / [data-the='hop-tuan'] thay nút radio.",
 			"duoi_sau_nguon": "lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log)",
 			"duoi_sau": [
 				"man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)",
@@ -816,9 +818,10 @@
 				"5b6be6129",
 				"apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx:105",
 				"_acceptance/toan-canh-okr/rang/man-toan-canh.mjs:2208",
-				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25"
+				"_acceptance/ho-so-do-kiem-cheo/decisions.jsonl:25",
+				"7bbfbc00c2c078b2077c33570ab61e359214945d"
 			],
-			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0.",
+			"sua": "man-toan-canh.mjs: (a) bước E23 vào bảng qua mục «Sức khoẻ» của thanh bên (aside[data-slot=area-sidebar]) thay thẻ «Toàn cảnh»; (b) E14/E28 bấm dòng KR chờ record=kr:<id>; (c) E21 đọc mục #chuong-trinh trên trang Sức khoẻ; (d) E29 xoá rồi đọc nhật ký cửa chặn (trình duyệt và máy chủ app, thêm đường xoa-nhat-ky ở cap-nhat-tuan-okr/rang/cua-chan.mjs), đòi ≥1 lời gọi mỗi thủ tục và mọi cycleId đúng kỳ đã chọn; E10 đếm 5 thẻ số. Lượt sau sửa: 164 khẳng định, 0 hỏng; lượt đo lại ở 730af844a (do-head-log) cũng 164/0. Sau gộp onehub 26/10 (trang-bo-okr 7bbfbc00c đổi trang theo đơn vị: không tham số donOkr thì hiện danh sách bộ OKR, cách xem thành thẻ con data-the): răng mở trang đơn vị với donOkr=goc và bấm [data-the='danh-sach'] / [data-the='hop-tuan'] thay nút radio.",
 			"duoi_sau_nguon": "lượt man-toan-canh.mjs chạy tròn 23/10 09:49–09:54 (+07) trên cây của 730af844a (scratchpad/tc-e3.log)",
 			"duoi_sau": [
 				"man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)",
