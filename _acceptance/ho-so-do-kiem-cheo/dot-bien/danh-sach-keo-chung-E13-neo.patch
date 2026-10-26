@@ -1,0 +1,11 @@
+--- a/_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs
++++ b/_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs
+@@ -7,7 +7,7 @@
+ const HERE = dirname(fileURLToPath(import.meta.url));
+ const GOC = join(HERE, "..", "..", "..");
+ const TU = "591bc8fb63a6505a888f80ccde43fc498e4eed2a";
+-const TOI = "a33a0d62424150945bf2dc482d050dfbaaeccb6e";
++const TOI = "0000000000000000000000000000000000000000";
+ 
+ function git(...a) {
+ 	return execFileSync("git", ["-C", GOC, ...a], { encoding: "utf8" }).trim();

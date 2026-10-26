@@ -1,0 +1,11 @@
+--- a/_acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs
++++ b/_acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs
+@@ -17,7 +17,7 @@
+ 	{
+ 		ten: "a mo-coi",
+ 		lenh: DON_VI("mo-coi"),
+-		pha: [[KHOI_DONG, "\tawait dungMoCoi(daGianh);\n", ""]],
++		pha: [[KHOI_DONG, "\t\t\t\tawait dungMoCoi(khoa);\n", ""]],
+ 		ghim: "mo coi con song",
+ 	},
+ 	{

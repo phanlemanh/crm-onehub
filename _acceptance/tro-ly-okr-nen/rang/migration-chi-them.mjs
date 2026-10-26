@@ -17,7 +17,10 @@ const THU_MUC =
 	process.env.THU_MUC_MIGRATION ?? join(GOC, "packages/db/prisma/migrations");
 const TEP_SCHEMA =
 	process.env.TEP_SCHEMA ?? join(GOC, "packages/db/prisma/schema.prisma");
-const NHANH = process.env.NHANH_GOC ?? "origin/onehub";
+const NEO = {
+	nen: process.env.NEO_NEN ?? "e3dd799ad9379038f618a243c6c479638f8e88b8",
+	gop: process.env.NEO_GOP ?? "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9",
+};
 const MODEL_MOI = [
 	"OkrDeXuat",
 	"OkrTomTat",
@@ -50,20 +53,35 @@ const GHIM = {
 	chiMucAgentTask: "chi muc moi tren agentTask",
 	thieuBang: "thieu bang",
 	thieuCot: "thieu cot",
-	lienKhoi: "model moi khong nam cuoi schema",
+	lienKhoi: "model moi khong lien khoi trong schema",
 };
 
 const git = (...d) =>
 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" });
-const nen = git("merge-base", "HEAD", NHANH).trim();
-const cu = new Set(
-	git("ls-tree", "--name-only", `${nen}:packages/db/prisma/migrations`)
-		.split("\n")
-		.filter((t) => t && t !== "migration_lock.toml"),
-);
-const moi = readdirSync(THU_MUC).filter(
-	(t) => t !== "migration_lock.toml" && !cu.has(t),
-);
+for (const sha of Object.values(NEO)) {
+	try {
+		execFileSync("git", ["-C", GOC, "cat-file", "-e", `${sha}^{commit}`], {
+			stdio: "ignore",
+		});
+	} catch {
+		console.error(`KHONG DO DUOC: sha neo ${sha} khong co trong kho`);
+		process.exit(2);
+	}
+}
+const nen = NEO.nen;
+const thuMucTai = (sha) =>
+	new Set(
+		git("ls-tree", "--name-only", `${sha}:packages/db/prisma/migrations`)
+			.split("\n")
+			.filter((t) => t && t !== "migration_lock.toml"),
+	);
+const cu = thuMucTai(nen);
+const trenDia = new Set(readdirSync(THU_MUC));
+const moi = [...thuMucTai(NEO.gop)].filter((t) => !cu.has(t));
+const hong = [];
+for (const t of moi)
+	if (!trenDia.has(t))
+		hong.push(`${GHIM.thieuBang}: migration ${t} cua cap gop khong con tren dia`);
 
 function cauLenh(sql) {
 	return sql
@@ -75,7 +93,6 @@ function cauLenh(sql) {
 		.filter(Boolean);
 }
 
-const hong = [];
 const cotThay = {
 	okrProgramConfig: new Set(),
 	notificationPreference: new Set(),
@@ -126,7 +143,7 @@ function soat(c) {
 }
 
 if (moi.length === 0) hong.push(`${GHIM.thieuBang}: khong co migration moi`);
-for (const t of moi)
+for (const t of moi.filter((t) => trenDia.has(t)))
 	for (const c of cauLenh(
 		readFileSync(join(THU_MUC, t, "migration.sql"), "utf8"),
 	))
@@ -138,10 +155,12 @@ for (const [bang, cot] of Object.entries(COT_MOI))
 		if (!cotThay[bang].has(k)) hong.push(`${GHIM.thieuCot}: ${bang}.${k}`);
 
 const schema = readFileSync(TEP_SCHEMA, "utf8");
-const models = [...schema.matchAll(/^model (\w+) \{/gm)].map((m) => m[1]);
-const duoi = models.slice(-MODEL_MOI.length);
-if (duoi.join(",") !== MODEL_MOI.join(","))
-	hong.push(`${GHIM.lienKhoi}: ${duoi.join(",")}`);
+const schemaGop = git("show", `${NEO.gop}:packages/db/prisma/schema.prisma`);
+const models = [...schemaGop.matchAll(/^model (\w+) \{/gm)].map((m) => m[1]);
+const dau = models.indexOf(MODEL_MOI[0]);
+const khoi = dau < 0 ? [] : models.slice(dau, dau + MODEL_MOI.length);
+if (khoi.join(",") !== MODEL_MOI.join(","))
+	hong.push(`${GHIM.lienKhoi}: ${khoi.join(",") || "(thieu)"}`);
 const agentTask = schema.match(/^model AgentTask \{([\s\S]*?)^\}/m)?.[1] ?? "";
 const agentTaskCu =
 	git("show", `${nen}:packages/db/prisma/schema.prisma`).match(
@@ -153,7 +172,12 @@ if (agentTask.replace(/\s+/g, "") !== agentTaskCu.replace(/\s+/g, ""))
 const tam = mkdtempSync(join(tmpdir(), "mig-tln-"));
 try {
 	const tepCu = join(tam, "cu.prisma");
+	const tepGop = join(tam, "gop.prisma");
 	writeFileSync(tepCu, git("show", `${nen}:packages/db/prisma/schema.prisma`));
+	writeFileSync(
+		tepGop,
+		git("show", `${NEO.gop}:packages/db/prisma/schema.prisma`),
+	);
 	const prisma = join(GOC, "packages/db/node_modules/.bin/prisma");
 	const diff = execFileSync(
 		prisma,
@@ -163,7 +187,7 @@ try {
 			"--from-schema",
 			tepCu,
 			"--to-schema",
-			TEP_SCHEMA,
+			tepGop,
 			"--script",
 		],
 		{

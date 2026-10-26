@@ -1,0 +1,11 @@
+--- a/_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs
++++ b/_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs
+@@ -7,7 +7,7 @@
+ const GOC = resolve(HERE, "..", "..", "..");
+ const SLUG = "ban-gieo-gop-y-sau-nop";
+ const MA_HANG = "K3b";
+-const GOP = "e7afcb8b782566381cb119e514415c5bea12047b";
++const GOP = "0000000000000000000000000000000000000000";
+ const NGUON_HANG = [
+ 	"docs/plan/dot-sau-14-10/hang-viec.json",
+ 	".acceptance-runs/dieu-phoi-sau-14-10/hang-viec.json",

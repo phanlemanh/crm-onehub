@@ -167,7 +167,8 @@ evals:
     cmd: config:executors.script.dph_thu_kho
     status: not-run
     superseded_by: chuyen-goi-dieu-phoi#AC-7
-    expected: "exit 0 khi bộ đo (gốc kho suy từ vị trí script) dựng bản sao git tạm có scripts/dieu-phoi/ của cây hiện tại, chạy thật dieu-phoi.mjs mo thu-kho, chay, chờ trang-thai.json (tối đa 20 giây), xem, dong, xem: dòng xem đầu khớp '^đợt thu-kho · dang-chay · nhịp \S+ · khoá trống · chờ lượt 0 · chờ người 0$'; pid trong phat-lich.pid còn sống trước dong và đã chết sau dong; hook chặn S4 thoát 2 trong đợt và 0 sau dong; xem cuối thoát 1 với stderr đúng 'dieu-phoi: không có đợt nào đang chạy'. Cùng một lần chạy, chiều đỏ trên bản sao cùng fixture: dongDot bị gỡ lời gọi dungPhatLich thì bộ đo phải in 'DO: tien-trinh-con-song-sau-dong' (không in → 'SOT' và exit 1). Bộ đo luôn giết pid còn sót trước khi thoát. Dòng cuối 'KET LUAN: xanh'."
+    expected: |-
+      "exit 0 khi bộ đo (gốc kho suy từ vị trí script) dựng bản sao git tạm có scripts/dieu-phoi/ của cây hiện tại, chạy thật dieu-phoi.mjs mo thu-kho, chay, chờ trang-thai.json (tối đa 20 giây), xem, dong, xem: dòng xem đầu khớp '^đợt thu-kho · dang-chay · nhịp \S+ · khoá trống · chờ lượt 0 · chờ người 0$'; pid trong phat-lich.pid còn sống trước dong và đã chết sau dong; hook chặn S4 thoát 2 trong đợt và 0 sau dong; xem cuối thoát 1 với stderr đúng 'dieu-phoi: không có đợt nào đang chạy'. Cùng một lần chạy, chiều đỏ trên bản sao cùng fixture: dongDot bị gỡ lời gọi dungPhatLich thì bộ đo phải in 'DO: tien-trinh-con-song-sau-dong' (không in → 'SOT' và exit 1). Bộ đo luôn giết pid còn sót trước khi thoát. Dòng cuối 'KET LUAN: xanh'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E22
     criterion: AC-14

@@ -1338,18 +1338,39 @@ async function buocE13E14() {
 		),
 	);
 	await chup(c, "E13-step3.png", { sel: "[data-the-viec-okr='tong-quan']" });
+	const hrefThe = await c.evaluate(
+		(s, chu) =>
+			[...document.querySelectorAll(s)]
+				.find((x) => x.textContent?.replace(/\s+/g, " ").trim().startsWith(chu))
+				?.getAttribute("href") ?? null,
+		"[data-the-viec-okr='tong-quan'] a",
+		"Cập nhật tuần",
+	);
+	const dichThe = hrefThe === null ? null : new URL(hrefThe, APP);
+	kiem(
+		`E13 buoc 4: lien ket the tro /${slug}/okr?tu=viec-cua-toi, thay ${hrefThe}`,
+		dichThe !== null &&
+			dichThe.pathname === `/${slug}/okr` &&
+			dichThe.searchParams.get("tu") === "viec-cua-toi",
+	);
 	await bamChu(c, "[data-the-viec-okr='tong-quan'] a", "Cập nhật tuần");
 	await doi(
 		c,
-		"E13 buoc 4: URL sang cap-nhat-tuan",
+		"E13 buoc 4: URL sang /okr",
 		(s) => new URL(location.href).pathname.endsWith(s),
-		"/okr/cap-nhat-tuan",
+		"/okr",
 	);
-	kiem(
-		`E13 buoc 4: tham so tu=viec-cua-toi, thay ${thamSo(c, "tu")}`,
-		thamSo(c, "tu") === "viec-cua-toi",
+	await doi(
+		c,
+		"E13 buoc 4: bang cap nhat mo san trong phan 1",
+		() =>
+			document.querySelector(
+				"[data-phan='can-cap-nhat'] [role='listitem'][data-kr]",
+			) !== null,
 	);
-	await chup(c, "E13-step4.png", { sel: "[data-kr]" });
+	await chup(c, "E13-step4.png", {
+		sel: "[data-phan='can-cap-nhat'] [role='listitem'][data-kr]",
+	});
 	await c.close();
 
 	const h = await moTrang(cookie.h, RONG, "/okr", "E13");
@@ -1426,10 +1447,14 @@ async function buocE13E14() {
 	await chup(tr, "E13-step8.png", { sel: "[data-the-viec-okr='tong-quan']" });
 	await tr.close();
 
-	const phienC = await db.okrCheckInSession.findFirst({
-		where: { userId: id.c },
-		orderBy: { openedAt: "desc" },
-	});
+	let phienC = null;
+	for (const han = Date.now() + CHO; phienC === null && Date.now() < han; ) {
+		phienC = await db.okrCheckInSession.findFirst({
+			where: { userId: id.c },
+			orderBy: { openedAt: "desc" },
+		});
+		if (phienC === null) await cho(250);
+	}
 	kiem(
 		`E14: entry cua phien C phai viec-cua-toi, thay ${phienC?.entry}`,
 		phienC?.entry === "viec-cua-toi",
@@ -2032,15 +2057,24 @@ const CHI = process.env.CHI
 	: null;
 const chay = (khoi) => CHI === null || khoi.some((k) => CHI.has(k));
 
+const CAC_BUOC = [
+	[["E6", "E7"], buocE6E7],
+	[["E13", "E14"], buocE13E14],
+	[["E16"], buocE16],
+	[["E18", "E19"], buocE18E19],
+	[["E23"], buocE23],
+	[["E29"], buocE29],
+];
+
 try {
-	if (chay(["E6", "E7"])) await buocE6E7();
-	if (chay(["E13", "E14"])) await buocE13E14();
-	if (chay(["E16"])) await buocE16();
-	if (chay(["E18", "E19"])) await buocE18E19();
-	if (chay(["E23"])) await buocE23();
-	if (chay(["E29"])) await buocE29();
-} catch (e) {
-	hong.push(`ngoai le: ${e.stack ?? e.message}`);
+	for (const [khoi, buoc] of CAC_BUOC) {
+		if (!chay(khoi)) continue;
+		try {
+			await buoc();
+		} catch (e) {
+			hong.push(`ngoai le ${khoi.join("/")}: ${e.stack ?? e.message}`);
+		}
+	}
 } finally {
 	const { writeFileSync } = await import("node:fs");
 	for (const [nhom, dong] of Object.entries(mangMang)) {

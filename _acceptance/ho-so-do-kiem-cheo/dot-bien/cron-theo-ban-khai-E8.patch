@@ -1,0 +1,11 @@
+--- a/_acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs
++++ b/_acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs
+@@ -6,7 +6,7 @@
+ 
+ const DU_AN = "crm-onehub-api";
+ const NEN = join(homedir(), "Library", "Application Support", "com.vercel.cli");
+-const CAP_GOP = "147b47a339b2f5a37cbbd5feae536553d490cf5a";
++const CAP_GOP = "f148b2bb1b9bbae9f6d5a3b0f17cb2431ac5ecaf";
+ const HET_HAN = "token Vercel CLI het han — chay vercel login";
+ 
+ const doiSo = (ten) => {

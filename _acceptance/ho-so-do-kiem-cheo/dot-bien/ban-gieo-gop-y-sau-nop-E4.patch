@@ -1,0 +1,11 @@
+--- a/_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs
++++ b/_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs
+@@ -118,7 +118,7 @@
+ const tep = git("diff", "--name-only", neo.tu, neo.toi)
+ 	.split("\n")
+ 	.filter(Boolean);
+-if (lay("--them")) tep.push(lay("--them"));
++tep.push(lay("--them") ?? "apps/app/lib/x.ts");
+ console.log(
+ 	`neo ${neo.kieu}: ${neo.tu.slice(0, 9)}..${neo.toi.slice(0, 9)} · ${tep.length} tep · ranh gioi ${dot ? dot.nguon : "chep"}`,
+ );
