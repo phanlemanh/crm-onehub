@@ -1,33 +1,4 @@
 {
   "feature_plain": "Một PR chỉ sửa chữ ở màn khác thôi bị đòi ghim lại hồ sơ màn giai đoạn thoả thuận, và các hồ sơ đã ký trong danh sách thôi bị coi là cũ chỉ vì một eval chấm tay không khai tệp nó đọc.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ chỉ theo dõi đúng ba tệp chữ mà màn giai đoạn và bảng thoả thuận dùng, thay cho cả thư mục chữ."},
-    {"id": "AC-2", "p": "Sẽ không đòi ghim lại hồ sơ màn giai đoạn khi PR chỉ sửa chữ của màn Tín hiệu, nhưng vẫn đòi khi sửa chữ của Cài đặt."},
-    {"id": "AC-3", "p": "Sẽ giữ danh sách hồ sơ được sửa ở một chỗ, khớp luật chọn tại mốc 16/10; hồ sơ đã cũ vì PR khác được tách ra có tên và lý do. Hai hồ sơ anh gọi tên (thu-haiku, ghim-thuoc) hoặc nằm trong danh sách, hoặc nằm trong nhóm bị tách đó."},
-    {"id": "AC-4", "p": "Sẽ không đổi chữ nào khác ngoài khối «tệp được đọc» thêm vào và dòng của màn giai đoạn; không chạm bộ máy của kit."},
-    {"id": "AC-5", "p": "Sẽ làm các hồ sơ đã ký trong danh sách thôi bị coi là cũ."},
-    {"id": "AC-6", "p": "Sẽ bỏ qua có tên các eval không suy được tệp đọc (không chạy, không có đầu vào, đầu vào mất, thước đã khoá)."},
-    {"id": "AC-7", "p": "Sẽ chứng bằng cổng gộp thật trên hai cây: số hồ sơ bị coi là cũ giảm, không hồ sơ nào mới bị kéo vào."}
-  ],
-  "wont_do": [
-    {"id": "OOS-1", "p": "Không ghim lại hàng loạt các hồ sơ đã ký vẫn cũ thật; chúng nhận khối «tệp được đọc» ở lần ghim lại kế của chính chúng."},
-    {"id": "OOS-2", "p": "Không thu hẹp phạm vi theo dõi của hồ sơ duyệt cây OKR — nó thật sự đọc rộng như vậy."},
-    {"id": "OOS-3", "p": "Không dọn chữ của 18 eval khai tệp đọc hẹp hơn đầu vào; theo cách cổng gộp khớp thì không eval nào sót tệp (việc của hàng F32)."},
-    {"id": "OOS-4", "p": "Không đụng eval máy và eval màn thiếu khối «tệp được đọc» — không có đầu vào để suy."},
-    {"id": "OOS-5", "p": "Không sửa tệp của kit; đề xuất cho kit đi đường riêng."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Loại eval: chấm tay, màn, máy — đã phủ chấm tay (AC-3, AC-6) và một eval màn (AC-1); eval máy thiếu khối là việc sau."},
-    {"i": 1, "p": "Độ khớp giữa «tệp được đọc» và tệp thật: thiếu (AC-3) và rộng hơn (AC-1) đã phủ; hẹp hơn là việc sau."},
-    {"i": 2, "p": "Nguồn khai tệp đọc: mọi kiểu đầu vào đã phủ, kể cả đầu vào mất hay không có (AC-3, AC-6)."},
-    {"i": 3, "p": "Hồ sơ sau khi sửa: chưa ghim và đã ký mà sạch đã phủ (AC-3, AC-5); đã ký mà vẫn cũ là việc sau."},
-    {"i": 4, "p": "Cắt ngang: không đổi thứ được đo, không chạm kit (AC-4); kết quả của cổng gộp thật (AC-7)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Câu «không hồ sơ nào còn bị bỏ bộ lọc vì eval chấm tay» thiếu đường đo — đã sửa: thu câu về các hồ sơ trong danh sách và thêm đường đo."},
-    {"i": 1, "p": "Hai hồ sơ anh gọi tên vào danh sách có điều kiện mà không tiêu chí nào khẳng định — đã sửa: AC-3 vế (b) và phép kiểm in tên."},
-    {"i": 2, "p": "Danh sách có hai nguồn và không gì so nó với luật chọn — đã sửa: một nguồn duy nhất, phép kiểm in thiếu/thừa."},
-    {"i": 3, "p": "Tiêu chí màn giai đoạn chỉ đo vài tệp chọn tay — đã sửa: quét mọi tệp chữ, tập suy từ mã."},
-    {"i": 4, "p": "Ngưỡng giảm số hồ sơ cũ chỉ đo tay — đã sửa: chạy cổng gộp thật trên hai cây (AC-7)."}
-  ]
+  "analyst_plain": "Lượt 5 đạt trọn: mọi phép đo của hợp đồng và mọi lệnh kiểm chung đều xanh trên cây đã gộp onehub. Phép đo đối chiếu với bản trước khi sửa không chạy được vì lỗi công cụ của tác tử, không ảnh hưởng kết quả."
 }
