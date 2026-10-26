@@ -11,6 +11,7 @@ feature_loop:
   repin_budget_min: 80
   repin_cost_cmd: node scripts/lan-do/chi-phi-gateway.mjs
   repin_ci_blank_env: [AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN]
+  model_carry_cmd: bun scripts/lan-do/van-tay-model.ts
   model_evals:
     - chan-uy-thac-sai-luot/E6
     - khung-tao-okr-nhu-deal/E6
