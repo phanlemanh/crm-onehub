@@ -1,0 +1,11 @@
+--- a/apps/app/app/(app)/[slug]/okr/phan-can-cap-nhat.tsx
++++ b/apps/app/app/(app)/[slug]/okr/phan-can-cap-nhat.tsx
+@@ -64,7 +64,7 @@
+ 				chay={() => {
+ 					if (daMoTuNgoai.current) return;
+ 					daMoTuNgoai.current = true;
+-					moPhien.mutate({ entry: tu });
++					moPhien.mutate({ entry: "cua-toi" });
+ 				}}
+ 			/>
+ 		) : null;

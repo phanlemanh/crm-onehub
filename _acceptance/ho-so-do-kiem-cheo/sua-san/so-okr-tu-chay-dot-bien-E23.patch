@@ -1,0 +1,14 @@
+--- a/_acceptance/so-okr-tu-chay/rang/soi-ma.mjs
++++ b/_acceptance/so-okr-tu-chay/rang/soi-ma.mjs
+@@ -644,6 +644,11 @@
+ 	}
+ 	process.on("exit", () => rmSync(thu, { recursive: true, force: true }));
+ 	CAY_DO = thu;
++	const tepTable = join(thu, "apps/app/components/detail-sheet.tsx");
++	writeFileSync(
++		tepTable,
++		`${readFileSync(tepTable, "utf8")}\nexport function BangGia() {\n\treturn <table />;\n}\n`,
++	);
+ }
+ 
+ if (ca === "thiet-ke") dungCayDinh();

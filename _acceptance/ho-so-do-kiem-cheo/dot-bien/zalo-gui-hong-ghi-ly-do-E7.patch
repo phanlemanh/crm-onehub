@@ -1,0 +1,11 @@
+--- a/_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs
++++ b/_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs
+@@ -78,7 +78,7 @@
+ 		});
+ 		if (r.status !== 0) throw new KhongDo(`khong co commit neo ${sha}`);
+ 	}
+-	const ds = git(["diff", "--name-only", TU, TOI]).split("\n").filter(Boolean);
++	const ds = git(["diff", "--name-only", TU, TOI]).split("\n").filter(Boolean).concat("apps/app/lib/x.ts");
+ 	const bot = git(["diff", "-U0", TU, TOI, "--", CHI_THEM])
+ 		.split("\n")
+ 		.filter((d) => d.startsWith("-") && !d.startsWith("---"));

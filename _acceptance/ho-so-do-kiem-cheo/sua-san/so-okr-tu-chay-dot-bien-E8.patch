@@ -1,0 +1,11 @@
+--- a/apps/api/scripts/okr-mau/nap.ts
++++ b/apps/api/scripts/okr-mau/nap.ts
+@@ -214,7 +214,7 @@
+ 		},
+ 	});
+ 	const phienXoa = await tx.okrCheckInSession.deleteMany({ where: { id: P } });
+-	const soChup = await tx.okrSoChup.deleteMany({ where: { keyResultId: K } });
++	const soChup = await tx.okrSoChup.deleteMany({});
+ 	const diem = await tx.okrDiemKr.deleteMany({
+ 		where: { OR: [{ keyResultId: K }, { cycleId: C }] },
+ 	});

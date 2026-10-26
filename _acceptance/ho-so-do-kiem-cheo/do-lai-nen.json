@@ -1,0 +1,3089 @@
+{
+	"sha": "6be0bb688900ecd8843989bd8f8b3095548b604f",
+	"ngay": "2026-10-22T07:45:00Z",
+	"ghi_chu": "Lượt đo 22/10 bằng bản đầu của rang/do-lai.mjs (cùng bộ đọc evals của kit), trên cây sạch ở sha trên; duoi là 12 dòng cuối không rỗng của stdout+stderr ô đỏ.",
+	"ho_so": [
+		{
+			"slug": "ban-gieo-gop-y-sau-nop",
+			"not_run": [],
+			"ngoai_may": [],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 28
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 551
+				},
+				{
+					"id": "E4",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: khong tim thay merge dua ho so len onehub"
+					]
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 12
+				}
+			]
+		},
+		{
+			"slug": "bang-thanh-vien-giu-hang",
+			"not_run": [],
+			"ngoai_may": [
+				"E8"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 73,
+					"duoi": [
+						"DUNG 375: nut menu vai cua Marcus Lindqvist nam trong khung nhin (true) va khong bi khoi nao de len (true)",
+						"DUNG 375: menu vai mo, co du 4 vai [\"Chủ sở hữu\",\"Quản trị\",\"Thành viên\",\"Chỉ OKR\",\"Chuyển việc 30 ngày…\",\"Chuyển OKR…\",\"Gỡ khỏi không gian làm việc\"]",
+						"DUNG don: con 0 loi moi cua ban do",
+						"DUNG don: loi moi co san truoc luot giu nguyen (0 truoc, 0 sau)",
+						"KHONG DO DUOC: het 60000ms cho cau «Không ai khớp với bộ lọc này.» khi tim ttv-khong-ai-trung-tu-nay",
+						"ANH .acceptance-runs/bang-thanh-vien-giu-hang/evidence/",
+						"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4685 · api http://localhost:4747",
+						"$ bun scripts/dev-session.ts ada@trycomp.ai",
+						"phien-do: xong — mã 2"
+					]
+				},
+				{
+					"id": "E2",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 69,
+					"duoi": [
+						"DUNG 375: nut menu vai cua Marcus Lindqvist nam trong khung nhin (true) va khong bi khoi nao de len (true)",
+						"DUNG 375: menu vai mo, co du 4 vai [\"Chủ sở hữu\",\"Quản trị\",\"Thành viên\",\"Chỉ OKR\",\"Chuyển việc 30 ngày…\",\"Chuyển OKR…\",\"Gỡ khỏi không gian làm việc\"]",
+						"DUNG don: con 0 loi moi cua ban do",
+						"DUNG don: loi moi co san truoc luot giu nguyen (0 truoc, 0 sau)",
+						"KHONG DO DUOC: het 60000ms cho cau «Không ai khớp với bộ lọc này.» khi tim ttv-khong-ai-trung-tu-nay",
+						"ANH .acceptance-runs/bang-thanh-vien-giu-hang/evidence/",
+						"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4350 · api http://localhost:4225",
+						"$ bun scripts/dev-session.ts ada@trycomp.ai",
+						"phien-do: xong — mã 2"
+					]
+				},
+				{
+					"id": "E3",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 68,
+					"duoi": [
+						"DUNG 375: nut menu vai cua Marcus Lindqvist nam trong khung nhin (true) va khong bi khoi nao de len (true)",
+						"DUNG 375: menu vai mo, co du 4 vai [\"Chủ sở hữu\",\"Quản trị\",\"Thành viên\",\"Chỉ OKR\",\"Chuyển việc 30 ngày…\",\"Chuyển OKR…\",\"Gỡ khỏi không gian làm việc\"]",
+						"DUNG don: con 0 loi moi cua ban do",
+						"DUNG don: loi moi co san truoc luot giu nguyen (0 truoc, 0 sau)",
+						"KHONG DO DUOC: het 60000ms cho cau «Không ai khớp với bộ lọc này.» khi tim ttv-khong-ai-trung-tu-nay",
+						"ANH .acceptance-runs/bang-thanh-vien-giu-hang/evidence/",
+						"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4570 · api http://localhost:4390",
+						"$ bun scripts/dev-session.ts ada@trycomp.ai",
+						"phien-do: xong — mã 2"
+					]
+				},
+				{
+					"id": "E4",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 68,
+					"duoi": [
+						"DUNG 375: nut menu vai cua Marcus Lindqvist nam trong khung nhin (true) va khong bi khoi nao de len (true)",
+						"DUNG 375: menu vai mo, co du 4 vai [\"Chủ sở hữu\",\"Quản trị\",\"Thành viên\",\"Chỉ OKR\",\"Chuyển việc 30 ngày…\",\"Chuyển OKR…\",\"Gỡ khỏi không gian làm việc\"]",
+						"DUNG don: con 0 loi moi cua ban do",
+						"DUNG don: loi moi co san truoc luot giu nguyen (0 truoc, 0 sau)",
+						"KHONG DO DUOC: het 60000ms cho cau «Không ai khớp với bộ lọc này.» khi tim ttv-khong-ai-trung-tu-nay",
+						"ANH .acceptance-runs/bang-thanh-vien-giu-hang/evidence/",
+						"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4842 · api http://localhost:4687",
+						"$ bun scripts/dev-session.ts ada@trycomp.ai",
+						"phien-do: xong — mã 2"
+					]
+				},
+				{
+					"id": "E5",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 69,
+					"duoi": [
+						"DUNG 375: nut menu vai cua Marcus Lindqvist nam trong khung nhin (true) va khong bi khoi nao de len (true)",
+						"DUNG 375: menu vai mo, co du 4 vai [\"Chủ sở hữu\",\"Quản trị\",\"Thành viên\",\"Chỉ OKR\",\"Chuyển việc 30 ngày…\",\"Chuyển OKR…\",\"Gỡ khỏi không gian làm việc\"]",
+						"DUNG don: con 0 loi moi cua ban do",
+						"DUNG don: loi moi co san truoc luot giu nguyen (0 truoc, 0 sau)",
+						"KHONG DO DUOC: het 60000ms cho cau «Không ai khớp với bộ lọc này.» khi tim ttv-khong-ai-trung-tu-nay",
+						"ANH .acceptance-runs/bang-thanh-vien-giu-hang/evidence/",
+						"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4360 · api http://localhost:4878",
+						"$ bun scripts/dev-session.ts ada@trycomp.ai",
+						"phien-do: xong — mã 2"
+					]
+				},
+				{
+					"id": "E6",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 68,
+					"duoi": [
+						"DUNG 375: nut menu vai cua Marcus Lindqvist nam trong khung nhin (true) va khong bi khoi nao de len (true)",
+						"DUNG 375: menu vai mo, co du 4 vai [\"Chủ sở hữu\",\"Quản trị\",\"Thành viên\",\"Chỉ OKR\",\"Chuyển việc 30 ngày…\",\"Chuyển OKR…\",\"Gỡ khỏi không gian làm việc\"]",
+						"DUNG don: con 0 loi moi cua ban do",
+						"DUNG don: loi moi co san truoc luot giu nguyen (0 truoc, 0 sau)",
+						"KHONG DO DUOC: het 60000ms cho cau «Không ai khớp với bộ lọc này.» khi tim ttv-khong-ai-trung-tu-nay",
+						"ANH .acceptance-runs/bang-thanh-vien-giu-hang/evidence/",
+						"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4718 · api http://localhost:4780",
+						"$ bun scripts/dev-session.ts ada@trycomp.ai",
+						"phien-do: xong — mã 2"
+					]
+				},
+				{
+					"id": "E7",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 69,
+					"duoi": [
+						"DUNG 375: nut menu vai cua Marcus Lindqvist nam trong khung nhin (true) va khong bi khoi nao de len (true)",
+						"DUNG 375: menu vai mo, co du 4 vai [\"Chủ sở hữu\",\"Quản trị\",\"Thành viên\",\"Chỉ OKR\",\"Chuyển việc 30 ngày…\",\"Chuyển OKR…\",\"Gỡ khỏi không gian làm việc\"]",
+						"DUNG don: con 0 loi moi cua ban do",
+						"DUNG don: loi moi co san truoc luot giu nguyen (0 truoc, 0 sau)",
+						"KHONG DO DUOC: het 60000ms cho cau «Không ai khớp với bộ lọc này.» khi tim ttv-khong-ai-trung-tu-nay",
+						"ANH .acceptance-runs/bang-thanh-vien-giu-hang/evidence/",
+						"KET LUAN: 28 DUNG, 0 SAI — ma thoat 2",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4277 · api http://localhost:4740",
+						"$ bun scripts/dev-session.ts ada@trycomp.ai",
+						"phien-do: xong — mã 2"
+					]
+				}
+			]
+		},
+		{
+			"slug": "bo-dung-chung-nhan-chuoi",
+			"not_run": [],
+			"ngoai_may": [
+				"E10"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 86
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 83
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 83
+				},
+				{
+					"id": "E4",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 6,
+					"duoi": [
+						"-- chiều dương: kiểu ngôn ngữ chỉ khai MỘT chỗ",
+						"    apps/app/test/bang-crm-loc-ro.dom.tsx:102:type Locale = \"vi\" | \"en\";",
+						"    apps/app/test/chu-man-tieng-viet.dom.tsx:9:type Locale = \"vi\" | \"en\";",
+						"    apps/app/test/hoan-tac-loat-dung-id.dom.tsx:91:type Locale = \"vi\" | \"en\";",
+						"    apps/app/test/lien-quan-loc-ban-da-cat.dom.tsx:127:type Locale = \"vi\" | \"en\";",
+						"    apps/app/test/vong-doi-mot-cach-cat.dom.tsx:136:type Locale = \"vi\" | \"en\";",
+						"    apps/app/test/luu-tru-truong-khong-hoi.dom.tsx:151:type Locale = \"vi\" | \"en\";",
+						"    apps/app/test/dich-ten-nganh-bang-bang.dom.tsx:45:type Locale = \"vi\" | \"en\";",
+						"    apps/app/test/tra-cuu-thuong-hieu-viet-nam.dom.tsx:55:type Locale = \"vi\" | \"en\";",
+						"    packages/ui/src/lib/locale.ts:3:export type Locale = (typeof LOCALES)[number];",
+						"RĂNG ĐỎ: có 9 chỗ khai kiểu ngôn ngữ, chờ đúng 1"
+					]
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 81
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 82
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 83
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 82
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 83
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 7
+				}
+			]
+		},
+		{
+			"slug": "bo-dung-khong-ket",
+			"not_run": [],
+			"ngoai_may": [
+				"E6"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E9",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"HEAD SESSION_LIMITS: dat",
+						"HEAD 128k: dat",
+						"HEAD 500k: dat",
+						"HEAD session-limit: dat",
+						"HEAD outputSchema: dat",
+						"HEAD cho re du tep (thieu: khong): dat",
+						"merge-base truot 0 dieu: khong dieu nao (sai)",
+						"tai-lieu khong dat"
+					]
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 10
+				}
+			]
+		},
+		{
+			"slug": "bo-xuong-kara",
+			"not_run": [],
+			"ngoai_may": [
+				"E11",
+				"E12"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E10",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 32,
+					"duoi": [
+						"OK  khong lucide: artifact.tsx",
+						"OK  khong chu thich: task.tsx",
+						"OK  khong lucide: task.tsx",
+						"OK  chu-cung.mjs ma 0: Răng xanh.",
+						"OK  mau-ban-kinh.mjs ma 0: XANH: moi lop ban kinh nam trong thang bon gia tri, va moi lop mau goi dung mot ten co trong bang token.",
+						"SAI so-lech-chuan.mjs ma 1:   VÂN TAY SAI: confirmation.tsx — sổ khai 5695b450b02078b9, đo được dbfa031b680e2d02. Đọc lại diff của confirmation.tsx rồi cập nhật mục, đừng chỉ sửa con số.",
+						"OK  so lech co muc artifact.tsx",
+						"OK  so lech co muc task.tsx",
+						"SAI MO COI: artifact.tsx",
+						"SAI MO COI: task.tsx",
+						"OK  mo-coi ma 0, CHET (0)",
+						"DO: 3 muc sai"
+					]
+				},
+				{
+					"id": "E13",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E14",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E15",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				}
+			]
+		},
+		{
+			"slug": "ca-chap-chon-cach-ly",
+			"not_run": [],
+			"ngoai_may": [],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 4
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 67
+				},
+				{
+					"id": "E5",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 4,
+					"duoi": [
+						"moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1"
+					]
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 4
+				},
+				{
+					"id": "E7",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 4,
+					"duoi": [
+						"moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1"
+					]
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 22
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				}
+			]
+		},
+		{
+			"slug": "ca-chap-chon-con-lai",
+			"not_run": [],
+			"ngoai_may": [],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 19
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E6",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"diff rong"
+					]
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 54
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				}
+			]
+		},
+		{
+			"slug": "cai-dat-chung-chi-quan-tri",
+			"not_run": [],
+			"ngoai_may": [
+				"E9"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E8",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"DUNG khoi cu con nguyen: it(\"leaves a request that already carries the slug alone\", async () => {",
+						"DUNG khoi cu con nguyen: it(\"rewrites nothing when the API could not say what the slug is\", async () => {",
+						"DUNG khoi cu con nguyen: it(\"sends an onboarded rep with no key to the key form\", async () => {",
+						"DUNG khoi cu con nguyen: it(\"lets that form render rather than looping onto itself\", async () => {",
+						"DUNG khoi cu con nguyen: it(\"asks the first question first when both are outstanding\", async () => {",
+						"DUNG khoi cu con nguyen: it(\"sends them on to the key once the workspace is named\", async () => {",
+						"SAI so khoi cu 30, con nguyen 28",
+						"KET LUAN: 28 DUNG, 3 SAI — ma thoat 1",
+						" 43 pass",
+						" 0 fail",
+						" 67 expect() calls",
+						"Ran 43 tests across 1 file. [49.00ms]"
+					]
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				}
+			]
+		},
+		{
+			"slug": "cai-dat-con-lai-noi-tieng-viet",
+			"not_run": [],
+			"ngoai_may": [
+				"E19"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 149,
+					"duoi": [
+						"-- man /settings/tracking · vi=76 chuoi · en=76 chuoi · cap doi chieu=76",
+						"   VE 3 HONG: chuoi luot vi khong mang dau — \"Chung\" — aside:0/nav:0/div:0/a:1#0",
+						"   ve 1: 0 cap lech · ve 2: 0 cap giong nhau · ve 3: 1 chuoi khong dau",
+						"ngoai lat (gioi han da khai): 7 chuoi tu packages/auth/src/slack-scopes.ts tren /settings/connections/slack — 7 lan duoc mien. Day la GIOI HAN DA KHAI, khong phai da dich.",
+						"mien dau (tu muon tieng Viet khong them dau): 1 chuoi — 1 lan duoc mien o ve 3.",
+						"   MIEN TRU CHET: \"Names and email addresses, so it can match a Slack account to a CRM record.\" khai ngoai lat tu packages/auth/src/slack-scopes.ts ma khong con tren man /settings/connections/slack.",
+						"ket qua: route do duoc 17/18 (thu muc sinh ra 21, tru 2 route dot mot) · 789 cap doi chieu · ngoai lat (gioi han da khai)=7 · mien dau=1 · mien tru chet=1 · hong=45",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4346 · api http://localhost:4758",
+						"$ bun scripts/dev-session.ts manh.phan@onemount.com",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E3",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: bang khai 26 loi goi toast mang chu, chan do nhan ra 31; thieu 1, thua 6. Bang ghim (file, khoa kho chuoi) — khong ghim so dong.",
+						"  THIEU: apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx khong con loi goi toast nao doc khoa hopThoaiChoPhep.xong",
+						"  THUA:  apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx:30 doc khoa hopThoaiChoPhep.xong ma bang khong khai",
+						"  THUA:  apps/app/app/(app)/[slug]/settings/members/chuyen-okr-dialog.tsx:60 doc khoa (khong doc kho chuoi) ma bang khong khai",
+						"  THUA:  apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx:68 doc khoa (khong doc kho chuoi) ma bang khong khai",
+						"  THUA:  apps/app/app/(app)/[slug]/settings/members/phat-chia-dialog.tsx:51 doc khoa phatChia.nhanLienKet ma bang khong khai",
+						"  THUA:  apps/app/app/(app)/[slug]/settings/members/phat-chia-dialog.tsx:59 doc khoa phatChia.nhanLienKet ma bang khong khai",
+						"  THUA:  apps/app/app/(app)/[slug]/settings/members/ten-mien-noi-bo.tsx:79 doc khoa tenMienNoiBo.daLuu ma bang khong khai"
+					]
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E6",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 19,
+					"duoi": [
+						"   chua co nha cung cap SSO nao",
+						"-- khong dung duoc:",
+						"   chua co ten mien duoc phep nao — workspace da co 1 ten mien va tracking.removeDomain tu choi vai tro \"member\"",
+						"   chua co nguon truy cap nao — tracking.sources tra 403: Only an owner or an admin can change tracking.",
+						"   chua co kenh Slack nao — Slack chua cam vao workspace nay",
+						"ket qua: dung duoc=2 · khong dung duoc=3 · o dung duoc ma khong co dau tieng Viet=0 · o do duoc ma man hien sai=1",
+						"   DO: khong ai khop bo loc thanh vien — trang thai DUNG DUOC va man mo duoc, nhung man khong hien cau rong \"Không ai khớp với bộ lọc này.\". Day KHONG phai gioi han: o nay do duoc va no sai.",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4603 · api http://localhost:4154",
+						"$ bun scripts/dev-session.ts manh.phan@onemount.com",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 25
+				},
+				{
+					"id": "E8",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 135,
+					"duoi": [
+						"THUA MOT GIA TRI: man that co \"onehub.center, onehub.vn\" ma bang khong khai — no phai duoc dich, hoac phai co mot dong khai ly do.",
+						"THUA MOT GIA TRI: man that co \"phanlemanh/crm-onehub · onehub · LO-TRINH.html\" ma bang khong khai — no phai duoc dich, hoac phai co mot dong khai ly do.",
+						"THUA MOT GIA TRI: man that co \"Điểm nhận dữ liệu\" ma bang khong khai — no phai duoc dich, hoac phai co mot dong khai ly do.",
+						"ngoai lat (gioi han da khai): 7 chuoi tu packages/auth/src/slack-scopes.ts tren /settings/connections/slack — 7 lan duoc mien. Day la GIOI HAN DA KHAI, khong phai da dich.",
+						"   MIEN TRU CHET: \"Names and email addresses, so it can match a Slack account to a CRM record.\" khai ngoai lat tu packages/auth/src/slack-scopes.ts ma khong con tren man /settings/connections/slack.",
+						"ket qua: thieu dong=0 · thua gia tri=24 · thieu thuoc tinh=0 · ngoai lat (gioi han da khai)=7 · mien tru chet=1 · route khong do duoc=1 · route lech do dai hai luot=0",
+						"   TU CHOI DO: /settings/notifications (lang=vi) — KHONG DO DUOC: tien de thieu — xin /onehub-center/settings/notifications nhung dung o /onehub-center/reminders.",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4663 · api http://localhost:4638",
+						"$ bun scripts/dev-session.ts manh.phan@onemount.com",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 17
+				},
+				{
+					"id": "E10",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 62,
+					"duoi": [
+						"-- tiền đề làn đo: kho \"crm\" không phải kho dùng-một-lần — chạy trong một phiên đo riêng",
+						"-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)",
+						"-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)",
+						"-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng",
+						"KHONG DO DUOC: chua pha gi ma 1 chan da khong xanh: moi-chuoi(1). Chieu xanh gay thi chieu do khong noi len dieu gi.",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4133 · api http://localhost:4202",
+						"phien-do: xong — mã 2"
+					]
+				},
+				{
+					"id": "E11",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"hang FILE: {\"latSinh\":45,\"chanJsx\":45,\"chanNgoaiToast\":45,\"chanNgoaiTieuDe\":45}",
+						"hang VAT:  {\"toastNhanRa\":31,\"toastKhai\":26,\"tieuDeNhanRa\":7,\"tieuDeKhai\":7}",
+						"KHONG DO DUOC: hang VAT lech — toast nhan ra 31/26, tieu de nhan ra 7/7.",
+						"  THIEU: bang khai apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx|hopThoaiChoPhep.xong ma chan do khong nhan ra",
+						"  THUA:  chan do nhan ra apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx|hopThoaiChoPhep.xong ma bang khong khai",
+						"  THUA:  chan do nhan ra apps/app/app/(app)/[slug]/settings/members/chuyen-okr-dialog.tsx|null ma bang khong khai",
+						"  THUA:  chan do nhan ra apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx|null ma bang khong khai",
+						"  THUA:  chan do nhan ra apps/app/app/(app)/[slug]/settings/members/phat-chia-dialog.tsx|phatChia.nhanLienKet ma bang khong khai",
+						"  THUA:  chan do nhan ra apps/app/app/(app)/[slug]/settings/members/phat-chia-dialog.tsx|phatChia.nhanLienKet ma bang khong khai",
+						"  THUA:  chan do nhan ra apps/app/app/(app)/[slug]/settings/members/ten-mien-noi-bo.tsx|tenMienNoiBo.daLuu ma bang khong khai",
+						"  So dem bang nhau van co the lech MUC — day la cho hang VAT chi so dem da bo qua."
+					]
+				},
+				{
+					"id": "E12",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"  tren dia: apps/app/app/(app)/[slug]/settings/sso/add-sso-provider-sheet.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/sso/page.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/sso/sso-table.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/tracking/allowed-domains.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/tracking/page.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/tracking/tracking-cookies.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/tracking/tracking-rules.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/tracking/tracking-sections.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/tracking/traffic-sources.tsx",
+						"  tren dia: apps/app/app/(app)/[slug]/settings/tracking/verify-installation.tsx",
+						"  tren dia: apps/app/components/slack/channel-picker.tsx"
+					]
+				},
+				{
+					"id": "E13",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 136,
+					"duoi": [
+						"-- man /settings/onboarding o 360px · phan tu co chu: vi=22 en=22 · nhan dich duoc=21",
+						"-- man /settings/organization o 360px · phan tu co chu: vi=20 en=20 · nhan dich duoc=19",
+						"-- man /settings/san-pham o 360px · phan tu co chu: vi=21 en=21 · nhan dich duoc=18",
+						"-- man /settings/sso o 360px · phan tu co chu: vi=19 en=19 · nhan dich duoc=18",
+						"-- man /settings/tracking o 360px · phan tu co chu: vi=62 en=62 · nhan dich duoc=48",
+						"GIOI HAN KE THUA: chan nay mu voi vung chua cho xuong dong — no chung \"khong cho nao bi cat\", khong chung \"moi nhan vua mat\".",
+						"ket qua 360px: 447 nhan dich duoc tren 17/18 route · vi tran ma en vua=2 · tran ca hai luot=1 · en tran ma vi vua=0",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4701 · api http://localhost:4407",
+						"$ bun scripts/dev-session.ts manh.phan@onemount.com",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E14",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: khong noi duoc http://localhost:3000 dang phuc vu cay nao.",
+						"    Dau moc canh-cay-320581df-b066-4a9e-a995-b494e82cd5a5.svg khong tra ve, va file doi chung apple-touch-icon.png cung tra loi mang: fetch failed.",
+						"    Khong co may chu tra loi, hoac may chu do khong phuc vu thu muc public — hai duong deu khong ket luan duoc gi.",
+						"    Chan be-rong-do dot bien cay TAI CHO roi doc con so tu man hinh, nen no chi co nghia",
+						"    khi may chu o APP_URL dang doc dung cai cay vua bi dot bien. Chua chung duoc dieu do",
+						"    thi KHONG cam vet va KHONG doc con so nao — con so 0 o day se la loi buoc toi oan."
+					]
+				},
+				{
+					"id": "E15",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx:47 [khac] \"khung-2\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx:47 [khac] \"khung-3\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx:41 [thuoc:aria-haspopup] \"dialog\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/members/members-table.tsx:78 [khac] \"whitespace-normal align-top\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/members/members-table.tsx:341 [thuoc:layout] \"content\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/members/page.tsx:48 [thuoc:hinh] \"bang\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/members/ten-mien-noi-bo.tsx:39 [khac] \"ten-mien-noi-bo\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/sso/add-sso-provider-sheet.tsx:63 [khac] \"sso-khoa-them\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/sso/page.tsx:50 [thuoc:hinh] \"bang\"",
+						"CON TIENG ANH: apps/app/app/(app)/[slug]/settings/tracking/page.tsx:36 [thuoc:hinh] \"the\"",
+						"quet 45 file · 92 chuoi nguoi co the doc · tru 32/32 dong giu nguyen co ten",
+						"DO: 34 chuoi con la tieng Anh."
+					]
+				},
+				{
+					"id": "E16",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 61
+				},
+				{
+					"id": "E17",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 2,
+					"duoi": [
+						"    |   thay: apps/app/lib/cai-dat-dieu-huong.ts:44 [nhan-thanh-ben]",
+						"    |   thay: apps/app/lib/cai-dat-dieu-huong.ts:48 [nhan-thanh-ben]",
+						"    |   thay: apps/app/lib/cai-dat-dieu-huong.ts:50 [nhan-thanh-ben]",
+						"    |   thay: apps/app/lib/cai-dat-dieu-huong.ts:51 [nhan-thanh-ben]",
+						"    |   Dem O NHAN, khong dem chuoi: dich xong thi chuoi roi vao kho, o nhan thi con.",
+						"LECH: khai-sinh.mjs thoat 2 khi chay tu goc kho va 2 khi chay tu /var/folders/6x/1dlzszm51wzbt20dn5y1lgzh0000gn/T, cho 0 ca hai. Bang chung da ky cua dot mot khong tai lap duoc.",
+						"    | hang FILE: {\"latSinh\":10,\"chanJsx\":10,\"chanNgoaiToast\":10,\"chanNgoaiTieuDe\":10}",
+						"    | hang VAT:  {\"toastNhanRa\":12,\"toastKhai\":12,\"tieuDeNhanRa\":20,\"tieuDeKhai\":18}",
+						"    | KHONG DO DUOC: hang VAT lech — toast nhan ra 12/12, tieu de nhan ra 20/18.",
+						"    | hang FILE: {\"latSinh\":10,\"chanJsx\":10,\"chanNgoaiToast\":10,\"chanNgoaiTieuDe\":10}",
+						"    | hang VAT:  {\"toastNhanRa\":12,\"toastKhai\":12,\"tieuDeNhanRa\":20,\"tieuDeKhai\":18}",
+						"    | KHONG DO DUOC: hang VAT lech — toast nhan ra 12/12, tieu de nhan ra 20/18."
+					]
+				},
+				{
+					"id": "E18",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				}
+			]
+		},
+		{
+			"slug": "cap-nhat-tuan-okr",
+			"not_run": [],
+			"ngoai_may": [
+				"E6",
+				"E13",
+				"E16",
+				"E18",
+				"E23",
+				"E26",
+				"E29"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E7",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 19,
+					"duoi": [
+						"$ bun scripts/dev-session.ts \"qnja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"tpnja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"trnja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"mnja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"anja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"cnja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"c2nja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"hnja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"rnja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"unja0gvw@thu.test\"",
+						"$ bun scripts/dev-session.ts \"dinja0gvw@thu.test\"",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E14",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 17,
+					"duoi": [
+						"$ bun scripts/dev-session.ts \"qnja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"tpnja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"trnja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"mnja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"anja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"cnja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"c2nja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"hnja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"rnja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"unja13e4@thu.test\"",
+						"$ bun scripts/dev-session.ts \"dinja13e4@thu.test\"",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E15",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E17",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E19",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 17,
+					"duoi": [
+						"$ bun scripts/dev-session.ts \"qnja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"tpnja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"trnja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"mnja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"anja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"cnja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"c2nja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"hnja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"rnja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"unja1l0p@thu.test\"",
+						"$ bun scripts/dev-session.ts \"dinja1l0p@thu.test\"",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E20",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E21",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 27
+				},
+				{
+					"id": "E22",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E24",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 5
+				},
+				{
+					"id": "E25",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E27",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E28",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				}
+			]
+		},
+		{
+			"slug": "chan-lai-component-ra-man",
+			"not_run": [],
+			"ngoai_may": [
+				"E10"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 1,
+					"duoi": [
+						"tap loai tru ghim ten: node_modules · .next · dist · build — 1113 file nguon",
+						"gia tri mac dinh la chuoi co chu: 132 · component so huu: 70",
+						"dong trong bang gioi han vong truoc: 9",
+						"tep git theo doi duoi goc: 1113",
+						"DO: neo mac_dinh ghim 129 nhung do duoc 132"
+					]
+				},
+				{
+					"id": "E2",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 3,
+					"duoi": [
+						"nhom chu-nguoi-doc: 0",
+						"nhom ky thuat: 125",
+						"khong ve duoc (da khai kem ly do): 7",
+						"tong: 132 · neo: 129",
+						"DO: tong ba nhom 132 khac neo 129"
+					]
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 12
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"tap loai tru ghim ten: node_modules · .next · dist · build — 1113 file nguon",
+						"gia tri mac dinh la chuoi co chu: 132 · component so huu: 70",
+						"dong trong bang gioi han vong truoc: 9",
+						"tep git theo doi duoi goc: 1113",
+						"DO: neo mac_dinh ghim 129 nhung do duoc 132"
+					]
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				}
+			]
+		},
+		{
+			"slug": "chan-trung-khoa-ban-nhap",
+			"not_run": [],
+			"ngoai_may": [
+				"E5"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E3",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 1,
+					"duoi": [
+						"Loaded Prisma config from prisma.config.ts.",
+						"Prisma schema loaded from prisma/schema.prisma.",
+						"tich-hop.spec.ts:",
+						"# Unhandled error between tests",
+						"-------------------------------",
+						"error: Cannot find module './okr-muc-tieu' from '/Users/manhphan/dev/crm/.claude/worktrees/epic-panini-3db124/.acceptance-runs/chan-trung-khoa-ban-nhap/sao-xanh-15077/okr-cuoc-soan.ts'",
+						"-------------------------------",
+						" 0 pass",
+						" 1 fail",
+						" 1 error",
+						"Ran 1 test across 1 file. [59.00ms]",
+						"error: script \"test\" exited with code 1"
+					]
+				},
+				{
+					"id": "E4",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 1,
+					"duoi": [
+						"Loaded Prisma config from prisma.config.ts.",
+						"Prisma schema loaded from prisma/schema.prisma.",
+						"tich-hop.spec.ts:",
+						"# Unhandled error between tests",
+						"-------------------------------",
+						"error: Cannot find module './okr-muc-tieu' from '/Users/manhphan/dev/crm/.claude/worktrees/epic-panini-3db124/.acceptance-runs/chan-trung-khoa-ban-nhap/sao-do-15253/okr-cuoc-soan.ts'",
+						"-------------------------------",
+						" 0 pass",
+						" 1 fail",
+						" 1 error",
+						"Ran 1 test across 1 file. [63.00ms]",
+						"error: script \"test\" exited with code 1"
+					]
+				}
+			]
+		},
+		{
+			"slug": "chu-cuoi-cung-tien-de",
+			"not_run": [],
+			"ngoai_may": [],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 12
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E5",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"chu-la --chan pham-vi · goc 058bb75f",
+						"diff 058bb75f...HEAD: 13918 tep, ngoai pham vi: 2751",
+						"RANG DO: diff cham tep ngoai pham vi: .claude/settings.json, .env.example, .githooks/gate-shape.json, .githooks/pre-push, .github/scripts/phan-loai.mjs, .github/scripts/t1-ma-doc.mjs, .github/scripts/test/phan-loai.test.mjs, .github/workflo"
+					]
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 17
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 968
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 19
+				}
+			]
+		},
+		{
+			"slug": "chu-mac-dinh-thu-vien-ngoai",
+			"not_run": [],
+			"ngoai_may": [
+				"E10"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 164
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 167
+				},
+				{
+					"id": "E3",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"doc tu dia: 120 component · 43 boc thu vien ngoai · 39 doc kho chuoi dung chung",
+						"neo ghim:  76 · 37 · 21",
+						"   LECH: component — do duoc 120, neo ghim 76",
+						"   LECH: boc — do duoc 43, neo ghim 37",
+						"   LECH: doc_kho — do duoc 39, neo ghim 21",
+						"   Danh sach boc sinh tu CAU LENH NHAP trong file, khong go tay ten goi — lech nghia la mot ben sai, doc ten file de biet ben nao.",
+						"   boc: accordion.tsx <- lucide-react, radix-ui",
+						"   boc: alert-dialog.tsx <- radix-ui",
+						"   boc: async-action.tsx <- lucide-react, motion/react",
+						"   boc: avatar.tsx <- radix-ui",
+						"   boc: calendar.tsx <- lucide-react"
+					]
+				},
+				{
+					"id": "E4",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"bang: 26 dong · chan dem tu dia: 28 component boc-ma-khong-doc",
+						"   THUA: progress.tsx khai trong bang ma khong phai boc-ma-khong-doc",
+						"   THIEU: context-menu.tsx la boc-ma-khong-doc ma bang khong khai",
+						"   THIEU: markdown-reader.tsx la boc-ma-khong-doc ma bang khong khai",
+						"   THIEU: radio-group.tsx la boc-ma-khong-doc ma bang khong khai",
+						"KHONG DO DUOC: bang lech voi dia — in ca hai danh sach o tren."
+					]
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 160
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 481
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E9",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"bang gioi han: 9 dong · chan dem tu dia: 10 component boc-ma-khong-doc thuoc loai chi-hien-sau-khi-bam",
+						"   THIEU: context-menu.tsx",
+						"KHONG DO DUOC: bang lech voi dia — mot bang khai mot dong khong duoc di qua nhu mot bang da ke het."
+					]
+				}
+			]
+		},
+		{
+			"slug": "cron-theo-ban-khai",
+			"not_run": [],
+			"ngoai_may": [],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 5
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 6
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E8",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 1,
+					"duoi": [
+						"MA 2: khong doc duoc danh sach ban trien khai — HTTP 403"
+					]
+				},
+				{
+					"id": "E7",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 383,
+					"duoi": [
+						"MA 2: khong chay duoc `test` — spawnSync bun ENOBUFS (stdout or stderr buffer reached maxBuffer size limit)"
+					]
+				}
+			]
+		},
+		{
+			"slug": "danh-sach-keo-chung",
+			"not_run": [],
+			"ngoai_may": [
+				"E4",
+				"E11"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 4
+				},
+				{
+					"id": "E13",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"SAI /var/folders/6x/1dlzszm51wzbt20dn5y1lgzh0000gn/T/dsk-san-thiet-ke-yaayFS/gia-xam-tren-mau.tsx: p0 1 (gray-on-color)",
+						"tu-thu: bat duoc tep gia; doi chung sach",
+						"0 tep",
+						"KET LUAN: khong co tep giao dien trong diff — khong do duoc"
+					]
+				}
+			]
+		},
+		{
+			"slug": "kara-gop-y-luot-2",
+			"not_run": [],
+			"ngoai_may": [
+				"E15c"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 4
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E10b",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E13",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E14",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E15",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 32
+				},
+				{
+					"id": "E15b",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				}
+			]
+		},
+		{
+			"slug": "to-chuc-danh-sach-chi-tiet",
+			"not_run": [],
+			"ngoai_may": [
+				"E17"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E13",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E14",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E15",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E16",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E18",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E19",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E20",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 610
+				},
+				{
+					"id": "E21",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"so tep giao dien vong nay cham: 0",
+						"KHONG DO DUOC: khong tep giao dien nao trong diff — khong co gi de soi"
+					]
+				}
+			]
+		},
+		{
+			"slug": "toan-canh-okr",
+			"not_run": [],
+			"ngoai_may": [
+				"E2",
+				"E5",
+				"E10",
+				"E14",
+				"E17",
+				"E19",
+				"E21",
+				"E23",
+				"E27"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E3",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 181,
+					"duoi": [
+						"  HONG: hien [data-hang-toan-canh]: het 30000ms van chua thay",
+						"  HONG: E23 buoc 4: Toan canh giu kyOkr, hang phong ban mang so cua Quý 3/2026 tjby1dn (1 muc tieu, 1 KR), khong «TCO-Q4-tjby1dn» (thay [])",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4545 · api http://localhost:4587 · cua chan http://localhost:4899",
+						"$ bun scripts/dev-session.ts \"atjby1dn@thu.test\"",
+						"$ bun scripts/dev-session.ts \"btjby1dn@thu.test\"",
+						"$ bun scripts/dev-session.ts \"ptjby1dn@thu.test\"",
+						"$ bun scripts/dev-session.ts \"qtjby1dn@thu.test\"",
+						"$ bun scripts/dev-session.ts \"ktjby1dn@thu.test\"",
+						"$ bun scripts/dev-session.ts \"otjby1dn@thu.test\"",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 4
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E13",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E15",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E16",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E18",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E20",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E22",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E24",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 5
+				},
+				{
+					"id": "E25",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E26",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E28",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 176,
+					"duoi": [
+						"  HONG: hien [data-hang-toan-canh]: het 30000ms van chua thay",
+						"  HONG: E23 buoc 4: Toan canh giu kyOkr, hang phong ban mang so cua Quý 3/2026 tjc2oty (1 muc tieu, 1 KR), khong «TCO-Q4-tjc2oty» (thay [])",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4609 · api http://localhost:4827 · cua chan http://localhost:4422",
+						"$ bun scripts/dev-session.ts \"atjc2oty@thu.test\"",
+						"$ bun scripts/dev-session.ts \"btjc2oty@thu.test\"",
+						"$ bun scripts/dev-session.ts \"ptjc2oty@thu.test\"",
+						"$ bun scripts/dev-session.ts \"qtjc2oty@thu.test\"",
+						"$ bun scripts/dev-session.ts \"ktjc2oty@thu.test\"",
+						"$ bun scripts/dev-session.ts \"otjc2oty@thu.test\"",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E29",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 176,
+					"duoi": [
+						"  HONG: hien [data-hang-toan-canh]: het 30000ms van chua thay",
+						"  HONG: E23 buoc 4: Toan canh giu kyOkr, hang phong ban mang so cua Quý 3/2026 tjc6gpt (1 muc tieu, 1 KR), khong «TCO-Q4-tjc6gpt» (thay [])",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4137 · api http://localhost:4355 · cua chan http://localhost:4440",
+						"$ bun scripts/dev-session.ts \"atjc6gpt@thu.test\"",
+						"$ bun scripts/dev-session.ts \"btjc6gpt@thu.test\"",
+						"$ bun scripts/dev-session.ts \"ptjc6gpt@thu.test\"",
+						"$ bun scripts/dev-session.ts \"qtjc6gpt@thu.test\"",
+						"$ bun scripts/dev-session.ts \"ktjc6gpt@thu.test\"",
+						"$ bun scripts/dev-session.ts \"otjc6gpt@thu.test\"",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E30",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E31",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				}
+			]
+		},
+		{
+			"slug": "tong-quan-va-khung-noi-tieng-viet",
+			"not_run": [],
+			"ngoai_may": [
+				"E18",
+				"E19"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 2,
+					"duoi": [
+						"    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)",
+						"    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)",
+						"    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)",
+						"    at #resolve (node:internal/modules/esm/loader:687:17)",
+						"    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)",
+						"    at node:internal/modules/esm/loader:636:32",
+						"    at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {",
+						"  code: 'ERR_MODULE_NOT_FOUND',",
+						"  url: 'file:///Users/manhphan/dev/crm/.claude/worktrees/epic-panini-3db124/apps/app/lib/deal-stage.ts'",
+						"}",
+						"Node.js v24.22.0",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E2",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E3",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E4",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"CON TIENG ANH: apps/app/components/app-header.tsx:59 [khac] \"companies\"",
+						"CON TIENG ANH: apps/app/components/app-icon-rail.tsx:308 [thuoc:placement] \"panel\"",
+						"CON TIENG ANH: apps/app/components/crm/quick-switcher.tsx:89 [khac] \"khong-quyen\"",
+						"CON TIENG ANH: apps/app/components/enrichment-queue.tsx:48 [khac] \"dangChay\"",
+						"CON TIENG ANH: apps/app/components/enrichment-queue.tsx:49 [khac] \"dangChay\"",
+						"CON TIENG ANH: apps/app/components/enrichment-queue.tsx:50 [khac] \"hong\"",
+						"CON TIENG ANH: apps/app/lib/sign-out.ts:10 [khac] \"Sign out failed\"",
+						"GIU NGUYEN CHET: \"primary\" (tone cua cham trang thai) khong con doi tuong that — go no khoi ban khai",
+						"GIU NGUYEN CHET: \"error\" (tone cua cham trang thai) khong con doi tuong that — go no khoi ban khai",
+						"quet 18 file · 61 chuoi nguoi co the doc · tru 21/23 dong giu nguyen co ten",
+						"DO: 32 chuoi con la tieng Anh.",
+						"DO: 2 dong giu nguyen khong con doi tuong that."
+					]
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 2,
+					"duoi": [
+						"    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)",
+						"    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)",
+						"    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)",
+						"    at #resolve (node:internal/modules/esm/loader:687:17)",
+						"    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)",
+						"    at node:internal/modules/esm/loader:636:32",
+						"    at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {",
+						"  code: 'ERR_MODULE_NOT_FOUND',",
+						"  url: 'file:///Users/manhphan/dev/crm/.claude/worktrees/epic-panini-3db124/apps/app/lib/deal-stage.ts'",
+						"}",
+						"Node.js v24.22.0",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E8",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E10",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E11",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E12",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E13",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E14",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 3,
+					"duoi": [
+						"    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)",
+						"    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)",
+						"    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)",
+						"    at #resolve (node:internal/modules/esm/loader:687:17)",
+						"    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)",
+						"    at node:internal/modules/esm/loader:636:32",
+						"    at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {",
+						"  code: 'ERR_MODULE_NOT_FOUND',",
+						"  url: 'file:///Users/manhphan/dev/crm/.claude/worktrees/epic-panini-3db124/apps/app/lib/deal-stage.ts'",
+						"}",
+						"Node.js v24.22.0",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E15",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 2,
+					"duoi": [
+						"ve 1: 9 file cua lat so voi 35 file cua bon lat truoc · cua so 12 dong trung=0",
+						"ve 1b: 9 file suy goc tu import.meta.url — 0 file ghim duong tuyet doi",
+						"tien de: 10 script ma o cam tq_* tro toi deu co mat",
+						"ve 2: _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs  — ma 0 · so file quet=10 (ky: 10)",
+						"ve 2: _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --chan toast — ma 0 · loi goi toast=12/12 (ky: 12/12)",
+						"ve 2b: man-that.mjs hai-tieng cua ho so da ky, khong tham so — ma 1 · {} · ghim lib truoc khi sua: {\"/settings\":41,\"/settings/currencies\":86}",
+						"ve 3: mui goi GOM/DO_RONG ngoai rang/ cua lat truyen tham so = 0 (tru noi dinh nghia man-that-lib.mjs)",
+						"DO: PHEP DO MAN CUA HO SO DA KY DO (ma 1) sau khi sua man-that-lib.mjs",
+						"DO: SO CHUOI LECH: /settings lib moi=undefined · lib truoc khi sua=41",
+						"DO: SO CHUOI LECH: /settings/currencies lib moi=undefined · lib truoc khi sua=86",
+						"ket qua: 3 cho do"
+					]
+				},
+				{
+					"id": "E16",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E17",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E20",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E21",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E22",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E23",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"Hai phep thu duoi day CO Y lam chan doc bao DO. Do la ket qua dung y muon.",
+						"--- ben trong: ghim neo sai cay (sha toan so khong) ---",
+						"  | DO: cay da doi sau khi lan chay — ghim neo o 000000000000 con HEAD la 6be0bb688900.",
+						"  | Ket qua cu khong noi gi ve cay hien tai. Chay lai lan noi tiep.",
+						"  |",
+						"--- het phan cam vao · ma thoat cua phep thu: 1 ---",
+						"KHONG DO DUOC: chua co ghim that de thu chieu cay ban — chay lan noi tiep truoc."
+					]
+				},
+				{
+					"id": "E24",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				},
+				{
+					"id": "E25",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"KHONG DO DUOC: chua co ghim cua lan noi tiep tai _acceptance/tong-quan-va-khung-noi-tieng-viet/.lan/noi-tiep.json.",
+						"Chay `node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs` truoc khi cham vong nay."
+					]
+				}
+			]
+		},
+		{
+			"slug": "tro-ly-okr-nen",
+			"not_run": [],
+			"ngoai_may": [
+				"E15",
+				"E24"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E4",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"chua co tong ket cua E9 — chay cach-ly-dau-cuoi.mjs truoc"
+					]
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 32
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 217
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 225
+				},
+				{
+					"id": "E13",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E14",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E16",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E17",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"thieu bang: okrTomTatPhanHoi",
+						"thieu bang: aiChiPhi",
+						"thieu bang: aiDoiSoat",
+						"thieu bang: aiBaoTran",
+						"thieu cot: okrProgramConfig.aiOn",
+						"thieu cot: okrProgramConfig.aiDeXuatPhamVi",
+						"thieu cot: okrProgramConfig.aiDeXuatDonVi",
+						"thieu cot: okrProgramConfig.aiTomTatPhamVi",
+						"thieu cot: okrProgramConfig.aiTomTatDonVi",
+						"thieu cot: okrProgramConfig.aiTranThangUsd",
+						"thieu cot: notificationPreference.dongTroLyOkr",
+						"model moi khong nam cuoi schema: DuAnVet,DuAnMoc,DuAnMocCho,ViecPhuThuoc,NgayNghi,GoiYKeHoach"
+					]
+				},
+				{
+					"id": "E18",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E19",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E20",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E21",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 6
+				},
+				{
+					"id": "E22",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 1,
+					"duoi": [
+						"  status: 128,",
+						"  signal: null,",
+						"  output: [",
+						"    null,",
+						"    '',",
+						"    \"fatal: path 'apps/api/src/okr/tien-do.ts' does not exist in '6be0bb688900ecd8843989bd8f8b3095548b604f'\\n\"",
+						"  ],",
+						"  pid: 94813,",
+						"  stdout: '',",
+						"  stderr: \"fatal: path 'apps/api/src/okr/tien-do.ts' does not exist in '6be0bb688900ecd8843989bd8f8b3095548b604f'\\n\"",
+						"}",
+						"Node.js v24.22.0"
+					]
+				},
+				{
+					"id": "E23",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"tu dien lech: Trợ lý OKR",
+						"tu dien lech: Tóm tắt tuần"
+					]
+				},
+				{
+					"id": "E25",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 25,
+					"duoi": [
+						"phien con khong ghi so: con_khong_so (doi chung, dung ky vong)",
+						"{\"phienGoc\":\"wrun_01M5HFKAVK8W9PJK0JAJW2T6C0\",\"soDong\":6,\"theoPhien\":[{\"ten\":\"goc\",\"dong\":[\"crm.nghien-cuu\",\"crm.nghien-cuu\",\"crm.nghien-cuu\"],\"phienCha\":null},{\"ten\":\"con_tro_ly\",\"dong\":[\"okr.chuyen-tiep\"],\"phienCha\":\"wrun_01M5HFKAVK8W9PJK",
+						"con_tro_ly: tinhNang okr.chuyen-tiep, can okr.de-xuat"
+					]
+				},
+				{
+					"id": "E26",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				}
+			]
+		},
+		{
+			"slug": "do-man-tren-kho-rieng",
+			"not_run": [],
+			"ngoai_may": [],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 22
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 41
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 22
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 25
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 39
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 84
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 28
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 180
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E13",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 87
+				},
+				{
+					"id": "E14",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				}
+			]
+		},
+		{
+			"slug": "so-okr-tu-chay",
+			"not_run": [],
+			"ngoai_may": [
+				"E11",
+				"E13",
+				"E19",
+				"E24"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 46
+				},
+				{
+					"id": "E8",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 1,
+					"duoi": [
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvjbmpwh-a1e23281-d772-4435-9e59-1de2d42beb3d/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvj9l5s0-ac4c00c3-8b1d-4402-a023-cb542216791d/source/packages/db/src/okr-chi-so.ts:446 (createMany trong chupKrCrm)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvj9l5s0-ac4c00c3-8b1d-4402-a023-cb542216791d/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvj9kfew-6d6237d6-765f-49da-abe3-811f11a510b6/source/packages/db/src/okr-chi-so.ts:446 (createMany trong chupKrCrm)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvj9kfew-6d6237d6-765f-49da-abe3-811f11a510b6/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvja9svk-2e96fc40-024b-4ba0-a95f-e081d9f34b69/source/packages/db/src/okr-chi-so.ts:446 (createMany trong chupKrCrm)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvja9svk-2e96fc40-024b-4ba0-a95f-e081d9f34b69/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvjcc4xf-04f86c4b-1222-46e2-ba79-433533c9ee07/source/packages/db/src/okr-chi-so.ts:446 (createMany trong chupKrCrm)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/agent/.eve/dev-runtime/snapshots/mvjcc4xf-04f86c4b-1222-46e2-ba79-433533c9ee07/source/apps/agent/agent/lib/okr-chup.ts:80 (createMany trong ghiBangTinh)",
+						"HONG okrSoChup bị sửa: apps/api/scripts/okr-mau/nap.ts:217 (deleteMany)",
+						"HONG okrSoChup tạo ngoài chỗ được phép: apps/api/scripts/okr-mau/nap.ts:656 (createMany trong napTrong)",
+						"vi pham: 20"
+					]
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E12",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 661,
+					"duoi": [
+						"  HONG: E19 buoc 4: chon muc Vua -> nut Gui bat: het 30000ms van chua thay",
+						"  HONG: khong thay [data-nut='gui'] de bam",
+						"  HONG: E19 buoc 4: gui -> thanh cong: het 30000ms van chua thay",
+						"  HONG: E19 buoc 4: okrCheckIn cua KR crm: het 30000ms (cuoi: null)",
+						"  HONG: E19 buoc 4: DB ghi KR crm gia tri 3, tu tin vua (thay null)",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4413 · api http://localhost:4131",
+						"$ bun scripts/dev-session.ts \"asjcym9j@thu.test\"",
+						"$ bun scripts/dev-session.ts \"tsjcym9j@thu.test\"",
+						"$ bun scripts/dev-session.ts \"osjcym9j@thu.test\"",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E14",
+					"exit": 1,
+					"ky_vong": 0,
+					"giay": 627,
+					"duoi": [
+						"  HONG: E19 buoc 4: chon muc Vua -> nut Gui bat: het 30000ms van chua thay",
+						"  HONG: khong thay [data-nut='gui'] de bam",
+						"  HONG: E19 buoc 4: gui -> thanh cong: het 30000ms van chua thay",
+						"  HONG: E19 buoc 4: okrCheckIn cua KR crm: het 30000ms (cuoi: null)",
+						"  HONG: E19 buoc 4: DB ghi KR crm gia tri 3, tu tin vua (thay null)",
+						"-- tiền đề làn đo: đã dọn contextDevApiKey",
+						"-- tiền đề làn đo: đã dọn ảnh đại diện",
+						"phien-do: kho crm_epic_panini_3db124_do · app http://localhost:4859 · api http://localhost:4203",
+						"$ bun scripts/dev-session.ts asjdcsgz@thu.test",
+						"$ bun scripts/dev-session.ts tsjdcsgz@thu.test",
+						"$ bun scripts/dev-session.ts osjdcsgz@thu.test",
+						"phien-do: xong — mã 1"
+					]
+				},
+				{
+					"id": "E15",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E16",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 7
+				},
+				{
+					"id": "E17",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E18",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E20",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E21",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E22",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 7
+				},
+				{
+					"id": "E23",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"dai so sanh: origin/onehub...HEAD (--no-renames)",
+						"tep giao dien apps/app (0):",
+						"tep ma doi soi chu thich tren dong them (0):",
+						"tep moi soi Record / useEffect (0):",
+						"tep okr moi soi so tran (0):",
+						"cho nhap CopyValue tu @crm/ui: 5",
+						"co tu truoc ngoai okr, dong cu khong tinh: googleapis.com trong apps/api/src/mailbox/mailbox-token.service.ts",
+						"co tu truoc ngoai okr, dong cu khong tinh: googleapis.com trong apps/api/src/google/gmail.client.ts",
+						"co tu truoc ngoai okr, dong cu khong tinh: googleapis.com trong apps/api/src/google/calendar.client.ts",
+						"tep apps/api/src soi googleapis.com: 333 (okr: ca tep; ngoai okr: dong diff them)",
+						"bien GOOGLE_SHEETS_EMAIL, GOOGLE_SHEETS_KHOA soi trong: .env.example, apps/api/src/config/env.validation.ts",
+						"KHONG DO DUOC: diff khong co tep giao dien apps/app nao"
+					]
+				},
+				{
+					"id": "E25",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"goc so sanh: origin/onehub (6be0bb68) · migration moi: (khong co) · so cau lenh: 0",
+						"KHONG DO DUOC: khong co migration moi nao so voi origin/onehub"
+					]
+				}
+			]
+		},
+		{
+			"slug": "dieu-phoi-hai-tang",
+			"not_run": [
+				"E1",
+				"E2",
+				"E3",
+				"E4",
+				"E5",
+				"E6",
+				"E7",
+				"E8",
+				"E9",
+				"E10",
+				"E11",
+				"E12",
+				"E13",
+				"E14",
+				"E15",
+				"E16",
+				"E17",
+				"E18",
+				"E19",
+				"E20",
+				"E21",
+				"E23",
+				"E24",
+				"E25",
+				"E26",
+				"E27",
+				"E28",
+				"E29",
+				"E30",
+				"E31",
+				"E32",
+				"E33",
+				"E34",
+				"E35",
+				"E36",
+				"E37",
+				"E38",
+				"E39",
+				"E40",
+				"E41",
+				"E42",
+				"E43",
+				"E44",
+				"E45"
+			],
+			"ngoai_may": [
+				"E22"
+			],
+			"eval": []
+		},
+		{
+			"slug": "lich-su-va-luu-tru-trang",
+			"not_run": [],
+			"ngoai_may": [
+				"E8u",
+				"E10",
+				"E11",
+				"E12",
+				"E13j"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E7a",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E8m",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E10m",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E11m",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 4
+				}
+			]
+		},
+		{
+			"slug": "no-sau-luot-5-okr",
+			"not_run": [],
+			"ngoai_may": [
+				"E8",
+				"E9",
+				"E10",
+				"E11"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E7",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 3
+				},
+				{
+					"id": "E13",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				}
+			]
+		},
+		{
+			"slug": "zalo-gui-hong-ghi-ly-do",
+			"not_run": [],
+			"ngoai_may": [
+				"E13",
+				"E20"
+			],
+			"eval": [
+				{
+					"id": "E1",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E2",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E3",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E4",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E5",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 1
+				},
+				{
+					"id": "E6",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E7",
+					"exit": 2,
+					"ky_vong": 0,
+					"giay": 0,
+					"duoi": [
+						"doi chung: diff rong -> ma 2",
+						"doi chung: ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts",
+						"diff rong"
+					]
+				},
+				{
+					"id": "E8",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 67
+				},
+				{
+					"id": "E9",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E10",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E11",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E12",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E14",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E15",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				},
+				{
+					"id": "E16",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E17",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E18",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 2
+				},
+				{
+					"id": "E19",
+					"exit": 0,
+					"ky_vong": 0,
+					"giay": 0
+				}
+			]
+		}
+	]
+}

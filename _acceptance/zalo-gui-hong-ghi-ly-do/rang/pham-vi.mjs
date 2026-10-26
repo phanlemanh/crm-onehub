@@ -7,6 +7,8 @@ const HO_SO = "_acceptance/zalo-gui-hong-ghi-ly-do";
 const LUON_DUOC = ["PRODUCT-MAP.md", "LO-TRINH.html"];
 const CHI_THEM = "_acceptance/config.yaml";
 const MA_KHONG_DO = 2;
+const TU = "0422d7976508e31d81923db5f8609fe5464d695d";
+const TOI = "1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed";
 
 class KhongDo extends Error {}
 
@@ -70,11 +72,14 @@ try {
 	if (la.chu !== "ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts")
 		throw new KhongDo(`doi chung tep la: ${la.chu}`);
 	console.log(`doi chung: ${la.chu}`);
-	const goc = git(["merge-base", "HEAD", "origin/onehub"]).trim();
-	const ds = git(["diff", "--name-only", goc, "HEAD"])
-		.split("\n")
-		.filter(Boolean);
-	const bot = git(["diff", "-U0", goc, "HEAD", "--", CHI_THEM])
+	for (const sha of [TU, TOI]) {
+		const r = spawnSync("git", ["cat-file", "-e", `${sha}^{commit}`], {
+			cwd: GOC,
+		});
+		if (r.status !== 0) throw new KhongDo(`khong co commit neo ${sha}`);
+	}
+	const ds = git(["diff", "--name-only", TU, TOI]).split("\n").filter(Boolean);
+	const bot = git(["diff", "-U0", TU, TOI, "--", CHI_THEM])
 		.split("\n")
 		.filter((d) => d.startsWith("-") && !d.startsWith("---"));
 	if (bot.length > 0) {
