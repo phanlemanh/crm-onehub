@@ -2173,6 +2173,12 @@ const THU_TU_DOC_OKR = {
 		dau: "tieuDeKr",
 		khac: 200,
 	},
+	"okr.capNhatGanDay": {
+		vao: (s: SanDoc) => ({ cycleId: s.ky }),
+		K: "chua-G",
+		dau: "tieuDeKr",
+		khac: 200,
+	},
 	"okr.transferPreview": {
 		vao: (_s, k) => ({ fromUserId: k }),
 		K: "vang",
