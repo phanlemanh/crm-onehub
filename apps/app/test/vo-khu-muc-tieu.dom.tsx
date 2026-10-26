@@ -440,7 +440,10 @@ describe("vkm-chu-ky", () => {
 
 		datNen();
 		await dung(<ThanhBenMucTieu />, "/ws/okr");
-		await cho(() => mucTrenAside().length === HREF_MUC.length, "nam muc khong ky");
+		await cho(
+			() => mucTrenAside().length === HREF_MUC.length,
+			"nam muc khong ky",
+		);
 		const khongKy = hrefMuc();
 		if (khongKy.some((h) => h.includes("kyOkr")))
 			throw new Error(
@@ -475,7 +478,10 @@ describe("vkm-chu-ky", () => {
 			datNen();
 			urlGhi.length = 0;
 			await dung(<ThanhBenMucTieu />, ca.duong);
-			await cho(() => mucTrenAside().length === HREF_MUC.length, `nam muc ${ca.duong}`);
+			await cho(
+				() => mucTrenAside().length === HREF_MUC.length,
+				`nam muc ${ca.duong}`,
+			);
 			await chonKy(ca.ten);
 			const cuoi = urlGhi.at(-1) ?? "";
 			if (new URLSearchParams(cuoi).get("kyOkr") !== ca.id)
