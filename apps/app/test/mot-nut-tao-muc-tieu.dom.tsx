@@ -67,7 +67,6 @@ const TRANG_QUANH = await import(
 
 const mVi = okrMessages("vi");
 const sVi = okrSoanMessages("vi");
-const { dauThangSau, homNayVn } = await import("@/lib/okr-chu-ky-nhan");
 const TRAN = String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy);
 
 const nguoi = (id: string, name: string) => ({
@@ -722,8 +721,8 @@ describe("mnt-hop", () => {
 			);
 		}
 		s.kiem(
-			q("[data-slot=kara-mark]", dong("soan") ?? document) !== null,
-			"mnt-hop: dong soan thieu dau Kara",
+			q("[data-slot=kara-mark]", dong("soan") ?? document) === null,
+			"mnt-hop: dong soan con dau Kara",
 		);
 		s.xong("mnt-hop", 4 + THU_TU.length);
 	});
@@ -797,183 +796,6 @@ describe("mnt-hop", () => {
 		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
 		if (q("[data-hop-chon-duong] [data-nut=ds-cuoc]"))
 			throw new Error("mnt-hop: ds-cuoc hien khi chua dung cuoc");
-	});
-});
-
-describe("mnt-soan", () => {
-	const tat = (lyDo: string) => soanSanSangOutput.parse({ bat: false, lyDo });
-	const O = [
-		{
-			o: "dang-chay",
-			nen: { pha: "dang-chay" as Pha },
-			ly: mVi.chonDuong.khoa.ngoaiPha,
-		},
-		{
-			o: "het-cuoc",
-			nen: { sanSang: tat("het-cuoc-ky") },
-			ly: sVi.nut.hetCuoc(TRAN),
-		},
-		{
-			o: "chua-khoa",
-			nen: { sanSang: tat("chua-co-khoa-mo-hinh") },
-			ly: sVi.lyDo["chua-co-khoa-mo-hinh"],
-		},
-		{
-			o: "chua-bat",
-			nen: { sanSang: tat("don-vi-chua-bat") },
-			ly: sVi.lyDo["don-vi-chua-bat"],
-		},
-		{
-			o: "het-tran",
-			nen: { sanSang: tat("het-tran-thang") },
-			ly: sVi.nut.tamNghi(dauThangSau(homNayVn(new Date()))),
-		},
-		{
-			o: "chua-cau-hinh",
-			nen: { cauNoi: false },
-			ly: sVi.nut.chuaCauHinh,
-		},
-		{
-			o: "khong-quyen",
-			nen: { suaDuoc: false },
-			ly: mVi.khoaTao.khongSua.replace("{ten}", "Kinh doanh vùng 1"),
-		},
-	];
-	test("mnt-soan: chon dong — mo cuoc moi goi soanMo mot lan, tiep cuoc khong goi, dong khoa khong goi", async () => {
-		const s = soSai();
-		const san = await dauTrang("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
-		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
-		await bam(dong("soan"), "dong soan");
-		s.kiem(
-			soLanGoi("okr.soanMo") === 1,
-			`mnt-soan: mo goi soanMo ${soLanGoi("okr.soanMo")} lan`,
-		);
-		s.kiem(
-			(san.url().get("record") ?? "").includes("cuoc-moi"),
-			`mnt-soan: khung ban ghi khong mo cuoc moi (${san.url().get("record")})`,
-		);
-		await don();
-		const san2 = await dauTrang(
-			"bo-okr",
-			{
-				xem: TP2,
-				sanSang: soanSanSangOutput.parse({ ...BAT, cuocDang: CUOC }),
-			},
-			"?donOkr=pb:P2",
-		);
-		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
-		s.kiem(
-			q("[data-slot=item-title]", dong("soan") ?? document)?.textContent ===
-				mVi.chonDuong.tiep,
-			"mnt-soan: tiep tieu de khong phai Tiep cuoc dang soan",
-		);
-		await bam(dong("soan"), "dong soan tiep");
-		s.kiem(
-			soLanGoi("okr.soanMo") === 0,
-			"mnt-soan: mo cuoc moi khi dang co cuoc",
-		);
-		s.kiem(
-			(san2.url().get("record") ?? "").includes(CUOC.id),
-			"mnt-soan: tiep khong mo dung cuoc",
-		);
-		await don();
-		for (const o of O) {
-			await dauTrang("bo-okr", { xem: TP2, ...o.nen }, "?donOkr=pb:P2");
-			await bam(q("[data-nut=them-muc-tieu]"), "nut them");
-			const d = dong("soan");
-			s.kiem(d !== null, `mnt-soan: ${o.o} dong vang`);
-			s.kiem(
-				d?.getAttribute("aria-disabled") === "true" &&
-					q("[data-slot=item-description]", d ?? document)?.textContent ===
-						o.ly,
-				`mnt-soan: ${o.o} khong khoa dung ly do`,
-			);
-			await bam(d, "dong soan khoa");
-			s.kiem(soLanGoi("okr.soanMo") === 0, `mnt-soan: ${o.o} van goi soanMo`);
-			await don();
-		}
-		s.xong("mnt-soan", 5 + O.length * 3);
-	});
-
-	test("mnt-soan: bam dong Soan hai lan khi dang cho chi goi soanMo mot lan", async () => {
-		await dauTrang("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
-		dat("okr.soanMo", () => new Promise(() => {}));
-		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
-		const d = dong("soan");
-		await act(async () => {
-			d?.click();
-			d?.click();
-		});
-		await nhip(6);
-		if (soLanGoi("okr.soanMo") !== 1)
-			throw new Error(
-				`mnt-soan: bam hai lan goi ${soLanGoi("okr.soanMo")} lan`,
-			);
-	});
-
-	test("mnt-soan: phan hoi soanMo — con cuoc thi mo cuoc do, tu choi thi doc lai san sang, loi thi bam lai duoc", async () => {
-		const s = soSai();
-		const san = await dauTrang("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
-		dat("okr.soanMo", () => ({
-			ok: false,
-			lyDo: "con-cuoc-dang",
-			cuocDang: { ...CUOC, id: "cuoc-cu" },
-		}));
-		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
-		await bam(dong("soan"), "dong soan");
-		const vao = goiCua("okr.soanMo")[0]?.dauVao as
-			| { level?: string; departmentId?: string | null }
-			| undefined;
-		s.kiem(
-			vao?.level === "phong-ban" && vao.departmentId === "P2",
-			`mnt-soan: soanMo gui sai don vi ${JSON.stringify(vao)}`,
-		);
-		await cho(
-			() => (san.url().get("record") ?? "").includes("cuoc-cu"),
-			"mnt-soan: con cuoc dang khong mo cuoc-cu",
-		);
-		await don();
-
-		const san2 = await dauTrang("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
-		dat("okr.soanMo", () => ({
-			ok: false,
-			lyDo: "het-cuoc-ky",
-			cuocDang: null,
-		}));
-		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
-		const hoiTruoc = soLanGoi("okr.soanSanSang");
-		await bam(dong("soan"), "dong soan");
-		await nhip(6);
-		s.kiem(
-			soLanGoi("okr.soanSanSang") === hoiTruoc + 1,
-			`mnt-soan: tu choi khong doc lai san sang (${hoiTruoc} → ${soLanGoi("okr.soanSanSang")})`,
-		);
-		s.kiem(
-			san2.url().get("record") === null,
-			`mnt-soan: tu choi van mo ban ghi ${san2.url().get("record")}`,
-		);
-		await don();
-
-		const san3 = await dauTrang("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
-		dat("okr.soanMo", () => {
-			throw new Error("mat mang");
-		});
-		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
-		await bam(dong("soan"), "dong soan");
-		await nhip(6);
-		if (hop() === null)
-			await bam(q("[data-nut=them-muc-tieu]"), "nut them lai");
-		await bam(dong("soan"), "dong soan lan hai");
-		await nhip(6);
-		s.kiem(
-			soLanGoi("okr.soanMo") === 2,
-			`mnt-soan: loi xong bam lai goi soanMo ${soLanGoi("okr.soanMo")} lan`,
-		);
-		s.kiem(
-			san3.url().get("record") === null,
-			`mnt-soan: loi van mo ban ghi ${san3.url().get("record")}`,
-		);
-		s.xong("mnt-soan", 5);
 	});
 });
 
@@ -1068,12 +890,12 @@ describe("mnt-khoa", () => {
 			);
 			await don();
 		}
-		await dauTrang("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
+		const sanSoan = await dauTrang("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
 		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
 		await bam(dong("soan"), "dong soan");
 		s.kiem(
-			soLanGoi("okr.soanMo") === 1,
-			"mnt-khoa: doi chung bo dem ghi khong thay soanMo khi co quyen",
+			(sanSoan.url().get("record") ?? "").startsWith("soan-bo:"),
+			`mnt-khoa: doi chung dong soan khong mo che do Soan khi co quyen (${sanSoan.url().get("record")})`,
 		);
 		await don();
 		s.xong("mnt-khoa", VAI.length + URL.length * 3 + 1);
