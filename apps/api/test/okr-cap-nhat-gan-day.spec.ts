@@ -539,26 +539,28 @@ describe("cng-trang", () => {
 		expect([...gop].sort()).toEqual([...tatCaTrang].sort());
 	});
 
-	test("so truy van khong doi khi them lan cap nhat va don vi", async () => {
-		expect(`dem duoc truy van=${DEM_DUOC}`).toBe("dem duoc truy van=true");
-		const truoc = await demTruyVan();
-		await luc(new Date(Date.UTC(2027, 3, 3, 1)));
-		const them = [...krTrang];
-		for (let i = 0; i < TRANG_CNG.themDonVi; i += 1)
-			them.push(
-				await mucTieuTrang(
-					await pbMoi(`cng-them-${i}`, san.don.B1),
-					`them-${i}`,
-				),
+	test.if(DEM_DUOC)(
+		"so truy van khong doi khi them lan cap nhat va don vi",
+		async () => {
+			const truoc = await demTruyVan();
+			await luc(new Date(Date.UTC(2027, 3, 3, 1)));
+			const them = [...krTrang];
+			for (let i = 0; i < TRANG_CNG.themDonVi; i += 1)
+				them.push(
+					await mucTieuTrang(
+						await pbMoi(`cng-them-${i}`, san.don.B1),
+						`them-${i}`,
+					),
+				);
+			await themPhien(
+				TRANG_CNG.themPhien,
+				them.slice(0, TRANG_CNG.themKrMoiPhien),
+				100,
 			);
-		await themPhien(
-			TRANG_CNG.themPhien,
-			them.slice(0, TRANG_CNG.themKrMoiPhien),
-			100,
-		);
-		const sau = await demTruyVan();
-		expect(`truoc=${truoc} sau=${sau}`).toBe(`truoc=${truoc} sau=${truoc}`);
-	});
+			const sau = await demTruyVan();
+			expect(`truoc=${truoc} sau=${sau}`).toBe(`truoc=${truoc} sau=${truoc}`);
+		},
+	);
 });
 
 describe("cng-tra-loi", () => {

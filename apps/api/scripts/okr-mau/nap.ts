@@ -803,7 +803,7 @@ export async function napBoOkrMau(
 	try {
 		const hoiY = await napHoiYMau(db, bo, { moc, chuKyId: CHU_KY.namKe });
 		const taiLieu = await napTaiLieuMau(db, bo);
-		const traoDoi = await napTraoDoiMau(db, bo);
+		const traoDoi = await napTraoDoiMau(db, bo, moc);
 		return { ...dem, ...hoiY, taiLieu, ...traoDoi };
 	} catch (loi) {
 		await xoaBoOkrMau(db).catch((loiDon) => {

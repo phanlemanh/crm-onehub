@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { PHAM_VI_BO, type PhamViBo } from "@crm/validation/okr-tham-so";
-import { isValidElement, type ReactNode, Suspense } from "react";
+import {
+	type ElementType,
+	isValidElement,
+	type ReactNode,
+	Suspense,
+} from "react";
+import { z } from "zod";
 import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
 import {
 	type CapNhatGanDayOutput,
@@ -12,6 +18,7 @@ import {
 	bamChuot,
 	chiTietTu,
 	cho,
+	type DauVao,
 	datLai,
 	docCua,
 	dung,
@@ -115,10 +122,13 @@ const NHIEU = Array.from({ length: 25 }, (_, i) =>
 	dong(`c${i}`, {}, i < 5 ? ["toi-dan"] : i < 8 ? ["theo-doi"] : []),
 );
 
-function traCapNhat(ds: DongGia[], vao: unknown): CapNhatGanDayOutput {
-	const v = (vao ?? {}) as { phamVi?: PhamViBo; trang?: number };
-	const phamVi = v.phamVi ?? "tat-ca";
-	const trang = v.trang ?? 1;
+const vaoCapNhat = z.object({
+	phamVi: z.enum(PHAM_VI_BO).default("tat-ca"),
+	trang: z.number().default(1),
+});
+
+function traCapNhat(ds: DongGia[], vao: DauVao): CapNhatGanDayOutput {
+	const { phamVi, trang } = vaoCapNhat.parse(vao ?? {});
 	const co = 20;
 	const loc = ds.filter((d) => d.pham.includes(phamVi));
 	return capNhatGanDayOutput.parse({
@@ -147,7 +157,7 @@ const dongTin = () => qsa("[data-dong-tin]");
 
 function timTrongCay(
 	nut: ReactNode,
-	kieu: unknown,
+	kieu: ElementType,
 	trongSuspense: boolean,
 ): { chu: ReactNode; trongSuspense: boolean }[] {
 	if (Array.isArray(nut))

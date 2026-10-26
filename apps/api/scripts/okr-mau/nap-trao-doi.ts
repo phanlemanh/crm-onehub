@@ -15,13 +15,21 @@ function dungDichVu(db: Db): OkrTraoDoiService {
 	return new OkrTraoDoiService(db, okr, quyen);
 }
 
-export async function napTraoDoiMau(db: Db, bo: BoOkrMau): Promise<DemTraoDoi> {
+export async function napTraoDoiMau(
+	db: Db,
+	bo: BoOkrMau,
+	moc: Date,
+): Promise<DemTraoDoi> {
 	const dichVu = dungDichVu(db);
 	for (const f of bo.traoDoi.theoDoi)
-		await dichVu.follow(idMau("nguoi", f.nguoi), {
-			objectiveId: idMau("mt", f.mucTieu),
-			on: true,
-		});
+		await dichVu.follow(
+			idMau("nguoi", f.nguoi),
+			{
+				objectiveId: idMau("mt", f.mucTieu),
+				on: true,
+			},
+			moc,
+		);
 	const krTheoMa = new Map(
 		bo.mucTieu.flatMap((m) => m.krs.map((k) => [k.ma, m.ma] as const)),
 	);

@@ -26,6 +26,7 @@ import {
 } from "@crm/validation/okr-kr";
 import { mauNoiDung } from "@crm/validation/okr-mau";
 import { crmHopKieu, parseOkrNguon } from "@crm/validation/okr-nguon";
+import { z } from "zod";
 import { LoiBoMau, OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 import { dienBien } from "../scripts/okr-mau/dien-bien";
 import { docBoOkrMau, type KichBan } from "../scripts/okr-mau/khuon";
@@ -921,6 +922,7 @@ const BANG_CO_MAU = [
 	"okrDiemKr",
 	"okrNhinLai",
 	"okrMangSang",
+	"okrFollow",
 	...SAU_BANG,
 	"okrHoiY",
 	"okrHoiYBanTruoc",
@@ -2526,6 +2528,8 @@ describe("okx", () => {
 	);
 });
 
+const vetBinhLuan = z.object({ commentId: z.string() });
+
 describe("cap-nhat-gan-day", () => {
 	const KY_QUY4 = idMau("chu-ky", "quy4");
 	const TRUONG = nguoiMau("nguyen-thi-lan");
@@ -2549,13 +2553,8 @@ describe("cap-nhat-gan-day", () => {
 				select: { after: true },
 			})
 		).filter((v) => {
-			const sau = v.after;
-			return (
-				typeof sau === "object" &&
-				sau !== null &&
-				!Array.isArray(sau) &&
-				idTraLoi.has(String(sau.commentId))
-			);
+			const sau = vetBinhLuan.safeParse(v.after);
+			return sau.success && idTraLoi.has(sau.data.commentId);
 		}).length;
 		return {
 			theoDoi: await db.okrFollow.count({
