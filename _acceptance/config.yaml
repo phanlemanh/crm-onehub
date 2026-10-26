@@ -2913,7 +2913,7 @@ executors:
     gtsx_tai_lieu: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/buoc-ci.mjs --tai-lieu
     hy_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs"'
     tbo_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-bo-okr/rang/man-bo-okr.mjs"'
-    tbo_khong_doi_hinh: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --phan 1/3
+    tbo_khong_doi_hinh: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --chi-quet
     tbo_khong_doi_hinh_2: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --phan 2/3
     tbo_khong_doi_hinh_3: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --phan 3/3
     bco_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-co-so/rang/man-bo-okr-co-so.mjs"'

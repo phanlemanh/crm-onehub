@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9b246f0a57bae04226f308c1d481f95b31a15217
+verified_commit: 772ed0f7058d90df61745ecdf3e3b9970a224a07
 human_signoff: Phan Le Manh 2026-10-23
 ---
 
@@ -302,3 +302,7 @@ Round 4: cả 18 eval (E15, E17, E18 là ba phần của phép quét không-đ�
 ### Re-pin lần 1 — 2026-10-24, do VK3 trang-bo-okr sửa thước và vật — ghim lại sau chữ ký, ba thước theo «duyệt cả ba» (9b246f0a5)
 run_id: repin-20261024T133834Z-50324
 sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-26, do ghim lại bằng làn eval
+run_id: repin-20261026T101849Z-81544
+sha: 772ed0f7058d90df61745ecdf3e3b9970a224a07 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E17, E18 · thay bởi hồ sơ đã ký: E17→kiem-cheo-sau-gop#AC-6, E18→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E14 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
