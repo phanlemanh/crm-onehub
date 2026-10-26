@@ -5,7 +5,7 @@ slug: ho-so-do-kiem-cheo
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-22-ho-so-do-kiem-cheo-design.md
 approved_by: Manh Phan
 approved_at: 2026-10-25T01:44:41Z
@@ -117,3 +117,45 @@ Thu phạm vi 24/10 — chủ kho chọn lối 1 ở Cổng Bằng chứng sau l
   - Ngoài-46: Bài kiểm việc cập nhật cơ sở dữ liệu của Trợ lý OKR chỉ so hai bản cũ cố định, nên nếu cấu trúc dữ liệu hiện tại đổi theo hướng nguy hiểm, một phần bài kiểm sẽ không thấy.
   - Ngoài-47: Số cảnh báo kiểm tra mã của ứng dụng được đo trên bản lịch sử cố định, không phải bản đang làm.
   - Ngoài-48: Công cụ chỉ kiểm tín hiệu báo lỗi sản phẩm theo đúng khuôn đã ghi, chứ không đối chiếu với tín hiệu đã thật sự gửi.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-26:
+  - Ngoài-1: Hồ sơ được chủ kho giao cho làn riêng sẽ không hiện trong bảng trước/sau mà hội đồng và người ký đọc.
+  - Ngoài-2: Nếu bước kiểm hồ sơ giao làn riêng bị hỏng âm thầm, lượt chạy vẫn báo không có lỗi, nên có thể bỏ sót một hồ sơ thiếu phần sửa ghi sẵn.
+  - Ngoài-3: Phần sửa ghi sẵn cho hồ sơ giao làn riêng có thể trỏ tới một bản vá không tồn tại mà bộ kiểm vẫn cho qua.
+  - Ngoài-4: Hội đồng nghiệm thu có thể đọc một bảng vẫn ghi kết quả kiểm tra cũ như thể mới, dù hồ sơ đã nói kết quả đó chỉ là lịch sử.
+  - Ngoài-7: Bảng trước/sau đưa cho hội đồng vẫn ghi một ô kiểm tra là bắt được lỗi, trong khi lượt đo mới nhất cho thấy ô đó đã bỏ sót.
+  - Ngoài-8: Câu hỏi giao cho hội đồng vẫn yêu cầu xem kết quả kiểm tra cũ, nên họ có thể dựa vào số liệu đã lỗi thời khi phán xét.
+  - Ngoài-9: Bước kiểm tra danh sách hồ sơ đỏ giờ chỉ so hai tệp do người viết hồ sơ ghi, không dựng lại phép đo từ đầu.
+  - Ngoài-10: Bảng so trước/sau cho người đọc có một khối «đầu ra sau khi sửa» do người dán tay, không phải máy chạy ra, dù đầu bảng nói là máy sinh.
+  - Ngoài-11: Một số lệnh kiểm của hồ sơ có thể báo xanh mà thực ra không kiểm gì nếu chạy qua đường dẫn có liên kết tượng trưng, như trong cây tạm trên máy này.
+  - Ngoài-12: Trong bảng so trước/sau, hai ô cron E7 và E8 không có số liệu thử phá bằng neo cố định như các ô khác, nên người duyệt chỉ thấy lời tự khai chứ không thấy kết quả máy chạy cho hai ô này.
+  - Ngoài-13: Hội đồng chấm chỉ đọc bảng trước/sau, mà hai khối đầu ra trong đó do người gõ tay nên không có gì bảo đảm chúng đúng hay còn mới, dù đầu bảng ghi là máy sinh.
+  - Ngoài-14: Phép thử cho hai ô neo cố định chỉ kiểm mã thoát, mà mã đó cũng có thể do lỗi khác gây ra, nên về sau nếu thứ tự trong lệnh đổi thì phép thử có thể xanh vì lý do sai.
+  - Ngoài-15: Mô tả các bước kiểm của vài màn Toàn cảnh OKR và Cập nhật tuần đã cũ so với phép đo đang chạy.
+  - Ngoài-16: Bảng so sánh trước/sau cho hai bài kiểm của lịch chạy theo bản khai mô tả cách sửa không còn đúng.
+  - Ngoài-17: Nếu sau này ai đó sửa công cụ chặn dùng chung, phép đo màn Toàn cảnh OKR có thể không được chạy lại tự động.
+  - Ngoài-20: Phần mô tả những gì các bài kiểm của đợt rà này chứng minh hơi khác với cách chúng thực sự chạy.
+  - Ngoài-21: Công cụ kiểm tra xem lỗi cố tình cài có bị bắt hay không chưa tự thử hai trường hợp quan trọng của chính nó.
+  - Ngoài-22: Công cụ phát hiện thay đổi không có nhãn chưa tự thử khâu tìm thay đổi đó.
+  - Ngoài-24: Nếu chạy lại phép đo theo thứ tự khác với tài liệu, một hồ sơ có thể âm thầm bị bỏ khỏi lượt đo.
+  - Ngoài-26: Với các hồ sơ có lỗi sản phẩm được giao lại cho hàng sau, phần sửa gợi ý có thể thiếu chỉ dẫn tệp nào và cách chứng minh.
+  - Ngoài-27: Công cụ kiểm tra lỗi cài thử chưa tự thử đủ hai kiểu thất bại của chính nó.
+  - Ngoài-28: Công cụ phát hiện thay đổi thiếu nhãn và đổi cấu hình lén chưa tự thử phần tìm kiếm thật của nó.
+  - Ngoài-29: Bài kiểm từ điển cho hai mục của Trợ lý OKR so với bản từ điển cũ cố định, nên nếu hai mục đó trong từ điển hiện tại bị sửa hỏng, bài kiểm vẫn xanh.
+  - Ngoài-30: Bài kiểm việc cập nhật cơ sở dữ liệu của Trợ lý OKR chỉ so hai bản cũ cố định, nên nếu cấu trúc dữ liệu hiện tại đổi theo hướng nguy hiểm, một phần bài kiểm sẽ không thấy.
+  - Ngoài-31: Số cảnh báo kiểm tra mã của ứng dụng được đo trên bản lịch sử cố định, không phải bản đang làm.
+  - Ngoài-32: Công cụ chỉ kiểm tín hiệu báo lỗi sản phẩm theo đúng khuôn đã ghi, chứ không đối chiếu với tín hiệu đã thật sự gửi.
+  - Ngoài-33: Khi một lượt đo lại chạy quá giờ và bị ngắt cưỡng bức, nó để lại một bản sao làm việc tạm và có thể còn tiến trình chạy ngầm trong máy.
+  - Ngoài-34: Mô tả các bước kiểm của vài màn Toàn cảnh OKR và Cập nhật tuần đã cũ so với phép đo đang chạy.
+  - Ngoài-35: Bảng so sánh trước/sau cho hai bài kiểm của lịch chạy theo bản khai mô tả cách sửa không còn đúng.
+  - Ngoài-36: Nếu sau này ai đó sửa công cụ chặn dùng chung, phép đo màn Toàn cảnh OKR có thể không được chạy lại tự động.
+  - Ngoài-39: Phần mô tả những gì các bài kiểm của đợt rà này chứng minh hơi khác với cách chúng thực sự chạy.
+  - Ngoài-40: Công cụ kiểm tra xem lỗi cố tình cài có bị bắt hay không chưa tự thử hai trường hợp quan trọng của chính nó.
+  - Ngoài-41: Công cụ phát hiện thay đổi không có nhãn chưa tự thử khâu tìm thay đổi đó.
+  - Ngoài-43: Nếu chạy lại phép đo theo thứ tự khác với tài liệu, một hồ sơ có thể âm thầm bị bỏ khỏi lượt đo.
+  - Ngoài-45: Với các hồ sơ có lỗi sản phẩm được giao lại cho hàng sau, phần sửa gợi ý có thể thiếu chỉ dẫn tệp nào và cách chứng minh.
+  - Ngoài-46: Công cụ kiểm tra lỗi cài thử chưa tự thử đủ hai kiểu thất bại của chính nó.
+  - Ngoài-47: Công cụ phát hiện thay đổi thiếu nhãn và đổi cấu hình lén chưa tự thử phần tìm kiếm thật của nó.
+  - Ngoài-48: Bài kiểm từ điển cho hai mục của Trợ lý OKR so với bản từ điển cũ cố định, nên nếu hai mục đó trong từ điển hiện tại bị sửa hỏng, bài kiểm vẫn xanh.
+  - Ngoài-49: Bài kiểm việc cập nhật cơ sở dữ liệu của Trợ lý OKR chỉ so hai bản cũ cố định, nên nếu cấu trúc dữ liệu hiện tại đổi theo hướng nguy hiểm, một phần bài kiểm sẽ không thấy.
+  - Ngoài-50: Số cảnh báo kiểm tra mã của ứng dụng được đo trên bản lịch sử cố định, không phải bản đang làm.
+  - Ngoài-51: Công cụ chỉ kiểm tín hiệu báo lỗi sản phẩm theo đúng khuôn đã ghi, chứ không đối chiếu với tín hiệu đã thật sự gửi.

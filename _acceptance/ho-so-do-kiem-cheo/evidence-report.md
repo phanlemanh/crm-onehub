@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: ho-so-do-kiem-cheo
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 748505ad5ad3dbeb3d25a3a49a64eaacf368ea01
-human_signoff:
+human_signoff: Manh Phan 2026-10-26
 ---
 
 # Evidence Report: ho-so-do-kiem-cheo
@@ -128,7 +128,7 @@ Hội đồng đề xuất cho E6 là UNCERTAIN: cả ba góc nhìn đều UNCER
     - tro-ly-okr-nen:E25 (cùng E23, E17) — AC hoặc dòng sổ trong _acceptance/tro-ly-okr-tom-tat (contract.md hay decisions.jsonl) cho phép ghi sổ chi phí phiên con đổi từ okr.de-xuat sang okr.chuyen-tiep; hiện chỉ có sha 853f07bd2.
     - bo-dung-chung-nhan-chuoi:E4 (san-pham-hong) — một câu từ decisions.jsonl hoặc contract.md nói rõ không quyết định đã ký nào cho phép tám bài test tự khai lại type Locale.
     - Các dòng sua_san của cai-dat-con-lai-noi-tieng-viet (E1, E3, E6, E10, E11, E12, E14, E15, E17), tong-quan-va-khung-noi-tieng-viet (E1 đến E25), so-okr-tu-chay (E8, E23, E25) và to-chuc-danh-sach-chi-tiet:E21 — mỗi dòng cần một khối trong bang-truoc-sau.md có đuôi đầu ra đỏ ở mốc nền 6be0bb68 (từ do-lai-nen.json) và một câu ly_do nêu loại (a)/(b)/(c)/(d); riêng các dòng nới neo (cai-dat-con-lai-noi-tieng-viet:E12 file 36 sang 44 và file_quyen 11 sang 13; E17 so_o 18 sang 20; E15 và E4 thêm vào danh sách cho phép) cần AC hoặc dòng sổ của hồ sơ ký sau.
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Manh Phan 2026-10-26
 
 Phiếu từng góc nhìn:
 
