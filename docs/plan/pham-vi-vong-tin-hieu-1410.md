@@ -12,11 +12,21 @@ kiến trúc kit (OneHub Platform và các sản phẩm sau).
 Nhóm U là các lỗi ghi trong lượt rà 14/10: U1–U5 là tín hiệu crm-1 đến crm-5 đã gửi trên production, U6–U9
 soạn sẵn chưa gửi.
 
+## Nguồn — tóm tắt đã làm sạch
+
+Tài liệu thô (thảo luận dựng lại từ bản ghi phiên, báo cáo, ảnh) nằm ở kho riêng tư `phanlemanh/crm-onehub-nguon`,
+trang đợt `wiki/dot/vong-tin-hieu-1410.md` (băm `bb3fc5ee39f5`, commit `88462c4`). Chủ kho chốt 24/10: kho crm công khai chỉ giữ con trỏ
+ghim và bản tóm tắt đã làm sạch.
+
+- TB2: mỗi sự kiện một bản ghi thông báo; chuông web đọc thẳng nó; Zalo và Slack rẽ từ cùng bản ghi. Cài đặt là bảng loại × kênh, hai mức («Cần làm» đẩy kênh, «Để biết» chỉ trên web). Giữ hành vi Zalo đang có. Chưa soát người chưa nối kênh nào nhận gì.
+- TH6b sinh ở Cổng Bằng chứng của TH6 (lỗi «xoá xong, bàn phím nhảy về đầu trang»); chưa có số đo riêng cho tiêu điểm của hộp xoá.
+- Lệch chữ: dòng S1 của bản phạm vi vẫn hứa «không chờ lần lên production kế», điều đã bỏ ở TH3.
+
 <!-- <<<PHAM-VI-MA -->
 ```
 dot: vong-tin-hieu-1410
 dang: chuoi
-nguon: chủ kho duyệt 14/10 trong phiên LT2 — rà giao diện trên production và đề xuất tự động hoá vòng tín hiệu
+nguon: crm-onehub-nguon:wiki/dot/vong-tin-hieu-1410.md#bb3fc5ee39f576cdc6dc3b8b8818e38e72ea1964
 
 - `Q1` — quản trị xem mọi tín hiệu: người gửi, phòng ban, màn, giờ, trạng thái; lọc theo phòng ban, trạng thái, người gửi
 - `Q2` — ba ô số đầu trang quản trị: tín hiệu 30 ngày qua, số phòng ban có tín hiệu, tín hiệu gửi quá 7 ngày chưa có chỗ

@@ -375,7 +375,7 @@ export function ToanCanh() {
 								<DongDonVi
 									h={h}
 									key={h.key}
-									toi={`${url("/okr/bo-okr")}${kem(h.key === "goc" ? {} : { [SEARCH_PARAM.okr.don]: h.key })}`}
+									toi={`${url("/okr/bo-okr")}${kem({ [SEARCH_PARAM.okr.don]: h.key })}`}
 								/>
 							))}
 						</SimpleTable>

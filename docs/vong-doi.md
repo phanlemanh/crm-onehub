@@ -45,7 +45,7 @@ theo hình dạng màn:
 | --- | --- | --- |
 | Bảng lớn có tìm, lọc, phân trang | Nút «Đã lưu trữ» trên thanh công cụ, cùng một chỗ, có ở mọi dạng xem (bảng và Kanban) | tham số `archived` của `list-search-params.ts`, `archivedFilter` ở API |
 | Danh sách ngắn ở Cài đặt | Mục gập «Đã lưu trữ (n)» cuối trang | `ArchivedList` (`packages/ui`) |
-| Danh sách có nhóm, bản ghi có kết cục nghiệp vụ | Dòng gập «Đã bỏ (n)», «Đã đóng (n)» cuối mỗi nhóm; bộ lọc trạng thái vẫn chọn riêng được | — |
+| Danh sách có hàng công cụ, bản ghi có kết cục nghiệp vụ | Nút bật tắt «Đã bỏ (n)», «Đã đóng (n)» ở cuối hàng công cụ (`docs/design.md` «Hàng công cụ»); bật thì danh sách chỉ hiện thứ đã khép. Thay dòng gập cuối nhóm, chủ kho 25/10 | — |
 
 Thêm vào đó:
 

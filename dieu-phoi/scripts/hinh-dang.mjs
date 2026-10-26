@@ -45,9 +45,11 @@ function kiemKhoaLa(du, cho, tep, tienTo) {
   if (la.length > 0) throw new Error(`${tep}: khoá lạ ${la.map((k) => `${tienTo}${k}`).join(', ')}`);
 }
 
-const KHOA_CAU_HINH = ['nhanh_chinh', 'tick_giay', 'han_thue_phut', 'nhip_cu_phut', 'suc_khoe', 's4_tran_gom_phut', 'bao_ve', 'goc_kho', 'nguon_hang', 'kiem_moi_truong', 'han_muc'];
+const KHOA_CAU_HINH = ['nhanh_chinh', 'tick_giay', 'han_thue_phut', 'nhip_cu_phut', 'suc_khoe', 's4_tran_gom_phut', 'bao_ve', 'goc_kho', 'nguon_hang', 'kiem_moi_truong', 'han_muc', 'gop_khong_chay_lai_ci'];
 const KHOA_HAN_MUC = ['bao_truoc_pct', 'ban_giao_pct', 'cho_ban_giao_phut', 'cho_dat_lai_phut'];
-const KHOA_SUC_KHOE = ['swap_gb', 'ap_luc_muc', 'rss_gb'];
+const KHOA_SUC_KHOE = ['ap_luc_muc'];
+const KHOA_SUC_KHOE_CU = ['swap_gb', 'rss_gb'];
+const LOAI_NANG_CAU_HINH = ['s4', 'ghim-lai', 'duong-nen'];
 
 export function kiemCauHinh(du, { canGocKho = false } = {}) {
   const sai = (s) => {
@@ -70,11 +72,29 @@ export function kiemCauHinh(du, { canGocKho = false } = {}) {
   for (const k of KHOA_SUC_KHOE) {
     if (!Number.isFinite(du.suc_khoe[k])) sai(`suc_khoe.${k} phải là số`);
   }
+  const sk = du.suc_khoe;
+  for (const k of KHOA_SUC_KHOE_CU) {
+    if (sk[k] !== undefined && !Number.isFinite(sk[k])) sai(`suc_khoe.${k} phải là số`);
+  }
+  if (sk.he_so_cho !== undefined && !(Number.isFinite(sk.he_so_cho) && sk.he_so_cho > 1)) sai('suc_khoe.he_so_cho phải là số lớn hơn 1');
+  if (sk.dinh_lan_gb !== undefined) {
+    if (!laObject(sk.dinh_lan_gb)) sai('suc_khoe.dinh_lan_gb phải là object theo loại lượt');
+    const la = Object.keys(sk.dinh_lan_gb).filter((k) => !LOAI_NANG_CAU_HINH.includes(k));
+    if (la.length > 0) sai(`suc_khoe.dinh_lan_gb khoá lạ ${la.join(', ')}`);
+    for (const [k, v] of Object.entries(sk.dinh_lan_gb)) {
+      if (!laSoDuong(v)) sai(`suc_khoe.dinh_lan_gb.${k} phải là số GB dương`);
+    }
+  }
+  if (sk.swapin_mb_phut !== undefined && !laSoDuong(sk.swapin_mb_phut)) sai('suc_khoe.swapin_mb_phut phải là số dương');
+  if (sk.duoi_tai_phut !== undefined && !laSoDuong(sk.duoi_tai_phut)) sai('suc_khoe.duoi_tai_phut phải là số phút dương');
+  if (sk.mau_hieu_chuan !== undefined && !(Number.isInteger(sk.mau_hieu_chuan) && sk.mau_hieu_chuan > 0)) sai('suc_khoe.mau_hieu_chuan phải là số nguyên dương');
   if (!laDanhSachChuoi(du.bao_ve)) sai('bao_ve phải là danh sách chuỗi');
   if (du.nguon_hang !== undefined && !laDanhSachChuoi(du.nguon_hang)) sai('nguon_hang phải là danh sách chuỗi');
   if (du.kiem_moi_truong !== undefined && !(Array.isArray(du.kiem_moi_truong) && du.kiem_moi_truong.every((m) => laObject(m) && laChuoi(m.ten) && laChuoi(m.lenh) && Object.keys(m).every((k) => k === 'ten' || k === 'lenh')))) {
     sai('kiem_moi_truong phải là danh sách {ten, lenh} chuỗi không rỗng');
   }
+  // Hồ sơ ky-den-gop (hạng I): kho bật gộp không chạy lại CI khi PR không trùng tệp với nhánh chính. Vắng = tắt.
+  if (du.gop_khong_chay_lai_ci !== undefined && typeof du.gop_khong_chay_lai_ci !== 'boolean') sai('gop_khong_chay_lai_ci phải là true/false');
   // DP4: ngưỡng hạn mức của đợt (spec workflow §4.3, §4.5). Vắng khoá → bộ phát lịch không xét hạn mức (đợt cũ).
   if (du.han_muc !== undefined) {
     const h = du.han_muc;

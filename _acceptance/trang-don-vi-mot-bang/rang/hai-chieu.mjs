@@ -95,16 +95,11 @@ const DOT_BIEN = {
 			thay: [
 				{
 					tep: "apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx",
-					cu: "\t\t<div className={LOP_KHOI} data-hang-cong-cu-don-vi>\n\t\t\t{chon}\n\t\t\t<ViewSwitch",
-					moi: '\t\t<>\n\t\t<div className={LOP_KHOI} data-hang-cong-cu-don-vi>\n\t\t\t{chon}\n\t\t</div>\n\t\t<div className="hidden flex-col gap-2 sm:flex">\n\t\t\t<ViewSwitch',
-				},
-				{
-					tep: "apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx",
-					cu: "\t\t\t\tvalue={xem}\n\t\t\t/>\n\t\t</div>\n\t);",
-					moi: "\t\t\t\tvalue={xem}\n\t\t\t/>\n\t\t</div>\n\t\t</>\n\t);",
+					cu: "\t\t<div className={LOP_KHOI} data-hang-cong-cu-don-vi>\n\t\t\t{chon}\n\t\t</div>\n",
+					moi: "\t\t<>\n\t\t\t{chon}\n\t\t\t<div className={LOP_KHOI} data-hang-cong-cu-don-vi />\n\t\t</>\n",
 				},
 			],
-			ghim: /dvb-hang-cong-cu: danh-sach: \[data-view-switch\] khong nam trong \[data-hang-cong-cu-don-vi\]/,
+			ghim: /dvb-hang-cong-cu: danh-sach: \[data-chon-don-vi\] khong nam trong \[data-hang-cong-cu-don-vi\]/,
 		},
 	],
 	"dvb-loc-nhanh": [
@@ -200,8 +195,8 @@ const DOT_BIEN = {
 			thay: [
 				{
 					tep: "packages/ui/src/components/data-table.tsx",
-					cu: "\t\t\t\t\t\t\t\t\t\t\t\t<ExpandRowButton\n\t\t\t\t\t\t\t\t\t\t\t\t\tlabel={\n\t\t\t\t\t\t\t\t\t\t\t\t\t\texpandable?.rowLabel?.(row) ??\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tmsg.table.rowFallback\n\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\topen={isOpen}\n\t\t\t\t\t\t\t\t\t\t\t\t\trowId={id}\n\t\t\t\t\t\t\t\t\t\t\t\t\tonToggle={handleClick}\n\t\t\t\t\t\t\t\t\t\t\t\t/>\n",
-					moi: "\t\t\t\t\t\t\t\t\t\t\t\t<ChevronRight size={12} />\n",
+					cu: "\t\t\t\t\t\t\t\t\t\t\t\t\t<ExpandRowButton\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tlabel={\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\texpandable?.rowLabel?.(row) ??\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tmsg.table.rowFallback\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\topen={isOpen}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\trowId={id}\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tonToggle={handleClick}\n\t\t\t\t\t\t\t\t\t\t\t\t\t/>\n",
+					moi: "\t\t\t\t\t\t\t\t\t\t\t\t\t<ChevronRight size={12} />\n",
 				},
 			],
 			ghim: /data-table-mo-rong: dong r1 khong co button\[aria-expanded\] trong o mui ten/,
@@ -315,14 +310,9 @@ const DOT_BIEN = {
 			ten: "cach-xem-trong-loc",
 			thay: [
 				{
-					tep: "apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx",
-					cu: "\t\t<div className={LOP_KHOI} data-hang-cong-cu-don-vi>\n\t\t\t{chon}\n\t\t\t<ViewSwitch",
-					moi: '\t\t<>\n\t\t<div className={LOP_KHOI} data-hang-cong-cu-don-vi>\n\t\t\t{chon}\n\t\t</div>\n\t\t<div className="hidden flex-col gap-2 sm:flex">\n\t\t\t<ViewSwitch',
-				},
-				{
-					tep: "apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx",
-					cu: "\t\t\t\tvalue={xem}\n\t\t\t/>\n\t\t</div>\n\t);",
-					moi: "\t\t\t\tvalue={xem}\n\t\t\t/>\n\t\t</div>\n\t\t</>\n\t);",
+					tep: "apps/app/app/(app)/[slug]/okr/theo-don-vi/the-con.tsx",
+					cu: '<div className="max-w-full overflow-x-auto" data-the-con-bo="">',
+					moi: '<div className="hidden max-w-full overflow-x-auto sm:block" data-the-con-bo="">',
 				},
 			],
 			ghim: /SAI AC-4: danh-sach 390 — cach xem bi giau sau Lọc/,
