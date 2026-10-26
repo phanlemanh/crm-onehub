@@ -1,5 +1,3 @@
-# Review findings: ho-so-do-kiem-cheo (round 5)
-
 ## Trong hợp đồng
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
@@ -27,7 +25,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **AC-6/E6 still points the judging panel at the mutation results that the 24/10 scope cut called historical only (r3 · tệp đã đổi)**
+- **AC-6/E6 still points the judging panel at the mutation results that the 24/10 scope cut called historical only (r3)**
   Người dùng thấy gì: Hội đồng nghiệm thu có thể đọc một bảng vẫn ghi kết quả kiểm tra cũ như thể mới, dù hồ sơ đã nói kết quả đó chỉ là lịch sử. Người ký có thể hiểu nhầm rằng bước kiểm tra đó vừa được xác nhận lại.
   Căn cứ: Chỉ làm người chấm đọc nhầm nguồn bằng chứng, không ảnh hưởng người dùng sản phẩm, không mất dữ liệu, và hợp đồng đã ghi rõ kết quả đó là sử liệu nên chỉ cần nhắc lại ở chỗ hội đồng đọc.
   file: `_acceptance/ho-so-do-kiem-cheo/contract.md`
@@ -41,7 +39,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **The hsdk_chieu_do executor remains in config, but no eval uses it any more (r3 · tệp đã đổi)**
+- **The hsdk_chieu_do executor remains in config, but no eval uses it any more (r3)**
   Người dùng thấy gì: Còn sót một dòng cấu hình không còn eval nào dùng tới trong tệp cấu hình chung. Nó không làm gì và không ảnh hưởng người dùng.
   Căn cứ: Dòng thừa vô hại, không đổi hành vi nào, bỏ hay giữ đều không ai thấy; công sửa không xứng với lợi ích.
   file: `_acceptance/config.yaml`
@@ -62,14 +60,14 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 2 (dữ liệu ghi sẵn, không đi vòng ghi rồi đọc): bỏ --tai-lap thì E1 chỉ còn so hai tệp tự khai với nhau, và mốc nền chỉ dựa vào trường sha do chính tệp ghi (r3 · tệp đã đổi)**
+- **Hình dạng 2 (dữ liệu ghi sẵn, không đi vòng ghi rồi đọc): bỏ --tai-lap thì E1 chỉ còn so hai tệp tự khai với nhau, và mốc nền chỉ dựa vào trường sha do chính tệp ghi (r3)**
   Người dùng thấy gì: Bước kiểm tra danh sách hồ sơ đỏ giờ chỉ so hai tệp do người viết hồ sơ ghi, không dựng lại phép đo từ đầu. Nếu tệp ghi sai thì kiểm tra này không phát hiện được.
   Căn cứ: Giới hạn này đã được chủ kho chấp nhận có chủ đích vì phép đo lại không ổn định, và không ảnh hưởng người dùng hay dữ liệu.
   file: `_acceptance/config.yaml`
   severity: low
   Đề xuất: known-limits
 
-- **«Đầu ra sau khi sửa» là chữ chép tay từ log ở scratchpad; ô cron E8 còn in đầu ra có trước một phần của bản sửa (r2 · tệp đã đổi)**
+- **«Đầu ra sau khi sửa» là chữ chép tay từ log ở scratchpad; ô cron E8 còn in đầu ra có trước một phần của bản sửa (r2)**
   Người dùng thấy gì: Bảng so trước/sau cho người đọc có một khối «đầu ra sau khi sửa» do người dán tay, không phải máy chạy ra, dù đầu bảng nói là máy sinh. Riêng ô cron E8, khối này có thể là kết quả của bản cũ hơn bản đang giao, nên người đọc có thể tin một kết quả chưa đo lại.
   Căn cứ: Hậu quả nhẹ: chỉ làm bảng đọc lệch sự thật ở một vài ô, không mất dữ liệu và không đổi hành vi sản phẩm; người đọc tự kiểm lại được và đo lại sau rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/danh-sach.json`
@@ -104,21 +102,21 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Sửa răng đổi khẳng định của các eval ui-check không có dòng danh sách, lời eval đã ký nay nói ngược với răng (r1 · tệp đã đổi)**
+- **Sửa răng đổi khẳng định của các eval ui-check không có dòng danh sách, lời eval đã ký nay nói ngược với răng (r1)**
   Người dùng thấy gì: Mô tả các bước kiểm của vài màn Toàn cảnh OKR và Cập nhật tuần đã cũ so với phép đo đang chạy. Người chấm bằng mắt đọc theo lời cũ có thể chấm lệch.
   Căn cứ: Chỉ gây hiểu nhầm cho người chấm chứ không làm hỏng tính năng nào của người dùng, và sửa lời mô tả sau vẫn rẻ.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Dòng danh sách của cron-theo-ban-khai E7/E8 đã cũ, bảng trước/sau và hội đồng E6 đọc sai cách sửa thật (r1 · tệp đã đổi)**
+- **Dòng danh sách của cron-theo-ban-khai E7/E8 đã cũ, bảng trước/sau và hội đồng E6 đọc sai cách sửa thật (r1)**
   Người dùng thấy gì: Bảng so sánh trước/sau cho hai bài kiểm của lịch chạy theo bản khai mô tả cách sửa không còn đúng. Người duyệt đọc bảng này có thể hiểu sai điều đã thực sự được sửa.
   Căn cứ: Chỉ làm sai lời giải thích trong hồ sơ nội bộ, không ảnh hưởng người dùng, và sửa lại câu chữ sau vẫn rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/danh-sach.json`
   severity: medium
   Đề xuất: known-limits
 
-- **Đo toan-canh-okr nay dựa vào nhật ký của cửa chặn thuộc hồ sơ khác, nhưng paths không khai tệp đó (r1 · tệp đã đổi)**
+- **Đo toan-canh-okr nay dựa vào nhật ký của cửa chặn thuộc hồ sơ khác, nhưng paths không khai tệp đó (r1)**
   Người dùng thấy gì: Nếu sau này ai đó sửa công cụ chặn dùng chung, phép đo màn Toàn cảnh OKR có thể không được chạy lại tự động. Một lỗi mới có thể lọt qua mà không ai thấy ngay.
   Căn cứ: Rủi ro nằm ở tương lai và chỉ ảnh hưởng công cụ kiểm, người dùng không mất dữ liệu, thêm một dòng khai báo sau là xong.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
@@ -237,21 +235,21 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Sửa răng đổi khẳng định của các eval ui-check không có dòng danh sách, lời eval đã ký nay nói ngược với răng (r1 · tệp đã đổi)**
+- **Sửa răng đổi khẳng định của các eval ui-check không có dòng danh sách, lời eval đã ký nay nói ngược với răng (r1)**
   Người dùng thấy gì: Mô tả các bước kiểm của vài màn Toàn cảnh OKR và Cập nhật tuần đã cũ so với phép đo đang chạy. Người chấm bằng mắt đọc theo lời cũ có thể chấm lệch.
   Căn cứ: Chỉ gây hiểu nhầm cho người chấm chứ không làm hỏng tính năng nào của người dùng, và sửa lời mô tả sau vẫn rẻ.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Dòng danh sách của cron-theo-ban-khai E7/E8 đã cũ, bảng trước/sau và hội đồng E6 đọc sai cách sửa thật (r1 · tệp đã đổi)**
+- **Dòng danh sách của cron-theo-ban-khai E7/E8 đã cũ, bảng trước/sau và hội đồng E6 đọc sai cách sửa thật (r1)**
   Người dùng thấy gì: Bảng so sánh trước/sau cho hai bài kiểm của lịch chạy theo bản khai mô tả cách sửa không còn đúng. Người duyệt đọc bảng này có thể hiểu sai điều đã thực sự được sửa.
   Căn cứ: Chỉ làm sai lời giải thích trong hồ sơ nội bộ, không ảnh hưởng người dùng, và sửa lại câu chữ sau vẫn rẻ.
   file: `_acceptance/ho-so-do-kiem-cheo/danh-sach.json`
   severity: medium
   Đề xuất: known-limits
 
-- **Đo toan-canh-okr nay dựa vào nhật ký của cửa chặn thuộc hồ sơ khác, nhưng paths không khai tệp đó (r1 · tệp đã đổi)**
+- **Đo toan-canh-okr nay dựa vào nhật ký của cửa chặn thuộc hồ sơ khác, nhưng paths không khai tệp đó (r1)**
   Người dùng thấy gì: Nếu sau này ai đó sửa công cụ chặn dùng chung, phép đo màn Toàn cảnh OKR có thể không được chạy lại tự động. Một lỗi mới có thể lọt qua mà không ai thấy ngay.
   Căn cứ: Rủi ro nằm ở tương lai và chỉ ảnh hưởng công cụ kiểm, người dùng không mất dữ liệu, thêm một dòng khai báo sau là xong.
   file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
@@ -362,7 +360,5 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `_acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs`
   severity: low
   Đề xuất: known-limits
-
-## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

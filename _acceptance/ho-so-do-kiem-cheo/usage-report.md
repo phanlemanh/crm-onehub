@@ -213,3 +213,36 @@ wall: 1471s
 - **claude-opus-5-5**: 3 agent · 45 calls · out 29,180 · in 90 · cache_read 2,736,056 · cache_create 251,083
 - **claude-haiku-5-5**: 12 agent · 24 calls · out 16,455 · in 48 · cache_read 296,172 · cache_create 384,226
 
+### S4 round 6 — wf_434039b2-ea8 (14 agent, 35,670 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 8 | 9,497 | 16 | 398,182 | 82 |
+| review:bugs | claude-opus-5-5 | 14 | 8,639 | 28 | 927,516 | 98 |
+| review:conventions | claude-opus-5-5 | 10 | 4,344 | 20 | 579,040 | 56 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 3,463 | 4 | 29,241 | 34 |
+| machine:bun _acceptance/ho-so-do-kiem-cheo/rang/ | claude-haiku-5-5 | 2 | 1,894 | 4 | 29,284 | 13 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,702 | 4 | 29,243 | 12 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 955 | 4 | 3,057 | 567 |
+| machine:bun _acceptance/ho-so-do-kiem-cheo/rang/ | claude-haiku-5-5 | 2 | 921 | 4 | 29,281 | 16 |
+| review:measurement | claude-opus-5-5 | 3 | 878 | 6 | 96,420 | 13 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 812 | 4 | 3,057 | 363 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 791 | 4 | 26,186 | 297 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 777 | 4 | 29,298 | 73 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 681 | 4 | 29,237 | 9 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 316 | 4 | 24,972 | 14 |
+
+
+wall: 1469s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 9 | 11,996 | 207,884 | 1368 | 09:27:39 | 09:50:27 |
+| review | 3 | 13,861 | 1,602,976 | 100 | 09:27:39 | 09:29:19 |
+| capture | 1 | 316 | 24,972 | 14 | 09:50:29 | 09:50:44 |
+| synthesize | 1 | 9,497 | 398,182 | 82 | 09:50:46 | 09:52:08 |
+
+- **claude-sonnet-5-5**: 2 agent · 10 calls · out 9,813 · in 20 · cache_read 423,154 · cache_create 92,074
+- **claude-opus-5-5**: 3 agent · 27 calls · out 13,861 · in 54 · cache_read 1,602,976 · cache_create 225,402
+- **claude-haiku-5-5**: 9 agent · 18 calls · out 11,996 · in 36 · cache_read 207,884 · cache_create 303,538
+
