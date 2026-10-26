@@ -5,7 +5,7 @@ import { AGENT, chayMau, RA, taoKho, xoaKho } from "./mau-chung.mjs";
 
 const KHO = "tln-e25";
 const CON = {
-	con_tro_ly: "okr.de-xuat",
+	con_tro_ly: "okr.chuyen-tiep",
 	con_runner: "crm.tac-nhan",
 	con_builder: "crm.dung-tac-nhan",
 };

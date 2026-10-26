@@ -86,6 +86,7 @@ const CHU = {
 	daDong: "đã đóng",
 	toanCanhTab: "Toàn cảnh",
 	sucKhoeMuc: "Sức khoẻ",
+	chuongTrinh: "Chương trình OKR",
 };
 
 const CHON = new Set(
@@ -1168,6 +1169,28 @@ async function chan(thuTuc) {
 
 const boChan = () => fetch(`${CUA_CHAN}/__cua-chan/bo`, { method: "POST" });
 
+async function xoaNhatKyCua() {
+	const r = await fetch(`${CUA_CHAN}/__cua-chan/xoa-nhat-ky`, {
+		method: "POST",
+	}).catch(() => null);
+	if (!r?.ok) hong.push(`E29: cua chan khong xoa duoc nhat ky (${r?.status})`);
+}
+
+async function loiGoiQuaCua() {
+	const r = await fetch(`${CUA_CHAN}/__cua-chan/nhat-ky`).catch(() => null);
+	if (!r?.ok) {
+		hong.push(`E29: cua chan khong tra nhat ky (${r?.status})`);
+		return [];
+	}
+	const { goi } = await r.json();
+	return goi
+		.filter((g) => g.thuTuc.some((t) => t.startsWith("okr.")))
+		.flatMap((g) => {
+			const vao = JSON.parse(g.input ?? "{}");
+			return g.thuTuc.map((t, i) => [t, vao[String(i)]]);
+		});
+}
+
 const ky = () => `kyOkr=${OKR.quy}`;
 const theoDonVi = (them) => `/okr/theo-don-vi?${ky()}${them ? `&${them}` : ""}`;
 
@@ -1379,8 +1402,8 @@ async function buocToanCanh() {
 		),
 	);
 	kiem(
-		`E10 buoc 2: bon the so (thay ${await demSel(o, "[data-slot='stat-card']")})`,
-		(await demSel(o, "[data-slot='stat-card']")) === 4,
+		`E10 buoc 2: bon the so cua toan canh cong o KR truot cua moi-kr-ca-cong-ty AC-1 (thay ${await demSel(o, "[data-slot='stat-card']")})`,
+		(await demSel(o, "[data-slot='stat-card']")) === 5,
 	);
 	kiem(
 		"E10 buoc 2: thanh tien do trung tinh, khong bg-primary",
@@ -1576,7 +1599,7 @@ async function buocHopTuan() {
 	await bamSel(t, `[data-mo-kr='${Kb}']`);
 	await doi(
 		t,
-		"E14 buoc 3: bam dong Kb mo ngan KR (ngan-kr-mot-cho)",
+		"E14 buoc 3: bam dong Kb mo ngan KR",
 		(k) => new URL(location.href).searchParams.get("record") === `kr:${k}`,
 		Kb,
 	);
@@ -1849,14 +1872,19 @@ async function buocSucKhoe() {
 		`E21 buoc 2: URL la trang suc khoe (thay ${new URL(a.url()).pathname})`,
 		new URL(a.url()).pathname.endsWith("/suc-khoe"),
 	);
-	// ve-sinh-do-san-onehub cach-toi: nhãn trợ năng của breadcrumb đổi theo ngôn ngữ (3b35afcd0, 14/10) — đọc dấu ổn định data-slot
-	const vun = await chuSel(a, "nav[data-slot='breadcrumb']");
+	const muc = await chuSel(a, "[data-phan='chuong-trinh'] h2");
 	kiem(
-		`E21 buoc 2: breadcrumb Toan canh › Suc khoe chuong trinh (thay ${vun})`,
-		vun.indexOf(CHU.toanCanhTab) === 0 &&
-			vun.indexOf(CHU.suKhoe) > CHU.toanCanhTab.length - 1,
+		`E21 buoc 2: muc #chuong-trinh «${CHU.chuongTrinh}» tren trang Suc khoe chua bang suc khoe (thay «${muc}»)`,
+		muc === CHU.chuongTrinh &&
+			(await coSel(
+				a,
+				"#chuong-trinh[data-phan='chuong-trinh'] [data-trang-thai='ST-suckhoe-codulieu']",
+			)),
 	);
-	const soThe = await demSel(a, "[data-slot='stat-card']");
+	const soThe = await demSel(
+		a,
+		"[data-phan='chuong-trinh'] [data-slot='stat-card']",
+	);
 	kiem(`E21 buoc 2: bon the so (thay ${soThe})`, soThe === 4);
 	const chu = await chuSel(a, "[data-trang-thai='ST-suckhoe-codulieu']");
 	kiem(
@@ -1900,14 +1928,14 @@ async function buocSucKhoe() {
 	const k = await moTrang(cookie.k, RONG, `/okr/toan-canh/suc-khoe?${ky()}`);
 	await hienSel(
 		k,
-		"[data-trang-thai='ST-suckhoe-khongquyen']",
-		"E21 buoc 3: thanh vien thuong mo thang URL bi chan",
+		"[data-trang-thai^='ST-toancanh-']",
+		"E21 buoc 3: thanh vien thuong mo thang URL cu dung o trang Suc khoe",
 	);
 	kiem(
-		"E21 buoc 3: thanh vien thuong thay cau chi quan tri, khong thay bang",
-		(await chuSel(k, "[data-trang-thai='ST-suckhoe-khongquyen']")).includes(
-			CHU.khongQuyen,
-		) && (await demSel(k, "[data-hang-suc-khoe]")) === 0,
+		`E21 buoc 3: thanh vien thuong o /okr/suc-khoe khong co muc #chuong-trinh, khong thay bang (thay ${new URL(k.url()).pathname})`,
+		new URL(k.url()).pathname.endsWith("/okr/suc-khoe") &&
+			!(await coSel(k, "[data-phan='chuong-trinh']")) &&
+			(await demSel(k, "[data-hang-suc-khoe]")) === 0,
 	);
 	await chup(k, "E21-buoc-suc-khoe-3.png");
 	await k.close();
@@ -1978,6 +2006,7 @@ async function buocChuKy() {
 	await chup(t, "E23-buoc-chon-ky-1.png", false);
 
 	trpc.length = 0;
+	await xoaNhatKyCua();
 	const sang = async (phim) => {
 		for (let i = 0; i < 12; i++) {
 			const dang = await t.evaluate(
@@ -2022,7 +2051,7 @@ async function buocChuKy() {
 	);
 	await chup(t, "E23-buoc-chon-ky-3.png");
 
-	await bamChu(t, "[data-slot='area-sidebar'] a", CHU.sucKhoeMuc);
+	await bamChu(t, "aside[data-slot='area-sidebar'] a", CHU.sucKhoeMuc);
 	await hienSel(t, "[data-hang-toan-canh]");
 	await cho(800);
 	const hangPK = await t.evaluate(
@@ -2044,14 +2073,16 @@ async function buocChuKy() {
 	);
 	await chup(t, "E23-buoc-chon-ky-4.png");
 
-	const goi = loiGoiOkr();
+	const goi = await loiGoiQuaCua();
 	for (const ten of ["okr.danhSach", "okr.hopTuan", "okr.toanCanh"]) {
-		const kyGoi = goi.filter(([t2]) => t2 === ten).map(([, v]) => v?.cycleId);
+		const cua = goi.filter(([t2]) => t2 === ten);
+		const kyGoi = cua.map(([, v]) => v?.json?.cycleId ?? v?.cycleId);
+		console.log(
+			`  E29 ${ten}: ${kyGoi.length} loi goi qua cua chan (trinh duyet va may chu app), cycleId [${kyGoi}]`,
+		);
 		kiem(
-			`E29: moi loi goi ${ten} sau khi chon ky mang cycleId cua ${tenA} (thay ${kyGoi})`,
-			ten === "okr.toanCanh"
-				? kyGoi.every((c) => c === OKR.quyA)
-				: kyGoi.length > 0 && kyGoi.every((c) => c === OKR.quyA),
+			`E29: co it nhat 1 loi goi ${ten} sau khi chon ky va moi loi goi mang cycleId cua ${tenA} (thay ${kyGoi.length} loi goi [${kyGoi}])`,
+			kyGoi.length > 0 && kyGoi.every((c) => c === OKR.quyA),
 		);
 	}
 	await t.close();

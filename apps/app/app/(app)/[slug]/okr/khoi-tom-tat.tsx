@@ -42,7 +42,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { type ReactNode, useId, useState } from "react";
 import { toast } from "sonner";
 import { useMoDienBien } from "@/components/crm/record-sheet/dien-bien-kr";
-import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
+import {
+	type OkrToanCanhMessages,
+	okrToanCanhMessages,
+} from "@/lib/messages/okr-toan-canh";
+import { homNayVn, ngayThangVn, OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -52,8 +56,13 @@ type TomTat = RouterOutputs["okr"]["troLyTomTat"];
 type BanTomTat = NonNullable<TomTat["ban"]>;
 type CauHien = BanTomTat["cau"][number];
 type NguonHien = CauHien["nguon"][number];
+type ChoBan = NonNullable<TomTat["choBan"]>;
 
 const PHAN_HOI = { huuIch: "huu-ich", khongHuuIch: "khong-huu-ich" } as const;
+
+const TRAN_HEN_GIO_MS = 2_147_483_647;
+
+const SO_THU = 7;
 
 function ngayNgan(ngay: string): string {
 	return `${ngay.slice(8, 10)}/${ngay.slice(5, 7)}`;
@@ -67,6 +76,69 @@ function nhipHoiLai(batDau: number, capNhatLuc: number): number | false {
 	return capNhatLuc - batDau < OKR_TOM_TAT.tranChoMs
 		? OKR_TOM_TAT.hoiLaiMs
 		: false;
+}
+
+function henToiLuc(luc: string): number | false {
+	const con = Date.parse(luc) - Date.now();
+	return con > 0 && con <= TRAN_HEN_GIO_MS ? con : false;
+}
+
+function thuVn(luc: Date): number {
+	const thu = new Date(`${homNayVn(luc)}T00:00:00Z`).getUTCDay();
+	return ((thu + SO_THU - 1) % SO_THU) + 1;
+}
+
+function gioVn(luc: Date): string {
+	return new Intl.DateTimeFormat("en-GB", {
+		timeZone: OKR_CHU_KY.muiGio,
+		hour: "2-digit",
+		minute: "2-digit",
+		hourCycle: "h23",
+	}).format(luc);
+}
+
+function chuToiLuc(luc: string, m: OkrToanCanhMessages["tomTat"]): string {
+	const d = new Date(luc);
+	const thu = thuVn(d);
+	const thuTruoc = ((thu + SO_THU - 2) % SO_THU) + 1;
+	return m.choBanDau(
+		gioVn(d),
+		m.tenThu[thu - 1] ?? "",
+		ngayThangVn(d),
+		m.tenThu[thuTruoc - 1] ?? "",
+	);
+}
+
+function DongCho({ cho }: { cho: ChoBan }) {
+	const m = okrToanCanhMessages(useLocale()).tomTat;
+	if (cho.kieu === "tam-dung")
+		return (
+			<CardContent data-trang-thai="ST-tomtat-tam-dung">
+				<KaraState
+					kind="off"
+					reason={
+						cho.lyDo === "het-tran-thang" && cho.moLai !== null
+							? m.tamNghiDen(ngayNgan(cho.moLai))
+							: m.chuaNoiMoHinh
+					}
+				/>
+			</CardContent>
+		);
+	if (cho.kieu === "dang-xep")
+		return (
+			<CardContent data-trang-thai="ST-tomtat-dang-xep">
+				<p className="text-muted-foreground text-sm" data-cho-ban>
+					{m.dangXep}
+				</p>
+			</CardContent>
+		);
+	return (
+		<CardContent data-trang-thai="ST-tomtat-cho-ban-dau">
+			<p className="text-muted-foreground text-sm" data-cho-ban>
+				{chuToiLuc(cho.luc, m)}
+			</p>
+		</CardContent>
+	);
 }
 
 function TheNguon({ n }: { n: NguonHien }) {
@@ -264,17 +336,33 @@ export function KhoiTomTat({
 	const trpc = useTRPC();
 	const idTieuDe = useId();
 	const [batDau, setBatDau] = useState<number | null>(null);
+	const [batDauXep, setBatDauXep] = useState<number | null>(null);
 	const tt = useQuery({
 		...trpc.okr.troLyTomTat.queryOptions({ cycleId, departmentId }),
 		retry: false,
-		refetchInterval: (q) =>
-			q.state.data?.dangSoan === true
-				? nhipHoiLai(batDau ?? q.state.dataUpdatedAt, q.state.dataUpdatedAt)
-				: false,
+		refetchInterval: (q) => {
+			const d = q.state.data;
+			if (d?.dangSoan === true)
+				return nhipHoiLai(
+					batDau ?? q.state.dataUpdatedAt,
+					q.state.dataUpdatedAt,
+				);
+			if (d?.choBan?.kieu === "dang-xep")
+				return nhipHoiLai(
+					batDauXep ?? q.state.dataUpdatedAt,
+					q.state.dataUpdatedAt,
+				);
+			if (d?.choBan?.kieu === "toi-luc") return henToiLuc(d.choBan.luc);
+			return false;
+		},
 	});
 	const dangSoan = tt.data?.dangSoan === true;
 	if (batDau === null && dangSoan && tt.dataUpdatedAt > 0) {
 		setBatDau(tt.dataUpdatedAt);
+	}
+	const dangXep = tt.data?.choBan?.kieu === "dang-xep";
+	if (batDauXep === null && dangXep && tt.dataUpdatedAt > 0) {
+		setBatDauXep(tt.dataUpdatedAt);
 	}
 
 	if (tt.isError)
@@ -343,6 +431,7 @@ export function KhoiTomTat({
 				trangThai="ST-tomtat-chua-cap-nhat"
 			/>
 		);
+	else if (tt.data.choBan) noiDung = <DongCho cho={tt.data.choBan} />;
 	else return null;
 
 	return (

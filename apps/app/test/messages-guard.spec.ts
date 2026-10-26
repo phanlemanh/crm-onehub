@@ -1088,6 +1088,14 @@ const GHIM = {
 		"Tiến độ 12: A%, lẽ ra đã tới B%",
 	],
 	"okr-toan-canh:hopTuan.tuan": ["Tuần 1", "Tuần 12"],
+	"okr-toan-canh:tomTat.choBanDau": [
+		"Kara gửi bản tóm tắt đầu tiên vào khoảng 1 A, B — sáng hôm sau ngày cập nhật C.",
+		"Kara gửi bản tóm tắt đầu tiên vào khoảng 12 A, B — sáng hôm sau ngày cập nhật C.",
+	],
+	"okr-toan-canh:tomTat.tamNghiDen": [
+		"Kara tạm nghỉ tóm tắt tuần tới 1.",
+		"Kara tạm nghỉ tóm tắt tuần tới 12.",
+	],
 	"okr-toan-canh:hopTuan.daCapNhat": [
 		"đã cập nhật 1/A KR",
 		"đã cập nhật 12/A KR",

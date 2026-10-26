@@ -1,0 +1,10 @@
+--- a/apps/app/app/(app)/[slug]/settings/organization/chi-tiet-goc.tsx
++++ b/apps/app/app/(app)/[slug]/settings/organization/chi-tiet-goc.tsx
+@@ -38,6 +38,7 @@
+ 					<Button
+ 						variant="outline"
+ 						size="sm"
++						className="justify-start"
+ 						disabled={!hd.sua}
+ 						aria-haspopup="dialog"
+ 						onClick={() => hd.moDonVi({ loai: "tao-bo-phan" })}

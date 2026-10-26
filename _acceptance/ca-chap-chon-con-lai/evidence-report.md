@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d5abe9ec87b9d80ffa3a0ab21fd2d312ee15fe91
+verified_commit: 6fdc7ed4587ef09283181bd35699a668ab3faa27
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -175,3 +175,7 @@ Round 1: E1 đến E8 đều xanh, bảy lệnh suite xanh. Không eval nào fai
 ### Re-pin lần 1 — 2026-10-09, do sửa bốn phát hiện trong hợp đồng sau S4 r1 và gộp onehub
 run_id: repin-20261009T105400Z-30595
 sha: d5abe9ec87b9d80ffa3a0ab21fd2d312ee15fe91 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
+run_id: repin-20261023T105529Z-32502
+sha: 6fdc7ed4587ef09283181bd35699a668ab3faa27 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

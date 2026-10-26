@@ -1,6 +1,8 @@
 import type { LOAI_VIEC_OKR } from "./agent-tasks";
+import { thangSau, thangVN } from "./ai-chi-phi";
 import type { Db } from "./client";
 import { Prisma } from "./generated/prisma/client";
+import { KY_CON_HIEN } from "./okr-chu-ky-hien";
 import { boGioiHan, dieuKienXemMucTieu, nguCanhXemOkr } from "./okr-hien-thi";
 import {
 	type KrSo,
@@ -9,8 +11,13 @@ import {
 	lyDoCua,
 } from "./okr-hop-tuan";
 import { cuaSoSuKien } from "./okr-nhac";
-import { cauHinhAiLuc } from "./okr-tro-ly";
+import { cauHinhAiLuc, quaTranChung } from "./okr-tro-ly";
 import {
+	GIO_MS,
+	LY_DO_TAM_DUNG_TOM_TAT,
+	type LyDoKhongSanSang,
+	type LyDoTamDungTomTat,
+	MINUTE_MS,
 	MUC_TU_TIN,
 	type MucTuTin,
 	motTrong,
@@ -20,12 +27,42 @@ import {
 	OKR_TOM_TAT,
 	TRO_LY_OKR_TRAN,
 	type TrangThaiQuanTriTomTat,
+	TUAN_MS,
 } from "./okr-tro-ly-danh-muc";
 import { KIEU_KR, type KieuKr } from "./okr-xu-huong";
-import { ngayVN } from "./onboarding-nhac";
+import { dauNgayVN, ngayVN, thuTrongTuan } from "./onboarding-nhac";
 import { WORKSPACE_ID } from "./workspace";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
+
+export function gioXepCua(luc: Date): Date {
+	return new Date(
+		dauNgayVN(luc).getTime() +
+			OKR_TOM_TAT.gioXep.gio * GIO_MS +
+			OKR_TOM_TAT.gioXep.phut * MINUTE_MS,
+	);
+}
+
+export function thuCapNhatCuaNgayXep(ngayXep: Date): number {
+	return thuTrongTuan(new Date(dauNgayVN(ngayXep).getTime() - 1));
+}
+
+export function lanXepTomTatKe(now: Date, updateWeekday: number): Date {
+	const dau = dauNgayVN(now).getTime();
+	for (let lech = 0; lech <= TUAN_MS; lech += NGAY_MS) {
+		const gio = gioXepCua(new Date(dau + lech));
+		if (gio > now && thuCapNhatCuaNgayXep(gio) === updateWeekday) return gio;
+	}
+	throw new Error(`ngay cap nhat cua chu ky khong doc duoc: ${updateWeekday}`);
+}
+
+export function lanXepTomTatHomNay(
+	now: Date,
+	updateWeekday: number,
+): Date | null {
+	const gio = gioXepCua(now);
+	return gio <= now && thuCapNhatCuaNgayXep(gio) === updateWeekday ? gio : null;
+}
 
 export type ChenhTuTin = -2 | -1 | 0 | 1 | 2;
 
@@ -638,6 +675,71 @@ function nacPhong(
 		boPhanId: phong.divisionId,
 		phongBanId: phong.id,
 	});
+}
+
+const LOAI_XEP =
+	"okr-tom-tat-xep" as const satisfies (typeof LOAI_VIEC_OKR)[number];
+
+const PHA_XEP = "dang-chay";
+
+export type ChoBanDau =
+	| { kieu: "toi-luc"; luc: string }
+	| { kieu: "dang-xep" }
+	| { kieu: "tam-dung"; lyDo: LyDoTamDungTomTat; moLai: string | null };
+
+function laLyDoTamDung(lyDo: LyDoKhongSanSang): lyDo is LyDoTamDungTomTat {
+	return (LY_DO_TAM_DUNG_TOM_TAT as readonly string[]).includes(lyDo);
+}
+
+async function daCoBanBat(
+	db: DbHoacTx,
+	v: { cycleId: string; departmentId: string },
+): Promise<boolean> {
+	const so = await db.okrTomTat.count({
+		where: {
+			cycleId: v.cycleId,
+			departmentId: v.departmentId,
+			cau: { path: ["nac"], equals: "bat" },
+		},
+	});
+	return so > 0;
+}
+
+export async function choBanDauTomTat(
+	db: DbHoacTx,
+	v: { cycleId: string; departmentId: string; now: Date },
+): Promise<ChoBanDau | null> {
+	const ky = await db.okrCycle.findFirst({
+		where: { id: v.cycleId, phase: PHA_XEP, ...KY_CON_HIEN },
+		select: { updateWeekday: true },
+	});
+	if (!ky || (await daCoBanBat(db, v))) return null;
+	const homNay = lanXepTomTatHomNay(v.now, ky.updateWeekday);
+	const dangXep =
+		homNay !== null &&
+		(await db.agentTask.count({
+			where: { kind: LOAI_XEP, dueAt: homNay, finishedAt: null },
+		})) > 0;
+	const luc = lanXepTomTatKe(v.now, ky.updateWeekday);
+	const san = await quaTranChung(db, await cauHinhAiLuc(db, v.now), v.now);
+	if (!san.bat && laLyDoTamDung(san.lyDo)) {
+		const chanLanKe =
+			san.lyDo !== "het-tran-thang" ||
+			dangXep ||
+			thangVN(luc) === thangVN(v.now);
+		if (chanLanKe)
+			return {
+				kieu: "tam-dung",
+				lyDo: san.lyDo,
+				moLai:
+					san.lyDo === "het-tran-thang"
+						? `${thangSau(thangVN(v.now))}-01`
+						: null,
+			};
+	}
+	return dangXep
+		? { kieu: "dang-xep" }
+		: { kieu: "toi-luc", luc: luc.toISOString() };
 }
 
 export async function nacTomTatPhong(

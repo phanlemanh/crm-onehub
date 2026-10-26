@@ -15,6 +15,11 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const API = join(ROOT, "apps/api");
 const RA = join(ROOT, ".acceptance-runs/chu-cuoi-cung-tien-de");
 const TEP = "test/workspace-thanh-vien.spec.ts";
+const PHAM_VI = {
+	gop: "46a52ade5b9fb48f823288f8063ec13141935d48",
+	tu: "5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b",
+	toi: "2aff077d0cb4966a90d014a9a70c91a45d5c8f6a",
+};
 
 const CCC = {
 	goc: "058bb75f8d9766ffe7654384201642664be83c21",
@@ -360,13 +365,20 @@ function phamVi() {
 	const bat = ngoaiPhamVi(mau, globs);
 	if (bat.join(",") !== "apps/api/src/workspace/workspace.service.ts")
 		dung(1, `RANG CUN: danh sach mau goi ten ${JSON.stringify(bat)}`);
-	const that = git(["diff", "--name-only", `${GOC}...HEAD`])
+	for (const sha of [PHAM_VI.tu, PHAM_VI.toi]) {
+		try {
+			git(["cat-file", "-e", `${sha}^{commit}`]);
+		} catch {
+			dung(2, `KHONG DO DUOC: khong co commit neo ${sha}`);
+		}
+	}
+	const that = git(["diff", "--name-only", `${PHAM_VI.tu}...${PHAM_VI.toi}`])
 		.trim()
 		.split("\n")
 		.filter(Boolean);
 	const lot = ngoaiPhamVi(that, globs);
 	console.log(
-		`diff ${GOC.slice(0, 8)}...HEAD: ${that.length} tep, ngoai pham vi: ${lot.length}`,
+		`diff ${PHAM_VI.tu.slice(0, 8)}...${PHAM_VI.toi.slice(0, 8)} (gop ${PHAM_VI.gop.slice(0, 9)}): ${that.length} tep, ngoai pham vi: ${lot.length}`,
 	);
 	if (lot.length)
 		dung(1, `RANG DO: diff cham tep ngoai pham vi: ${lot.join(", ")}`);

@@ -9,6 +9,7 @@ const GOC =
 const CU = "apps/api/src/okr/tien-do.ts";
 const MOI = "packages/db/src/okr-tien-do.ts";
 const HAM = ["chonChuKyHienTai", "kyVongTheoNgay", "tienDoMucTieu"];
+const NEN = process.env.NEO_NEN ?? "c1e37b730548a6faa9c2dbac1e0a652a32934753";
 const DUONG_CU = [
 	/from\s+["']\.\/tien-do["']/,
 	/from\s+["'][^"']*okr\/tien-do["']/,
@@ -63,11 +64,13 @@ const than = (nguon, ten) => {
 	return m ? m[0].replace(/\s+/g, "") : null;
 };
 if (existsSync(join(GOC, MOI))) {
-	const nen = git(
-		"merge-base",
-		"HEAD",
-		process.env.NHANH_GOC ?? "origin/onehub",
-	);
+	const nen = NEN;
+	try {
+		git("cat-file", "-e", `${nen}^{commit}`);
+	} catch {
+		console.error(`KHONG DO DUOC: sha neo ${nen} khong co trong kho`);
+		process.exit(2);
+	}
 	const cu = `${git("show", `${nen}:${CU}`)}\n`;
 	const moi = readFileSync(join(GOC, MOI), "utf8");
 	for (const h of HAM) {

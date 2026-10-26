@@ -258,11 +258,14 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.tbo_khong_doi_hinh
-    long_running: 200
     paths:
       - "_acceptance/*/rang/**"
       - "apps/app/test/**"
     expected: |
+      Từ 26/10 (sổ d-20261026T084222Z-49, chủ kho «Đồng ý A», «Đồng ý như lời khuyên»): E15 chạy `khong-doi-hinh.mjs
+      --chi-quet` — quét lớp rồi soát đổi thước (2) bên dưới, in từng «MUC <slug>#<E>», thoát 0 khi không có «SAI AC-11»,
+      mã 1 khi có; KHÔNG chạy lại eval nào của lớp. Vế (1) chạy lại lớp và so nền chuyển sang kiểm chéo đêm
+      kiem-cheo-sau-gop#AC-6 (E17, E18 nghỉ với con trỏ đó); lượt ghim lại không còn chạy (1).
       khong-doi-hinh.mjs QUÉT LỚP LÚC CHẠY, không danh sách viết tay: mọi hồ sơ _acceptance/* status signed-off hay
       machine-cleared; với mỗi eval executor test VÀ script, không not-run, lấy các tệp có trong lệnh đã giải (kể cả mọi
       tệp mã cùng thư mục rang của tệp thước) — eval thuộc lớp khi một tệp ấy chứa okr/bo-okr, okr/theo-don-vi,
@@ -292,6 +295,8 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.tbo_khong_doi_hinh_2
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
     long_running: 200
     paths:
       - "_acceptance/*/rang/**"
@@ -305,6 +310,8 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.tbo_khong_doi_hinh_3
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
     long_running: 200
     paths:
       - "_acceptance/*/rang/**"
