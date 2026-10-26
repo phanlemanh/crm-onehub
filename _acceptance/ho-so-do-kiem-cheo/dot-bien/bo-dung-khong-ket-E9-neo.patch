@@ -1,0 +1,11 @@
+--- a/_acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs
++++ b/_acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs
+@@ -7,7 +7,7 @@
+ const TAI_LIEU = "docs/agent.md";
+ const MUC_BO_DUNG = "## Team-agent builder and runner";
+ const MUC_RE = "### Chỗ rẽ có tên";
+-const NEO_GOC = "13477d5f8f8b75555120f438a5095e8f2940935c";
++const NEO_GOC = "0000000000000000000000000000000000000000";
+ const NEO_TOI = "ac6a3ab36239260dac1773e33c86e5d3843e32b4";
+ 
+ function git(...thamSo) {

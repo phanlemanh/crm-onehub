@@ -1,0 +1,11 @@
+--- a/packages/ui/src/components/kara/steps.tsx
++++ b/packages/ui/src/components/kara/steps.tsx
+@@ -5,7 +5,7 @@
+ 	TaskContent,
+ 	TaskItem,
+ 	TaskTrigger,
+-} from "@crm/ui/components/ai-elements/task";
++} from "@crm/ui/components/ai-elements/task-cu";
+ import { KaraRetry } from "@crm/ui/components/kara/state";
+ import { useMessages } from "@crm/ui/components/locale-provider";
+ import { useEffect, useState } from "react";

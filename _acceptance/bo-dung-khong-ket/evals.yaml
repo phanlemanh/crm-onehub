@@ -215,14 +215,17 @@ evals:
       - "_acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"
     expected: |
       Script suy goc kho tu vi tri cua no. Doc docs/agent.md o HEAD va o
-      git merge-base HEAD origin/onehub.
+      ban goc co dinh cua PR #178 (gop 8176bb2ef4086be290bbe8ed8df75ce9b845b6ad):
+      13477d5f8f8b75555120f438a5095e8f2940935c, khong theo merge-base dong; sha neo
+      khong co (git cat-file -e) -> exit 2 "KHONG DO DUOC".
       Muc "Team-agent builder and runner" (cat bang tieu de) phai co: "SESSION_LIMITS",
       "128k" hoac "128 000"/"128.000", "500k"/"500.000", "session-limit", va
       "outputSchema".
       Danh sach "Chỗ rẽ có tên với bản của hãng": moi tep ma git diff --name-only
       origin/release...HEAD cham VA ton tai o origin/release phai co ten trong muc do
-      (chi xet tep ma nhanh nay sua, tinh tu merge-base voi origin/onehub).
-      Ban merge-base phai TRUOT it nhat mot dieu kien (in dieu kien truot). In
+      (chi xet tep ma PR #178 sua: git diff --name-only
+      13477d5f8f8b75555120f438a5095e8f2940935c..ac6a3ab36239260dac1773e33c86e5d3843e32b4).
+      Ban goc co dinh do phai TRUOT it nhat mot dieu kien (in dieu kien truot). In
       "tai-lieu ok" va exit 0 khi HEAD dat va ban goc truot; nguoc lai exit 1 va in
       dieu kien vi pham.
   - id: E10

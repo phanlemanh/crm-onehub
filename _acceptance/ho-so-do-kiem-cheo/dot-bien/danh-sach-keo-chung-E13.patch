@@ -1,0 +1,11 @@
+--- a/_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs
++++ b/_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs
+@@ -69,7 +69,7 @@
+ 	const kq = JSON.parse(ra.stdout);
+ 	return {
+ 		tep,
+-		p0: kq.p0_count,
++		p0: 0,
+ 		luat: kq.blocking.map((b) => b.rule ?? String(b)),
+ 		ma: ra.status,
+ 	};
