@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 01f736f78f180827e3debc835107dacd42c4eec4
+verified_commit: 34487982603b686115969b63e6567a390991efb0
 human_signoff: Phan Le Manh 2026-10-26 — ký Cổng Bằng chứng trên S4 vòng 5 PASS (7/7 tiêu chí; AC-6 chạy lại 244 eval của 53 hồ sơ đã ký, 236 xanh, 8 đỏ sẵn trên onehub, 0 SAI). Ngoài-1 đến Ngoài-15 theo đề xuất máy — mười ba mục ghi Known limits, Ngoài-6 chấp nhận không sửa, Ngoài-10 mở hợp đồng mới cho chữ «Cập nhật tuần» còn ở okr-config.ts và packages/ui/src/lib/messages.ts:573. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -166,3 +166,7 @@ none — every multi-run eval is uniform
 
 Round 4: E6 bị REJECT (thước khong-doi-hinh); lối A: E6 chạy lại một lần mục đỏ trên cây, mở lại Cổng Phạm vi, duyệt lại 2026-10-25.
 Round 5: E1, E3, E5, E6, E7 chạy lại và xanh trên 01f736f78; E2, E2b, E4 carry-forward từ round 1 (delta không chạm paths); bảy lệnh suite xanh.
+
+### Re-pin lần 1 — 2026-10-26, do SV6 bam-kr-mo-chi-tiet-kr đổi bài kiểm và thước của hồ sơ đã ký; gộp onehub 344879826
+run_id: repin-20261026T184903Z-86908
+sha: 34487982603b686115969b63e6567a390991efb0 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

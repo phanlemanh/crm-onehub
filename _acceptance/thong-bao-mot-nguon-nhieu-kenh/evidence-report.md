@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e28fff9f0da10caf4771635df2a3e606e8d3e66b
+verified_commit: 34487982603b686115969b63e6567a390991efb0
 human_signoff: Manh Phan 2026-10-23
 ---
 
@@ -199,3 +199,7 @@ sha: 6683ad552bdc92912ea62bc0d1a97b04b718bab7 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-23, do hoá cũ sau gộp onehub 359e04005
 run_id: repin-20261023T231056Z-19000
 sha: e28fff9f0da10caf4771635df2a3e606e8d3e66b · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-26, do SV6 bam-kr-mo-chi-tiet-kr đổi bài kiểm và thước của hồ sơ đã ký; gộp onehub 344879826
+run_id: repin-20261026T184903Z-86908
+sha: 34487982603b686115969b63e6567a390991efb0 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
