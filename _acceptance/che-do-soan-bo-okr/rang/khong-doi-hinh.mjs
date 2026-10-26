@@ -444,6 +444,8 @@ const THUOC_THEO_VONG = {
 		"thuoc theo vong trang-don-vi-mot-bang: rut tep kiem tu diff merge-base cua nhanh dang chay roi chay eval cua ho so khac",
 };
 const DONG_YAML_NGHI = /^ {4}(?:status: not-run|superseded_by: \S+)$/;
+const DONG_YAML_TRO_CU = /^ {4}superseded_by: \S+$/;
+const DONG_YAML_TRO_MOI = `    superseded_by: ${HO_SO_NAY}#AC-7`;
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx|sh)$/;
 const TEP_TRONG_LENH = /[\w@./()[\]-]+\.(?:tsx|ts|mjs|cjs|js|sh)\b/g;
 const NHAP_TUONG_DOI = /(?:from\s+|import\(\s*)["'](\.{1,2}\/[^"']+)["']/g;
@@ -785,7 +787,12 @@ const trungKhop = (a, b) =>
 
 function khoiDoiChuoi(tep, k) {
 	if (tep.endsWith("evals.yaml"))
-		return k.bo.length === 0 && k.them.every((d) => DONG_YAML_NGHI.test(d));
+		return (
+			(k.bo.length === 0 && k.them.every((d) => DONG_YAML_NGHI.test(d))) ||
+			(k.bo.length === k.them.length &&
+				k.bo.every((d) => DONG_YAML_TRO_CU.test(d)) &&
+				k.them.every((d) => d === DONG_YAML_TRO_MOI))
+		);
 	if (gon(k.bo).length === 0 && gon(k.them).length === 0) return true;
 	if (k.bo.length === 0 || k.them.length === 0) return false;
 	return chuanHoa(k.bo.join("\n")) === chuanHoa(k.them.join("\n"));
