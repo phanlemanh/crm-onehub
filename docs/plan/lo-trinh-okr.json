@@ -2801,8 +2801,11 @@
       "ten_ngan": "Thước cần gh",
       "cau_giao": "«Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây»",
       "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng. Gộp #396 (kiểm chéo dựng lại cây, cùng scripts/kiem-cheo).",
-      "trang_thai": "chưa mở",
-      "buoc_ke": "Làn MacBook Pro · thứ 8"
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        495
+      ],
+      "buoc_ke": "Đã gộp 20/10 11:59 (#495)"
     },
     {
       "ma": "MH1",
@@ -2862,8 +2865,11 @@
       "dung_tren": [
         "F26"
       ],
-      "trang_thai": "chưa mở",
-      "buoc_ke": "Làn MacBook Pro · thứ 11"
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        563
+      ],
+      "buoc_ke": "Đã gộp 26/10 18:01 (#563)"
     },
     {
       "ma": "F29",
@@ -3087,9 +3093,14 @@
       "cau_giao": "«Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A»",
       "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c, Ngoài-15 của ve-sinh-do-san-onehub (thước _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts dò mã nguồn bằng indexOf thay vì chạy hành vi — chủ kho chọn gom vào F35 ở phiên Mac Studio 17/10) và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng. Đêm 17→18/10 gom thêm chín ca cùng lớp «thước của hồ sơ đã ký gãy khi vào onehub» làm bằng chứng cho K-A (#375 03:40Z): hop-thoai-giu-cho-dang-nhap E11 (--ca thiet-ke lệch phạm vi §12; --ca huy dùng danh sách hộp viết tay, thừa 11 hộp); trang-don-vi-mot-bang E12, E16 (gốc so merge-base với onehub, gãy khi chính nó gộp) và E14 (không khai paths); dieu-huong-khu-muc-tieu E3 (coNutHoiKara grep cả thư mục); ve-sinh-do-san-onehub E18 (bất biến lúc gộp); so-do-quanh-muc-tieu E14 (ranh-gioi.mjs buộc nhánh feat/so-do-can-chinh-don-vi); tac-nhan-glm-5-3-cham E5 (so-tac-nhan.ts --pham-vi đếm mọi tệp đổi trên nhánh); tac-nhan-va E9 (lỗi kit resolveConfigKey không bỏ thoát hai nháy đơn). Luật tạm 18/10 (chủ kho đồng ý): máy không tự sửa thước hồ sơ đã ký tới khi có K-A. Nhận thêm DA0c và K6a (#411). Chủ kho duyệt 19/10: sửa thước hồ sơ đã ký nhóm F35/F28/F31/F34 với nghi thức hai chiều + dòng sổ fix, chỉ khi làn chủ hồ sơ không có vòng đã ký chờ gộp.",
       "dung_tren": [],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        512,
+        518,
+        535
+      ],
       "chay_khi": "crm nhận mốc kit có K-A (ho-so-da-ky-giu-tuoi)",
-      "buoc_ke": "Làn MacBook Pro · thứ 10"
+      "buoc_ke": "Đã gộp 22/10 14:05 (#512; lô 1 #535, lô 2 #518)"
     },
     {
       "ma": "F36",
@@ -3104,8 +3115,11 @@
       "dung_tren": [
         "C-1b"
       ],
-      "trang_thai": "chưa mở",
-      "buoc_ke": "Làn MacBook Pro · thứ 9"
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        507
+      ],
+      "buoc_ke": "Đã gộp 22/10 00:21 (#507)"
     },
     {
       "ma": "C-1b",
