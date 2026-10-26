@@ -15,7 +15,6 @@ const TRO_LY = "apps/api/src/okr/tro-ly.service.ts";
 const BO_GHI = "apps/agent/agent/lib/okr/nop-de-xuat.ts";
 const CONG_CU = "apps/agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat.ts";
 const HOP = "apps/app/app/(app)/[slug]/okr/hop-thoai-can-chinh.tsx";
-const NHOM = "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx";
 const CHAN = [
 	"l4_luat",
 	"l4_gan",
@@ -24,7 +23,6 @@ const CHAN = [
 	"l4_nhan",
 	"l4_sua_de_xuat",
 	"l4_hop_thoai",
-	"l4_de_xuat",
 ];
 
 const config = Bun.YAML.parse(
@@ -121,13 +119,6 @@ const VET = [
 		ghim: "muc tin hop thoai sai",
 	},
 	{
-		ten: "(h) bo dong can cu cua de xuat",
-		tep: NHOM,
-		cam: thay("{d.canCu ? (", "{false && d.canCu ? ("),
-		lenh: lenhCua("l4_de_xuat"),
-		ghim: "thieu dong can cu",
-	},
-	{
 		ten: "(i) cong cu bo can cu",
 		tep: CONG_CU,
 		cam: thay(
@@ -201,7 +192,6 @@ const ban = execFileSync(
 		BO_GHI,
 		CONG_CU,
 		HOP,
-		NHOM,
 	],
 	{ encoding: "utf8" },
 ).trim();
