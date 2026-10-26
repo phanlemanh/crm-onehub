@@ -271,7 +271,7 @@ describe("tom-tat", () => {
 									...h.tom_tat,
 									moi_nguoi: {
 										...h.tom_tat.moi_nguoi,
-										vi_sao: h.tom_tat.moi_nguoi.vi_sao.slice(0, 400),
+										vi_sao: h.tom_tat.moi_nguoi.vi_sao.slice(0, 200),
 									},
 								},
 							}
@@ -280,9 +280,9 @@ describe("tom-tat", () => {
 			})),
 		};
 		const dai = CO_DAI.filter(
-			(h) => (h.tom_tat?.moi_nguoi.vi_sao ?? "").length > 400,
+			(h) => (h.tom_tat?.moi_nguoi.vi_sao ?? "").length > 200,
 		);
-		expect(dai.length).toBe(31);
+		expect(dai.length).toBe(55);
 		for (const h of dai)
 			expect(kiemTomTat(await moNgan(cat, h.khoa), h)).toContain(
 				`viec ${h.khoa} lech o tom tat vi_sao`,

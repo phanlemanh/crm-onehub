@@ -1,0 +1,6 @@
+{
+  "feature_plain": "Công ty làm cả bảy ngày đặt được lịch đó và lịch giữ nguyên; dự án đã đủ 300 việc vẫn sửa được mốc và phụ thuộc.",
+  "decisions": [
+    {"id": "E9", "q": "Tài liệu API và từ điển đã nói đúng nghĩa mới của lịch và trần 300 chưa?", "why": "Ba thẩm phán đọc docs/api.md và CONTEXT.md đều đề xuất Đạt; hạng T3 nên chữ quyết là của anh."}
+  ]
+}

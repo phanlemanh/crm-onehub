@@ -1,6 +1,21 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
+	sanPham: {
+		chon: "Product",
+		layTu: "Fetched from",
+		luc: (gio: string) => `at ${gio}`,
+		layHong: (lyDo: string) =>
+			`The last fetch failed: ${lyDo}. Showing the previous copy.`,
+		nguonDoi:
+			"Source just changed — showing the old source until the new one is fetched.",
+		khuonCu: (ten: string, n: number) =>
+			`${ten} uses roadmap format ${n} — some parts follow the old rules.`,
+		khuonMoi: (ten: string, n: number) =>
+			`${ten} uses roadmap format ${n}, newer than this page — some parts are not shown.`,
+		chuaCoTieuDe: (ten: string) => `No roadmap for ${ten} yet`,
+		moCaiDat: "Open Settings › Products",
+	},
 	gioLay: {
 		capNhat: (luc: string) => `Updated ${luc}`,
 		banDung: "(build)",
@@ -54,7 +69,34 @@ const en = {
 		homNay: "today",
 		tre: (n: string) => `${n} days late`,
 		lechKeHoach: (n: string) => `${n} plan mismatches`,
+		conLai: (n: string, tong: string) => `${n} of ${tong} left`,
+		daGiaoThem: (n: string) => ` · ${n} delivered`,
+		giaoDu: (tong: string) => `All ${tong} delivered`,
 		xem: "Show",
+	},
+	duKien: {
+		ngay: (ngay: string) => `Expected by ${ngay}`,
+		ngayGon: (ngay: string) => `expected ${ngay}`,
+		chuaDuSoDo: "rough estimate",
+		quaTai: "after target date",
+		daQua: "past expected date",
+		cachTinh: (ngay: string) =>
+			`Estimated by the system when the milestone started (${ngay}), as if it were the only milestone running. Not a commitment.`,
+		cachTinhKhongNgay:
+			"Estimated by the system when the milestone started, as if it were the only milestone running. Not a commitment.",
+		chuaDuSoDoMoTa:
+			"Some open items have no measured history yet, so their effort is a rule-of-thumb guess.",
+		chuaCo: "No expected date yet",
+		lyDo: {
+			"ban-cu": "This copy of the roadmap does not carry expected dates yet.",
+			"chua-mo-viec":
+				"The system sets the date when the first item of the milestone starts; none has started since it began doing so.",
+			"khong-doc-duoc":
+				"The expected date in the roadmap data could not be read.",
+		},
+		nhan: "Expected date",
+		uocLuong: "Effort estimate",
+		gio: (khoang: string) => `${khoang} machine hours`,
 	},
 	tre: {
 		tieuDe: (n: string) =>
@@ -139,6 +181,21 @@ const en = {
 export type LoTrinhMessages = typeof en;
 
 const vi: LoTrinhMessages = {
+	sanPham: {
+		chon: "Sản phẩm",
+		layTu: "Lấy từ",
+		luc: (gio: string) => `lúc ${gio}`,
+		layHong: (lyDo: string) =>
+			`Lần lấy gần nhất hỏng: ${lyDo}. Trang đang hiện bản lấy trước đó.`,
+		nguonDoi:
+			"Nguồn vừa đổi — trang đang hiện lộ trình của nguồn cũ tới khi nguồn mới lấy được.",
+		khuonCu: (ten: string, n: number) =>
+			`${ten} đang ở khuôn lộ trình bản ${n} — vài phần hiện theo luật cũ.`,
+		khuonMoi: (ten: string, n: number) =>
+			`${ten} đang ở khuôn lộ trình bản ${n}, mới hơn trang — vài phần chưa hiện.`,
+		chuaCoTieuDe: (ten: string) => `Chưa có lộ trình của ${ten}`,
+		moCaiDat: "Mở Cài đặt › Sản phẩm",
+	},
 	gioLay: {
 		capNhat: (luc: string) => `Cập nhật lúc ${luc}`,
 		banDung: "(bản dựng)",
@@ -192,7 +249,33 @@ const vi: LoTrinhMessages = {
 		homNay: "hôm nay",
 		tre: (n: string) => `Trễ ${n} ngày`,
 		lechKeHoach: (n: string) => `${n} chỗ lệch kế hoạch`,
+		conLai: (n: string, tong: string) => `còn ${n}/${tong} việc`,
+		daGiaoThem: (n: string) => ` · ${n} đã giao`,
+		giaoDu: (tong: string) => `đã giao đủ ${tong} việc`,
 		xem: "Mở",
+	},
+	duKien: {
+		ngay: (ngay: string) => `Dự kiến xong ${ngay}`,
+		ngayGon: (ngay: string) => `dự kiến ${ngay}`,
+		chuaDuSoDo: "ước sơ bộ",
+		quaTai: "sau ngày mục tiêu",
+		daQua: "đã qua ngày dự kiến",
+		cachTinh: (ngay: string) =>
+			`Máy tính lúc mốc bắt đầu (${ngay}), coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.`,
+		cachTinhKhongNgay:
+			"Máy tính lúc mốc bắt đầu, coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.",
+		chuaDuSoDoMoTa:
+			"Một số việc chưa xong chưa có số đo của các lần làm trước, nên thời gian làm là ước theo luật chung.",
+		chuaCo: "Chưa có ngày dự kiến",
+		lyDo: {
+			"ban-cu": "Bản lộ trình này chưa mang ngày dự kiến.",
+			"chua-mo-viec":
+				"Máy đặt ngày khi việc đầu tiên của mốc được mở; mốc này chưa có việc nào mở từ lúc máy bắt đầu tính ngày.",
+			"khong-doc-duoc": "Ngày dự kiến trong dữ liệu lộ trình không đọc được.",
+		},
+		nhan: "Ngày dự kiến",
+		uocLuong: "Ước lượng",
+		gio: (khoang: string) => `${khoang} giờ máy`,
 	},
 	tre: {
 		tieuDe: (n: string) => `${n} việc đã qua mốc mà chưa giao`,

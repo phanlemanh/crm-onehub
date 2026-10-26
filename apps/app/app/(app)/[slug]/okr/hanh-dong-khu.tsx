@@ -1,22 +1,15 @@
 "use client";
 
 import Add from "@carbon/icons-react/es/Add";
-import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { Button } from "@crm/ui/components/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { skipToken, useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { parseAsBoolean, useQueryState, useQueryStates } from "nuqs";
-import type { ReactNode } from "react";
+import { useQueryStates } from "nuqs";
+import { type ReactNode, type RefObject, useRef } from "react";
+import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { PageShellNote } from "@/components/page-shell-note";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -25,14 +18,17 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { useChuKy } from "./chon-chu-ky";
 import { type DonDich, donDich, giaiDon } from "./don-dich";
 import { NutHoiKara } from "./hoi/nut-hoi-kara";
+import { HopChonDuong, useHopChonDuong } from "./hop-chon-duong";
 import {
 	type DonChonOkr,
 	khoaDon,
 	locOkr,
 	okrParsers,
 } from "./okr-search-params";
-import { NutSoan } from "./soan/nut-soan";
+import { DanhSachCuoc } from "./soan/danh-sach-cuoc";
+import { donViSoanCua } from "./soan/nut-soan";
 import { DUONG, type TabOkr } from "./tab-okr";
+import { useTenGoc } from "./ten-goc";
 
 export const ID_KHONG_THEM = "okr-khong-them-duoc";
 
@@ -50,15 +46,22 @@ export type QuyenKhu =
 			canEdit: boolean;
 	  };
 
+export function useTenDon(don: DonChonOkr): string {
+	const m = okrMessages(useLocale());
+	const trpc = useTRPC();
+	const cay = useQuery(trpc.org.tree.queryOptions());
+	const tenGoc = useTenGoc();
+	return (cay.data && giaiDon(don, cay.data, tenGoc)?.ten) || m.donVi;
+}
+
 export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 	const m = okrMessages(useLocale());
 	const trpc = useTRPC();
 	const [url] = useQueryStates(okrParsers);
 	const { cycles, currentId } = useChuKy();
 	const access = useQuery(trpc.okr.access.queryOptions());
-	const cay = useQuery(trpc.org.tree.queryOptions());
-	const workspace = useQuery(trpc.workspace.get.queryOptions());
 	const dich = donDich(tab, url[SEARCH_PARAM.okr.don], access.data?.headOf);
+	const ten = useTenDon(dich.don);
 	const hoiDuoc = currentId !== null && access.data !== undefined;
 	const ds = useQuery(
 		trpc.okr.danhSach.queryOptions(
@@ -84,10 +87,6 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 		};
 	if (currentId === null || !ds.data) return { kieu: "cho" };
 	const duoc = ds.data.canCreate === true;
-	const ten =
-		(cay.data &&
-			giaiDon(dich.don, cay.data, workspace.data?.name || m.goc)?.ten) ||
-		m.donVi;
 	const lyDo = duoc
 		? null
 		: dich.nguon === "goc"
@@ -105,7 +104,16 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 	};
 }
 
-export function DongLyDoKhu({ q }: { q: QuyenKhu }) {
+export const TAB_TAO = [
+	"cua-toi",
+	"theo-don-vi",
+] as const satisfies readonly TabOkr[];
+
+export const laTabTao = (tab: TabOkr): boolean =>
+	(TAB_TAO as readonly TabOkr[]).includes(tab);
+
+export function DongLyDoKhu({ q, tab }: { q: QuyenKhu; tab?: TabOkr }) {
+	if (tab !== undefined && !laTabTao(tab)) return null;
 	if (q.kieu !== "xong" || q.lyDo === null) return null;
 	return (
 		<PageShellNote data-ly-do-khu="" id={ID_KHONG_THEM}>
@@ -114,37 +122,32 @@ export function DongLyDoKhu({ q }: { q: QuyenKhu }) {
 	);
 }
 
-function useDuongTheoDonVi(cycleId: string) {
+export function useDuongTheoDonVi(cycleId: string) {
 	const url = useWorkspaceUrl();
 	const trpc = useTRPC();
 	const [thamSo] = useQueryStates(okrParsers);
 	const kyChay = useQuery(trpc.okr.cycles.queryOptions()).data?.currentId;
-	return (don: DonChonOkr, khoa: string) => {
+	return (don: DonChonOkr, khoa: readonly string[]) => {
 		const q = new URLSearchParams();
 		const ky =
 			cycleId && cycleId !== kyChay ? cycleId : thamSo[SEARCH_PARAM.okr.ky];
 		if (ky) q.set(SEARCH_PARAM.okr.ky, ky);
-		if (don.loai !== "goc") q.set(SEARCH_PARAM.okr.don, khoaDon(don));
-		q.set(khoa, "true");
+		q.set(SEARCH_PARAM.okr.don, khoaDon(don));
+		for (const k of khoa) q.set(k, "true");
 		return `${url(DUONG["theo-don-vi"])}?${q}`;
 	};
 }
 
 function NutThem({
 	q,
-	tab,
-	duong,
 	ten,
+	nutRef,
 }: {
 	q: Extract<QuyenKhu, { kieu: "xong" }>;
-	tab: TabOkr;
-	duong: string;
 	ten: string;
+	nutRef: RefObject<HTMLButtonElement | null>;
 }) {
-	const [, datTao] = useQueryState(
-		SEARCH_PARAM.dialog.create,
-		parseAsBoolean.withDefault(false),
-	);
+	const [, dat] = useHopChonDuong();
 	const noiDung = (
 		<>
 			<Icon data-icon="inline-start" icon={Add} />
@@ -162,129 +165,70 @@ function NutThem({
 				{noiDung}
 			</Button>
 		);
-	if (tab === "theo-don-vi")
-		return (
-			<Button
-				aria-haspopup="dialog"
-				data-nut="them-muc-tieu"
-				onClick={() => void datTao(true)}
-				size="sm"
-			>
-				{noiDung}
-			</Button>
-		);
 	return (
-		<Button asChild data-nut="them-muc-tieu" size="sm">
-			<Link href={duong}>{noiDung}</Link>
+		<Button
+			aria-haspopup="dialog"
+			data-nut="them-muc-tieu"
+			onClick={() => void dat({ [SEARCH_PARAM.okr.chonDuong]: true })}
+			ref={nutRef}
+			size="sm"
+		>
+			{noiDung}
 		</Button>
 	);
 }
 
-function MenuThem({
+function DsCuocTheoUrl({
 	q,
-	tab,
-	duong,
+	cauNoi,
 }: {
 	q: Extract<QuyenKhu, { kieu: "xong" }>;
-	tab: TabOkr;
-	duong: string;
+	cauNoi: boolean;
 }) {
-	const m = okrMessages(useLocale());
-	const [, datNhap] = useQueryState(
-		SEARCH_PARAM.okr.nhap,
-		parseAsBoolean.withDefault(false),
-	);
+	const [thamSo, dat] = useHopChonDuong();
+	const moBanGhi = useOpenRecord();
+	const donVi = donViSoanCua(q.dich.don, q.cycleId);
+	if (!thamSo[SEARCH_PARAM.okr.dsCuoc] || !cauNoi || !donVi) return null;
+	const dong = () => void dat({ [SEARCH_PARAM.okr.dsCuoc]: null });
 	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button
-					aria-label={m.khoaTao.themCach}
-					data-nut="them-cach"
-					size="icon-sm"
-					variant="outline"
-				>
-					<Icon icon={OverflowMenuHorizontal} />
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end">
-				{!q.duoc ? (
-					<DropdownMenuItem
-						aria-describedby={ID_KHONG_THEM}
-						data-nut="nhap-bang-tinh"
-						disabled
-					>
-						{m.nhapBangTinh}
-					</DropdownMenuItem>
-				) : tab === "theo-don-vi" ? (
-					<DropdownMenuItem
-						data-nut="nhap-bang-tinh"
-						onSelect={() => void datNhap(true)}
-					>
-						{m.nhapBangTinh}
-					</DropdownMenuItem>
-				) : (
-					<DropdownMenuItem asChild data-nut="nhap-bang-tinh">
-						<Link href={duong}>{m.nhapBangTinh}</Link>
-					</DropdownMenuItem>
-				)}
-			</DropdownMenuContent>
-		</DropdownMenu>
+		<DanhSachCuoc
+			donVi={donVi}
+			dong={dong}
+			mo={(id) => {
+				dong();
+				moBanGhi({ kind: "soan", id });
+			}}
+		/>
 	);
 }
 
 export function HanhDongKhu({
 	q,
 	tab,
-	chonChuKy,
 	cauNoi,
 }: {
 	q: QuyenKhu;
 	tab: TabOkr;
-	chonChuKy: ReactNode;
+	chonChuKy?: ReactNode;
 	cauNoi: boolean;
 }) {
 	const m = okrMessages(useLocale());
-	const toi = useDuongTheoDonVi(q.kieu === "xong" ? q.cycleId : "");
+	const nutRef = useRef<HTMLButtonElement>(null);
 	const hoiKara = <NutHoiKara />;
-	if (q.kieu === "an")
-		return (
-			<>
-				{hoiKara}
-				{chonChuKy}
-			</>
-		);
+	if (!laTabTao(tab) || q.kieu === "an") return hoiKara;
 	if (q.kieu === "cho")
 		return (
 			<>
 				{hoiKara}
-				{chonChuKy}
-				<Skeleton className="h-7 w-56" data-hang-cho="" />
+				<Skeleton className="h-7 w-36" data-hang-cho="" />
 			</>
 		);
 	return (
 		<>
 			{hoiKara}
-			{chonChuKy}
-			<MenuThem
-				duong={toi(q.dich.don, SEARCH_PARAM.okr.nhap)}
-				q={q}
-				tab={tab}
-			/>
-			<NutSoan
-				canEdit={q.canEdit}
-				cauNoi={cauNoi}
-				cycleId={q.cycleId}
-				don={q.dich.don}
-				khoaVi={q.duoc ? undefined : ID_KHONG_THEM}
-				phaKy={q.phaKy}
-				quanTri={q.quanTri}
-			/>
-			<NutThem
-				duong={toi(q.dich.don, SEARCH_PARAM.dialog.create)}
-				q={q}
-				tab={tab}
-				ten={m.themMucTieu}
-			/>
+			<NutThem nutRef={nutRef} q={q} ten={m.themMucTieu} />
+			<HopChonDuong cauNoi={cauNoi} nutVe={nutRef} q={q} tab={tab} />
+			<DsCuocTheoUrl cauNoi={cauNoi} q={q} />
 		</>
 	);
 }

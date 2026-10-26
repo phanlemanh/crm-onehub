@@ -5,10 +5,15 @@ import Bot from "@carbon/icons-react/es/Bot";
 import CheckmarkFilled from "@carbon/icons-react/es/CheckmarkFilled";
 import CircleFilled from "@carbon/icons-react/es/CircleFilled";
 import Renew from "@carbon/icons-react/es/Renew";
+import {
+	AreaSidebar,
+	AreaSidebarGroup,
+	AreaSidebarItem,
+	useAreaSidebarOrientation,
+} from "@crm/ui/components/area-sidebar";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { cn } from "@crm/ui/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -29,17 +34,16 @@ type SidebarData = {
 };
 
 export function AgentBuilderSidebar({
-	className,
+	placement,
 	onNavigate,
 	initialData,
 }: {
-	className?: string;
+	placement: "area" | "panel";
 	onNavigate?: () => void;
 	initialData?: SidebarData;
 }) {
 	const t = khungMessages(useLocale());
 	const pathname = usePathname();
-	const workspaceUrl = useWorkspaceUrl();
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 	const hydrated = useHydrated();
@@ -61,9 +65,14 @@ export function AgentBuilderSidebar({
 	const markRead = useMutation(
 		trpc.conversations.markRead.mutationOptions({
 			onSuccess: () =>
-				queryClient.invalidateQueries({
-					queryKey: trpc.conversations.builderList.pathKey(),
-				}),
+				Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: trpc.conversations.builderList.pathKey(),
+					}),
+					queryClient.invalidateQueries({
+						queryKey: trpc.thongBao.chuong.pathKey(),
+					}),
+				]),
 		}),
 	);
 
@@ -79,87 +88,117 @@ export function AgentBuilderSidebar({
 	const teamAgents = showData ? (agents.data ?? []) : [];
 
 	return (
-		<aside className={cn("min-h-0 min-w-0 flex-col p-4 font-sans", className)}>
-			<div className="flex h-7 shrink-0 items-center justify-between pl-2">
-				<span className="font-medium text-xs">{t.thanhBen.hoiThoai}</span>
-				<Button asChild variant="ghost" size="icon-xs">
-					<Link
-						href={workspaceUrl("/chat")}
-						aria-label={t.thanhBen.hoiThoaiMoi}
-						onClick={onNavigate}
-					>
-						<Icon icon={Add} />
-					</Link>
-				</Button>
-			</div>
+		<AreaSidebar
+			label={t.thanhBen.danhSachHoiThoai}
+			placement={placement}
+			header={<DauThanh onNavigate={onNavigate} />}
+		>
+			{groups.map((group) => (
+				<AreaSidebarGroup
+					key={group.label}
+					label={t.thanhBen.nhom[group.label]}
+				>
+					{group.items.map((conversation) => (
+						<MucHoiThoai
+							key={conversation.id}
+							conversation={conversation}
+							pathname={pathname}
+							onOpen={() => {
+								if (conversation.unread) {
+									markRead.mutate({ id: conversation.id });
+								}
+								onNavigate?.();
+							}}
+							onDeleted={onNavigate}
+						/>
+					))}
+				</AreaSidebarGroup>
+			))}
 
-			<nav
-				aria-label={t.thanhBen.danhSachHoiThoai}
-				className="min-h-0 flex-1 overflow-y-auto"
-			>
-				{groups.map((group) => (
-					<div key={group.label}>
-						<div className="flex h-8 items-end pb-1 pl-2 font-medium text-[11px] text-muted-foreground uppercase tracking-[0.08em]">
-							{t.thanhBen.nhom[group.label]}
-						</div>
-						{group.items.map((conversation) => {
-							const href = workspaceUrl(`/chat/${conversation.id}`);
-							const active = pathname === href;
-							const title = conversation.title ?? t.thanhBen.chuaDatTen;
-							return (
-								<div
-									key={conversation.id}
-									className="group relative flex h-7 min-w-0 items-center"
-								>
-									<Link
-										href={href}
-										aria-current={active ? "page" : undefined}
-										onClick={() => {
-											if (conversation.unread) {
-												markRead.mutate({ id: conversation.id });
-											}
-											onNavigate?.();
-										}}
-										className={cn(
-											"flex h-7 min-w-0 flex-1 items-center gap-3 rounded-sm pr-8 pl-2 text-xs outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/60",
-											active && "bg-muted font-medium",
-											!active &&
-												conversation.state === "idle" &&
-												"text-muted-foreground",
-										)}
-									>
-										<ConversationState state={conversation.state} />
-										<span className="min-w-0 flex-1 truncate" translate="no">
-											{title}
-										</span>
-									</Link>
-									<DeleteChatAction
-										conversationId={conversation.id}
-										title={title}
-										trigger="close"
-										returnToChatList={active}
-										onDeleted={active ? onNavigate : undefined}
-										className="absolute right-1 opacity-100 transition-opacity duration-150 [@media(hover:hover)]:pointer-events-none [@media(hover:hover)]:translate-x-1 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-focus-within:pointer-events-auto [@media(hover:hover)]:group-focus-within:translate-x-0 [@media(hover:hover)]:group-focus-within:opacity-100 [@media(hover:hover)]:group-hover:pointer-events-auto [@media(hover:hover)]:group-hover:translate-x-0 [@media(hover:hover)]:group-hover:opacity-100 motion-safe:transition-[opacity,translate] motion-reduce:translate-x-0"
-									/>
-								</div>
-							);
-						})}
-					</div>
-				))}
+			{groups.length === 0 ? <CauRong /> : null}
 
-				{groups.length === 0 ? (
-					<p className="px-2 py-3 text-muted-foreground text-xs">
-						{t.thanhBen.trongBayNgay}
-					</p>
-				) : null}
+			<TeamAgents
+				agents={teamAgents}
+				pathname={pathname}
+				onNavigate={onNavigate}
+			/>
+		</AreaSidebar>
+	);
+}
 
-				<TeamAgents
-					agents={teamAgents}
-					pathname={pathname}
-					onNavigate={onNavigate}
-				/>
-			</nav>
-		</aside>
+function DauThanh({ onNavigate }: { onNavigate?: () => void }) {
+	const t = khungMessages(useLocale());
+	const workspaceUrl = useWorkspaceUrl();
+
+	return (
+		<div className="flex h-7 items-center justify-between pl-3">
+			<span className="font-medium text-xs">{t.thanhBen.hoiThoai}</span>
+			<Button asChild variant="ghost" size="icon-xs">
+				<Link
+					href={workspaceUrl("/chat")}
+					aria-label={t.thanhBen.hoiThoaiMoi}
+					onClick={onNavigate}
+				>
+					<Icon icon={Add} />
+				</Link>
+			</Button>
+		</div>
+	);
+}
+
+function CauRong() {
+	const t = khungMessages(useLocale());
+	if (useAreaSidebarOrientation() === "horizontal") return null;
+
+	return (
+		<p className="px-3 text-muted-foreground text-xs">
+			{t.thanhBen.trongBayNgay}
+		</p>
+	);
+}
+
+function MucHoiThoai({
+	conversation,
+	pathname,
+	onOpen,
+	onDeleted,
+}: {
+	conversation: Conversation;
+	pathname: string;
+	onOpen: () => void;
+	onDeleted?: () => void;
+}) {
+	const t = khungMessages(useLocale());
+	const workspaceUrl = useWorkspaceUrl();
+	const huong = useAreaSidebarOrientation();
+	const href = workspaceUrl(`/chat/${conversation.id}`);
+	const active = pathname === href;
+	const title = conversation.title ?? t.thanhBen.chuaDatTen;
+	const lienKet = (
+		<AreaSidebarItem asChild active={active}>
+			<Link href={href} onClick={onOpen}>
+				<ConversationState state={conversation.state} />
+				<span className="min-w-0 flex-1 truncate" translate="no">
+					{title}
+				</span>
+			</Link>
+		</AreaSidebarItem>
+	);
+
+	if (huong === "horizontal") return lienKet;
+
+	return (
+		<div className="group relative flex min-w-0 items-center">
+			{lienKet}
+			<DeleteChatAction
+				conversationId={conversation.id}
+				title={title}
+				trigger="close"
+				returnToChatList={active}
+				onDeleted={active ? onDeleted : undefined}
+				className="absolute right-1 opacity-100 transition-opacity duration-150 [@media(hover:hover)]:pointer-events-none [@media(hover:hover)]:translate-x-1 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-focus-within:pointer-events-auto [@media(hover:hover)]:group-focus-within:translate-x-0 [@media(hover:hover)]:group-focus-within:opacity-100 [@media(hover:hover)]:group-hover:pointer-events-auto [@media(hover:hover)]:group-hover:translate-x-0 [@media(hover:hover)]:group-hover:opacity-100 motion-safe:transition-[opacity,translate] motion-reduce:translate-x-0"
+			/>
+		</div>
 	);
 }
 
@@ -176,38 +215,31 @@ function TeamAgents({
 	const workspaceUrl = useWorkspaceUrl();
 
 	return (
-		<div className="mt-3 border-t pt-1">
-			<Link
-				href={workspaceUrl("/agents")}
-				transitionTypes={["nav-lateral"]}
-				onClick={onNavigate}
-				className="flex h-8 items-end gap-2 rounded-sm px-2 pb-1 font-medium text-[11px] text-muted-foreground uppercase tracking-[0.08em] outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
-			>
-				<span className="min-w-0 flex-1">{t.thanhBen.tacNhanCuaDoi}</span>
-				<span className="shrink-0 font-mono">{agents.length}</span>
-			</Link>
+		<AreaSidebarGroup
+			label={
+				<Link
+					href={workspaceUrl("/agents")}
+					transitionTypes={["nav-lateral"]}
+					onClick={onNavigate}
+					className="flex gap-2 hover:text-foreground"
+				>
+					<span className="min-w-0 flex-1">{t.thanhBen.tacNhanCuaDoi}</span>
+					<span className="shrink-0 tabular-nums">{agents.length}</span>
+				</Link>
+			}
+		>
 			{agents.map((agent) => {
 				const href = workspaceUrl(`/agents/${agent.id}`);
-				const active = pathname === href;
 				return (
-					<Link
-						key={agent.id}
-						href={href}
-						aria-current={active ? "page" : undefined}
-						onClick={onNavigate}
-						className={cn(
-							"flex h-7 items-center gap-3 rounded-sm px-2 text-xs outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/60",
-							active ? "bg-muted font-medium" : "text-muted-foreground",
-						)}
-					>
-						<span className="flex size-5 shrink-0 items-center justify-center">
-							<Icon icon={Bot} className="size-3.5" />
-						</span>
-						<span className="min-w-0 flex-1 truncate">{agent.name}</span>
-					</Link>
+					<AreaSidebarItem key={agent.id} asChild active={pathname === href}>
+						<Link href={href} onClick={onNavigate}>
+							<Icon icon={Bot} aria-hidden="true" />
+							<span className="min-w-0 flex-1 truncate">{agent.name}</span>
+						</Link>
+					</AreaSidebarItem>
 				);
 			})}
-		</div>
+		</AreaSidebarGroup>
 	);
 }
 

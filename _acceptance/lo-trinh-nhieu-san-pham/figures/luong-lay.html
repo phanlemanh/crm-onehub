@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luồng lấy lộ trình sản phẩm</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình · Luồng lấy · lo-trinh-nhieu-san-pham · AC-1 AC-2 AC-3</p>
+    <h1>Từ lúc khai sản phẩm tới trang Lộ trình, qua nhịp 5 phút</h1>
+    <p class="sub">Lệch L3: hàng hứa «báo khi nhánh chính đổi»; vòng này lấy theo nhịp kiểm của tác nhân thay webhook. Lấy hỏng thì trạng thái hiện ở Cài đặt, bản chụp cũ giữ nguyên. CRM giữ đường Actions đẩy như hôm nay.</p>
+
+    <svg viewBox="0 0 1200 528" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="44" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LUỒNG LẤY · NHỊP THAY WEBHOOK (LỆCH L3) · AC-1 AC-2 AC-3</text>
+
+      <line x1="228" y1="236" x2="276" y2="236" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="460" y1="236" x2="508" y2="236" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="692" y1="236" x2="740" y2="236" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="924" y1="236" x2="972" y2="236" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="600" y1="280" x2="600" y2="352" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1064" y1="144" x2="1064" y2="192" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="694" y="212" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="716" y="224" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SHA ĐỔI</text>
+
+      <rect x="608" y="304" width="40" height="16" rx="2" fill="#fafafa"/>
+      <text x="612" y="316" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">HỎNG</text>
+
+      <path d="M 308 396 Q 420 300 520 284" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="520" cy="284" r="2" fill="#171717"/>
+      <text x="44" y="392" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">L3 hứa «báo khi nhánh chính đổi»;</text>
+      <text x="44" y="412" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">nhịp 5 phút thay webhook.</text>
+
+      <rect x="44" y="192" width="184" height="88" rx="6" fill="#fafafa"/>
+      <rect x="44" y="192" width="184" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="52" y="200" width="44" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="74" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGƯỜI</text>
+      <text x="136" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quản trị khai sản phẩm</text>
+      <text x="136" y="256" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ở Cài đặt › Sản phẩm</text>
+      <text x="136" y="272" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">tên · kho · nhánh · đường tệp</text>
+
+      <rect x="276" y="192" width="184" height="88" rx="6" fill="#fafafa"/>
+      <rect x="276" y="192" width="184" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="284" y="200" width="44" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="306" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGƯỜI</text>
+      <text x="368" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cài ứng dụng GitHub</text>
+      <text x="368" y="256" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chủ kho cài vào kho</text>
+      <text x="368" y="272" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chỉ đọc · không khoá cá nhân</text>
+
+      <rect x="508" y="192" width="184" height="88" rx="6" fill="#fafafa"/>
+      <rect x="508" y="192" width="184" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="516" y="200" width="32" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="532" y="212" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY</text>
+      <text x="600" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nhịp điều phối</text>
+      <text x="600" y="256" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">tác nhân hỏi đầu nhánh</text>
+      <text x="600" y="272" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">mỗi 5 phút · sha đổi mới tải</text>
+
+      <rect x="740" y="192" width="184" height="88" rx="6" fill="#fafafa"/>
+      <rect x="740" y="192" width="184" height="88" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <rect x="748" y="200" width="32" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="764" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY</text>
+      <text x="832" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bản chụp sản phẩm</text>
+      <text x="832" y="256" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">một hàng · ghi một chiều</text>
+      <text x="832" y="272" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">LO-TRINH.html</text>
+
+      <rect x="972" y="192" width="184" height="88" rx="6" fill="#fafafa"/>
+      <rect x="972" y="192" width="184" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="980" y="200" width="44" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1002" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGƯỜI</text>
+      <text x="1064" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trang Lộ trình</text>
+      <text x="1064" y="256" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bộ chọn sản phẩm</text>
+      <text x="1064" y="272" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chỉ người được cấp thấy</text>
+
+      <rect x="972" y="64" width="184" height="80" rx="6" fill="#fafafa"/>
+      <rect x="972" y="64" width="184" height="80" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="1064" y="96" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">CRM đi đường riêng</text>
+      <text x="1064" y="116" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Actions của kho CRM đẩy</text>
+      <text x="1064" y="132" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">giữ như hôm nay</text>
+
+      <rect x="440" y="352" width="320" height="96" rx="6" fill="#fafafa"/>
+      <rect x="440" y="352" width="320" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="448" y="360" width="40" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="468" y="372" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HỎNG</text>
+      <text x="600" y="396" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trạng thái ở Cài đặt</text>
+      <text x="600" y="416" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chưa cài · không thấy tệp · khối hỏng</text>
+      <text x="600" y="432" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bản chụp cũ giữ nguyên</text>
+
+      <line x1="44" y1="472" x2="1156" y2="472" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="44" y="500" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="140" y="488" width="24" height="16" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="172" y="500" fill="#575757" font-size="10" font-family="'Geist', sans-serif">nhịp lấy — chỗ đổi so với L3</text>
+      <rect x="392" y="488" width="24" height="16" rx="3" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="424" y="500" fill="#575757" font-size="10" font-family="'Geist', sans-serif">đường riêng của CRM, không đổi</text>
+      <rect x="652" y="488" width="44" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="674" y="500" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGƯỜI</text>
+      <rect x="704" y="488" width="32" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="720" y="500" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY</text>
+      <text x="744" y="500" fill="#575757" font-size="10" font-family="'Geist', sans-serif">ai làm bước đó</text>
+    </svg>
+
+    <footer>lo-trinh-nhieu-san-pham · Cổng Phạm vi · 20/10/2026</footer>
+  </div>
+</body>
+</html>

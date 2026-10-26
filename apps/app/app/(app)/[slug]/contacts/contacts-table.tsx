@@ -18,11 +18,16 @@ import { useEffect, useMemo, useState } from "react";
 import { CompanyCell } from "@/components/crm/company-cell";
 import { contactName } from "@/components/crm/contact-name";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
-import { useFieldFacets } from "@/components/crm/fields/field-facets";
-import { OwnerCell } from "@/components/crm/owner-cell";
+import {
+	useFieldFacets,
+	useTruongLoc,
+} from "@/components/crm/fields/field-facets";
+import {
+	anDuoiTheoKieu,
+	OTruongBang,
+} from "@/components/crm/fields/kieu-truong";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
-import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { ListSearch } from "@/components/data-table/list-search";
 import { SavedViewsMenu } from "@/components/data-table/saved-views-menu";
 import { useTableQuery } from "@/components/data-table/use-table-query";
@@ -59,36 +64,26 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 		{
 			id: "phone",
 			header: m.headers.phone,
+			sortable: true,
 			width: "w-[14%]",
-			hideBelow: "md",
-			cell: (row) =>
-				row.phone ? <SoDienThoai so={row.phone} /> : <EmptyCellValue />,
+			hideBelow: anDuoiTheoKieu("PHONE"),
+			cell: (row) => <OTruongBang kieu="PHONE" giaTri={row.phone} />,
 		},
 		{
 			id: "title",
 			header: m.headers.title,
 			sortable: true,
 			width: "w-[20%]",
-			hideBelow: "lg",
-			cell: (row) =>
-				row.title ? (
-					<span className="truncate">{row.title}</span>
-				) : (
-					<EmptyCellValue />
-				),
+			hideBelow: anDuoiTheoKieu("TEXT"),
+			cell: (row) => <OTruongBang kieu="TEXT" giaTri={row.title} />,
 		},
 		{
 			id: "email",
 			header: m.headers.email,
 			sortable: true,
 			width: "w-[24%]",
-			hideBelow: "md",
-			cell: (row) =>
-				row.email ? (
-					<span className="truncate text-muted-foreground">{row.email}</span>
-				) : (
-					<EmptyCellValue />
-				),
+			hideBelow: anDuoiTheoKieu("EMAIL"),
+			cell: (row) => <OTruongBang kieu="EMAIL" giaTri={row.email} />,
 		},
 		{
 			id: "company",
@@ -102,8 +97,14 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			header: m.headers.owner,
 			sortable: true,
 			width: "w-[16%]",
-			hideBelow: "md",
-			cell: (row) => <OwnerCell owner={row.owner} />,
+			hideBelow: anDuoiTheoKieu("USER"),
+			cell: (row) => (
+				<OTruongBang
+					kieu="USER"
+					giaTri={row.owner?.id ?? null}
+					nguoi={row.owner}
+				/>
+			),
 		},
 		{
 			id: "createdAt",
@@ -165,7 +166,9 @@ export function ContactsTable() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
-	const table = useTableQuery(contactsSearchParams);
+	const table = useTableQuery(contactsSearchParams, {
+		truongLoc: useTruongLoc("CONTACT"),
+	});
 	const { query, input, setArchived, currentView, applyView } = table;
 
 	const contacts = useQuery({

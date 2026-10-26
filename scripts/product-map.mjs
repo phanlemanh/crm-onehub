@@ -149,7 +149,27 @@ function edges(cTxt, oTxt) {
   return out.length ? ' · ' + out.join(' · ') : '';
 }
 
+// Nhãn «đỏ sẵn trên nền» (hồ sơ ho-so-da-ky-giu-tuoi): hỏi lib/do-san-tren-nen.cjs#nhanHoSo — cùng hàm thẻ hỏi,
+// nó gọi CHÍNH checkRepinEvals của lưới trước-gộp và kiểm lại. Chỉ khi nhãn đạt (khoá bật, mọi vế khớp) dòng
+// bản đồ mới kèm chữ nhãn, rút từ bảng chung NHAN. Hồ sơ không có dòng ghim mang `do_san` → dòng như cũ.
+// Nạp KHOAN DUNG: kho chép scripts/ + lib/ đời trước chưa có tệp luật thì bản đồ vẽ như cũ, không vỡ.
+let _ds;
+const dsLib = () => {
+  if (_ds !== undefined) return _ds;
+  try { _ds = require(path.join(__dirname, '..', 'lib', 'do-san-tren-nen.cjs')); }
+  catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e; _ds = null; }
+  return _ds;
+};
 export function classify(dir, slug) {
+  const it = classifyO(dir, slug);
+  if (it.key === 'hong' || !dsLib() || typeof dsLib().nhanHoSo !== 'function') return it;
+  const n = dsLib().nhanHoSo(dir);
+  if (!n) return it;
+  const ds = `${require(path.join(__dirname, '..', 'lib', 'nhan-canh-gay.cjs')).NHAN.DO_SAN}: ${n.ids.join(', ')}`;
+  return { ...it, note: it.note ? `${it.note} · ${ds}` : ds };
+}
+
+function classifyO(dir, slug) {
   // Đọc LƯỜI và phân biệt lỗi, đúng thứ tự bộ quét đi: mở file nào là câu hỏi
   // của luật chung. Đọc cả ba vô điều kiện thì (a) lỗi quyền ở một hồ sơ trạng
   // thái hiện tại không dùng lại quyết định ô của slug, và (b) `read` cũ nuốt
@@ -243,7 +263,7 @@ export function classify(dir, slug) {
       // `if (duongA) return …` TRƯỚC đó, nên bản đồ lại tin thẳng frontmatter trong khi bộ
       // quét gọi HỎNG — đúng lớp lỗi vừa định giết, chỉ đổi chỗ (S4-r12 [0][1]).
       if (status === 'machine-cleared' && !khongCanNguoi(cTxt, texts['evidence-report.md'] || '',
-          { findings: readRecord(path.join(dir, 'review-findings.md')).t ?? null, ledger: ledgerTxt ?? null })) {
+          { findings: readRecord(path.join(dir, 'review-findings.md')).t ?? null, ledger: ledgerTxt ?? null, runLog: readRecord(path.join(dir, 'run-log.jsonl')).t ?? null })) {
         return { key: 'hong', slug, file: 'evidence-report.md', reason: 'status machine-cleared nhưng bằng chứng KHÔNG đạt sáu điều kiện xanh-sạch — hồ sơ tự khai «máy đã thông» mà không có vật' };
       }
       // Đường A (cơ hội quyết build/iterate) còn một cổng người nữa: phiên
@@ -343,6 +363,49 @@ export function renderProductMap(root) {
 // nhau, khối CLI im lặng không chạy, và `--check` exit 0 mà chẳng kiểm gì —
 // đúng dạng false-green. Case P119 chạy trong bản sao dưới /var/folders bắt
 // được điều này.
+// Trang lộ trình (hồ sơ viec-ke-theo-plan) — MỘT hàm vẽ cho bản đồ và cho bước khởi tạo lộ trình (hồ sơ
+// kho-moi-cai-goi-road-map): kho không khai khoá → `{ trang: null }` và mô-đun lộ trình không được nạp (AC-1 của
+// viec-ke-theo-plan: kho chép thiếu tệp vẫn vẽ được bản đồ). Lỗi của TỆP Ý ĐỊNH không làm hàm hỏng: trang tự nói lý do.
+// `loi` = kho khai tin_hieu mà thiếu bộ đọc khoá — người gọi in câu và thoát 1.
+// Một đường trong kho có được `risk_tiers.t1_skip_globs` phủ không — khớp bằng ĐÚNG hai hàm glob của lưới trước-merge, gọi
+// qua bash: kit giữ MỘT bộ khớp glob. `{ biet:false, ly }` khi không gọi được (không đỏ — người gọi nói ra một dòng).
+// Dùng chung cho `--check` và bước khởi tạo lộ trình (hồ sơ kho-moi-cai-goi-road-map).
+export function mienTru(root, duong) {
+  const pm = path.join(__dirname, 'pre-merge-check.sh');
+  if (!existsSync(pm)) return { biet: false, ly: 'không thấy scripts/pre-merge-check.sh' };
+  const globs = configList(readPlain(path.join(root, '_acceptance', 'config.yaml')) || '', 't1_skip_globs').join('\n');
+  const lenh = `eval "$(sed -n '/^glob_variants() {/,/^}/p;/^match_globs() {/,/^}/p' "$1")"; match_globs "$3" "$2"`;
+  try {
+    execFileSync('bash', ['-c', lenh, 'mien-tru', pm, globs, duong], { stdio: ['ignore', 'ignore', 'ignore'] });
+    return { biet: true, phu: true };
+  } catch (e) {
+    if (e.status === 1) return { biet: true, phu: false };
+    return { biet: false, ly: `bash không chạy được (${e.code || e.status})` };
+  }
+}
+
+export async function veTrangLoTrinh(root) {
+  const cfg = readPlain(path.join(root, '_acceptance', 'config.yaml')) || '';
+  const tepLoTrinh = khoaLoTrinh(cfg);
+  let trang = null; let LT = null;
+  if (tepLoTrinh != null) {
+    LT = await import('./lo-trinh.mjs');
+    // Cửa tín hiệu (hồ sơ cua-tin-hieu-gom-nhom): mô-đun chỉ được nạp khi kho khai `tin_hieu` — kho không
+    // khai thì trang giữ nguyên từng byte và mã cửa không chạy. Lỗi của mô-đun KHÔNG bị nuốt.
+    let tinHieu = null;
+    if (khoaTinHieu == null && /^tin_hieu:/m.test(cfg))
+      return { loi: 'Kho khai tin_hieu nhưng thiếu scripts/tin-hieu-khoa.cjs — chép theo danh sách chép CI (GUIDE §5.3) hoặc gỡ khối tin_hieu.' };
+    if (khoaTinHieu != null && khoaTinHieu(cfg) != null) {
+      const TH = await import('./tin-hieu.mjs');
+      // Trang là vật COMMIT: chỉ ý đã theo dõi trong cây đang vẽ (hồ sơ ve-lo-trinh-doc-tin-hieu-cua-cay) — bộ đọc
+      // tương tác của cửa vẫn đọc hộp ý chung ở thư mục chính.
+      tinHieu = TH.duongDi({ root, classify, sections: SECTIONS, chiTheoDoi: true });
+    }
+    trang = LT.veTrang({ root, classify, sections: SECTIONS, tinHieu });
+  }
+  return { trang, LT };
+}
+
 const isMain = (() => {
   if (!process.argv[1]) return false;
   const same = (a, b) => { try { return realpathSync(a) === realpathSync(b); } catch { return false; } };
@@ -403,25 +466,10 @@ if (isMain) {
   // hàm chung TRƯỚC, mô-đun lộ trình chỉ được nạp khi kho khai ổ cắm — kho không khai thì mã lộ
   // trình không chạy (AC-1) và kho chép thiếu tệp vẫn vẽ được bản đồ. Lỗi của TỆP Ý ĐỊNH không làm
   // lệnh này thoát khác 0: trang tự nói lý do; chỉ trang vắng hoặc lệch mới làm `--check` đỏ.
-  const tepLoTrinh = khoaLoTrinh(readPlain(path.join(root, '_acceptance', 'config.yaml')) || '');
   const pagePath = path.join(root, 'LO-TRINH.html');
-  let trang = null; let LT_ = null;
-  if (tepLoTrinh != null) {
-    const LT = await import('./lo-trinh.mjs'); LT_ = LT;
-    // Cửa tín hiệu (hồ sơ cua-tin-hieu-gom-nhom): mô-đun chỉ được nạp khi kho khai `tin_hieu` — kho không
-    // khai thì trang giữ nguyên từng byte và mã cửa không chạy. Lỗi của mô-đun KHÔNG bị nuốt.
-    let tinHieu = null;
-    const cfgTH = readPlain(path.join(root, '_acceptance', 'config.yaml')) || '';
-    if (khoaTinHieu == null && /^tin_hieu:/m.test(cfgTH)) {
-      console.error('Kho khai tin_hieu nhưng thiếu scripts/tin-hieu-khoa.cjs — chép theo danh sách chép CI (GUIDE §5.3) hoặc gỡ khối tin_hieu.');
-      process.exit(1);
-    }
-    if (khoaTinHieu != null && khoaTinHieu(cfgTH) != null) {
-      const TH = await import('./tin-hieu.mjs');
-      tinHieu = TH.duongDi({ root, classify, sections: SECTIONS });
-    }
-    trang = LT.veTrang({ root, classify, sections: SECTIONS, tinHieu });
-  }
+  const vt = await veTrangLoTrinh(root);
+  if (vt.loi) { console.error(vt.loi); process.exit(1); }
+  const trang = vt.trang; const LT_ = vt.LT;
   if (!check) {
     writeFileSync(mapPath, rendered);
     console.log(mapPath);
@@ -431,19 +479,7 @@ if (isMain) {
   // Kho khai lộ trình thì LO-TRINH.html phải được t1_skip_globs phủ — thiếu thì chính commit đóng cổng
   // làm bằng chứng cũ đi (cùng lý do ADR 0007). Khớp bằng ĐÚNG hai hàm glob của lưới trước-merge, gọi
   // qua bash: kit giữ MỘT bộ khớp glob. Không gọi được thì nói ra một dòng, không đỏ.
-  const mienTruLoTrinh = () => {
-    const pm = path.join(__dirname, 'pre-merge-check.sh');
-    if (!existsSync(pm)) return { biet: false, ly: 'không thấy scripts/pre-merge-check.sh' };
-    const globs = configList(readPlain(path.join(root, '_acceptance', 'config.yaml')) || '', 't1_skip_globs').join('\n');
-    const lenh = `eval "$(sed -n '/^glob_variants() {/,/^}/p;/^match_globs() {/,/^}/p' "$1")"; match_globs LO-TRINH.html "$2"`;
-    try {
-      execFileSync('bash', ['-c', lenh, 'mien-tru', pm, globs], { stdio: ['ignore', 'ignore', 'ignore'] });
-      return { biet: true, phu: true };
-    } catch (e) {
-      if (e.status === 1) return { biet: true, phu: false };
-      return { biet: false, ly: `bash không chạy được (${e.code || e.status})` };
-    }
-  };
+  const mienTruLoTrinh = () => mienTru(root, 'LO-TRINH.html');
   const ketThuc = code => {
     if (trang != null) {
       const mt = mienTruLoTrinh();

@@ -606,7 +606,16 @@ async function buocNhanPhuTrach() {
 		cookie.admin,
 		`/okr/theo-don-vi?${donB()}&phuTrachOkr=${id.vang},${roi}`,
 	);
-	await hienSel(trang, "[data-loc-okr]", "E11: thanh bo loc hien");
+	// AC-14 cach-toi: nam mat loc nay o nut «Loc» (menu mat loc) cua hang cong cu DataTable tren trang don vi (trang-don-vi-mot-bang AC-5), khong con thanh [data-loc-okr].
+	await doi(
+		trang,
+		"E11: thanh bo loc hien",
+		(c) =>
+			window
+				.__tim("button[aria-haspopup='menu']")
+				.some((b) => b.innerText.replace(/\s+/g, " ").trim().startsWith(c)),
+		CHU.boLoc,
+	);
 	const dong = await chuTrang(trang);
 	kiem(
 		`E11: nhan phu trach lo ma khi menu dong (${[id.vang, roi].filter((x) => dong.includes(x))})`,

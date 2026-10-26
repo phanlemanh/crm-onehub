@@ -1,0 +1,24 @@
+{
+	"tep_ghim_lai": [
+		"_acceptance/dieu-huong-khu-muc-tieu/evidence-report.md",
+		"_acceptance/dieu-huong-khu-muc-tieu/run-log.jsonl",
+		"_acceptance/khung-okr-truoc-r1/evidence-report.md",
+		"_acceptance/khung-okr-truoc-r1/run-log.jsonl",
+		"_acceptance/khung-trang-cai-dat/evidence-report.md",
+		"_acceptance/khung-trang-cai-dat/run-log.jsonl",
+		"_acceptance/okr-to-chuc-va/evidence-report.md",
+		"_acceptance/okr-to-chuc-va/run-log.jsonl",
+		"_acceptance/soan-okr-trong-khung/evidence-report.md",
+		"_acceptance/soan-okr-trong-khung/run-log.jsonl",
+		"_acceptance/t1-ma-doc/evidence-report.md",
+		"_acceptance/t1-ma-doc/run-log.jsonl",
+		"_acceptance/toan-canh-okr/evidence-report.md",
+		"_acceptance/toan-canh-okr/run-log.jsonl",
+		"_acceptance/trang-don-vi-mot-bang/evidence-report.md",
+		"_acceptance/trang-don-vi-mot-bang/run-log.jsonl"
+	],
+	"ci_yml": ".github/workflows/ci.yml",
+	"evals_ho_so_ky": "_acceptance/t1-ma-doc/evals.yaml",
+	"contract_ma_doc": "_acceptance/dieu-huong-khu-muc-tieu/contract.md",
+	"ly_do_ma_doc": "t1-ma-doc"
+}

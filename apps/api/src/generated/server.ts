@@ -23,12 +23,17 @@ import { conversationListInput, conversationListOutput, builderListOutput, build
 import { currencySettingsOutput, setReportingCurrencyInput, setManualRateInput, removeManualRateInput } from "../currency/currency.contracts";
 import { dashboardSummaryInput, dashboardSummaryOutput } from "../dashboard/dashboard.contracts";
 import { dealListInput, dealListOutput, dealBoardInput, dealBoardOutput, dealIdInput, dealDetailOutput, dealCreateInput, dealCreateOutput, dealUpdateArgs, dealMutateOutput, setStageInput, dealSetStageOutput, dealContactsInput, dealContactOptionsOutput, dealAttachContactInput, dealContactLinkOutput, dealDetachContactInput, dealContactRoleInput, dealContactRoleOutput, dealBulkOwnerInput, dealBulkResultOutput, dealBulkStageInput, dealBulkInput } from "../deals/deals.contracts";
+import { duAnListInput, duAnListOutput, duAnIdInput, duAnDong, duAnLichOutput, duAnTaoInput, duAnTaoOutput, duAnSuaInput, duAnOkOutput, duAnMocTaoInput, duAnMocSuaInput, duAnPhuThuocInput, duAnDaDoiOutput } from "../du-an/du-an.contracts";
 import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
-import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
+import { fieldFileStatusOutput, fieldFileRequestUploadInput, fieldFileRequestUploadOutput, fieldFileCompleteInput, fieldFileCompleteOutput, fieldFileIdInput, fieldFileDownloadOutput, fieldFileRemoveOutput } from "../fields/field-files.contracts";
+import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldLayoutOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldStandardHiddenInput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { giaiDoanListOutput, giaiDoanCreateInput, giaiDoanWriteOutput, giaiDoanRenameInput, giaiDoanReorderInput, giaiDoanArchiveInput, giaiDoanArchivedOutput, giaiDoanRestoreInput } from "../giai-doan/giai-doan.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
+import { lichLamViecOutput, datNgayNghiTuanInput, lichOkOutput, themNgayLeInput, xoaNgayLeInput } from "../lich-lam-viec/lich-lam-viec.contracts";
 import { banChupVao, banChupRa } from "@crm/validation/ban-chup-lo-trinh";
+import { sanPhamDanhSach, sanPhamHang, sanPhamMaVao, sanPhamNguoiXemRa, sanPhamGhiRa, sanPhamSuaVao, sanPhamNguoiXemVao } from "../lo-trinh/san-pham.contracts";
+import { sanPhamKhai } from "@crm/validation/san-pham-lo-trinh";
 import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, aiChiTieuOutput, troLyDichInput, troLySanSangOutput, troLyDeXuatOutput, troLyDanhSachOutput, troLyQuyetInput, troLyQuyetOutput, troLyAnInput, troLyAnOutput, troLySoDoInput, troLySoDoOutput, xuHuongKrInput, xuHuongKrOutput, donViSoanVao, soanSanSangOutput, soanMoVao, soanMoOutput, soanDanhSachCuocOutput, cuocIdInput, soanTangLuotOutput, soanDanhSachOutput, soanQuyetInput, soanQuyetOutput, soanDuaVaoOutput, soanAnOutput, soanSoDoInput, soanSoDoOutput, datHienThiOutput, programOutput, setProgramInput, byUnitInput, byUnitOutput, countByUnitInput, okrCountByUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, chuyenDonViXemTruocOutput, chuyenDonViOutput, moCoiOutput, dungLaiOutput, createKrInput, updateKrInput, alignmentTreeInput, alignmentTreeOutput, alignmentTargetsInput, alignmentTargetsOutput, alignmentInput, suaLyDoCanChinhInput, okrImportInput, okrImportPreviewOutput, okrImportApplyInput, okrImportApplyOutput, capNhatTuanOutput, moCapNhatOutput, guiCapNhatOutput, viecCuaToiOutput, thanhVienOutput, commentsOutput, addCommentOutput, mauInput, mauOutput, luuMauVao, followOutput, transferOkrOutput } from "../okr/okr.contracts";
 import { suaChuKyInput, goChuKyInput, hienChuKyInput } from "@crm/validation/okr-chu-ky";
 import { anChuKyInput, moRaInput, dongRaInput, xuatKyInput, chamKrInput, ghiDieuHocDuocInput, moLaiKyInput, mangSangInput } from "@crm/validation/okr-khep";
@@ -39,14 +44,15 @@ import { moHoiYInput, suaHoiYInput, cycleIdInput, hoiYIdInput, gopYInput, suaYIn
 import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput, hoiYDoPhuOutput, congBoOutput, hieuViSaoOutput } from "../okr/okr-hoi-y.contracts";
 import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../okr/okr-khep.contracts";
 import { datHienThiInput, traLaiInput, chuyenDonViInput, moCoiInput } from "@crm/validation/okr-hien-thi";
-import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, quanhMucTieuInput, quanhMucTieuOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
+import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, danhSachBoOutput, viecCuaBoInput, viecCuaBoOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, quanhMucTieuInput, quanhMucTieuOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
+import { moiKrInput, moiKrOutput } from "../okr/okr-moi-kr.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
 import { canhKrInput, canhKrOutput, idOutput, goViecInput, goBangChungInput, goGhiNhanInput } from "../okr/okr-canh-kr.contracts";
 import { themViecInput, suaViecInput, danhDauViecInput, ganSangKienInput, themBangChungInput, guiGhiNhanInput } from "@crm/validation/okr-canh-kr";
 import { taoTuMauInput } from "@crm/validation/okr-mau";
 import { chiSoOutput, xemTruocChiSoInput, xemTruocChiSoOutput, datNguonKrVao, datNguonKrOutput, lichSuSoInput, lichSuSoOutput, banGhiChiSoInput, banGhiChiSoOutput, ghiSoKrInput, ghiSoKrOutput } from "../okr/okr-so.contracts";
-import { accessOutput, nguoiNhanViecOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, planCloseInput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
+import { accessOutput, nguoiNhanViecOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, goiYCuaDealInput, goiYCuaDealOutput, boQuaGoiYInput, boQuaGoiYOutput, planCloseInput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
 import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannelsOutput, slackJoinChannelInput, slackJoinChannelOutput, slackRefreshPeopleOutput, slackCreateChannelInput, slackCreateChannelOutput, slackDisconnectOutput } from "../slack/slack.contracts";
@@ -54,13 +60,13 @@ import { ssoSignInOptionsOutput, ssoSettingsOutput, ssoProviderListInput, ssoPro
 import { taiLieuHoiInput, taiLieuHoiOutput, taiLieuHoiKetQuaInput, taiLieuHoiKetQuaOutput, taiLieuBaoSaiInput, taiLieuBaoSaiOutput, taiLieuDatXacMinhInput, taiLieuXuLyChuaTraLoiInput, taiLieuXuLyBaoSaiInput } from "../tai-lieu/tai-lieu-hoi.contracts";
 import { taiLieuNguonTrangThaiOutput, taiLieuNguonXinChoInput, taiLieuNguonXinChoOutput, taiLieuNguonNhanInput, taiLieuNguonNhanOutput, taiLieuNguonListOutput, taiLieuNguonIdInput, taiLieuNguonGetOutput, taiLieuNguonTaiVeOutput, taiLieuNguonOkOutput } from "../tai-lieu/tai-lieu-nguon.contracts";
 import { taiLieuSlugInput, taiLieuLichSuOutput, taiLieuPhienBanInput, taiLieuPhienBanOutput, taiLieuProposeOutput, taiLieuDeXuatTrangInput, taiLieuOkOutput, taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput } from "../tai-lieu/tai-lieu.contracts";
-import { chuongThongBaoOutput, danhSachThongBaoOutput, moThongBaoOutput, docHetThongBaoOutput } from "../thong-bao/thong-bao.contracts";
-import { danhSachThongBaoInput, moThongBaoInput } from "@crm/validation/thong-bao";
-import { keoVeOutput, guiTinHieuInput, xoaTinHieuInput } from "@crm/validation/tin-hieu";
-import { guiTinHieuOutput, tinHieuCuaToiOutput, tinHieuTatCaOutput, xoaTinHieuOutput } from "../tin-hieu/tin-hieu.contracts";
+import { chuongThongBaoOutput, danhSachThongBaoOutput, moThongBaoOutput, docHetThongBaoOutput, caiDatThongBaoOutput, luuCaiDatThongBaoOutput } from "../thong-bao/thong-bao.contracts";
+import { danhSachThongBaoInput, moThongBaoInput, luuCaiDatThongBaoInput } from "@crm/validation/thong-bao";
+import { keoVeOutput, guiTinHieuInput, luuTruTinHieuInput, khoiPhucTinHieuInput, xoaTinHieuInput } from "@crm/validation/tin-hieu";
+import { guiTinHieuOutput, tinHieuCuaToiOutput, tinHieuTatCaOutput, luuTruTinHieuOutput, khoiPhucTinHieuOutput, xoaTinHieuOutput } from "../tin-hieu/tin-hieu.contracts";
 import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgKhoiPhucOutput, orgDepartmentCreateInput, orgLuuTruXemTruocOutput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
-import { viecBangInput, viecBangOutput, viecKeoInput, viecOkOutput, viecTaoConInput, viecTaoOutput, viecIdInput, viecConOutput, viecCuaToiInput, viecCuaToiNhomOutput, viecChiTietOutput, viecVetOutput, viecBanGhiInput, viecCuaBanGhiOutput, viecCreateInput, viecDoiTrangThaiInput, viecSuaInput, viecDoiNguoiInput, viecGanInput, viecTheoDoiInput } from "../viec/viec.contracts";
+import { viecBangInput, viecBangOutput, viecKeoInput, viecOkOutput, viecTaoConInput, viecTaoOutput, viecIdInput, viecConOutput, viecCuaToiInput, viecCuaToiNhomOutput, viecChiTietOutput, viecVetOutput, viecBanGhiInput, viecCuaBanGhiOutput, viecCreateInput, viecDoiTrangThaiInput, viecDoiLichInput, viecDaDoiOutput, viecDoiDuAnInput, viecSuaInput, viecDoiNguoiInput, viecGanInput, viecTheoDoiInput } from "../viec/viec.contracts";
 import { workspaceOutput, memberListInput, memberListOutput, updateWorkspaceInput, setMemberRoleInput, workspaceMemberOutput, staffDomainsOutput, setStaffDomainsInput, allowanceListOutput, allowEmailInput, allowanceOutput, issuePasswordLinkInput, passwordLinkOutput, revokeAllowanceInput, removeMemberInput, removeMemberOutput } from "../workspace/workspace.contracts";
 import { zaloTaoMaOutput, zaloGoOutput, zaloLuuUuTienInput, zaloLuuUuTienOutput, zaloLuuDongTroLyOkrInput, zaloLuuDongTroLyOkrOutput, zaloLuuBotInput, zaloLuuBotOutput, zaloGuiThuOutput, zaloCuaToiOutput, zaloXuongOutput } from "../zalo/zalo.contracts";
 import type { UsersRouter } from "../users/users.router";
@@ -493,6 +499,60 @@ const appRouter = t.router({
       .output(dealBulkResultOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
+  duAn: t.router({
+    list: publicProcedure
+      .input(duAnListInput)
+      .output(duAnListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    get: publicProcedure
+      .input(duAnIdInput)
+      .output(duAnDong)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    lich: publicProcedure
+      .input(duAnIdInput)
+      .output(duAnLichOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    tao: publicProcedure
+      .input(duAnTaoInput)
+      .output(duAnTaoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    sua: publicProcedure
+      .input(duAnSuaInput)
+      .output(duAnOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    dong: publicProcedure
+      .input(duAnIdInput)
+      .output(duAnOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    moLai: publicProcedure
+      .input(duAnIdInput)
+      .output(duAnOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xoa: publicProcedure
+      .input(duAnIdInput)
+      .output(duAnOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    mocTao: publicProcedure
+      .input(duAnMocTaoInput)
+      .output(duAnTaoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    mocSua: publicProcedure
+      .input(duAnMocSuaInput)
+      .output(duAnOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    mocXoa: publicProcedure
+      .input(duAnIdInput)
+      .output(duAnOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    phuThuocTao: publicProcedure
+      .input(duAnPhuThuocInput)
+      .output(duAnDaDoiOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    phuThuocXoa: publicProcedure
+      .input(duAnPhuThuocInput)
+      .output(duAnOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
   enrichment: t.router({
     queue: publicProcedure
       .input(enrichmentQueueInput)
@@ -546,6 +606,27 @@ const appRouter = t.router({
 }))
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
+  fieldFiles: t.router({
+    status: publicProcedure
+      .output(fieldFileStatusOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    requestUpload: publicProcedure
+      .input(fieldFileRequestUploadInput)
+      .output(fieldFileRequestUploadOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    complete: publicProcedure
+      .input(fieldFileCompleteInput)
+      .output(fieldFileCompleteOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    downloadUrl: publicProcedure
+      .input(fieldFileIdInput)
+      .output(fieldFileDownloadOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    remove: publicProcedure
+      .input(fieldFileIdInput)
+      .output(fieldFileRemoveOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
   fields: t.router({
     access: publicProcedure
       .output(fieldAccessOutput)
@@ -562,6 +643,10 @@ const appRouter = t.router({
       .input(fieldEntityInput)
       .output(fieldFiltersOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    layout: publicProcedure
+      .input(fieldEntityInput)
+      .output(fieldLayoutOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     coverage: publicProcedure
       .input(fieldIdInput)
       .output(fieldCoverageOutput)
@@ -577,6 +662,10 @@ const appRouter = t.router({
     reorder: publicProcedure
       .input(fieldReorderInput)
       .output(fieldReorderOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    setStandardHidden: publicProcedure
+      .input(fieldStandardHiddenInput)
+      .output(fieldLayoutOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     archive: publicProcedure
       .input(fieldIdInput)
@@ -653,10 +742,67 @@ const appRouter = t.router({
       .output(calendarEventOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
+  lichLamViec: t.router({
+    get: publicProcedure
+      .output(lichLamViecOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    datNgayNghiTuan: publicProcedure
+      .input(datNgayNghiTuanInput)
+      .output(lichOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    themNgayLe: publicProcedure
+      .input(themNgayLeInput)
+      .output(lichOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xoaNgayLe: publicProcedure
+      .input(xoaNgayLeInput)
+      .output(lichOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
   loTrinhBanChup: t.router({
     day: publicProcedure
       .input(banChupVao)
       .output(banChupRa)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  sanPhamLoTrinh: t.router({
+    danhSach: publicProcedure
+      .output(sanPhamDanhSach)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    daLuuTru: publicProcedure
+      .output(z.array(sanPhamHang))
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    nguoiXem: publicProcedure
+      .input(sanPhamMaVao)
+      .output(sanPhamNguoiXemRa)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    tao: publicProcedure
+      .input(sanPhamKhai)
+      .output(sanPhamGhiRa)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    sua: publicProcedure
+      .input(sanPhamSuaVao)
+      .output(sanPhamGhiRa)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    datNguoiXem: publicProcedure
+      .input(sanPhamNguoiXemVao)
+      .output(sanPhamGhiRa)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    luuTru: publicProcedure
+      .input(sanPhamMaVao)
+      .output(sanPhamGhiRa)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    khoiPhuc: publicProcedure
+      .input(sanPhamMaVao)
+      .output(sanPhamGhiRa)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xoa: publicProcedure
+      .input(sanPhamMaVao)
+      .output(sanPhamGhiRa)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xoaVinhVien: publicProcedure
+      .input(sanPhamMaVao)
+      .output(sanPhamGhiRa)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   microsoft: t.router({
@@ -1030,9 +1176,21 @@ const appRouter = t.router({
       .input(cycleOnlyInput)
       .output(toanCanhOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    danhSachBo: publicProcedure
+      .input(cycleOnlyInput)
+      .output(danhSachBoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    viecCuaBo: publicProcedure
+      .input(viecCuaBoInput)
+      .output(viecCuaBoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     sucKhoe: publicProcedure
       .input(cycleOnlyInput)
       .output(sucKhoeOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    moiKr: publicProcedure
+      .input(moiKrInput)
+      .output(moiKrOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     cayCanChinh: publicProcedure
       .input(cycleOnlyInput)
@@ -1229,6 +1387,14 @@ const appRouter = t.router({
     createFromTemplate: publicProcedure
       .input(planCreateFromTemplateInput)
       .output(planOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    goiYCuaDeal: publicProcedure
+      .input(goiYCuaDealInput)
+      .output(goiYCuaDealOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    boQuaGoiY: publicProcedure
+      .input(boQuaGoiYInput)
+      .output(boQuaGoiYOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     closePlan: publicProcedure
       .input(planCloseInput)
@@ -1563,6 +1729,13 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     docHet: publicProcedure
       .output(docHetThongBaoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    caiDat: publicProcedure
+      .output(caiDatThongBaoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    luuCaiDat: publicProcedure
+      .input(luuCaiDatThongBaoInput)
+      .output(luuCaiDatThongBaoOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   tinHieuLich: t.router({
@@ -1581,6 +1754,17 @@ const appRouter = t.router({
     tatCa: publicProcedure
       .output(tinHieuTatCaOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    daLuuTru: publicProcedure
+      .output(tinHieuTatCaOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    luuTru: publicProcedure
+      .input(luuTruTinHieuInput)
+      .output(luuTruTinHieuOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    khoiPhuc: publicProcedure
+      .input(khoiPhucTinHieuInput)
+      .output(khoiPhucTinHieuOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     xoa: publicProcedure
       .input(xoaTinHieuInput)
       .output(xoaTinHieuOutput)
@@ -1765,6 +1949,14 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     doiTrangThai: publicProcedure
       .input(viecDoiTrangThaiInput)
+      .output(viecChiTietOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    doiLich: publicProcedure
+      .input(viecDoiLichInput)
+      .output(viecDaDoiOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    doiDuAn: publicProcedure
+      .input(viecDoiDuAnInput)
       .output(viecChiTietOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     sua: publicProcedure

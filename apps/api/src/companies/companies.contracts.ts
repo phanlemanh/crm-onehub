@@ -1,5 +1,6 @@
 import { EnrichmentStatus, RecordSource } from "@crm/db";
 import { FIELD_TYPES } from "@crm/db/fields";
+import { soTepTheoTruong, tepTheoTruong } from "@crm/validation/tep-truong";
 import { z } from "zod";
 import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
 import {
@@ -24,7 +25,13 @@ export type CompanyListInput = z.infer<typeof companyListInput>;
 export const companyCreateInput = z.object({
 	name: z.string().trim().min(1, "A company needs a name."),
 	domain: z.string().trim().optional(),
+	website: z.string().optional(),
+	phone: z.string().optional(),
+	email: z.string().optional(),
+	city: z.string().optional(),
+	country: z.string().optional(),
 	ownerId: z.string().nullable().optional(),
+	fields: recordFieldValues.optional(),
 });
 
 export type CompanyCreateInput = z.infer<typeof companyCreateInput>;
@@ -134,6 +141,7 @@ export const companyRowOutput = z.object({
 	createdAt: z.string(),
 	archivedAt: z.string().nullable(),
 	fields: recordFieldValues,
+	soTepTheoTruong: soTepTheoTruong,
 });
 
 export type CompanyRow = z.infer<typeof companyRowOutput>;
@@ -206,6 +214,7 @@ export const companyDetailOutput = z.object({
 	owner: ownerSummaryOutput.nullable(),
 	contacts: z.array(companyDetailContactOutput),
 	fields: z.array(companyRecordFieldOutput),
+	tepTheoTruong: tepTheoTruong,
 	queued: z.boolean(),
 	createdAt: z.string(),
 	archivedAt: z.string().nullable(),

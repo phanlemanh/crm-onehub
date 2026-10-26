@@ -15,3 +15,11 @@ export const PHIEN_DO = {
 	khoApp: ".next-phien-do",
 	ghi: ".acceptance-runs/phien-do",
 };
+
+export const VAN_TAY_MODEL = {
+	loiDo: "ok",
+	toiDaToken: 1,
+	choMoiModelMs: 20 * GIAY_MS,
+	khongKhoa: "khong-khoa",
+	tepKhoaGoi: "bun.lock",
+};

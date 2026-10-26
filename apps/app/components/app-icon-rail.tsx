@@ -305,7 +305,7 @@ export function AppIconRail({
 							))}
 						</nav>
 						<AgentBuilderSidebar
-							className="flex flex-1"
+							placement="panel"
 							onNavigate={() => setOpen(false)}
 						/>
 					</SheetContent>

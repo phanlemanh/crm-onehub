@@ -9,7 +9,7 @@ const vi = {
 		"cua-toi": "Của tôi",
 		"theo-don-vi": "Theo đơn vị",
 		"toan-canh": "Toàn cảnh",
-		"hoi-y": "Hỏi ý",
+		"hoi-y": "Lấy ý kiến",
 	},
 	nhanHoiYMoi: "Mới",
 	khoaTao: {
@@ -18,7 +18,6 @@ const vi = {
 		chuaDan:
 			"Bạn chưa dẫn đơn vị nào nên chưa thêm được mục tiêu: mục tiêu thuộc về đơn vị và do trưởng đơn vị đặt.",
 		loiQuyen: "Chưa tải được quyền của bạn — tải lại trang để thử lại.",
-		themCach: "Thêm cách tạo mục tiêu",
 	},
 	moTa: {
 		"cua-toi":
@@ -30,10 +29,10 @@ const vi = {
 	},
 	chuKy: "Chu kỳ",
 	loaiChuKy: { nam: "Năm", quy: "Quý" },
-	goc: "Toàn công ty",
+	goc: "Công ty",
 	donVi: "Đơn vị",
 	cap: {
-		goc: "Cả công ty",
+		goc: "Công ty",
 		bp: "Bộ phận",
 		pb: "Phòng ban",
 		nguoi: "Cá nhân",
@@ -45,9 +44,39 @@ const vi = {
 	demDonVi: (mt: number, kr: number) => `${mt} mục tiêu · ${kr} KR`,
 	cachXem: "Cách xem",
 	danhSach: "Danh sách",
-	cayCanChinh: "Cây căn chỉnh",
+	cayCanChinh: "Sơ đồ góp vào",
 	themMucTieu: "Thêm mục tiêu",
-	nhapBangTinh: "Nhập từ bảng tính",
+	chonDuong: {
+		moTa: "Mục tiêu mới của {ten}. Chọn cách bắt đầu.",
+		duong: {
+			tuViet: {
+				ten: "Tự viết",
+				moTa: "Gõ câu mục tiêu, chọn loại và người phụ trách.",
+			},
+			tuMau: {
+				ten: "Từ mẫu",
+				moTa: "Chọn một mẫu quản trị soạn sẵn cho cấp này rồi điền số của bạn.",
+			},
+			bangTinh: {
+				ten: "Từ bảng tính",
+				moTa: "Dán nhiều mục tiêu và KR từ một bảng tính, xem trước rồi ghi.",
+			},
+			soan: {
+				ten: "Soạn cùng Kara",
+				moTa: "Trò chuyện với Kara để soạn mục tiêu và KR, rồi đưa vào bộ OKR.",
+			},
+		},
+		tiep: "Tiếp cuộc đang soạn",
+		khoa: {
+			chuaCoMau:
+				"Chưa có mẫu cho cấp này. Quản trị thêm mẫu ở Cài đặt › OKR; trong lúc đó, chọn Tự viết.",
+			ngoaiPha:
+				"Chỉ mở khi chu kỳ đang lập kế hoạch. Trong lúc đó, chọn Tự viết hay Từ mẫu.",
+			caNhan:
+				"Soạn cùng Kara chỉ mở cho bộ phận, phòng ban và OneHub. Với mục tiêu cá nhân, chọn Tự viết.",
+		},
+		cuocDaSoan: "Các cuộc đã soạn ({da}/{tran})",
+	},
 	phuTrach: "Phụ trách",
 	gopVao: (n: number) => `góp vào ${n} chỗ`,
 	cuaToi: "Của tôi",
@@ -96,7 +125,7 @@ const vi = {
 		tuKhoiDiem: (kieu: string, gia: string) => `${kieu} · từ ${gia}`,
 	},
 	tienDoCua: (ten: string, p: number) => `Tiến độ ${ten}: ${p}%`,
-	chuaCanChinh: "Chưa căn chỉnh vào đâu",
+	chuaCanChinh: "Chưa góp vào đâu",
 	dangTai: "Đang tải OKR…",
 	loi: {
 		title: "Không tải được OKR",
@@ -118,8 +147,32 @@ const vi = {
 	},
 	khongThay: {
 		title: "Không thấy đơn vị này",
-		body: "Đơn vị có thể đã được lưu trữ. Chọn một đơn vị khác trong cây.",
-		action: "Về toàn công ty",
+		body: "Đơn vị có thể đã được lưu trữ. Chọn một đơn vị khác ở ô Đơn vị.",
+		action: "Về cả công ty",
+	},
+	donViBang: {
+		chonDonVi: "Đơn vị",
+		timDonVi: "Tìm đơn vị…",
+		khongKhopDonVi: "Không có đơn vị nào khớp.",
+		caCongTy: "cả công ty",
+		thuoc: "Thuộc",
+		locNhanh: {
+			tatCa: "Tất cả",
+			"can-ban": "Cần bàn",
+			"chua-gop": "Chưa góp vào đâu",
+		},
+		khongKhopLoc: "Không có mục tiêu nào khớp",
+		khongKhopLocMoTa:
+			"Đổi ô lọc nhanh hoặc bỏ bớt bộ lọc để thấy lại mục tiêu của đơn vị.",
+		boLoc: "Bỏ lọc",
+		cot: {
+			mucTieu: "Mục tiêu",
+			tienDo: "Tiến độ",
+			tinhTrang: "Tình trạng",
+			phuTrach: "Phụ trách",
+		},
+		donViTrucThuoc: "Đơn vị trực thuộc",
+		chuaDatOkr: "Chưa đặt OKR",
 	},
 	baPhan: {
 		phan1: "Cần cập nhật tuần này",
@@ -157,7 +210,7 @@ const vi = {
 		tabKr: "KR",
 		khuViSao: "Vì sao lúc này",
 		quaKr: "qua KR «{ten}»",
-		khuDuongLyDo: "Đường lý do",
+		khuDuongLyDo: "Góp vào đâu",
 		canCu: "Căn cứ: {cau}",
 		mucTin: {
 			"chua-co-ly-do": "Chưa có lý do",
@@ -165,7 +218,7 @@ const vi = {
 			"co-so-lieu": "Có số liệu",
 		},
 		tienDoTu: "Tiến độ mục tiêu {x}% tính từ {n} KR.",
-		tabCanChinh: "Căn chỉnh",
+		tabCanChinh: "Góp vào",
 		tabVet: "Vết",
 		tabVetNhan: "Vết",
 		tienDoTuSo: (x: string, n: string) =>
@@ -187,9 +240,9 @@ const vi = {
 		cotThaoTac: "Thao tác",
 		suaKr: "Sửa",
 		xoaKr: "Xoá",
-		ganThem: "Gắn thêm",
-		goCanChinh: "Gỡ căn chỉnh vào {ten}",
-		suaLyDo: "Sửa lý do căn chỉnh vào {ten}",
+		ganThem: "Thêm chỗ góp vào",
+		goCanChinh: "Thôi góp vào {ten}",
+		suaLyDo: "Sửa lý do góp vào {ten}",
 		cotCanChinh: {
 			donVi: "Đơn vị",
 			mucTieu: "Mục tiêu",
@@ -197,7 +250,7 @@ const vi = {
 		},
 		chuaCanChinh: {
 			title: "Chưa góp vào đâu",
-			body: "Gắn mục tiêu này vào một mục tiêu hoặc KR cấp trên đã công bố.",
+			body: "Chọn một mục tiêu hoặc KR cấp trên đã công bố mà mục tiêu này góp vào.",
 		},
 		hoiCongBo: {
 			title: "Công bố mục tiêu này?",
@@ -218,9 +271,9 @@ const vi = {
 			cancel: "Huỷ",
 		},
 		hoiGo: {
-			title: "Gỡ căn chỉnh vào {ten}?",
-			body: "Mục tiêu này thôi góp vào chỗ đó. Gắn lại được bất cứ lúc nào.",
-			action: "Gỡ căn chỉnh",
+			title: "Thôi góp vào {ten}?",
+			body: "Mục tiêu này thôi góp vào chỗ đó. Thêm lại được bất cứ lúc nào.",
+			action: "Thôi góp vào",
 			cancel: "Huỷ",
 		},
 		daCongBo: "Đã công bố mục tiêu",
@@ -240,7 +293,7 @@ const vi = {
 			guiDuyet: "Mục tiêu đã về Nháp. Gửi duyệt lại khi sẵn sàng.",
 			congBo: "Mục tiêu đã về Nháp. Công bố lại khi sẵn sàng.",
 		},
-		daGo: "Đã gỡ căn chỉnh",
+		daGo: "Đã thôi góp vào",
 	},
 	hopThoai: {
 		huy: "Huỷ",
@@ -251,7 +304,7 @@ const vi = {
 		daLuu: "Đã lưu",
 		cap: "Cấp",
 		capMucTieu: {
-			onehub: "Toàn OneHub",
+			onehub: "Công ty",
 			"bo-phan": "Bộ phận",
 			"phong-ban": "Phòng ban",
 			"ca-nhan": "Cá nhân",
@@ -295,14 +348,14 @@ const vi = {
 			"dich-phai-nho-hon-khoi-diem": "Đích phải nhỏ hơn khởi điểm.",
 			"phan-tram-ngoai-0-100": "Đích phần trăm phải từ 0 đến 100.",
 		},
-		ganCanChinh: "Gắn căn chỉnh",
+		ganCanChinh: "Thêm chỗ góp vào",
 		ganVao: "Góp vào",
 		chonDich: "Chọn mục tiêu hoặc KR",
 		timDich: "Tìm theo tên hoặc đơn vị",
 		khongDich: "Chưa có mục tiêu cấp trên nào đã công bố để góp vào.",
 		moTaCanChinh: "Chỉ hiện mục tiêu và KR cấp trên đã công bố.",
-		gan: "Gắn",
-		daGan: "Đã gắn căn chỉnh",
+		gan: "Thêm",
+		daGan: "Đã thêm chỗ góp vào",
 		lyDoCanChinh: "Vì sao mục tiêu này đẩy được đích đó",
 		lyDoCanChinhMoTa:
 			"Không bắt buộc. Để trống thì nhánh này là «Chưa có lý do».",
@@ -310,9 +363,9 @@ const vi = {
 		canCuCanChinhMoTa: "Không bắt buộc. Để trống thì nhánh này là «Đặt cược».",
 		mucTinCanChinh: "Mức tin",
 		loiCanCuCanChinh: "Căn cứ cần đi kèm lý do.",
-		suaLyDoCanChinh: "Sửa lý do căn chỉnh",
+		suaLyDoCanChinh: "Sửa lý do góp vào",
 		moTaSuaLyDo: "Đích giữ nguyên; chỉ lý do và căn cứ đổi.",
-		moTaNhanDeXuat: "Lý do và căn cứ Kara soạn — sửa rồi căn chỉnh.",
+		moTaNhanDeXuat: "Lý do và căn cứ Kara soạn — sửa rồi thêm chỗ góp vào.",
 		daSuaLyDo: "Đã lưu lý do",
 		dangTai: "Đang tải…",
 	},
@@ -333,9 +386,9 @@ const vi = {
 		"tao-kr": "Thêm KR",
 		"sua-kr": "Sửa KR",
 		"xoa-kr": "Xoá KR",
-		"gan-can-chinh": "Gắn căn chỉnh",
-		"go-can-chinh": "Gỡ căn chỉnh",
-		"sua-ly-do-can-chinh": "Sửa lý do căn chỉnh",
+		"gan-can-chinh": "Thêm chỗ góp vào",
+		"go-can-chinh": "Thôi góp vào",
+		"sua-ly-do-can-chinh": "Sửa lý do góp vào",
 		"nhap-bang-tinh": "Nhập từ bảng tính",
 		"cap-nhat-tuan": "Cập nhật tuần",
 		"binh-luan": "Bình luận",
@@ -362,11 +415,11 @@ const vi = {
 		"ghi-nhan": "Ghi nhận",
 		"go-ghi-nhan": "Gỡ ghi nhận",
 		"sua-mau": "Sửa mẫu OKR",
-		"mo-hoi-y": "Mở hỏi ý",
-		"sua-hoi-y": "Sửa hỏi ý",
+		"mo-hoi-y": "Mở lần lấy ý kiến",
+		"sua-hoi-y": "Sửa lần lấy ý kiến",
 		"doi-nguoi-chon": "Đổi người chọn",
 		"niem-phong": "Niêm phong bản viết trước",
-		"cong-bo-hoi-y": "Công bố hỏi ý",
+		"cong-bo-hoi-y": "Công bố lần lấy ý kiến",
 		"doi-hien-thi": "Đổi mức hiển thị",
 		"gui-duyet": "Gửi duyệt",
 		duyet: "Duyệt",
@@ -486,7 +539,7 @@ const vi = {
 			go: {
 				tieuDe: (ten: string) => `Gỡ ${ten}?`,
 				than: (ten: string) =>
-					`${ten} chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.`,
+					`${ten} chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.`,
 				nut: "Gỡ chu kỳ",
 				huy: "Huỷ",
 				xong: (ten: string) => `Đã gỡ ${ten}.`,
@@ -641,6 +694,8 @@ const vi = {
 		},
 		daGuiMotPhan: (x: number, y: number) => `Đã gửi ${x}/${y} KR tuần này`,
 		nhanDaGui: "Đã gửi tuần này",
+		xemTruoc: "Xem trước điểm mới so với đích",
+		tienDoMoi: (n: number) => `Tiến độ mới ${n}%`,
 	},
 	traoDoi: {
 		danhSach: "Bình luận và ghi nhận",
@@ -690,12 +745,12 @@ const vi = {
 			theoDoi: "{capNhat} cập nhật, {binhLuan} bình luận mới",
 			theoDoiCapNhat: "{capNhat} cập nhật mới",
 			theoDoiBinhLuan: "{binhLuan} bình luận mới",
-			hoiYGop: "Hỏi ý mục tiêu đang chờ bạn góp",
-			hoiYCongBo: "Hỏi ý mục tiêu đã công bố — xem ý của bạn đi đâu",
+			hoiYGop: "Lấy ý kiến về mục tiêu đang chờ bạn góp",
+			hoiYCongBo: "Lấy ý kiến về mục tiêu đã công bố — xem ý của bạn đi đâu",
 		},
 		capNhatTuan: "Cập nhật tuần",
 		moMucTieu: "Mở mục tiêu",
-		moHoiY: "Mở Hỏi ý",
+		moHoiY: "Mở Lấy ý kiến",
 		rong: "Hôm nay OKR không cần gì từ bạn",
 		loi: {
 			title: "Không lấy được việc OKR của bạn",
@@ -741,7 +796,6 @@ const en: OkrMessages = {
 		chuaDan:
 			"You don't lead a unit yet, so you can't add objectives: objectives belong to a unit and its head sets them.",
 		loiQuyen: "Couldn't load your permissions — reload the page to try again.",
-		themCach: "More ways to add objectives",
 	},
 	moTa: {
 		"cua-toi":
@@ -754,10 +808,10 @@ const en: OkrMessages = {
 	},
 	chuKy: "Cycle",
 	loaiChuKy: { nam: "Year", quy: "Quarter" },
-	goc: "Whole company",
+	goc: "Company",
 	donVi: "Unit",
 	cap: {
-		goc: "Whole company",
+		goc: "Company",
 		bp: "Division",
 		pb: "Department",
 		nguoi: "Person",
@@ -771,9 +825,39 @@ const en: OkrMessages = {
 		`${mt} ${mt === 1 ? "objective" : "objectives"} · ${kr} ${kr === 1 ? "KR" : "KRs"}`,
 	cachXem: "View",
 	danhSach: "List",
-	cayCanChinh: "Alignment tree",
+	cayCanChinh: "Contribution map",
 	themMucTieu: "Add objective",
-	nhapBangTinh: "Import from spreadsheet",
+	chonDuong: {
+		moTa: "New objective for {ten}. Choose how to start.",
+		duong: {
+			tuViet: {
+				ten: "Write it yourself",
+				moTa: "Type the objective, pick its type and owner.",
+			},
+			tuMau: {
+				ten: "From a template",
+				moTa: "Pick a template an admin prepared for this level, then fill in your numbers.",
+			},
+			bangTinh: {
+				ten: "From a spreadsheet",
+				moTa: "Paste several objectives and KRs from a spreadsheet, preview, then save.",
+			},
+			soan: {
+				ten: "Draft with Kara",
+				moTa: "Talk with Kara to draft objectives and KRs, then add them to the OKR set.",
+			},
+		},
+		tiep: "Continue the open draft",
+		khoa: {
+			chuaCoMau:
+				"No templates for this level yet. Admins add them in Settings › OKR; meanwhile, write it yourself.",
+			ngoaiPha:
+				"Only open while the cycle is in planning. Meanwhile, write it yourself or use a template.",
+			caNhan:
+				"Draft with Kara is for divisions, departments and OneHub. For a personal objective, write it yourself.",
+		},
+		cuocDaSoan: "Past drafts ({da}/{tran})",
+	},
 	phuTrach: "Owner",
 	gopVao: (n: number) =>
 		n === 1 ? "contributes to 1 place" : `contributes to ${n} places`,
@@ -823,7 +907,7 @@ const en: OkrMessages = {
 		tuKhoiDiem: (kieu: string, gia: string) => `${kieu} · from ${gia}`,
 	},
 	tienDoCua: (ten: string, p: number) => `${ten} progress: ${p}%`,
-	chuaCanChinh: "Not aligned to anything",
+	chuaCanChinh: "Not contributing anywhere",
 	dangTai: "Loading OKRs…",
 	loi: {
 		title: "Couldn't load OKRs",
@@ -845,8 +929,32 @@ const en: OkrMessages = {
 	},
 	khongThay: {
 		title: "Unit not found",
-		body: "It may have been archived. Pick another unit from the tree.",
+		body: "It may have been archived. Pick another unit in the Unit box.",
 		action: "Back to the whole company",
+	},
+	donViBang: {
+		chonDonVi: "Unit",
+		timDonVi: "Find a unit…",
+		khongKhopDonVi: "No unit matches.",
+		caCongTy: "whole company",
+		thuoc: "In",
+		locNhanh: {
+			tatCa: "All",
+			"can-ban": "Needs discussion",
+			"chua-gop": "Not contributing",
+		},
+		khongKhopLoc: "No objective matches",
+		khongKhopLocMoTa:
+			"Change the quick filter or clear a filter to see this unit's objectives again.",
+		boLoc: "Clear filter",
+		cot: {
+			mucTieu: "Objective",
+			tienDo: "Progress",
+			tinhTrang: "Status",
+			phuTrach: "Owner",
+		},
+		donViTrucThuoc: "Units below",
+		chuaDatOkr: "No OKRs set",
 	},
 	baPhan: {
 		phan1: "Needs updating this week",
@@ -885,7 +993,7 @@ const en: OkrMessages = {
 		tabKr: "KR",
 		khuViSao: "Why now",
 		quaKr: "through KR “{ten}”",
-		khuDuongLyDo: "Path of reasons",
+		khuDuongLyDo: "Where it contributes",
 		canCu: "Evidence: {cau}",
 		mucTin: {
 			"chua-co-ly-do": "No reason yet",
@@ -893,7 +1001,7 @@ const en: OkrMessages = {
 			"co-so-lieu": "Backed by data",
 		},
 		tienDoTu: "Objective progress {x}% from {n} KRs.",
-		tabCanChinh: "Alignment",
+		tabCanChinh: "Contributes to",
 		tabVet: "History",
 		tabVetNhan: "Changes",
 		tienDoTuSo: (x: string, n: string) =>
@@ -915,17 +1023,17 @@ const en: OkrMessages = {
 		cotThaoTac: "Actions",
 		suaKr: "Edit",
 		xoaKr: "Delete",
-		ganThem: "Align to more",
-		goCanChinh: "Remove alignment to {ten}",
-		suaLyDo: "Edit the reason for the alignment to {ten}",
+		ganThem: "Add where it contributes",
+		goCanChinh: "Stop contributing to {ten}",
+		suaLyDo: "Edit the reason for contributing to {ten}",
 		cotCanChinh: {
 			donVi: "Unit",
 			mucTieu: "Objective",
 			kr: "Upper-level KR",
 		},
 		chuaCanChinh: {
-			title: "Not aligned to anything",
-			body: "Align this objective to a published objective or KR one level up.",
+			title: "Not contributing anywhere",
+			body: "Pick a published objective or KR one level up that this objective contributes to.",
 		},
 		hoiCongBo: {
 			title: "Publish this objective?",
@@ -946,9 +1054,9 @@ const en: OkrMessages = {
 			cancel: "Cancel",
 		},
 		hoiGo: {
-			title: "Remove alignment to {ten}?",
-			body: "This objective stops contributing there. You can align it again any time.",
-			action: "Remove alignment",
+			title: "Stop contributing to {ten}?",
+			body: "This objective stops contributing there. You can add it back any time.",
+			action: "Stop contributing",
 			cancel: "Cancel",
 		},
 		daCongBo: "Objective published",
@@ -969,7 +1077,7 @@ const en: OkrMessages = {
 				"The objective is back to Draft. Submit it for approval again when ready.",
 			congBo: "The objective is back to Draft. Publish it again when ready.",
 		},
-		daGo: "Alignment removed",
+		daGo: "No longer contributing",
 	},
 	hopThoai: {
 		huy: "Cancel",
@@ -980,7 +1088,7 @@ const en: OkrMessages = {
 		daLuu: "Saved",
 		cap: "Level",
 		capMucTieu: {
-			onehub: "All of OneHub",
+			onehub: "Company",
 			"bo-phan": "Division",
 			"phong-ban": "Department",
 			"ca-nhan": "Personal",
@@ -1024,14 +1132,14 @@ const en: OkrMessages = {
 			"dich-phai-nho-hon-khoi-diem": "The target must be below the start.",
 			"phan-tram-ngoai-0-100": "A percentage target must be between 0 and 100.",
 		},
-		ganCanChinh: "Align objective",
+		ganCanChinh: "Add where it contributes",
 		ganVao: "Contributes to",
 		chonDich: "Choose an objective or KR",
 		timDich: "Search by name or unit",
 		khongDich: "No published objective one level up to contribute to yet.",
 		moTaCanChinh: "Only published objectives and KRs one level up are shown.",
-		gan: "Align",
-		daGan: "Alignment added",
+		gan: "Add",
+		daGan: "Contribution added",
 		lyDoCanChinh: "Why this objective moves that target",
 		lyDoCanChinhMoTa:
 			"Optional. Left empty, this branch shows as «No reason yet».",
@@ -1039,9 +1147,10 @@ const en: OkrMessages = {
 		canCuCanChinhMoTa: "Optional. Left empty, this branch shows as «Bet».",
 		mucTinCanChinh: "Confidence",
 		loiCanCuCanChinh: "Evidence needs a reason with it.",
-		suaLyDoCanChinh: "Edit alignment reason",
+		suaLyDoCanChinh: "Edit the contribution reason",
 		moTaSuaLyDo: "The target stays; only the reason and evidence change.",
-		moTaNhanDeXuat: "Reason and evidence drafted by Kara — edit, then align.",
+		moTaNhanDeXuat:
+			"Reason and evidence drafted by Kara — edit, then add the contribution.",
 		daSuaLyDo: "Reason saved",
 		dangTai: "Loading…",
 	},
@@ -1062,9 +1171,9 @@ const en: OkrMessages = {
 		"tao-kr": "Added KR",
 		"sua-kr": "Edited KR",
 		"xoa-kr": "Deleted KR",
-		"gan-can-chinh": "Aligned",
-		"go-can-chinh": "Removed alignment",
-		"sua-ly-do-can-chinh": "Edited alignment reason",
+		"gan-can-chinh": "Added a contribution",
+		"go-can-chinh": "Stopped contributing",
+		"sua-ly-do-can-chinh": "Edited the contribution reason",
 		"nhap-bang-tinh": "Imported from spreadsheet",
 		"cap-nhat-tuan": "Weekly update",
 		"binh-luan": "Commented",
@@ -1372,6 +1481,8 @@ const en: OkrMessages = {
 		daGuiMotPhan: (x: number, y: number) =>
 			`Sent ${x}/${y} key results this week`,
 		nhanDaGui: "Sent this week",
+		xemTruoc: "Preview of the new point against the target",
+		tienDoMoi: (n: number) => `New progress ${n}%`,
 	},
 	traoDoi: {
 		danhSach: "Comments and recognitions",

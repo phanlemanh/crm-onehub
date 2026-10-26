@@ -1,0 +1,7 @@
+{
+  "feature_plain": "Khi một deal sang giai đoạn thắng, máy tự tạo một gợi ý mở kế hoạch onboard 30 ngày cho người phụ trách; người đó thấy thẻ trên sheet deal và dòng trong nhắc buổi sáng, bấm mở kế hoạch hay bỏ qua.",
+  "decisions": [
+    {"id": "E9", "q": "Từ điển và tài liệu API đã đủ để người mới hiểu gợi ý mở kế hoạch chưa?", "why": "Ba người chấm đều thấy đủ sáu điều đã hứa; đây là đề xuất của máy, anh chốt."}
+  ],
+  "analyst_plain": ""
+}

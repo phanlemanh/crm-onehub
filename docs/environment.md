@@ -128,6 +128,7 @@ single place that knows what is set.
 | `GITHUB_TOKEN` | Raises the GitHub rate limit from 60/hour |
 | `BLOB_READ_WRITE_TOKEN` | Mirrors logos and photos into a public Blob store |
 | `KHO_TAI_LIEU_BLOB_TOKEN` | Keeps the Word and PDF sources of the document library in a private Blob store and reads them back for drafting. Without it nothing can be uploaded to the library |
+| `TEP_BAN_GHI_BLOB_TOKEN` | Keeps the files of `FILE` fields (contracts, scans, photos on a deal, company or contact) in their own private Blob store. Without it names and counts still show but nothing can be uploaded or opened. Read by the API only, through `packages/db/src/blob-tep-truong.ts`; no fallback to the two tokens around it |
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
 | `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document library — the drafting machine (`may_soan`) and the AI assistant that answers from approved pages (`tro_ly_kho`) — so their spend is billed apart. Without it both run on the key above |
 | `OKR_AI_GATEWAY_API_KEY` | A separate AI Gateway key used only by Trợ lý OKR (suggestions, weekly summaries and the drafting chat in `apps/agent-okr`), so its spend is billed apart and the key can carry its own monthly budget. Without it Trợ lý OKR runs on `AI_GATEWAY_API_KEY`, or on Vercel OIDC |
@@ -139,6 +140,8 @@ single place that knows what is set.
 | `ZALO_WEBHOOK_SECRET` | Fallback webhook secret. Khi bot bật trên màn, tác tử sinh khoá và lưu trong `AppSetting`, giá trị đó thắng biến này; không có cả hai thì `/zalo/webhook` trả 404 — see `agent.md` |
 | `ZALO_API_URL` | Base URL of the Zalo Bot API; empty means the real one. Only for running against a fake Zalo in tests |
 | `OKR_SHEETS_TOKEN_URL`, `OKR_SHEETS_API_URL` | Google token endpoint and Sheets API root for the OKR Sheets reader; empty means the real ones (`OKR_SO.sheets`). Read only when `NODE_ENV` is not `production` — for a measuring session against a fake Google |
+| `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY` | The read-only GitHub app the agent uses to fetch each product's `LO-TRINH.html` (Settings › Products). Set both or every product shows «the server has no GitHub app» and CRM reads as before — see `agent.md` «Lấy lộ trình sản phẩm» |
+| `GITHUB_API_URL` | GitHub API root for the product roadmap fetch; empty means the real one. Read only when `NODE_ENV` is not `production` — for tests and measuring sessions against the fake GitHub |
 
 **`GOOGLE_SHEETS_EMAIL` + `GOOGLE_SHEETS_KHOA`** are the read-only service account behind
 the Google Sheets source of an OKR key result. Set both or the source is off: `okr.chiSo`

@@ -1,0 +1,31 @@
+{
+  "ngay_tinh": "2026-10-19",
+  "hang": {
+    "ma": "F35",
+    "gio_may": [
+      4,
+      7
+    ],
+    "phan_tram": null
+  },
+  "moc": {
+    "ten": "Hồ sơ đã ký luôn tươi 31/10",
+    "bat_dau": "2026-10-27",
+    "hoan_tat": "2026-10-30",
+    "gio_may": [
+      31.5,
+      53
+    ],
+    "gio_cho": 13.29,
+    "gio_cho_do": true,
+    "muc_tieu": "2026-10-31",
+    "hang": [
+      "F26",
+      "F36",
+      "F35",
+      "F28",
+      "F31",
+      "F34"
+    ]
+  }
+}

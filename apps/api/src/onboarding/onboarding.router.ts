@@ -16,6 +16,8 @@ import {
 	archivedInput,
 	bangCotInput,
 	bangCotOutput,
+	boQuaGoiYInput,
+	boQuaGoiYOutput,
 	companyPlanListOutput,
 	contactPlanListOutput,
 	danhMucOutput,
@@ -27,6 +29,8 @@ import {
 	enrollmentRemoveOutput,
 	enrollmentStageInput,
 	enrollmentUpsertInput,
+	goiYCuaDealInput,
+	goiYCuaDealOutput,
 	nguoiNhanViecOutput,
 	planCloseInput,
 	planCreateFromTemplateInput,
@@ -207,6 +211,30 @@ export class OnboardingRouter {
 		@Input() input: z.infer<typeof planCreateFromTemplateInput>,
 	) {
 		return this.onboarding.createFromTemplate(input, ctx.user.id);
+	}
+
+	@Query({
+		input: goiYCuaDealInput,
+		output: goiYCuaDealOutput,
+		meta: restMeta("GET", "/onboarding/deals/{dealId}/goi-y", TAG),
+	})
+	goiYCuaDeal(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof goiYCuaDealInput>,
+	) {
+		return this.onboarding.goiYCuaDeal(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: boQuaGoiYInput,
+		output: boQuaGoiYOutput,
+		meta: restMeta("POST", "/onboarding/goi-y/{id}/bo-qua", TAG),
+	})
+	boQuaGoiY(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof boQuaGoiYInput>,
+	) {
+		return this.onboarding.boQuaGoiY(input, ctx.user.id);
 	}
 
 	@Mutation({

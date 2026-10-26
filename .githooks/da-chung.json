@@ -1,0 +1,29 @@
+{
+	"note": "Bước nào của pre-push đã được chứng cho cây mã đang đẩy, và từ đâu (_acceptance/trang-ve-gop-va-dau-cay). scripts/pre-push-t1.mjs đọc tệp này qua scripts/pre-push-da-chung.mjs, in bước đã chứng vào dòng bỏ qua của hook và ghi phiếu của lần đẩy; scripts/verify-gate-shape.mjs chỉ nhận bước bỏ vì đã chứng khi có phiếu ấy và tệp này có vi_sao. Xoá tệp thì không nguồn nào được đọc và mọi lần đẩy chạy như cũ.",
+	"vi_sao": "Hai commit cùng cây mã khi mọi tệp khác nhau giữa chúng là T1 thường: khớp t1_skip_globs mà không khớp t1_ma_doc của _acceptance/config.yaml, theo tachT1 của .github/scripts/phan-loai.mjs; tệp dưới .github/ luôn thuộc cây mã; diff quá gioi_han.tep_diff tệp coi là khác cây. Cùng cây mã thì năm bước cho cùng kết quả, nên bước đã xanh trên một commit cùng cây được bỏ. Ba nguồn, mỗi nguồn chỉ chứng tập bước của nó: dấu của chính hook (ghi sau lần đẩy mà verify-gate-shape xanh, mang đúng các bước vừa thật sự chạy trên máy — bước bỏ theo đường T1 hay do nguồn khác chứng không vào dấu, nên dấu không tự gia hạn) chứng các bước nó mang, chỉ dùng khi vân tay môi trường (node, bun, .env băm) khớp và chưa quá gioi_han.ngay; sổ chạy _acceptance/*/run-log.jsonl của cây đang đẩy — dòng lệnh S4 có exit_code 0 và dòng repin có ket_cuc xanh — chứng bước theo lenh, và test chỉ khi các lệnh test xanh trên cùng sha phủ đủ mọi gói cần test; check-run CI xanh trên một commit cùng cây chứng bước theo ci, ô bị bỏ qua không phải xanh. Không có dấu thì bộ phân loại in đúng như trước và hook chạy đủ năm bước. .githooks/pre-push và gate-shape.json không đổi.",
+	"lenh": {
+		"check-types": ["bun run check-types", "bunx turbo run check-types --force"],
+		"lint": ["bun run lint", "bunx turbo run lint --force"],
+		"lint:slop": ["bun run lint:slop"],
+		"build": ["bun run build", "bunx turbo run build --force"]
+	},
+	"test": {
+		"lenh": "bun run test",
+		"loc": "--filter="
+	},
+	"ci": {
+		"check-types": ["check-types, lint"],
+		"lint": ["check-types, lint"],
+		"lint:slop": ["check-types, lint"],
+		"test": ["test (api)", "test (app-ui)", "test (con-lai)"],
+		"build": ["lệnh dựng"]
+	},
+	"gioi_han": {
+		"ngay": 14,
+		"tep_diff": 300,
+		"sha_so_chay": 40,
+		"commit_gan": 20,
+		"gh_toi_da": 3,
+		"giay_gh": 10
+	}
+}

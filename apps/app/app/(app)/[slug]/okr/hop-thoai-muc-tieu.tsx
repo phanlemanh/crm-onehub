@@ -60,13 +60,19 @@ import { useTRPC } from "@/lib/trpc/client";
 import { DongDanGopY } from "./dong-dan-gop-y";
 import type { MucTieu } from "./kieu";
 import type { DonChonOkr } from "./okr-search-params";
-import { KhungTuMau, NutBatDauTuMau, NutTaoTuMau, useTuMau } from "./tu-mau";
+import { KhungTuMau, NutTaoTuMau, useTuMau } from "./tu-mau";
 
 export type YeuCauMucTieu =
-	| { loai: "tao"; cycleId: string; don: DonChonOkr; tenDon: string }
+	| {
+			loai: "tao";
+			cycleId: string;
+			don: DonChonOkr;
+			tenDon: string;
+			batDau?: "tay" | "mau";
+	  }
 	| { loai: "sua"; mucTieu: MucTieu };
 
-const CAP_THEO_DON = {
+export const CAP_THEO_DON = {
 	goc: "onehub",
 	bp: "bo-phan",
 	pb: "phong-ban",
@@ -232,6 +238,7 @@ export function HopThoaiMucTieu({
 			yeuCau.loai === "tao"
 				? { cycleId: yeuCau.cycleId, don: yeuCau.don }
 				: null,
+		batDau: yeuCau.loai === "tao" ? (yeuCau.batDau ?? "tay") : "tay",
 		cap,
 		chu,
 		donVi,
@@ -331,7 +338,6 @@ export function HopThoaiMucTieu({
 							}}
 						>
 							<FieldGroup>
-								<NutBatDauTuMau tuMau={tuMau} />
 								{cu ? (
 									<DongDanGopY
 										moTa={okrGopYMessages(locale).danSang.moTaMucTieu}

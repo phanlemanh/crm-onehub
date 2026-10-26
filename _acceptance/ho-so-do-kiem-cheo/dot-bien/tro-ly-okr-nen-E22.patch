@@ -1,0 +1,11 @@
+--- a/apps/api/src/okr/okr-xem.service.ts
++++ b/apps/api/src/okr/okr-xem.service.ts
+@@ -10,7 +10,7 @@
+ 	moiNhat,
+ 	xepHopTuan,
+ } from "@crm/db/okr-hop-tuan";
+-import { kyVongTheoNgay } from "@crm/db/okr-tien-do";
++import { kyVongTheoNgay } from "./tien-do";
+ import { dauTuanVN } from "@crm/db/onboarding-nhac";
+ import { readTenGoc } from "@crm/db/workspace";
+ import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";

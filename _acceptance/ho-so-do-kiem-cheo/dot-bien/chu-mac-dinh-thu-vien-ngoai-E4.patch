@@ -1,0 +1,12 @@
+--- a/_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/boc-ma-khong-doc.json
++++ b/_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/boc-ma-khong-doc.json
+@@ -134,7 +134,8 @@
+ 		{
+ 			"component": "radio-group.tsx",
+ 			"nguyen_ban": [
+-				"RadioGroupPrimitive (radix-ui)"
++				"RadioGroupPrimitive (radix-ui)",
++				"CircleIcon (lucide-react)"
+ 			]
+ 		},
+ 		{

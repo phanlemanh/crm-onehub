@@ -30,6 +30,7 @@ import {
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
 import { FlowMap } from "../src/components/flow-map";
+import { GanttDuAn } from "../src/components/gantt-du-an";
 import { Heatmap } from "../src/components/heatmap";
 import { KaraLabel } from "../src/components/kara";
 import { KhungXuong } from "../src/components/khung-xuong";
@@ -58,6 +59,7 @@ import { TargetLineChart } from "../src/components/target-line-chart";
 import { ThinkingIndicator } from "../src/components/thinking-indicator";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
+import { TrinhSoan } from "../src/components/trinh-soan";
 import { DEFAULT_LOCALE, type Locale } from "../src/lib/locale";
 import type { TableQueryState } from "../src/lib/table-query";
 import { DU_LIEU, TEN_RIENG, TRUNG_TINH } from "./du-lieu";
@@ -91,7 +93,9 @@ async function chuNguoiDoc(html: string): Promise<Set<string>> {
 			them(t.text);
 		},
 	});
-	await rw.transform(new Response(html)).text();
+	await rw
+		.transform(new Response(html.replace(/<style[\s\S]*?<\/style>/g, "")))
+		.text();
 	return ra;
 }
 
@@ -200,7 +204,82 @@ const CA: Ca[] = [
 			/>
 		),
 	},
+	{
+		ten: "GanttDuAn",
+		ve: () => (
+			<GanttDuAn
+				className="h-[320px]"
+				homNay="2026-10-16"
+				lich={{ ngayNghiTuan: [6, 7], ngayLe: ["2026-10-26"] }}
+				moc={[
+					{
+						id: "m",
+						ten: DU_LIEU.cot,
+						ngay: "2026-10-30",
+						tre: false,
+						cho: ["b"],
+					},
+				]}
+				viec={[
+					{
+						id: "a",
+						tieuDe: DU_LIEU.tenCongTy,
+						chaId: null,
+						batDau: "2026-10-19",
+						han: "2026-10-21",
+						nghia: "xong",
+						suaDuoc: true,
+						phaiCho: [],
+					},
+					{
+						id: "b",
+						tieuDe: DU_LIEU.cotHai,
+						chaId: null,
+						batDau: "2026-10-22",
+						han: "2026-10-23",
+						nghia: "dangChay",
+						suaDuoc: false,
+						phaiCho: ["a"],
+					},
+					{
+						id: "c",
+						tieuDe: DU_LIEU.nhomLoc,
+						chaId: null,
+						batDau: null,
+						han: null,
+						nghia: "nhap",
+						suaDuoc: true,
+						phaiCho: [],
+					},
+				]}
+				onDatNgay={() => {}}
+			/>
+		),
+	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{
+		ten: "TrinhSoan",
+		ve: () => (
+			<TrinhSoan
+				giaTri=""
+				goiY={DU_LIEU.cotHai}
+				nhan={DU_LIEU.tieuDeHopThoai}
+				nhanNut={{
+					tieuDe2: DU_LIEU.cot,
+					tieuDe3: DU_LIEU.cot,
+					dam: DU_LIEU.cot,
+					nghieng: DU_LIEU.cot,
+					danhSachSo: DU_LIEU.cot,
+					danhSachCham: DU_LIEU.cot,
+					bang: DU_LIEU.cot,
+					lienKet: DU_LIEU.cot,
+					hoanTac: DU_LIEU.cot,
+					lamLai: DU_LIEU.cot,
+				}}
+				onDoi={() => {}}
+			/>
+		),
+	},
 	{
 		ten: "FlowMap",
 		ve: () => (

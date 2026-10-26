@@ -17,6 +17,14 @@
 			]
 		},
 		{
+			"component": "context-menu.tsx",
+			"nguyen_ban": [
+				"ContextMenuPrimitive (radix-ui)",
+				"ChevronRightIcon (lucide-react)",
+				"CheckIcon (lucide-react)"
+			]
+		},
+		{
 			"component": "drawer.tsx",
 			"nguyen_ban": [
 				"DrawerPrimitive (vaul)"
@@ -71,6 +79,7 @@
 		"ket_qua": {
 			"accordion.tsx": "rong",
 			"alert-dialog.tsx": "rong",
+			"context-menu.tsx": "rong",
 			"drawer.tsx": "rong",
 			"dropdown-menu.tsx": "rong",
 			"hover-card.tsx": "rong",

@@ -1,3 +1,4 @@
+import { LOAI_VIEC_KR } from "@crm/validation/okr-canh-kr";
 import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import { MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import { KIEU_KR } from "@crm/validation/okr-kr";
@@ -9,6 +10,7 @@ import { LOC_GOP_Y } from "@crm/validation/okr-tham-so";
 import { z } from "zod";
 import { MUC_TIN_CAN_CHINH } from "./can-chinh";
 import { donViChon, mucTieuOutput, type NutCanChinh } from "./okr.contracts";
+import { lienKet } from "./okr-canh-kr.contracts";
 import { OKR_XEM } from "./okr-xem.config";
 
 const ma = z.string().trim().min(1).max(120);
@@ -351,3 +353,49 @@ export const quanhMucTieuOutput = z.object({
 });
 
 export type QuanhMucTieuOutput = z.infer<typeof quanhMucTieuOutput>;
+
+const nguoiGon = z.object({ id: z.string(), name: z.string() });
+
+export const hangBo = z.object({
+	don: z.string(),
+	ten: z.string(),
+	cap: capHang,
+	cha: z.string().nullable(),
+	truong: nguoiGon.nullable(),
+	soMucTieu: z.number(),
+	tienDo: z.number().nullable(),
+	tuTinThap: z.number(),
+	toiDan: z.boolean(),
+	dangTheoDoi: z.boolean(),
+});
+
+export const danhSachBoOutput = z.object({ hang: z.array(hangBo) });
+
+export const viecCuaBoInput = z.object({ cycleId: ma, unit: donViChon });
+
+const viecBo = z.object({
+	id: z.string(),
+	loai: z.enum(LOAI_VIEC_KR),
+	tieuDe: z.string(),
+	lienKet: lienKet.nullable(),
+	nguoiLam: nguoiGon.nullable(),
+	hanNgay: z.string().nullable(),
+	xong: z.boolean(),
+});
+
+const nhomViecBo = z.object({
+	kr: z.object({
+		id: z.string(),
+		ten: z.string(),
+		mucTieu: z.object({ id: z.string(), ten: z.string() }),
+	}),
+	viec: z.array(viecBo),
+});
+
+export const viecCuaBoOutput = z.object({ nhom: z.array(nhomViecBo) });
+
+export type HangBo = z.infer<typeof hangBo>;
+export type DanhSachBoOutput = z.infer<typeof danhSachBoOutput>;
+export type ViecCuaBoInput = z.infer<typeof viecCuaBoInput>;
+export type ViecCuaBoOutput = z.infer<typeof viecCuaBoOutput>;
+export type NhomViecBo = z.infer<typeof nhomViecBo>;

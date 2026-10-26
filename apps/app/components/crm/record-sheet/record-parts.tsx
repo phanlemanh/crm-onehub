@@ -36,22 +36,12 @@ import {
 	DetailSheetTabs,
 } from "@/components/detail-sheet";
 import { LocalDateTime } from "@/components/local-date-time";
+import type { LyDoLoi } from "@/lib/ly-do-loi";
 import { crmMessages } from "@/lib/messages/crm";
 import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { recordSheetMessages } from "@/lib/messages/record-sheet";
 import { NGAY_LUU_TRU } from "./record-actions";
 import { useOpenRecord, useRecordStack } from "./record-stack";
-
-export type LyDoLoi = "khong-con" | "khong-quyen" | "mat-ket-noi";
-
-export function lyDoLoi(
-	loi: { data?: { code?: string } | null } | null | undefined,
-): LyDoLoi {
-	const ma = loi?.data?.code;
-	if (ma === "NOT_FOUND") return "khong-con";
-	if (ma === "FORBIDDEN") return "khong-quyen";
-	return "mat-ket-noi";
-}
 
 export function KhungTaiLoi({
 	lyDo = "mat-ket-noi",

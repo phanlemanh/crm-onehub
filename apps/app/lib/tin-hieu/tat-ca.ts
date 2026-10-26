@@ -1,7 +1,12 @@
 import { demNguongSong, dongDemTuTatCa, idTep } from "@crm/validation/tin-hieu";
 import type { TinHieuMessages } from "@/lib/messages/tin-hieu";
 import type { BaSo } from "@/lib/tin-hieu/loc-tat-ca";
-import { docTrangThaiDu, type TrangThaiDu } from "@/lib/tin-hieu/trang-thai";
+import {
+	docTrangThaiTuNguon,
+	type NguonTrangThai,
+	nguonTuHtml,
+	type TrangThaiDu,
+} from "@/lib/tin-hieu/trang-thai";
 
 export type HangTatCa = {
 	so: number;
@@ -16,6 +21,56 @@ export type KetQuaTatCa = {
 	baSo: BaSo;
 };
 
+export type NenTatCa = {
+	banVeDocDuoc: boolean;
+	trangThai: Record<string, TrangThaiDu>;
+	coCho: string[];
+};
+
+export function docNenTatCa(
+	vao: { rows: HangTatCa[]; m: TinHieuMessages } & (
+		| { html: string | null }
+		| { nguon: NguonTrangThai }
+	),
+): NenTatCa {
+	const { rows, m } = vao;
+	const du = docTrangThaiTuNguon(
+		"nguon" in vao ? vao.nguon : nguonTuHtml(vao.html),
+		rows.map((r) => ({ ma: idTep(r.so), daKeoVe: r.daKeoVe })),
+		m,
+	);
+	return {
+		banVeDocDuoc: du.banVe === "co",
+		trangThai: du.trangThai,
+		coCho: [...du.coCho],
+	};
+}
+
+export function demBaSo({
+	rows,
+	coCho,
+	banVeDocDuoc,
+	now,
+}: {
+	rows: HangTatCa[];
+	coCho: readonly string[];
+	banVeDocDuoc: boolean;
+	now: Date;
+}): BaSo {
+	const so = demNguongSong(
+		dongDemTuTatCa(rows.map((r) => ({ ...r, ma: idTep(r.so) }))),
+		now,
+		new Set(coCho),
+	);
+	return {
+		trongKy: so.trongKy,
+		soPhong: so.soPhong,
+		khongPhong: so.khongPhong,
+		quaHan: so.quaHan,
+		chuaCoCho: banVeDocDuoc ? so.chuaCoCho : null,
+	};
+}
+
 export function ghepTatCa({
 	rows,
 	html,
@@ -27,23 +82,15 @@ export function ghepTatCa({
 	now: Date;
 	m: TinHieuMessages;
 }): KetQuaTatCa {
-	const coMa = rows.map((r) => ({ ...r, ma: idTep(r.so) }));
-	const du = docTrangThaiDu(
-		html,
-		coMa.map((r) => ({ ma: r.ma, daKeoVe: r.daKeoVe })),
-		m,
-	);
-	const docDuoc = du.banVe === "co";
-	const so = demNguongSong(dongDemTuTatCa(coMa), now, du.coCho);
+	const nen = docNenTatCa({ rows, html, m });
 	return {
-		banVeDocDuoc: docDuoc,
-		trangThai: du.trangThai,
-		baSo: {
-			trongKy: so.trongKy,
-			soPhong: so.soPhong,
-			khongPhong: so.khongPhong,
-			quaHan: so.quaHan,
-			chuaCoCho: docDuoc ? so.chuaCoCho : null,
-		},
+		banVeDocDuoc: nen.banVeDocDuoc,
+		trangThai: nen.trangThai,
+		baSo: demBaSo({
+			rows,
+			coCho: nen.coCho,
+			banVeDocDuoc: nen.banVeDocDuoc,
+			now,
+		}),
 	};
 }

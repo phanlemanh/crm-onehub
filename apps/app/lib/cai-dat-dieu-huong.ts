@@ -24,6 +24,7 @@ export const NHOM_CAI_DAT: readonly NhomCaiDat[] = [
 			{ khoa: "tienTe", href: `${GOC_CAI_DAT}/currencies` },
 			{ khoa: "truong", href: `${GOC_CAI_DAT}/fields` },
 			{ khoa: "giaiDoan", href: `${GOC_CAI_DAT}/giai-doan` },
+			{ khoa: "lichLamViec", href: `${GOC_CAI_DAT}/lich-lam-viec` },
 		],
 	},
 	{
@@ -40,6 +41,7 @@ export const NHOM_CAI_DAT: readonly NhomCaiDat[] = [
 		muc: [
 			{ khoa: "ketNoi", href: `${GOC_CAI_DAT}/connections` },
 			{ khoa: "theoDoi", href: `${GOC_CAI_DAT}/tracking` },
+			{ khoa: "sanPham", href: `${GOC_CAI_DAT}/san-pham` },
 		],
 	},
 	{

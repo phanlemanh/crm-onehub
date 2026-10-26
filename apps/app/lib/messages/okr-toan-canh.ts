@@ -2,9 +2,8 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
 	cay: {
-		donVi: "Cây đơn vị",
-		canChinh: "Cây căn chỉnh toàn công ty",
-		chuaCanChinh: "Chưa căn chỉnh vào đâu",
+		canChinh: "Sơ đồ góp vào cả công ty",
+		chuaCanChinh: "Chưa góp vào đâu",
 		cungHien: "cũng hiện ở chỗ góp kia",
 		locTatCa: "Tất cả",
 		locRong: "Không có mục tiêu nào ở mức này trong chu kỳ.",
@@ -16,9 +15,6 @@ const vi = {
 		tuTin: "Mức tự tin",
 		boLoc: "Bỏ lọc",
 		nguoiDaRoi: "Người không còn trong tổ chức",
-		khongKhop: "Không mục tiêu nào khớp bộ lọc",
-		khongKhopMoTa:
-			"Đổi hoặc bỏ bớt bộ lọc để thấy lại mục tiêu của đơn vị này.",
 	},
 	nguoi: {
 		phongBanChinh: "Phòng ban chính",
@@ -128,6 +124,20 @@ const vi = {
 		daGhi:
 			"Đã ghi — quản trị viên thấy số phản hồi này ở Toàn cảnh › Sức khoẻ chương trình.",
 		phanHoiLoi: "Không gửi được phản hồi. Thử lại.",
+		choBanDau: (gio: string, thu: string, ngay: string, thuCapNhat: string) =>
+			`Kara gửi bản tóm tắt đầu tiên vào khoảng ${gio} ${thu}, ${ngay} — sáng hôm sau ngày cập nhật ${thuCapNhat}.`,
+		dangXep: "Kara đang xếp bản tóm tắt đầu tiên — thường có trong vài phút.",
+		tamNghiDen: (ngay: string) => `Kara tạm nghỉ tóm tắt tuần tới ${ngay}.`,
+		chuaNoiMoHinh: "Kara chưa tóm tắt được: quản trị chưa nối mô hình AI.",
+		tenThu: [
+			"thứ Hai",
+			"thứ Ba",
+			"thứ Tư",
+			"thứ Năm",
+			"thứ Sáu",
+			"thứ Bảy",
+			"Chủ nhật",
+		],
 	},
 	quanTri: {
 		moTa: (ngay: string) =>
@@ -204,16 +214,16 @@ const vi = {
 		cachXem: "Cách xem",
 		bang: "Bảng",
 		soDo: "Sơ đồ",
-		moTa: "Mỗi đơn vị một thẻ. Dây là căn chỉnh thật: nét liền góp vào cấp trên trực tiếp, nét đứt góp thẳng hay chéo sang nhánh khác.",
-		nhan: "Sơ đồ căn chỉnh theo đơn vị",
+		moTa: "Mỗi đơn vị một thẻ. Dây là chỗ góp vào thật: nét liền góp vào cấp trên trực tiếp, nét đứt góp thẳng hay chéo sang nhánh khác.",
+		nhan: "Sơ đồ góp vào theo đơn vị",
 		moi: "Mọi đơn vị",
 		chuY: "Cần chú ý",
 		locNhan: "Lọc đơn vị",
 		chuGiaiLien: "Nét liền: góp vào mục tiêu hay KR của đơn vị cấp trên",
 		chuGiaiDut: "Nét đứt: góp thẳng lên cấp cao hơn hoặc chéo sang nhánh khác",
 		chuGiaiChuaNoi:
-			"Chưa nối lên: có mục tiêu mà không mục tiêu nào góp ra ngoài đơn vị",
-		chuaNoiLen: "Chưa nối lên",
+			"Chưa góp vào đâu: có mục tiêu mà không mục tiêu nào góp ra ngoài đơn vị",
+		chuaNoiLen: "Chưa góp vào đâu",
 		chuaCoTruong: "Chưa có trưởng",
 		chuaDatOkr: "Chưa đặt OKR",
 		soMucTieu: (mt: number, kr: number) => `${mt} mục tiêu · ${kr} KR`,
@@ -224,7 +234,7 @@ const vi = {
 		co: {
 			"chua-truong": "Chưa có trưởng",
 			"chua-okr": "Chưa đặt OKR",
-			"chua-noi": "Chưa nối lên",
+			"chua-noi": "Chưa góp vào đâu",
 			"muc-tieu-chua-gop": "Có mục tiêu chưa góp vào đâu",
 			"kr-truot": "Có KR trượt",
 		},
@@ -249,9 +259,8 @@ export type OkrToanCanhMessages = typeof vi;
 
 const en: OkrToanCanhMessages = {
 	cay: {
-		donVi: "Unit tree",
-		canChinh: "Company-wide alignment tree",
-		chuaCanChinh: "Not aligned anywhere",
+		canChinh: "Company-wide contribution map",
+		chuaCanChinh: "Not contributing anywhere",
 		cungHien: "also shown where it contributes",
 		locTatCa: "All",
 		locRong: "No objectives at this level in the cycle.",
@@ -263,9 +272,6 @@ const en: OkrToanCanhMessages = {
 		tuTin: "Confidence",
 		boLoc: "Clear filters",
 		nguoiDaRoi: "No longer in the organization",
-		khongKhop: "No objectives match these filters",
-		khongKhopMoTa:
-			"Change or clear a filter to see this unit's objectives again.",
 	},
 	nguoi: {
 		phongBanChinh: "Primary department",
@@ -375,6 +381,23 @@ const en: OkrToanCanhMessages = {
 		phanHoiNhom: "Was this week's summary useful",
 		daGhi: "Noted — admins see these counts under Overview › Program health.",
 		phanHoiLoi: "Couldn't send your feedback. Try again.",
+		choBanDau: (gio: string, thu: string, ngay: string, thuCapNhat: string) =>
+			`Kara sends the first summary around ${gio} on ${thu}, ${ngay} — the morning after the ${thuCapNhat} update.`,
+		dangXep:
+			"Kara is queuing the first summary — it usually arrives within a few minutes.",
+		tamNghiDen: (ngay: string) =>
+			`Kara has paused weekly summaries until ${ngay}.`,
+		chuaNoiMoHinh:
+			"Kara can't summarise yet: an admin hasn't connected an AI model.",
+		tenThu: [
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday",
+			"Sunday",
+		],
 	},
 	quanTri: {
 		moTa: (ngay: string) =>
@@ -452,16 +475,17 @@ const en: OkrToanCanhMessages = {
 		cachXem: "View",
 		bang: "Table",
 		soDo: "Map",
-		moTa: "One card per unit. Lines are real alignments: solid lines feed the unit directly above, dashed lines skip a level or cross to another branch.",
-		nhan: "Alignment map by unit",
+		moTa: "One card per unit. Lines are real contributions: solid lines contribute to the unit directly above, dashed lines skip a level or cross to another branch.",
+		nhan: "Contribution map by unit",
 		moi: "All units",
 		chuY: "Needs attention",
 		locNhan: "Filter units",
-		chuGiaiLien: "Solid: feeds an objective or KR of the unit above",
-		chuGiaiDut: "Dashed: feeds a higher level directly or another branch",
+		chuGiaiLien: "Solid: contributes to an objective or KR of the unit above",
+		chuGiaiDut:
+			"Dashed: contributes to a higher level directly or to another branch",
 		chuGiaiChuaNoi:
-			"Not connected: has objectives, none of them feeds outside the unit",
-		chuaNoiLen: "Not connected",
+			"Not contributing anywhere: has objectives, none of them contributes outside the unit",
+		chuaNoiLen: "Not contributing anywhere",
 		chuaCoTruong: "No head",
 		chuaDatOkr: "No OKRs yet",
 		soMucTieu: (mt: number, kr: number) => `${mt} objectives · ${kr} KRs`,
@@ -472,12 +496,12 @@ const en: OkrToanCanhMessages = {
 		co: {
 			"chua-truong": "No head",
 			"chua-okr": "No OKRs yet",
-			"chua-noi": "Not connected",
-			"muc-tieu-chua-gop": "Has an objective that feeds nothing",
+			"chua-noi": "Not contributing anywhere",
+			"muc-tieu-chua-gop": "Has an objective that contributes nowhere",
 			"kr-truot": "Has an off-track KR",
 		},
-		gopVao: "feeds",
-		chuaGopDong: "Feeds nothing yet",
+		gopVao: "contributes to",
+		chuaGopDong: "Not contributing anywhere",
 		phongBanGop: (n: number) => `+${n} departments`,
 		chuYBenTrong: (n: number) => `${n} need attention inside`,
 		moNhanh: "Expand",

@@ -307,6 +307,20 @@ self-hoster's admin cannot redeploy.
   của một bước, Huỷ, xoá và gỡ gắn kế hoạch trả 400 `VIEC.thongDiep.goBuocOKeHoach`. `closePlan` nhận
   `huyViecMo?: boolean`: đúng thì Việc còn mở của bước chưa xong sang Huỷ (nguồn `dong-ke-hoach`); mở lại
   không hồi. Nhắc buổi sáng không phát `buoc-*` cho bước có Việc — Việc tự nhắc `viec-*`.
+- **Gợi ý mở kế hoạch khi deal thắng (hàng DA3b, `goi-y-mo-ke-hoach`).** Bảng `GoiYKeHoach` (`CHO · DA_MO ·
+  BO_QUA`). Luật tất định ở máy chủ, không qua tác tử: `sinhGoiYKeHoach` (`@crm/db/goi-y-ke-hoach`) chạy
+  trong chính giao dịch của `chuyenGiaiDoanTrongTx` (phủ `setStage`, `bulkSetStage`, lưu trữ giai đoạn) và
+  của `DealsService.create`. Sinh một gợi ý ⟺ lần chuyển đi từ giai đoạn không phải thắng (hay tạo mới)
+  sang giai đoạn thắng, công ty không có kế hoạch `closedAt` trống, và deal không có gợi ý `CHO`; người
+  nhận là `deal.ownerId` lúc sinh; chỉ mục duy nhất một phần `goiYKeHoach_dealId_cho_key` giữ «một gợi ý
+  chờ mỗi deal». Mỗi lần chuyển sang thắng là một gợi ý: đã bỏ qua rồi thắng lại thì sinh gợi ý mới.
+  Hai thủ tục mới: `onboarding.goiYCuaDeal({ dealId })` trả gợi ý `CHO` của deal đang thắng, chưa lưu
+  trữ, khi người gọi là người nhận hay quản trị (`canManageOnboarding`), không thì `null`;
+  `onboarding.boQuaGoiY({ id })` → `BO_QUA`, người khác 403 `GOI_Y.thongDiep.khongQuyen`, gợi ý đã xử lý 400
+  `GOI_Y.thongDiep.daXuLy` («Gợi ý này đã được xử lý.»). `createFromTemplate` (tRPC hay REST
+  `POST /onboarding/plans`, ai gọi cũng vậy) chuyển mọi gợi ý `CHO` của công ty sang `DA_MO` kèm `planId`
+  trong cùng giao dịch; tạo hỏng thì không đổi gì. Gợi ý còn `CHO` của deal đang thắng thành mục
+  `goi-y-ke-hoach` của nhắc buổi sáng và thông báo của người nhận đọc được dữ liệu đối tác.
 - **Writes in the shared scope are either self-service or admin-only.** API keys
   and the person's own Zalo channel are self-service; every system setting —
   `settings.*` writes included, gated by `canManageSettings` — requires an owner
@@ -538,8 +552,19 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
 - **Ai thấy một việc.** `dieuKienXemViec(userId)` đứng ở mọi câu đọc (một việc, lịch sử, Việc của
   tôi, khối của bản ghi, Tổng quan cả hai phạm vi) và là bước đầu của mọi lệnh ghi. Việc gắn ít nhất một
   bản ghi đối tác thì ai qua được cửa router cũng thấy; việc không gắn gì chỉ người giao, người thực hiện,
-  người theo dõi thấy — quản trị không thấy. Mã không thấy và mã không có trả cùng 404
+  người theo dõi thấy — quản trị không thấy. Việc nằm trong một dự án (`duAnId` khác rỗng) cũng thấy
+  với mọi người qua được cửa router (hàng DA4). Mã không thấy và mã không có trả cùng 404
   «Không có việc nào mang mã <id>.».
+- **Khung việc nói ai thấy** (hàng DA11). `viec.get` trả `aiThay`, một trong ba giá trị, tính ở máy chủ
+  (`apps/api/src/viec/viec-khuat.ts`) từ chính hàng việc: `ban-ghi` khi gắn ít nhất một bản ghi, `du-an` khi
+  không gắn mà nằm trong dự án, `rieng` khi không gắn và không thuộc dự án. Khung việc chỉ vẽ theo trường này,
+  không tự suy từ `banGhi` hay `duAn`.
+- **Lịch sử che việc người xem không thấy** (hàng DA11). Bốn loại vết nhắc một việc khác: `them-phu-thuoc`,
+  `go-phu-thuoc`, `doi-han`/`doi-bat-dau` mang `boi` (tự dời), `them-viec-con`. `viec.lichSu` gom mọi mã
+  việc được nhắc (`maViecNhac`, `@crm/db/viec-nhac`) rồi đọc một lần bằng `dieuKienXemViec` của người xem.
+  Việc người xem không đọc được, hay đã bị xoá, thì vết ra ngoài mang `null` ở chỗ đó (`viec`, `boi`, hay
+  `sau` của `them-viec-con`): không tiêu đề, không mã. Vết lưu trong `viecVet` không đổi, người trong cuộc
+  vẫn thấy đủ. Lược đồ đầu ra là `vetViecRa` (`viec.contracts.ts`).
 - **Đồ thị trạng thái** (`DO_THI`): G là chỉ người giao, GT là người giao hoặc người thực hiện.
 
   | Từ | Sang | Ai |
@@ -596,8 +621,61 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
   lọc `NOT { type: TASK, viecChep: { isNot: null } }`: việc chưa chép vẫn hiện, chỉ đọc; việc đã chép chỉ hiện
   như Việc. Dòng thời gian còn bốn bộ lọc `all`, `notes`, `email`, `meetings`.
 - **Nguồn vết** (`NGUON_VIEC`): `web`, `zalo`, `api`, `chuyen-viec`, `tac-nhan` (Tác nhân tự dựng và việc mã
-  môi giới lệch), `chep-cu` (bản chép). `Viec.khoaNguon` giữ khoá chặn trùng của đường máy — hôm nay chỉ
+  môi giới lệch), `chep-cu` (bản chép), `gantt` (kéo thanh hay dời bằng phím trên Gantt, `viec.doiLich`),
+  `tu-doi` (tự dời khi chồng, xem «Dự án»). `Viec.khoaNguon` giữ khoá chặn trùng của đường máy — hôm nay chỉ
   `ma-lech:<mã>`.
+
+### Dự án
+
+Router `duAn` (`apps/api/src/du-an`, alias `duAn`), `PhamViDoiTacMiddleware`. Luật ở `@crm/db/du-an`,
+lệnh ghi ở `@crm/db/du-an-ghi` và `@crm/db/viec-ghi`; ngày làm việc ở `@crm/db/lich-lam-viec`, tính dời ở
+`@crm/db/lich-viec`. Ngày chỉ-ngày lưu ở 00:00Z của ngày lịch Việt Nam; API trao đổi chuỗi `YYYY-MM-DD`.
+
+- **Thủ tục.** `duAn.list({ trangThai: "mo" | "dong" })` (mỗi hàng `soViec`, `soXong`, `batDauSom`,
+  `hanMuon`, `mocKe`, `taoBoi`, `quyen`), `duAn.get`, `duAn.lich` (việc, mốc, lịch — khuôn
+  `@crm/validation/du-an-lich`), `duAn.tao`, `duAn.sua`, `duAn.dong`, `duAn.moLai`, `duAn.xoa`. Mốc và
+  phụ thuộc là thủ tục phẳng của cùng router — `duAn.mocTao`, `duAn.mocSua`, `duAn.mocXoa`,
+  `duAn.phuThuocTao`, `duAn.phuThuocXoa` — mà hợp đồng gọi là `duAn.moc.*` và `duAn.phuThuoc.*`
+  (nestjs-trpc của kho không có router lồng). Trên `viec`: `viec.doiLich({ id, batDauNgay, hanNgay })`
+  (kéo thanh, nguồn `gantt`, trả `daDoi`), `viec.doiDuAn({ id, duAnId | null })`, `viec.sua` nhận thêm
+  `batDauNgay`, `viec.create` nhận `duAnId` và `batDauNgay`, `viec.cuaToi`/`viec.bang` nhận `duAnId` hay
+  `tatCaDuAn`.
+- **Quyền.** Sửa tên, mô tả, mốc: ai đọc được dự án. Đóng, mở lại, xoá: người tạo dự án và quản trị
+  (`duAn.xoa` kiểm quyền 403 trước lịch sử 409). Tạo việc trong dự án: ai đọc được dự án. Đổi ngày, kéo
+  thanh, đưa vào hay ra dự án: người giao hay người thực hiện của việc đó. Tạo hay gỡ phụ thuộc T → S:
+  người giao hay người thực hiện của S. Vai «chỉ OKR» bị chặn ở cửa và không nhận việc trong dự án.
+- **Luật dời khi chồng.** Phụ thuộc chỉ một kiểu xong-rồi-mới-bắt-đầu, cùng dự án, không vòng
+  (`timVong`, rồi `tinhDoi` dò lần nữa). S phải bắt đầu từ `ngayLamKe(hạn T)`. Mỗi lần ghi ngày hay tạo
+  phụ thuộc, `lanDoi` chạy trong cùng giao dịch: khoá hàng `duAn` rồi mọi việc của dự án theo `id`, đi theo
+  thứ tự topo, dời việc sau sang ngày làm việc kế sau hạn việc trước, giữ số ngày làm việc, bỏ Thứ Bảy, Chủ
+  nhật và ngày lễ. Không bao giờ kéo lùi; việc Xong, Huỷ không dời nhưng vẫn ràng việc sau. Mỗi việc dời có
+  một vết `doi-bat-dau` và một `doi-han` nguồn `tu-doi`, `sau.boi` là việc trước gây dời, người là người
+  đổi việc đầu chuỗi — kể cả khi người đó không sửa được việc sau. Đặt bắt đầu sớm hơn việc phải chờ → 400
+  «Việc này phải bắt đầu sau khi «A» xong (hạn dd/mm).».
+- **Mốc.** `DuAnMoc` có ngày và `DuAnMocCho` (việc phải xong trước). Trễ khi một việc chờ có hạn sau ngày
+  mốc (`mocTre`); mốc không tự dời.
+- **Vòng đời.** Dự án chưa có `DuAnVet` ngoài `tao` thì xoá được; còn lại Đóng · Mở lại. Đóng không đổi
+  việc nào; dự án đã đóng từ chối thêm việc, mốc, phụ thuộc và đổi ngày (400 «Dự án đã đóng.»), việc trong
+  đó vẫn đổi trạng thái. Đưa việc ra khỏi dự án gỡ phụ thuộc (vết `go-phu-thuoc` trên cả hai việc) và việc
+  chờ mốc; xoá việc gỡ chúng theo khoá ngoại.
+- **Trần 300 việc.** Chỉ chặn việc thêm vào dự án: `viec.create` có `duAnId`, `viec.taoCon` của việc trong dự
+  án, `viec.doiDuAn` chuyển vào. Lời kiểm `docDuAnNhanViec` khoá hàng `duAn` rồi đếm, nên hai người cùng thêm
+  việc thứ 300 thì người sau nhận 400 «Một dự án chứa tối đa 300 việc.». Mốc, phụ thuộc và đổi ngày dùng
+  `docDuAnMo`, chỉ chặn khi dự án đã đóng.
+- **Thứ tự khoá.** Các đường ghi qua `khoaMot` (sửa, đóng, mở lại, xoá dự án; mốc; phụ thuộc) và `khoaDuAn` (đổi ngày,
+  `viec.doiDuAn`) khoá hàng `duAn` rồi mọi việc của dự án theo `id`. Thêm việc con (`viec.taoCon`) đọc dự án của
+  việc cha không khoá, khoá hàng `duAn` của dự án đó, rồi mới khoá việc cha — nên thêm việc con đúng lúc người khác
+  sửa mốc hay đổi ngày cùng dự án thì một bên chờ bên kia, không bên nào nhận lỗi. Việc cha đổi dự án trong lúc chờ
+  thì lượt đó dừng (`LoiChaDoiDuAn`) trước khi khoá dự án mới, và `viec.taoCon` chạy lại trong giao dịch mới, tối đa
+  `DU_AN.thuLaiViecCon` lượt; hết lượt mới trả 400 «Việc cha vừa đổi dự án. Hãy thử lại.». Các đường ghi việc lẻ
+  khác (`docViecGhi`: đổi trạng thái, sửa nội dung, gắn bản ghi…) chưa được rà thứ tự khoá với dự án.
+- **Lịch làm việc.** Router `lichLamViec` (`PhamViDoiTacMiddleware`, như `duAn`): `get` (ai đọc được phạm vi đối tác), `datNgayNghiTuan`,
+  `themNgayLe`, `xoaNgayLe` (chủ, quản trị). Lịch chưa từng đặt nghỉ Thứ Bảy, Chủ nhật
+  (`LICH_LAM_VIEC.ngayNghiTuanMacDinh`). Quản trị bỏ chọn hết thì `datNgayNghiTuan([])` bật
+  `AppSetting.khongNghiTuan`: không nghỉ ngày nào trong tuần, ở mọi đường đọc (`docLichLam`); đặt lại một
+  thứ nghỉ bất kỳ thì cờ tắt. Đổi lịch không dời việc đã có; chỉ lần ghi sau tính theo lịch mới.
+- **Dữ liệu mẫu và thước.** `gieoDuAnMau` (`@crm/db/du-an-gieo`, gọi từ `bun run db:seed`) dựng một dự án
+  qua đúng các hàm ghi trên. Thước `_acceptance/du-an-gantt/rang/do-nguong.mjs --tu --den` chỉ đọc.
 
 ## The organization tree
 
@@ -882,7 +960,13 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   objectives contributing one step down, each objective or KR once — built by the pure
   `quanh-muc-tieu.ts` over the same `mucTieuCuaCay` set the tree reads (so the same
   visibility; a target outside that set is dropped, never named), and `okr.sucKhoe` is admin-only
-  (`ForbiddenException` otherwise). `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
+  (`ForbiddenException` otherwise). `okr.danhSachBo` (GET `/okr/units/sets`) lists one row per unit OKR set of the
+  org tree (OneHub, divisions, departments — no personal sets) with the objective count of
+  `countByUnit`, the progress and low-confidence count of `toanCanh`, and two viewer flags: `toiDan`
+  (the viewer is that division's or department's head; nobody leads OneHub) and `dangTheoDoi` (the
+  viewer follows at least one objective of that set in the cycle). `okr.viecCuaBo` (POST
+  `/okr/units/viec`) returns the `OkrViecKr` tasks of one set's KRs in a cycle, grouped by KR, KRs
+  without tasks omitted; both are pure reads built in `bo-okr.ts`. `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
   number of queries whatever the unit count; `apps/api/test/okr-toan-canh-hieu-nang.spec.ts`
   pins that at 50 departments × 2000 KRs. The pure roll-ups (`danh-sach.ts`, `toan-canh.ts`) take
   plain data and are tested without a database. Caps and the admin message live in
@@ -1489,6 +1573,33 @@ luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
   a person or the machine, is written by `taoDeXuatTaiLieu` in
   `packages/db/src/tai-lieu-de-xuat.ts`.
 
+## Trường Tệp: tải lên, quyền tạm, hàng chờ xoá
+
+`apps/api/src/fields/field-files.*` owns the `fieldFiles.*` router: `status`,
+`requestUpload`, `complete`, `downloadUrl`, `remove`. A `FILE` field stores no value in
+`fieldValue`; its files are `FieldFile` rows, one per file, pointing at exactly one
+company, contact or deal (`CHECK fieldFile_mot_ban_ghi`).
+
+- **Same upload path as the document library.** `requestUpload` signs a PUT on the private
+  store of `packages/db/src/blob-tep-truong.ts` and returns a `phieu` from `phieu-nguon.ts`;
+  `complete` checks it, takes an advisory lock, reads the bytes back, recognises the kind from
+  magic bytes (`@crm/validation/kieu-tep`, a DOCX with `vbaProject.bin` is refused), checks
+  the real size and writes the row. Ten files per cell, 20 MB each, same bytes once per cell.
+- **No `TEP_BAN_GHI_BLOB_TOKEN` switches files off, never throws.** `status` answers
+  `{ bat: false }`; `requestUpload`, `complete` and `downloadUrl` answer
+  `PRECONDITION_FAILED`; names and counts still show. There is no fallback to
+  `KHO_TAI_LIEU_BLOB_TOKEN` or `BLOB_READ_WRITE_TOKEN`.
+- **Interim permission lives in one file** (`field-files-quyen.ts`): workspace admins open
+  files; admins and the uploader delete them. Every row in `tepTheoTruong` carries
+  `coTheMo` and `coTheXoa`, so the screen never compares roles.
+- **A Blob is deleted after the row, through a queue.** `requestUpload` writes a
+  `BlobChoXoa` row that expires with the ticket and `complete` removes it. `remove`,
+  `fields.delete` and every `purge` write the row inside their transaction
+  (`ghiChoXoaTheoTep`) and delete the Blob after commit; a failed delete stays queued and
+  the daily archive-retention sweep (`FieldsService.donHangCho`) retries it.
+- **Filters.** `field:<key>=some|none` on lists, boards, saved views and campaigns;
+  `facetCounts` counts both. Kara never fills a `FILE` field (`karaDienDuoc`).
+
 ## Deal stages are rows, and code reads their kind
 
 `apps/api/src/giai-doan` owns the `giaiDoan.*` router. A deal stage is a row in
@@ -1643,12 +1754,16 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
   đè nhánh không làm rơi tệp vì thủ tục trả mọi tín hiệu còn lại. `tin-hieu/crm/**` nằm trong
   `t1_skip_globs`, nên PR hàng chờ là T1. Lượt hỏng (thiếu bí mật, CRM lỗi, tệp lệch byte, kho
   cấm mở PR) kết thúc đỏ và GitHub gửi thư cho người sửa dòng lịch gần nhất.
-- **Giới hạn đã biết:** PR do tác vụ mở bằng `GITHUB_TOKEN` không kích hoạt CI; điều phối đóng
-  rồi mở lại PR để chạy bước nhẹ trước khi đưa vào lô.
+- **Giới hạn đã biết (đã gỡ từ #445):** PR do tác vụ mở bằng `GITHUB_TOKEN` không kích hoạt CI.
+  Lịch giờ lấy mã, đẩy nhánh và mở PR bằng bí mật `TIN_HIEU_TOKEN`, nên CI tự chạy trên PR hàng
+  chờ như PR của người.
 - **Ba việc cài một lần của chủ kho** (ngoài kho): tạo khoá chỉ-kéo trên production; đặt hai bí
-  mật kho `CRM_API_URL`, `CRM_KHOA_KEO_TIN_HIEU`; bật «Allow GitHub Actions to create and approve
-  pull requests» (Settings › Actions › General). Thiếu việc cuối thì lượt vẫn kéo và đẩy nhánh —
-  người gửi vẫn thấy «Chờ gom» — rồi đỏ ở bước mở PR với câu gọi tên quyền đó.
+  mật kho `CRM_API_URL`, `CRM_KHOA_KEO_TIN_HIEU`; tạo một token fine-grained chỉ cho kho này, quyền
+  «Contents: Read and write» và «Pull requests: Read and write», rồi đặt nó làm bí mật
+  `TIN_HIEU_TOKEN`. Token có hạn (bản tạo 16/10 hết hạn khoảng 14/01/2027) — tạo token mới và đặt
+  lại bí mật trước ngày đó. Token thiếu quyền «Pull requests» thì lượt vẫn kéo và đẩy nhánh —
+  người gửi vẫn thấy «Chờ gom» — rồi đỏ ở bước mở PR với câu gọi tên quyền đó; token hết hạn thì
+  lượt đỏ ngay ở bước lấy mã.
 - Tệp git không mang tên, thư, id người dùng hay phòng ban; phòng ban (tên và `phongBanId`) chỉ đi
   kèm trong phản hồi để lệnh kéo về đếm cho ngưỡng.
 - `tinHieu.tatCa` chỉ owner/admin (cùng câu kiểm với `keoVe`), chỉ đọc — không đóng dấu. Trả mọi tín
@@ -1662,6 +1777,20 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
   14/10 (`_acceptance/moi-tin-hieu-cho-quan-tri/`). Mở lại khi số tín hiệu vượt vài trăm.
 - Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
   phán nào ở API.
+- **Trạng thái sống (TH3).** Hai trang tín hiệu đọc chỗ của tín hiệu từ bản chụp lộ trình theo đúng
+  `chonNguon` của trang Lộ trình (`apps/app/lib/tin-hieu/nguon.ts`); bộ đọc thô giữ khoá `tin_hieu` mà
+  `phanTichLoTrinh` lột đi. Khoá chỗ người gửi thấy (`cho-gom` … `da-giao`) tính ở một hàm
+  `choTinHieu` (`@crm/validation/tin-hieu-cho`) cho cả app lẫn API.
+- **Báo người gửi khi đổi chỗ — chỗ thứ hai API ghi `ThongBao`.** `loTrinhBanChup.day` ghi bản chụp
+  qua `ghiBanChupVaBaoTinHieu` (`apps/api/src/lo-trinh/tin-hieu-doi-cho.ts`): một giao dịch khoá hàng
+  của nguồn (`FOR UPDATE`), quyết `nhan/trung/cu-hon` như LT1c, và khi `nhan` với nguồn `crm` và đã có
+  bản trước thì `doiCho(cũ, mới)` → một `ThongBao` loại `tin-hieu-doi-cho` cho người gửi của mỗi tín
+  hiệu đổi chỗ (khoá gộp `tin-hieu-doi-cho:<mã>:<sha>`, đường `/tin-hieu`). Bỏ tín hiệu đã lưu trữ,
+  không còn người gửi, người gửi không còn là thành viên; bản chụp đầu tiên không báo. Danh sách tín
+  hiệu vắng hay hỏng ở bản cũ hoặc bản mới thì không báo gì, bản chụp vẫn nhận, nhật ký ghi
+  `lo-trinh.ban-chup.tin-hieu-khong-doc-duoc` — phần so không ném vì dữ liệu, nên chỉ lỗi kho dữ liệu
+  làm lượt đỏ, và khi đó bản chụp cũng không đổi. Luật tất định trong giao dịch như
+  `sinhGoiYKeHoach`; không `AgentTask`. Lệnh đo: `bun run tin-hieu:do-bao --tu <ngày>`.
 
 ## Bản chụp lộ trình: Actions đẩy, CRM giữ bản mới nhất
 
@@ -1682,8 +1811,9 @@ Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó m�
   khoá ngoài khuôn của trang (danh sách tín hiệu) để TH3 đọc. Đọc ra thì phân tích lại.
 - **Không bao giờ lùi**: ghi bằng một câu `UPDATE … WHERE commitLuc < $moi`; cùng sha trả
   `trung`, cũ hơn trả `cu-hon`, không đổi gì. Hai lượt chạy đua tạo hàng đầu bắt `P2002`.
-- Nhật ký ghi mã khoá, sha và kết quả, không ghi nội dung khối. Không `AgentTask`: không có việc
-  phán nào ở API.
+- Nhật ký ghi mã khoá, sha, kết quả và số thông báo đổi chỗ, không ghi nội dung khối. Không
+  `AgentTask`: không có việc phán nào ở API. Ghi bản chụp `crm` đi qua `ghiBanChupVaBaoTinHieu`
+  (mục «Tín hiệu», TH3).
 - **Trần thân 2 MB chỉ áp riêng đường bản chụp.** `createApp` dựng hai cầu REST trên cùng router:
   `POST /rest/lo-trinh/ban-chup` (khớp đúng đường, `BAN_CHUP_LO_TRINH.duongRest`) đọc thân tới
   `tranThanByte`; mọi đường khác của `/rest` đọc tới `REST_BRIDGE_BODY_LIMIT_BYTES` (100 000 byte,
@@ -1695,6 +1825,24 @@ Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó m�
   in ref đã chạy, không gọi CRM. Chạy ngoài Actions không bị chặn. Bước chặn sống trong kịch bản
   của chính nhánh được chạy: nhánh lấy onehub trước khi bước chặn vào onehub thì không có nó.
 
+
+## Danh bạ sản phẩm lộ trình
+
+Router `sanPhamLoTrinh` (`apps/api/src/lo-trinh/san-pham.router.ts`, REST `/roadmap-products`) giữ danh
+bạ sản phẩm mà trang Lộ trình đọc ngoài CRM, và ai xem được từng sản phẩm. API không gọi GitHub —
+tác nhân lấy lộ trình (`docs/agent.md`, «Lấy lộ trình sản phẩm»).
+
+- **Chỉ chủ và quản trị ghi** (`canManageSettings`): tạo, sửa, cấp người xem, lưu trữ, khôi phục, xoá,
+  xoá vĩnh viễn. `danhSach` mở cho mọi vai trong phạm vi «chung»; người không phải quản trị chỉ nhận
+  sản phẩm mình được cấp. Một hàm quyền duy nhất: `sanPhamXemDuoc` (`@crm/db/san-pham-lo-trinh`), trang
+  Lộ trình và lệnh đo cùng gọi nó.
+- **Mã sinh từ tên lúc tạo, không đổi sau.** Mã `crm` bị cấm (CRM là mục cố định trong mã); mã trùng
+  hay rỗng trả `BAD_REQUEST` với câu mở đầu «Name:».
+- **Sửa kho, nhánh hay tệp không xoá bản chụp**: đặt `nguonDoiLuc`, trang hiện bản cũ kèm dòng «nguồn
+  vừa đổi»; lần lấy đầu của nguồn mới thay hẳn bản cũ (bỏ kiểm một chiều đúng một lần).
+- **Vòng đời** (`docs/vong-doi.md`): Xoá khi chưa từng lấy được (`layDauLuc` null); đã lấy thì Lưu trữ →
+  Khôi phục → Xoá vĩnh viễn, và xoá vĩnh viễn từ chối sản phẩm chưa lưu trữ, mất cả bản chụp và
+  người xem.
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may

@@ -236,7 +236,7 @@ evals:
       con lai, ke ca da dau.
       Ma tran viet truoc 5 o:
         1 onehub khong co tep, CRM co 2 tin hieu -> origin/tin-hieu/keo-ve == onehub + 1 commit; diff --name-only chi gom
-          tin-hieu/crm/crm-1.json, crm-2.json
+          LO-TRINH.html, tin-hieu/crm/crm-1.json, crm-2.json
         2 chay lai y het -> sha origin/tin-hieu/keo-ve khong doi (khong day)
         3 CRM them crm-3 -> nhanh moi la onehub + 1 commit chua 3 tep (dung lai tren dinh onehub, khong chong commit)
         4 onehub da gop ca 3 tep, CRM khong co gi moi -> khong commit, khong day, nhanh hang cho khong doi
@@ -245,11 +245,20 @@ evals:
           sau luot nay (assert tren tap tep, ca 5 o)
         7 (describe "tvk-nhanh-hook") ban lam dat core.hooksPath ve thu muc chua ban chep .githooks/pre-push THAT cua kho
           -> luot van day duoc nhanh hang cho (hook bo qua qua CRM_SKIP_HOOKS)
+        8 (describe "tvk-ve", them 17/10) kho thu mang bo ve gia scripts/product-map.mjs ghi LO-TRINH.html tu danh sach tep
+          tin hieu -> commit hang cho cham dung thu muc nguon tin hieu + LO-TRINH.html, trang tren nhanh hang cho == trang
+          ve tu chinh cac tep tren nhanh do
+        9 bo ve thoat khac 0 -> luot do, goi ten "ve lai trang lo trinh hong" kem dong loi cua bo ve, khong day, khong goi gh
+        10 bo ve tu stage PRODUCT-MAP.md -> luot do voi thong diep chamNgoai goi ten PRODUCT-MAP.md, khong day
+        11 bo ve doi PRODUCT-MAP.md trong cay ma khong stage -> commit van chi mang LO-TRINH.html + tep tin hieu
       Moi tep day len doc bang ham kiem cua kit (cung ham kiem kenh yeu cau ma rang vong-kit cua LT2 dung) 0 loi.
       CHIEU DO: ban sao commit ca khi khong co tep moi -> o 2 hoac 4 do voi thong diep ghim "luot day khi khong co gi moi";
       ban sao chong commit len nhanh cu -> o 3 do voi thong diep ghim "nhanh hang cho khong dung lai tren nhanh chinh";
       may chu gia chi tra tin hieu chua dau -> dong 6 do voi thong diep ghim "nhanh hang cho lam roi tep chua gop";
       ban sao day khong dat CRM_SKIP_HOOKS -> dong 7 do voi thong diep ghim "luot lich bi hook truoc day chan".
+      ban sao bo buoc ve -> o 8 do voi thong diep ghim "trang lo trinh khong ve lai"; ban sao bo kiem ma thoat cua bo ve
+      -> o 9 do voi thong diep ghim "ban ve hong ma luot van xanh"; ban sao cho moi tep qua chamNgoai -> o 10 do voi thong
+      diep ghim "commit cham PRODUCT-MAP.md ma luot van xanh".
 
   - id: E9
     criterion: AC-9

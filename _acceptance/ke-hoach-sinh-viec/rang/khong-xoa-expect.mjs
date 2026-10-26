@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const GOC = path.resolve(import.meta.dirname, "..", "..", "..");
@@ -17,15 +18,27 @@ function docTenTrangThai(chu) {
 		.flatMap(([ma, cu, moi]) => {
 			if (!ma || !cu) return [];
 			const loai = ma[0];
-			if (loai === "M" || loai === "D") return [{ loai, cu, moi: loai === "D" ? null : cu }];
+			if (loai === "M" || loai === "D")
+				return [{ loai, cu, moi: loai === "D" ? null : cu }];
 			if (loai === "R" && moi) return [{ loai, cu, moi }];
 			return [];
 		})
 		.filter((t) => MAU_TEP_KIEM.test(t.cu));
 }
-function tepKiemDaSua(moc) {
+// Khoảng đếm: «--gop <sha gộp>» đo đúng cặp gộp của vòng (cha thứ nhất → chính commit gộp), nên các PR
+// gộp vào nhánh chính SAU vòng không lọt vào phép đo; «--moc <sha>» giữ đường cũ (mốc → cây làm việc)
+// cho lúc vòng chưa gộp.
+function tepKiemDaSua(goc, moc, dich) {
 	return docTenTrangThai(
-		git("diff", "--name-status", "-M", "--diff-filter=MDR", moc, "HEAD"),
+		git(
+			goc,
+			"diff",
+			"--name-status",
+			"-M",
+			"--diff-filter=MDR",
+			moc,
+			dich ?? "HEAD",
+		),
 	);
 }
 // Câu expect được phép mất, mỗi câu kèm lý do có tên. Chỉ một: AC-1 của ke-hoach-sinh-viec (Cổng
@@ -84,8 +97,78 @@ function mat(truoc, sau) {
 	return { sai, choPhep: thieu.length - sai.length };
 }
 
-function git(...args) {
-	return execFileSync("git", ["-C", GOC, ...args], { encoding: "utf8" });
+function git(goc, ...args) {
+	return execFileSync("git", ["-C", goc, ...args], { encoding: "utf8" });
+}
+
+function doKhoang(goc, moc, dich) {
+	const tep = tepKiemDaSua(goc, moc, dich);
+	let tongSai = 0;
+	let tongChoPhep = 0;
+	let tongTruoc = 0;
+	const loi = [];
+	for (const { cu, moi } of tep) {
+		const ten = moi ?? cu;
+		const truoc = git(goc, "show", `${moc}:${cu}`);
+		const sau =
+			moi === null
+				? ""
+				: dich
+					? git(goc, "show", `${dich}:${moi}`)
+					: readFileSync(path.join(goc, moi), "utf8");
+		tongTruoc += cauExpect(truoc).length;
+		const { sai, choPhep } = mat(truoc, sau);
+		tongChoPhep += choPhep;
+		tongSai += sai.length;
+		for (const c of sai) loi.push(`${ten}: expect bi xoa hay sua: ${c}`);
+	}
+	return { soTep: tep.length, tongSai, tongChoPhep, tongTruoc, loi };
+}
+
+function thuCapGop() {
+	const kho = mkdtempSync(path.join(tmpdir(), "kh-cap-gop-"));
+	const g = (...a) =>
+		git(kho, "-c", "user.name=t", "-c", "user.email=t@t", ...a);
+	const ghi = (ten, noiDung) => writeFileSync(path.join(kho, ten), noiDung);
+	try {
+		g("init", "-q", "-b", "chinh");
+		execFileSync("mkdir", ["-p", path.join(kho, "test")]);
+		ghi("test/a.spec.ts", "expect(a).toBe(1);\n");
+		ghi("x.ts", "1\n");
+		g("add", ".");
+		g("commit", "-q", "-m", "goc");
+		const capGop = (tenNhanh, tep, noiDung) => {
+			g("checkout", "-q", "-b", tenNhanh, "chinh");
+			ghi(tep, noiDung);
+			g("commit", "-q", "-am", tenNhanh);
+			g("checkout", "-q", "chinh");
+			g("merge", "-q", "--no-ff", "-m", `gop ${tenNhanh}`, tenNhanh);
+			return git(kho, "rev-parse", "HEAD").trim();
+		};
+		const sach = capGop("vong-sach", "x.ts", "2\n");
+		const sauSach = doKhoang(kho, `${sach}^1`, sach);
+		const ban = capGop(
+			"vong-sua-expect",
+			"test/a.spec.ts",
+			"expect(a).toBe(2);\n",
+		);
+		const sauBan = doKhoang(kho, `${ban}^1`, ban);
+		const sauBanRoiSach = doKhoang(kho, `${sach}^1`, sach);
+		const ok =
+			sauSach.tongSai === 0 &&
+			sauBan.tongSai === 1 &&
+			sauBan.loi[0] ===
+				"test/a.spec.ts: expect bi xoa hay sua: expect(a).toBe(1)" &&
+			sauBanRoiSach.tongSai === 0;
+		if (!ok) {
+			console.error(
+				`tu-thu cap gop: sach ${sauSach.tongSai}, sua-expect ${JSON.stringify(sauBan.loi)}, sach-sau-PR-khac ${sauBanRoiSach.tongSai}`,
+			);
+			process.exit(2);
+		}
+	} finally {
+		rmSync(kho, { recursive: true, force: true });
+	}
 }
 
 if (process.argv.includes("--tu-thu")) {
@@ -110,48 +193,53 @@ if (process.argv.includes("--tu-thu")) {
 		"M\tapps/api/test/a.spec.ts\nD\tapps/api/test/b.spec.ts\nR087\tapps/api/test/c.spec.ts\tapps/api/test/d.spec.ts\nM\tapps/api/src/x.ts\n",
 	);
 	const mongDs = JSON.stringify([
-		{ loai: "M", cu: "apps/api/test/a.spec.ts", moi: "apps/api/test/a.spec.ts" },
+		{
+			loai: "M",
+			cu: "apps/api/test/a.spec.ts",
+			moi: "apps/api/test/a.spec.ts",
+		},
 		{ loai: "D", cu: "apps/api/test/b.spec.ts", moi: null },
-		{ loai: "R", cu: "apps/api/test/c.spec.ts", moi: "apps/api/test/d.spec.ts" },
+		{
+			loai: "R",
+			cu: "apps/api/test/c.spec.ts",
+			moi: "apps/api/test/d.spec.ts",
+		},
 	]);
 	if (JSON.stringify(ds) !== mongDs) {
 		console.error(`tu-thu: doc ten-trang-thai sai ${JSON.stringify(ds)}`);
 		process.exit(2);
 	}
-	if (mat('expect(a).toBe(1);', "").sai.length !== 1) {
+	if (mat("expect(a).toBe(1);", "").sai.length !== 1) {
 		console.error("tu-thu: tep bi xoa khong bat");
 		process.exit(2);
 	}
+	thuCapGop();
 	console.log(
-		"tu-thu 5/5: sua gia tri nhieu dong -> bat; sua khoang trang trong chuoi -> bat; doi khoang trang ngoai chuoi -> khong bat; doc M/D/R -> dung; tep bi xoa -> bat",
+		"tu-thu 6/6: sua gia tri nhieu dong -> bat; sua khoang trang trong chuoi -> bat; doi khoang trang ngoai chuoi -> khong bat; doc M/D/R -> dung; tep bi xoa -> bat; cap gop: vong sua expect -> bat, vong sach -> im, PR gop sau vong -> im",
 	);
 	process.exit(0);
 }
 
+const iGop = process.argv.indexOf("--gop");
 const iMoc = process.argv.indexOf("--moc");
-if (iMoc < 0 || !process.argv[iMoc + 1]) {
+const dau =
+	iGop >= 0
+		? process.argv[iGop + 1]
+		: iMoc >= 0
+			? process.argv[iMoc + 1]
+			: null;
+if (!dau) {
 	console.error(
-		"thieu --moc <sha>: moc phai ghim trong lenh, khong suy tu merge-base",
+		"thieu --gop <sha gop cua vong> hay --moc <sha>: moc phai ghim trong lenh, khong suy tu merge-base",
 	);
 	process.exit(2);
 }
-const moc = git("rev-parse", process.argv[iMoc + 1]).trim();
-let tongSai = 0;
-let tongChoPhep = 0;
-let tongTruoc = 0;
-const TEP = tepKiemDaSua(moc);
-for (const { cu, moi } of TEP) {
-	const tep = moi ?? cu;
-	const truoc = git("show", `${moc}:${cu}`);
-	const sau = moi === null ? "" : readFileSync(path.join(GOC, moi), "utf8");
-	tongTruoc += cauExpect(truoc).length;
-	const { sai, choPhep } = mat(truoc, sau);
-	tongChoPhep += choPhep;
-	tongSai += sai.length;
-	for (const c of sai) console.error(`${tep}: expect bi xoa hay sua: ${c}`);
-}
+const dich = iGop >= 0 ? git(GOC, "rev-parse", dau).trim() : null;
+const moc = git(GOC, "rev-parse", dich ? `${dich}^1` : dau).trim();
+const kq = doKhoang(GOC, moc, dich);
+for (const d of kq.loi) console.error(d);
 console.log(
-	`moc ${moc.slice(0, 9)} · ${TEP.length} tep · ${tongTruoc} cau expect san co · ${tongChoPhep} cau cho phep mat`,
+	`${dich ? `cap gop ${moc.slice(0, 9)}..${dich.slice(0, 9)}` : `moc ${moc.slice(0, 9)}`} · ${kq.soTep} tep · ${kq.tongTruoc} cau expect san co · ${kq.tongChoPhep} cau cho phep mat`,
 );
-if (tongSai > 0) process.exit(1);
+if (kq.tongSai > 0) process.exit(1);
 console.log("khong expect san co nao bi xoa hay sua");

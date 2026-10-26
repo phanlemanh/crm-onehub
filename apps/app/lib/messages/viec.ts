@@ -26,6 +26,9 @@ const en = {
 		huy: "Cancel",
 		dangGiao: "Assigning…",
 		loi: "Couldn't assign. Check the fields and try again.",
+		duAn: "Project",
+		khongDuAn: "No project",
+		khongDuAnNao: "No open project matches",
 	},
 	khoi: { tieuDe: "Work" },
 	nut: {
@@ -51,6 +54,7 @@ const en = {
 		nguoiTheoDoi: "Followers",
 		ganVoi: "Linked to",
 		rieng: "Private — only the people on it can see it",
+		duAnChung: "Project task — everyone who can see the project can see it",
 		chiXem: "Only the assigner and the assignee can change the status",
 		choNguoiGiao:
 			"Waiting for the assigner to review. Only the assigner can change the status now",
@@ -59,9 +63,24 @@ const en = {
 		tuTheoDoi: "Follow",
 		boTheoDoi: "Unfollow",
 		loiLichSu: "Couldn't load the history",
+		batDau: "Start",
+		batDauSauHan: "The start date must be on or before the due date.",
+		duAn: "Project",
+		khongDuAn: "No project",
+		phaiCho: "Waits for ({n})",
+		khongPhaiCho: "Doesn't wait for any task",
+		themPhaiCho: "Add a task to wait for",
+		chonViecDuAn: "Pick a task in this project…",
+		khongViecDuAn: "No other task in this project",
+		goPhaiCho: "Stop waiting for «{ten}»",
+		congKhaiTieuDe: "Move this task into «{ten}»?",
+		congKhaiThan: "Everyone who can see the project will see this task.",
+		congKhaiNut: "Move into project",
+		congKhaiThoi: "Keep it private",
 	},
 	lichSu: {
 		heThong: "System",
+		viecKhuat: "a task you can't view",
 		nguon: {
 			web: "in the app",
 			zalo: "replied on Zalo",
@@ -74,6 +93,8 @@ const en = {
 			khuon: "from the 30-day plan template",
 			"ke-hoach": "from the 30-day plan steps",
 			"dong-ke-hoach": "when the 30-day plan was closed",
+			gantt: "on the Gantt chart",
+			"tu-doi": "rescheduled automatically",
 		},
 		loai: {
 			tao: "created the work",
@@ -88,6 +109,15 @@ const en = {
 			"chuyen-viec": "handed it over",
 			"go-do-ban-ghi-xoa": "unlinked {ten} because the record was deleted",
 			"them-viec-con": "added subtask {ten}",
+			"doi-bat-dau": "set the start date to {ngay}",
+			"doi-han-tu-doi":
+				"moved the due date from {truoc} to {sau} because «{viec}» moved",
+			"doi-bat-dau-tu-doi":
+				"moved the start date from {truoc} to {sau} because «{viec}» moved",
+			"vao-du-an": "moved it into project {ten}",
+			"ra-du-an": "took it out of project {ten}",
+			"them-phu-thuoc": "made it wait for «{ten}»",
+			"go-phu-thuoc": "stopped it waiting for «{ten}»",
 		},
 	},
 	xoa: {
@@ -97,7 +127,7 @@ const en = {
 		thoi: "Keep it",
 	},
 	trang: {
-		tieuDe: "My work",
+		tieuDe: "Work",
 		moTa: "Work assigned to you, work you assigned, and work you follow.",
 		giaoViec: "Assign work",
 		giaoMoTa:
@@ -191,6 +221,9 @@ const vi: ViecMessages = {
 		huy: "Huỷ",
 		dangGiao: "Đang giao…",
 		loi: "Chưa giao được. Kiểm lại các ô rồi thử lại.",
+		duAn: "Dự án",
+		khongDuAn: "Không dự án",
+		khongDuAnNao: "Không có dự án đang mở nào khớp",
 	},
 	khoi: { tieuDe: "Việc" },
 	nut: {
@@ -216,6 +249,7 @@ const vi: ViecMessages = {
 		nguoiTheoDoi: "Người theo dõi",
 		ganVoi: "Gắn với",
 		rieng: "Việc riêng — chỉ người trong cuộc thấy",
+		duAnChung: "Việc trong dự án — mọi người xem được dự án đều thấy việc này",
 		chiXem: "Chỉ người giao và người thực hiện đổi được trạng thái",
 		choNguoiGiao:
 			"Đang chờ người giao đánh giá. Bây giờ chỉ người giao đổi được trạng thái",
@@ -224,9 +258,24 @@ const vi: ViecMessages = {
 		tuTheoDoi: "Theo dõi",
 		boTheoDoi: "Bỏ theo dõi",
 		loiLichSu: "Không tải được lịch sử",
+		batDau: "Bắt đầu",
+		batDauSauHan: "Ngày bắt đầu phải trước hay trùng hạn.",
+		duAn: "Dự án",
+		khongDuAn: "Không dự án",
+		phaiCho: "Phải chờ ({n})",
+		khongPhaiCho: "Không chờ việc nào",
+		themPhaiCho: "Thêm việc phải chờ",
+		chonViecDuAn: "Chọn việc trong dự án…",
+		khongViecDuAn: "Dự án không còn việc nào khác",
+		goPhaiCho: "Thôi chờ «{ten}»",
+		congKhaiTieuDe: "Đưa việc vào «{ten}»?",
+		congKhaiThan: "Mọi người xem được dự án sẽ thấy việc này.",
+		congKhaiNut: "Đưa vào dự án",
+		congKhaiThoi: "Giữ riêng",
 	},
 	lichSu: {
 		heThong: "Hệ thống",
+		viecKhuat: "một việc bạn không có quyền xem",
 		nguon: {
 			web: "trên màn",
 			zalo: "trả lời qua Zalo",
@@ -239,6 +288,8 @@ const vi: ViecMessages = {
 			khuon: "từ khuôn kế hoạch 30 ngày",
 			"ke-hoach": "trên thẻ Bước của kế hoạch 30 ngày",
 			"dong-ke-hoach": "khi đóng kế hoạch 30 ngày",
+			gantt: "trên Gantt",
+			"tu-doi": "máy tự dời",
 		},
 		loai: {
 			tao: "tạo việc",
@@ -253,6 +304,14 @@ const vi: ViecMessages = {
 			"chuyen-viec": "chuyển việc 30 ngày",
 			"go-do-ban-ghi-xoa": "gỡ {ten} vì bản ghi đã bị xoá",
 			"them-viec-con": "thêm việc con {ten}",
+			"doi-bat-dau": "đổi ngày bắt đầu sang {ngay}",
+			"doi-han-tu-doi": "dời hạn từ {truoc} sang {sau} vì «{viec}» dời",
+			"doi-bat-dau-tu-doi":
+				"dời ngày bắt đầu từ {truoc} sang {sau} vì «{viec}» dời",
+			"vao-du-an": "đưa vào dự án {ten}",
+			"ra-du-an": "đưa ra khỏi dự án {ten}",
+			"them-phu-thuoc": "đặt việc phải chờ «{ten}»",
+			"go-phu-thuoc": "gỡ việc phải chờ «{ten}»",
 		},
 	},
 	xoa: {
@@ -262,7 +321,7 @@ const vi: ViecMessages = {
 		thoi: "Giữ lại",
 	},
 	trang: {
-		tieuDe: "Việc của tôi",
+		tieuDe: "Việc",
 		moTa: "Việc người khác giao cho bạn, việc bạn giao, và việc bạn đang theo dõi.",
 		giaoViec: "Giao việc",
 		giaoMoTa: "Giao việc cho bạn hoặc đồng nghiệp, có thể gắn với một bản ghi.",

@@ -32,7 +32,6 @@ const en = {
 		dangLam: "Working",
 		dangXep: "Queued",
 		dangGhi: (duong: string) => `Writing ${duong}`,
-		chayNen: "Runs in the background",
 		dangDungLai: "Stopping",
 		thuLai: "Try again",
 		dungLai: "Stop",
@@ -41,6 +40,10 @@ const en = {
 		daXinDung: "Stop requested.",
 		dungHong: "The agent could not be stopped. Try again.",
 		dangThuLai: "Retrying",
+		daTroi: (dongHo: string) => `${dongHo} elapsed`,
+		lauHon: "Over 3 minutes now. Kara is still building.",
+		roiTrang:
+			"You can leave this page. Kara will tell you in notifications when it is done.",
 	},
 	loi: {
 		choPhut:
@@ -250,7 +253,6 @@ const vi = {
 		dangLam: "Đang làm",
 		dangXep: "Đang xếp",
 		dangGhi: (duong: string) => `Đang ghi ${duong}`,
-		chayNen: "Chạy ngầm",
 		dangDungLai: "Đang dừng",
 		thuLai: "Thử lại",
 		dungLai: "Dừng",
@@ -259,6 +261,9 @@ const vi = {
 		daXinDung: "Đã xin dừng.",
 		dungHong: "Không dừng được tác nhân. Thử lại.",
 		dangThuLai: "Đang thử lại",
+		daTroi: (dongHo: string) => `Đã ${dongHo}`,
+		lauHon: "Đã quá 3 phút. Kara vẫn đang dựng.",
+		roiTrang: "Bạn có thể rời trang. Kara sẽ báo trong hộp thông báo khi xong.",
 	},
 	loi: {
 		choPhut:

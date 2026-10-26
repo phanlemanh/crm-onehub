@@ -52,6 +52,7 @@ import { useChuKy } from "../chon-chu-ky";
 import { okrParsers, soDoParsers } from "../okr-search-params";
 import { kyVongCo, ThanhTienDo } from "../tien-do-kr";
 import { ChuaChuKy, DangTai } from "../trang-thai-okr";
+import { OKrTruot } from "./o-kr-truot";
 
 type HangToanCanh = RouterOutputs["okr"]["toanCanh"]["hang"][number];
 
@@ -322,6 +323,7 @@ export function ToanCanh() {
 					label={mt.toanCanh.tuTinThap}
 					value={String(tongQuan.tuTinThap)}
 				/>
+				<OKrTruot cycleId={currentId} />
 			</StatGroup>
 			{tuanDau ? (
 				<Empty>
@@ -354,7 +356,7 @@ export function ToanCanh() {
 								<Button asChild size="sm" variant="outline">
 									<Link
 										data-nut="suc-khoe"
-										href={`${url("/okr/toan-canh/suc-khoe")}${kem({})}`}
+										href={`${url("/okr/suc-khoe")}${kem({})}#chuong-trinh`}
 									>
 										<Icon icon={ChartLine} data-icon="inline-start" />
 										{mt.toanCanh.suKhoe}
@@ -373,7 +375,7 @@ export function ToanCanh() {
 								<DongDonVi
 									h={h}
 									key={h.key}
-									toi={`${url("/okr/theo-don-vi")}${kem(h.key === "goc" ? {} : { [SEARCH_PARAM.okr.don]: h.key })}`}
+									toi={`${url("/okr/bo-okr")}${kem({ [SEARCH_PARAM.okr.don]: h.key })}`}
 								/>
 							))}
 						</SimpleTable>

@@ -4,6 +4,8 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.sol_nut_dom
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-7
     expected: "exit 0; bài DOM dựng NutSoan với cauNoi=false trên ma trận rút lúc chạy: tập khoá HINH_NUT_TAT (nut-soan.tsx) phải BẰNG tập mã union lyDo của soanSanSangOutput (lệch → 'bang nut lech union: <ma>'), cộng ba biến thể bật (nấc bật không cuộc đang, nấc bật có cuộc đang, nấc ẩn) = 11 kết quả × hai vai (quản trị, người sửa được) = 22 ô, sàn viết tay 22 (ít hơn hoặc rỗng → 'ma tran rong' mã 1); mỗi ô hôm nay có nút → đúng một [data-nut-soan='nut-chua-cau-hinh'] disabled, aria-describedby trỏ câu nut.chuaCauHinh, không chữ nut.tiep, không [data-nut='ds-cuoc'], spy soanMo 0 lời gọi; mỗi ô hôm nay không có nút → không phần tử [data-nut-soan]; số khẳng định = số ô. Đối chứng dương: ô nấc bật với cauNoi=true, bấm nút thì spy soanMo ghi đúng 1 lời gọi; cả ma trận với cauNoi=true cho lại đúng hình hôm nay. Chiều đỏ ghim: bản sao bỏ nhánh cauNoi → 'nut mo khi chua cau hinh: <ma>' mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", apps/app/lib/messages/okr-soan.ts, apps/app/test/soan-okr-song-lai.dom.tsx]
@@ -55,6 +57,8 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.sol_nut_dom
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-7
     expected: "exit 0; trong cùng tệp DOM, ca 'nut-chua-cau-hinh — so cuoc' với cauNoi=true và soanSanSang trả soCuocDaDung = k: nút danh sách cuộc ghi đúng nut.dsCuoc(k, trần), không có nút khi k = 0. Chiều đỏ: bản sao hiện số cố định → 'so cuoc tren nut lech: <k>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", apps/app/test/soan-okr-song-lai.dom.tsx]

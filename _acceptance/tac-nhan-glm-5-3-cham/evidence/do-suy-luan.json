@@ -1,0 +1,19 @@
+{
+  "luc": "2026-10-16T09:51:41.608Z",
+  "model": "zai/glm-5.3",
+  "cau": "A team wants a weekly digest of deals closing this month grouped by owner. List the three data fields you need and one risk. Answer in four short lines.",
+  "muc": {
+    "low": {
+      "status": 200,
+      "model": "zai/glm-5.3",
+      "token_ra": 86,
+      "token_suy_luan": 15
+    },
+    "high": {
+      "status": 200,
+      "model": "zai/glm-5.3",
+      "token_ra": 165,
+      "token_suy_luan": 81
+    }
+  }
+}

@@ -48,6 +48,7 @@ export type CrmCache = {
 	settings(options?: Options): Promise<void>;
 	currency(options?: Options): Promise<void>;
 	giaiDoan(options?: Options): Promise<void>;
+	sanPhamLoTrinh(options?: Options): Promise<void>;
 	workspace(options?: Options): Promise<void>;
 	slack(options?: Options): Promise<void>;
 	zalo(options?: Options): Promise<void>;
@@ -134,6 +135,8 @@ export function useCrmCache(): CrmCache {
 				trpc.viec.cuaBanGhi.queryKey(),
 				trpc.viec.bang.queryKey(),
 				trpc.viec.con.queryKey(),
+				trpc.duAn.list.queryKey(),
+				trpc.duAn.lich.queryKey(),
 				trpc.dashboard.summary.queryKey(),
 			],
 			[],
@@ -160,6 +163,9 @@ export function useCrmCache(): CrmCache {
 					entity
 						? trpc.fields.filters.queryKey({ entity: ENTITY_FOR[entity] })
 						: trpc.fields.filters.queryKey(),
+					entity
+						? trpc.fields.layout.queryKey({ entity: ENTITY_FOR[entity] })
+						: trpc.fields.layout.queryKey(),
 				],
 				entity
 					? [RECORD_BY_ID[entity](), RECORD_LIST[entity]()]
@@ -227,7 +233,12 @@ export function useCrmCache(): CrmCache {
 
 		deal: (id, options) =>
 			run(
-				[id ? trpc.deals.byId.queryKey({ id }) : trpc.deals.byId.queryKey()],
+				[
+					id ? trpc.deals.byId.queryKey({ id }) : trpc.deals.byId.queryKey(),
+					id
+						? trpc.onboarding.goiYCuaDeal.queryKey({ dealId: id })
+						: trpc.onboarding.goiYCuaDeal.queryKey(),
+				],
 				[
 					...listKeys(),
 					trpc.deals.contactOptions.queryKey(),
@@ -292,11 +303,14 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.program.queryKey(),
 					trpc.okr.aiChiTieu.queryKey(),
 					trpc.okr.danhSach.queryKey(),
+					trpc.okr.danhSachBo.queryKey(),
+					trpc.okr.viecCuaBo.queryKey(),
 					trpc.okr.cayCanChinh.queryKey(),
 					trpc.okr.soDoDonVi.queryKey(),
 					trpc.okr.quanhMucTieu.queryKey(),
 					trpc.okr.toanCanh.queryKey(),
 					trpc.okr.sucKhoe.queryKey(),
+					trpc.okr.moiKr.queryKey(),
 					trpc.okr.hopTuan.queryKey(),
 					trpc.okr.dienBien.queryKey(),
 					trpc.okr.khoiCuaToi.queryKey(),
@@ -337,6 +351,9 @@ export function useCrmCache(): CrmCache {
 					trpc.viec.lichSu.queryKey(),
 					trpc.viec.bang.queryKey(),
 					trpc.viec.con.queryKey(),
+					trpc.duAn.list.queryKey(),
+					trpc.duAn.get.queryKey(),
+					trpc.duAn.lich.queryKey(),
 				],
 				[trpc.dashboard.summary.queryKey()],
 				options,
@@ -471,6 +488,17 @@ export function useCrmCache(): CrmCache {
 				options,
 			),
 
+		sanPhamLoTrinh: (options) =>
+			run(
+				[
+					trpc.sanPhamLoTrinh.danhSach.queryKey(),
+					trpc.sanPhamLoTrinh.daLuuTru.queryKey(),
+					trpc.sanPhamLoTrinh.nguoiXem.queryKey(),
+				],
+				[],
+				options,
+			),
+
 		giaiDoan: (options) =>
 			run(
 				[trpc.giaiDoan.list.queryKey(), trpc.giaiDoan.archived.queryKey()],
@@ -506,7 +534,11 @@ export function useCrmCache(): CrmCache {
 
 		zalo: (options) =>
 			run(
-				[trpc.zalo.cuaToi.queryKey(), trpc.zalo.xuong.queryKey()],
+				[
+					trpc.zalo.cuaToi.queryKey(),
+					trpc.zalo.xuong.queryKey(),
+					trpc.thongBao.caiDat.queryKey(),
+				],
 				[],
 				options,
 			),
@@ -529,7 +561,11 @@ export function useCrmCache(): CrmCache {
 
 		tinHieu: (options) =>
 			run(
-				[trpc.tinHieu.cuaToi.queryKey(), trpc.tinHieu.tatCa.queryKey()],
+				[
+					trpc.tinHieu.cuaToi.queryKey(),
+					trpc.tinHieu.tatCa.queryKey(),
+					trpc.tinHieu.daLuuTru.queryKey(),
+				],
 				[],
 				options,
 			),

@@ -12,3 +12,5 @@ export const NHIP = {
 };
 
 export const DOC_DAU_BYTE = 64 * 1024;
+
+export const SUC_KHOE_MAC_DINH = { he_so_cho: 1.5, duoi_tai_phut: 2, mau_hieu_chuan: 5 };

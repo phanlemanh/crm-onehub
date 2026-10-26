@@ -5,8 +5,10 @@ import {
 	Prisma as PrismaNamespace,
 	type RecordSource,
 } from "@crm/db";
+import { ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { ghiGoDoXoa } from "@crm/db/viec-ghi";
+import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
 import {
 	BadRequestException,
 	ConflictException,
@@ -35,6 +37,7 @@ import {
 import { blankToNull, toCents } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
+import type { NguoiGoiTep } from "../fields/field-files-quyen";
 import { FieldsService } from "../fields/fields.service";
 import {
 	activityFacetCounts,
@@ -47,6 +50,8 @@ import {
 	ownerFilter,
 	paginate,
 	resolveOrderBy,
+	timTrang,
+	xepTheoId,
 } from "../trpc/list-input";
 import type {
 	CompanyBulkOwnerInput,
@@ -57,6 +62,14 @@ import type {
 } from "./companies.contracts";
 import { normalizeDomain } from "./domain";
 import { FaviconService } from "./favicon.service";
+
+function tuChoiNenTang(input: string | null | undefined): void {
+	const nenTang = nenTangCuaTenMien(input);
+	if (!nenTang) return;
+	throw new BadRequestException(
+		`"${input}" is a ${nenTang.ten} page, not the company's own website — leave the domain empty or use its own site.`,
+	);
+}
 
 const OWNER_SELECT = {
 	id: true,
@@ -97,45 +110,53 @@ export class CompaniesService {
 		const { skip, take } = paginate(input);
 
 		const [rows, total, facetCounts] = await Promise.all([
-			this.db.company.findMany({
-				where,
-				skip,
-				take,
-				orderBy: resolveOrderBy(input, SORTABLE, {
-					createdAt: "desc",
-				}),
-				select: {
-					id: true,
-					name: true,
-					domain: true,
-					iconUrl: true,
-					iconDarkUrl: true,
-					iconTone: true,
-					logoUrl: true,
-					brandColor: true,
-					industry: true,
-					enrichmentStatus: true,
-					source: true,
-					owner: { select: OWNER_SELECT },
-					_count: {
-						select: {
-							contacts: true,
-							deals: { where: { giaiDoan: { kind: "OPEN" } } },
-						},
-					},
-					lastActivityAt: true,
-					createdAt: true,
-					archivedAt: true,
-				},
-			}),
+			this.fields
+				.sapTheoTruong("COMPANY", input, where, { skip, take })
+				.then(async (theoTruong) =>
+					xepTheoId(
+						await this.db.company.findMany({
+							...timTrang(
+								theoTruong,
+								where,
+								{ skip, take },
+								resolveOrderBy(input, SORTABLE, { createdAt: "desc" }),
+							),
+							select: {
+								id: true,
+								name: true,
+								domain: true,
+								iconUrl: true,
+								iconDarkUrl: true,
+								iconTone: true,
+								logoUrl: true,
+								brandColor: true,
+								industry: true,
+								enrichmentStatus: true,
+								source: true,
+								owner: { select: OWNER_SELECT },
+								_count: {
+									select: {
+										contacts: true,
+										deals: { where: { giaiDoan: { kind: "OPEN" } } },
+									},
+								},
+								lastActivityAt: true,
+								createdAt: true,
+								archivedAt: true,
+							},
+						}),
+						theoTruong,
+					),
+				),
 			this.db.company.count({ where }),
 			this.facetCounts(input, filterableFields),
 		]);
 
 		const ids = rows.map((row) => row.id);
-		const [queued, tableFields] = await Promise.all([
+		const [queued, tableFields, soTep] = await Promise.all([
 			this.queue.queuedCompanies(ids),
 			this.fields.tableValuesFor("COMPANY", ids),
+			this.fields.soTepTheoBanGhi("COMPANY", ids),
 		]);
 
 		return {
@@ -159,13 +180,14 @@ export class CompaniesService {
 				createdAt: row.createdAt.toISOString(),
 				archivedAt: row.archivedAt?.toISOString() ?? null,
 				fields: tableFields.get(row.id) ?? {},
+				soTepTheoTruong: soTep.get(row.id) ?? {},
 			})),
 			total,
 			facetCounts,
 		};
 	}
 
-	async byId(id: string) {
+	async byId(id: string, nguoiGoi?: NguoiGoiTep) {
 		const company = await this.db.company.findUnique({
 			where: { id },
 			select: {
@@ -271,6 +293,7 @@ export class CompaniesService {
 			})),
 			archivedContacts: nguoi.daLuuTru.map(caNhanDaLuuTru),
 			fields: await this.fields.valuesFor("COMPANY", id),
+			tepTheoTruong: await this.fields.tepTheoBanGhi("COMPANY", id, nguoiGoi),
 			queued: await this.queue.isQueued({ companyId: id }),
 			createdAt: createdAt.toISOString(),
 			archivedAt: archivedAt?.toISOString() ?? null,
@@ -306,6 +329,9 @@ export class CompaniesService {
 	}
 
 	async create(input: CompanyCreateInput) {
+		const truong = input.fields ?? {};
+		await this.fields.kiemBatBuocLucTao(this.db, "COMPANY", truong);
+		tuChoiNenTang(input.domain);
 		const domain = normalizeDomain(input.domain);
 
 		if (domain) {
@@ -325,11 +351,18 @@ export class CompaniesService {
 				data: {
 					name: input.name.trim(),
 					domain,
-					website: domain ? `https://${domain}` : null,
+					website:
+						blankToNull(input.website ?? "") ??
+						(domain ? `https://${domain}` : null),
+					phone: blankToNull(input.phone ?? ""),
+					email: blankToNull(input.email ?? ""),
+					city: blankToNull(input.city ?? ""),
+					country: blankToNull(input.country ?? ""),
 					ownerId: input.ownerId ?? null,
 				},
 				select: { id: true, name: true, domain: true, createdAt: true },
 			});
+			await this.fields.ghiTruongLucTao(tx, "COMPANY", created.id, truong);
 			await emit({
 				type: "company.created",
 				record: { kind: "company", id: created.id },
@@ -348,7 +381,7 @@ export class CompaniesService {
 		await this.agent.companyCreated(company.id);
 
 		void this.favicon.backfill(company.id, company.domain);
-		void this.fields.queueBackfillForNewRecord("COMPANY", company.id);
+		void this.fields.queueBackfillForNewRecord("COMPANY", company.id, truong);
 
 		return { id: company.id, name: company.name, domain: company.domain };
 	}
@@ -380,6 +413,7 @@ export class CompaniesService {
 		}
 
 		if (input.domain !== undefined) {
+			tuChoiNenTang(input.domain);
 			const domain = normalizeDomain(input.domain);
 			if (input.domain.trim() && !domain) {
 				throw new BadRequestException(
@@ -471,7 +505,11 @@ export class CompaniesService {
 		id: string,
 		guard?: { archivedBefore: Date },
 	): Promise<{ id: string; name: string } | null> {
-		let deleted: { targets: StampTargets; name: string } | null;
+		let deleted: {
+			targets: StampTargets;
+			name: string;
+			tepXoa: string[];
+		} | null;
 
 		try {
 			deleted = await this.db.$transaction(async (tx) => {
@@ -522,13 +560,16 @@ export class CompaniesService {
 					},
 					new Date(),
 				);
+				const tepXoa = await ghiChoXoaTheoTep(tx, {
+					OR: [{ companyId: id }, { deal: { companyId: id } }],
+				});
 
 				const company = await tx.company.delete({
 					where: { id },
 					select: { name: true },
 				});
 
-				return { targets, name: company.name };
+				return { targets, name: company.name, tepXoa };
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -536,6 +577,7 @@ export class CompaniesService {
 
 		if (!deleted) return null;
 
+		await this.fields.donTepNgay(deleted.tepXoa);
 		await this.stamp.recomputeAfterDelete(deleted.targets, { companyId: id });
 
 		this.logger.log({

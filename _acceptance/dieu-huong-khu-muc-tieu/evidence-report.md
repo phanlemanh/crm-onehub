@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7cfc90d514b682e0fcffc864b2f39b05e42bbd85
+verified_commit: 9b246f0a57bae04226f308c1d481f95b31a15217
 human_signoff: manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 vòng 2, wf_0412087d-785, engine feature-loop 2.30.0). Ngoài-1, 3–16 ghi Known limits; Ngoài-2, 17, 18 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -250,3 +250,39 @@ sha: 6650f1063d7a61758993e6af6dddff336878c74c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-16, do gộp onehub f1bf84a29 + vá NutHoiKara a219fc9fd + lớp cấm/chú thích/nạp sẵn danhSach
 run_id: repin-20261016T080432Z-52909
 sha: 7cfc90d514b682e0fcffc864b2f39b05e42bbd85 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-17, do trang-don-vi-mot-bang (DH2): ghim lại sáu hồ sơ sau sửa coNutHoiKara (lối b, 374b5f9c5), một làn
+run_id: repin-20261017T174535Z-97743
+sha: b628afc16ae96714e56391e79605f2af26a101dd · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-18, do DA4 du-an-gantt: code Dự án, Lịch làm việc, răng HG đổi; 10 hồ sơ, trần 150′, bỏ DH2 (răng DH2 gãy sau gộp) theo Điều phối
+run_id: repin-20261018T002421Z-44023
+sha: 6e3d4c62116ca1cc0a4db4d18851f873814b448a · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-18, do DA4 du-an-gantt: S4 lượt 1–2 sửa test và trang Việc; 7 hồ sơ bỏ DH2 (thước DH2 chờ chủ kho), trần 130′
+run_id: repin-20261018T042326Z-17299
+sha: 9e9aa993dfc2cdd1788661f0715129ed417ff472 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-18, do t1-ma-doc đổi phan-loai.mjs, gate-shape.json, t1_ma_doc, bộ quét và spec trong packages/ui; gộp onehub 76e8fb215 (#475); thước E17 và E11 neo lần gộp của hồ sơ
+run_id: repin-20261018T111331Z-21656
+sha: 01089942a15cecbdcc387d41e69bc032346524fc · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-18, do gộp onehub 2374af730 (#472, #479) làm cũ lại 8 hồ sơ
+run_id: repin-20261018T122729Z-21270
+sha: a0124b2dba7fd0f324ebb62c0a560e6b83425141 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 11 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
+run_id: repin-20261020T130437Z-49516
+sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E8 · thay bởi hồ sơ đã ký: E8→vo-khu-muc-tieu#AC-2 · ngoài làn máy: E2, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-6, AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 12 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: eval thay bởi VK9, bàn đo qua hộp Thêm mục tiêu (V2-20 b2), thước Cài đặt theo hiện trạng (V2-21), sau gộp onehub
+run_id: repin-20261023T034523Z-32223
+sha: f91b4721b353b24c36cac18e10f33321c8f697f8 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E6, E7, E8 · thay bởi hồ sơ đã ký: E3→mot-nut-tao-muc-tieu#AC-1, E6→mot-nut-tao-muc-tieu#AC-6, E7→mot-nut-tao-muc-tieu#AC-8, E8→vo-khu-muc-tieu#AC-2 · ngoài làn máy: E2, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2, AC-6, AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 13 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: hoá cũ lại sau gộp onehub (#547)
+run_id: repin-20261023T043846Z-81133
+sha: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E6, E7, E8 · thay bởi hồ sơ đã ký: E3→mot-nut-tao-muc-tieu#AC-1, E6→mot-nut-tao-muc-tieu#AC-6, E7→mot-nut-tao-muc-tieu#AC-8, E8→vo-khu-muc-tieu#AC-2 · ngoài làn máy: E2, E13 (E13 không khai paths) · AC không có chốt máy: AC-2, AC-6, AC-11 · chập chờn (đỏ lần đầu, đạt khi chạy lại): khung-soan-chan-lien-ket E8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 14 — 2026-10-24, do VK3 trang-bo-okr sửa thước và vật — ghim lại sau chữ ký, ba thước theo «duyệt cả ba» (9b246f0a5)
+run_id: repin-20261024T133834Z-50324
+sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E6, E7, E8 · thay bởi hồ sơ đã ký: E3→mot-nut-tao-muc-tieu#AC-1, E6→mot-nut-tao-muc-tieu#AC-6, E7→mot-nut-tao-muc-tieu#AC-8, E8→vo-khu-muc-tieu#AC-2 · ngoài làn máy: E2, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2, AC-6, AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

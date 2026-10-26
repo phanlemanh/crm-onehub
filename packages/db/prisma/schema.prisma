@@ -31,6 +31,7 @@ model User {
   factDecisions  ContactFact[]       @relation("FactDecider")
   conversations  AgentConversation[] @relation("ConversationOwner")
   fieldValues    FieldValue[]        @relation("FieldValueUser")
+  fieldFiles     FieldFile[]         @relation("FieldFileUploader")
   savedViews     SavedView[]         @relation("SavedViewOwner")
 
   campaignsOwned   Campaign[]      @relation("CampaignOwner")
@@ -55,6 +56,8 @@ model User {
   apiKeys Apikey[]
 
   onboardingPlansOwned    OnboardingPlan[]        @relation("OnboardingPlanOwner")
+  goiYKeHoachNhan         GoiYKeHoach[]           @relation("GoiYKeHoachNguoiNhan")
+  goiYKeHoachXuLy         GoiYKeHoach[]           @relation("GoiYKeHoachNguoiXuLy")
   onboardingStepsAssigned OnboardingStep[]        @relation("OnboardingStepAssignee")
   onboardingWatches       OnboardingWatch[]
   zaloLink                ZaloLink?
@@ -99,13 +102,24 @@ model User {
   taiLieuBaoSai     TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiNguoiBao")
   taiLieuBaoSaiXuLy TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiXuLyBoi")
   tinHieu           TinHieu[]         @relation("TinHieuNguoiGui")
+  tinHieuLuuTru     TinHieu[]         @relation("TinHieuLuuTru")
+  tinHieuVet        TinHieuVet[]      @relation("TinHieuVetNguoi")
   thongBao          ThongBao[]        @relation("ThongBaoNguoiNhan")
+  caiDatThongBao    CaiDatThongBao[]
   viecGiao          Viec[]            @relation("ViecNguoiGiao")
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
   viecTao           Viec[]            @relation("ViecTaoBoi")
   viecTheoDoi       ViecTheoDoi[]
   viecThuTu         ViecThuTu[]
   viecVet           ViecVet[]         @relation("ViecVetNguoi")
+  duAnTao           DuAn[]            @relation("DuAnTaoBoi")
+  duAnDong          DuAn[]            @relation("DuAnDongBoi")
+  duAnVet           DuAnVet[]         @relation("DuAnVetNguoi")
+  duAnMocTao        DuAnMoc[]         @relation("DuAnMocTaoBoi")
+  viecPhuThuocTao   ViecPhuThuoc[]    @relation("ViecPhuThuocTaoBoi")
+  ngayNghiTao       NgayNghi[]        @relation("NgayNghiTaoBoi")
+  sanPhamLoTrinhTao  SanPhamLoTrinh[]  @relation("SanPhamLoTrinhTaoBoi")
+  sanPhamLoTrinhXem  SanPhamNguoiXem[]
 
   @@unique([email])
   @@map("user")
@@ -240,6 +254,12 @@ enum DealStageKind {
   OPEN
   WON
   LOST
+}
+
+enum TrangThaiGoiY {
+  CHO
+  DA_MO
+  BO_QUA
 }
 
 enum ActivityType {
@@ -412,11 +432,13 @@ model Company {
   emailThreads   EmailThread[]
   calendarEvents CalendarEvent[]
   fieldValues    FieldValue[]
+  fieldFiles     FieldFile[]
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
 
   onboardingPlans OnboardingPlan[]
   viecGan         ViecGan[]
+  goiYKeHoach     GoiYKeHoach[]
 
   @@unique([domain], map: "company_domain_active_key", where: { archivedAt: null })
   @@index([ownerId])
@@ -478,6 +500,7 @@ model Contact {
   calendarEvents  CalendarEvent[]
   eventAttendance CalendarAttendee[]
   fieldValues     FieldValue[]
+  fieldFiles      FieldFile[]
   visitors        TrackedVisitor[]   @relation("VisitorContact")
   submissions     FormSubmission[]   @relation("SubmissionContact")
   createdAt       DateTime           @default(now())
@@ -1049,7 +1072,9 @@ model Deal {
   contacts    DealContact[]
   activities  Activity[]
   fieldValues FieldValue[]
+  fieldFiles  FieldFile[]
   viecGan     ViecGan[]
+  goiYKeHoach GoiYKeHoach[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -1114,6 +1139,7 @@ enum FieldType {
   EMAIL
   PHONE
   USER
+  FILE
 }
 
 model FieldDefinition {
@@ -1136,6 +1162,7 @@ model FieldDefinition {
 
   options FieldOption[]
   values  FieldValue[]
+  files   FieldFile[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1157,6 +1184,18 @@ model FieldOption {
 
   @@index([fieldId, position])
   @@map("fieldOption")
+}
+
+model StandardFieldLayout {
+  entity   FieldEntity
+  key      String
+  position Int
+  hidden   Boolean     @default(false)
+
+  updatedAt DateTime @updatedAt
+
+  @@id([entity, key])
+  @@map("standardFieldLayout")
 }
 
 model FieldValue {
@@ -1194,6 +1233,51 @@ model FieldValue {
   @@index([optionId])
   @@index([userId])
   @@map("fieldValue")
+}
+
+model FieldFile {
+  id      String          @id @default(cuid())
+  fieldId String
+  field   FieldDefinition @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId String?
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  dealId    String?
+  deal      Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  tenTep       String
+  kieu         String
+  kichThuoc    Int
+  sha256       String
+  blobPathname String   @unique
+  taiBoiId     String?
+  taiBoi       User?    @relation("FieldFileUploader", fields: [taiBoiId], references: [id], onDelete: SetNull)
+  taiLuc       DateTime @default(now())
+
+  @@unique([fieldId, companyId, sha256])
+  @@unique([fieldId, contactId, sha256])
+  @@unique([fieldId, dealId, sha256])
+  @@index([fieldId, companyId])
+  @@index([fieldId, contactId])
+  @@index([fieldId, dealId])
+  @@index([taiBoiId])
+  @@map("fieldFile")
+}
+
+model BlobChoXoa {
+  pathname String   @id
+  kho      String
+  taoLuc   DateTime @default(now())
+  xoaSau   DateTime
+  lanThu   Int      @default(0)
+  fieldId  String?
+  banGhiId String?
+  userId   String?
+
+  @@index([xoaSau])
+  @@map("blobChoXoa")
 }
 
 model SavedView {
@@ -1498,6 +1582,9 @@ model AppSetting {
   zaloWebhookSecret String?
   zaloWebhookUrl    String?
   zaloWebhookLyDo   String?
+
+  ngayNghiTuan  Int[]   @default([])
+  khongNghiTuan Boolean @default(false)
 
   updatedAt DateTime @updatedAt
 
@@ -1874,6 +1961,7 @@ model OnboardingPlan {
   watches     OnboardingWatch[]
   okrViecKr   OkrViecKr[]
   viecGan     ViecGan[]
+  goiYKeHoach GoiYKeHoach[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -2977,21 +3065,39 @@ model OkrHoiYHieu {
 }
 
 model TinHieu {
-  id         String      @id @default(cuid())
-  so         Int         @unique @default(autoincrement())
-  nguoiGuiId String?
-  nguoiGui   User?       @relation("TinHieuNguoiGui", fields: [nguoiGuiId], references: [id], onDelete: SetNull)
-  phongBanId String?
-  phongBan   Department? @relation(fields: [phongBanId], references: [id], onDelete: SetNull)
-  muonLam    String
-  daXayRa    String
-  tieuDe     String
-  man        String
-  guiLuc     DateTime    @default(now())
-  keoVeLuc   DateTime?
+  id           String       @id @default(cuid())
+  so           Int          @unique @default(autoincrement())
+  nguoiGuiId   String?
+  nguoiGui     User?        @relation("TinHieuNguoiGui", fields: [nguoiGuiId], references: [id], onDelete: SetNull)
+  phongBanId   String?
+  phongBan     Department?  @relation(fields: [phongBanId], references: [id], onDelete: SetNull)
+  muonLam      String
+  daXayRa      String
+  tieuDe       String
+  man          String
+  guiLuc       DateTime     @default(now())
+  keoVeLuc     DateTime?
+  archivedAt   DateTime?
+  archivedById String?
+  archivedBy   User?        @relation("TinHieuLuuTru", fields: [archivedById], references: [id], onDelete: SetNull)
+  vet          TinHieuVet[]
 
   @@index([nguoiGuiId, guiLuc])
   @@map("tinHieu")
+}
+
+model TinHieuVet {
+  id        String   @id @default(cuid())
+  tinHieuId String?
+  tinHieu   TinHieu? @relation(fields: [tinHieuId], references: [id], onDelete: SetNull)
+  so        Int
+  luc       DateTime @default(now())
+  nguoiId   String?
+  nguoi     User?    @relation("TinHieuVetNguoi", fields: [nguoiId], references: [id], onDelete: SetNull)
+  loai      String
+
+  @@index([tinHieuId, luc])
+  @@map("tinHieuVet")
 }
 
 enum TrangThaiViec {
@@ -3003,34 +3109,41 @@ enum TrangThaiViec {
 }
 
 model Viec {
-  id              String        @id @default(cuid())
+  id              String          @id @default(cuid())
   tieuDe          String
   moTa            String?
-  trangThai       TrangThaiViec @default(CHUA_LAM)
+  trangThai       TrangThaiViec   @default(CHUA_LAM)
   hanNgay         DateTime?
   nguoiGiaoId     String
-  nguoiGiao       User          @relation("ViecNguoiGiao", fields: [nguoiGiaoId], references: [id], onDelete: Restrict)
+  nguoiGiao       User            @relation("ViecNguoiGiao", fields: [nguoiGiaoId], references: [id], onDelete: Restrict)
   nguoiThucHienId String
-  nguoiThucHien   User          @relation("ViecNguoiThucHien", fields: [nguoiThucHienId], references: [id], onDelete: Restrict)
+  nguoiThucHien   User            @relation("ViecNguoiThucHien", fields: [nguoiThucHienId], references: [id], onDelete: Restrict)
   taoBoiId        String
-  taoBoi          User          @relation("ViecTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
-  taoLuc          DateTime      @default(now())
-  doiLuc          DateTime      @updatedAt
+  taoBoi          User            @relation("ViecTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc          DateTime        @default(now())
+  doiLuc          DateTime        @updatedAt
   roiChuaLamLuc   DateTime?
   khepLuc         DateTime?
-  activityGocId   String?       @unique
-  activityGoc     Activity?     @relation("ViecChep", fields: [activityGocId], references: [id], onDelete: SetNull)
+  activityGocId   String?         @unique
+  activityGoc     Activity?       @relation("ViecChep", fields: [activityGocId], references: [id], onDelete: SetNull)
   khoaNguon       String?
   gan             ViecGan[]
   theoDoi         ViecTheoDoi[]
   vet             ViecVet[]
   chaId           String?
-  cha             Viec?         @relation("ViecCon", fields: [chaId], references: [id], onDelete: NoAction)
-  con             Viec[]        @relation("ViecCon")
+  cha             Viec?           @relation("ViecCon", fields: [chaId], references: [id], onDelete: NoAction)
+  con             Viec[]          @relation("ViecCon")
   thuTu           ViecThuTu[]
   buoc            OnboardingStep? @relation("BuocViec")
+  batDauNgay      DateTime?
+  duAnId          String?
+  duAn            DuAn?           @relation(fields: [duAnId], references: [id], onDelete: Restrict)
+  phaiCho         ViecPhuThuoc[]  @relation("PhuThuocSau")
+  choBoi          ViecPhuThuoc[]  @relation("PhuThuocTruoc")
+  mocCho          DuAnMocCho[]
 
   @@index([chaId])
+  @@index([duAnId])
   @@index([nguoiThucHienId, trangThai, hanNgay])
   @@index([nguoiGiaoId, trangThai])
   @@index([taoLuc])
@@ -3106,12 +3219,29 @@ model ThongBao {
   thayNgay    String
   docLuc      DateTime?
   moLuc       DateTime?
+  dayLan      Int       @default(0)
+  dayLuc      DateTime?
+  dayKenh     String?
+  dayLoi      String?
 
   @@unique([nguoiNhanId, khoa, ngayDau])
   @@index([nguoiNhanId, taoLuc])
   @@index([nguoiNhanId, docLuc])
   @@index([taoLuc])
+  @@index([dayLuc, taoLuc])
   @@map("thongBao")
+}
+
+model CaiDatThongBao {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  loai   String
+  dayRa  Boolean
+  doiLuc DateTime @updatedAt
+
+  @@unique([userId, loai])
+  @@map("caiDatThongBao")
 }
 
 model ViecThuTu {
@@ -3135,4 +3265,151 @@ model BanChupLoTrinh {
   layLuc    DateTime
   duLieu    Json
   canhBao   String[]
+}
+
+model SanPhamLoTrinh {
+  ma            String            @id
+  ten           String
+  kho           String
+  nhanh         String
+  duongTep      String
+  trangThaiLay  String            @default("chua-lay")
+  chiTietLay    String?
+  kiemLuc       DateTime?
+  layDauLuc     DateTime?
+  caiLuc        DateTime?
+  nguonDoiLuc   DateTime?
+  phienBanKhuon Int?
+  luuTruLuc     DateTime?
+  taoBoiId      String
+  taoBoi        User              @relation("SanPhamLoTrinhTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc        DateTime          @default(now())
+  doiLuc        DateTime          @updatedAt
+  nguoiXem      SanPhamNguoiXem[]
+
+  @@index([luuTruLuc, kiemLuc])
+}
+
+model SanPhamNguoiXem {
+  sanPhamMa String
+  sanPham   SanPhamLoTrinh @relation(fields: [sanPhamMa], references: [ma], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  capLuc    DateTime       @default(now())
+
+  @@id([sanPhamMa, userId])
+  @@index([userId])
+}
+
+model DuAn {
+  id        String    @id @default(cuid())
+  ten       String
+  moTa      String?
+  taoBoiId  String
+  taoBoi    User      @relation("DuAnTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc    DateTime  @default(now())
+  doiLuc    DateTime  @updatedAt
+  dongLuc   DateTime?
+  dongBoiId String?
+  dongBoi   User?     @relation("DuAnDongBoi", fields: [dongBoiId], references: [id], onDelete: SetNull)
+  viec      Viec[]
+  vet       DuAnVet[]
+  moc       DuAnMoc[]
+
+  @@index([dongLuc])
+  @@index([taoLuc])
+  @@map("duAn")
+}
+
+model DuAnVet {
+  id      String   @id @default(cuid())
+  duAnId  String
+  duAn    DuAn     @relation(fields: [duAnId], references: [id], onDelete: Cascade)
+  luc     DateTime @default(now())
+  nguoiId String?
+  nguoi   User?    @relation("DuAnVetNguoi", fields: [nguoiId], references: [id], onDelete: SetNull)
+  loai    String
+  truoc   Json?
+  sau     Json?
+
+  @@index([duAnId, luc])
+  @@map("duAnVet")
+}
+
+model DuAnMoc {
+  id       String       @id @default(cuid())
+  duAnId   String
+  duAn     DuAn         @relation(fields: [duAnId], references: [id], onDelete: Cascade)
+  ten      String
+  ngay     DateTime
+  taoBoiId String
+  taoBoi   User         @relation("DuAnMocTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc   DateTime     @default(now())
+  cho      DuAnMocCho[]
+
+  @@index([duAnId, ngay])
+  @@map("duAnMoc")
+}
+
+model DuAnMocCho {
+  id     String  @id @default(cuid())
+  mocId  String
+  moc    DuAnMoc @relation(fields: [mocId], references: [id], onDelete: Cascade)
+  viecId String
+  viec   Viec    @relation(fields: [viecId], references: [id], onDelete: Cascade)
+
+  @@unique([mocId, viecId])
+  @@index([viecId])
+  @@map("duAnMocCho")
+}
+
+model ViecPhuThuoc {
+  id       String   @id @default(cuid())
+  truocId  String
+  truoc    Viec     @relation("PhuThuocTruoc", fields: [truocId], references: [id], onDelete: Cascade)
+  sauId    String
+  sau      Viec     @relation("PhuThuocSau", fields: [sauId], references: [id], onDelete: Cascade)
+  taoBoiId String
+  taoBoi   User     @relation("ViecPhuThuocTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc   DateTime @default(now())
+
+  @@unique([truocId, sauId])
+  @@index([sauId])
+  @@map("viecPhuThuoc")
+}
+
+model NgayNghi {
+  id       String   @id @default(cuid())
+  ngay     DateTime @unique
+  ten      String
+  taoBoiId String
+  taoBoi   User     @relation("NgayNghiTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc   DateTime @default(now())
+
+  @@map("ngayNghi")
+}
+
+model GoiYKeHoach {
+  id          String          @id @default(cuid())
+  dealId      String
+  deal        Deal            @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  companyId   String
+  company     Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  nguoiNhanId String
+  nguoiNhan   User            @relation("GoiYKeHoachNguoiNhan", fields: [nguoiNhanId], references: [id])
+  chuyenLuc   DateTime
+  trangThai   TrangThaiGoiY   @default(CHO)
+  sinhLuc     DateTime
+  xuLyLuc     DateTime?
+  xuLyBoiId   String?
+  xuLyBoi     User?           @relation("GoiYKeHoachNguoiXuLy", fields: [xuLyBoiId], references: [id])
+  planId      String?
+  plan        OnboardingPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
+
+  @@unique([dealId], map: "goiYKeHoach_dealId_cho_key", where: { trangThai: "CHO" })
+  @@index([dealId, trangThai])
+  @@index([nguoiNhanId, trangThai])
+  @@index([companyId, trangThai])
+  @@index([sinhLuc])
+  @@map("goiYKeHoach")
 }

@@ -1,0 +1,82 @@
+{
+ "dot": "viec-du-an-kho-tai-lieu",
+ "day": [
+  {
+   "id": "V1",
+   "worktree": "/CHUA-CO-WORKTREE/V1",
+   "link": ""
+  },
+  {
+   "id": "R1",
+   "worktree": "/CHUA-CO-WORKTREE/R1",
+   "link": ""
+  },
+  {
+   "id": "K1",
+   "worktree": "/CHUA-CO-WORKTREE/K1",
+   "link": ""
+  }
+ ],
+ "hang": [
+  {
+   "ma": "DA12",
+   "tep": "docs/plan/lo-trinh-viec-du-an.json",
+   "slug": "va-gantt-lich-bay-ngay",
+   "day": "V1",
+   "uu_tien": 0,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/va-gantt-lich-bay-ngay/**"
+   ],
+   "moc": "2026-10-24"
+  },
+  {
+   "ma": "VS8",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "ngan-ban-ghi-giu-danh-tinh",
+   "day": "R1",
+   "uu_tien": 0,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/ngan-ban-ghi-giu-danh-tinh/**"
+   ],
+   "moc": "2026-10-22"
+  },
+  {
+   "ma": "l7",
+   "tep": "docs/plan/lo-trinh-kho-tai-lieu.json",
+   "slug": "zalo-cau-thu-hai-lien-ket",
+   "day": "K1",
+   "uu_tien": 0,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/zalo-cau-thu-hai-lien-ket/**"
+   ],
+   "moc": "2026-10-30"
+  },
+  {
+   "ma": "MH4",
+   "tep": "docs/plan/lo-trinh-kho-tai-lieu.json",
+   "slug": "model-theo-vai-do-lai",
+   "day": "K1",
+   "uu_tien": 1,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/model-theo-vai-do-lai/**"
+   ],
+   "moc": "2026-10-30"
+  },
+  {
+   "ma": "MH2",
+   "tep": "docs/plan/lo-trinh-kho-tai-lieu.json",
+   "slug": "re-mo-hinh-mac-dinh",
+   "day": "K1",
+   "uu_tien": 2,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/re-mo-hinh-mac-dinh/**"
+   ],
+   "moc": "2026-10-30"
+  }
+ ]
+}

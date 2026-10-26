@@ -78,7 +78,7 @@ export function TheQuanh({
 				</span>
 			) : null}
 			<span className="flex w-full items-center gap-2">
-				<Progress className="h-1.5 flex-1" value={tienDo} />
+				<Progress className="h-1.5 flex-1" value={tienDo} variant="neutral" />
 				<span className="text-muted-foreground text-xs tabular-nums">
 					{m.tienDo(tienDo)}
 				</span>

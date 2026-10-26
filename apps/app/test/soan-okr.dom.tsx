@@ -21,13 +21,11 @@ import {
 	datAgent,
 	datDanhSach,
 	datLai,
-	dauThangSau,
 	diTrang,
 	don,
 	donViSoanCua,
 	go,
 	goiCua,
-	homNayVn,
 	kr,
 	MO_DAU,
 	m,
@@ -365,22 +363,8 @@ const DV_PB1 = {
 	departmentId: "pb-1",
 } as const;
 const BAT_CO_CUOC = { ...SAN_SANG_BAT, cuocDang: CUOC_DANG, soCuocDaDung: 1 };
-const moThongTin = () => bam(q('[data-nut="thong-tin-soan"]'));
-const chuThongTin = () => q("[data-thong-tin-soan]")?.textContent ?? "";
 
 describe("nut soan — ST-soan-nut-*", () => {
-	test("ST-soan-nut: đã dùng cuộc thì có nút xem danh sách cuộc, bấm mở danh sách", async () => {
-		await moKhung(DON_PB1, {
-			sanSang: { ...SAN_SANG_BAT, soCuocDaDung: 2 },
-		});
-		await moThongTin();
-		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("2", "3"));
-		expect(q("[data-cuoc]")).toBeNull();
-		await bam(q('[data-nut="ds-cuoc"]'));
-		await cho(() => q("[data-cuoc]") !== null, "danh sach cuoc mo");
-		expect(goiCua("okr.soanDanhSachCuoc")[0]?.dauVao).toEqual(DV_PB1);
-	});
-
 	test("ST-soan-nut-an: người không phải quản trị không thấy gì dù máy chủ trả nấc ẩn", async () => {
 		await moKhung(DON_PB1, {
 			sanSang: { ...SAN_SANG_BAT, nac: "an" },
@@ -390,77 +374,9 @@ describe("nut soan — ST-soan-nut-*", () => {
 		expect(q("[data-nut-soan]")).toBeNull();
 		expect(document.body.textContent).not.toContain(m.nut.cheDoAn);
 	});
-
-	test("ngày mở cuộc tính theo giờ Việt Nam, không theo giờ máy", async () => {
-		await moKhung(DON_PB1, {
-			sanSang: {
-				...BAT_CO_CUOC,
-				cuocDang: { ...CUOC_DANG, moLuc: "2026-11-30T18:30:00.000Z" },
-			},
-		});
-		await moThongTin();
-		expect(chuThongTin()).toContain(m.nut.tiepMoTa("01/12", "2", "3"));
-	});
-
-	test("nút bật thường không có nhãn chế độ ẩn", async () => {
-		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, quanTri: true });
-		expect(q('[data-nut-soan="nut"]')).not.toBeNull();
-		expect(document.body.textContent).not.toContain(m.nut.cheDoAn);
-	});
-
-	test("ST-soan-nut-het-cuoc: vẫn xem lại được các cuộc đã soạn", async () => {
-		await moKhung(DON_PB1, {
-			sanSang: { bat: false, lyDo: "het-cuoc-ky" },
-		});
-		await moThongTin();
-		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("3", "3"));
-		await bam(q('[data-nut="ds-cuoc"]'));
-		await cho(() => q("[data-cuoc]") !== null, "danh sach cuoc mo");
-	});
-
-	test("chưa có khoá mô hình: nút mờ kèm lý do", async () => {
-		await moKhung(DON_PB1, {
-			sanSang: { bat: false, lyDo: "chua-co-khoa-mo-hinh" },
-		});
-		expect(
-			(q('[data-nut-soan="nut-chua-khoa"] button') as HTMLButtonElement)
-				.disabled,
-		).toBe(true);
-		await moThongTin();
-		expect(chuThongTin()).toContain(m.lyDo["chua-co-khoa-mo-hinh"]);
-	});
 });
 
 describe("nut theo ly do", () => {
-	const KET_QUA_THEO_LY_DO = {
-		"don-vi-luu-tru": null,
-		"don-vi-chua-bat": null,
-		"don-vi-che-do-an": null,
-		"cuoc-an-dang-mo": null,
-		"con-cuoc-dang": null,
-		"het-cuoc-ky": "nut-het-cuoc",
-		"het-tran-thang": "nut-het-tran",
-		"chua-co-khoa-mo-hinh": "nut-chua-khoa",
-	} as const;
-
-	test("bảng kết quả khớp đúng các mã lý do của máy chủ", () => {
-		expect(Object.keys(KET_QUA_THEO_LY_DO).sort()).toEqual(
-			Object.keys(m.lyDo).sort(),
-		);
-	});
-
-	for (const [lyDo, hinh] of Object.entries(KET_QUA_THEO_LY_DO)) {
-		for (const quanTri of [false, true]) {
-			test(`mã ${lyDo}, ${quanTri ? "quản trị" : "người thường"}: ${hinh ?? "không có nút"}`, async () => {
-				await moKhung(DON_PB1, { sanSang: { bat: false, lyDo }, quanTri });
-				const co = qa("[data-nut-soan]").map((o) =>
-					o.getAttribute("data-nut-soan"),
-				);
-				expect(co).toEqual(hinh ? [hinh] : []);
-			});
-		}
-	}
-
 	test("nấc ẩn mà không phải quản trị: không có nút", async () => {
 		await moKhung(DON_PB1, {
 			sanSang: { bat: false, lyDo: "don-vi-che-do-an" },
@@ -473,25 +389,6 @@ describe("nut theo ly do", () => {
 		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, pha: "dang-chay" });
 		expect(q("[data-nut-soan]")).toBeNull();
 		expect(goiCua("okr.soanSanSang")).toHaveLength(0);
-	});
-
-	test("người không sửa được đơn vị mà không phải quản trị: nút khoá trỏ dòng lý do đầu trang, không hỏi máy chủ", async () => {
-		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, canEdit: false });
-		const nut = q(
-			'[data-nut-soan="nut-khong-quyen"] button',
-		) as HTMLButtonElement | null;
-		expect(nut?.disabled).toBe(true);
-		expect(nut?.getAttribute("aria-describedby")).toBe("okr-khong-them-duoc");
-		expect(goiCua("okr.soanSanSang")).toHaveLength(0);
-	});
-
-	test("quản trị không sửa được đơn vị vẫn thấy nút", async () => {
-		await moKhung(DON_PB1, {
-			sanSang: SAN_SANG_BAT,
-			canEdit: false,
-			quanTri: true,
-		});
-		expect(q('[data-nut-soan="nut"]')).not.toBeNull();
 	});
 
 	test("đơn vị soạn suy từ ô chọn: gốc, bộ phận, phòng ban; người thì không", () => {
@@ -509,59 +406,6 @@ describe("nut theo ly do", () => {
 		});
 		expect(donViSoanCua({ loai: "pb", id: "pb-1" }, "q1")).toEqual(DV_PB1);
 		expect(donViSoanCua({ loai: "nguoi", id: "hung" }, "q1")).toBeNull();
-	});
-
-	test("bấm nút gọi soanMo với đơn vị đúng và đi tới trang soạn", async () => {
-		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
-		await bam(q('[data-nut-soan="nut"]'));
-		expect(goiCua("okr.soanMo")[0]?.dauVao).toEqual(DV_PB1);
-		await cho(() => banGhiCuoi() === `soan:${CUOC.id}`, "mo khung soan");
-		expect(diTrang).toEqual([]);
-	});
-
-	test("bấm Tiếp cuộc đang soạn không gọi soanMo, mở đúng cuộc", async () => {
-		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC });
-		await bam(q('[data-nut-soan="nut-tiep"] button'));
-		await cho(() => banGhiCuoi() === `soan:${CUOC.id}`, "mo khung soan");
-		expect(goiCua("okr.soanMo")).toHaveLength(0);
-		expect(diTrang).toEqual([]);
-	});
-
-	test("soanMo báo còn cuộc đang soạn: mở đúng cuộc đó", async () => {
-		dat("okr.soanMo", () => ({
-			ok: false,
-			lyDo: "con-cuoc-dang",
-			cuocDang: { ...CUOC, id: "cuoc-cu" },
-		}));
-		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
-		await bam(q('[data-nut-soan="nut"]'));
-		await cho(() => banGhiCuoi() === `soan:${"cuoc-cu"}`, "mo khung soan");
-		expect(diTrang).toEqual([]);
-	});
-
-	test("soanMo từ chối vì hết cuộc: không mở màn, đọc lại trạng thái sẵn sàng", async () => {
-		dat("okr.soanMo", () => ({
-			ok: false,
-			lyDo: "het-cuoc-ky",
-			cuocDang: null,
-		}));
-		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
-		expect(goiCua("okr.soanSanSang")).toHaveLength(1);
-		await bam(q('[data-nut-soan="nut"]'));
-		expect(diTrang).toEqual([]);
-		expect(goiCua("okr.soanSanSang")).toHaveLength(2);
-	});
-
-	test("soanMo lỗi: không mở màn, nút mở lại được", async () => {
-		dat("okr.soanMo", () => {
-			throw new Error("mất mạng");
-		});
-		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
-		await bam(q('[data-nut-soan="nut"]'));
-		expect(diTrang).toEqual([]);
-		expect((q('[data-nut-soan="nut"]') as HTMLButtonElement).disabled).toBe(
-			false,
-		);
 	});
 
 	test("tham số cuộc cũ trên URL chuyển sang trang soạn, không thêm lịch sử", async () => {
@@ -585,7 +429,6 @@ describe("nut theo ly do", () => {
 				new URL(d.duong, "http://x").searchParams.get("record"),
 			]),
 		).toEqual([["replace", `soan:${"cuoc-1"}`]]);
-		expect(q('[data-nut-soan="nut-het-tran"]')).not.toBeNull();
 	});
 
 	test("danh sách cuộc mở từ URL; bấm Tiếp trong danh sách đổi sang màn soạn", async () => {
@@ -715,66 +558,6 @@ function idBangTrangThai(): string[] {
 }
 
 const CA = {
-	"ST-soan-nut": async () => {
-		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
-		const nutSoan = q('[data-nut-soan="nut"]') as HTMLButtonElement | null;
-		expect(nutSoan?.textContent?.trim()).toBe(m.nut.soan);
-		expect(nutSoan?.disabled).toBe(false);
-		expect(q('[data-nut-soan="nut-tiep"]')).toBeNull();
-		expect(q('[data-nut-soan="nut-an"]')).toBeNull();
-		expect(q('[data-nut="ds-cuoc"]')).toBeNull();
-	},
-	"ST-soan-nut-tiep": async () => {
-		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC });
-		expect(chu('[data-nut-soan="nut-tiep"] button')).toBe(m.nut.tiep);
-		await moThongTin();
-		expect(chuThongTin()).toContain(m.nut.tiepMoTa("01/12", "2", "3"));
-		expect(chuThongTin()).toContain("lượt");
-		expect(q('[data-nut-soan="nut"]')).toBeNull();
-		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("1", "3"));
-	},
-	"ST-soan-nut-an": async () => {
-		await moKhung(DON_PB1, {
-			sanSang: { ...SAN_SANG_BAT, nac: "an" },
-			quanTri: true,
-		});
-		expect(chu('[data-nut-soan="nut-an"] button')).toBe(m.nut.soan);
-		await moThongTin();
-		expect(chu('[data-thong-tin-soan] [data-slot="badge"]')).toBe(
-			m.nut.cheDoAn,
-		);
-		expect(chuThongTin()).toContain(m.nut.cheDoAnMoTa);
-	},
-	"ST-soan-nut-het-cuoc": async () => {
-		await moKhung(DON_PB1, {
-			sanSang: { bat: false, lyDo: "het-cuoc-ky" },
-		});
-		const o = q('[data-nut-soan="nut-het-cuoc"]');
-		const nutTat = o?.querySelector("button");
-		expect(nutTat?.textContent?.trim()).toBe(m.nut.soan);
-		expect(nutTat?.disabled).toBe(true);
-		expect(q('[data-nut="thong-tin-soan"]')?.getAttribute("aria-label")).toBe(
-			m.nut.thongTin,
-		);
-		await moThongTin();
-		expect(chuThongTin()).toContain(m.nut.hetCuoc("3"));
-		await bam(nutTat ?? null);
-		expect(goiCua("okr.soanMo")).toHaveLength(0);
-	},
-	"ST-soan-nut-het-tran": async () => {
-		await moKhung(DON_PB1, {
-			sanSang: { bat: false, lyDo: "het-tran-thang" },
-		});
-		const nutTat = q(
-			'[data-nut-soan="nut-het-tran"] button',
-		) as HTMLButtonElement;
-		expect(nutTat.disabled).toBe(true);
-		await moThongTin();
-		expect(chuThongTin()).toContain(
-			m.nut.tamNghi(dauThangSau(homNayVn(new Date()))),
-		);
-		expect(q('[data-nut="ds-cuoc"]')).toBeNull();
-	},
 	"ST-soan-mo-dau": async () => {
 		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
 		await moMan();
@@ -999,7 +782,7 @@ const CA = {
 			m.banNhap.daTao("1"),
 		);
 		expect(q('[data-nut="xem-theo-don-vi"]')?.getAttribute("href")).toBe(
-			"/ws/okr/theo-don-vi?kyOkr=q1&donOkr=pb%3Apb-1",
+			"/ws/okr/bo-okr?kyOkr=q1&donOkr=pb%3Apb-1",
 		);
 		expect(q("[data-hanh-dong]")).toBeNull();
 		expect(q('[data-nut="dua-vao"]')).toBeNull();

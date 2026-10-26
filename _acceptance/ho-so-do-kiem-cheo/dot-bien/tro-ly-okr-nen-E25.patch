@@ -1,0 +1,11 @@
+--- a/packages/db/src/ai-chi-phi-danh-muc.ts
++++ b/packages/db/src/ai-chi-phi-danh-muc.ts
+@@ -105,7 +105,7 @@
+ export function tinhNangCua(nguon: NguonBuoc): TinhNang {
+ 	if (nguon.subagent === "tro_ly_okr") {
+ 		if (nguon.okrViec === "tom-tat-tuan") return "okr.tom-tat";
+-		return nguon.okrViec === "de-xuat" ? "okr.de-xuat" : "okr.chuyen-tiep";
++		return nguon.okrViec === "de-xuat" ? "okr.de-xuat" : "okr.de-xuat";
+ 	}
+ 	if (
+ 		nguon.subagent === "agent_runner" ||

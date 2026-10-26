@@ -51,6 +51,8 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 }
 
 const KHONG_DAU = new Set([
+	"nhom.okr",
+	"the.danh-sach",
 	"dong.soKr",
 	"chuyen.dongMoTa",
 	"hopThoaiChoPhep.choDoi",
@@ -199,6 +201,23 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.stage",
 	"okr.sheet.tabVet",
 	"okr.sheet.tienDoTu",
+	"companies.create.domain",
+	"companies.create.owner",
+	"contacts.create.company",
+	"contacts.create.email",
+	"contacts.create.firstName",
+	"contacts.create.jobTitle",
+	"contacts.create.lastName",
+	"contacts.create.owner",
+	"contacts.create.phone",
+	"deals.create.amount",
+	"deals.create.closeDate",
+	"deals.create.company",
+	"deals.create.noDate",
+	"deals.create.owner",
+	"record-sheet.contact.firstName",
+	"record-sheet.contact.lastName",
+	"record-sheet.deal.noDate",
 ];
 
 const GHIM_TRO_LY_OKR = {
@@ -402,14 +421,55 @@ const GHIM_LO_TRINH = {
 		"12 việc · A/B đã giao trong phạm vi lọc",
 	],
 	"lo-trinh:gioLay.capNhat": ["Cập nhật lúc 1", "Cập nhật lúc 12"],
+	"lo-trinh:duKien.ngay": ["Dự kiến xong 1", "Dự kiến xong 12"],
+	"lo-trinh:duKien.ngayGon": ["dự kiến 1", "dự kiến 12"],
+	"lo-trinh:duKien.cachTinh": [
+		"Máy tính lúc mốc bắt đầu (1), coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.",
+		"Máy tính lúc mốc bắt đầu (12), coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.",
+	],
+	"lo-trinh:duKien.gio": ["1 giờ máy", "12 giờ máy"],
 	"lo-trinh:metaTre": [" · 1 trễ mốc", " · 12 trễ mốc"],
 	"lo-trinh:moc.conNgay": ["còn 1 ngày", "còn 12 ngày"],
 	"lo-trinh:moc.tre": ["Trễ 1 ngày", "Trễ 12 ngày"],
 	"lo-trinh:moc.lechKeHoach": ["1 chỗ lệch kế hoạch", "12 chỗ lệch kế hoạch"],
+	"lo-trinh:moc.conLai": ["còn 1/A việc", "còn 12/A việc"],
+	"lo-trinh:moc.daGiaoThem": [" · 1 đã giao", " · 12 đã giao"],
+	"lo-trinh:moc.giaoDu": ["đã giao đủ 1 việc", "đã giao đủ 12 việc"],
 	"lo-trinh:tre.tieuDe": [
 		"1 việc đã qua mốc mà chưa giao",
 		"12 việc đã qua mốc mà chưa giao",
 	],
+	"lo-trinh:sanPham.luc": ["lúc 1", "lúc 12"],
+	"lo-trinh:sanPham.layHong": [
+		"Lần lấy gần nhất hỏng: 1. Trang đang hiện bản lấy trước đó.",
+		"Lần lấy gần nhất hỏng: 12. Trang đang hiện bản lấy trước đó.",
+	],
+	"lo-trinh:sanPham.khuonCu": [
+		"1 đang ở khuôn lộ trình bản A — vài phần hiện theo luật cũ.",
+		"12 đang ở khuôn lộ trình bản A — vài phần hiện theo luật cũ.",
+	],
+	"lo-trinh:sanPham.khuonMoi": [
+		"1 đang ở khuôn lộ trình bản A, mới hơn trang — vài phần chưa hiện.",
+		"12 đang ở khuôn lộ trình bản A, mới hơn trang — vài phần chưa hiện.",
+	],
+	"lo-trinh:sanPham.chuaCoTieuDe": [
+		"Chưa có lộ trình của 1",
+		"Chưa có lộ trình của 12",
+	],
+	"san-pham:the.khuon": ["khuôn bản 1", "khuôn bản 12"],
+	"san-pham:the.layLuc": ["lấy lúc 1", "lấy lúc 12"],
+	"san-pham:the.thaoTac": ["Thao tác với 1", "Thao tác với 12"],
+	"san-pham:bao.daTao": [
+		"Đã thêm 1 — lộ trình được lấy trong vòng 5 phút.",
+		"Đã thêm 12 — lộ trình được lấy trong vòng 5 phút.",
+	],
+	"san-pham:bao.daLuuTru": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+	"san-pham:bao.daKhoiPhuc": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+	"san-pham:bao.daXoa": ["Đã xoá 1.", "Đã xoá 12."],
+	"san-pham:hoiXoa.tieuDe": ["Xoá 1?", "Xoá 12?"],
+	"san-pham:hoiXoaVinhVien.tieuDe": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
+	"san-pham:sheet.suaTieuDe": ["Sửa 1", "Sửa 12"],
+	"san-pham:nguoiXem.tieuDe": ["Người xem 1", "Người xem 12"],
 } satisfies Record<string, [string, string]>;
 
 const GHIM = {
@@ -417,8 +477,20 @@ const GHIM = {
 	...GHIM_OKR_GOP_Y,
 	...GHIM_OKR_SOAN,
 	...GHIM_LO_TRINH,
+	"okr-vo-khu:boOkr.rongLoc.tieuDe": [
+		"Không có bộ OKR nào trong «1»",
+		"Không có bộ OKR nào trong «12»",
+	],
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
+	"crm:truongKieu.trong": ["1 không được để trống.", "12 không được để trống."],
+	"crm:truongKieu.chuaLuu": ["Chưa lưu được 1.", "Chưa lưu được 12."],
+	"crm:truongKieu.sua": ["Sửa 1", "Sửa 12"],
+	"crm:tepTruong.mo": ["Mở 1", "Mở 12"],
+	"crm:tepTruong.xoa": ["Xoá 1", "Xoá 12"],
+	"crm:tepTruong.soTep": ["1 tệp", "12 tệp"],
+	"crm:tepTruong.taiBoi": ["bởi 1", "bởi 12"],
+	"crm:tepTruong.hoiXoa.tieuDe": ["Xoá tệp «1»?", "Xoá tệp «12»?"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 	"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
 	"auth:datMatKhau.description": [
@@ -442,6 +514,10 @@ const GHIM = {
 		"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 	],
 	"companies:created": ["Đã thêm 1.", "Đã thêm 12."],
+	"companies:nenTang": [
+		"Đây là trang 1, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.",
+		"Đây là trang 12, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.",
+	],
 	"companies:bulk.reassigned": [
 		"Đã đổi người phụ trách cho 1.",
 		"Đã đổi người phụ trách cho 12.",
@@ -602,6 +678,12 @@ const GHIM = {
 	"crm:sheet.deletedForever": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
 	"crm:web.views": ["1 lượt xem", "12 lượt xem"],
 	"crm:fields.removeOption": ["Bỏ 1", "Bỏ 12"],
+	"crm:fields.sheetSwitch": ["Hiện 1 trên hồ sơ", "Hiện 12 trên hồ sơ"],
+	"crm:fields.shownOnSheet": [
+		"1 đã hiện trên hồ sơ.",
+		"12 đã hiện trên hồ sơ.",
+	],
+	"crm:fields.hiddenFromSheet": ["Đã ẩn 1 khỏi hồ sơ.", "Đã ẩn 12 khỏi hồ sơ."],
 	"crm:fields.moreFor": ["Thêm hành động cho 1", "Thêm hành động cho 12"],
 	"crm:fields.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
 	"crm:fields.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
@@ -924,8 +1006,8 @@ const GHIM = {
 	],
 	"okr:caiDat.chuKy.go.tieuDe": ["Gỡ 1?", "Gỡ 12?"],
 	"okr:caiDat.chuKy.go.than": [
-		"1 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
-		"12 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"1 chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"12 chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
 	],
 	"okr:caiDat.chuKy.go.xong": ["Đã gỡ 1.", "Đã gỡ 12."],
 	"okr:caiDat.chuKy.an.tieuDe": ["Ẩn 1?", "Ẩn 12?"],
@@ -976,6 +1058,7 @@ const GHIM = {
 	],
 	"okr:capNhat.gui": ["Gửi 1 cập nhật", "Gửi 12 cập nhật"],
 	"okr:capNhat.guiLai": ["Gửi lại 1 cập nhật", "Gửi lại 12 cập nhật"],
+	"okr:capNhat.tienDoMoi": ["Tiến độ mới 1%", "Tiến độ mới 12%"],
 	"okr:capNhat.daGui.title": [
 		"Đã gửi 1 cập nhật lúc A · mất B giây",
 		"Đã gửi 12 cập nhật lúc A · mất B giây",
@@ -1005,6 +1088,14 @@ const GHIM = {
 		"Tiến độ 12: A%, lẽ ra đã tới B%",
 	],
 	"okr-toan-canh:hopTuan.tuan": ["Tuần 1", "Tuần 12"],
+	"okr-toan-canh:tomTat.choBanDau": [
+		"Kara gửi bản tóm tắt đầu tiên vào khoảng 1 A, B — sáng hôm sau ngày cập nhật C.",
+		"Kara gửi bản tóm tắt đầu tiên vào khoảng 12 A, B — sáng hôm sau ngày cập nhật C.",
+	],
+	"okr-toan-canh:tomTat.tamNghiDen": [
+		"Kara tạm nghỉ tóm tắt tuần tới 1.",
+		"Kara tạm nghỉ tóm tắt tuần tới 12.",
+	],
 	"okr-toan-canh:hopTuan.daCapNhat": [
 		"đã cập nhật 1/A KR",
 		"đã cập nhật 12/A KR",
@@ -1188,6 +1279,7 @@ const GHIM = {
 		"Đã chuyển 1 mục tiêu sang A.",
 		"Đã chuyển 12 mục tiêu sang A.",
 	],
+	"agent-builder-tro-chuyen:dung.daTroi": ["Đã 1", "Đã 12"],
 } satisfies Record<string, [string, string]>;
 
 describe("kho chuoi cua vong ③a", () => {

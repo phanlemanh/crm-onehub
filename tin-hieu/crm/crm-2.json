@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Câu báo quá trần ngày và lỗi máy chủ tô đỏ ô «Điều gì xảy ra», như thể nhập sai ô đó",
+    "muon_lam": "Gửi tín hiệu khi đã gửi đủ 10 trong ngày, hoặc khi máy chủ lỗi",
+    "da_xay_ra": "Câu báo quá trần ngày và lỗi máy chủ tô đỏ ô «Điều gì xảy ra», như thể nhập sai ô đó\nLỗi không do ô nào. Khi đã quá trần, nút Gửi vẫn bấm được và chỉ báo lại cùng câu. Mong: câu báo đứng riêng dưới hai ô, không đánh dấu ô nào; quá trần thì khoá nút Gửi kèm lý do.",
+    "man": "/tin-hieu"
+  },
+  "luc": "2026-10-13T23:47:39.428Z"
+}

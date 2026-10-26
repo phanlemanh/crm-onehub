@@ -46,15 +46,15 @@ const DOT_BIEN = {
 		{
 			ten: "nut-giua-than",
 			tep: `${OKR}/theo-don-vi/theo-don-vi.tsx`,
-			cu: '<div className="flex flex-wrap items-center gap-2" data-hang-nut>',
-			moi: '<div className="flex flex-wrap items-center gap-2" data-hang-nut><button data-nut="them-muc-tieu" type="button" />',
+			cu: '<div className="flex flex-col gap-6">\n\t\t\t{than}',
+			moi: '<div className="flex flex-col gap-6">\n\t\t\t<button data-nut="them-muc-tieu" type="button" />\n\t\t\t{than}',
 			ghim: "dhk-hanh-dong: theo-don-vi con nut them-muc-tieu trong than",
 		},
 		{
 			ten: "hoi-kara-ngoai-hang",
 			tep: `${OKR}/theo-don-vi/theo-don-vi.tsx`,
-			cu: '<div className="flex flex-wrap items-center gap-2" data-hang-nut>',
-			moi: '<div className="flex flex-wrap items-center gap-2" data-hang-nut><span data-nut="hoi-kara" />',
+			cu: '<div className="flex flex-col gap-6">\n\t\t\t{than}',
+			moi: '<div className="flex flex-col gap-6">\n\t\t\t{/* NutHoiKara gia */}<span data-nut="hoi-kara" />\n\t\t\t{than}',
 			ghim: "dhk-hanh-dong: co NutHoiKara nhung khong nam trong page-shell-actions",
 		},
 		{
@@ -62,7 +62,7 @@ const DOT_BIEN = {
 			tep: `${OKR}/hanh-dong-khu.tsx`,
 			cu: "	const hoiKara = <NutHoiKara />;\n",
 			moi: '	const hoiKara = <span data-nut-gia="" />;\n',
-			ghim: "dhk-hanh-dong: theo-don-vi lap-ke-hoach co 5 phan tu, mong 4",
+			ghim: "dhk-hanh-dong: theo-don-vi lap-ke-hoach co 4 phan tu, mong 3",
 		},
 	],
 	"dhk-don-dich": [
@@ -79,13 +79,6 @@ const DOT_BIEN = {
 			cu: "	const bp = headOf?.divisions[0];",
 			moi: '	if (donUrl) return { don: donUrl, nguon: "url" };\n	const bp = headOf?.divisions[0];',
 			ghim: "dhk-don-dich: donOkr=pb:P9 + truong phong ban P2: mong pb:P2, nhan pb:P9",
-		},
-		{
-			ten: "ky-hoi-y",
-			tep: `${OKR}/hanh-dong-khu.tsx`,
-			cu: "cycleId && cycleId !== kyChay ? cycleId : thamSo[SEARCH_PARAM.okr.ky];",
-			moi: "thamSo[SEARCH_PARAM.okr.ky];",
-			ghim: "dhk-don-dich: hoi-y gui sang Theo don vi ky «q4», quyen hoi ky «n27», mong kyOkr=n27",
 		},
 	],
 	"dhk-menu-soan": [

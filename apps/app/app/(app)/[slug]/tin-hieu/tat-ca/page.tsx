@@ -16,11 +16,11 @@ import {
 } from "@/components/page-shell";
 import { KhongQuyenTatCa } from "@/components/tin-hieu/bang-tat-ca";
 import { ThanhTheTinHieu } from "@/components/tin-hieu/thanh-the-tin-hieu";
-import { docTepLoTrinh } from "@/lib/lo-trinh/doc-tep";
 import { getLocale } from "@/lib/locale/server";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import { requireSession } from "@/lib/session";
-import { ghepTatCa } from "@/lib/tin-hieu/tat-ca";
+import { docNguonTinHieuTrang } from "@/lib/tin-hieu/doc-nguon";
+import { docNenTatCa } from "@/lib/tin-hieu/tat-ca";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import {
 	getServerQueryClient,
@@ -35,29 +35,24 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: tinHieuMessages(await getLocale()).tatCa.tieuDe };
 }
 
-async function docBanVe(): Promise<string | null> {
-	"use cache";
-	return docTepLoTrinh();
-}
-
 async function NoiDung() {
 	await requireSession();
 	const m = tinHieuMessages(await getLocale());
 	const tatCa = await getServerQueryClient().fetchQuery(
 		getServerTrpc().tinHieu.tatCa.queryOptions(),
 	);
-	const kq = ghepTatCa({
+	const nen = docNenTatCa({
 		rows: tatCa.rows,
-		html: await docBanVe(),
-		now: new Date(),
+		nguon: (await docNguonTinHieuTrang()).dauVao,
 		m,
 	});
 	return (
 		<HydrateClient>
 			<TatCaTrang
-				banVeDocDuoc={kq.banVeDocDuoc}
-				baSo={kq.baSo}
-				trangThai={kq.trangThai}
+				banVeDocDuoc={nen.banVeDocDuoc}
+				coCho={nen.coCho}
+				luc={new Date().toISOString()}
+				trangThai={nen.trangThai}
 			/>
 		</HydrateClient>
 	);

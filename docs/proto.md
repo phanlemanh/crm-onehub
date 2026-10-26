@@ -4,6 +4,20 @@ Phòng trưng bày giao diện chạy được của kho. Nó tồn tại để 
 diện **trên bản bấm được** thay vì trên chữ, và để skill `design-pass` có một
 URL thật mà mở — thiếu nó thì nghi thức dừng ở preflight.
 
+## Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí
+
+Chủ kho chốt 24/10, nguyên văn: «Lưu ý là phải bổ sung proto (nếu có) ở mỗi vòng, vì
+hiện nay giờ khá nhiều dữ liệu nên, tôi muốn xác nhận kỹ trước khi làm nhé.» và «Và
+nhìn diagram design hay proto song song với text thì mới dễ xác nhận.»
+
+- Vòng chạm giao diện: S1 dựng `/proto/<slug>` theo mục «Thêm một bản mẫu» dưới đây và
+  chạy `design-pass`, trên dữ liệu mẫu dày — nhiều đơn vị, nhiều mục tiêu và KR, tên dài,
+  đủ các trạng thái — viết sẵn trong module như bộ OKR mẫu, không đọc dữ liệu thật. Chủ
+  kho bấm thử trước Cổng Phạm vi.
+- Thẻ Cổng Phạm vi đặt ảnh bản mẫu ở khổ 1440 và 375 ngay cạnh từng tiêu chí nó minh hoạ,
+  không gom ảnh ở cuối thẻ.
+- Vòng không có màn đặt một sơ đồ (skill `diagram-design`) cạnh từng tiêu chí thay cho ảnh.
+
 ## Bật lên
 
 Cờ là biến `PROTO_ROUTE`, và nó phải bằng **đúng chuỗi `"1"`**:

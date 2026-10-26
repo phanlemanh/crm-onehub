@@ -1,0 +1,6 @@
+{
+  "feature_plain": "Các hồ sơ đã ký mà lượt kiểm chéo ban đêm báo đỏ được đo lại; mỗi phép đo hỏng được sửa hoặc ghi lại kèm lý do, để màu xanh của chúng lại tin được. Hồ sơ tổ chức đã giao cho làn riêng.",
+  "decisions": [
+    {"id": "E6", "q": "Lý do của từng dòng sửa hay ghi lại trong danh sách có đứng vững không?", "why": "Hội đồng chấm mới: không dòng nào hạ một ô để che lỗi sản phẩm, nhưng vài dòng còn căn cứ mỏng hoặc chưa đo lại sau sửa — chủ yếu các hồ sơ trả về làn chủ."}
+  ]
+}

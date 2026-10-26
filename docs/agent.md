@@ -11,7 +11,7 @@ are in `docs/setup.md`.
 
 ## Model
 
-Default `zai/glm-5.2-fast`; `DEFAULT_AGENT_MODEL` in `@crm/db/settings` because the
+Default `zai/glm-5.3-flash` (MH2, 21/10 — trước đó `zai/glm-5.2-fast`); `DEFAULT_AGENT_MODEL` in `@crm/db/settings` because the
 agent and the API both need it.
 
 - **A row (`AppSetting`), not an env var**, via `defineDynamic` on `session.started`.
@@ -325,6 +325,22 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   hay Slack vẫn gửi. Đường dẫn lưu là `duongTrongApp(v)` — đúng phần sau `/<slug>`
   của đường trong tin Zalo. `payload.mucTinh` là mẫu số của lệnh
   `bun run thong-bao:doi-chieu`; lệnh không bao giờ lấy mẫu số từ bảng `ThongBao`.
+- **Tin sáng bỏ loại người đã tắt** (hồ sơ `thong-bao-mot-nguon-nhieu-kenh`). Sau
+  `kenhSeDungCua`, `chayNhac` lọc danh sách mục theo cài đặt loại thông báo của người
+  (`docCaiDatThongBao` ở `@crm/db/cai-dat-thong-bao`, mặc định ở `MUC_THONG_BAO` của
+  `@crm/validation/thong-bao`). Thông báo của mọi mục vẫn ghi trước đó. Lọc xong mà rỗng
+  thì không gửi, lượt đóng `da-tat-het`. `payload.daGuiKhoa` giữ khoá thông báo của các
+  mục thật sự vào tin — lệnh đối chiếu dùng nó để kiểm mỗi mục ra Zalo/Slack có bản trong chuông.
+- **Thông báo sự kiện rẽ ra kênh ở một chỗ** (`lib/thong-bao-day.ts`). Bước
+  `dayThongBaoSuKien` trong nhịp mỗi phút đọc thẳng bảng `ThongBao`: thông báo không phải
+  nhắc sáng, ghi trong 30 phút gần nhất, loại người nhận đã bật và ghi sau lúc bật. Giữ chỗ
+  bằng một cập nhật có điều kiện trước khi gửi (`dayLan`, `dayLuc`) nên hai nhịp chồng
+  không gửi đôi; hỏng thì ghi `dayLoi`, thử lại tới `THONG_BAO.day.tranLan` lần; Zalo hỏng
+  không đổi sang Slack. Câu gửi là câu tiếng Việt của chuông (`cauSuKienVi`,
+  `@crm/validation/thong-bao-cau`) cộng đường dẫn. Nguồn thông báo mới không phải sửa gì ở đây.
+- **Không phải mọi thông báo do tác nhân ghi.** Thông báo đổi chỗ tín hiệu (`tin-hieu-doi-cho`,
+  nguồn `tin-hieu`) do API ghi lúc nhận bản chụp lộ trình (`docs/api.md`, mục «Tín hiệu»); tác nhân
+  không quét lại nó.
 - **Kênh do `kenhSeDungCua` chọn** (`@crm/db/kenh-thong-bao`), không do `chayNhac`.
   Hàm đọc ưu tiên của người (`NotificationPreference`, thiếu hàng là `AUTO`),
   `ZaloLink`, `appSetting.zaloBotName` và khớp Slack, rồi gọi hàm thuần `chonKenh`.
@@ -644,6 +660,29 @@ API; the API only reads and writes rows.
   «Câu chưa trả lời được». A question it answers keeps no text — `ghiKetQuaHoi`
   clears `cauHoi` on `TRA_LOI`.
 
+### Lấy lộ trình sản phẩm
+
+`layLoTrinhSanPham` (`lib/lo-trinh-san-pham.ts`) chạy trên nhịp dispatch cạnh `chupSoOkr`, không có lịch
+riêng, không phiên model, không `AgentTask`. Mỗi nhịp lấy tối đa `LO_TRINH_SAN_PHAM.toiDaMoiNhip` sản
+phẩm chưa lưu trữ mà lần kiểm cuối cũ hơn `nhipKiemMs` (5 phút).
+
+- **Ứng dụng GitHub chỉ đọc** (`lib/lo-trinh-github.ts`): JWT RS256 của ứng dụng sống 9 phút; token cài
+  đặt xin cho đúng một kho với `contents: read` + `metadata: read`, không lưu. Đầu nhánh cùng sha với
+  bản chụp đang lưu thì không tải tệp. Thiếu `GITHUB_APP_ID` hay `GITHUB_APP_PRIVATE_KEY` thì mọi sản
+  phẩm thành `chua-cau-hinh`, không ném. `GITHUB_API_URL` chỉ ghi đè ngoài production — GitHub giả của
+  bài kiểm và phép đo màn ở `scripts/lo-trinh-san-pham/github-gia.ts`.
+- **Mỗi lỗi một trạng thái**: `chua-cai` · `khong-thay-kho` · `khong-thay-tep` · `khoi-hong` (kèm đường
+  khoá hỏng) · `qua-tran` (2 MB) · `loi-github`. Bản chụp đang lưu không đổi; lỗi một sản phẩm không
+  dừng sản phẩm khác. Nhật ký chỉ ghi mã và trạng thái — không token, không khoá.
+- **Nguồn đổi giữa lượt**: trước khi ghi, lượt lấy đọc lại sản phẩm; kho, nhánh, đường tệp hay
+  `nguonDoiLuc` khác lúc bắt đầu thì không ghi bản chụp lẫn trạng thái (nhật ký `nguon-doi-giua-luot`),
+  và `ghiKetQuaLay` chỉ cập nhật hàng còn đúng nguồn đó. Lỡ một bản chụp nguồn cũ lọt vào giữa hai bước
+  thì cờ nguồn đổi vẫn còn, nên nhịp sau thay hẳn nó.
+- **Bộ đọc khối** là bản chép kit `packages/validation/src/doc-du-lieu-lo-trinh.js`, trùng từng byte với
+  `apps/app/lib/lo-trinh/doc-du-lieu.js` (bài `doc-du-lieu-lo-trinh.spec.ts` giữ hai bản trùng nhau; nâng kit
+  thì chép cả hai). Bản dựng eve không với tới tệp trong `apps/app`, nên agent nhập bản trong gói;
+  `tsconfig` của agent bật `allowJs` chỉ cho việc này.
+
 ### Chụp số OKR mỗi ngày
 
 Nhịp dispatch chụp số OKR qua `chupSoOkr` (`lib/okr-chup.ts`), cạnh `lenLichNhac` —
@@ -763,6 +802,26 @@ wrong in the direction that looks useful.
   record with the answer sitting unread beneath it.
 - **A new fact field goes in `FIELDS` (`lib/facts.ts`) *and* `FACT_COLUMNS`**
   (`apps/api/src/contacts/contacts.service.ts`).
+
+### Custom field values are never overwritten
+
+`writeField` (`lib/fields.ts`) is the only path Kara writes a custom field value through, and
+`set_field_value` is the only tool that calls it. It locks the cell and reads it in the same
+transaction, then:
+
+- **An empty cell is filled**, in any session.
+- **A background session never replaces a value** — a dispatched task, a team-agent run, with
+  or without `replace`. "Background" is `isAutomated(ctx.session)` (`lib/approval.ts`), computed
+  by the tool, never taken from the model's input.
+- **A session with a person in it replaces only with `replace: true`**, which the tool
+  describes as "only if the rep asked you to in this conversation". Without it the refusal
+  names the value already there and says the same thing, so Kara asks rather than retries.
+- **Clearing (`null`) a filled cell is a replace**, under the same rule.
+- **A manual-only field (`agentFilled: false`) refuses first**, whatever `replace` says.
+
+`FieldValue` has no provenance column, so Kara cannot refresh a value it filled itself in an
+earlier background run. That waits for the proposals of `tac-tu-xin-duyet`
+(`docs/ai-ux.md` §4). Tests: `test/kara-khong-ghi-de-truong.integration.spec.ts`.
 
 ## Optional by default
 

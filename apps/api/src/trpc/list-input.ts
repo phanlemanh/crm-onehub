@@ -34,6 +34,35 @@ export function paginate(input: Pick<ListInput, "page" | "pageSize">): Page {
 
 export type SortDirection = ListInput["dir"];
 
+export type DieuKienTrang<TWhere, TOrderBy> = {
+	where: TWhere | { id: { in: string[] } };
+	skip?: number;
+	take?: number;
+	orderBy?: TOrderBy;
+};
+
+export function timTrang<TWhere, TOrderBy>(
+	idsTheoTruong: string[] | null,
+	where: TWhere,
+	page: Page,
+	orderBy: TOrderBy,
+): DieuKienTrang<TWhere, TOrderBy> {
+	if (idsTheoTruong) return { where: { id: { in: idsTheoTruong } } };
+	return { where, ...page, orderBy };
+}
+
+export function xepTheoId<TRow extends { id: string }>(
+	rows: TRow[],
+	idsTheoTruong: string[] | null,
+): TRow[] {
+	if (!idsTheoTruong) return rows;
+	const byId = new Map(rows.map((row) => [row.id, row]));
+	return idsTheoTruong.flatMap((id) => {
+		const row = byId.get(id);
+		return row ? [row] : [];
+	});
+}
+
 export interface OrderByColumns<TOrderBy> {
 	[column: string]: (dir: SortDirection) => TOrderBy;
 }

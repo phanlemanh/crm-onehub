@@ -7,7 +7,9 @@ import {
 	type DuLieuChoXem,
 	phanTichLoTrinh,
 } from "@crm/validation/lo-trinh-du-lieu";
+import type { TrangThaiLay } from "@crm/validation/san-pham-lo-trinh";
 import type { WorkspaceRole } from "@crm/validation/vai-workspace";
+import { LO_TRINH } from "./cau-hinh";
 import { choVaiXem } from "./cho-vai";
 import { type BanDung, chonNguon, type NguonLoTrinh } from "./chon-nguon";
 import { docDuLieu } from "./doc-du-lieu.js";
@@ -17,17 +19,43 @@ export type DauVaoLoTrinh =
 	| { kieu: "chua-co-khoi"; cauMay: string }
 	| { kieu: "khoi-hong"; cauMay: string }
 	| {
+			kieu: "san-pham-chua-co";
+			ten: string;
+			trangThai: TrangThaiLay;
+			quanTri: boolean;
+	  }
+	| {
 			kieu: "co-du-lieu";
 			duLieu: DuLieuChoXem;
 			canhBao: string[];
 			nguon?: NguonLoTrinh;
+			sanPham?: NguonSanPhamTrang;
 	  };
+
+export type NguonSanPhamTrang = {
+	ten: string;
+	kho: string;
+	nhanh: string;
+	layLuc: string;
+	layHong: TrangThaiLay | null;
+	nguonDoi: boolean;
+	khuon: { phienBan: number; moiHon: boolean } | null;
+};
 
 export type KetQuaDocBanChup =
 	| { kieu: "co"; banChup: BanChupDoc }
 	| { kieu: "khong" }
 	| { kieu: "loi"; lyDo: string }
 	| { kieu: "hong"; lyDo: string };
+
+export function canhBaoChoTrang(phienBan: number, canhBao: string[]): string[] {
+	if (phienBan === 1) return [];
+	return canhBao.filter(
+		(c) =>
+			!c.includes(LO_TRINH.canhBaoThieuGioMay) &&
+			!c.includes(LO_TRINH.canhBaoThieuMoHinh),
+	);
+}
 
 export function docTrangLoTrinh(html: string | null): DauVaoLoTrinh {
 	if (html === null) return { kieu: "tep-vang" };
@@ -44,7 +72,7 @@ export function docTrangLoTrinh(html: string | null): DauVaoLoTrinh {
 	return {
 		kieu: "co-du-lieu",
 		duLieu: kq.duLieu,
-		canhBao: kq.duLieu.phien_ban === 1 ? [] : canhBao,
+		canhBao: canhBaoChoTrang(kq.duLieu.phien_ban, canhBao),
 	};
 }
 
@@ -83,7 +111,7 @@ export async function docDauVaoChoVai(
 			{
 				kieu: "co-du-lieu",
 				duLieu: banChup.duLieu,
-				canhBao: banChup.duLieu.phien_ban === 1 ? [] : banChup.canhBao,
+				canhBao: canhBaoChoTrang(banChup.duLieu.phien_ban, banChup.canhBao),
 				nguon: chon,
 			},
 			vai,

@@ -268,6 +268,17 @@ mock.module("@/lib/trpc/client", () => ({
 				() => null,
 				() => ({ written: 1, seconds: 12 }),
 			),
+			canhKr: thuTuc("okr.canhKr"),
+			dienBien: thuTuc("okr.dienBien", () => ({
+				kieu: "tang-toi",
+				tieuDe: "KR kr-1",
+				khoi: 0,
+				dich: 50,
+				donVi: "khách",
+				coCapNhat: false,
+				tuanDau: null,
+				diem: [],
+			})),
 			troLySanSang: thuTuc("okr.troLySanSang", () => ({
 				bat: false,
 				lyDo: "tat",
@@ -495,7 +506,7 @@ describe("sheet-nhap-co-nut-cong-bo", () => {
 		expect(truoc).toEqual({
 			trangThai: "ST-sheet-nhap",
 			tieuDe: "Tăng khách hàng doanh nghiệp",
-			tab: ["KR1", "Căn chỉnh", "Vết", "Trao đổi", "Diễn biến"],
+			tab: ["KR1", "Góp vào", "Vết", "Trao đổi", "Diễn biến"],
 			congBo: 1,
 			themKr: 1,
 			nhap: true,
@@ -1271,7 +1282,7 @@ describe("sheet-trao-doi", () => {
 				chipKhongDich: "no",
 				noiDungKhongDich: ["no", "no"],
 				nhac: LAN.name,
-				tab: ["KR1", "Căn chỉnh", "Vết", "Trao đổi2", "Diễn biến"],
+				tab: ["KR1", "Góp vào", "Vết", "Trao đổi2", "Diễn biến"],
 			},
 			goi: [
 				{

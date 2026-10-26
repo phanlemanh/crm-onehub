@@ -8,7 +8,6 @@ import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import type { FieldValueJson } from "@crm/db/fields";
 import { Button } from "@crm/ui/components/button";
 import { KhoaLuuTru } from "@crm/ui/components/dai-luu-tru";
-import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import {
 	EntityLogo,
 	type EntityLogoTone,
@@ -23,21 +22,30 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
-import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
+import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
 import { EnrichmentActions } from "@/components/crm/enrichment-actions";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
-import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
 import {
-	InlineField,
-	InlineSelectField,
-	savingValue,
-} from "@/components/crm/inline-field";
-import { OwnerCell } from "@/components/crm/owner-cell";
-import { SoDienThoai } from "@/components/crm/so-dien-thoai";
+	cauLoiTheoKhoa,
+	HienThiTruong,
+	khoaCuaLuot,
+	type MoTaTruong,
+	OTruongBang,
+	OTruongPhieu,
+} from "@/components/crm/fields/kieu-truong";
+import {
+	FieldsCog,
+	nguCanhTepCua,
+	OTruongTuTao,
+} from "@/components/crm/fields/record-fields";
+import { mucChiTiet } from "@/components/crm/fields/truong-chuan";
+import { useBoTriTruong } from "@/components/crm/fields/use-bo-tri-truong";
+import { savingValue } from "@/components/crm/inline-field";
+import type { Owner } from "@/components/crm/owner-cell";
 import { CompanySocials } from "@/components/crm/social-links";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { Timeline } from "@/components/crm/timeline/timeline";
@@ -45,19 +53,17 @@ import { WebsiteActivity } from "@/components/crm/website-activity";
 import {
 	DetailSheetBody,
 	DetailSheetEmpty,
-	DetailSheetMain,
 	DetailSheetPending,
 	DetailSheetProperties,
-	DetailSheetRail,
 	DetailSheetSection,
-	DetailSheetSplit,
 	DetailSheetStat,
 	DetailSheetStats,
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
-import { LocalDay } from "@/components/local-date-time";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
 import { useGiaiDoan } from "@/lib/giai-doan";
+import { lyDoLoi } from "@/lib/ly-do-loi";
+import { companyMessages } from "@/lib/messages/companies";
 import { crmMessages } from "@/lib/messages/crm";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import {
@@ -66,6 +72,8 @@ import {
 } from "@/lib/messages/record-sheet";
 import { savingField } from "@/lib/pending-field";
 import { hasCompanyLinks } from "@/lib/social-links";
+import { tenNganh } from "@/lib/ten-nganh";
+import { tenQuocGia } from "@/lib/ten-quoc-gia";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -79,7 +87,6 @@ import {
 	DealAmount,
 	DomainLink,
 	DongDaLuuTru,
-	lyDoLoi,
 	MetaLine,
 	RecordSheetFrame,
 	tenCaNhan,
@@ -88,8 +95,6 @@ import { useOpenRecord, useRecordSheetView } from "./record-stack";
 
 type Company = RouterOutputs["companies"]["byId"];
 type CompanyDeal = Company["deals"][number];
-
-const UNASSIGNED = "unassigned";
 
 function pendingFields(company: Company, locale: Locale): string[] {
 	const m = crmMessages(locale).missing;
@@ -181,10 +186,16 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 	const company = query.data;
 
 	const location = company
-		? [company.city, company.stateCode, company.country]
+		? [
+				company.city,
+				company.stateCode,
+				tenQuocGia(company.country, company.countryCode, locale)?.ten,
+			]
 				.filter(Boolean)
 				.join(", ")
 		: null;
+
+	const nganh = company ? tenNganh(company.industry, locale) : null;
 
 	const openDeals =
 		company?.deals.filter((deal) => !giaiDoan.laDaDong(deal.stage)) ?? [];
@@ -272,7 +283,13 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 						lead={
 							<DomainLink domain={company.domain} website={company.website} />
 						}
-						parts={[{ text: location }, { text: company.industry, lang: "en" }]}
+						parts={[
+							{ text: location },
+							nganh && {
+								text: nganh.ten,
+								lang: nganh.dich ? undefined : "en",
+							},
+						]}
 					/>
 				) : undefined
 			}
@@ -321,17 +338,15 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 						) : null}
 						<DetailSheetStats>
 							<DetailSheetStat label={m.company.openPipeline}>
-								{openDeals.some((deal) => deal.amountCents !== null) ? (
-									<span className="tabular-nums">
-										{formatMoney(
-											openValueCents,
-											company.reportingCurrency,
-											locale,
-										)}
-									</span>
-								) : (
-									<EmptyCellValue />
-								)}
+								<HienThiTruong
+									kieu="MONEY"
+									giaTri={
+										openDeals.some((deal) => deal.amountCents !== null)
+											? openValueCents
+											: null
+									}
+									tienTe={company.reportingCurrency}
+								/>
 								{openUncounted > 0 ? (
 									<span className="text-muted-foreground">
 										{" "}
@@ -343,10 +358,15 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 								<span className="tabular-nums">{openDeals.length}</span>
 							</DetailSheetStat>
 							<DetailSheetStat label={m.company.nextClose}>
-								{closing ? <LocalDay date={closing} /> : <EmptyCellValue />}
+								<HienThiTruong kieu="DATE" giaTri={closing} />
 							</DetailSheetStat>
 							<DetailSheetStat label={m.company.fields.owner}>
-								<OwnerCell owner={company.owner} xuongDongDienThoai />
+								<HienThiTruong
+									kieu="USER"
+									giaTri={company.owner?.id ?? null}
+									nguoi={company.owner}
+									xuongDongDienThoai
+								/>
 							</DetailSheetStat>
 						</DetailSheetStats>
 					</>
@@ -359,7 +379,113 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 	);
 }
 
-function CompanyOverview({ company }: { company: Company }) {
+type LuuCongTy = (data: Record<string, string | null>, khoa: string) => void;
+
+export function truongChuanCongTy(
+	company: Company,
+	{
+		m,
+		locale,
+		luu,
+		dangLuu,
+		nguoiDung,
+	}: {
+		m: RecordSheetMessages;
+		locale: Locale;
+		luu: LuuCongTy;
+		dangLuu: (khoa: string) => boolean;
+		nguoiDung: Owner[] | undefined;
+	},
+): MoTaTruong[] {
+	const chu = (giaTri: string | number | boolean | null) =>
+		giaTri === null ? null : String(giaTri);
+	const truongChu = (
+		khoa: "website" | "phone" | "email" | "city",
+		nhan: string,
+		kieu: MoTaTruong["kieu"],
+		goiY?: string,
+	): MoTaTruong => ({
+		khoa,
+		nhan,
+		kieu,
+		giaTri: company[khoa],
+		goiY,
+		luu: (giaTri) => luu({ [khoa]: chu(giaTri) }, khoa),
+		dangLuu: dangLuu(khoa),
+	});
+	return [
+		{
+			khoa: "name",
+			nhan: m.company.fields.name,
+			kieu: "TEXT",
+			giaTri: company.name,
+			batBuoc: true,
+			luu: (giaTri) => luu({ name: String(giaTri) }, "name"),
+			dangLuu: dangLuu("name"),
+		},
+		{
+			khoa: "domain",
+			nhan: m.company.fields.domain,
+			kieu: "TEXT",
+			giaTri: company.domain,
+			goiY: m.company.domainPlaceholder,
+			luu: (giaTri) => {
+				const domain = chu(giaTri);
+				const nenTang = domain ? nenTangCuaTenMien(domain) : null;
+				if (nenTang) {
+					toast.error(companyMessages(locale).nenTang(nenTang.ten));
+					return;
+				}
+				luu({ domain }, "domain");
+			},
+			dangLuu: dangLuu("domain"),
+		},
+		truongChu(
+			"website",
+			m.company.fields.website,
+			"URL",
+			m.company.websitePlaceholder,
+		),
+		truongChu("phone", m.company.fields.phone, "PHONE"),
+		truongChu("email", m.company.fields.email, "EMAIL"),
+		truongChu("city", m.company.fields.city, "TEXT"),
+		{
+			khoa: "country",
+			nhan: m.company.fields.country,
+			kieu: "TEXT",
+			giaTri: company.country,
+			trinhBay: (country) => {
+				const quocGia = tenQuocGia(country, company.countryCode, locale);
+				if (!quocGia) return country;
+				return quocGia.dich ? (
+					quocGia.ten
+				) : (
+					<span translate="no">{quocGia.ten}</span>
+				);
+			},
+			luu: (giaTri) => luu({ country: chu(giaTri) }, "country"),
+			dangLuu: dangLuu("country"),
+		},
+		{
+			khoa: "owner",
+			nhan: m.company.fields.owner,
+			kieu: "USER",
+			giaTri: company.owner?.id ?? null,
+			nguoi: company.owner,
+			nhanRong: m.company.fields.unassigned,
+			nguoiDung,
+			luu: (giaTri) => luu({ ownerId: chu(giaTri) }, "owner"),
+			dangLuu: dangLuu("ownerId"),
+		},
+	];
+}
+
+const DOI_KHOA_CONG_TY = { ownerId: "owner" } as const satisfies Record<
+	string,
+	string
+>;
+
+export function CompanyOverview({ company }: { company: Company }) {
 	const locale = useLocale();
 	const m = recordSheetMessages(locale);
 	const trpc = useTRPC();
@@ -370,123 +496,89 @@ function CompanyOverview({ company }: { company: Company }) {
 	const update = useMutation(
 		trpc.companies.update.mutationOptions({
 			onSuccess: () => cache.company(company.id, { settle: "record" }),
-			onError: (error) => toast.error(error.message),
+			onError: (error, bien) => {
+				const khoa = khoaCuaLuot(
+					Object.keys(bien.data),
+					bien.data.fields ? Object.keys(bien.data.fields) : undefined,
+					DOI_KHOA_CONG_TY,
+				);
+				const ds = khoa?.tuTao ? moTaTuTao() : truongChuan;
+				toast.error(cauLoiTheoKhoa(khoa?.khoa, ds, locale) ?? error.message);
+			},
 		}),
 	);
-
-	const save = (data: Record<string, string | null>) =>
-		update.mutate({ id: company.id, data });
-
-	const saveFields = (fields: Record<string, FieldValueJson>) =>
-		update.mutate({ id: company.id, data: { fields } });
 
 	const isSaving = savingField(update);
 	const isSavingField = savingValue(update);
 
+	const save = (data: Record<string, string | null>) =>
+		update.mutate({ id: company.id, data });
+
+	const moTaTuTao = () =>
+		company.fields.map((field) => ({
+			khoa: field.key,
+			nhan: field.label,
+			kieu: field.type,
+		}));
+
+	const truongChuan = truongChuanCongTy(company, {
+		m,
+		locale,
+		luu: save,
+		dangLuu: isSaving,
+		nguoiDung: users.data,
+	});
+
+	const saveFields = (fields: Record<string, FieldValueJson>) =>
+		update.mutate({ id: company.id, data: { fields } });
+
+	const truongTheoKhoa = new Map(truongChuan.map((mt) => [mt.khoa, mt]));
+	const boTri = useBoTriTruong("COMPANY", company.fields);
+	const chiTiet = mucChiTiet(boTri.muc, company.fields);
+
 	return (
 		<KhoaLuuTru khoa={company.archivedAt !== null}>
 			<DetailSheetBody>
-				<DetailSheetSplit>
-					<DetailSheetMain>
-						<CompanyAbout
-							title={m.section.about}
-							description={company.description}
-						/>
+				<CompanyAbout
+					title={m.section.about}
+					description={company.description}
+				/>
 
-						<WebsiteActivity companyId={company.id} />
-					</DetailSheetMain>
+				<DetailSheetSection
+					title={m.company.details}
+					action={company.archivedAt ? undefined : <FieldsCog kind="company" />}
+				>
+					<DetailSheetProperties>
+						{chiTiet.map((muc) => {
+							if (muc.kind === "custom")
+								return (
+									<OTruongTuTao
+										key={muc.field.id}
+										field={muc.field}
+										saving={isSavingField}
+										onSave={saveFields}
+										nguoiDung={users.data}
+										nguCanhTep={nguCanhTepCua("COMPANY", company)}
+									/>
+								);
+							const mt = truongTheoKhoa.get(muc.key);
+							return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
+						})}
+					</DetailSheetProperties>
 
-					<DetailSheetRail>
-						<DetailSheetSection
-							title={m.company.details}
-							action={
-								company.archivedAt ? undefined : <FieldsCog kind="company" />
-							}
-						>
-							<DetailSheetProperties columns={1}>
-								<InlineField
-									label={m.company.fields.name}
-									value={company.name}
-									saving={isSaving("name")}
-									onSave={(name) => name && save({ name })}
-								/>
-								<InlineField
-									label={m.company.fields.domain}
-									value={company.domain}
-									type="url"
-									placeholder={m.company.domainPlaceholder}
-									saving={isSaving("domain")}
-									onSave={(domain) => save({ domain })}
-								/>
-								<InlineField
-									label={m.company.fields.website}
-									value={company.website}
-									type="url"
-									placeholder={m.company.websitePlaceholder}
-									saving={isSaving("website")}
-									onSave={(website) => save({ website })}
-								/>
-								<InlineField
-									label={m.company.fields.phone}
-									value={company.phone}
-									type="tel"
-									saving={isSaving("phone")}
-									onSave={(phone) => save({ phone })}
-								/>
-								<InlineField
-									label={m.company.fields.email}
-									value={company.email}
-									type="email"
-									saving={isSaving("email")}
-									onSave={(email) => save({ email })}
-								/>
-								<InlineField
-									label={m.company.fields.city}
-									value={company.city}
-									saving={isSaving("city")}
-									onSave={(city) => save({ city })}
-								/>
-								<InlineField
-									label={m.company.fields.country}
-									value={company.country}
-									saving={isSaving("country")}
-									onSave={(country) => save({ country })}
-								/>
-								<InlineSelectField
-									label={m.company.fields.owner}
-									value={company.owner?.id ?? UNASSIGNED}
-									options={[
-										{ value: UNASSIGNED, label: m.company.fields.unassigned },
-										...(users.data ?? []).map((user) => ({
-											value: user.id,
-											label: user.name,
-										})),
-									]}
-									emptyValue={UNASSIGNED}
-									onSave={(ownerId) =>
-										save({ ownerId: ownerId === UNASSIGNED ? null : ownerId })
-									}
-								/>
-								<RecordFields
-									fields={company.fields}
-									saving={isSavingField}
-									onSave={saveFields}
-								/>
-							</DetailSheetProperties>
-						</DetailSheetSection>
+					<DetailSheetPending
+						fields={pendingFields(company, locale)}
+						running={isEnriching(company.enrichmentStatus, company.queued)}
+					/>
+				</DetailSheetSection>
 
-						<DetailSheetPending
-							fields={pendingFields(company, locale)}
-							running={isEnriching(company.enrichmentStatus, company.queued)}
-						/>
+				{hasCompanyLinks(company) ? (
+					<DetailSheetSection title={m.section.links}>
+						<CompanySocials company={company} />
+					</DetailSheetSection>
+				) : null}
 
-						{hasCompanyLinks(company) ? (
-							<DetailSheetSection title={m.section.links}>
-								<CompanySocials company={company} />
-							</DetailSheetSection>
-						) : null}
-					</DetailSheetRail>
-				</DetailSheetSplit>
+				<WebsiteActivity companyId={company.id} />
 			</DetailSheetBody>
 		</KhoaLuuTru>
 	);
@@ -616,20 +708,20 @@ function CompanyContacts({
 								</span>
 							</TableCell>
 							<TableCell className="px-3 py-2.5">
-								{contact.phone ? (
-									<SoDienThoai so={contact.phone} />
-								) : (
-									<EmptyCellValue />
-								)}
+								<OTruongBang kieu="PHONE" giaTri={contact.phone} />
 							</TableCell>
 							<TableCell className="truncate px-3 py-2.5">
-								{contact.title ?? <EmptyCellValue />}
+								<OTruongBang kieu="TEXT" giaTri={contact.title} />
 							</TableCell>
 							<TableCell className="truncate px-3 py-2.5 text-muted-foreground">
-								{contact.email ?? <EmptyCellValue />}
+								<OTruongBang kieu="EMAIL" giaTri={contact.email} />
 							</TableCell>
 							<TableCell className="px-3 py-2.5">
-								<OwnerCell owner={contact.owner} />
+								<OTruongBang
+									kieu="USER"
+									giaTri={contact.owner?.id ?? null}
+									nguoi={contact.owner}
+								/>
 							</TableCell>
 						</SimpleTableRow>
 					);
@@ -722,14 +814,14 @@ function CompanyDeals({
 							/>
 						</TableCell>
 						<TableCell className="px-3 py-2.5 text-muted-foreground">
-							{deal.expectedCloseDate ? (
-								<LocalDay date={deal.expectedCloseDate} />
-							) : (
-								<EmptyCellValue />
-							)}
+							<OTruongBang kieu="DATE" giaTri={deal.expectedCloseDate} />
 						</TableCell>
 						<TableCell className="px-3 py-2.5">
-							<OwnerCell owner={deal.owner} />
+							<OTruongBang
+								kieu="USER"
+								giaTri={deal.owner?.id ?? null}
+								nguoi={deal.owner}
+							/>
 						</TableCell>
 					</SimpleTableRow>
 				))}

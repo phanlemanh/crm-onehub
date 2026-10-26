@@ -1,0 +1,96 @@
+{
+  "feature_plain": "Lần đẩy và PR chỉ ghim lại bằng chứng không còn chạy test và build (~15–18 phút), mà cổng nghiệm thu vẫn chạy ở mọi PR và vẫn chặn được bằng chứng giả — lượt chấm đầu xanh trọn.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ coi sổ chạy và sổ quyết định của mỗi hồ sơ là tệp nhẹ, và chỉ hai loại tệp đó (11 ca viết sẵn, gồm 4 loại tệp gần mà vẫn nặng)."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ xếp PR ghim lại thật của 18/10 (16 tệp) là nhẹ ở CI; thêm bất kỳ tệp thước đo, tệp sâu hay tệp workflow nào thì PR thành nặng."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ bỏ test và build ở lần đẩy chỉ ghim lại, in một dòng nói rõ đã bỏ gì; thêm tiêu chí hay tệp sâu thì chạy đủ năm bước."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ không để tệp nằm sâu hơn một bậc trong hồ sơ lọt thành nhẹ — một luật dùng chung cho CI, lần đẩy và bộ quét (hình «luật số đoạn»)."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ báo đỏ nếu sau này có mã nào đọc sổ chạy hay sổ quyết định mà chưa khai — để tệp đó thôi được coi là nhẹ."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ chứng trên commit ghim lại thật rằng cổng nghiệm thu vẫn chạy và vẫn đỏ khi bằng chứng bị làm giả, cả ở báo cáo lẫn ở sổ chạy (hình «răng cổng»)."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ giữ cổng nghiệm thu chạy ở mọi PR: không lọc theo đường dẫn, không phụ thuộc phân loại, không nuốt lỗi."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ phá thử năm chỗ trong cấu hình và mã thật để chứng các bài kiểm trên thật sự đỏ khi luật bị gỡ."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "OOS-1",
+      "p": "Sẽ KHÔNG sửa bộ cổng chép từ bộ kit (kiểm trước gộp, bộ khớp tên tệp) — lỗi ở đó gửi lên kit."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Sẽ KHÔNG đổi PR nháp — vốn đã nhẹ."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Sẽ KHÔNG nới cho bằng chứng ảnh, răng, tiêu chí hay cấu hình — có bài kiểm đọc chúng."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Sẽ KHÔNG làm nhẹ lần đẩy mang theo bản gộp onehub, và PR có mã vẫn nặng khi nhận thêm lần ghim lại."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Sẽ KHÔNG sửa câu giải thích của khối bỏ bước hay CLAUDE.md — cả hai vẫn đúng."
+    }
+  ],
+  "scope_plain": "Phạm vi cố ý giữ hẹp: chỉ hai loại tệp ghim lại, chỉ hai đường phân loại; cổng nghiệm thu không đổi.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Loại tệp trong một lần ghim lại: đã phủ cả tệp được nhẹ (sổ chạy, sổ quyết định, báo cáo) lẫn tệp gần mà phải nặng (tiêu chí, cấu hình, ảnh bằng chứng, răng, tệp sâu, workflow) — AC-1, AC-2, AC-3, AC-4."
+    },
+    {
+      "i": 1,
+      "p": "Hai đường phân loại — CI của PR và lần đẩy từ máy — đều có ca riêng chạy mã thật (AC-2, AC-3); PR nháp đã nhẹ sẵn nên không xét."
+    },
+    {
+      "i": 2,
+      "p": "Cổng đi kèm: cổng nghiệm thu vẫn chạy và vẫn đỏ ở PR nhẹ (AC-6, AC-7), bộ quét vẫn bắt bên đọc mới (AC-5)."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Một lựa chọn của máy (thử cổng trên commit thật) bị ghi như thể chủ kho đã chọn — đã sửa: ghi lại là máy chọn, kèm lý do lối kia chết."
+    },
+    {
+      "i": 1,
+      "p": "Luật chặn tệp sâu đặt ở bộ quét thì không chạy đúng ở PR cần bắt, vì PR đó được xếp nhẹ — đã sửa: chuyển luật vào chỗ phân loại dùng chung, thêm ca ở CI và lần đẩy."
+    },
+    {
+      "i": 2,
+      "p": "Chưa canh việc ai đó lọc workflow theo đường dẫn hay cho bước kiểm nuốt lỗi — đã sửa: thêm năm luật, mỗi luật một ca đỏ, thêm một lần phá thử thật."
+    },
+    {
+      "i": 3,
+      "p": "Ca bằng chứng giả chưa chứng cái đỏ đến từ bước đối chiếu bằng chứng — đã sửa: ghim đúng câu báo lỗi, thêm ca giả trong sổ chạy."
+    },
+    {
+      "i": 4,
+      "p": "Răng tự viết lệnh cổng thay vì chạy đúng lệnh CI chạy — đã sửa: đọc lệnh từ workflow thật; giới hạn «giả khớp cả hai thì không bắt được» ghi vào ghi chú."
+    }
+  ]
+}

@@ -3,13 +3,14 @@ import { createHash } from "node:crypto";
 import {
 	existsSync,
 	mkdirSync,
+	mkdtempSync,
 	readdirSync,
 	readFileSync,
 	rmSync,
 	statSync,
-	utimesSync,
 	writeFileSync,
 } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -92,14 +93,14 @@ function* tepTrong(thuMuc) {
 
 function chupThoiDiem() {
 	const anh = new Map();
+	anh.tam = mkdtempSync(join(tmpdir(), "ba-ban-do-"));
+	let i = 0;
 	for (const goc of BANG_CHUNG)
 		for (const duong of tepTrong(join(GOC, goc))) {
-			const st = statSync(duong);
-			anh.set(duong, {
-				bam: bamTep(duong),
-				atimeMs: st.atimeMs,
-				mtimeMs: st.mtimeMs,
-			});
+			const ban = join(anh.tam, String(i++));
+			const r = spawnSync("cp", ["-p", duong, ban]);
+			if (r.status !== 0) khongDo(`khong chup duoc ${duong.slice(GOC.length + 1)}`);
+			anh.set(duong, { bam: bamTep(duong), ban, mtimeMs: statSync(duong).mtimeMs });
 		}
 	return anh;
 }
@@ -111,9 +112,10 @@ function traThoiDiem(anh) {
 			lech.push(duong.slice(GOC.length + 1));
 			continue;
 		}
-		if (statSync(duong).mtimeMs !== cu.mtimeMs)
-			utimesSync(duong, cu.atimeMs / 1000, cu.mtimeMs / 1000);
+		if (statSync(duong).mtimeMs !== cu.mtimeMs) spawnSync("cp", ["-p", cu.ban, duong]);
+		if (statSync(duong).mtimeMs !== cu.mtimeMs) lech.push(`${duong.slice(GOC.length + 1)} (thoi diem)`);
 	}
+	rmSync(anh.tam, { recursive: true, force: true });
 	if (lech.length)
 		khongDo(
 			`tep bang chung khong ve dung noi dung truoc lenh: ${lech.join(", ")}`,

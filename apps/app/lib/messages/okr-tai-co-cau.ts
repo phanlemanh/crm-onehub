@@ -43,7 +43,7 @@ const vi = {
 	},
 	chuyen: {
 		tieuDe: "Chuyển OKR",
-		moTa: "Từ «{ten}». Mục tiêu giữ KR, cập nhật tuần, căn chỉnh, người xem và vết.",
+		moTa: "Từ «{ten}». Mục tiêu giữ KR, cập nhật tuần, chỗ góp vào, người xem và vết.",
 		denDonVi: "Chuyển sang",
 		seVuotTran:
 			"«{ten}» sẽ có {n} mục tiêu trong một chu kỳ — vượt trần {tran} của chương trình.",
@@ -163,7 +163,7 @@ const en: OkrTaiCoCauMessages = {
 	},
 	chuyen: {
 		tieuDe: "Move OKRs",
-		moTa: "From “{ten}”. Objectives keep their key results, weekly updates, alignments, viewers and history.",
+		moTa: "From “{ten}”. Objectives keep their key results, weekly updates, contributions, viewers and history.",
 		denDonVi: "Move to",
 		seVuotTran:
 			"“{ten}” will have {n} objectives in one cycle — over the program cap of {tran}.",

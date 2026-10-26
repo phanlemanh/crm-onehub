@@ -1,0 +1,1 @@
+driver: do-man.mjs (puppeteer via mot-luot.sh, luot chay chung E5c 20/10/2026 06:14-06:16, KET LUAN 19 DUNG 0 SAI ma thoat 0); khong co browser tool doc network -> n-a (driver). Console/failed requests khong doc duoc.

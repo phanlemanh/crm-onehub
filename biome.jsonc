@@ -18,6 +18,7 @@
 			"!**/test/fixtures/**/clipboard-*.html",
 			"!**/test/fixtures/**/gateway-models-*.json",
 			"!apps/app/lib/lo-trinh/doc-du-lieu.js",
+			"!packages/validation/src/doc-du-lieu-lo-trinh.js",
 			"!.claude",
 			"!.agents",
 			"!tools/oxlint/anti-slop",

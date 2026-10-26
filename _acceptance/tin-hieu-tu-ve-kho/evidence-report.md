@@ -7,8 +7,8 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7a3e69c5eb5cdc78520c655e147a921a3b92169f
-human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 3 (17/17 eval máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
+verified_commit: 1db3a1409fd52d562e23a2618891b7a4fbe7792c
+human_signoff: Manh Phan 2026-10-18 — ký lại Cổng Bằng chứng sau nhát sửa câu báo không mở được PR (235a7b4bd, sổ d-20261017T085439Z-52 — câu gọi đúng quyền TIN_HIEU_TOKEN và token hết hạn, nhận thêm lỗi token thiếu quyền, docs/api.md cập nhật việc cài thứ ba; lời AC giữ nguyên) trên bằng chứng ghim lại sau gộp onehub (0d55d8e6a). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo. Chữ ký 2026-10-17 trước đó phủ bản trước nhát sửa này (đổi lời AC-8, #453); chữ ký 2026-10-14 phủ lời AC-8 cũ.
 ---
 
 # Evidence Report: tin-hieu-tu-ve-kho
@@ -288,3 +288,35 @@ sha: 29fef6b0bcaf4f2e32577787260b3a26724a706d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-15, do gộp onehub 48993d6ab (#418) sau lần ghim 29fef6b0b
 run_id: repin-20261015T162628Z-72000
 sha: 7a3e69c5eb5cdc78520c655e147a921a3b92169f · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-16, do sửa workflow lịch kéo + đẩy bản chụp: DATABASE_URL giả cho bun install (#445)
+run_id: repin-20261016T160639Z-91397
+sha: 13140654c6eee35bbf8367e61d49a3efd0461ade · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7, suite 2/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-16, do sau gộp onehub có kit 2.31.0 (#413) — #445
+run_id: repin-20261016T180149Z-83573
+sha: 12bed328c30cd45ee4ec97b4e4efda8fd827d978 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-16, do lịch kéo vẽ lại trang lộ trình (sau lượt thật #452)
+run_id: repin-20261016T191234Z-42788
+sha: fb95c9db3980834b4ac3a4ec9e0cba7c689a8fdc · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-17, do làn đêm C-2 17/10: hoá cũ vì các lần gộp trong ngày (onehub 093e294e5→30d982d22)
+run_id: repin-20261017T183217Z-62449
+sha: 0784b1e8c29062b23855ef1aa6fc9152d5bf2744 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-18, do làn đêm C-2 17/10, phần đổi: hoá cũ lại vì #471 gộp (onehub 30d982d22→b22c0a329)
+run_id: repin-20261018T031621Z-30260
+sha: 468a79b5feefdf2ac856bb05df8943d99b65b845 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 11 — 2026-10-18, do gộp onehub 16db97019 trước khi vào lô (#464)
+run_id: repin-20261018T060815Z-65119
+sha: 579f59356f27c2ebd35755b02bcb988e01b68521 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 12 — 2026-10-18, do gộp onehub sau chữ ký 18/10, trước khi vào lô (PR 464)
+run_id: repin-20261018T133340Z-89558
+sha: 0eef02fc800d60f98bbff3863ea84e8670bbdf77 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 13 — 2026-10-18, do gộp onehub sau #478 #480, trước khi vào lô (PR 464)
+run_id: repin-20261018T143205Z-70919
+sha: 1db3a1409fd52d562e23a2618891b7a4fbe7792c · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

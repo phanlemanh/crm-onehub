@@ -1,4 +1,5 @@
 import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
+import { soTepTheoTruong, tepTheoTruong } from "@crm/validation/tep-truong";
 import { z } from "zod";
 import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
 import { caNhanDaLuuTruOutput } from "../crm/da-luu-tru";
@@ -47,6 +48,7 @@ export const dealCreateInput = z.object({
 	amountCents,
 	currency: currencyCode.optional(),
 	expectedCloseDate: z.string().nullable().optional(),
+	fields: recordFieldValues.optional(),
 });
 
 export type DealCreateInput = z.infer<typeof dealCreateInput>;
@@ -206,6 +208,7 @@ const dealListRowOutput = z.object({
 	createdAt: z.string(),
 	archivedAt: z.string().nullable(),
 	fields: z.record(z.string(), fieldValueOutput),
+	soTepTheoTruong: soTepTheoTruong,
 });
 
 export const dealListOutput = z.object({
@@ -233,9 +236,9 @@ export const dealBoardInput = dealListInput.pick({
 
 export type DealBoardInput = z.infer<typeof dealBoardInput>;
 
-export const dealBoardCardOutput = dealListRowOutput
-	.omit({ fields: true })
-	.extend({ counted: z.boolean() });
+export const dealBoardCardOutput = dealListRowOutput.extend({
+	counted: z.boolean(),
+});
 
 export const dealBoardOutput = z.object({
 	columns: z.array(
@@ -266,6 +269,7 @@ export const dealDetailOutput = z.object({
 	company: dealCompanyDetailOutput,
 	owner: dealOwnerOutput,
 	fields: z.array(recordFieldOutput),
+	tepTheoTruong: tepTheoTruong,
 	amountCents: z.number().nullable(),
 	baseAmountCents: z.number().nullable(),
 	reportingCurrency: z.string(),

@@ -102,6 +102,8 @@ mock.module("@/lib/trpc/client", () => ({
 				quaJson(fieldAccessOutput.parse({ canManage: true })),
 			),
 			list: thuTuc("fields.list", dsTruong),
+			layout: thuTuc("fields.layout", () => new Promise(() => {})),
+			setStandardHidden: thuTuc("fields.setStandardHidden", khongDoc),
 			filters: thuTuc("fields.filters", () => []),
 			coverage: thuTuc("fields.coverage", () => ({ filled: 0, total: 0 })),
 			create: thuTuc("fields.create", khongDoc),

@@ -6,10 +6,12 @@ feature_loop:
   ui_standards_skill: web-design-guidelines
   suite_keys: [executors.test.suite_api, executors.test.suite_app_ui, executors.test.suite_agent_db, executors.test.suite_okr_goi, executors.script.lint_khong_cache, executors.script.lint_slop, executors.script.build_khong_cache]
   repin_parallel_suites: true
+  do_san_tren_nen: true
   repin_retry: 1
   repin_budget_min: 80
   repin_cost_cmd: node scripts/lan-do/chi-phi-gateway.mjs
   repin_ci_blank_env: [AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN]
+  model_carry_cmd: bun scripts/lan-do/van-tay-model.ts
   model_evals:
     - chan-uy-thac-sai-luot/E6
     - khung-tao-okr-nhu-deal/E6
@@ -44,6 +46,8 @@ feature_loop:
     - chuyen-goi-dieu-phoi/E10
     - bo-ca-mau-quy-4/E7
     - thu-haiku-tro-ly-okr/E7
+    - pre-push-t1/E9
+    - pre-push-t1/E10
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
@@ -54,7 +58,40 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    hdm_bo_mau: 'bun run test -- "cd apps/agent && bun test test/hop-dong-mau.spec.ts -t hdm-bo-mau"'
+    hdm_doc_chu: 'bun run test -- "cd apps/agent && bun test test/hop-dong-mau.spec.ts -t hdm-doc-chu"'
+    hdm_nap: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-nap"'
+    hdm_khong_ghi_thang: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-khong-ghi-thang"'
+    hdm_chay_lai: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-chay-lai"'
+    hdm_chan: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-chan"'
+    hdm_thoat: 'bun run test -- "cd apps/api && bun test test/hop-dong-mau.spec.ts -t hdm-thoat"'
+    gdl_gui_sai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/gon-dau-trang-lay-y-kien.dom.tsx -t gdl-gui-sai
+    smt_api_sap: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-sap"'
+    smt_api_trang: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-trang"'
+    smt_api_cty_lh: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-cty-lh"'
+    smt_api_khoa_chet: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-khoa-chet"'
+    smt_api_board: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-board"'
+    smt_api_the: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-the"'
+    smt_toc_do: 'bun run test -- "cd apps/api && SMT_TOC_DO=1 bun test --timeout 600000 test/sort-moi-truong-toc-do.spec.ts -t smt-toc-do"'
+    smt_cot_sap: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sort-moi-truong.dom.tsx -t smt-cot-sap
+    smt_an_theo_kieu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sort-moi-truong.dom.tsx -t smt-an-theo-kieu
+    smt_the_kanban: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sort-moi-truong.dom.tsx -t smt-the-kanban
+    kgd_co_nguoi_dat: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-co-nguoi-dat"'
+    kgd_co_nguoi_xoa: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-co-nguoi-xoa"'
+    kgd_co_nguoi_thay: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-co-nguoi-thay"'
+    kgd_nen: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-nen"'
+    kgd_o_trong: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-o-trong"'
+    kgd_dong_thoi: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-dong-thoi"'
+    kgd_mo_ta: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-mo-ta"'
+    kgd_chi_tay: 'bun run test -- "cd apps/agent && bun test test/kara-khong-ghi-de-truong.integration.spec.ts -t kgd-chi-tay"'
     ltc_hien: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t hien
+    tbo_api_hang: 'bun run test -- "cd apps/api && bun test test/okr-danh-sach-bo.spec.ts -t tbo-hang"'
+    tbo_api_co: 'bun run test -- "cd apps/api && bun test test/okr-danh-sach-bo.spec.ts -t tbo-co"'
+    tbo_api_viec: 'bun run test -- "cd apps/api && bun test test/okr-danh-sach-bo.spec.ts -t tbo-viec"'
+    tbo_dom_the: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/trang-bo-okr.dom.tsx -t tbo-the
+    tbo_dom_lien_ket: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/trang-bo-okr.dom.tsx -t tbo-lien-ket
+    tbo_dom_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/trang-bo-okr.dom.tsx -t tbo-tai
+    tbo_dom_viec: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/trang-bo-okr.dom.tsx -t tbo-viec-ten
     ltc_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t loc
     ltc_khoan_dung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t khoan-dung
     ltc_chi_doc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t chi-doc
@@ -64,6 +101,36 @@ executors:
     ltc_da_bac: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t da-bac
     ltc_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-ngay.spec.ts && TZ=UTC bun test ./test/lo-trinh-ngay.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t ngay
     ltc_vai: cd apps/app && bun test ./test/pham-vi-man.spec.ts ./test/khung-dieu-huong.spec.ts ./test/proxy-lo-trinh.spec.ts -t lo-trinh
+    ldk_ban_chep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-chep
+    ldk_khuon: cd packages/validation && bun test test/lo-trinh-du-lieu.spec.ts -t gio-may
+    ldk_co_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t co-ngay
+    ldk_so_do: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t so-do && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t so-do
+    ldk_qua_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t qua-tai && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t qua-tai
+    ldk_chua_co: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t chua-co && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t chua-co
+    ldk_viec: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t viec
+    ldk_ban_cu: cd packages/validation && bun test test/ban-chup-lo-trinh.spec.ts -t gio-may && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-cu && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t ban-cu
+    ldk_khoi_that: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t khoi-that && TZ=UTC bun test ./test/lo-trinh-du-kien.spec.ts -t khoi-that
+    ldk_day: 'bun run test -- "cd apps/api && bun test test/ban-chup-lo-trinh.spec.ts -t ldk-gio-may"'
+    ltmh_viec_moc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-mo-hinh.spec.ts -t ltmh-viec-moc && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-viec-moc
+    ltmh_moc_hien: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-moc-hien
+    ltmh_chua_hen: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-chua-hen
+    ltmh_ten: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-ten
+    ltmh_doi_chieu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-doi-chieu
+    ltmh_khoi_cu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-mo-hinh.spec.ts -t ltmh-khoi-cu && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-khoi-cu
+    ltsp_lay_dau: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-lay-dau"'
+    ltsp_doc_du: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-san-pham.dom.tsx -t ltsp-doc-du
+    ltsp_nhip: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-nhip"'
+    ltsp_hong: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-hong"'
+    ltsp_cau_trang_thai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/san-pham-lo-trinh.dom.tsx ./test/lo-trinh-san-pham.dom.tsx -t ltsp-cau-trang-thai
+    ltsp_quyen_may_chu: 'bun run test -- "cd apps/api && bun test test/san-pham-lo-trinh.spec.ts -t ltsp-quyen"'
+    ltsp_quyen_trang: cd apps/app && bun test ./test/lo-trinh-san-pham.spec.ts -t ltsp-quyen-trang && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-san-pham.dom.tsx -t ltsp-quyen-trang
+    ltsp_danh_ba_may_chu: 'bun run test -- "cd apps/api && bun test test/san-pham-lo-trinh.spec.ts -t ltsp-danh-ba && cd ../agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-danh-ba"'
+    ltsp_danh_ba_trang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/san-pham-lo-trinh.dom.tsx -t ltsp-danh-ba-trang
+    ltsp_vong_doi_may_chu: 'bun run test -- "cd apps/api && bun test test/san-pham-lo-trinh.spec.ts -t ltsp-vong-doi && cd ../agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-vong-doi"'
+    ltsp_vong_doi_trang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/san-pham-lo-trinh.dom.tsx -t ltsp-vong-doi-trang
+    ltsp_khuon: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-san-pham.dom.tsx ./test/san-pham-lo-trinh.dom.tsx -t ltsp-khuon && cd ../.. && bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-khuon"'
+    ltsp_khoa: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-khoa"'
+    ltsp_do: 'bun run test -- "bun test scripts/lo-trinh-san-pham/test/do.spec.ts -t ltsp-do"'
     ldb_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-khung.dom.tsx -t khung-chung
     lhs_tom_tat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ho-so.dom.tsx -t tom-tat
     lhs_o_vang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ho-so.dom.tsx -t o-vang
@@ -519,6 +586,17 @@ executors:
     ghd_duyet_nhac: 'bun run test -- "cd apps/api && bun test test/okr-duyet.spec.ts -t nhac-duyet && cd ../agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-nhac.integration.spec.ts -t duyet"'
     ghd_luu_tru_chan: 'bun run test -- "cd apps/api && bun test test/okr-tai-co-cau.spec.ts -t luu-tru-chan"'
     ghd_chuyen_don_vi: 'bun run test -- "cd apps/api && bun test test/okr-tai-co-cau.spec.ts -t chuyen-don-vi"'
+    lmt_api_chu: 'bun run test -- "cd apps/api && bun test test/loc-moi-truong.spec.ts -t lmt-api-chu"'
+    lmt_api_so: 'bun run test -- "cd apps/api && bun test test/loc-moi-truong.spec.ts -t lmt-api-so"'
+    lmt_api_ngay_tich: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/loc-moi-truong.spec.ts -t lmt-api-ngay-tich"'
+    lmt_api_trong: 'bun run test -- "cd apps/api && bun test test/loc-moi-truong.spec.ts -t lmt-api-trong"'
+    lmt_api_cty_lh_bang: 'bun run test -- "cd apps/api && bun test test/loc-moi-truong.spec.ts -t lmt-api-cty-lh-bang"'
+    lmt_api_khoa_chet: 'bun run test -- "cd apps/api && bun test test/loc-moi-truong.spec.ts -t lmt-api-khoa-chet"'
+    lmt_api_da_luu: 'bun run test -- "cd apps/api && bun test test/loc-moi-truong.spec.ts -t lmt-api-da-luu"'
+    lmt_toc_do: 'bun run test -- "cd apps/api && LMT_TOC_DO=1 bun test --timeout 600000 test/loc-moi-truong-toc-do.spec.ts -t lmt-toc-do"'
+    lmt_duong_dan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-moi-truong.dom.tsx -t lmt-duong-dan
+    lmt_luu_thoa_thuan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-moi-truong.dom.tsx -t lmt-luu-thoa-thuan
+    lmt_cai_dat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-moi-truong.dom.tsx -t lmt-cai-dat
     ghd_mo_coi: 'bun run test -- "cd apps/api && bun test test/okr-tai-co-cau.spec.ts -t mo-coi"'
     ghd_khung_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx"
     ghd_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t gioi-han-duyet"'
@@ -543,6 +621,12 @@ executors:
     hy_do_phu: 'bun run test -- "cd apps/api && bun test test/okr-hoi-y-thuan.spec.ts -t do-phu && bun test test/okr-hoi-y.spec.ts -t do-phu && bun test test/okr-hoi-y-hieu-nang.spec.ts"'
     hy_man_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi-y.dom.tsx"
     hy_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t hoi-y"'
+    okx_viec: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-viec"'
+    okx_tin_hieu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-tin-hieu"'
+    okx_ngoai_giu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-ngoai-giu"'
+    okx_ten_giu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-ten-giu"'
+    okx_luoi: 'bun run test -- "cd apps/api && bun test test/okr-mau-khoa-nguoi.spec.ts -t okx-luoi"'
+    okx_da_ky: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t xoa-mau"'
     hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"
     hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
     hd_cau_tu_choi: "cd packages/auth && bun test test/cau-tu-choi.spec.ts"
@@ -905,6 +989,8 @@ executors:
     lmcv_ba_khoa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-chuyen-viec.dom.tsx -t ba-khoa"
     lmcv_dong_sau_lam_moi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-chuyen-viec.dom.tsx -t dong-sau-lam-moi"
     lmcv_loi_khong_lam_moi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-chuyen-viec.dom.tsx -t loi-khong-lam-moi"
+    ctnl_the_dung: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cho-tac-nhan-lau.dom.tsx'
+    ctnl_dong_chuong: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cho-tac-nhan-lau-chuong.dom.tsx'
     kagt_khong_ghi_trong_nguong: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t khong-ghi-trong-nguong"'
     kagt_bien_nguong: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t bien-nguong"'
     kagt_tu_choi_van_giu: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t tu-choi-van-giu"'
@@ -1118,6 +1204,19 @@ executors:
     lslt_dom_lich_su: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-lich-su.dom.tsx"
     lslt_dom_luu_tru: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-luu-tru.dom.tsx"
     lslt_dom_da_xu_ly: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-da-xu-ly.dom.tsx"
+    ssct_nguon: 'bun run test -- "cd apps/api && bun test test/ssct-nguon.spec.ts -t ssct-nguon"'
+    ssct_nop_luu_tru: 'bun run test -- "cd apps/agent && bun test test/ssct-nop-luu-tru.spec.ts"'
+    ssct_doc_cho: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-doc-cho.dom.tsx"
+    ssct_quay_lai: 'bun run test -- "cd apps/api && bun test test/ssct-quay-lai.spec.ts -t ssct-quay-lai"'
+    ssct_muc_luc: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-muc-luc.dom.tsx"
+    ssct_lien_ket: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-lien-ket.dom.tsx"
+    ssct_chon_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-chon-loi.dom.tsx"
+    ssct_tim_nhanh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-tim-nhanh-loi.dom.tsx"
+    ssct_hoi_en: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-hoi-en.dom.tsx"
+    ssct_hoi_ma: 'bun run test -- "cd apps/api && bun test test/ssct-hoi-ma.spec.ts -t ssct-hoi-ma"'
+    ssct_bang_doi_cot: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-bang-doi-cot.dom.tsx"
+    ssct_duyet_may_cu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-duyet-may-cu.dom.tsx"
+    ssct_loai_tep: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-loai-tep.dom.tsx"
     bom_okr_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okr-that-mau"'
     bom_bo_hong: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t bo-hong-mau"'
     bcq4_sinh: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-sinh"'
@@ -1651,6 +1750,17 @@ executors:
     kmt_bai_cu_app: node _acceptance/kara-mot-ten/rang/bai-cu.mjs --app
     kmt_bai_cu_may: node _acceptance/kara-mot-ten/rang/bai-cu.mjs --may
     kmt_tin_nhac: 'bun run test -- "cd apps/agent && bun test test/kara-mot-ten.spec.ts -t kmt-tin-nhac"'
+    dnk_gop_vao: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-gop-vao
+    dnk_goc: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-goc
+    dnk_lay_y_kien: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-lay-y-kien
+    dnk_luat: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-luat
+    dnk_goc_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-khu-muc-tieu.dom.tsx -t dnk-goc-man
+    dnk_bai_cu: 'cd apps/app && bun test ./test/messages-guard.spec.ts && for f in okr-cua-toi-ba-phan okr-sheet okr-tai-co-cau okr-gioi-han-duyet duong-ly-do okr-so-do-don-vi okr-theo-don-vi okr-hoi-y okr-thanh-tab okr-trang-don-vi; do TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/$f.dom.tsx || exit 1; done'
+    cmst_loi: 'bun run test -- "cd apps/api && bun test test/chu-may-sinh-ten-moi.spec.ts"'
+    cmst_goc: 'bun run test -- "cd apps/api && bun test test/chu-may-sinh-ten-moi-goc.spec.ts && bun test test/okr-hoi-y.spec.ts -t do-phu && bun test test/okr-khep.spec.ts -t \"sang-cham|cham-va-nhin-lai\" && bun test test/okr-khep-xuat.spec.ts && cd ../agent-okr && bun test test/chu-may-sinh-ten-moi.spec.ts -t cmst-goc-hoi"'
+    cmst_nhac: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/chu-may-sinh-ten-moi.spec.ts -t cmst-nhac && CRM_TELEMETRY_DISABLED=1 bun test test/okr-nhac.integration.spec.ts -t hoi-y && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-ghi.integration.spec.ts -t htb-kenh"'
+    cmst_loi_dan: cd apps/agent-okr && bun test test/chu-may-sinh-ten-moi.spec.ts -t cmst-loi-dan
+    cmst_luat: cd packages/validation && bun test test/ten-cu-okr.spec.ts -t cmst-luat
     kmc_quet: "cd apps/app && bun test ./test/khung-man-chung.spec.ts"
     kmc_xuong: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/khung-xuong.dom.tsx"
     kmc_chi_tiet: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-man-chung.dom.tsx -t chi-tiet && bun test ./test/khung-man-chung.spec.ts -t breadcrumb-chi-tiet"
@@ -1694,6 +1804,21 @@ executors:
     tvk_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"'
     tvk_lenh: bun test scripts/tin-hieu/test/keo-ve-lich.test.ts -t tvk-lenh
     tvk_lich: bun test scripts/tin-hieu/test/lich.test.ts
+    gtc_khong_moi: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-khong-moi
+    gtc_de_xuat: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-de-xuat
+    gtc_rang_do: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-rang-do
+    gtc_cham_ngoai: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-cham-ngoai
+    gtc_nguoi_sua: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-nguoi-sua
+    gtc_phu_quyet: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-phu-quyet
+    gtc_hong: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-hong
+    gtc_do: bun test scripts/tin-hieu/test/do-gom.test.ts -t gtc-do
+    gcg_moi_truong: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-moi-truong
+    gcg_loi_goi: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-loi-goi
+    gcg_chi_viec_gom: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-chi-viec-gom
+    gcg_khong_tren_dia: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-khong-tren-dia
+    gcg_token: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-token
+    gcg_sieu_du_lieu: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-sieu-du-lieu
+    gcg_lot_khoa: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-lot-khoa
     gth_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"'
     ldbc_day: 'bun run test -- "cd apps/api && bun test test/ban-chup-lo-trinh.spec.ts -t ldbc-day"'
     ldbc_khoa: 'bun run test -- "cd apps/api && bun test test/ban-chup-lo-trinh.spec.ts -t ldbc-khoa"'
@@ -1768,6 +1893,8 @@ executors:
     htb_gop: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-ghi.integration.spec.ts -t htb-gop"'
     htb_kenh: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-ghi.integration.spec.ts -t htb-kenh && TZ=Asia/Ho_Chi_Minh bun test test/nhac-qua-zalo.integration.spec.ts test/nhac-viec.integration.spec.ts"'
     htb_don: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-ghi.integration.spec.ts -t htb-don"'
+    ctnl_bao_khi_xong: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 TZ=Asia/Ho_Chi_Minh bun test test/cho-tac-nhan-lau.integration.spec.ts"'
+    ctnl_doc_khi_mo: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/cho-tac-nhan-lau.spec.ts"'
     htb_duong: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-duong.spec.ts" && cd apps/app && bun test ./test/thong-bao-cau.spec.ts'
     htb_doi_chieu: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-doi-chieu.integration.spec.ts"'
     htb_api: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao.spec.ts test/vai-chi-okr.spec.ts"'
@@ -1801,6 +1928,16 @@ executors:
     kv_man_tra_ve: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t kv-man-tra-ve"
     kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
     kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
+    # trang-don-vi-mot-bang (DH2): mỗi khoá một nhóm của okr-trang-don-vi.dom.tsx
+    dvb_dong_mo_ui: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-mo-rong.spec.tsx && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-dong-mo-ui"
+    dvb_chon_don_vi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chon-don-vi && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-chon-don-vi"
+    dvb_dong_mo: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-dong-mo && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-dong-mo"
+    dvb_hang_cong_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-hang-cong-cu && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-hang-cong-cu"
+    dvb_loc_nhanh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-loc-nhanh && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-loc-nhanh"
+    dvb_sap_xep: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-sap-xep && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-sap-xep"
+    dvb_chan_bang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chan-bang && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-chan-bang"
+    dvb_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-trang-thai && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-trang-thai"
+    dvb_giu_xem: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-giu-xem && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-giu-xem"
     # dieu-huong-khu-muc-tieu (DH1): mỗi khoá chạy một nhóm dhk-* hai chiều (đối chứng dương + đột biến ghim thông điệp).
     dhk_tieu_de: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-tieu-de
     dhk_hanh_dong: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-hanh-dong
@@ -1838,7 +1975,47 @@ executors:
     kh_ke_hoach_cu: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ke-hoach-cu"'
     kh_thuoc: 'bun run test -- "cd apps/api && bun test test/ke-hoach-sinh-viec-do-nguong.spec.ts"'
     kh_nhac_buoc: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.integration.spec.ts -t kh-nhac-buoc"'
+    dg_tao: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an.spec.ts -t dg-tao"'
+    dg_gom: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an.spec.ts -t dg-gom"'
+    dg_moc: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an.spec.ts -t dg-moc"'
+    dg_vong_doi: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an.spec.ts -t dg-vong-doi"'
+    dg_bat_dau: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-lich.spec.ts -t dg-bat-dau"'
+    dg_keo_thanh: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-lich.spec.ts -t dg-keo-thanh"'
+    dg_phu_thuoc: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-lich.spec.ts -t dg-phu-thuoc"'
+    dg_tu_doi: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-lich.spec.ts -t dg-tu-doi"'
+    dg_lich: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/lich-lam-viec.spec.ts"'
+    dg_quyen: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-quyen.spec.ts"'
+    dg_thuoc: 'bun run test -- "cd apps/api && bun test test/du-an-do-nguong.spec.ts"'
+    dg_ngay_lam: "cd packages/db && TZ=Asia/Ho_Chi_Minh bun test test/lich-lam-viec.spec.ts test/lich-viec.spec.ts"
+    dg_gantt_ui: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/gantt-du-an.dom.tsx -t gantt-du-an"
+    dg_man_ds: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an.dom.tsx -t dg-man-ds"
+    dg_man_dong: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an.dom.tsx -t dg-man-dong"
+    dg_man_gantt: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an-gantt.dom.tsx -t dg-man-gantt"
+    dg_man_keo: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an-gantt.dom.tsx -t dg-man-keo"
+    dg_man_khung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-khung && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t dg-man-dong-phu"
+    dg_man_phai_cho: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-phai-cho"
+    dg_man_lich: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-lam-viec.dom.tsx"
+    dg_man_ngay: "cd apps/app && for tz in Asia/Ho_Chi_Minh UTC; do TZ=$tz bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-ngay || exit 1; done"
+    vg_lich_api: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/lich-bay-ngay.spec.ts"'
+    vg_lich_db: 'bun run test -- "cd packages/db && TZ=Asia/Ho_Chi_Minh bun test test/lich-bay-ngay.spec.ts"'
+    vg_tran_viec: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test --timeout 120000 test/du-an-tran-viec.spec.ts"'
+    vg_gantt_ui: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/gantt-bay-ngay.dom.tsx"
+    vck_doi_thu: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test --timeout 120000 test/viec-con-khoa.spec.ts -t vck-doi-thu"'
+    vck_dong: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test --timeout 120000 test/viec-con-khoa.spec.ts -t vck-dong"'
+    vck_chuyen_cha: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test --timeout 120000 test/viec-con-khoa.spec.ts -t vck-chuyen-cha"'
+    t127_scripts: bun test scripts/tin-hieu/test scripts/ban-chup-lo-trinh/test
     kh_man_tao: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tao-ke-hoach-nguoi.dom.tsx"
+    gymk_sinh: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-sinh"'
+    gymk_chan: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-chan"'
+    gymk_xu_ly: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-xu-ly"'
+    gymk_dong: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-dong"'
+    gymk_the: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/goi-y-ke-hoach.dom.tsx"
+    gymk_nhac: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.integration.spec.ts -t gy-nhac"'
+    gymk_thuoc: 'bun run test -- "cd apps/api && bun test test/goi-y-mo-ke-hoach-do-nguong.spec.ts"'
+    lmgy_stepper: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-stepper"
+    lmgy_menu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-menu"
+    lmgy_roi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-roi"
+    lmgy_cache: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-cache"
     dh4_du_lieu: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-du-lieu"'
     dh4_chu_y: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-chu-y"'
     dh4_quyen: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-quyen"'
@@ -1866,6 +2043,9 @@ executors:
     sgt_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-loi && TZ=UTC bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-loi-ngay
     sgt_ma: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-ma
     sgt_tieu_diem: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-tieu-diem
+    tdx_giu_lai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tieu-diem-sau-hop-xoa-tin-hieu.dom.tsx -t tdx-giu-lai
+    tdx_hong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tieu-diem-sau-hop-xoa-tin-hieu.dom.tsx -t tdx-hong
+    tdx_cho: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tieu-diem-sau-hop-xoa-tin-hieu.dom.tsx -t tdx-cho
     sgt_cham: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-cham
     sgt_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-dong
     sgt_chu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-chu
@@ -1878,6 +2058,16 @@ executors:
     vca_khop_khung: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-khop-khung"'
     vca_tinh_luc_doc: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-tinh-luc-doc"'
     vca_quet: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-quet"'
+    vrc_ma_tran: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-ma-tran"'
+    vrc_chuyen: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-chuyen"'
+    vrc_phu_thuoc: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-phu-thuoc"'
+    vrc_tu_doi: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-tu-doi"'
+    vrc_viec_con: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-viec-con"'
+    vrc_man_du_an: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-man-du-an"'
+    vrc_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-rieng-trong-cuoc.dom.tsx -t vrc-khung-chu
+    vrc_khung_doi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-rieng-trong-cuoc.dom.tsx -t vrc-khung-doi
+    vrc_lich_su_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-rieng-trong-cuoc.dom.tsx -t vrc-lich-su-khung
+    vrc_dem: 'bun run test -- "cd packages/db && bun test test/dem-viec-rieng.spec.ts -t vrc-dem"'
     tlk_so_du: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-so-du'
     tlk_hong_het: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-hong-het'
     tlk_kho_theo_cay: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-kho-theo-cay'
@@ -1896,6 +2086,12 @@ executors:
     hdo_zdr: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/zdr-hoi.spec.ts
     hdo_chu: "cd apps/app && bun test ./test/messages-guard.spec.ts ./test/kara-mot-ten.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi.dom.tsx -t hdo-chu"
     tca_cham_health: 'bun run test -- "bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs"'
+    vs_nap_san_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ban-ghi-nap-san.dom.tsx"
+    gdt_danh_tinh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ban-ghi-giu-danh-tinh.dom.tsx -t gdt-danh-tinh"
+    gdt_tai_xong: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ban-ghi-giu-danh-tinh.dom.tsx -t gdt-tai-xong"
+    gdt_nap_vai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ban-ghi-giu-danh-tinh.dom.tsx -t gdt-nap-vai"
+    gdt_khong_de: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ban-ghi-giu-danh-tinh.dom.tsx -t gdt-khong-de"
+    vs_403_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-nguoi-xem-khong-mo.dom.tsx"
     ttr_ban_chup: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-ban-chup"'
     ttr_duong_khac: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-duong-khac"'
     ttr_khuon_413: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-khuon-413"'
@@ -1909,20 +2105,233 @@ executors:
     kcl_khong_do: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-khong-do && cd ../.. && cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-hop-sach"
     kcl_khong_chan: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-khong-chan"
     kcl_hoi_quy: "git diff --quiet $(git merge-base HEAD origin/onehub) -- packages/ui/test/giu-thay-doi.dom.tsx packages/ui/test/giu-thay-doi-loi-hoi.dom.tsx apps/app/test/soan-okr-trong-khung.dom.tsx apps/app/test/ngan-ban-ghi-giu.dom.tsx apps/app/test/tai-lieu-soan.dom.tsx && (cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-loi-hoi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-ngoai) && cd apps/app && for t in soan-okr-trong-khung ngan-ban-ghi-giu tai-lieu-soan; do TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/$t.dom.tsx || exit 1; done"
+    kcl_hoi_quy_vkm: "MB=$(git merge-base HEAD origin/onehub) && git diff --quiet $MB -- packages/ui/test/giu-thay-doi.dom.tsx packages/ui/test/giu-thay-doi-loi-hoi.dom.tsx apps/app/test/ngan-ban-ghi-giu.dom.tsx apps/app/test/tai-lieu-soan.dom.tsx && [ \"$(git show $MB:apps/app/test/soan-okr-trong-khung.dom.tsx | sed 's#/okr/theo-don-vi#/okr/bo-okr#g')\" = \"$(sed 's#/okr/theo-don-vi#/okr/bo-okr#g' apps/app/test/soan-okr-trong-khung.dom.tsx)\" ] && (cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-loi-hoi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-ngoai) && cd apps/app && for t in soan-okr-trong-khung ngan-ban-ghi-giu tai-lieu-soan; do TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/$t.dom.tsx || exit 1; done"
     zkd_lien_ket: 'bun run test -- "cd apps/agent && bun test test/zkd-lien-ket.integration.spec.ts"'
     zkd_chi_dan: 'bun run test -- "cd apps/agent && bun test test/zkd-chi-dan.integration.spec.ts"'
+    zch_lien_ket: 'bun run test -- "cd apps/agent && bun test test/zch-cau-thu-hai.integration.spec.ts -t zch-lien-ket"'
+    zch_chi_dan: 'bun run test -- "cd apps/agent && bun test test/zch-cau-thu-hai.integration.spec.ts -t zch-chi-dan"'
     mtc_bang: "cd packages/ui && bun test ./test/status-tone.spec.ts"
     mtc_mot_bang: "cd packages/ui && bun test ./test/mau-trang-thai-mot-bang.spec.ts"
     mtc_anh_xa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/mau-trang-thai-anh-xa.spec.ts"
     mtc_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/mau-trang-thai-dom.dom.tsx"
+    tthv_danh_sach: cd packages/validation && bun test ./test/ten-mien-nen-tang.spec.ts
+    tthv_api: 'bun run test -- "cd apps/api && bun test test/ten-mien-nen-tang.spec.ts"'
+    tthv_tac_nhan: 'bun run test -- "cd apps/agent && bun test test/tra-cuu-thuong-hieu-viet-nam.spec.ts"'
+    tthv_man: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tra-cuu-thuong-hieu-viet-nam.dom.tsx
+    dtn_bang: cd apps/app && bun test ./lib/ten-nganh.test.ts
+    dtn_man: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dich-ten-nganh-bang-bang.dom.tsx
     bch_nhan: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/status-indicator-xuong-dong.dom.tsx"
+    ppt_phan_loai: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t phan-loai"
+    ppt_day_t1: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-t1"
+    ppt_day_nang: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-nang"
+    ppt_verify: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t verify"
+    ppt_khai: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t khai"
+    ppr_gop: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t gop-onehub"
+    ppr_dong: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t dong-gop"
+    ppr_day_gop: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-gop"
+    ppr_hinh: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t hinh-gop"
+    pcn_hinh: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t hinh-gop"
+    tvg_khai: "cd packages/ui && bun test --timeout 300000 ./test/trang-ve-gop.spec.ts -t khai"
+    tvg_gop: "cd packages/ui && bun test --timeout 300000 ./test/trang-ve-gop.spec.ts -t 'gop-tu-dong|gop-xung-dot'"
+    tvg_an_toan: "cd packages/ui && bun test --timeout 300000 ./test/trang-ve-gop.spec.ts -t an-toan"
+    tvg_cay_ma: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t cay-ma"
+    tvg_dau_hook: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t dau-hook"
+    tvg_so_chay: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t so-chay && node ../../_acceptance/trang-ve-gop-va-dau-cay/rang/so-chay-that.mjs"
+    tvg_ci: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t nguon-ci && node ../../_acceptance/trang-ve-gop-va-dau-cay/rang/ten-job.mjs"
+    tvg_nhu_cu: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-da-chung.spec.ts -t 'nhu-cu|verify-da-chung' && bun test --timeout 120000 ./test/pre-push-t1.spec.ts ./test/t1-ma-doc.spec.ts ./test/push-ghim-lai-t1.spec.ts"
+    tmd_phan_loai: node --test .github/scripts/test/phan-loai.test.mjs
+    tmd_day: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t day"
+    tmd_quet: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t quet-that"
+    tmd_quet_do: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t quet-do"
+    pglt_tach: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-tach"
+    pglt_ci: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-ci"
+    pglt_day: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-day"
+    pglt_sau: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-sau"
+    pglt_doc: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-doc"
+    pglt_job: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-job"
+    tcb_luat: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-luat"'
+    tcb_ham: 'bun run test -- "cd packages/auth && bun test test/quyen-tep.spec.ts -t tcb-ham"'
+    tcb_doi_chu: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-doi-chu"'
+    tcb_pham_vi: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-pham-vi"'
+    tcb_xoa: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-xoa"'
+    tcb_o_tep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tep-theo-chu.dom.tsx -t tcb-o-tep
+    tcb_vet: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-vet"'
+    tlkp_khoi_phuc: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t khoi-phuc:.de.xuat.khoi.phuc.duoc.duyet"'
+    tlkp_luu_tru: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t duyet-luu-tru:.ma.tran.nguoi.viet.truoc"'
+    tlkp_dem: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-dem"'
+    tlkp_tinh: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-tinh"'
+    tlkp_tep: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts"'
+    gtr_luu_tru: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-luu-tru"'
+    gtr_keo_ve: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-keo-ve"'
+    gtr_da_lay_ve: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-da-lay-ve"'
+    gtr_quyen: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-quyen"'
+    gtr_khoi_phuc: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-khoi-phuc"'
+    gtr_ba_so: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-ba-so"'
+    gtr_cua_toi: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-cua-toi"'
+    gtr_hoan_tac: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t hoan-tac
+    gtr_thanh_cong_cu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t thanh-cong-cu
+    gtr_ba_so_giu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t ba-so-giu
+    gtr_nguoi_gui: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t nguoi-gui
+    gtr_ca_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t ca-man
+    tbk_khung: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/area-sidebar.dom.tsx -t tbk-khung"
+    tbk_panel: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/area-sidebar.dom.tsx -t tbk-panel"
+    tbk_cai_dat: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-trang-cai-dat-thanh-ben.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t tbk-cai-dat"
+    tbk_hoi_thoai_may_tinh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t tbk-hoi-thoai-may-tinh"
+    tbk_hoi_thoai_bam: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t 'tbk-hoi-thoai-bam|tbk-hoi-thoai-rong'"
+    tbk_hoi_thoai_dien_thoai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t 'tbk-hoi-thoai-dien-thoai|tbk-hoi-thoai-ngan'"
+    tbk_dang_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t tbk-dang-tai"
+    tcc_danh_muc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-danh-muc"
+    tcc_sap_lai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-sap-lai"
+    tcc_phieu_thu_tu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-phieu-thu-tu"
+    tcc_an: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-an"
+    tcc_chuan_bat_buoc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-chuan-bat-buoc"
+    tcc_bat_buoc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-bat-buoc-luu"
+    tcc_bat_buoc_hien: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-bat-buoc-hien"
+    tcc_phieu_chua_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-phieu-chua-tai"
+    tcc_khong_quyen: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-khong-quyen"
+    tcc_api_sap_lai: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/truong-chuan-cai-dat.spec.ts -t tcc-api-sap-lai"'
+    tcc_api_an: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/truong-chuan-cai-dat.spec.ts -t tcc-api-an"'
+    tcc_api_chuan_bat_buoc: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/truong-chuan-cai-dat.spec.ts -t tcc-api-chuan-bat-buoc"'
+    tcc_api_bat_buoc: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/truong-chuan-cai-dat.spec.ts -t tcc-api-bat-buoc-luu"'
+    tcc_api_bat_buoc_hien: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/truong-chuan-cai-dat.spec.ts -t tcc-api-bat-buoc-hien"'
+    tcc_api_mac_dinh: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/truong-chuan-cai-dat.spec.ts -t tcc-api-mac-dinh"'
+    tcc_api_quyen: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/truong-chuan-cai-dat.spec.ts -t tcc-api-quyen"'
+    vk7_moi_loi: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-moi-loi && cd ../.. && bun _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs && test "$(bun _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs --goc _acceptance/ngan-kr-mot-cho/rang/moi | grep -c "")" = 2'
+    vk7_dau_ngan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-dau-ngan
+    vk7_than_ngan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-than-ngan
+    vk7_kr_ke: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-kr-ke
+    vk7_cap_nhat_ngan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-cap-nhat-ngan
+    vk7_tren_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-tren-dong
+    vk7_ghi_that: 'bun run test -- "cd apps/api && bun test test/ngan-kr-mot-cho.spec.ts -t vk7-ghi-that"'
+    vk7_ba_bam: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-ba-bam
+    vk7_xem_truoc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-xem-truoc && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/target-line-chart.dom.tsx
+    vk7_hep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-hep
+    vk7_trang_thai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-kr-mot-cho.dom.tsx -t vk7-trang-thai && bun test ./test/messages-guard.spec.ts
+    kcd_cau_truc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-cau-truc"
+    kcd_a11y: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-a11y"
+    tmc_doc_so: cd apps/app && bun test ./test/truong-mot-cach.spec.ts -t tmc-doc-so
+    tmc_ten_goi: cd apps/app && bun test ./test/truong-mot-cach.spec.ts -t tmc-ten-goi
+    tmc_phieu_so: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-phieu-so
+    tmc_loi_nhap: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-loi-nhap
+    tmc_loi_may_chu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-loi-may-chu
+    tmc_o_tich: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-o-tich
+    tmc_lien_ket: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-lien-ket
+    tmc_truong_chuan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-truong-chuan
+    tmc_o_bang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-o-bang
+    tmc_api_so: 'bun run test -- "cd apps/api && bun test test/truong-mot-cach.spec.ts -t tmc-api-so"'
+    tmc_api_tu_choi: 'bun run test -- "cd apps/api && bun test test/truong-mot-cach.spec.ts -t tmc-api-tu-choi"'
+    vkm_thanh_ben: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/vo-khu-muc-tieu.dom.tsx -t vkm-thanh-ben"
+    vkm_chu_ky: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/vo-khu-muc-tieu.dom.tsx -t vkm-chu-ky"
+    vkm_mot_lop: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/vo-khu-muc-tieu.dom.tsx -t vkm-mot-lop"
+    vkm_chuyen_huong: "cd apps/app && bun test ./test/vo-khu-chuyen-huong.spec.ts -t vkm-chuyen-huong"
+    vkm_don_vi_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-don-vi-dan-cay.dom.tsx -t vkm-don-vi-dan"
+    vkm_loi_vao_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-ba-phan.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test ./test/okr-giai-ky-an.spec.ts ./test/okr-chuyen-huong-cap-nhat.spec.ts"
+    mnt_dau_trang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-dau-trang"
+    mnt_man_doc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-man-doc"
+    mnt_hop: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-hop"
+    mnt_tu_viet: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-tu-viet"
+    mnt_tu_mau: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-tu-mau"
+    mnt_bang_tinh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-bang-tinh"
+    mnt_soan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-soan"
+    mnt_khoa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-khoa"
+    mnt_api_muc_tieu: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t muc-tieu"'
+    mnt_api_tu_mau: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t tu-mau"'
+    mnt_api_nhap: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t nhap-bang-tinh"'
+    mnt_api_soan: 'bun run test -- "cd apps/api && bun test test/soan-okr-mo.spec.ts -t soan-mo"'
+    mkc_o_truot: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-o-truot"
+    mkc_duong_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-duong-dan"
+    mkc_ngan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-ngan"
+    mkc_trang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-trang"
+    mkc_nguon: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-nguon"'
+    mkc_quyen: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-quyen"'
+    mkc_loc_tinh_trang: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-loc-tinh-trang"'
+    mkc_loc_don_vi: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-loc-don-vi"'
+    mkc_loc_nguoi: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-loc-nguoi"'
+    ntl_bo_truong: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-bo-truong"
+    ntl_chua_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-chua-tai"
+    ntl_giu_luat_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tra-cuu-thuong-hieu-viet-nam.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/deals-giai-doan-hydrat.dom.tsx"
+    ntl_gui_gia_tri: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-gui-gia-tri"
+    ntl_bat_buoc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-bat-buoc"
+    ntl_loi_may_chu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-loi-may-chu"
+    ntl_them_nhanh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-them-nhanh"
+    ntl_ban_ghi_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-ban-ghi-cu"
+    ntl_api_tao_co_truong: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-tao-co-truong"'
+    ntl_api_bat_buoc: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-bat-buoc"'
+    ntl_api_tu_choi: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-tu-choi"'
+    ntl_api_kara_dien: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-kara-dien"'
+    ntl_api_ban_ghi_cu: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-ban-ghi-cu"'
+    ldv_bang: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-tai-lai.dom.tsx -t ldv-bang"
+    ldv_giu: "cd apps/app && bun test ./test/loc-don-vi-giu-bang.spec.ts -t ldv-giu"
+    ttdc_khoi_cho: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tom-tat-tuan-dang-cho.dom.tsx -t ttdc-khoi-cho"
+    ttdc_api_cho: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tom-tat-tuan-dang-cho.spec.ts -t ttdc-api-cho"'
+    ttdc_luat_gio: 'bun run test -- "cd apps/api && TZ=UTC TTDC_CAN_TZ=1 CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tom-tat-tuan-dang-cho.spec.ts -t ttdc-luat-gio && TZ=America/Los_Angeles TTDC_CAN_TZ=1 CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tom-tat-tuan-dang-cho.spec.ts -t ttdc-luat-gio"'
+    ttdc_mot_luat: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tom-tat-tuan-dang-cho.spec.ts -t ttdc-mot-luat"'
+    ttdc_dang_xep: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tom-tat-tuan-dang-cho.spec.ts -t ttdc-dang-xep" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tom-tat-tuan-dang-cho.dom.tsx -t ttdc-dang-xep'
+    ttdc_tam_dung: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tom-tat-tuan-dang-cho.spec.ts -t ttdc-tam-dung" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tom-tat-tuan-dang-cho.dom.tsx -t ttdc-tam-dung'
+    ttdc_khong_doi: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tom-tat-tuan-dang-cho.spec.ts -t ttdc-khong-doi" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tom-tat-tuan-dang-cho.dom.tsx -t ttdc-khong-doi'
+    ttdc_mui_gio: "cd apps/app && TZ=UTC bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tom-tat-tuan-dang-cho.dom.tsx -t ttdc-mui-gio && TZ=America/Los_Angeles bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tom-tat-tuan-dang-cho.dom.tsx -t ttdc-mui-gio"
+    hct_khoi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-cap-nhat-lan-truoc.dom.tsx -t hct-khoi"
+    hct_rong: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-cap-nhat-lan-truoc.dom.tsx -t hct-rong"
+    hct_sau_gui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-cap-nhat-lan-truoc.dom.tsx -t hct-sau-gui"
+    hct_goi_y: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-cap-nhat-lan-truoc.dom.tsx -t hct-goi-y"
+    hct_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-cap-nhat-lan-truoc.dom.tsx -t hct-tai"
+    hct_api_moi_nhat: 'bun run test -- "cd apps/api && bun test test/hop-cap-nhat-lan-truoc.spec.ts -t hct-moi-nhat"'
+    ttts_doc_ban_chup: 'bun run test -- "cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-doc-ban-chup"'
+    ttts_khong_lui: cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-khong-lui
+    ttts_bao: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-bao"'
+    ttts_khong_bao: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-khong-bao"'
+    ttts_giao_dich: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-giao-dich"'
+    ttts_cau: cd apps/app && bun test ./test/thong-bao-cau.spec.ts
+    ttts_do: 'bun run test -- "bun test scripts/tin-hieu/test/do-bao-doi-cho.spec.ts -t ttts-do"'
+    ttp_tao_truong: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-tao-truong"'
+    ttp_cai_dat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx -t ttp-cai-dat
+    ttp_tai_len: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-tai-len"'
+    ttp_blob_that: 'bun run test -- "cd apps/api && TTB_BLOB_THAT=1 bun test --timeout 120000 test/truong-tep-blob-that.spec.ts -t ttp-blob-that"'
+    ttp_tu_choi: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-tu-choi"'
+    ttp_quyen: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-quyen"'
+    ttp_o_tep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx -t ttp-o-tep
+    ttp_loc: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-loc"'
+    ttp_man_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx -t ttp-man-loc
+    ttp_xoa: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-xoa"'
+    ttp_vong_doi: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-vong-doi"'
+    ttp_khoa: 'bun run test -- "cd packages/db && bun test test/blob-tep-truong.spec.ts -t ttp-khoa && cd ../../apps/api && bun test test/truong-tep.spec.ts -t ttp-tat"'
+    ttp_kho_tai_lieu: 'bun run test -- "cd packages/db && bun test test/blob-nguon.spec.ts && cd ../../apps/api && bun test test/tai-lieu-nguon.spec.ts test/tai-lieu-nguon-tat.spec.ts test/phieu-nguon.spec.ts" && bun _acceptance/truong-tep/rang/bai-cu-nguyen.mjs'
+    ttp_ghi_chu: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-ghi-chu && cd ../agent && CRM_TELEMETRY_DISABLED=1 bun test test/truong-tep.integration.spec.ts -t ttp-kara"'
+    tbk_muc: 'cd packages/validation && bun test test/thong-bao-muc.spec.ts -t tbk-muc && cd ../../apps/app && bun test ./test/thong-bao-ten-loai.spec.ts -t tbk-ten'
+    tbk_mac_dinh: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-kenh.integration.spec.ts -t tbk-mac-dinh"'
+    tbk_loc: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-kenh.integration.spec.ts -t tbk-loc"'
+    tbk_su_kien: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-kenh.integration.spec.ts -t tbk-su-kien" && cd apps/app && bun test ./test/thong-bao-cau.spec.ts -t tbk-cau'
+    tbk_hong: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-kenh.integration.spec.ts -t tbk-hong"'
+    tbk_api: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup.ts test/thong-bao-cai-dat.spec.ts -t tbk-api"'
+    tbk_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao-cai-dat.dom.tsx -t tbk-man
+    tbk_doi_chieu: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-doi-chieu.integration.spec.ts -t tbk-doi-chieu"'
+    otdt_dom: '(git diff --quiet $(git merge-base origin/onehub HEAD) HEAD -- packages/ui/test/nguon-keo-tha.dom.tsx packages/ui/test/nguon-canh-nhau.dom.tsx apps/app/test/truong-tep.dom.tsx apps/app/test/nguon-keo-tha-chu.dom.tsx apps/app/test/tai-lieu-nguon.dom.tsx || (echo "otdt dom: bai cu bi sua" && exit 1)) && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx ./test/nguon-canh-nhau.dom.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx ./test/nguon-keo-tha-chu.dom.tsx ./test/tai-lieu-nguon.dom.tsx'
   script:
+    gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
+    gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs
+    smt_quet: bun _acceptance/sort-moi-truong/rang/quet-bang-kieu.mjs
+    smt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/sort-moi-truong/rang/do-man.mjs"'
+    tthv_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs"
+    dtn_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dich-ten-nganh-bang-bang/rang/chup.mjs"
     dcn_mot_cho: node _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
     kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs
     kmt_chup: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-mot-ten/rang/chup.mjs"'
     kmt_kiem_ke: node _acceptance/kara-mot-ten/rang/kiem-ke.mjs
     kmt_bang_chu: node _acceptance/kara-mot-ten/rang/bang-chu.mjs
+    dnk_dot_bien: node _acceptance/doi-nhan-khu-muc-tieu/rang/dot-bien.mjs
+    dnk_kiem_ke: node _acceptance/doi-nhan-khu-muc-tieu/rang/kiem-ke.mjs
+    dnk_proto: node _acceptance/doi-nhan-khu-muc-tieu/rang/proto.mjs
+    dnk_khong_go_bai: node _acceptance/doi-nhan-khu-muc-tieu/rang/khong-go-bai.mjs
+    dnk_thuoc_da_ky: node _acceptance/doi-nhan-khu-muc-tieu/rang/thuoc-da-ky.mjs
+    dnk_bang_chu: node _acceptance/doi-nhan-khu-muc-tieu/rang/bang-chu.mjs
+    dnk_chup: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/doi-nhan-khu-muc-tieu/rang/chup.mjs"'
+    cmst_so_eval_soan: node _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan.mjs
+    cmst_so_eval_soan_do: node _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan-do.mjs
+    cmst_kiem_ke: node _acceptance/chu-may-sinh-ten-moi/rang/kiem-ke.mjs
+    cmst_khong_go_bai: node _acceptance/chu-may-sinh-ten-moi/rang/khong-go-bai.mjs
+    cmst_thuoc_da_ky: node _acceptance/chu-may-sinh-ten-moi/rang/thuoc-da-ky.mjs
+    cmst_eval_soan: 'bun _acceptance/chu-may-sinh-ten-moi/rang/eval-soan.mjs --nhan ${NHAN:-sau}'
     ltk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/luu-tru-truong-khong-hoi/rang/man.mjs"'
     ltk_san_thiet_ke: 'for t in apps/app/components/crm/fields/field-editor.tsx apps/app/components/crm/fields/fields-list.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     dlt_mot_noi: bun _acceptance/dai-luu-tru-dung-chung/rang/mot-noi.mjs
@@ -2016,6 +2425,8 @@ executors:
     lslt_man_lich_su: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lich-su-va-luu-tru-trang/rang/man.mjs --phan lich-su"'
     lslt_man_luu_tru: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lich-su-va-luu-tru-trang/rang/man.mjs --phan luu-tru"'
     lslt_man_da_luu_tru: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lich-su-va-luu-tru-trang/rang/man.mjs --phan da-luu-tru"'
+    ssct_so_bo_mau: "bun _acceptance/sua-sau-chay-that/rang/so-bo-mau.ts"
+    ssct_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/sua-sau-chay-that/rang/man.mjs"'
     msd_blob_that: 'BLOB_READ_WRITE_TOKEN=vercel_blob_rw_logo_gia_khong_dung bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'
     knr_bien_cac_nha: "node _acceptance/kho-nguon-khoa-rieng/rang/bien-cac-nha.mjs"
     msd_soan_that: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/soan-that.mjs"'
@@ -2202,6 +2613,8 @@ executors:
     rang3_no_vong_1: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/no-vong-1.mjs"'
     rang3_trinh_doc_man_hinh: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs trinh-doc-man-hinh"'
     rang3_khai_tieng: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs khai-tieng"'
+    lmt_quet: bun _acceptance/loc-moi-truong/rang/quet-bang-loc.mjs
+    lmt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/loc-moi-truong/rang/do-man.mjs"'
     rang3_doi_tieng: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs doi-tieng"'
     rang3_may_chu_ve: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bash _acceptance/nhan-ung-dung-noi-tieng-viet/rang/may-chu-ve.sh"'
     rang3_be_rong: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bash _acceptance/nhan-ung-dung-noi-tieng-viet/rang/be-rong.sh"'
@@ -2477,6 +2890,7 @@ executors:
     dos_soi_chu: "bun _acceptance/don-okr-nhap-sai/rang/soi-ma.mjs --ca chu"
     dos_san_thiet_ke: "bun _acceptance/don-okr-nhap-sai/rang/soi-ma.mjs --ca thiet-ke"
     ckr_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/man-canh-kr.mjs"'
+    okx_man_canh_kr: 'EVAL=E12,E15,E17 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/man-canh-kr.mjs"'
     ckr_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/ty-le.mjs"'
     ckr_san_thiet_ke: "bun _acceptance/canh-kr-okr/rang/soi-ma.mjs --ca thiet-ke"
     ckr_migration_chi_them: "bun _acceptance/canh-kr-okr/rang/migration-chi-them.mjs"
@@ -2492,6 +2906,10 @@ executors:
     gtsx_buoc_ci_chay: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/buoc-ci.mjs --chay
     gtsx_tai_lieu: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/buoc-ci.mjs --tai-lieu
     hy_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs"'
+    tbo_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-bo-okr/rang/man-bo-okr.mjs"'
+    tbo_khong_doi_hinh: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --chi-quet
+    tbo_khong_doi_hinh_2: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --phan 2/3
+    tbo_khong_doi_hinh_3: bun _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs --phan 3/3
     hy_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dot-hoi-y-tuong-okr/rang/ty-le.mjs"'
     hy_san_thiet_ke: "bun _acceptance/dot-hoi-y-tuong-okr/rang/soi-ma.mjs --ca thiet-ke"
     hy_migration_chi_them: "bun _acceptance/dot-hoi-y-tuong-okr/rang/migration-chi-them.mjs"
@@ -2670,10 +3088,10 @@ executors:
     r1f_thuoc_cu_xanh: "bun _acceptance/cua-vao-va/rang/thuoc-cu-xanh.mjs"
     r1f_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/error.tsx" "apps/app/app/(app)/error.tsx" "apps/app/components/trang-loi-tam.tsx" "apps/app/components/dau-cua-vao.tsx" "apps/app/components/auth-shell.tsx" "apps/app/app/(landing)/quen-mat-khau/quen-mat-khau-form.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done && bun _acceptance/cua-vao-va/rang/khong-ghi-de.mjs'
     r1a_man_khung: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan le"
-    r1a_man_thanh: 'PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan thanh-chua" && OKR_AGENT_BRIDGE_SECRET=gia-do-r1a PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan thanh"'
+    r1a_man_thanh: 'OKR_AGENT_BRIDGE_SECRET= PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan thanh-chua" && OKR_AGENT_BRIDGE_SECRET=gia-do-r1a PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan thanh"'
     r1a_man_khung_dt: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan dien-thoai"
     r1a_man_chip: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan chip"
-    r1a_man_bon_vai: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/bon-vai.mjs"
+    r1a_man_bon_vai: OKR_AGENT_BRIDGE_SECRET= PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/bon-vai.mjs"
     r1a_san_thiet_ke: for t in "apps/app/components/detail-sheet.tsx" "apps/app/components/crm/record-sheet/objective-sheet.tsx" "apps/app/components/crm/record-sheet/objective-hien-thi.tsx" "apps/app/components/crm/record-sheet/record-parts.tsx" "apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx" "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
     r1h_man_that: 'OKR_AGENT_BRIDGE_SECRET=gia-do-soan-okr-khong-tru-luot OKR_AGENT_URL=http://127.0.0.1:9 PHIEN_DO_TEN_CAY=soan-okr-khong-tru-luot bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-khong-tru-luot/rang/thu-lai-man-that.mjs"'
     r1h_chu_va_san: 'cd apps/app && bun test test/messages-guard.spec.ts && cd ../.. && node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx" --mode static'
@@ -2855,12 +3273,19 @@ executors:
     gth_vong_kit: bun _acceptance/gui-tin-hieu-trong-crm/rang/vong-kit.mjs
     gth_ban_dung: node _acceptance/gui-tin-hieu-trong-crm/rang/ban-dung.mjs
     tvk_tep_lich: bun _acceptance/tin-hieu-tu-ve-kho/rang/tep-lich.mjs
+    gtc_tep_lich: bun _acceptance/gom-tin-hieu-tu-chay/rang/tep-lich.mjs --tu-kiem
+    gcg_tep_lich: bun _acceptance/gia-co-gom-tin-hieu/rang/tep-lich.mjs --tu-kiem
     tvk_t1: node _acceptance/tin-hieu-tu-ve-kho/rang/t1.mjs
     tvk_duong_doc_khoa: bun _acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs
     tvk_thiet_ke: 'for f in "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     gth_thiet_ke: 'for f in apps/app/components/tin-hieu/*.tsx "apps/app/app/(app)/[slug]/tin-hieu/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     gth_do_man: 'APP_URL=${APP_URL:-http://localhost:3370} API_URL=${API_URL:-http://localhost:3371} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/gui-tin-hieu-trong-crm/rang/do-man.mjs"'
     ldbc_do_man: 'APP_URL=${APP_URL:-http://localhost:3390} API_URL=${API_URL:-http://localhost:3391} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lo-trinh-doc-ban-chup/rang/do-man.mjs"'
+    ldk_do_man: 'APP_URL=${APP_URL:-http://localhost:3394} API_URL=${API_URL:-http://localhost:3395} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lo-trinh-hien-ngay-du-kien/rang/do-man.mjs"'
+    ltmh_do_man: 'APP_URL=${APP_URL:-http://localhost:3394} API_URL=${API_URL:-http://localhost:3395} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/trang-lo-trinh-mo-hinh-hien-thi/rang/do-man.mjs"'
+    ltsp_do_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/lo-trinh-nhieu-san-pham/rang/do-man.mjs"'
+    ltsp_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx" "apps/app/app/(app)/[slug]/settings/san-pham/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
+    ltsp_khoa_quet: bun _acceptance/lo-trinh-nhieu-san-pham/rang/quet-khoa.mjs
     ldbc_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx" "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     mth_khop: bun test scripts/tin-hieu/test/nguong-song-khop.test.ts
     mth_ban_dung: node _acceptance/moi-tin-hieu-cho-quan-tri/rang/ban-dung.mjs
@@ -2877,6 +3302,12 @@ executors:
     cgdp_goi_dot: bun _acceptance/chuyen-goi-dieu-phoi/rang/goi-dot.mjs
     cgdp_thay_boi: bun _acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs
     cgdp_khong_do_them: bun _acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs
+    kdtg_ban_gh: bun _acceptance/khong-do-them-chay-gh/rang/ban-gh.mjs
+    kdtg_ban_gh_nguon: bun _acceptance/khong-do-them-chay-gh/rang/ban-gh.mjs --nguon
+    kdtg_lenh_gh: bun _acceptance/khong-do-them-chay-gh/rang/lenh-gh.mjs
+    kdtg_ban_do: bun _acceptance/khong-do-them-chay-gh/rang/ban-do-that.mjs
+    kdtg_chi: bun _acceptance/khong-do-them-chay-gh/rang/chi.mjs
+    kdtg_dung_lai_cay: bun _acceptance/khong-do-them-chay-gh/rang/dung-lai-cay.mjs
     bhds_paths_song: bun _acceptance/ba-ho-so-do-san/rang/paths-song.mjs
     bhds_danh_sach: bun _acceptance/ba-ho-so-do-san/rang/danh-sach.mjs
     bhds_khai_du: bun _acceptance/ba-ho-so-do-san/rang/khai-du.mjs
@@ -2911,6 +3342,9 @@ executors:
     vc_san_thiet_ke: node _acceptance/viec-chung/rang/san-thiet-ke.mjs
     vc_dot_bien: node _acceptance/viec-chung/rang/dot-bien.mjs
     htb_do_man: 'NGUOI=ada@trycomp.ai bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thong-bao-tren-web/rang/do-man.mjs"'
+    tbk_do_man: 'NGUOI=ada@trycomp.ai bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/thong-bao-mot-nguon-nhieu-kenh/rang/do-man.mjs"'
+    ctnl_do_man: 'NGUOI=ada@trycomp.ai bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cho-tac-nhan-lau/rang/do-man.mjs"'
+    ctnl_san_thiet_ke: 'bun _acceptance/cho-tac-nhan-lau/rang/san-thiet-ke.mjs'
     htb_thiet_ke: 'for f in apps/app/components/thong-bao/*.tsx "apps/app/app/(app)/[slug]/thong-bao/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     cvc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/chep-viec-can-lam-cu/rang/man.mjs"'
     cvc_dot_bien: node _acceptance/chep-viec-can-lam-cu/rang/dot-bien.mjs
@@ -2922,16 +3356,45 @@ executors:
     kh_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ke-hoach-sinh-viec/rang/man.mjs"'
     kh_san_thiet_ke: node _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs
     kh_dot_bien: node _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs
+    dg_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/du-an-gantt/rang/man.mjs"'
+    dg_san_thiet_ke: node _acceptance/du-an-gantt/rang/san-thiet-ke.mjs
+    dg_dot_bien: node _acceptance/du-an-gantt/rang/dot-bien.mjs
+    vg_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/va-gantt-lich-bay-ngay/rang/man.mjs"'
+    vg_dot_bien: node _acceptance/va-gantt-lich-bay-ngay/rang/dot-bien.mjs
+    vck_dot_bien: node _acceptance/khoa-viec-con-dung-thu-tu/rang/dot-bien.mjs
+    t127_quet: node _acceptance/test-nghe-127/rang/quet.mjs
+    t127_quet_goc: node _acceptance/test-nghe-127/rang/quet.mjs --ref 33ddf1b0294399ddf581318b71bb9b7e48f4de84 --mong-do
+    t127_co_che: bun _acceptance/test-nghe-127/rang/co-che.ts
+    t127_khang_dinh: node _acceptance/test-nghe-127/rang/khong-doi-khang-dinh.mjs
+    ttc30_mot_khoa: bun _acceptance/tran-test-ci-30/rang/kiem.mjs mot-khoa
+    ttc30_e3_cu: bun _acceptance/tran-test-ci-30/rang/kiem.mjs e3-cu
+    vrc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-rieng-chi-nguoi-trong-cuoc/rang/man.mjs"'
+    gymk_san_thiet_ke: node _acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs
+    gymk_dot_bien: node _acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs
+    gymk_hoi_quy: 'node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types'
+    gymk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/goi-y-mo-ke-hoach/rang/man.mjs"'
+    lmgy_dot_bien: node _acceptance/lam-moi-goi-y-ke-hoach/rang/dot-bien.mjs
+    lmgy_duong: node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs --tu-thu && node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs
+    lmgy_hoi_quy: 'node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types'
+    lmgy_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/lam-moi-goi-y-ke-hoach/rang/man.mjs"'
     kh_e6_xanh: node _acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs
-    kh_hoi_quy: 'node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc 34d31a8bf && bun run check-types'
+    kh_hoi_quy: 'node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --gop 7ebcb0242 && bun run check-types'
     sgt_ranh_gioi: node _acceptance/sua-giao-dien-tin-hieu/rang/ranh-gioi.mjs
     sgt_do_man: APP_URL=${APP_URL:-http://localhost:3372} API_URL=${API_URL:-http://localhost:3373} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/sua-giao-dien-tin-hieu/rang/do-man.mjs"
     sgt_thiet_ke: for f in apps/app/components/tin-hieu/*.tsx "apps/app/app/(app)/[slug]/tin-hieu/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done
+    tdx_ranh_gioi: node _acceptance/tieu-diem-sau-hop-xoa-tin-hieu/rang/ranh-gioi.mjs
+    tdx_ban_phim: APP_URL=${APP_URL:-http://localhost:3372} API_URL=${API_URL:-http://localhost:3373} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tieu-diem-sau-hop-xoa-tin-hieu/rang/do-ban-phim.mjs"
+    tdx_thiet_ke: for f in apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx "apps/app/app/(app)/[slug]/tin-hieu/danh-sach-tin-hieu-trang.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done
     hdo_chi_hoi_okr: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/chi-hoi-okr.mjs"'
     hdo_bo_cau: 'bun test _acceptance/hoi-dap-okr/rang/do-hoi-dap.test.ts && bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs"'
     hdo_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/man-hoi.mjs"'
     nltk_ba_ngay: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs
     nltk_pham_vi: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs --pham-vi
+    # trang-don-vi-mot-bang (DH2)
+    dvb_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"'
+    dvb_ho_so_da_ky: 'bun _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ho-so-da-ky'
+    dvb_proto: 'bun _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs && cd apps/app && bun test test/proto-catalog.spec.ts && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-proto'
+    dvb_ghim_nam: 'bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ghim-nam'
     # dieu-huong-khu-muc-tieu (DH1)
     dhk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"'
     dhk_ho_so_da_ky: bun _acceptance/dieu-huong-khu-muc-tieu/rang/ho-so-da-ky.mjs
@@ -2955,10 +3418,23 @@ executors:
     eqh_qua_han: bun _acceptance/e24-qua-han-khong-phai-ha-tang/rang/qua-han.mjs
     eqh_khong_qua_han: bun _acceptance/e24-qua-han-khong-phai-ha-tang/rang/qua-han.mjs --khong-qua-han
     tca_pham_vi: bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs --pham-vi
+    vs_hydrat_record: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ve-sinh-do-san-onehub/rang/hydrat-record.mjs"'
+    vs_chieu_do_hydrat: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --tu-thu-cay && node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca hydrat"
+    vs_chieu_do_nap_san: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --tu-thu-cay && node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca nap-san"
+    gdt_chieu_do: node _acceptance/ngan-ban-ghi-giu-danh-tinh/rang/chieu-do.mjs
+    gdt_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"'
+    gdt_man_chieu_do: bun _acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs --chieu-do
+    vs_chieu_do_403: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --tu-thu-cay && node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca 403"
+    vs_chieu_do_moi_chuoi: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --tu-thu-cay && node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca moi-chuoi-khai --ca moi-chuoi-that --ca e16-thieu --ca e16-cu"
+    vs_khong_noi: "node _acceptance/ve-sinh-do-san-onehub/rang/khong-noi.mjs --tu-thu && node _acceptance/ve-sinh-do-san-onehub/rang/khong-noi.mjs"
+    vs_ghim_xanh: "node _acceptance/ve-sinh-do-san-onehub/rang/ghim-xanh.mjs --tu-thu && node _acceptance/ve-sinh-do-san-onehub/rang/ghim-xanh.mjs"
     kcl_dot_bien: node _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs
     kcl_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan man"'
     kcl_man_luot: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan luot"'
+    nm5_dh1: node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/khong-sua.mjs
+    nm5_mo_coi: node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/go-mo-coi.mjs
     zkd_so_do: bun _acceptance/zalo-tro-ly-kho-chi-dan/rang/so-do.ts
+    zch_so_do: bun _acceptance/zalo-cau-thu-hai-lien-ket/rang/so-do.ts
     mtc_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs"'
     mtc_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs --chi-do"'
     tpe_e15: "node _acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs --ho-so giai-doan-thoa-thuan --chi-eval E15 --ma-tran-chu"
@@ -2969,8 +3445,80 @@ executors:
     tpe_bo_qua: "node _acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs --kiem-bo-qua-lop"
     tpe_pmc_that: "node _acceptance/thu-paths-e15-giai-doan/rang/pmc-truoc-sau.mjs --ho-so @_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
     tpe_dot_bien: "node _acceptance/thu-paths-e15-giai-doan/rang/dot-bien.mjs"
+    tnc_so: bun _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts
+    tnc_pham_vi: bun _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts --pham-vi
+    mtv_so: bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts
+    mtv_pham_vi: bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts --pham-vi
+    mh2_so: bun _acceptance/re-mo-hinh-mac-dinh/rang/so-mh2.ts
+    mh2_pham_vi: bun _acceptance/re-mo-hinh-mac-dinh/rang/so-mh2.ts --pham-vi
     bch_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"'
     bch_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs --chi-do"'
+    ppt_mot_nguon: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t mot-nguon && cd ../.. && node _acceptance/pre-push-t1/rang/mot-nguon.mjs"
+    ppt_dot_bien: node _acceptance/pre-push-t1/rang/dot-bien.mjs
+    ppt_rang_cu: node _acceptance/pre-push-t1/rang/rang-cu.mjs
+    ppt_day_that: node _acceptance/pre-push-t1/rang/day-that.mjs
+    ppr_day_that: node _acceptance/pre-push-phan-rieng-pr/rang/day-gop-that.mjs
+    ppr_lich_su: node _acceptance/pre-push-phan-rieng-pr/rang/lich-su.mjs
+    ppr_ho_so_cu: node _acceptance/pre-push-phan-rieng-pr/rang/ho-so-cu.mjs
+    ppr_dot_bien: node _acceptance/pre-push-phan-rieng-pr/rang/dot-bien.mjs
+    pcn_doi_chieu: node _acceptance/pre-push-cau-va-nhan/rang/doi-chieu.mjs
+    pcn_lich_su_sap: node _acceptance/pre-push-cau-va-nhan/rang/lich-su-sap.mjs
+    pcn_neo: node _acceptance/pre-push-cau-va-nhan/rang/neo.mjs
+    tvg_ca_that: node _acceptance/trang-ve-gop-va-dau-cay/rang/ca-550.mjs
+    tvg_khong_doi: node _acceptance/trang-ve-gop-va-dau-cay/rang/khong-doi.mjs
+    tvg_doi_chieu: node _acceptance/trang-ve-gop-va-dau-cay/rang/doi-chieu.mjs
+    tmd_khai: node _acceptance/t1-ma-doc/rang/khai.mjs
+    tmd_ho_so_cu: 'node --test .github/scripts/test/phan-loai.test.mjs && (cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t "phan-loai|mot-nguon") && node _acceptance/pre-push-t1/rang/mot-nguon.mjs'
+    tmd_gpct_phan_loai: bun _acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs
+    tmd_dau_ra_that: node _acceptance/t1-ma-doc/rang/dau-ra-that.mjs
+    tmd_dot_bien: node _acceptance/t1-ma-doc/rang/dot-bien.mjs
+    pglt_cong: bun _acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs
+    pglt_dot_bien: node _acceptance/push-ghim-lai-t1/rang/dot-bien.mjs
+    gtr_do_man: 'APP_URL=${APP_URL:-http://localhost:3392} API_URL=${API_URL:-http://localhost:3393} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/go-tin-hieu-rac/rang/do-man.mjs"'
+    tcb_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tep-theo-chu-ban-ghi/rang/do-man.mjs"'
+    gtr_migration: bun _acceptance/go-tin-hieu-rac/rang/migration-chi-them.mjs
+    gtr_thiet_ke: node _acceptance/go-tin-hieu-rac/rang/khong-ghi-de.mjs
+    tbk_quet: bun _acceptance/thanh-ben-khu-dung-chung/rang/quet-vo-tay.mjs
+    tbk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"'
+    dhc_kiem_ke: bun _acceptance/don-ho-so-cu/rang/kiem-ke.mjs --tu-kiem
+    dhc_lo: bun _acceptance/don-ho-so-cu/rang/kiem-lo.mjs
+    dhc_doi_chieu: bun _acceptance/don-ho-so-cu/rang/doi-chieu.mjs
+    dhc_so_xu_ly: bun _acceptance/don-ho-so-cu/rang/so-xu-ly.mjs
+    dhc_sua_thuoc: bun _acceptance/don-ho-so-cu/rang/sua-thuoc.mjs
+    dhc_cay_ho_so: bun _acceptance/don-ho-so-cu/rang/cay-ho-so.mjs
+    dhc_ca_goi_ten: bun _acceptance/don-ho-so-cu/rang/ca-goi-ten.mjs
+    dhc_lan_chu: bun _acceptance/don-ho-so-cu/rang/sua-thuoc.mjs --lan-chu
+    dhc_cong_gop: bun _acceptance/don-ho-so-cu/rang/cong-gop.mjs
+    tcc_quet: bun _acceptance/truong-chuan-o-cai-dat/rang/quet.mjs
+    tcc_migration: bun _acceptance/truong-chuan-o-cai-dat/rang/migration-chi-them.mjs
+    tcc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-chuan-o-cai-dat/rang/do-man.mjs"'
+    vk7_man: 'bun test _acceptance/ngan-kr-mot-cho/rang/loi-console.test.mjs && bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ngan-kr-mot-cho/rang/man.mjs"'
+    vk7_giu_ho_so: bun test _acceptance/ngan-kr-mot-cho/rang/giu-ho-so.test.mjs && bun _acceptance/ngan-kr-mot-cho/rang/giu-ho-so.mjs
+    kcd_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs"'
+    kcd_trang_khac: node _acceptance/khung-cho-don-vi-mot-hinh/rang/trang-khac.mjs
+    tmc_quet: bun _acceptance/truong-mot-cach-cu-xu/rang/quet-vo-tay.mjs
+    tmc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-mot-cach-cu-xu/rang/do-man.mjs"'
+    vkm_quet: bun _acceptance/vo-khu-muc-tieu/rang/quet-duong-cu.mjs
+    vkm_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vo-khu-muc-tieu/rang/do-man.mjs"'
+    mnt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/mot-nut-tao-muc-tieu/rang/do-man.mjs"'
+    mkc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"'
+    ntl_quet: bun _acceptance/nhap-truong-luc-tao/rang/quet.mjs
+    ntl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/nhap-truong-luc-tao/rang/do-man.mjs"'
+    ldv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs"'
+    hsdk_danh_sach: bun _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs
+    hsdk_khai_du: bun _acceptance/ho-so-do-kiem-cheo/rang/khai-du.mjs
+    hsdk_chieu_do: bun _acceptance/ho-so-do-kiem-cheo/rang/chieu-do.mjs
+    hsdk_ghim_xanh: bun _acceptance/ho-so-do-kiem-cheo/rang/ghim-xanh.mjs
+    hsdk_yaml_chuan: bun _acceptance/ho-so-do-kiem-cheo/rang/yaml-chuan.mjs
+    hsdk_loi_ra: bun _acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs
+    ttdc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tom-tat-tuan-dang-cho/rang/do-man.mjs"'
+    hct_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-cap-nhat-lan-truoc/rang/man.mjs"'
+    ttts_do_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-thai-tin-hieu-song/rang/do-man.mjs"'
+    ttp_quet: bun _acceptance/truong-tep/rang/quet-kieu.mjs
+    ttp_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tep/rang/do-man.mjs"'
+    otdt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/o-tep-dien-thoai/rang/do-man.mjs"'
+    ctc_man: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chi-tiet-cong-ty-hai-cot/rang/do-bo-cuc.mjs"
+    ctc_man_do: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chi-tiet-cong-ty-hai-cot/rang/do-bo-cuc.mjs --chi-do"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
@@ -2982,11 +3530,12 @@ risk_tiers:
     - "LO-TRINH.html"   # trang lộ trình máy vẽ cùng bản đồ (kit 2.21.0) — view, --check canh
     - "AGENTS.md"
     - "CLAUDE.md"
-    # Ba dòng trên là .md ở GỐC kho, phải liệt đích danh vì "**/*.md" chỉ khớp
-    # khi có ít nhất một đoạn thư mục — file .md ở gốc lọt qua. PRODUCT-MAP.md đã
-    # được vá kiểu này từ trước; AGENTS.md vấp đúng chỗ đó ở PR #29 (09/09);
-    # CLAUDE.md vấp lần thứ ba ở PR gỡ luật trailer đồng tác giả (10/09).
-    # Lỗi glob thuộc về kit, đã mở chip sang ~/dev/acceptance-gate-kit.
+    # "**/*.md" khớp cả tệp .md ở GỐC kho: từ kit 2.9.0 `**/` là không-hoặc-nhiều
+    # thư mục (glob_variants trong scripts/pre-merge-check.sh; CI, pre-push và
+    # product-map.mjs khớp bằng đúng hàm ấy). AGENTS.md và CLAUDE.md vì thế thừa —
+    # chúng có từ trước bản vá, khi .md ở gốc còn lọt (PR #29 09/09, PR gỡ trailer
+    # 10/09). PRODUCT-MAP.md thì không thừa: lib/workspace-record.cjs tìm đúng
+    # chuỗi này trong danh sách để biết kho đã bật bản đồ.
     # Bộ cổng vendored theo INIT-CI-COPY-LIST (đường dẫn ĐÍCH DANH, không glob):
     # đây là THƯỚC ĐO, không phải product code — nâng chính cái thước không được
     # làm hết hạn bằng chứng đã ghim, và không được tự chặn lượt nâng nó.
@@ -3019,12 +3568,29 @@ risk_tiers:
     - "scripts/tin-hieu-khoa.cjs"
     - "scripts/tin-hieu.mjs"
     - "scripts/cat-luot.mjs"
+    # Kit 2.30.0 (gồm phần 2.29.0): tin-hieu.mjs nạp cat-luot.mjs, cat-luot.mjs nạp co-hop-dong.cjs.
+    - "scripts/co-hop-dong.cjs"
+    # Kit 2.32.0: lo-trinh.mjs nạp gio-may.mjs lúc nạp; pre-merge-check.sh gọi chan-lo-trinh.cjs (lớp chép 26 → 28 tệp).
+    - "scripts/gio-may.mjs"
+    - "lib/chan-lo-trinh.cjs"
+    # Kit 2.33.0: product-map.mjs và pre-merge-check đọc nhãn «đỏ sẵn trên nền» qua lib/do-san-tren-nen.cjs (lớp chép 28 → 29 tệp).
+    - "lib/do-san-tren-nen.cjs"
     # Bốn tệp cuối của INIT-CI-COPY-LIST 2.28.0, «chỉ khi khai tin_hieu»: kho khai cửa tín hiệu từ LT2
     # (gui-tin-hieu-trong-crm) nên bước bản đồ nạp tin-hieu.mjs, và thiếu chúng là ERR_MODULE_NOT_FOUND.
     - "dieu-phoi/scripts/hinh-dang.mjs"
     - "dieu-phoi/scripts/cau-hinh.mjs"
     - "dieu-phoi/scripts/dot.mjs"
     - "skills/acceptance/references/tin-hieu-template.md"
+    # Tầng tri thức (kit TT1–TT4): cat-luot.mjs nạp tri-thuc-khoa.cjs mỗi lần chạy; khi kho khai tri_thuc, lệnh mở ô
+    # và răng nguồn của bản phạm vi nạp thêm tri-thuc-nguon.cjs, tri-thuc.mjs và khuôn tri-thuc-template.md.
+    - "scripts/tri-thuc-khoa.cjs"
+    - "scripts/tri-thuc-nguon.cjs"
+    - "scripts/tri-thuc.mjs"
+    - "skills/acceptance/references/tri-thuc-template.md"
+    # TT5: lệnh tra tri thức (tri-thuc.mjs --tra) nạp tri-thuc-tra.cjs, nó nạp can-cu-s1.cjs, nó nạp luat-san-pham.cjs.
+    - "scripts/tri-thuc-tra.cjs"
+    - "scripts/can-cu-s1.cjs"
+    - "scripts/luat-san-pham.cjs"
     # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
     # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
     # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và
@@ -3039,6 +3605,39 @@ risk_tiers:
     # — PR #216 đã bị cổng chặn hai ngày vì đúng lớp «đổi cấu hình, không hồ sơ».
     - ".github/workflows/ci.yml"
     - "tin-hieu/crm/**"   # tệp tín hiệu lịch chạy kéo về (TH1) — PR hàng chờ chỉ chạm thư mục này
+    # Sổ chạy và sổ quyết định của hồ sơ (_acceptance/push-ghim-lai-t1): ghim lại chỉ ghi hai tệp này cùng
+    # evidence-report.md, nên lần đẩy và PR chỉ ghim lại được nhẹ ở CI và pre-push. Cổng nghiệm thu vẫn chạy và
+    # vẫn đối chiếu chúng — pre-merge-check bỏ qua _acceptance/* trước khi xét T1. Ở CI và pre-push, `*` của hai
+    # glob này chỉ khớp đúng một đoạn (luật số đoạn trong tachT1), nên tệp cùng tên nằm sâu hơn vẫn nặng.
+    - "_acceptance/*/run-log.jsonl"
+    - "_acceptance/*/decisions.jsonl"
+  # Tệp T1 mà bài kiểm, bản dựng hay runtime đọc (_acceptance/t1-ma-doc). Chỉ CI (.github/scripts/phan-loai.mjs) và
+  # pre-push (scripts/pre-push-t1.mjs) đọc khoá này, qua docGlobT1/tachT1: tệp khớp ở đây là NẶNG dù khớp
+  # t1_skip_globs. Cổng nghiệm thu của kit không đọc nó — sửa các tệp này vẫn không cần hồ sơ. Danh sách giữ đủ
+  # bằng bộ quét .github/scripts/t1-ma-doc.mjs (chạy trong @crm/ui#test): bài kiểm mới đọc một tệp T1 chưa khai
+  # là đỏ. Gỡ hết khoá thì mọi PR và lần đẩy đều nặng, không phải đều nhẹ.
+  t1_ma_doc:
+    - "apps/**"
+    - "packages/**"
+    - "CONTEXT.md"
+    - "LO-TRINH.html"
+    - "docs/design.md"
+    - "docs/environment.md"
+    - "docs/setup.md"
+    - "docs/telemetry.md"
+    - "docs/superpowers/specs/2026-09-30-soan-okr-cung-tro-ly-design.md"
+    - "docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md"
+    - "docs/superpowers/specs/2026-10-01-va-tro-ly-okr-sau-thu-design.md"
+    - "docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md"
+    - "docs/superpowers/specs/2026-10-03-gop-y-dung-cho-design.md"
+    - "_acceptance/soan-okr-cung-tro-ly/rang/ma-tran-quyen.md"
+    - "_acceptance/dieu-huong-khu-muc-tieu/contract.md"
+    - "scripts/pre-merge-check.sh"
+    - "lib/workspace-record.cjs"
+    - "lib/evidence-core.cjs"
+    - "lib/eval-yaml.cjs"
+    - "scripts/lo-trinh.mjs"
+    - "scripts/product-map.mjs"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"
@@ -3049,6 +3648,31 @@ risk_tiers:
     - "apps/api/src/workspace/**"
     - "apps/api/src/tracking/**"
     - "apps/api/src/mailbox/**"
+    - "apps/api/src/okr/okr-access.service.ts"
+    - "apps/api/src/okr/hien-thi.ts"
+    - "apps/api/src/agent/agent-access.service.ts"
+    - "apps/api/src/agent/agent-visibility.ts"
+    - "apps/api/src/tai-lieu/quyen.ts"
+    - "packages/db/src/tai-lieu-quyen.ts"
+    - "packages/db/src/okr-hien-thi.ts"
+    - "packages/db/src/viec.ts"
+    - "vercel.json"
+    - "apps/*/vercel.json"
+    - "packages/db/scripts/chep-viec-can-lam.ts"
+    - "packages/db/scripts/luot-don-sql.ts"
+    - "packages/db/scripts/xem-truoc-luot-don.ts"
+    - "apps/agent/agent/channels/**"
+    - "apps/agent-okr/agent/channels/**"
+    - "apps/agent/agent/lib/zalo-*"
+    - "apps/agent/agent/lib/slack-*"
+    - "apps/agent/agent/lib/thong-bao-*"
+    - "apps/agent/agent/lib/tin-nhac.ts"
+    - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+    - "apps/agent/agent/lib/tra-loi-nhac.ts"
+    - "apps/agent/agent/lib/tai-lieu-hoi-zalo.ts"
+    - "apps/agent/agent/subagents/agent_runner/tools/post_slack_message.ts"
+    - "apps/agent/scripts/zalo-*"
+    - "apps/agent/scripts/thong-bao-*"
   stale_scope: paths
 signoff:
   required_for: [T2, T3]
@@ -3063,6 +3687,16 @@ capture:
 tin_hieu:
   nguon: [tin-hieu/crm]
   gom: tin-hieu/gom
+
+# Tầng tri thức (kit TT1): nghiên cứu thô của crm sống ở kho RIÊNG TƯ crm-onehub-nguon, vì kho này công khai —
+# tài liệu thô không bao giờ vào đây. Đường kho riêng tính từ checkout chính (cha của git-common-dir), nên mọi
+# worktree dưới .claude/worktrees/ cùng trỏ một bản. Máy chưa có bản thì máy in lệnh clone, không chặn.
+tri_thuc:
+  cong_khai: true
+  kho:
+    ten: crm-onehub-nguon
+    duong: ../crm-onehub-nguon
+    remote: https://github.com/phanlemanh/crm-onehub-nguon.git
 
 # Nhánh production của kho (kit 2.28.0, X2s): ô production của dải tóm tắt đọc mã đã chấm có nằm trên
 # origin/<nhánh> không. Gộp vào onehub là tự lên production.

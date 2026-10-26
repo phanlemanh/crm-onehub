@@ -2,6 +2,8 @@ import type { Locale } from "@crm/ui/lib/locale";
 import type { NoiDungThongBao } from "@crm/validation/thong-bao";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { thongBaoMessages } from "@/lib/messages/thong-bao";
+import { tinHieuMessages } from "@/lib/messages/tin-hieu";
+import { nhanCuaCho } from "@/lib/tin-hieu/nhan";
 
 function dienCau(mau: string, nd: NoiDungThongBao): string {
 	switch (nd.loai) {
@@ -42,15 +44,46 @@ function dienCau(mau: string, nd: NoiDungThongBao): string {
 			});
 		case "tai-lieu-cho-duyet":
 			return dien(mau, { so: nd.so });
+		case "goi-y-ke-hoach":
+			return dien(mau, { cty: nd.companyName, deal: nd.dealName });
 		case "okr-tom-tat":
 			return dien(mau, { phong: nd.phongTen });
 		case "ai-tran":
 			return dien(mau, { muc: nd.muc });
 		case "ai-doi-soat-lech":
 			return dien(mau, { thang: nd.thang, lech: nd.lechPhanTram });
+		case "tac-nhan-xong":
+		case "tac-nhan-can-tra-loi":
+		case "tac-nhan-hong":
+			return dien(mau, { ten: nd.ten });
+		case "tin-hieu-doi-cho":
+			return dien(mau, { tieuDe: nd.tieuDe });
 	}
 }
 
+const LOAI_TAC_NHAN = new Set<NoiDungThongBao["loai"]>([
+	"tac-nhan-xong",
+	"tac-nhan-can-tra-loi",
+	"tac-nhan-hong",
+]);
+
+export function tenKhongDich(nd: NoiDungThongBao): string | null {
+	if (nd.loai === "tin-hieu-doi-cho") return nd.tieuDe.trim() || null;
+	if (!LOAI_TAC_NHAN.has(nd.loai) || !("ten" in nd)) return null;
+	const ten = nd.ten.trim();
+	return ten.length > 0 ? ten : null;
+}
+
 export function cauThongBao(locale: Locale, nd: NoiDungThongBao): string {
-	return dienCau(thongBaoMessages(locale).cau[nd.loai], nd);
+	const m = thongBaoMessages(locale);
+	if (nd.loai === "tin-hieu-doi-cho")
+		return dien(m.cau[nd.loai], {
+			tieuDe: nd.tieuDe,
+			nhan: nhanCuaCho(nd.khoa, tinHieuMessages(locale)),
+		});
+	const ndDien =
+		LOAI_TAC_NHAN.has(nd.loai) && "ten" in nd && !tenKhongDich(nd)
+			? { ...nd, ten: m.chuong.tacNhanKhongTen }
+			: nd;
+	return dienCau(m.cau[nd.loai], ndDien);
 }

@@ -5,35 +5,72 @@ import {
 	type Prisma,
 	Prisma as PrismaNamespace,
 } from "@crm/db";
+import { donChoXoa, ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
+import type { KhoTepTruong } from "@crm/db/blob-tep-truong";
 import {
 	attachValues,
+	type CachSapTruong,
+	cachLocTruong,
+	cachSapTruong,
+	columnFor,
 	type FieldDefinitionWithOptions,
+	type FieldTypeName,
 	FieldValueError,
 	type FieldValueJson,
 	fieldKeyFromLabel,
+	locDuocTrong,
 	type RecordField,
 	readValue,
 	recordColumn,
 	type SerializedField,
 	serializeField,
+	TIEN_TO_COT_TRUONG,
 	usesOptions,
 	writeValues,
 } from "@crm/db/fields";
 import {
+	isRequiredStandardKey,
+	isStandardFieldKey,
+	type MucBoTri,
+	STANDARD_FIELD_KEYS,
+	sapBoTri,
+	viTriChuan,
+} from "@crm/db/fields-chuan";
+import {
+	GIA_TRI_CO_TEP,
+	GIA_TRI_TRONG,
+	type LocTruong,
+	LocTruongError,
+	MOC_NGAY,
+	phanTichLocTruong,
+} from "@crm/validation/bo-loc-truong";
+import { type TepTheoTruong, tepTrongO } from "@crm/validation/tep-truong";
+import {
 	BadRequestException,
 	ConflictException,
 	ForbiddenException,
+	Inject,
 	Injectable,
+	Logger,
 	NotFoundException,
+	Optional,
 } from "@nestjs/common";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
+import type { Page, SortDirection } from "../trpc/list-input";
+import { FIELD_FILES_CONFIG } from "./field-files-config";
+import type { NguoiGoiTep } from "./field-files-quyen";
 import type {
 	FieldCreateInput,
 	FieldReorderInput,
+	FieldStandardHiddenInput,
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
+import { KHO_TEP } from "./kho-tep";
+import { LoiGiaTriTruong, laGiaTriRong } from "./loi-gia-tri-truong";
+import { LUAT_TEP, LUAT_TEP_THAT, type LuatTep } from "./luat-tep";
+import { khoangMocTruong } from "./moc-ngay";
 
 const WITH_OPTIONS = {
 	options: { orderBy: { position: "asc" } },
@@ -45,12 +82,177 @@ const RELATIONS = {
 	DEAL: "deal",
 } as const satisfies Record<FieldEntity, string>;
 
+export type DieuKienTruong =
+	| { fieldValues: { some: Prisma.FieldValueWhereInput } }
+	| { fieldValues: { none: Prisma.FieldValueWhereInput } }
+	| { fieldFiles: { some: Prisma.FieldFileWhereInput } }
+	| { fieldFiles: { none: Prisma.FieldFileWhereInput } }
+	| { OR: DieuKienTruong[] };
+
+function coGiaTriCua(definition: {
+	id: string;
+	type: FieldTypeName;
+}): Prisma.FieldValueWhereInput {
+	const cot = columnFor(definition.type);
+	return cot
+		? { fieldId: definition.id, [cot]: { not: null } }
+		: { fieldId: definition.id };
+}
+
+function trongCua(definition: {
+	id: string;
+	type: FieldTypeName;
+}): DieuKienTruong {
+	return cachLocTruong(definition.type) === "coTep"
+		? { fieldFiles: { none: { fieldId: definition.id } } }
+		: { fieldValues: { none: coGiaTriCua(definition) } };
+}
+
+function phanTich(
+	definition: FieldDefinitionWithOptions,
+	values: string[],
+): LocTruong {
+	try {
+		return phanTichLocTruong(cachLocTruong(definition.type), values);
+	} catch (error) {
+		if (error instanceof LocTruongError) {
+			throw new BadRequestException(
+				`${definition.label} (${definition.key}): ${error.message}`,
+			);
+		}
+		throw error;
+	}
+}
+
+function hoacCua(dieuKien: DieuKienTruong[]): DieuKienTruong {
+	return dieuKien.length === 1
+		? (dieuKien[0] as DieuKienTruong)
+		: { OR: dieuKien };
+}
+
+function dieuKienLoc(
+	definition: FieldDefinitionWithOptions,
+	values: string[],
+): DieuKienTruong {
+	const loc = phanTich(definition, values);
+	const fieldId = definition.id;
+	const co = (where: Prisma.FieldValueWhereInput): DieuKienTruong => ({
+		fieldValues: { some: { fieldId, ...where } },
+	});
+	const cacNhanh: DieuKienTruong[] = [];
+
+	switch (loc.cach) {
+		case "chua":
+			for (const chu of loc.chu) {
+				cacNhanh.push(co({ text: { contains: chu, mode: "insensitive" } }));
+			}
+			break;
+		case "khoang": {
+			if (loc.tu !== null || loc.den !== null) {
+				cacNhanh.push(
+					co({
+						number: { gte: loc.tu ?? undefined, lte: loc.den ?? undefined },
+					}),
+				);
+			}
+			break;
+		}
+		case "moc":
+			for (const moc of loc.moc)
+				cacNhanh.push(co({ date: khoangMocTruong(moc) }));
+			break;
+		case "tich":
+			for (const giaTri of new Set(loc.co)) {
+				cacNhanh.push(
+					giaTri
+						? co({ bool: true })
+						: { fieldValues: { none: { fieldId, bool: true } } },
+				);
+			}
+			break;
+		case "luaChon":
+			if (loc.id.length > 0) cacNhanh.push(co({ optionId: { in: loc.id } }));
+			break;
+		case "nguoi":
+			if (loc.id.length > 0) cacNhanh.push(co({ userId: { in: loc.id } }));
+			break;
+		case "coTep":
+			if (loc.co) cacNhanh.push({ fieldFiles: { some: { fieldId } } });
+			break;
+	}
+
+	if (loc.cach !== "tich" && loc.trong) {
+		cacNhanh.push(trongCua(definition));
+	}
+
+	return hoacCua(cacNhanh);
+}
+
+const TEN_BAN_GHI = {
+	COMPANY: [{ name: "asc" }],
+	CONTACT: [{ lastName: "asc" }, { firstName: "asc" }],
+	DEAL: [{ name: "asc" }],
+} as const satisfies Record<FieldEntity, readonly object[]>;
+
+export type WhereTheoLoai = {
+	COMPANY: Prisma.CompanyWhereInput;
+	CONTACT: Prisma.ContactWhereInput;
+	DEAL: Prisma.DealWhereInput;
+};
+
+function thuTuGiaTri(
+	cach: CachSapTruong,
+	dir: SortDirection,
+): Prisma.FieldValueOrderByWithRelationInput {
+	if (cach === "luaChon") return { option: { position: dir } };
+	if (cach === "nguoi") return { user: { name: dir } };
+	return { [cach]: dir };
+}
+
 @Injectable()
 export class FieldsService {
+	private readonly logger = new Logger(FieldsService.name);
+
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		private readonly agent: AgentTriggerService,
+		@Optional() @Inject(KHO_TEP) private readonly kho?: KhoTepTruong,
+		@Optional()
+		@Inject(LUAT_TEP)
+		private readonly luat: LuatTep = LUAT_TEP_THAT,
 	) {}
+
+	async donTepNgay(pathnames: string[]): Promise<void> {
+		if (pathnames.length === 0 || !this.kho?.bat()) return;
+		try {
+			const kq = await donChoXoa(this.db, this.kho, {
+				toiDa: pathnames.length,
+				pathnames,
+			});
+			if (kq.hong.length > 0) {
+				this.logger.warn({
+					message: "Field file blobs not deleted, left for the daily sweep",
+					hong: kq.hong.length,
+				});
+			}
+		} catch (error) {
+			this.logger.error({
+				message: "Field file blob cleanup failed, left for the daily sweep",
+				error: error instanceof Error ? error.message : String(error),
+			});
+		}
+	}
+
+	async donHangCho(
+		bayGio: Date = new Date(),
+	): Promise<{ daXoa: number; hong: number }> {
+		if (!this.kho?.bat()) return { daXoa: 0, hong: 0 };
+		const kq = await donChoXoa(this.db, this.kho, {
+			bayGio,
+			toiDa: FIELD_FILES_CONFIG.don.toiDa,
+		});
+		return { daXoa: kq.daXoa.length, hong: kq.hong.length };
+	}
 
 	async list(
 		entity: FieldEntity,
@@ -111,11 +313,11 @@ export class FieldsService {
 			throw new BadRequestException("A select needs at least one option.");
 		}
 
-		const last = await this.db.fieldDefinition.findFirst({
-			where: { entity: input.entity },
-			orderBy: { position: "desc" },
-			select: { position: true },
-		});
+		if (input.required && !input.showOnSheet) {
+			throw new BadRequestException(FIELDS_CONFIG.messages.requiredShown);
+		}
+
+		const next = await this.nextPosition(input.entity);
 
 		const definition = await this.db.fieldDefinition.create({
 			data: {
@@ -129,7 +331,7 @@ export class FieldsService {
 				showOnSheet: input.showOnSheet,
 				showOnTable: input.showOnTable,
 				showOnFilter: input.showOnFilter,
-				position: (last?.position ?? -1) + 1,
+				position: next,
 				options: usesOptions(input.type)
 					? {
 							create: input.options.map((option, index) => ({
@@ -173,14 +375,24 @@ export class FieldsService {
 
 		if (!existing) throw new NotFoundException("That field does not exist.");
 
+		if ((data.required ?? existing.required) && data.showOnSheet === false) {
+			throw new BadRequestException(FIELDS_CONFIG.messages.requiredShown);
+		}
+
+		const showOnSheet =
+			data.required === true && data.showOnSheet === undefined
+				? true
+				: data.showOnSheet;
+
 		const type = data.type ?? existing.type;
 
 		if (data.type && data.type !== existing.type) {
-			const values = await this.db.fieldValue.count({
-				where: { fieldId: id },
-			});
+			const [values, tep] = await Promise.all([
+				this.db.fieldValue.count({ where: { fieldId: id } }),
+				this.db.fieldFile.count({ where: { fieldId: id } }),
+			]);
 
-			if (values > 0) {
+			if (values + tep > 0) {
 				throw new ConflictException(
 					"This field already holds values, so its type cannot change. Archive it and make a new one.",
 				);
@@ -231,7 +443,7 @@ export class FieldsService {
 					agentFilled: data.agentFilled,
 					agentBrief: data.agentBrief,
 					required: data.required,
-					showOnSheet: data.showOnSheet,
+					showOnSheet,
 					showOnTable: data.showOnTable,
 					showOnFilter: data.showOnFilter,
 				},
@@ -262,33 +474,191 @@ export class FieldsService {
 		return serializeField(definition);
 	}
 
+	async layout(entity: FieldEntity): Promise<MucBoTri[]> {
+		const [hangChuan, tuTao] = await Promise.all([
+			this.db.standardFieldLayout.findMany({
+				where: { entity },
+				select: { key: true, position: true, hidden: true },
+			}),
+			this.db.fieldDefinition.findMany({
+				where: { entity, archivedAt: null },
+				select: { id: true, key: true, position: true },
+			}),
+		]);
+
+		return sapBoTri(
+			entity,
+			hangChuan.filter((hang) => isStandardFieldKey(entity, hang.key)),
+			tuTao,
+		);
+	}
+
 	async reorder(
 		actingUserId: string,
 		input: FieldReorderInput,
 	): Promise<SerializedField[]> {
 		await this.requireManager(actingUserId);
 
+		if (input.ids) {
+			await this.reorderCustom(input.entity, input.ids);
+		} else if (input.items) {
+			await this.reorderMixed(input.entity, input.items);
+		}
+
+		return this.list(input.entity, false);
+	}
+
+	private async reorderCustom(entity: FieldEntity, ids: string[]) {
 		const owned = await this.db.fieldDefinition.findMany({
-			where: { id: { in: input.ids }, entity: input.entity },
-			select: { id: true },
+			where: { id: { in: ids }, entity },
+			select: { id: true, position: true },
 		});
 
-		if (owned.length !== input.ids.length) {
+		if (owned.length !== ids.length || new Set(ids).size !== ids.length) {
 			throw new BadRequestException(
 				"That order names a field which is not on this record type.",
 			);
 		}
 
+		const slots = owned.map((field) => field.position).sort((a, b) => a - b);
+
 		await this.db.$transaction(
-			input.ids.map((id, index) =>
+			ids.map((id, index) =>
 				this.db.fieldDefinition.update({
 					where: { id },
-					data: { position: index },
+					data: { position: slots[index] },
 				}),
 			),
 		);
+	}
 
-		return this.list(input.entity, false);
+	private async reorderMixed(
+		entity: FieldEntity,
+		items: ({ standard: string } | { custom: string })[],
+	) {
+		const live = await this.db.fieldDefinition.findMany({
+			where: { entity, archivedAt: null },
+			select: { id: true },
+		});
+		const standardKeys: readonly string[] = STANDARD_FIELD_KEYS[entity];
+		const named = items.map((item) =>
+			"standard" in item ? `s:${item.standard}` : `c:${item.custom}`,
+		);
+		const expected = new Set([
+			...standardKeys.map((key) => `s:${key}`),
+			...live.map((field) => `c:${field.id}`),
+		]);
+
+		if (
+			named.length !== expected.size ||
+			new Set(named).size !== named.length ||
+			named.some((name) => !expected.has(name))
+		) {
+			throw new BadRequestException(FIELDS_CONFIG.messages.orderMismatch);
+		}
+
+		const hidden = new Map(
+			(
+				await this.db.standardFieldLayout.findMany({
+					where: { entity },
+					select: { key: true, hidden: true },
+				})
+			).map((row) => [row.key, row.hidden]),
+		);
+
+		await this.db.$transaction(
+			items.map((item, position) =>
+				"standard" in item
+					? this.db.standardFieldLayout.upsert({
+							where: { entity_key: { entity, key: item.standard } },
+							create: {
+								entity,
+								key: item.standard,
+								position,
+								hidden: hidden.get(item.standard) ?? false,
+							},
+							update: { position },
+						})
+					: this.db.fieldDefinition.update({
+							where: { id: item.custom },
+							data: { position },
+						}),
+			),
+		);
+	}
+
+	async setStandardHidden(
+		actingUserId: string,
+		input: FieldStandardHiddenInput,
+	): Promise<MucBoTri[]> {
+		await this.requireManager(actingUserId);
+
+		const { entity, key, hidden } = input;
+
+		if (!isStandardFieldKey(entity, key)) {
+			throw new BadRequestException(FIELDS_CONFIG.messages.notStandard);
+		}
+
+		if (hidden && isRequiredStandardKey(entity, key)) {
+			throw new BadRequestException(
+				FIELDS_CONFIG.messages.requiredStandardShown,
+			);
+		}
+
+		const rows = await this.db.standardFieldLayout.findMany({
+			where: { entity },
+			select: { key: true, position: true, hidden: true },
+		});
+		const missing = viTriChuan(entity, rows).filter(
+			(row) => !rows.some((existing) => existing.key === row.key),
+		);
+
+		if (missing.length > 0) {
+			await this.ensureStandardRows(entity);
+		}
+
+		await this.db.standardFieldLayout.update({
+			where: { entity_key: { entity, key } },
+			data: { hidden },
+		});
+
+		return this.layout(entity);
+	}
+
+	private async ensureStandardRows(entity: FieldEntity) {
+		const order = await this.layout(entity);
+
+		await this.db.$transaction(
+			order.map((item, position) =>
+				item.kind === "standard"
+					? this.db.standardFieldLayout.upsert({
+							where: { entity_key: { entity, key: item.key } },
+							create: { entity, key: item.key, position, hidden: item.hidden },
+							update: { position },
+						})
+					: this.db.fieldDefinition.update({
+							where: { id: item.id },
+							data: { position },
+						}),
+			),
+		);
+	}
+
+	private async nextPosition(entity: FieldEntity): Promise<number> {
+		const [custom, standard] = await Promise.all([
+			this.db.fieldDefinition.aggregate({
+				where: { entity },
+				_max: { position: true },
+			}),
+			this.db.standardFieldLayout.aggregate({
+				where: { entity },
+				_max: { position: true },
+			}),
+		]);
+
+		return (
+			Math.max(custom._max.position ?? -1, standard._max.position ?? -1) + 1
+		);
 	}
 
 	async archive(actingUserId: string, id: string): Promise<SerializedField> {
@@ -326,12 +696,18 @@ export class FieldsService {
 	async delete(actingUserId: string, id: string): Promise<{ id: string }> {
 		await this.requireManager(actingUserId);
 
+		let tepXoa: string[];
 		try {
-			await this.db.fieldDefinition.delete({ where: { id } });
+			tepXoa = await this.db.$transaction(async (tx) => {
+				const pathnames = await ghiChoXoaTheoTep(tx, { fieldId: id });
+				await tx.fieldDefinition.delete({ where: { id } });
+				return pathnames;
+			});
 		} catch (error) {
 			throw this.translate(error);
 		}
 
+		await this.donTepNgay(tepXoa);
 		return { id };
 	}
 
@@ -379,20 +755,60 @@ export class FieldsService {
 	async queueBackfillForNewRecord(
 		entity: FieldEntity,
 		recordId: string,
+		values: Record<string, unknown> = {},
 	): Promise<void> {
 		const definitions = await this.db.fieldDefinition.findMany({
 			where: { entity, archivedAt: null, agentFilled: true },
 			select: { key: true },
 		});
+		const conTrong = definitions
+			.map((definition) => definition.key)
+			.filter((key) => laGiaTriRong(values[key]));
 
-		if (definitions.length === 0) return;
+		if (conTrong.length === 0) return;
 
 		await this.agent.fieldBackfillRecords(
 			entity,
-			definitions.map((definition) => definition.key),
+			conTrong,
 			[recordId],
 			"New record",
 		);
+	}
+
+	async kiemBatBuocLucTao(
+		client: Prisma.TransactionClient,
+		entity: FieldEntity,
+		values: Record<string, unknown>,
+	): Promise<void> {
+		const batBuoc = await client.fieldDefinition.findMany({
+			where: {
+				entity,
+				archivedAt: null,
+				required: true,
+				type: { not: "FILE" },
+			},
+			select: { key: true, label: true },
+			orderBy: { position: "asc" },
+		});
+		const thieu = batBuoc.find((definition) =>
+			laGiaTriRong(values[definition.key]),
+		);
+		if (thieu) {
+			throw new LoiGiaTriTruong(
+				{ khoa: thieu.key, nhan: thieu.label, lyDo: "thieu" },
+				`${thieu.label} is required.`,
+			);
+		}
+	}
+
+	async ghiTruongLucTao(
+		tx: Prisma.TransactionClient,
+		entity: FieldEntity,
+		recordId: string,
+		values: Record<string, unknown>,
+	): Promise<void> {
+		await this.kiemBatBuocLucTao(tx, entity, values);
+		await this.applyValues(tx, entity, recordId, values);
 	}
 
 	private async missingRecordIds(
@@ -459,6 +875,115 @@ export class FieldsService {
 		});
 	}
 
+	async tepTheoBanGhi(
+		entity: FieldEntity,
+		recordId: string,
+		nguoi?: NguoiGoiTep,
+	): Promise<TepTheoTruong> {
+		const cot = recordColumn(entity);
+		const hang = await this.db.fieldFile.findMany({
+			where: { [cot]: recordId, field: { entity, archivedAt: null } },
+			orderBy: [{ taiLuc: "asc" }, { id: "asc" }],
+			select: {
+				id: true,
+				tenTep: true,
+				kieu: true,
+				kichThuoc: true,
+				taiLuc: true,
+				taiBoiId: true,
+				taiBoi: { select: { id: true, name: true } },
+				field: { select: { key: true } },
+			},
+		});
+		const phuTrachId =
+			hang.length > 0 ? await this.phuTrachCua(entity, recordId) : null;
+		const ket: TepTheoTruong = {};
+		for (const dong of hang) {
+			const quyen = nguoi
+				? this.luat.quyenMoTep({
+						vai: nguoi.role,
+						userId: nguoi.id,
+						phuTrachId,
+					})
+				: null;
+			const tep = tepTrongO.parse({
+				id: dong.id,
+				tenTep: dong.tenTep,
+				kieu: dong.kieu,
+				kichThuoc: dong.kichThuoc,
+				taiLuc: dong.taiLuc.toISOString(),
+				taiBoi: dong.taiBoi
+					? { id: dong.taiBoi.id, ten: dong.taiBoi.name ?? null }
+					: null,
+				coTheMo: quyen?.coTheMo ?? false,
+				coTheXoa: nguoi
+					? this.luat.coTheXoaTep({
+							vai: nguoi.role,
+							userId: nguoi.id,
+							phuTrachId,
+							taiBoiId: dong.taiBoiId,
+						})
+					: false,
+				lyDoKhongMo:
+					quyen && !quyen.coTheMo && quyen.lyDo !== "ngoai-pham-vi"
+						? quyen.lyDo
+						: null,
+			});
+			const danhSach = ket[dong.field.key] ?? [];
+			danhSach.push(tep);
+			ket[dong.field.key] = danhSach;
+		}
+		return ket;
+	}
+
+	private async phuTrachCua(
+		entity: FieldEntity,
+		recordId: string,
+	): Promise<string | null> {
+		const where = { where: { id: recordId }, select: { ownerId: true } };
+		const banGhi =
+			entity === "DEAL"
+				? await this.db.deal.findUnique(where)
+				: entity === "COMPANY"
+					? await this.db.company.findUnique(where)
+					: await this.db.contact.findUnique(where);
+		return banGhi?.ownerId ?? null;
+	}
+
+	async soTepTheoBanGhi(
+		entity: FieldEntity,
+		recordIds: string[],
+	): Promise<Map<string, Record<string, number>>> {
+		const ket = new Map<string, Record<string, number>>();
+		if (recordIds.length === 0) return ket;
+		const truong = await this.db.fieldDefinition.findMany({
+			where: { entity, type: "FILE", archivedAt: null, showOnTable: true },
+			select: { id: true, key: true },
+		});
+		if (truong.length === 0) return ket;
+		for (const id of recordIds) {
+			ket.set(id, Object.fromEntries(truong.map((t) => [t.key, 0])));
+		}
+		const cot = recordColumn(entity);
+		const khoaTheoId = new Map(truong.map((t) => [t.id, t.key]));
+		const nhom = await this.db.fieldFile.groupBy({
+			by: ["fieldId", cot],
+			where: {
+				fieldId: { in: truong.map((t) => t.id) },
+				[cot]: { in: recordIds },
+			} as Prisma.FieldFileWhereInput,
+			_count: { _all: true },
+		});
+		for (const dong of nhom) {
+			const recordId = (dong as Record<string, unknown>)[cot];
+			const khoa = khoaTheoId.get(dong.fieldId);
+			if (typeof recordId !== "string" || !khoa) continue;
+			const muc = ket.get(recordId);
+			if (muc) muc[khoa] = dong._count._all;
+		}
+		return ket;
+	}
+
 	async valuesFor(
 		entity: FieldEntity,
 		recordId: string,
@@ -473,9 +998,100 @@ export class FieldsService {
 		return attachValues(definitions, rows);
 	}
 
+	async sapTheoTruong<E extends FieldEntity>(
+		entity: E,
+		sapXep: { sort?: string; dir: SortDirection },
+		where: WhereTheoLoai[E],
+		trang: Page,
+	): Promise<string[] | null> {
+		if (!sapXep.sort?.startsWith(TIEN_TO_COT_TRUONG)) return null;
+
+		const key = sapXep.sort.slice(TIEN_TO_COT_TRUONG.length);
+		if (!key) return null;
+
+		const definition = await this.db.fieldDefinition.findFirst({
+			where: { entity, key, archivedAt: null },
+			select: { id: true, type: true },
+		});
+		if (!definition) return null;
+
+		const cach = cachSapTruong(definition.type);
+		if (!cach) return null;
+
+		const relation = RELATIONS[entity];
+		const column = recordColumn(entity);
+		const coGiaTri = coGiaTriCua(definition);
+		const doanCo: Prisma.FieldValueWhereInput = {
+			...coGiaTri,
+			[relation]: { is: where },
+		};
+
+		const [soCo, hangCo] = await Promise.all([
+			this.db.fieldValue.count({ where: doanCo }),
+			this.db.fieldValue.findMany({
+				where: doanCo,
+				orderBy: [
+					thuTuGiaTri(cach, sapXep.dir),
+					...TEN_BAN_GHI[entity].map((thuTu) => ({ [relation]: thuTu })),
+					{ [column]: "asc" },
+				],
+				skip: trang.skip,
+				take: trang.take,
+				select: { [column]: true },
+			}),
+		]);
+
+		const ids = hangCo.flatMap((hang) => {
+			const id = hang[column];
+			return id ? [id] : [];
+		});
+
+		const conLai = trang.take - ids.length;
+		if (conLai <= 0) return ids;
+
+		const trong = await this.banGhiTrong(entity, where, coGiaTri, {
+			skip: Math.max(0, trang.skip - soCo),
+			take: conLai,
+		});
+
+		return [...ids, ...trong];
+	}
+
+	private async banGhiTrong<E extends FieldEntity>(
+		entity: E,
+		where: WhereTheoLoai[E],
+		coGiaTri: Prisma.FieldValueWhereInput,
+		trang: Page,
+	): Promise<string[]> {
+		const khongGiaTri = { fieldValues: { none: coGiaTri } };
+		const chon = { ...trang, select: { id: true } } as const;
+
+		const hang =
+			entity === "DEAL"
+				? await this.db.deal.findMany({
+						...chon,
+						where: { AND: [where as Prisma.DealWhereInput, khongGiaTri] },
+						orderBy: [...TEN_BAN_GHI.DEAL, { id: "asc" }],
+					})
+				: entity === "COMPANY"
+					? await this.db.company.findMany({
+							...chon,
+							where: { AND: [where as Prisma.CompanyWhereInput, khongGiaTri] },
+							orderBy: [...TEN_BAN_GHI.COMPANY, { id: "asc" }],
+						})
+					: await this.db.contact.findMany({
+							...chon,
+							where: { AND: [where as Prisma.ContactWhereInput, khongGiaTri] },
+							orderBy: [...TEN_BAN_GHI.CONTACT, { id: "asc" }],
+						});
+
+		return hang.map((dong) => dong.id);
+	}
+
 	async tableValuesFor(
 		entity: FieldEntity,
 		recordIds: string[],
+		gioiHan?: number,
 	): Promise<Map<string, Record<string, FieldValueJson>>> {
 		const byRecord = new Map<string, Record<string, FieldValueJson>>();
 
@@ -485,6 +1101,7 @@ export class FieldsService {
 			where: { entity, archivedAt: null, showOnTable: true },
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
+			take: gioiHan,
 		});
 
 		if (definitions.length === 0) return byRecord;
@@ -518,12 +1135,6 @@ export class FieldsService {
 		return byRecord;
 	}
 
-	/**
-	 * SELECT and USER fields are the only types with a fixed, small
-	 * vocabulary a facet can count, but only the ones an admin turned on
-	 * (`showOnFilter`) actually render — same opt-in as `showOnTable`, so the
-	 * filter bar doesn't fill up with every field ever created.
-	 */
 	async filters(entity: FieldEntity): Promise<SerializedField[]> {
 		const definitions = await this.filterableFieldsFor(entity);
 		return definitions.map(serializeField);
@@ -537,7 +1148,6 @@ export class FieldsService {
 				entity,
 				archivedAt: null,
 				showOnFilter: true,
-				type: { in: ["SELECT", "USER"] },
 			},
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
@@ -566,10 +1176,10 @@ export class FieldsService {
 			definitions.map((definition) => [definition.id, definition]),
 		);
 		const selectIds = definitions
-			.filter((definition) => definition.type === "SELECT")
+			.filter((definition) => cachLocTruong(definition.type) === "luaChon")
 			.map((definition) => definition.id);
 		const userIds = definitions
-			.filter((definition) => definition.type === "USER")
+			.filter((definition) => cachLocTruong(definition.type) === "nguoi")
 			.map((definition) => definition.id);
 
 		const [selectGroups, userGroups] = await Promise.all([
@@ -614,14 +1224,95 @@ export class FieldsService {
 			bucket[group.userId] = (bucket[group.userId] ?? 0) + group._count._all;
 		}
 
+		const demThem = await Promise.all(
+			definitions.flatMap((definition) =>
+				this.demGiaTriMenu(entity, relationWhere, definition).map(
+					async ([gia, dem]) => [definition.key, gia, await dem] as const,
+				),
+			),
+		);
+
+		for (const [key, gia, dem] of demThem) {
+			const bucket = facetCounts[key] ?? {};
+			facetCounts[key] = bucket;
+			bucket[gia] = dem;
+		}
+
 		return facetCounts;
 	}
 
-	/** Translates selected filter values (by field key) into `FieldValue` `AND` conditions. */
+	private demGiaTriMenu(
+		entity: FieldEntity,
+		relationWhere: WhereTheoLoai[FieldEntity],
+		definition: FieldDefinitionWithOptions,
+	): Array<[string, Promise<number>]> {
+		const relation = RELATIONS[entity];
+		const fieldId = definition.id;
+		const demGiaTri = (where: Prisma.FieldValueWhereInput) =>
+			this.db.fieldValue.count({
+				where: { fieldId, ...where, [relation]: relationWhere },
+			});
+		const dem: Array<[string, Promise<number>]> = [];
+
+		if (cachLocTruong(definition.type) === "moc") {
+			for (const moc of MOC_NGAY) {
+				dem.push([moc, demGiaTri({ date: khoangMocTruong(moc) })]);
+			}
+		}
+
+		if (cachLocTruong(definition.type) === "tich") {
+			dem.push(["yes", demGiaTri({ bool: true })]);
+			dem.push([
+				"no",
+				this.demBanGhi(entity, relationWhere, {
+					fieldValues: { none: { fieldId, bool: true } },
+				}),
+			]);
+		}
+
+		if (cachLocTruong(definition.type) === "coTep") {
+			dem.push([
+				GIA_TRI_CO_TEP,
+				this.demBanGhi(entity, relationWhere, {
+					fieldFiles: { some: { fieldId } },
+				}),
+			]);
+		}
+
+		if (locDuocTrong(definition.type)) {
+			dem.push([
+				GIA_TRI_TRONG,
+				this.demBanGhi(entity, relationWhere, trongCua(definition)),
+			]);
+		}
+
+		return dem;
+	}
+
+	private demBanGhi(
+		entity: FieldEntity,
+		where: WhereTheoLoai[FieldEntity],
+		them: DieuKienTruong,
+	): Promise<number> {
+		if (entity === "DEAL") {
+			return this.db.deal.count({
+				where: { AND: [where as Prisma.DealWhereInput, them] },
+			});
+		}
+		if (entity === "COMPANY") {
+			return this.db.company.count({
+				where: { AND: [where as Prisma.CompanyWhereInput, them] },
+			});
+		}
+		return this.db.contact.count({
+			where: { AND: [where as Prisma.ContactWhereInput, them] },
+		});
+	}
+
 	fieldFilters(
 		definitions: FieldDefinitionWithOptions[],
 		selected: Record<string, string[]>,
-	): Array<{ fieldValues: { some: Prisma.FieldValueWhereInput } }> {
+	): DieuKienTruong[] {
 		const byKey = new Map(
 			definitions.map((definition) => [definition.key, definition]),
 		);
@@ -632,16 +1323,7 @@ export class FieldsService {
 				const definition = byKey.get(key);
 				if (!definition) return [];
 
-				return [
-					{
-						fieldValues: {
-							some:
-								definition.type === "USER"
-									? { fieldId: definition.id, userId: { in: values } }
-									: { fieldId: definition.id, optionId: { in: values } },
-						},
-					},
-				];
+				return [dieuKienLoc(definition, values)];
 			});
 	}
 
@@ -659,7 +1341,15 @@ export class FieldsService {
 			await writeValues(tx, entity, recordId, definitions, values);
 		} catch (error) {
 			if (error instanceof FieldValueError) {
-				throw new BadRequestException(error.message);
+				throw new LoiGiaTriTruong(
+					{
+						khoa: error.key,
+						nhan:
+							definitions.find((d) => d.key === error.key)?.label ?? error.key,
+						lyDo: laGiaTriRong(values[error.key]) ? "thieu" : "gia-tri",
+					},
+					error.message,
+				);
 			}
 
 			throw error;

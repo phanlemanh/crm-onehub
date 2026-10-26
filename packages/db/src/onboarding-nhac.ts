@@ -1,6 +1,12 @@
 import { type LoaiNhacAi, type ViecAi, viecAiCanNhac } from "./ai-nhac";
 import type { Db } from "./client";
 import { TrangThaiViec } from "./generated/prisma/enums";
+import {
+	LOAI_NHAC_GOI_Y,
+	type LoaiNhacGoiY,
+	type ViecGoiY,
+	viecGoiYCanNhac,
+} from "./goi-y-nhac";
 import { type LoaiNhacOkr, type ViecOkr, viecOkrCanNhac } from "./okr-nhac";
 import { type ViecTomTat, viecTomTatCanNhac } from "./okr-tom-tat";
 import {
@@ -34,6 +40,7 @@ export const THU_TU_NHAC = [
 	"okr-tra-lai",
 	"okr-hoi-y-gop",
 	...LOAI_NHAC,
+	...LOAI_NHAC_GOI_Y,
 	...LOAI_NHAC_VIEC,
 	"okr-kr-im",
 	"okr-duoc-giao",
@@ -47,6 +54,7 @@ export const THU_TU_NHAC = [
 	"ai-doi-soat-lech",
 ] as const satisfies readonly (
 	| LoaiNhac
+	| LoaiNhacGoiY
 	| LoaiNhacOkr
 	| LoaiNhacTaiLieu
 	| ViecTomTat["loai"]
@@ -196,6 +204,7 @@ export type NhacViec = {
 
 export type ViecNhac =
 	| ViecKeHoach
+	| ViecGoiY
 	| NhacViec
 	| ViecOkr
 	| ViecTaiLieu
@@ -451,6 +460,7 @@ function gop(
 	tomTat: Map<string, ViecTomTat[]>,
 	ai: Map<string, ViecAi[]>,
 	viecGiao: Map<string, NhacViec[]>,
+	goiY: Map<string, ViecGoiY[]>,
 	thanhVien: Set<string>,
 ): Map<string, ViecNhac[]> {
 	const nguoi = [
@@ -461,6 +471,7 @@ function gop(
 			...tomTat.keys(),
 			...ai.keys(),
 			...viecGiao.keys(),
+			...goiY.keys(),
 		]),
 	].filter((u) => thanhVien.has(u));
 	return new Map(
@@ -472,6 +483,7 @@ function gop(
 				...(tomTat.get(userId) ?? []),
 				...(ai.get(userId) ?? []),
 				...(viecGiao.get(userId) ?? []),
+				...(goiY.get(userId) ?? []),
 			];
 			return [userId, ds.sort(soSanh)];
 		}),
@@ -482,7 +494,7 @@ export async function viecCanNhac(
 	db: Db,
 	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
 ): Promise<Map<string, ViecNhac[]>> {
-	const [keHoach, thanhVien, okr, taiLieu, tomTat, ai, viecGiao] =
+	const [keHoach, thanhVien, okr, taiLieu, tomTat, ai, viecGiao, goiY] =
 		await Promise.all([
 			docKeHoach(db, chon.userId),
 			db.member.findMany({
@@ -503,6 +515,7 @@ export async function viecCanNhac(
 				: new Map<string, ViecTomTat[]>(),
 			viecAiCanNhac(db, chon),
 			docViec(db, chon.userId),
+			viecGoiYCanNhac(db, { userId: chon.userId }),
 		]);
 	const tap = new Set(thanhVien.map((m) => m.userId));
 	const tapDoiTac = new Set(
@@ -515,6 +528,7 @@ export async function viecCanNhac(
 		tomTat,
 		ai,
 		gomViec(viecGiao.flatMap((v) => guiViec(v, tapDoiTac, chon.now))),
+		new Map([...goiY].filter(([userId]) => tapDoiTac.has(userId))),
 		tap,
 	);
 }

@@ -5,7 +5,6 @@ import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import type { z } from "zod";
 import {
 	cyclesOutput,
 	type KrOutput,
@@ -17,17 +16,14 @@ import {
 	type ObjectiveOutput,
 	objectiveOutput,
 	okrAccessOutput,
-	type SoanSanSangOutput,
-	soanSanSangOutput,
 	troLyDanhSachOutput,
 	troLySanSangOutput,
 } from "../../api/src/okr/okr.contracts";
 import { OKR } from "../../api/src/okr/okr-config";
 import { danhSachOutput } from "../../api/src/okr/okr-xem.contracts";
 import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
-import { CUOC, cho, dat, datLai, nhip } from "./khung-soan-okr";
+import { cho, dat, datLai, nhip } from "./khung-soan-okr";
 
-const { DauTrangOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 const { TheoDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
 );
@@ -39,17 +35,11 @@ const { DetailSheet } = await import("@/components/detail-sheet");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
-const { okrSoanMessages } = await import("@/lib/messages/okr-soan");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 const { okrGioiHanMessages } = await import("@/lib/messages/okr-gioi-han");
 const { okrGopYMessages } = await import("@/lib/messages/okr-gop-y");
 const { messages: uiMessages } = await import("@crm/ui/lib/messages");
-const { ngayThangVn, dauThangSau, homNayVn } = await import(
-	"@/lib/okr-chu-ky-nhan"
-);
-const { TRO_LY_OKR_TRAN } = await import("@crm/validation/okr-tro-ly");
 
-const ms = okrSoanMessages("vi");
 const HUNG = { id: "hung", name: "Trần Văn Hùng", email: "h@onehub.vn" };
 const MT_ID = "mt-k";
 
@@ -73,7 +63,10 @@ afterEach(async () => {
 
 async function dung(
 	man: ReactElement,
-	{ locale = "vi", thamSo = "" }: { locale?: Locale; thamSo?: string } = {},
+	{
+		locale = "vi",
+		thamSo = "?donOkr=goc",
+	}: { locale?: Locale; thamSo?: string } = {},
 ): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
@@ -331,255 +324,8 @@ function datNen({
 	);
 }
 
-const cuocDang = { ...CUOC, soLuot: 3, soDongTong: 5, soDongNhan: 3 };
-
-type DangSoan = {
-	ten: string;
-	sanSang: SoanSanSangOutput;
-	quanTri?: boolean;
-	chuPhu: string[];
-};
-
-const SS = (x: z.input<typeof soanSanSangOutput>) => soanSanSangOutput.parse(x);
-const BAT = {
-	bat: true,
-	nac: "bat",
-	cuocDang: null,
-	soCuocDaDung: 0,
-	tranCuoc: 3,
-	thieuBoiCanh: false,
-} as const;
-const TRAN = String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy);
-const CO_DS = new Set(["nut-tiep", "nut-an", "mo-co-cuoc", "nut-het-cuoc"]);
-
-const DANG_CO_CHU_PHU: DangSoan[] = [
-	{
-		ten: "nut-tiep",
-		sanSang: SS({ ...BAT, cuocDang, soCuocDaDung: 1 }),
-		chuPhu: [
-			ms.nut.tiepMoTa(
-				ngayThangVn(new Date(cuocDang.moLuc)),
-				String(cuocDang.soLuot),
-				String(cuocDang.soDongTong - cuocDang.soDongNhan),
-			),
-			ms.nut.dsCuoc("1", "3"),
-		],
-	},
-	{
-		ten: "nut-an",
-		quanTri: true,
-		sanSang: SS({ ...BAT, nac: "an", soCuocDaDung: 2 }),
-		chuPhu: [ms.nut.cheDoAn, ms.nut.cheDoAnMoTa, ms.nut.dsCuoc("2", "3")],
-	},
-	{
-		ten: "mo-co-cuoc",
-		sanSang: SS({ ...BAT, soCuocDaDung: 1 }),
-		chuPhu: [ms.nut.dsCuoc("1", "3")],
-	},
-	{
-		ten: "nut-het-cuoc",
-		sanSang: SS({ bat: false, lyDo: "het-cuoc-ky" }),
-		chuPhu: [ms.nut.hetCuoc(TRAN), ms.nut.dsCuoc(TRAN, TRAN)],
-	},
-	{
-		ten: "nut-het-tran",
-		sanSang: SS({ bat: false, lyDo: "het-tran-thang" }),
-		chuPhu: [ms.nut.tamNghi(dauThangSau(homNayVn(new Date())))],
-	},
-	{
-		ten: "nut-chua-khoa",
-		sanSang: SS({ bat: false, lyDo: "chua-co-khoa-mo-hinh" }),
-		chuPhu: [ms.lyDo["chua-co-khoa-mo-hinh"]],
-	},
-];
-
-async function moDonVi({
-	sanSang,
-	quanTri = false,
-	canEdit = true,
-	cauNoi = true,
-	treo = false,
-	loi = false,
-	rows = [],
-}: {
-	sanSang?: SoanSanSangOutput;
-	quanTri?: boolean;
-	canEdit?: boolean;
-	cauNoi?: boolean;
-	treo?: boolean;
-	loi?: boolean;
-	rows?: MucTieuOutput[];
-}): Promise<San> {
-	datNen({ quanTri, canEdit, rows });
-	dat("okr.soanSanSang", () => {
-		if (treo) return new Promise(() => {});
-		if (loi) throw new Error("mang loi");
-		return sanSang ?? SS(BAT);
-	});
-	const san = await dung(
-		<>
-			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />
-			<TheoDonVi />
-		</>,
-	);
-	await cho(() => q("[data-hang-nut]") !== null, "thanh don vi");
-	await nhip(10);
-	return san;
-}
-
-const theDonVi = () => q("[data-don-vi]");
-const chuNgoaiPopover = () => {
-	const the = theDonVi();
-	if (!the) return "";
-	const ban = the.cloneNode(true) as HTMLElement;
-	for (const p of qa("[data-thong-tin-soan]", ban)) p.remove();
-	return ban.textContent ?? "";
-};
-
-describe("nut-soan", () => {
-	test("tám dạng: nhóm soạn đứng ngay trước nút chính ở hàng hành động đầu trang, ≤ 2 nút, không chữ phụ trên thẻ", async () => {
-		const tam: {
-			ten: string;
-			dung: () => Promise<San>;
-			chuPhu: string[];
-		}[] = [
-			{
-				ten: "dang-tai",
-				dung: () => moDonVi({ treo: true }),
-				chuPhu: [],
-			},
-			{
-				ten: "mo-duoc",
-				dung: () => moDonVi({ sanSang: SS(BAT) }),
-				chuPhu: [],
-			},
-			...DANG_CO_CHU_PHU.filter((d) => d.ten !== "mo-co-cuoc").map((d) => ({
-				ten: d.ten,
-				dung: () => moDonVi({ sanSang: d.sanSang, quanTri: d.quanTri }),
-				chuPhu: d.chuPhu,
-			})),
-			{
-				ten: "chua-cau-hinh",
-				dung: () => moDonVi({ cauNoi: false, quanTri: true }),
-				chuPhu: [ms.nut.chuaCauHinh],
-			},
-		];
-		expect(tam.length).toBe(8);
-		for (const d of tam) {
-			await d.dung();
-			const hang = q("[data-hang-hanh-dong]");
-			const nhom = q("[data-nhom-soan]");
-			expect(nhom, `thieu nhom soan: ${d.ten}`).not.toBeNull();
-			expect(
-				hang?.lastElementChild?.previousElementSibling,
-				`nhom soan khong dung truoc nut chinh: ${d.ten}`,
-			).toBe(nhom);
-			expect(
-				qa("button", nhom as HTMLElement).length,
-				`chu phu tren thanh: ${d.ten}`,
-			).toBeLessThanOrEqual(2);
-			expect(
-				qa("[data-slot=field-description]", theDonVi() ?? document).length,
-				`chu phu tren thanh: ${d.ten}`,
-			).toBe(0);
-			for (const c of d.chuPhu)
-				expect(
-					chuNgoaiPopover().includes(c),
-					`chu phu tren thanh: ${d.ten}`,
-				).toBe(false);
-			if (d.ten === "dang-tai") {
-				const nut = q("button", nhom as HTMLElement) as HTMLButtonElement;
-				expect(nut.disabled).toBe(true);
-				expect(nut.textContent?.trim()).toBe(ms.nut.soan);
-			}
-			for (const s of dangMo) await act(async () => s.root.unmount());
-			dangMo = [];
-			document.body.innerHTML = "";
-		}
-		console.log(`so dang: ${tam.length}`);
-	});
-
-	test("truy vấn sẵn sàng lỗi: nút giữ chỗ, khoá, không chữ phụ", async () => {
-		await moDonVi({ loi: true });
-		await nhip(10);
-		const nhom = q("[data-nhom-soan]");
-		expect(nhom, "loi mang mat nhom soan").not.toBeNull();
-		const nut = q("button", nhom as HTMLElement) as HTMLButtonElement;
-		expect(nut.disabled).toBe(true);
-		expect(q("[data-nut=thong-tin-soan]")).toBeNull();
-	});
-});
-
-describe("popover-soan", () => {
-	test("sáu dạng có chữ phụ: «i» mở popover chứa đúng chữ, Esc trả focus", async () => {
-		let soBamDs = 0;
-		for (const d of DANG_CO_CHU_PHU) {
-			const san = await moDonVi({ sanSang: d.sanSang, quanTri: d.quanTri });
-			const i = q("[data-nut=thong-tin-soan]");
-			expect(i, `thieu chu phu: ${d.ten}`).not.toBeNull();
-			expect(i?.getAttribute("aria-label")).toBe(ms.nut.thongTin);
-			await bam(i, "nut i");
-			const pop = q("[data-thong-tin-soan]");
-			for (const c of d.chuPhu)
-				expect(pop?.textContent?.includes(c), `thieu chu phu: ${d.ten}`).toBe(
-					true,
-				);
-			await phim(i, "{Escape}", "nut i");
-			expect(q("[data-thong-tin-soan]")).toBeNull();
-			expect(document.activeElement).toBe(i);
-			await phim(i, "{Enter}", "nut i");
-			expect(
-				q("[data-thong-tin-soan]"),
-				`enter khong mo: ${d.ten}`,
-			).not.toBeNull();
-			const ds = qa("[data-thong-tin-soan] [data-nut=ds-cuoc]")[0] ?? null;
-			expect(Boolean(ds), `ds cuoc lech ma tran: ${d.ten}`).toBe(
-				CO_DS.has(d.ten),
-			);
-			if (ds) {
-				await bam(ds, "ds cuoc");
-				expect(san.url().get("dsCuoc"), `ds cuoc khong mo: ${d.ten}`).toBe("1");
-				soBamDs += 1;
-			}
-			for (const s of dangMo) await act(async () => s.root.unmount());
-			dangMo = [];
-			document.body.innerHTML = "";
-		}
-		expect(soBamDs, "so lan bam ds cuoc").toBe(CO_DS.size);
-		console.log(`so dang: ${DANG_CO_CHU_PHU.length} · bam ds: ${soBamDs}`);
-	});
-});
-
-describe("chua-cau-hinh", () => {
-	test("quản trị thấy nút khoá kèm lý do; người sửa được không quản trị không thấy gì", async () => {
-		await moDonVi({ cauNoi: false, quanTri: true, sanSang: SS(BAT) });
-		const nhom = q("[data-nhom-soan]");
-		expect(nhom, "quan tri thieu nut chua cau hinh").not.toBeNull();
-		expect(
-			(q("button", nhom as HTMLElement) as HTMLButtonElement).disabled,
-		).toBe(true);
-		await bam(q("[data-nut=thong-tin-soan]"), "nut i");
-		expect(q("[data-thong-tin-soan]")?.textContent).toContain(
-			ms.nut.chuaCauHinh,
-		);
-		for (const s of dangMo) await act(async () => s.root.unmount());
-		dangMo = [];
-		document.body.innerHTML = "";
-
-		await moDonVi({
-			cauNoi: false,
-			quanTri: false,
-			canEdit: true,
-			sanSang: SS(BAT),
-		});
-		expect(
-			q("[data-nhom-soan]"),
-			"nguoi thuong thay nut chua cau hinh",
-		).toBeNull();
-		expect(q("[data-nut-soan]")).toBeNull();
-		expect(document.body.textContent?.includes(ms.nut.chuaCauHinh)).toBe(false);
-	});
-});
+const dongMt = (id: string) =>
+	q(`[data-hang-muc-tieu="${id}"]`)?.closest("tr") ?? null;
 
 async function moSheet(
 	mt: MucTieuOutput,
@@ -714,7 +460,8 @@ describe("chip", () => {
 					nhanLoai?.getAttribute("data-variant") ?? "",
 				);
 				const mo = q(
-					'[data-hang-muc-tieu="mt-a"] [aria-expanded]',
+					"[aria-expanded]",
+					dongMt("mt-a") ?? document.body,
 				)?.getAttribute("aria-expanded");
 				await phim(chip, ten, "chip");
 				expect(
@@ -723,7 +470,7 @@ describe("chip", () => {
 				).toBe("objective:mt-a");
 				expect(san.url().get("neoGopY")).not.toBeNull();
 				expect(
-					q('[data-hang-muc-tieu="mt-a"] [aria-expanded]')?.getAttribute(
+					q("[aria-expanded]", dongMt("mt-a") ?? document.body)?.getAttribute(
 						"aria-expanded",
 					) ?? null,
 				).toBe(mo ?? null);

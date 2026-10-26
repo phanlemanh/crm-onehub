@@ -1,9 +1,8 @@
 "use client";
 
 import Settings from "@carbon/icons-react/es/Settings";
-import type { FieldValueJson } from "@crm/db/fields";
+import type { FieldTypeName, FieldValueJson } from "@crm/db/fields";
 import { Button } from "@crm/ui/components/button";
-import { Checkbox } from "@crm/ui/components/checkbox";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -12,19 +11,15 @@ import {
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
 import { useQuery } from "@tanstack/react-query";
-import {
-	InlineDateField,
-	InlineField,
-	InlineSelectField,
-	InlineTextArea,
-} from "@/components/crm/inline-field";
+import type { Owner } from "@/components/crm/owner-cell";
 import {
 	type EntityKind,
 	useFieldsSheet,
 } from "@/components/crm/record-sheet/record-stack";
-import { DetailSheetProperty } from "@/components/detail-sheet";
 import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
+import { type MoTaTruong, OTruongPhieu } from "./kieu-truong";
+import type { DichOTep, TepOTep } from "./o-tep";
 
 type RecordFieldOption = { id: string; label: string };
 
@@ -32,13 +27,12 @@ export type RecordFieldEntry = {
 	id: string;
 	key: string;
 	label: string;
-	type: string;
+	type: FieldTypeName;
 	showOnSheet: boolean;
+	required: boolean;
 	options: RecordFieldOption[];
 	value: FieldValueJson;
 };
-
-const NONE = "__none__";
 
 export function FieldsCog({ kind }: { kind: EntityKind }) {
 	const locale = useLocale();
@@ -58,137 +52,82 @@ export function FieldsCog({ kind }: { kind: EntityKind }) {
 	);
 }
 
-export function RecordFields({
-	fields,
+export type NguCanhTep = DichOTep & { tep: Record<string, TepOTep[]> };
+
+export function nguCanhTepCua(
+	entity: DichOTep["entity"],
+	banGhi: {
+		id: string;
+		archivedAt: string | null;
+		owner: { name: string } | null;
+		tepTheoTruong: Record<string, TepOTep[]>;
+	},
+): NguCanhTep {
+	return {
+		entity,
+		recordId: banGhi.id,
+		luuTru: banGhi.archivedAt !== null,
+		phuTrach: banGhi.owner?.name ?? null,
+		tep: banGhi.tepTheoTruong,
+	};
+}
+
+export function moTaTruongTuTao(
+	field: RecordFieldEntry,
+	luu: (khoa: string, giaTri: FieldValueJson) => void,
+	dangLuu: (khoa: string) => boolean,
+	nguoiDung: Owner[] | undefined,
+	nguCanhTep?: NguCanhTep,
+): MoTaTruong {
+	const moTa: MoTaTruong = {
+		khoa: field.key,
+		nhan: field.label,
+		kieu: field.type,
+		giaTri: field.value,
+		batBuoc: field.required,
+		luaChon: field.options.map((option) => ({
+			value: option.id,
+			label: option.label,
+		})),
+		nguoiDung,
+		luu: (giaTri) => luu(field.key, giaTri),
+		dangLuu: dangLuu(field.key),
+	};
+	if (!nguCanhTep) return moTa;
+	moTa.tep = nguCanhTep.tep[field.key] ?? [];
+	moTa.dichTep = {
+		entity: nguCanhTep.entity,
+		recordId: nguCanhTep.recordId,
+		luuTru: nguCanhTep.luuTru,
+		phuTrach: nguCanhTep.phuTrach ?? null,
+	};
+	return moTa;
+}
+
+export function OTruongTuTao({
+	field,
 	saving,
 	onSave,
+	nguoiDung,
+	nguCanhTep,
 }: {
-	fields: RecordFieldEntry[];
+	field: RecordFieldEntry;
 	saving: (key: string) => boolean;
-	onSave: (values: Record<string, FieldValueJson>) => void;
+	onSave: (values: Record<string, FieldValueJson>, khoa: string) => void;
+	nguoiDung: Owner[] | undefined;
+	nguCanhTep?: NguCanhTep;
 }) {
-	const trpc = useTRPC();
-	const locale = useLocale();
-	const users = useQuery(trpc.users.list.queryOptions());
-
-	const userOptionsFor = (value: string) => {
-		const options = [
-			{ value: NONE, label: crmMessages(locale).owner.unassigned },
-			...(users.data ?? []).map((user) => ({
-				value: user.id,
-				label: user.name,
-			})),
-		];
-
-		if (users.data && !options.some((option) => option.value === value)) {
-			options.push({ value, label: crmMessages(locale).owner.formerMember });
-		}
-
-		return options;
-	};
+	if (!field.showOnSheet) return null;
 
 	return (
-		<>
-			{fields
-				.filter((field) => field.showOnSheet)
-				.map((field) => {
-					const save = (value: FieldValueJson) =>
-						onSave({ [field.key]: value });
-					const busy = saving(field.key);
-
-					if (field.type === "CHECKBOX") {
-						return (
-							<DetailSheetProperty key={field.id} label={field.label}>
-								<Checkbox
-									checked={field.value === true}
-									disabled={busy}
-									onCheckedChange={(checked) => save(checked === true)}
-								/>
-							</DetailSheetProperty>
-						);
-					}
-
-					if (field.type === "LONG_TEXT") {
-						return (
-							<DetailSheetProperty key={field.id} label={field.label} wide>
-								<InlineTextArea
-									label={field.label}
-									value={field.value === null ? null : String(field.value)}
-									saving={busy}
-									onSave={save}
-								/>
-							</DetailSheetProperty>
-						);
-					}
-
-					if (field.type === "DATE") {
-						return (
-							<InlineDateField
-								key={field.id}
-								label={field.label}
-								value={field.value === null ? null : String(field.value)}
-								saving={busy}
-								onSave={save}
-							/>
-						);
-					}
-
-					if (field.type === "SELECT") {
-						return (
-							<InlineSelectField
-								key={field.id}
-								label={field.label}
-								value={field.value === null ? NONE : String(field.value)}
-								options={[
-									{ value: NONE, label: crmMessages(locale).fieldValue.none },
-									...field.options.map((option) => ({
-										value: option.id,
-										label: option.label,
-									})),
-								]}
-								saving={busy}
-								emptyValue={NONE}
-								onSave={(next) => save(next === NONE ? null : next)}
-							/>
-						);
-					}
-
-					if (field.type === "USER") {
-						const current = field.value === null ? NONE : String(field.value);
-
-						return (
-							<InlineSelectField
-								key={field.id}
-								label={field.label}
-								value={current}
-								options={userOptionsFor(current)}
-								placeholder={crmMessages(locale).owner.unassigned}
-								emptyValue={NONE}
-								saving={busy}
-								onSave={(next) => save(next === NONE ? null : next)}
-							/>
-						);
-					}
-
-					return (
-						<InlineField
-							key={field.id}
-							label={field.label}
-							type={
-								field.type === "URL"
-									? "url"
-									: field.type === "EMAIL"
-										? "email"
-										: field.type === "PHONE"
-											? "tel"
-											: "text"
-							}
-							value={field.value === null ? null : String(field.value)}
-							saving={busy}
-							onSave={save}
-						/>
-					);
-				})}
-		</>
+		<OTruongPhieu
+			moTa={moTaTruongTuTao(
+				field,
+				(khoa, giaTri) => onSave({ [khoa]: giaTri }, khoa),
+				saving,
+				nguoiDung,
+				nguCanhTep,
+			)}
+		/>
 	);
 }

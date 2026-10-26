@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c1cc61d003840c0965e00fe74fcd02a40d11fc3d
+verified_commit: 6fdc7ed4587ef09283181bd35699a668ab3faa27
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -216,3 +216,7 @@ Round 5: chủ kho gõ "Tiếp tục" sau vòng 4; không sửa mã sản phẩm
 ### Re-pin lần 1 — 2026-09-27, do hoá cũ do gộp onehub (#176, #177) vào nhánh PR #178
 run_id: repin-20260927T151847Z-68302
 sha: c1cc61d003840c0965e00fe74fcd02a40d11fc3d · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E6
+
+### Re-pin lần 2 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
+run_id: repin-20261023T105529Z-32502
+sha: 6fdc7ed4587ef09283181bd35699a668ab3faa27 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E6 · diff chạm vật đo ngoài làn máy: E6 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -25,6 +25,15 @@
       "port": 3301
     },
     {
+      "name": "proto-cay-nay",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PROTO_ROUTE=1 PORT=3302 NEXT_PUBLIC_API_URL=http://localhost:3301 API_URL=http://localhost:3301 APP_URL=http://localhost:3302 bun run dev"
+      ],
+      "port": 3302
+    },
+    {
       "name": "app-cay-nay",
       "runtimeExecutable": "bash",
       "runtimeArgs": [

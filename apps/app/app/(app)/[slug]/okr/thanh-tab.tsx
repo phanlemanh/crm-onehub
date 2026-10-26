@@ -11,6 +11,7 @@ import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { DongLyDoKhu, HanhDongKhu, useQuyenKhu } from "./hanh-dong-khu";
+import { NutHoiKara } from "./hoi/nut-hoi-kara";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
 import { khoaDon, okrParsers } from "./okr-search-params";
 import { laTrangSoan } from "./soan/luat-ban-nhap";
@@ -35,9 +36,11 @@ export function ThanhTabOkr({
 	const [thamSo] = useQueryStates(okrParsers);
 	const ky = thamSo[SEARCH_PARAM.okr.ky];
 	const don = thamSo[SEARCH_PARAM.okr.don];
+	const xem = thamSo[SEARCH_PARAM.okr.xem];
 	const giu = new URLSearchParams();
 	if (ky) giu.set(SEARCH_PARAM.okr.ky, ky);
 	if (don) giu.set(SEARCH_PARAM.okr.don, khoaDon(don));
+	if (xem) giu.set(SEARCH_PARAM.okr.xem, xem);
 	const toi = (t: TabOkr) => {
 		const goc = url(DUONG[t]);
 		return giu.size > 0 ? `${goc}?${giu}` : goc;
@@ -68,12 +71,9 @@ export function ThanhTabOkr({
 }
 
 export function DauTrangOkr({
-	chonChuKy,
-	nhanHoiY = null,
 	cauNoi = false,
 }: {
-	chonChuKy: ReactNode;
-	nhanHoiY?: NhanHoiY;
+	chonChuKy?: ReactNode;
 	cauNoi?: boolean;
 }) {
 	const locale = useLocale();
@@ -81,15 +81,23 @@ export function DauTrangOkr({
 	const duong = usePathname();
 	const tab = tabTuDuong(duong);
 	const q = useQuyenKhu(tab);
+	const [thamSo] = useQueryStates(okrParsers);
 	if (laTrangSoan(duong ?? "")) return null;
+	const laDanhSachBo =
+		tab === "theo-don-vi" &&
+		thamSo[SEARCH_PARAM.okr.don] === null &&
+		thamSo[SEARCH_PARAM.okr.xem] === null;
 	return (
 		<LuoiDauTrangOkr
-			ghiChu={<DongLyDoKhu q={q} />}
+			ghiChu={laDanhSachBo ? null : <DongLyDoKhu q={q} tab={tab} />}
 			hanhDong={
-				<HanhDongKhu cauNoi={cauNoi} chonChuKy={chonChuKy} q={q} tab={tab} />
+				laDanhSachBo ? (
+					<NutHoiKara />
+				) : (
+					<HanhDongKhu cauNoi={cauNoi} q={q} tab={tab} />
+				)
 			}
 			moTa={m.moTa[tab]}
-			thanhTab={<ThanhTabOkr nhanHoiY={nhanHoiY} tab={tab} />}
 			tieuDe={tieuDeKhu(locale)}
 		/>
 	);

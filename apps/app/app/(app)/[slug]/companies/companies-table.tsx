@@ -16,12 +16,19 @@ import {
 import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useTableSelection } from "@crm/ui/hooks/use-table-selection";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
-import { useFieldFacets } from "@/components/crm/fields/field-facets";
-import { OwnerCell } from "@/components/crm/owner-cell";
+import {
+	useFieldFacets,
+	useTruongLoc,
+} from "@/components/crm/fields/field-facets";
+import {
+	anDuoiTheoKieu,
+	OTruongBang,
+} from "@/components/crm/fields/kieu-truong";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { ListSearch } from "@/components/data-table/list-search";
@@ -38,6 +45,7 @@ import {
 	type CompanyMessages,
 	companyMessages,
 } from "@/lib/messages/companies";
+import { tenNganh } from "@/lib/ten-nganh";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { CompaniesBulkActions } from "./companies-bulk-actions";
@@ -45,7 +53,10 @@ import { companiesSearchParams } from "./companies-search-params";
 
 type CompanyRow = RouterOutputs["companies"]["list"]["rows"][number];
 
-function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
+export function columnsFor(
+	m: CompanyMessages,
+	locale: Locale,
+): DataTableColumn<CompanyRow>[] {
 	return [
 		{
 			id: "name",
@@ -73,13 +84,8 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.domain,
 			sortable: true,
 			width: "w-[12%]",
-			hideBelow: "md",
-			cell: (row) =>
-				row.domain ? (
-					<span className="truncate text-muted-foreground">{row.domain}</span>
-				) : (
-					<EmptyCellValue />
-				),
+			hideBelow: anDuoiTheoKieu("URL"),
+			cell: (row) => <OTruongBang kieu="TEXT" giaTri={row.domain} />,
 		},
 		{
 			id: "industry",
@@ -87,22 +93,33 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			sortable: true,
 			width: "w-[12%]",
 			hideBelow: "lg",
-			cell: (row) =>
-				row.industry ? (
-					<ForeignText className="truncate" lang="en">
-						{row.industry}
-					</ForeignText>
+			cell: (row) => {
+				const nganh = tenNganh(row.industry, locale);
+				if (!nganh) return <EmptyCellValue />;
+				return nganh.dich ? (
+					<span className="block truncate" title={nganh.ten}>
+						{nganh.ten}
+					</span>
 				) : (
-					<EmptyCellValue />
-				),
+					<ForeignText className="block truncate" lang="en">
+						{nganh.ten}
+					</ForeignText>
+				);
+			},
 		},
 		{
 			id: "owner",
 			header: m.headers.owner,
 			sortable: true,
 			width: "w-[13%]",
-			hideBelow: "md",
-			cell: (row) => <OwnerCell owner={row.owner} />,
+			hideBelow: anDuoiTheoKieu("USER"),
+			cell: (row) => (
+				<OTruongBang
+					kieu="USER"
+					giaTri={row.owner?.id ?? null}
+					nguoi={row.owner}
+				/>
+			),
 		},
 		{
 			id: "contacts",
@@ -195,7 +212,9 @@ export function CompaniesTable() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
-	const table = useTableQuery(companiesSearchParams);
+	const table = useTableQuery(companiesSearchParams, {
+		truongLoc: useTruongLoc("COMPANY"),
+	});
 	const { query, input, setArchived, currentView, applyView } = table;
 
 	const companies = useQuery({
@@ -236,7 +255,10 @@ export function CompaniesTable() {
 			options: facetValueOptions(
 				facetCounts?.industry,
 				query.filters.industry ?? [],
-			),
+			).map((option) => ({
+				...option,
+				label: tenNganh(option.value, locale)?.ten ?? option.value,
+			})),
 		},
 		{
 			id: "enrichment",
@@ -255,9 +277,9 @@ export function CompaniesTable() {
 	const columns = useMemo(
 		() =>
 			input.archived
-				? [...columnsFor(m), archivedColumn(m), ...fieldColumns]
-				: [...columnsFor(m), ...fieldColumns],
-		[fieldColumns, input.archived, m],
+				? [...columnsFor(m, locale), archivedColumn(m), ...fieldColumns]
+				: [...columnsFor(m, locale), ...fieldColumns],
+		[fieldColumns, input.archived, m, locale],
 	);
 
 	return (

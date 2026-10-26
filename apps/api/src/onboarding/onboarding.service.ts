@@ -1,6 +1,11 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { taoViecChoBuoc } from "@crm/db/buoc-viec";
+import {
+	boQuaGoiYTrongTx,
+	dongGoiYCuaCongTy,
+	GOI_Y,
+} from "@crm/db/goi-y-ke-hoach";
 import { demOkrTheoDonVi } from "@crm/db/okr-don-vi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
@@ -22,6 +27,8 @@ import type {
 	ArchivedInput,
 	BangCotInput,
 	BangCotOutput,
+	BoQuaGoiYInput,
+	BoQuaGoiYOutput,
 	DanhMucOutput,
 	DeletedOutput,
 	DepartmentOutput,
@@ -30,6 +37,8 @@ import type {
 	EnrollmentRemoveOutput,
 	EnrollmentStageInput,
 	EnrollmentUpsertInput,
+	GoiYCuaDealInput,
+	GoiYCuaDealOutput,
 	NguoiNhanViecOutput,
 	PlanCloseInput,
 	PlanCreateFromTemplateInput,
@@ -447,6 +456,12 @@ export class OnboardingService {
 					now,
 				});
 			}
+			await dongGoiYCuaCongTy(tx, {
+				companyId: input.companyId,
+				planId: plan.id,
+				nguoiId: actingUserId,
+				now,
+			});
 
 			return keHoachRa(plan);
 		});
@@ -714,6 +729,56 @@ export class OnboardingService {
 			steps: parseOnboardingTemplateSteps(row.steps),
 			archivedAt: row.archivedAt,
 		};
+	}
+
+	async goiYCuaDeal(
+		input: GoiYCuaDealInput,
+		userId: string,
+	): Promise<GoiYCuaDealOutput> {
+		const goiY = await this.db.goiYKeHoach.findFirst({
+			where: {
+				dealId: input.dealId,
+				trangThai: "CHO",
+				deal: { archivedAt: null, giaiDoan: { kind: "WON" } },
+			},
+			select: {
+				id: true,
+				dealId: true,
+				companyId: true,
+				nguoiNhanId: true,
+				sinhLuc: true,
+				company: { select: { name: true } },
+			},
+		});
+		if (!goiY) return null;
+		if (goiY.nguoiNhanId !== userId && !(await this.laQuanTri(userId))) {
+			return null;
+		}
+		const { company, ...ra } = goiY;
+		return { ...ra, companyName: company.name };
+	}
+
+	async boQuaGoiY(
+		input: BoQuaGoiYInput,
+		userId: string,
+	): Promise<BoQuaGoiYOutput> {
+		const goiY = await this.db.goiYKeHoach.findUnique({
+			where: { id: input.id },
+			select: { nguoiNhanId: true },
+		});
+		if (!goiY) throw new NotFoundException(GOI_Y.thongDiep.daXuLy);
+		if (goiY.nguoiNhanId !== userId && !(await this.laQuanTri(userId))) {
+			throw new ForbiddenException(GOI_Y.thongDiep.khongQuyen);
+		}
+		const xong = await this.db.$transaction((tx) =>
+			boQuaGoiYTrongTx(tx, { id: input.id, nguoiId: userId, now: new Date() }),
+		);
+		if (!xong) throw new BadRequestException(GOI_Y.thongDiep.daXuLy);
+		return { id: input.id, trangThai: "BO_QUA" };
+	}
+
+	private async laQuanTri(userId: string): Promise<boolean> {
+		return canManageOnboarding(await workspaceRoleOf(userId));
 	}
 
 	async yeuCauQuanTri(userId: string): Promise<void> {

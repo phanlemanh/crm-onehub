@@ -1,10 +1,6 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-import { spawnSync } from "node:child_process";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { afterEach, beforeEach, describe, mock, test } from "bun:test";
 import type { Locale } from "@crm/ui/lib/locale";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -15,15 +11,7 @@ import {
 } from "../../api/src/okr/okr.contracts";
 import { danhSachOutput } from "../../api/src/okr/okr-xem.contracts";
 import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
-import {
-	cho,
-	type DauVao,
-	dat,
-	datLai,
-	dinhVi,
-	goiCua,
-	nhip,
-} from "./khung-soan-okr";
+import { cho, dat, datLai, dinhVi, nhip } from "./khung-soan-okr";
 
 let localeMayChu: Locale = "vi";
 mock.module("@/lib/locale/server", () => ({
@@ -50,10 +38,8 @@ const { TAB } = await import("@/app/(app)/[slug]/okr/tab-okr");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
-const { okrSoanMessages } = await import("@/lib/messages/okr-soan");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 const { khungUngDungMessages } = await import("@/lib/messages/khung-ung-dung");
-const { dauThangSau, homNayVn } = await import("@/lib/okr-chu-ky-nhan");
 const { TRO_LY_OKR_TRAN } = await import("@crm/validation/okr-tro-ly");
 
 const TRANG = {
@@ -74,8 +60,6 @@ const DUONG_TAB = {
 	"hoi-y": "/ws/okr/hoi-y",
 } satisfies Record<TabOkr, string>;
 const DUONG_SUC_KHOE = "/ws/okr/toan-canh/suc-khoe";
-
-const GOC_KHO = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const nguoi = (id: string, name: string) => ({
 	id,
@@ -362,7 +346,11 @@ async function dauTrang(
 	return dung(
 		<>
 			<DauTrangOkr cauNoi={nen.cauNoi ?? true} chonChuKy={CHON_GIA} />
-			{kemThan ? <TheoDonVi /> : null}
+			{kemThan ? (
+				<div data-than-don-vi="">
+					<TheoDonVi />
+				</div>
+			) : null}
 		</>,
 		{ locale, thamSo, duong },
 	);
@@ -375,16 +363,6 @@ const qa = (chon: string, goc: ParentNode = document) => [
 ];
 const hang = () => q("[data-slot=page-shell-actions]");
 const nutThem = () => q("[data-nut=them-muc-tieu]");
-
-const nguoiDung = () =>
-	userEvent.setup({ document, pointerEventsCheck: 0, delay: null });
-async function bam(o: Element | null, moTa: string) {
-	if (!o) throw new Error(`khong thay: ${moTa}`);
-	await act(async () => {
-		await nguoiDung().click(o);
-	});
-	await nhip(6);
-}
 
 function soSai() {
 	const sai: string[] = [];
@@ -451,60 +429,6 @@ describe("dhk-don-dich", () => {
 		);
 		s.xong("dhk-don-dich", soO);
 	});
-
-	test("dhk-don-dich: nút ở Của tôi dẫn tới Theo đơn vị của đơn vị đích với ngăn tạo mở; ở Theo đơn vị bấm là mở ngay", async () => {
-		await dauTrang("cua-toi", { xem: TP2 }, "?kyOkr=q4&donOkr=pb:P9");
-		await cho(
-			() => nutThem() !== null && !nutThem()?.hasAttribute("disabled"),
-			"nut them",
-		);
-		const a =
-			nutThem()?.closest("a") ??
-			(nutThem()?.tagName === "A" ? nutThem() : null);
-		const href = a?.getAttribute("href") ?? "";
-		const u = new URL(href, "http://x");
-		expect(u.pathname).toBe("/ws/okr/theo-don-vi");
-		expect(u.searchParams.get("kyOkr")).toBe("q4");
-		expect(u.searchParams.get("donOkr")).toBe("pb:P2");
-		expect(u.searchParams.get("new")).toBe("true");
-		await don();
-
-		for (const [tab, mong] of [
-			["hoi-y", "n27"],
-			["cua-toi", null],
-		] as const) {
-			await dauTrang(tab, { xem: TP2, haiKy: true });
-			await cho(
-				() => nutThem() !== null && !nutThem()?.hasAttribute("disabled"),
-				`nut them ${tab}`,
-			);
-			const ds = goiCua("okr.danhSach").at(-1)?.dauVao as
-				| { cycleId?: string }
-				| undefined;
-			const a =
-				nutThem()?.closest("a") ??
-				(nutThem()?.tagName === "A" ? nutThem() : null);
-			const ky = new URL(
-				a?.getAttribute("href") ?? "/",
-				"http://x",
-			).searchParams.get("kyOkr");
-			const chay = ky ?? "q4";
-			if (chay !== (ds?.cycleId ?? "?") || ky !== mong)
-				throw new Error(
-					`dhk-don-dich: ${tab} gui sang Theo don vi ky «${chay}», quyen hoi ky «${ds?.cycleId}», mong kyOkr=${mong ?? "(vang)"}`,
-				);
-			await don();
-		}
-
-		const san = await dauTrang("theo-don-vi", { xem: TP2 }, "?donOkr=pb:P2");
-		await cho(
-			() => nutThem() !== null && !nutThem()?.hasAttribute("disabled"),
-			"nut them",
-		);
-		await bam(nutThem(), "nut them");
-		expect(san.url().get("new")).toBe("true");
-		expect(san.url().get("donOkr")).toBe("pb:P2");
-	});
 });
 
 describe("dhk-tieu-de", () => {
@@ -569,395 +493,6 @@ describe("dhk-tieu-de", () => {
 	});
 });
 
-function coNutHoiKara(): boolean {
-	const r = spawnSync(
-		"git",
-		["grep", "-q", "<NutHoiKara", "--", ":(literal)app/(app)/[slug]/okr"],
-		{
-			cwd: GOC_KHO,
-		},
-	);
-	return r.status === 0;
-}
-
-describe("dhk-hanh-dong", () => {
-	test("dhk-hanh-dong: hàng hành động ở đầu trang 5 thẻ × 2 pha; thân Theo đơn vị không còn nút tạo", async () => {
-		const s = soSai();
-		const hoiKara = coNutHoiKara();
-		let soO = 0;
-		for (const t of TAB) {
-			for (const pha of ["lap-ke-hoach", "dang-chay"] as const) {
-				soO += 1;
-				await dauTrang(t, { pha }, "", "vi", t === "theo-don-vi");
-				await cho(() => nutThem() !== null, `nut them ${t}`);
-				await nhip(6);
-				const h = hang();
-				const con = h ? [...h.children] : [];
-				const mong = (pha === "lap-ke-hoach" ? 4 : 3) + (hoiKara ? 1 : 0);
-				s.kiem(
-					con.length === mong,
-					`dhk-hanh-dong: ${t} ${pha} co ${con.length} phan tu, mong ${mong}`,
-				);
-				s.kiem(
-					Boolean(h?.contains(nutThem())) &&
-						con.at(-1)?.contains(nutThem()) === true,
-					`dhk-hanh-dong: ${t} ${pha} nut them-muc-tieu khong la cuoi hang hanh dong`,
-				);
-				s.kiem(
-					Boolean(q("[data-chon-chu-ky-gia]", h ?? document)) &&
-						Boolean(q("[data-nut=them-cach]", h ?? document)),
-					`dhk-hanh-dong: ${t} ${pha} thieu o chu ky hoac nut «…»`,
-				);
-				s.kiem(
-					(pha === "lap-ke-hoach") ===
-						Boolean(q("[data-nhom-soan]", h ?? document)),
-					`dhk-hanh-dong: ${t} ${pha} nhom soan ${q("[data-nhom-soan]", h ?? document) ? "co" : "vang"}`,
-				);
-				const kara = qa("[data-nut=hoi-kara]");
-				if (hoiKara)
-					s.kiem(
-						kara.length > 0 && kara.every((k) => h?.contains(k) === true),
-						"dhk-hanh-dong: co NutHoiKara nhung khong nam trong page-shell-actions",
-					);
-				if (t === "theo-don-vi") {
-					await cho(() => q("[data-hang-nut]") !== null, "hang nut than");
-					const than = q("[data-hang-nut]");
-					for (const [chon, ten] of [
-						["[data-nut=them-muc-tieu]", "them-muc-tieu"],
-						["[data-nut=nhap-bang-tinh]", "nhap-bang-tinh"],
-						["[data-nhom-soan]", "nhom-soan"],
-					] as const) {
-						soO += 1;
-						s.kiem(
-							!than || q(chon, than) === null,
-							`dhk-hanh-dong: theo-don-vi con nut ${ten} trong than`,
-						);
-					}
-				}
-				await don();
-			}
-		}
-		s.xong("dhk-hanh-dong", soO);
-	});
-});
-
-const ms = okrSoanMessages("vi");
-
-describe("dhk-menu-soan", () => {
-	test("dhk-menu-soan: «…» chỉ có Nhập; mở hộp nhập cho đơn vị đích; nút soạn và đối số truy vấn theo đơn vị đích", async () => {
-		const s = soSai();
-		let soO = 0;
-		const san = await dauTrang(
-			"theo-don-vi",
-			{ xem: TP2 },
-			"?donOkr=pb:P2",
-			"vi",
-			true,
-		);
-		await cho(
-			() => nutThem() !== null && !nutThem()?.hasAttribute("disabled"),
-			"nut them",
-		);
-		await bam(q("[data-nut=them-cach]"), "nut «…»");
-		const muc = qa("[role=menuitem]");
-		soO += 1;
-		s.kiem(
-			muc.length === 1 &&
-				muc[0]?.textContent === okrMessages("vi").nhapBangTinh,
-			`dhk-menu-soan: menu «…» co ${muc.length} muc`,
-		);
-		await bam(q("[data-nut=nhap-bang-tinh]"), "muc nhap");
-		soO += 1;
-		s.kiem(
-			san.url().get("nhapOkr") === "true",
-			"dhk-menu-soan: chon Nhap khong dat khoa nhapOkr",
-		);
-		await cho(() => q("[role=dialog]") !== null, "hop nhap");
-		await don();
-
-		await dauTrang("cua-toi", { xem: TP2 }, "?kyOkr=q4&donOkr=pb:P9");
-		await cho(
-			() => nutThem() !== null && !nutThem()?.hasAttribute("disabled"),
-			"nut them",
-		);
-		await bam(q("[data-nut=them-cach]"), "nut «…»");
-		const lienKet = q("[data-nut=nhap-bang-tinh]");
-		const u = new URL(
-			(lienKet?.tagName === "A"
-				? lienKet
-				: lienKet?.querySelector("a")
-			)?.getAttribute("href") ?? "/",
-			"http://x",
-		);
-		const mongNhap = khoaDonChu(
-			donDich("cua-toi", { loai: "pb", id: "P9" }, TP2.headOf).don,
-		);
-		soO += 1;
-		s.kiem(
-			u.searchParams.get("nhapOkr") === "true" &&
-				(u.searchParams.get("donOkr") ?? "goc") === mongNhap,
-			`dhk-menu-soan: hop nhap mo cho ${u.searchParams.get("donOkr") ?? "goc"}, mong ${mongNhap}`,
-		);
-		const ds = goiCua("okr.danhSach").at(-1)?.dauVao as
-			| { unit?: { loai: string; id?: string } }
-			| undefined;
-		soO += 1;
-		s.kiem(
-			khoaDonChu(ds?.unit ?? { loai: "?" }) === mongNhap,
-			`dhk-menu-soan: dau trang hoi danhSach cho ${khoaDonChu(ds?.unit ?? { loai: "?" })}, mong ${mongNhap}`,
-		);
-		await don();
-
-		await dauTrang(
-			"cua-toi",
-			{ xem: TP2, pha: "lap-ke-hoach" },
-			"?donOkr=pb:P9",
-		);
-		await cho(() => q("[data-nhom-soan] button") !== null, "nut soan");
-		const ss = goiCua("okr.soanSanSang").at(-1)?.dauVao as DauVao;
-		soO += 1;
-		s.kiem(
-			ss?.departmentId === "P2",
-			`dhk-menu-soan: soanSanSang hoi ${JSON.stringify(ss)}, mong phong-ban P2`,
-		);
-		await bam(q("[data-nhom-soan] button"), "nut soan");
-		const moi = goiCua("okr.soanMo").at(-1)?.dauVao as DauVao;
-		soO += 1;
-		s.kiem(
-			moi?.departmentId === "P2",
-			`dhk-menu-soan: soanMo gui ${JSON.stringify(moi)}`,
-		);
-		await don();
-
-		const DANG: { ten: string; nen: Nen; chu: string | null }[] = [
-			{
-				ten: "chua-cau-hinh",
-				nen: { xem: QT, cauNoi: false },
-				chu: ms.nut.chuaCauHinh,
-			},
-			{
-				ten: "het-luot",
-				nen: {
-					sanSang: soanSanSangOutput.parse({ bat: false, lyDo: "het-cuoc-ky" }),
-				},
-				chu: ms.nut.hetCuoc(String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy)),
-			},
-			{
-				ten: "het-tran",
-				nen: {
-					sanSang: soanSanSangOutput.parse({
-						bat: false,
-						lyDo: "het-tran-thang",
-					}),
-				},
-				chu: ms.nut.tamNghi(dauThangSau(homNayVn(new Date()))),
-			},
-			{
-				ten: "chua-co-khoa",
-				nen: {
-					sanSang: soanSanSangOutput.parse({
-						bat: false,
-						lyDo: "chua-co-khoa-mo-hinh",
-					}),
-				},
-				chu: ms.lyDo["chua-co-khoa-mo-hinh"],
-			},
-			{ ten: "khong-quyen", nen: { xem: TV, duoc: false }, chu: null },
-		];
-		for (const d of DANG) {
-			soO += 1;
-			await dauTrang(
-				"theo-don-vi",
-				{ pha: "lap-ke-hoach", ...d.nen },
-				"?donOkr=pb:P2",
-			);
-			await cho(
-				() => q("[data-nhom-soan] button") !== null,
-				`nut soan ${d.ten}`,
-			);
-			await nhip(6);
-			const nut = q("[data-nhom-soan] button") as HTMLButtonElement | null;
-			if (d.chu === null) {
-				s.kiem(
-					nut?.disabled === true &&
-						nut.getAttribute("aria-describedby") === ID_KHONG_THEM,
-					`dhk-menu-soan: ${d.ten} nut soan khong khoa kem ly do dau trang`,
-				);
-			} else {
-				await bam(q("[data-nut=thong-tin-soan]"), `nut i ${d.ten}`);
-				const pop = q("[data-thong-tin-soan]")?.textContent ?? "";
-				s.kiem(
-					nut?.disabled === true && pop.includes(d.chu),
-					`dhk-menu-soan: ${d.ten} popover «${pop.slice(0, 60)}» thieu «${d.chu}»`,
-				);
-			}
-			await don();
-		}
-		s.xong("dhk-menu-soan", soO);
-	});
-});
-
-describe("dhk-khoa-ly-do", () => {
-	test("dhk-khoa-ly-do: 12 ô — khoá kèm đúng một dòng lý do, không ẩn; có quyền thì không dòng nào", async () => {
-		const s = soSai();
-		const m = okrMessages("vi");
-		const NGUON = [
-			{
-				ten: "chon don vi",
-				tab: "theo-don-vi" as const,
-				xem: TV,
-				tham: "?donOkr=pb:P9",
-				cau: m.khoaTao.khongSua.replace("{ten}", "Kho vận"),
-			},
-			{
-				ten: "don vi minh dan",
-				tab: "cua-toi" as const,
-				xem: TP2,
-				tham: "",
-				cau: m.khoaTao.khongSua.replace("{ten}", "Kinh doanh vùng 1"),
-			},
-			{
-				ten: "khong dan ai",
-				tab: "cua-toi" as const,
-				xem: TV,
-				tham: "",
-				cau: m.khoaTao.chuaDan,
-			},
-		];
-		let soO = 0;
-		for (const duoc of [true, false]) {
-			for (const n of NGUON) {
-				for (const pha of ["lap-ke-hoach", "dang-chay"] as const) {
-					soO += 1;
-					const o = `(${n.ten}, ${pha})`;
-					await dauTrang(n.tab, { xem: n.xem, duoc, pha }, n.tham);
-					await nhip(10);
-					const nut = nutThem() as HTMLButtonElement | null;
-					const ghi = qa("[data-slot=page-shell-note]");
-					if (!duoc) {
-						if (!nut) {
-							s.kiem(
-								false,
-								`dhk-khoa-ly-do: nut them-muc-tieu vang khi canCreate=false ${o}`,
-							);
-						} else {
-							s.kiem(
-								nut.disabled &&
-									nut.getAttribute("aria-describedby") === ID_KHONG_THEM,
-								`dhk-khoa-ly-do: nut them-muc-tieu khong khoa kem ly do ${o}`,
-							);
-							s.kiem(
-								ghi.length === 1 &&
-									ghi[0]?.id === ID_KHONG_THEM &&
-									ghi[0]?.textContent === n.cau,
-								`dhk-khoa-ly-do: dong ly do ${o} «${ghi.map((g) => g.textContent).join(" | ")}», mong «${n.cau}»`,
-							);
-							if (pha === "lap-ke-hoach") {
-								const soan = q(
-									"[data-nhom-soan] button",
-								) as HTMLButtonElement | null;
-								s.kiem(
-									soan?.disabled === true &&
-										soan.getAttribute("aria-describedby") === ID_KHONG_THEM,
-									`dhk-khoa-ly-do: nut soan vang hoac khong khoa ${o}`,
-								);
-							}
-							await bam(q("[data-nut=them-cach]"), "nut «…»");
-							const nhap = q("[data-nut=nhap-bang-tinh]");
-							s.kiem(
-								nhap?.getAttribute("data-disabled") !== null &&
-									nhap?.getAttribute("aria-describedby") === ID_KHONG_THEM,
-								`dhk-khoa-ly-do: muc Nhap khong khoa cung nut chinh ${o}`,
-							);
-						}
-					} else {
-						s.kiem(
-							Boolean(nut) && !nut?.disabled && ghi.length === 0,
-							`dhk-khoa-ly-do: co quyen ma nut khoa hoac co dong ly do ${o}`,
-						);
-					}
-					await don();
-				}
-			}
-		}
-		soO += 1;
-		const san = await dauTrang(
-			"theo-don-vi",
-			{ xem: TV, duoc: false },
-			"?donOkr=pb:P9&new=true",
-			"vi",
-			true,
-		);
-		await nhip(10);
-		s.kiem(
-			san.url().get("new") === null,
-			"dhk-khoa-ly-do: khoa tao con tren URL khi khong du quyen",
-		);
-		s.xong("dhk-khoa-ly-do", soO);
-	});
-});
-
-describe("dhk-giu-don", () => {
-	test("dhk-giu-don: 25 liên kết thẻ mang đúng kyOkr và donOkr đang có; vòng đi-về giữ đơn vị", async () => {
-		const s = soSai();
-		const DUONG_DAN = [
-			"?kyOkr=q4&donOkr=pb:P2",
-			"?kyOkr=q4",
-			"?donOkr=pb:P2",
-			"",
-			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan&phuTrachOkr=hung&new=true",
-		];
-		let soO = 0;
-		for (const tham of DUONG_DAN) {
-			const vao = new URLSearchParams(tham);
-			const mong = new URLSearchParams();
-			for (const k of ["kyOkr", "donOkr"]) {
-				const v = vao.get(k);
-				if (v) mong.set(k, v);
-			}
-			await dauTrang("theo-don-vi", {}, tham);
-			for (const t of TAB) {
-				soO += 1;
-				const a = qa("[role=tab]").find(
-					(x) =>
-						x.getAttribute("href")?.startsWith(DUONG_TAB[t]) &&
-						new URL(x.getAttribute("href") ?? "", "http://x").pathname ===
-							DUONG_TAB[t],
-				);
-				const ra = new URL(a?.getAttribute("href") ?? "/", "http://x")
-					.searchParams;
-				const thieu = [...mong].filter(([k, v]) => ra.get(k) !== v);
-				const thua = [...ra.keys()].filter((k) => !mong.has(k));
-				s.kiem(
-					thieu.length === 0 && thua.length === 0,
-					`dhk-giu-don: lien ket ${t}${thieu.length ? ` thieu ${thieu.map(([k, v]) => `${k}=${v}`).join(",")}` : ""}${thua.length ? ` thua ${thua.join(",")}` : ""}`,
-				);
-			}
-			await don();
-		}
-		soO += 1;
-		let tham = "?kyOkr=q4&donOkr=pb:P2";
-		let dangO: TabOkr = "theo-don-vi";
-		for (const t of ["cua-toi", "toan-canh", "hoi-y", "theo-don-vi"] as const) {
-			await dauTrang(dangO, {}, tham);
-			const a = qa("[role=tab]").find(
-				(x) =>
-					new URL(x.getAttribute("href") ?? "", "http://x").pathname ===
-					DUONG_TAB[t],
-			);
-			tham = new URL(a?.getAttribute("href") ?? "/", "http://x").search;
-			dangO = t;
-			await don();
-		}
-		const cuoi = new URLSearchParams(tham);
-		s.kiem(
-			cuoi.get("kyOkr") === "q4" && cuoi.get("donOkr") === "pb:P2",
-			`dhk-giu-don: di-ve ve Theo don vi voi «${tham}»`,
-		);
-		s.xong("dhk-giu-don", soO);
-	});
-});
-
 describe("dhk-suc-khoe", () => {
 	test("dhk-suc-khoe: tiêu đề khu, thẻ Toàn cảnh, đường dẫn A › B khớp, về giữ ky + đơn vị; en một cách viết", async () => {
 		const s = soSai();
@@ -980,11 +515,7 @@ describe("dhk-suc-khoe", () => {
 				"breadcrumb",
 			);
 			const rail = khungUngDungMessages(locale).rail.okr;
-			const dangChon = qa("[role=tab]").find(
-				(x) => x.getAttribute("aria-current") === "page",
-			);
 			const muc = qa("[data-slot=breadcrumb-item]");
-			const dau = muc[0]?.textContent ?? "";
 			const cuoi = muc.at(-1)?.textContent ?? "";
 			localeMayChu = locale;
 			const tieuDe = String((await TRANG_SUC_KHOE.generateMetadata()).title);
@@ -994,15 +525,6 @@ describe("dhk-suc-khoe", () => {
 			s.kiem(
 				q("h1")?.textContent === rail,
 				`dhk-suc-khoe: h1 ${locale} «${q("h1")?.textContent}»`,
-			);
-			s.kiem(
-				new URL(dangChon?.getAttribute("href") ?? "/", "http://x").pathname ===
-					DUONG_TAB["toan-canh"],
-				`dhk-suc-khoe: the dang chon ${locale} khong la Toan canh`,
-			);
-			s.kiem(
-				dau === dangChon?.textContent,
-				`dhk-suc-khoe: muc dau «${dau}» khac the «${dangChon?.textContent}»`,
 			);
 			s.kiem(
 				tieuDe.startsWith(`${cuoi} · `),

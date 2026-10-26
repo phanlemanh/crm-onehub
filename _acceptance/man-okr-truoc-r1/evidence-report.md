@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9afe1c586f395777695460ac44406784d100b815
+verified_commit: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 2 (11/11 eval máy và ui-check đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng); E11 ghi Đạt. Sáu mục ngoài hợp đồng định đoạt từng mục ở lượt ký này — Ngoài-1, 4, 5 ghi Known limits; Ngoài-2, 6 chấp nhận không sửa; Ngoài-3 mở hợp đồng mới. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -227,3 +227,7 @@ Round 2: lint:slop sạch, 11 eval máy và ui-check đạt, bảy lệnh suite 
 ### Re-pin lần 1 — 2026-10-04, do gộp onehub 3e782921 (#248) sau Cổng 2
 run_id: repin-20261004T093433Z-56825
 sha: 9afe1c586f395777695460ac44406784d100b815 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5u, E8u, E11 (E11 không khai paths) · AC không có chốt máy: AC-2, AC-8, AC-11
+
+### Re-pin lần 2 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
+run_id: repin-20261020T130437Z-49516
+sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5u, E8u, E11 (E11 không khai paths) · diff chạm vật đo ngoài làn máy: E2, E5u, E8u — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2, AC-8, AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

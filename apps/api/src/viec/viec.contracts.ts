@@ -39,6 +39,8 @@ export const viecCreateInput = z
 		hanNgay: ngayLich.nullable().optional(),
 		nguoiThucHienId: ma.optional(),
 		nguoiTheoDoiIds: z.array(ma).max(VIEC.theoDoiToiDa).default([]),
+		duAnId: ma.optional(),
+		batDauNgay: ngayLich.nullable().optional(),
 		...banGhiTruong,
 	})
 	.refine((v) => soBanGhi(v) <= 1, { message: VIEC.thongDiep.dungMotBanGhi });
@@ -61,6 +63,19 @@ export const viecSuaInput = z.object({
 	tieuDe: z.string().trim().min(1).max(VIEC.tieuDeToiDa).optional(),
 	moTa: z.string().trim().max(VIEC.moTaToiDa).nullable().optional(),
 	hanNgay: ngayLich.nullable().optional(),
+	batDauNgay: ngayLich.nullable().optional(),
+});
+
+export const viecDoiLichInput = z.object({
+	id: ma,
+	batDauNgay: ngayLich,
+	hanNgay: ngayLich,
+});
+
+export const viecDoiDuAnInput = z.object({ id: ma, duAnId: ma.nullable() });
+
+export const viecDaDoiOutput = z.object({
+	daDoi: z.array(z.object({ id: z.string(), tieuDe: z.string() })),
 });
 
 export const viecDoiNguoiInput = z.object({ id: ma, nguoiThucHienId: ma });
@@ -69,6 +84,8 @@ export const viecTheoDoiInput = z.object({ id: ma, userId: ma.optional() });
 
 export const viecCuaToiInput = z.object({
 	nhom: z.enum(NHOM_VIEC).default("giao-cho-toi"),
+	duAnId: ma.optional(),
+	tatCaDuAn: z.boolean().optional(),
 });
 
 const nguoiRa = z.object({
@@ -83,11 +100,17 @@ const banGhiRa = z.object({
 	ten: z.string(),
 });
 
+export const AI_THAY = ["rieng", "du-an", "ban-ghi"] as const;
+
+export type AiThay = (typeof AI_THAY)[number];
+
 export const viecDong = z.object({
 	id: z.string(),
 	tieuDe: z.string(),
 	trangThai: z.enum(TRANG_THAI_VIEC),
 	hanNgay: z.string().nullable(),
+	batDauNgay: z.string().nullable(),
+	duAn: z.object({ id: z.string(), ten: z.string() }).nullable(),
 	quaHan: z.boolean(),
 	nguoiGiao: nguoiRa,
 	nguoiThucHien: nguoiRa,
@@ -97,7 +120,16 @@ export const viecDong = z.object({
 export const viecChiTietOutput = viecDong.extend({
 	moTa: z.string().nullable(),
 	nguoiTheoDoi: z.array(nguoiRa),
+	phaiCho: z.array(
+		z.object({
+			id: z.string(),
+			tieuDe: z.string(),
+			batDauNgay: z.string().nullable(),
+			hanNgay: z.string().nullable(),
+		}),
+	),
 	coLichSu: z.boolean(),
+	aiThay: z.enum(AI_THAY),
 	quyen: z.object({
 		trangThai: z.array(z.enum(TRANG_THAI_VIEC)),
 		sua: z.boolean(),
@@ -125,6 +157,42 @@ export const viecCuaToiNhomOutput = viecCuaBanGhiOutput.extend({
 	}),
 });
 
+const viecNhacRa = z.object({ id: z.string(), tieuDe: z.string() }).nullable();
+
+const hanRa = z.object({
+	hanNgay: z.string().nullable(),
+	boi: viecNhacRa.optional(),
+});
+
+const batDauRa = z.object({
+	batDauNgay: z.string().nullable(),
+	boi: viecNhacRa.optional(),
+});
+
+const vetCheRa = z.discriminatedUnion("loai", [
+	z.object({ loai: z.literal("doi-han"), truoc: hanRa, sau: hanRa }),
+	z.object({ loai: z.literal("doi-bat-dau"), truoc: batDauRa, sau: batDauRa }),
+	z.object({
+		loai: z.literal("them-phu-thuoc"),
+		truoc: z.null(),
+		sau: z.object({ viec: viecNhacRa }),
+	}),
+	z.object({
+		loai: z.literal("go-phu-thuoc"),
+		truoc: z.object({ viec: viecNhacRa }),
+		sau: z.null(),
+	}),
+	z.object({
+		loai: z.literal("them-viec-con"),
+		truoc: z.null(),
+		sau: z.object({ conId: z.string(), tieuDe: z.string() }).nullable(),
+	}),
+]);
+
+export const vetViecRa = z.union([vetCheRa, vetViec]);
+
+export type VetViecRa = z.infer<typeof vetViecRa>;
+
 export const viecVetOutput = z.array(
 	z.object({
 		id: z.string(),
@@ -132,7 +200,7 @@ export const viecVetOutput = z.array(
 		nguon: z.enum(NGUON_VIEC),
 		loai: z.enum(LOAI_VET_VIEC),
 		nguoi: z.object({ id: z.string(), name: z.string() }).nullable(),
-		vet: vetViec,
+		vet: vetViecRa,
 	}),
 );
 
@@ -208,5 +276,8 @@ export type ViecBangInput = z.infer<typeof viecBangInput>;
 export type ViecBangOutput = z.infer<typeof viecBangOutput>;
 export type TheBangOutput = z.infer<typeof theBang>;
 export type ViecKeoInput = z.infer<typeof viecKeoInput>;
+export type ViecDoiLichInput = z.infer<typeof viecDoiLichInput>;
+export type ViecDoiDuAnInput = z.infer<typeof viecDoiDuAnInput>;
+export type ViecDaDoiOutput = z.infer<typeof viecDaDoiOutput>;
 export type ViecTaoConInput = z.infer<typeof viecTaoConInput>;
 export type ViecConOutput = z.infer<typeof viecConOutput>;

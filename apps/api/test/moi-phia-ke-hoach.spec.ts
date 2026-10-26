@@ -583,7 +583,10 @@ function congTyDichVu(): CompaniesService {
 		{} as unknown as FaviconService,
 		new ActivityStampService(db),
 		{ reportingCurrency: async () => "VND" } as unknown as ConversionService,
-		{ valuesFor: async () => [] } as unknown as FieldsService,
+		{
+			valuesFor: async () => [],
+			tepTheoBanGhi: async () => ({}),
+		} as unknown as FieldsService,
 	);
 }
 

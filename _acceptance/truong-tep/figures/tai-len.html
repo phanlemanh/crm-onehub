@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đường tải lên và hàng chờ xoá · truong-tep</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub { color: var(--color-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">truong-tep · Hình 1 · AC-2 · AC-3 · AC-7</p>
+    <h1>Đường tải lên và hàng chờ xoá</h1>
+    <p class="sub">Blob nào vào kho cũng có hàng chờ xoá từ trước. Chỉ complete thành công mới gỡ hàng ấy.</p>
+
+    <svg viewBox="0 0 1120 648" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="40" y1="80" x2="1080" y2="80" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <line x1="40" y1="180" x2="1080" y2="180" stroke="rgba(23,23,23,0.10)" stroke-width="1"/>
+      <line x1="40" y1="320" x2="1080" y2="320" stroke="rgba(23,23,23,0.10)" stroke-width="1"/>
+      <line x1="40" y1="432" x2="1080" y2="432" stroke="rgba(23,23,23,0.10)" stroke-width="1"/>
+      <line x1="40" y1="560" x2="1080" y2="560" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <line x1="176" y1="80" x2="176" y2="560" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+
+      <text x="56" y="134" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">TRÌNH DUYỆT</text>
+      <text x="56" y="246" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">API</text>
+      <text x="56" y="262" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">fieldFiles</text>
+      <text x="56" y="372" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">KHO BLOB</text>
+      <text x="56" y="388" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">RIÊNG TƯ</text>
+      <text x="56" y="500" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LỊCH DỌN</text>
+
+      <path d="M288 206 V138 Q288 130 296 130 H420" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M596 130 H736 Q744 130 744 138 V196" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M848 250 H888" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M700 300 V348" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M808 300 V372 Q808 380 816 380 H888" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M508 156 V452" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="316" y="108" width="80" height="16" rx="2" fill="#fafafa"/>
+      <text x="356" y="120" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">URL · PHIẾU</text>
+      <rect x="628" y="108" width="72" height="16" rx="2" fill="#fafafa"/>
+      <text x="664" y="120" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">PUT XONG</text>
+      <rect x="850" y="228" width="36" height="16" rx="2" fill="#fafafa"/>
+      <text x="868" y="240" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">NHẬN</text>
+      <rect x="604" y="324" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="648" y="336" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TRÙNG TRONG Ô</text>
+      <rect x="824" y="358" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="852" y="370" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TỪ CHỐI</text>
+      <rect x="516" y="234" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="540" y="246" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">BỎ DỞ</text>
+
+      <rect x="420" y="104" width="176" height="52" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="508" y="126" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">PUT lên URL đã ký</text>
+      <text x="508" y="144" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">byte không đi qua API</text>
+
+      <rect x="200" y="206" width="176" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="288" y="228" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">requestUpload</text>
+      <text x="288" y="246" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Trình duyệt xin chữ ký PUT</text>
+      <text x="288" y="262" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Ghi hàng chờ BlobChoXoa</text>
+      <text x="288" y="280" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">xoaSau = hạn phiếu</text>
+
+      <rect x="640" y="196" width="208" height="104" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="744" y="220" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">complete</text>
+      <text x="744" y="240" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Kiểm phiếu, đối chiếu hàng chờ</text>
+      <text x="744" y="256" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Đọc byte, nhận kiểu theo byte</text>
+      <text x="744" y="272" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Tính sha256</text>
+
+      <rect x="888" y="214" width="176" height="72" rx="6" fill="#fafafa"/>
+      <rect x="888" y="214" width="176" height="72" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="976" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Ghi FieldFile</text>
+      <text x="976" y="252" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">và gỡ hàng chờ</text>
+      <text x="976" y="272" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trong một giao dịch</text>
+
+      <rect x="620" y="348" width="160" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="700" y="370" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xoá Blob mới</text>
+      <text x="700" y="386" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trả hàng cũ</text>
+      <text x="700" y="402" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">{ trung: true, tepId }</text>
+
+      <rect x="888" y="348" width="176" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="976" y="370" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xoá Blob</text>
+      <text x="976" y="386" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trả lời từ chối có tên</text>
+      <text x="976" y="402" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">không ghi FieldFile</text>
+
+      <rect x="400" y="452" width="216" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="508" y="474" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lượt dọn sau hạn phiếu</text>
+      <text x="508" y="492" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">PUT xong mà không gọi complete</text>
+      <text x="508" y="508" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chỉ lấy xoaSau &lt;= now()</text>
+      <text x="508" y="526" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">xoá Blob và hàng chờ</text>
+
+      <line x1="40" y1="584" x2="1080" y2="584" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="604" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="40" y="620" width="16" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="64" y="630" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Bước</text>
+      <rect x="140" y="620" width="16" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="164" y="630" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Tệp được nhận</text>
+      <line x1="292" y1="626" x2="320" y2="626" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="328" y="630" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Đường nhận</text>
+      <line x1="440" y1="626" x2="468" y2="626" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="476" y="630" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Luồng, nhánh rẽ</text>
+      <line x1="612" y1="626" x2="640" y2="626" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="648" y="630" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Bỏ dở, chờ hạn phiếu</text>
+    </svg>
+  </div>
+</body>
+</html>

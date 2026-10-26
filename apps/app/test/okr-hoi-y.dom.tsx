@@ -519,8 +519,8 @@ mock.module("@/components/page-shell", () => ({
 }));
 
 const { HoiYMan } = await import("@/app/(app)/[slug]/okr/hoi-y/hoi-y");
-const { DauTrangOkrHoiY } = await import(
-	"@/app/(app)/[slug]/okr/dau-trang-hoi-y"
+const { ThanhBenMucTieu } = await import(
+	"@/app/(app)/[slug]/okr/thanh-ben-muc-tieu"
 );
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { messages } = await import("@crm/ui/lib/messages");
@@ -528,7 +528,7 @@ const { messages } = await import("@crm/ui/lib/messages");
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
 
-async function mo(coDauTrang = false): Promise<HTMLElement> {
+async function mo(coThanhBen = false): Promise<HTMLElement> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
@@ -540,7 +540,7 @@ async function mo(coDauTrang = false): Promise<HTMLElement> {
 			<NuqsTestingAdapter hasMemory searchParams="">
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
-						{coDauTrang ? <DauTrangOkrHoiY chonChuKy={null} /> : null}
+						{coThanhBen ? <ThanhBenMucTieu /> : null}
 						<HoiYMan />
 					</LocaleProvider>
 				</QueryClientProvider>
@@ -1020,7 +1020,7 @@ describe("Hỏi ý — sheet: câu từ chối của máy chủ và nhánh hết
 	test("mở: máy chủ từ chối thì câu ghim hiện nguyên văn ở chân sheet, cạnh «Mở»", async () => {
 		hoiY = null;
 		quanTri = true;
-		const CAU = "Chu kỳ này đã có một lần hỏi ý.";
+		const CAU = "Chu kỳ này đã có một lần lấy ý kiến.";
 		loiGhi.set("moHoiY", CAU);
 		const o = await mo();
 		await cho(() => trangThai(o) === "trong-quan-tri", "trống quản trị");
@@ -1323,7 +1323,7 @@ describe("Hỏi ý — kết quả", () => {
 	});
 });
 
-describe("Hỏi ý — huy hiệu tab", () => {
+describe("Hỏi ý — huy hiệu mục Lấy ý kiến", () => {
 	test("«Mới» khi còn góp được, mất ngay sau khi gửi ý", async () => {
 		khiGop = () => {
 			nhan = { ...nhan, canGop: false };
@@ -1331,7 +1331,7 @@ describe("Hỏi ý — huy hiệu tab", () => {
 		const o = await mo(true);
 		await cho(() => trangThai(o) === "gop", "gop");
 		const huyHieu = () =>
-			o.querySelector('[role="tab"][href^="/ws/okr/hoi-y"] [data-slot="badge"]')
+			o.querySelector('a[href^="/ws/okr/lay-y-kien"] [data-slot="badge"]')
 				?.textContent ?? null;
 		await cho(() => huyHieu() !== null, "huy hiệu");
 		const truoc = huyHieu();
@@ -1350,7 +1350,7 @@ describe("Hỏi ý — huy hiệu tab", () => {
 		};
 		const a = await mo(true);
 		const huyHieu = (o: HTMLElement) =>
-			o.querySelector('[role="tab"][href^="/ws/okr/hoi-y"] [data-slot="badge"]')
+			o.querySelector('a[href^="/ws/okr/lay-y-kien"] [data-slot="badge"]')
 				?.textContent ?? null;
 		await cho(() => huyHieu(a) !== null, "huy hiệu số");
 		const so = huyHieu(a);

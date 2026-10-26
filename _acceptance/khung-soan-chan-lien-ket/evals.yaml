@@ -98,7 +98,9 @@ evals:
   - id: E6
     criterion: AC-6
     executor: test
-    cmd: config:executors.test.kcl_hoi_quy
+    cmd: config:executors.test.kcl_hoi_quy_vkm
+    status: not-run
+    superseded_by: mot-nut-tao-muc-tieu#AC-7
     paths:
       - "packages/ui/src/components/giu-thay-doi.tsx"
       - "packages/ui/src/components/dialog.tsx"

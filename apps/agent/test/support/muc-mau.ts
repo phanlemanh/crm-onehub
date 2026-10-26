@@ -132,6 +132,13 @@ export const MUC_MAU = {
 		binhLuan: 3,
 	},
 	"tai-lieu-cho-duyet": { loai: "tai-lieu-cho-duyet", so: 3 },
+	"goi-y-ke-hoach": {
+		loai: "goi-y-ke-hoach",
+		goiYId: "gy-mau-1",
+		dealId: "deal-mau-1",
+		dealName: "Hợp đồng mẫu",
+		companyName: "Công ty mẫu",
+	},
 	"okr-tom-tat": {
 		loai: "okr-tom-tat",
 		tomTatId: "tt-mau-1",

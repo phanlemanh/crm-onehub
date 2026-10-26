@@ -162,6 +162,7 @@ tay trên màn production mà kho không thấy. Trước khi báo «chưa bật
 | `OKR_AI_GATEWAY_API_KEY` | agent | phần Trợ lý OKR chạy trong agent chính (góp ý, tóm tắt tuần) dùng chung khoá model; `agent-okr` có khoá riêng |
 | `PERPLEXITY_API_KEY` | agent | không tìm trên web; log ghi `[agent] off  Web research` |
 | `GITHUB_TOKEN` | agent | GitHub giới hạn 60 lượt mỗi giờ |
+| `GITHUB_APP_ID` + `GITHUB_APP_PRIVATE_KEY` | agent | không lấy lộ trình sản phẩm khác; Cài đặt › Sản phẩm hiện «Máy chủ chưa có ứng dụng GitHub», CRM đọc như cũ |
 | `GOOGLE_SHEETS_EMAIL` + `GOOGLE_SHEETS_KHOA` | API, agent | KR không lấy số từ Google Sheets (`docs/environment.md`) |
 | `MICROSOFT_CLIENT_ID` + `_SECRET` | API | không nút đăng nhập Microsoft, không đọc thư Outlook |
 | `SLACK_CLIENT_ID` + `_SECRET` | API | không nối Slack ở Kết nối |
@@ -190,6 +191,25 @@ Mỗi lượt để lại đúng một ghi chú `ban-chup-lo-trinh` với kết 
 «(bản dựng)». Lượt đỏ là CRM từ chối hay không trả lời; log của bước «Đẩy bản chụp» in lý do.
 
 Đo độ trễ (Cổng Giá trị của LT1c): `bun scripts/ban-chup-lo-trinh/do-tre.ts --tu <YYYY-MM-DD>`.
+
+### Lộ trình sản phẩm khác (LT3)
+
+Sản phẩm ngoài CRM không đẩy: tác nhân tự lấy `LO-TRINH.html` của từng kho bằng một ứng dụng GitHub
+chỉ đọc, trên nhịp điều phối mỗi phút, mỗi sản phẩm mỗi 5 phút (`apps/agent/agent/lib/lo-trinh-san-pham.ts`).
+Ứng dụng không dùng khoá của ai, không webhook.
+
+Cài một lần (việc của chủ kho, sau khi gộp):
+
+1. GitHub › Settings › Developer settings › GitHub Apps › New: quyền Repository › Contents: Read-only
+   và Metadata: Read-only; tắt Webhook; cài được ở tài khoản `phanlemanh`.
+2. Tạo khoá riêng; đặt trên dự án `crm-onehub-agent` hai biến `GITHUB_APP_ID` và
+   `GITHUB_APP_PRIVATE_KEY` (dán nguyên PEM).
+3. Cài ứng dụng vào từng kho sản phẩm (đầu tiên `phanlemanh/acceptance-gate-kit`), chỉ chọn kho đó.
+4. Cài đặt › Sản phẩm › Thêm sản phẩm: tên, kho, nhánh, đường tệp; rồi Người xem.
+
+Trong vòng 5 phút hàng sản phẩm thành «Đã lấy». Hàng đỏ nói đúng chỗ hỏng (chưa cài vào kho, sai
+nhánh, sai tệp, tệp không mang khối lộ trình). Đo ngưỡng Cổng Đáng («hiện đủ trong ngày cài»):
+`bun run lo-trinh:do-san-pham` trên production (`DATABASE_URL` của production, chỉ đọc).
 
 ## Kho Blob
 
@@ -335,6 +355,22 @@ còn đủ). Vế hai, 14 ngày sau ngày gộp: `bun run viec:chep-cu --tu <ng�
 DA1b: chạy `--dao` TRƯỚC — lùi mã khi bản chép còn thì một việc hiện hai lần (hàng gốc có ô tích ở dòng thời
 gian, bản chép ở Việc của tôi và tin nhắc) và việc mã môi giới lệch đời cũ giao trùng. Hai cột mới để lại vô
 hại cho mã cũ.
+
+## Đếm việc riêng đã lộ (hàng DA11)
+
+Việc của chủ kho, chạy trên máy của chủ kho; máy không vào production. Lệnh chỉ đọc: mở một `transaction`
+`READ ONLY`, Postgres từ chối mọi lệnh ghi trong đó.
+
+`DATABASE_URL=<chuỗi kết nối production> bun run --cwd packages/db viec:dem-rieng`
+
+In một dòng JSON:
+- `viecDuAnKhongGan` — số việc trong dự án mà không gắn bản ghi: trước DA11, khung của các việc này ghi
+  «Việc riêng — chỉ người trong cuộc thấy» trong khi cả đội dự án thấy chúng.
+- `vetNhacViecRieng` — số dòng lịch sử của một việc người ngoài cuộc đọc được (gắn bản ghi hay trong dự án)
+  đang nêu một việc nay là riêng: trước DA11, các dòng này lộ tiêu đề việc riêng.
+- `viecRiengBiNhac` — số việc riêng khác nhau bị nêu như vậy.
+
+Thiếu `DATABASE_URL` thì lệnh thoát 2. Dán bản in vào #375 khi chạy.
 
 ## Bẫy đã gặp
 

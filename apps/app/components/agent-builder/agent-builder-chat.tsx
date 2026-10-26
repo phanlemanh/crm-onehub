@@ -103,6 +103,7 @@ import {
 } from "./chat-chips";
 import { DeleteChatAction } from "./delete-chat-action";
 import { ShareChatDialog } from "./share-chat-dialog";
+import { TheDangDung } from "./the-dang-dung";
 
 type Conversation = RouterOutputs["conversations"]["builderById"];
 type SharedConversation = RouterOutputs["conversations"]["shared"];
@@ -285,9 +286,14 @@ export function AgentBuilderChat({
 	const markRead = useMutation(
 		trpc.conversations.markRead.mutationOptions({
 			onSuccess: () =>
-				queryClient.invalidateQueries({
-					queryKey: trpc.conversations.builderList.pathKey(),
-				}),
+				Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: trpc.conversations.builderList.pathKey(),
+					}),
+					queryClient.invalidateQueries({
+						queryKey: trpc.thongBao.chuong.pathKey(),
+					}),
+				]),
 		}),
 	);
 
@@ -497,7 +503,7 @@ export function AgentBuilderChat({
 										conversationId={conversationId}
 										sessionId={data.sessionId}
 										artifacts={data.builderArtifacts}
-										startedAt={submissions.at(-1)?.createdAt ?? null}
+										submissions={submissions}
 									/>
 								</MessageScrollerItem>
 							) : null}
@@ -1103,18 +1109,19 @@ function ResponseActions({
 	);
 }
 
-function BuildingAgentCard({
+export function BuildingAgentCard({
 	conversationId,
 	sessionId,
 	artifacts,
-	startedAt,
+	submissions,
 }: {
 	conversationId: string;
 	sessionId: string | null;
 	artifacts: Conversation["builderArtifacts"];
-	startedAt: string | null;
+	submissions: readonly BuilderSubmission[];
 }) {
 	const t = troChuyenMessages(useLocale());
+	const startedAt = submissions.at(-1)?.createdAt ?? null;
 	const completed = completedBuilderSteps(artifacts, startedAt, sessionId);
 	const stop = useAsyncAction({
 		action: async () => {
@@ -1133,103 +1140,34 @@ function BuildingAgentCard({
 		artifacts.find((artifact) => artifact.status === "WRITING")?.path ?? null;
 
 	return (
-		<div className="w-full max-w-lg">
-			<div className="overflow-hidden rounded-lg border bg-card">
-				<div className="flex items-center gap-2 px-4 pt-4">
-					<span className="min-w-0 flex-1 font-medium text-sm">
-						{t.dung.dangDung}
-					</span>
-					<span className="shrink-0 font-mono text-muted-foreground text-xs">
-						{t.dung.tienDo(String(completed))}
-					</span>
-				</div>
-				<ol className="flex flex-col gap-1 p-3" aria-label={t.dung.nhanTienDo}>
-					{t.man.buoc.map((label: string, index: number) => {
-						const done = index < completed;
-						const active = index === completed && completed < t.man.buoc.length;
-						const artifact = BUILDER_STEP_ARTIFACTS[index];
-
-						return (
-							<li
-								key={label}
-								className={cn(
-									"flex min-h-8 min-w-0 flex-col justify-center gap-1 rounded-md px-2",
-									active && "bg-muted py-2",
-								)}
-								aria-current={active ? "step" : undefined}
-							>
-								<div className="flex min-w-0 items-center gap-2">
-									<span
-										className={cn(
-											"flex size-5 shrink-0 items-center justify-center font-mono text-xs",
-											(done || active) && "text-ring",
-											!done && !active && "text-muted-foreground",
-										)}
-									>
-										{done ? (
-											<Icon icon={Checkmark} className="size-3.5" />
-										) : active ? (
-											<DotMatrix decorative />
-										) : (
-											index + 1
-										)}
-									</span>
-									<span
-										className={cn(
-											"min-w-0 flex-1 wrap-break-word text-sm",
-											!done && !active && "text-muted-foreground",
-										)}
-									>
-										{label}
-									</span>
-									<span
-										className={cn(
-											"shrink-0 text-xs",
-											done && artifact && "font-mono",
-											active ? "text-foreground" : "text-muted-foreground",
-										)}
-									>
-										{done && artifact
-											? artifact.replace("agent/", "")
-											: done
-												? t.dung.xong
-												: active
-													? t.dung.dangLam
-													: t.dung.dangXep}
-									</span>
-								</div>
-								{active && writingPath ? (
-									<p className="pl-7 font-mono text-muted-foreground text-xs">
-										{t.dung.dangGhi(writingPath)}
-									</p>
-								) : null}
-							</li>
-						);
-					})}
-				</ol>
-				<footer className="flex items-center gap-2 border-t bg-muted px-4 py-3">
-					<p className="min-w-0 flex-1 text-pretty text-muted-foreground text-xs">
-						{t.dung.chayNen}
-					</p>
-					<Button
-						variant="outline"
-						size="sm"
-						disabled={!sessionId || stop.pending}
-						aria-busy={stop.pending}
-						onClick={() => stop.run()}
+		<TheDangDung
+			buoc={t.man.buoc.map((nhan: string, index: number) => ({
+				nhan,
+				vat: BUILDER_STEP_ARTIFACTS[index] ?? null,
+			}))}
+			daXong={completed}
+			dangGhi={writingPath}
+			batDauLuc={startedAt}
+			t={t}
+			nutDung={
+				<Button
+					variant="outline"
+					size="sm"
+					disabled={!sessionId || stop.pending}
+					aria-busy={stop.pending}
+					onClick={() => stop.run()}
+				>
+					<AsyncButtonContent
+						status={stop.status}
+						pendingLabel={t.dung.dangDungLai}
+						successLabel={t.dung.dangDungLai}
+						errorLabel={t.dung.thuLai}
 					>
-						<AsyncButtonContent
-							status={stop.status}
-							pendingLabel={t.dung.dangDungLai}
-							successLabel={t.dung.dangDungLai}
-							errorLabel={t.dung.thuLai}
-						>
-							{t.dung.dungLai}
-						</AsyncButtonContent>
-					</Button>
-				</footer>
-			</div>
-		</div>
+						{t.dung.dungLai}
+					</AsyncButtonContent>
+				</Button>
+			}
+		/>
 	);
 }
 

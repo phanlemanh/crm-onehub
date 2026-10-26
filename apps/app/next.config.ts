@@ -40,6 +40,66 @@ const nextConfig: NextConfig = {
 
 	cacheComponents: true,
 	partialPrefetching: true,
+
+	async redirects() {
+		return [
+			{
+				source: "/:slug/okr/cap-nhat-tuan",
+				destination: "/:slug/okr",
+				permanent: false,
+			},
+			{
+				source: "/:slug/okr/theo-don-vi",
+				destination: "/:slug/okr/bo-okr",
+				permanent: true,
+			},
+			{
+				source: "/:slug/okr/hoi-y",
+				destination: "/:slug/okr/lay-y-kien",
+				permanent: true,
+			},
+			{
+				source: "/:slug/okr/toan-canh/suc-khoe",
+				destination: "/:slug/okr/suc-khoe#chuong-trinh",
+				permanent: true,
+			},
+			{
+				source: "/:slug/okr/toan-canh",
+				destination: "/:slug/okr/suc-khoe",
+				permanent: true,
+			},
+			{
+				source: "/:slug/okr/quanh-muc-tieu/:id",
+				destination: "/:slug/okr/so-do/muc-tieu/:id",
+				permanent: true,
+			},
+		];
+	},
+
+	async rewrites() {
+		return {
+			beforeFiles: [],
+			afterFiles: [
+				{
+					source: "/:slug/okr/bo-okr",
+					destination: "/:slug/okr/theo-don-vi",
+				},
+				{
+					source: "/:slug/okr/lay-y-kien",
+					destination: "/:slug/okr/hoi-y",
+				},
+				{
+					source: "/:slug/okr/suc-khoe",
+					destination: "/:slug/okr/toan-canh",
+				},
+				{
+					source: "/:slug/okr/so-do/muc-tieu/:id",
+					destination: "/:slug/okr/quanh-muc-tieu/:id",
+				},
+			],
+			fallback: [],
+		};
+	},
 };
 
 export default nextConfig;

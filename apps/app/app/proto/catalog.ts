@@ -11,6 +11,58 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "ngan-kr-mot-cho",
+		ten: "Ngăn KR một chỗ — Cập nhật ở đầu ngăn và trên dòng, sang KR kế",
+		states: [
+			{
+				id: "ST-nkr-dong",
+				nhan: "Trang đơn vị — nút Cập nhật trên mỗi dòng KR",
+			},
+			{ id: "ST-nkr-ngan", nhan: "Ngăn KR — KR 2/4, có Cập nhật" },
+			{ id: "ST-nkr-ngan-dau", nhan: "Ngăn KR — KR đầu, nút KR trước tắt" },
+			{
+				id: "ST-nkr-ngan-chi-doc",
+				nhan: "Ngăn KR — chỉ đọc, không nút Cập nhật",
+			},
+			{
+				id: "ST-nkr-hop",
+				nhan: "Hộp cập nhật — đã gõ 78, điểm mới trên đồ thị",
+			},
+			{ id: "ST-nkr-hop-moc", nhan: "Hộp cập nhật — KR mốc" },
+			{ id: "ST-nkr-hop-sai", nhan: "Hộp cập nhật — giá trị sai" },
+			{
+				id: "ST-nkr-hop-tu-ngan",
+				nhan: "Cảnh ngữ cảnh — hộp mở từ ngăn KR trên trang đơn vị",
+			},
+			{ id: "ST-nkr-dang-tai", nhan: "Ngăn KR — đang tải" },
+			{ id: "ST-nkr-loi", nhan: "Ngăn KR — lỗi" },
+			{
+				id: "ST-nkr-khong-thay",
+				nhan: "Ngăn KR — không thấy hay không có quyền",
+			},
+		],
+	},
+	{
+		slug: "trang-don-vi-mot-bang",
+		ten: "Trang đơn vị một bảng — ô chọn đơn vị ở chỗ ô tìm kiếm, mục tiêu mở ra KR, một hàng công cụ đứng yên",
+		states: [
+			{ id: "ST-dvb-danh-sach", nhan: "Danh sách — phòng ban có mục tiêu" },
+			{ id: "ST-dvb-mo-kr", nhan: "Một mục tiêu mở ra KR" },
+			{ id: "ST-dvb-chon-don-vi", nhan: "Ô chọn đơn vị đang mở, gõ «kinh»" },
+			{ id: "ST-dvb-can-ban", nhan: "Ô lọc nhanh «Cần bàn»" },
+			{ id: "ST-dvb-khong-khop", nhan: "Ô lọc không khớp dòng nào" },
+			{ id: "ST-dvb-rong", nhan: "Đơn vị chưa đặt OKR" },
+			{ id: "ST-dvb-chua-truong", nhan: "Đơn vị chưa có trưởng" },
+			{ id: "ST-dvb-cong-ty", nhan: "Cấp công ty" },
+			{ id: "ST-dvb-nguoi", nhan: "Một người" },
+			{ id: "ST-dvb-hop-tuan", nhan: "Họp tuần" },
+			{ id: "ST-dvb-cham-diem", nhan: "Chấm điểm" },
+			{ id: "ST-dvb-cay", nhan: "Cây căn chỉnh" },
+			{ id: "ST-dvb-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-dvb-loi", nhan: "Lỗi tải" },
+		],
+	},
+	{
 		slug: "cua-toi-ba-phan",
 		ten: "Của tôi ba phần — cần cập nhật tuần này, đơn vị bạn dẫn, KR bạn phụ trách",
 		states: [
@@ -54,6 +106,35 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "lo-trinh-nhieu-san-pham",
+		ten: "Lộ trình nhiều sản phẩm — bộ chọn sản phẩm và Cài đặt › Sản phẩm",
+		states: [
+			{ id: "ST-lotrinh-chon", nhan: "Lộ trình — bộ chọn, CRM chọn sẵn" },
+			{ id: "ST-lotrinh-sp", nhan: "Lộ trình — Kit nghiệm thu đã lấy" },
+			{ id: "ST-lotrinh-sp-en", nhan: "Lộ trình — Kit nghiệm thu, tiếng Anh" },
+			{
+				id: "ST-lotrinh-sp-chua-co",
+				nhan: "Lộ trình — sản phẩm chưa có bản chụp",
+			},
+			{
+				id: "ST-lotrinh-sp-lay-hong",
+				nhan: "Lộ trình — lần lấy gần nhất hỏng",
+			},
+			{ id: "ST-lotrinh-sp-nguon-doi", nhan: "Lộ trình — nguồn vừa đổi" },
+			{ id: "ST-lotrinh-sp-khuon-cu", nhan: "Lộ trình — khuôn bản 1" },
+			{ id: "ST-sanpham-danh-sach", nhan: "Cài đặt — danh sách sản phẩm" },
+			{ id: "ST-sanpham-rong", nhan: "Cài đặt — chưa có sản phẩm khác" },
+			{ id: "ST-sanpham-khong-quyen", nhan: "Cài đặt — thành viên, chỉ đọc" },
+			{
+				id: "ST-sanpham-chua-cau-hinh",
+				nhan: "Cài đặt — máy chủ chưa có ứng dụng GitHub",
+			},
+			{ id: "ST-sanpham-them", nhan: "Cài đặt — Sheet thêm, ô tệp sai" },
+			{ id: "ST-sanpham-nguoi-xem", nhan: "Cài đặt — Sheet người xem" },
+			{ id: "ST-sanpham-da-luu-tru", nhan: "Cài đặt — mục Đã lưu trữ" },
+		],
+	},
+	{
 		slug: "lo-trinh-doc-ban-chup",
 		ten: "Lộ trình đọc bản chụp — dòng giờ lấy",
 		states: [
@@ -61,6 +142,18 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-lo-trinh-ban-dung", nhan: "Rơi về bản dựng" },
 			{ id: "ST-lo-trinh-ban-chup-en", nhan: "Đọc bản chụp — tiếng Anh" },
 			{ id: "ST-lo-trinh-ban-dung-en", nhan: "Rơi về bản dựng — tiếng Anh" },
+		],
+	},
+	{
+		slug: "lo-trinh-hien-ngay-du-kien",
+		ten: "Lộ trình hiện ngày dự kiến — ngày của mốc và của việc",
+		states: [
+			{ id: "ST-du-kien-moc", nhan: "Xem theo mốc — hôm nay 17/10" },
+			{ id: "ST-du-kien-bang", nhan: "Bảng — cột mốc có ngày dự kiến" },
+			{ id: "ST-du-kien-ngan", nhan: "Ngăn hồ sơ việc LT1e" },
+			{ id: "ST-du-kien-da-qua", nhan: "Hôm nay 19/10 — đã qua ngày dự kiến" },
+			{ id: "ST-du-kien-ban-cu", nhan: "Bản lộ trình chưa mang ngày dự kiến" },
+			{ id: "ST-du-kien-moc-en", nhan: "Xem theo mốc — tiếng Anh" },
 		],
 	},
 	{
@@ -1172,6 +1265,39 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "du-an-gantt",
+		ten: "Dự án và Gantt — màn Việc một nơi, ô Phạm vi, Gantt có phụ thuộc và mốc, lịch làm việc",
+		states: [
+			{ id: "ST-viec-cua-toi-du-an", nhan: "Việc — Của tôi" },
+			{ id: "ST-pham-vi-mo", nhan: "Ô Phạm vi mở" },
+			{ id: "ST-du-an-ds-co", nhan: "Tất cả dự án" },
+			{ id: "ST-du-an-ds-rong", nhan: "Tất cả dự án — rỗng" },
+			{ id: "ST-du-an-ds-cho-tai", nhan: "Tất cả dự án — tải" },
+			{ id: "ST-du-an-ds-loi", nhan: "Tất cả dự án — hỏng" },
+			{ id: "ST-du-an-tao", nhan: "Tạo dự án" },
+			{
+				id: "ST-gantt-co-lich",
+				nhan: "Gantt — có lịch",
+			},
+			{ id: "ST-gantt-moc-tre", nhan: "Gantt — mốc trễ" },
+			{ id: "ST-gantt-da-doi", nhan: "Gantt — đã tự dời" },
+			{ id: "ST-gantt-chi-xem", nhan: "Gantt — đã đóng" },
+			{ id: "ST-gantt-rong", nhan: "Gantt — rỗng" },
+			{ id: "ST-gantt-cho-tai", nhan: "Gantt — đang tải" },
+			{ id: "ST-gantt-loi", nhan: "Gantt — tải hỏng" },
+			{ id: "ST-du-an-hoi-dong", nhan: "Hỏi lại khi đóng" },
+			{
+				id: "ST-khung-viec-lich",
+				nhan: "Khung việc — lịch",
+			},
+			{ id: "ST-lich-lam-viec", nhan: "Lịch làm việc" },
+			{
+				id: "ST-lich-lam-viec-khong-quyen",
+				nhan: "Lịch làm việc — không quyền",
+			},
+		],
+	},
+	{
 		slug: "kanban-viec",
 		ten: "Kanban việc — bảng bốn cột ở Việc của tôi, việc con trong khung việc",
 		states: [
@@ -1391,6 +1517,37 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{
 				id: "ST-cho-duyet-da-xu-ly",
 				nhan: "Chờ duyệt — Đã xử lý có cả đề xuất đã duyệt",
+			},
+		],
+	},
+	{
+		slug: "cho-tac-nhan-lau",
+		ten: "Chờ Tác nhân lâu — thời gian đã trôi, lời hứa và báo khi xong",
+		states: [
+			{ id: "ST-duoi-nguong", nhan: "Đang dựng — dưới 200 giây" },
+			{ id: "ST-tren-nguong", nhan: "Đang dựng — lâu hơn thường lệ" },
+			{ id: "ST-chuong-ba-loai", nhan: "Chuông — xong, cần trả lời, hỏng" },
+			{ id: "ST-chuong-da-doc", nhan: "Chuông — đã đọc sau khi mở" },
+		],
+	},
+	{
+		slug: "go-tin-hieu-rac",
+		ten: "Gỡ tín hiệu rác — lưu trữ, Hoàn tác, Đã lưu trữ, trang người gửi",
+		states: [
+			{ id: "ST-tat-ca-co-menu", nhan: "Tất cả — mỗi dòng có menu Lưu trữ" },
+			{
+				id: "ST-tat-ca-vua-luu-tru",
+				nhan: "Tất cả — vừa lưu trữ crm-9, thông báo có Hoàn tác",
+			},
+			{
+				id: "ST-tat-ca-luu-tru-loi",
+				nhan: "Tất cả — lưu trữ hỏng, crm-9 vừa bị lấy về",
+			},
+			{ id: "ST-da-luu-tru-co", nhan: "Đã lưu trữ — hai tín hiệu, Khôi phục" },
+			{ id: "ST-da-luu-tru-rong", nhan: "Đã lưu trữ — chưa có tín hiệu nào" },
+			{
+				id: "ST-cua-toi-da-luu-tru",
+				nhan: "Tín hiệu đã gửi — người gửi thấy tín hiệu bị lưu trữ",
 			},
 		],
 	},

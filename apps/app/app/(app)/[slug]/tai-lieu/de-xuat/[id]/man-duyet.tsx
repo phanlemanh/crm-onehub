@@ -8,6 +8,7 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardContent,
+	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
@@ -301,7 +302,12 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 					{may?.coBanGoc && daDoc ? (
 						<Card data-so-voi-ban="">
 							<CardHeader>
-								<CardTitle>{mm.soVoiBan}</CardTitle>
+								<CardTitle>
+									{deXuat.cu ? mm.soVoiBanGocMay : mm.soVoiBan}
+								</CardTitle>
+								{deXuat.cu ? (
+									<CardDescription>{mm.banDangDungDaDoi}</CardDescription>
+								) : null}
 							</CardHeader>
 							<CardContent>{diff}</CardContent>
 						</Card>

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { homNayVN } from "./ngay-vn";
+import { KHOA_CHO_TIN_HIEU } from "./tin-hieu-cho";
 
 const GIAY_MS = 1000;
 const NGAY_MS = 24 * 60 * 60 * GIAY_MS;
@@ -10,8 +11,13 @@ export const THONG_BAO = {
 	hoiLaiMs: 60 * GIAY_MS,
 	giuNgay: 90,
 	tranSo: 99,
-	nguon: { nhacBuoiSang: "nhac-buoi-sang" },
+	nguon: {
+		nhacBuoiSang: "nhac-buoi-sang",
+		tacNhan: "tac-nhan",
+		tinHieu: "tin-hieu",
+	},
 	doiChieu: { tranGiaoDichMs: 10 * 60 * GIAY_MS },
+	day: { cuaSoPhut: 30, tranLan: 3 },
 	loi: { khongCo: "Không có thông báo này." },
 } as const;
 
@@ -24,6 +30,7 @@ export const LOAI_THONG_BAO = [
 	"buoc-sap-han",
 	"ke-hoach-im",
 	"moc-ngay",
+	"goi-y-ke-hoach",
 	"viec-qua-han",
 	"viec-sap-han",
 	"viec-cho-danh-gia",
@@ -37,9 +44,75 @@ export const LOAI_THONG_BAO = [
 	"okr-tom-tat",
 	"ai-tran",
 	"ai-doi-soat-lech",
+	"tac-nhan-xong",
+	"tac-nhan-can-tra-loi",
+	"tac-nhan-hong",
+	"tin-hieu-doi-cho",
 ] as const;
 
 export type LoaiThongBao = (typeof LOAI_THONG_BAO)[number];
+
+export const LOAI_SU_KIEN = [
+	"tac-nhan-xong",
+	"tac-nhan-can-tra-loi",
+	"tac-nhan-hong",
+	"tin-hieu-doi-cho",
+] as const satisfies readonly LoaiThongBao[];
+
+export type LoaiSuKien = (typeof LOAI_SU_KIEN)[number];
+
+export const MUC_LOAI = ["can-lam", "de-biet"] as const;
+
+export type MucThongBao = (typeof MUC_LOAI)[number];
+
+const canLam = (macDinhDayRa: boolean) =>
+	({ muc: "can-lam", macDinhDayRa }) as const;
+const deBiet = (macDinhDayRa: boolean) =>
+	({ muc: "de-biet", macDinhDayRa }) as const;
+
+export const MUC_THONG_BAO = {
+	"okr-cap-nhat": canLam(true),
+	"okr-cho-duyet": canLam(true),
+	"okr-tra-lai": canLam(true),
+	"okr-hoi-y-gop": canLam(true),
+	"buoc-qua-han": canLam(true),
+	"buoc-sap-han": canLam(true),
+	"ke-hoach-im": canLam(true),
+	"moc-ngay": canLam(true),
+	"goi-y-ke-hoach": canLam(true),
+	"viec-qua-han": canLam(true),
+	"viec-sap-han": canLam(true),
+	"viec-cho-danh-gia": canLam(true),
+	"okr-kr-im": canLam(true),
+	"okr-duoc-giao": deBiet(true),
+	"okr-nhac-ten": deBiet(true),
+	"okr-ghi-nhan": deBiet(true),
+	"okr-hoi-y-cong-bo": deBiet(true),
+	"okr-theo-doi": deBiet(true),
+	"tai-lieu-cho-duyet": canLam(true),
+	"okr-tom-tat": deBiet(true),
+	"ai-tran": deBiet(true),
+	"ai-doi-soat-lech": canLam(true),
+	"tac-nhan-xong": deBiet(false),
+	"tac-nhan-can-tra-loi": canLam(false),
+	"tac-nhan-hong": deBiet(false),
+	"tin-hieu-doi-cho": deBiet(false),
+} as const satisfies Record<
+	LoaiThongBao,
+	{ muc: MucThongBao; macDinhDayRa: boolean }
+>;
+
+export function laLoaiThongBao(v: string): v is LoaiThongBao {
+	return (LOAI_THONG_BAO as readonly string[]).includes(v);
+}
+
+export function macDinhDayRa(loai: string): boolean | null {
+	return laLoaiThongBao(loai) ? MUC_THONG_BAO[loai].macDinhDayRa : null;
+}
+
+export function laLoaiSuKien(v: string): v is LoaiSuKien {
+	return (LOAI_SU_KIEN as readonly string[]).includes(v);
+}
 
 const ma = z.string().min(1);
 
@@ -60,6 +133,18 @@ const keHoach = <
 		soBuocXong: z.number().optional(),
 		soBuocTong: z.number().optional(),
 		targetDays: z.number().optional(),
+	});
+
+const tacNhan = <
+	L extends "tac-nhan-xong" | "tac-nhan-can-tra-loi" | "tac-nhan-hong",
+>(
+	loai: L,
+) =>
+	z.object({
+		loai: z.literal(loai),
+		conversationId: ma,
+		luotId: ma,
+		ten: z.string(),
 	});
 
 const viec = <L extends "viec-qua-han" | "viec-sap-han" | "viec-cho-danh-gia">(
@@ -154,6 +239,13 @@ export const noiDungThongBao = z.discriminatedUnion("loai", [
 		so: z.number().int().positive(),
 	}),
 	z.object({
+		loai: z.literal("goi-y-ke-hoach"),
+		goiYId: ma,
+		dealId: ma,
+		dealName: z.string(),
+		companyName: z.string(),
+	}),
+	z.object({
 		loai: z.literal("okr-tom-tat"),
 		tomTatId: ma,
 		departmentId: ma,
@@ -175,6 +267,16 @@ export const noiDungThongBao = z.discriminatedUnion("loai", [
 		soSoUsd: z.number(),
 		soGatewayUsd: z.number(),
 		lechPhanTram: z.number(),
+	}),
+	tacNhan("tac-nhan-xong"),
+	tacNhan("tac-nhan-can-tra-loi"),
+	tacNhan("tac-nhan-hong"),
+	z.object({
+		loai: z.literal("tin-hieu-doi-cho"),
+		ma: ma,
+		tieuDe: z.string(),
+		khoa: z.enum(KHOA_CHO_TIN_HIEU),
+		sha: ma,
 	}),
 ]);
 
@@ -229,12 +331,20 @@ export function khoaThongBao(nd: NoiDungThongBao, now: Date): string {
 			return `${nd.loai}:${nd.hoiYId}`;
 		case "tai-lieu-cho-duyet":
 			return nd.loai;
+		case "goi-y-ke-hoach":
+			return `${nd.loai}:${nd.goiYId}`;
 		case "okr-tom-tat":
 			return `${nd.loai}:${nd.tomTatId}`;
 		case "ai-tran":
 			return `${nd.loai}:${nd.thang}:${nd.muc}`;
 		case "ai-doi-soat-lech":
 			return `${nd.loai}:${nd.thang}`;
+		case "tac-nhan-xong":
+		case "tac-nhan-can-tra-loi":
+		case "tac-nhan-hong":
+			return `${nd.loai}:${nd.luotId}`;
+		case "tin-hieu-doi-cho":
+			return `${nd.loai}:${nd.ma}:${nd.sha}`;
 	}
 }
 
@@ -244,3 +354,7 @@ export const danhSachThongBaoInput = z.object({
 	chiChuaDoc: z.boolean(),
 	cursor: z.string().min(1).optional(),
 });
+
+export const luuCaiDatThongBaoInput = z
+	.object({ loai: z.enum(LOAI_THONG_BAO), dayRa: z.boolean() })
+	.strict();

@@ -1,0 +1,322 @@
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tbo_api_hang
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/okr-danh-sach-bo.spec.ts"
+    expected: |
+      apps/api/test/okr-danh-sach-bo.spec.ts ca «tbo-hang»: gieo một cây tổ chức qua đường ghi thật (gốc, 2 bộ phận,
+      3 phòng ban) và mục tiêu ở 4 đơn vị; gọi okr.danhSachBo({cycleId}). Ma trận viết trước 6 đơn vị: mỗi đơn vị đúng
+      một hàng (khoá don dạng donOkr), số mục tiêu bằng okr.countByUnit cho cùng khoá, tiến độ bằng hang của
+      okr.toanCanh cho cùng khoá, trưởng bằng headUserId; không có hàng nguoi:. Thông điệp ghim
+      «tbo-hang: <khoá> lech <cot>».
+      CHIEU DO (cùng tệp, ca «tbo-hang-do»): gọi bản dựng hàng với một phòng ban bị bỏ khỏi cây → khẳng định thiếu
+      hàng đỏ với thông điệp «tbo-hang: pb:<id> thieu» (đối chứng dương của chính thước, chạy trong cùng lượt).
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tbo_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/api/src/okr/**"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
+    expected: |
+      man-bo-okr.mjs trên phiên đo riêng (tien-de.mjs), bộ OKR mẫu, người xem là trưởng một phòng ban mẫu, khổ 1440.
+      Mở /okr/bo-okr trần: khẳng định «DANH SACH: tieu de Bo OKR · <n> hang = <n> don vi cua cay» với tập tên hàng
+      bằng tập đơn vị của org.tree (gốc + bộ phận + phòng ban) và mỗi hàng: cột Mục tiêu bằng countByUnit, cột Tiến độ
+      bằng toanCanh (đọc qua API trong cùng phiên). In «SAI AC-1: …», mã 1.
+      CHIEU DO (--chieu-do bo-danh-sach, bản sao): page.tsx luôn dựng trang một bộ → «SAI AC-1: DANH SACH: tieu de»
+      (ghim /SAI AC-1: DANH SACH/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tbo_api_co
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/okr-danh-sach-bo.spec.ts"
+    expected: |
+      Ca «tbo-co»: ma trận viết trước người xem × đơn vị (trưởng phòng ban A, trưởng bộ phận X là cha của A, thành viên,
+      quản trị chương trình không làm trưởng) × (A, X, B, gốc) = 16 ô. toiDan đúng chỉ ở (trưởng A, A) và (trưởng X, X);
+      (trưởng X, A) sai; gốc sai với mọi người; quản trị không có toiDan ở đâu. dangTheoDoi: người
+      xem theo dõi một mục tiêu của B qua okr.follow → B true, A false; bỏ theo dõi → B false. Thông điệp ghim
+      «tbo-co: <nguoi>/<don> <co> lech».
+      CHIEU DO (ca «tbo-co-do»): đối chứng dương — theo dõi mục tiêu của chu kỳ KHÁC → dangTheoDoi của B vẫn false
+      (khẳng định đỏ nếu bản dựng bỏ lọc chu kỳ, ghim «tbo-co: theo doi khac chu ky»); và bản dựng bỏ nhánh
+      Division.headUserId (tham số thử của hàm dựng) → «tbo-co: truong-bp/bp:<id> toiDan lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tbo_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/app/(app)/[slug]/okr/okr-search-params.ts"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
+    expected: |
+      Cùng lần chạy E2: người xem theo dõi một mục tiêu của một bộ phận mẫu (gieo qua okr.follow). Ma trận viết trước
+      3 mục lọc {tat-ca, toi-dan, theo-doi}: bấm mục → URL mang phamViBo đúng (tat-ca không mang), tập hàng bằng tập kỳ
+      vọng tính từ API (toiDan, dangTheoDoi), số đếm cạnh mục bằng số hàng; rồi tải lại trang và mở URL ở trang mới →
+      cùng mục sáng, cùng tập hàng. Khẳng định «LOC <muc>: url <q> · <n> hang · dem <n> · tai lai giu». Thêm ca người
+      xem là thành viên không dẫn đơn vị nào: bấm Tôi dẫn → không có hàng bảng, có câu chứa tên lọc và nút «Về Tất cả»;
+      bấm nút → URL không còn phamViBo, số hàng bằng Tất cả. Khẳng định «LOC rong: cau · ve tat ca».
+      CHIEU DO (--chieu-do loc-khong-url, bản sao): bộ lọc giữ trong useState thay vì nuqs → «SAI AC-2: LOC toi-dan:
+      tai lai mat» (ghim /SAI AC-2: LOC \S+: tai lai mat/), mã 1; (--chieu-do rong-khong-cau, bản sao): bỏ câu rỗng
+      theo lọc → «SAI AC-2: LOC rong» (ghim /SAI AC-2: LOC rong/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tbo_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
+    expected: |
+      Cùng lần chạy: từ danh sách bấm tên phòng ban của người xem và bấm OneHub. Mỗi ca: URL có donOkr đúng (OneHub là
+      donOkr=goc) và kyOkr của chu kỳ đang xem; tiêu đề trang bằng tên đơn vị; có liên kết «Bộ OKR» với href
+      /okr/bo-okr giữ kyOkr; mọi mục tiêu trong bảng thuộc đơn vị ấy (so với okr.danhSach). Khẳng định
+      «MO BO <don>: url · tieu de · ve Bo OKR · <n> muc tieu cua don vi».
+      CHIEU DO (--chieu-do bo-goc-trong-url, bản sao): parseAsDonOkr lại bỏ goc khỏi URL → bấm OneHub mở trang danh sách
+      → «SAI AC-3: MO BO goc: url» (ghim /SAI AC-3: MO BO goc/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tbo_dom_the
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/test/trang-bo-okr.dom.tsx"
+    expected: |
+      apps/app/test/trang-bo-okr.dom.tsx ca «tbo-the»: dựng trang một bộ với mock cache, ma trận viết trước 5 pha chu kỳ
+      × 5 giá trị xemOkr. Mỗi ô: hàng thẻ con là các liên kết a[href] theo đúng thứ tự OKR · Họp tuần · Việc · Sơ đồ (+
+      Chấm điểm chỉ ở pha cham-diem và da-dong), đúng một thẻ mang aria-current="page" là thẻ của xemOkr (cham ngoài pha
+      chấm thì OKR), không có phần tử data-slot của ViewSwitch. Thông điệp ghim «tbo-the: <pha>/<xem> <loi>».
+      CHIEU DO (ca «tbo-the-do», cùng tệp): đối chứng dương dựng HangCongCuDonVi bản cũ có ViewSwitch → bộ dò ViewSwitch
+      của chính ca bắt được (đếm > 0), chứng thước không mù.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tbo_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
+    expected: |
+      Cùng lần chạy: mở bộ phòng ban ở chu kỳ KHÔNG phải chu kỳ hiện tại của bộ mẫu (kyOkr tường minh), bấm lần lượt
+      Họp tuần → Việc → Sơ đồ → OKR bằng chuột, rồi Quay lại ba lần. Ma trận viết trước 4 bước tiến + 3 bước lùi: mỗi
+      bước URL giữ kyOkr và donOkr ban đầu, thẻ aria-current đúng, khối nội dung của thẻ hiện (data-trang-thai của kiểu
+      xem). Lặp với bộ OneHub (donOkr=goc). Khẳng định «THE <buoc>: ky giu · don giu · <the> mo».
+      CHIEU DO (--chieu-do the-bo-ky, bản sao): href thẻ con dựng không kèm kyOkr → «SAI AC-5: THE hop-tuan: ky mat»
+      (ghim /SAI AC-5: THE \S+: ky mat/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tbo_api_viec
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/okr-danh-sach-bo.spec.ts"
+    expected: |
+      Ca «tbo-viec»: gieo 2 mục tiêu ở phòng ban A (chu kỳ đang xét) với 3 KR, gắn 4 việc qua okr.themViec (một việc
+      đã đánh dấu xong), thêm 1 việc ở mục tiêu của phòng ban B và 1 việc ở chu kỳ khác. okr.viecCuaBo({cycleId, unit:
+      A}) trả đúng 4 việc nhóm theo các KR có việc (KR không việc không có nhóm — luật của bản thiết kế), mỗi việc
+      đủ tiêu đề, người làm, hạn, xong; không lẫn việc của B hay chu kỳ khác. Ghim «tbo-viec: <loi>».
+      CHIEU DO (ca «tbo-viec-do»): bộ không có việc → mảng rỗng; và đối chứng dương việc của B xuất hiện khi gọi unit B.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tbo_dom_viec
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/viec-cua-bo.tsx"
+      - "apps/api/src/okr/bo-okr.ts"
+      - "apps/app/test/trang-bo-okr.dom.tsx"
+    expected: |
+      Ca «tbo-viec-ten»: ViecCuaBo dựng ba việc của một KR — việc thường «Gọi khách», chiến dịch đã xoá (lienKet
+      coQuyen true, ten null, trangThai da-xoa), kế hoạch không đủ quyền (lienKet coQuyen false). Ô tiêu đề ở bảng (md+)
+      và ItemTitle ở danh sách (<md) lần lượt là «Gọi khách», m.sangKien.daXoa["chien-dich"], m.sangKien.khongQuyen với
+      {loai} = m.sangKien.loai["ke-hoach"] — không ô nào rỗng. Ca API «tbo-viec-lien-ket» (E8) chứng viecBoTu mang
+      lienKet theo vai (admin thấy da-xoa, vai okr coQuyen false). Ghim «tbo-viec-ten: con o tieu de rong».
+      CHIEU DO: bản ViecCuaBo cũ chỉ in v.tieuDe → ô v2, v3 rỗng, ca đỏ; đối chứng «doi chung duong» trong tệp.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tbo_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
+    expected: |
+      Cùng lần chạy: gieo 3 việc gắn 2 KR của phòng ban người xem qua okr.themViec (một việc có người làm và hạn, một
+      việc đã đánh dấu xong), mở thẻ Việc của bộ đó. Ma trận viết trước theo từng việc gieo (3 khẳng định): việc nằm
+      dưới đúng nhóm mang tên KR của nó (đo quan hệ: phần tử việc là con của khối nhóm có tên KR ấy), người làm, hạn và
+      dấu xong trên dòng bằng giá trị okr.viecCuaBo trả. Mở thẻ Việc của một bộ không có việc → câu rỗng, không bảng.
+      Khẳng định «VIEC <tieu de>: nhom <KR> · nguoi lam · han · xong» và «VIEC rong: cau rong».
+      CHIEU DO (--chieu-do viec-phang, bản sao): thẻ Việc dựng danh sách phẳng không nhóm, không cột người làm → «SAI
+      AC-6: VIEC <tieu de>: nhom» (ghim /SAI AC-6: VIEC .+: nhom/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tbo_man
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
+    expected: |
+      Cùng lần chạy: mở /okr/theo-don-vi?donOkr=pb:<id>&xemOkr=hop-tuan&kyOkr=<id> → URL cuối /okr/bo-okr giữ cả ba tham
+      số, thẻ Họp tuần mở, tiêu đề là tên phòng ban; mở /okr/bo-okr?xemOkr=hop-tuan → thẻ Họp tuần của bộ OneHub (tiêu
+      đề tên gốc). Khẳng định «CU <ca>: <url cuoi> · <the> · <tieu de>».
+      CHIEU DO (--chieu-do cu-xem-ve-danh-sach, bản sao): page.tsx chỉ xét donOkr khi chọn trang danh sách → «SAI AC-7:
+      CU xem-khong-don» (ghim /SAI AC-7: CU xem-khong-don/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tbo_dom_lien_ket
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/trang-bo-okr.dom.tsx"
+    expected: |
+      Ca «tbo-lien-ket»: danh sách viết trước mọi chỗ dựng liên kết tới bộ OKR trong apps/app, lập THEO ĐÍCH chứ không
+      theo chuỗi: mọi tệp dưới apps/app/app chứa chuỗi "/okr/bo-okr", hay dùng hằng DUONG[…] (gồm DUONG["theo-don-vi"])
+      hay DUONG_MUC[…] của tab-okr.ts (riêng tab-okr.ts, nơi khai hằng, loại ra), so với danh sách viết tay — lệch là đỏ
+      «tbo-lien-ket: cho moi <tep>» / «cho mat <tep>». Danh sách viết tay chia hai vai: «co-don» (Toàn cảnh, Đơn vị con,
+      Đơn vị bạn dẫn, bản nháp Soạn, danh sách bộ, thẻ con, nút Thêm mục tiêu và Nhập bảng tính của hanh-dong-khu.tsx)
+      và «danh-sach» (Của tôi, vị trí bộ, thanh thẻ thanh-tab.tsx, thanh bên thanh-ben-muc-tieu.tsx — đích là trang
+      danh sách). Mỗi tệp «co-don» có đúng một hàm dựng trong ca; gọi với bộ OneHub → href mang donOkr=goc, với phòng ban
+      → donOkr=pb:<id>. Riêng hanh-dong-khu.tsx: dựng HanhDongKhu (q.dich.don = goc, rồi pb:P1, tab Của tôi, được tạo) và
+      đọc href của liên kết «Thêm mục tiêu». Ghim «tbo-lien-ket: <tên tệp> thieu donOkr=goc».
+      Ca «tbo-lien-ket-danh-sach»: mỗi tệp «danh-sach» có đúng một hàm dựng (CuaToi khi mine rỗng, ThanhBenMucTieu,
+      ThanhTabOkr tab Của tôi, ViTriBo một bộ) — dựng trong DOM với kyOkr=q4 rồi đọc href thật: đường /ws/okr/bo-okr,
+      không donOkr, không xemOkr, giữ kyOkr=q4. Ghim «tbo-lien-ket: <tên tệp> khong mo trang danh sach».
+      CHIEU DO (ca «tbo-lien-ket-do»): serialize parseAsDonOkr bản cũ (bỏ goc) → khẳng định của Toàn cảnh đỏ
+      «tbo-lien-ket: toan-canh.tsx thieu donOkr=goc». Chiều đỏ tay đã đo: đặt lại điều kiện `if (don.loai !== "goc")`
+      trước q.set(donOkr) trong useDuongTheoDonVi của hanh-dong-khu.tsx → ca hanh-dong-khu đỏ
+      «tbo-lien-ket: hanh-dong-khu.tsx thieu donOkr=goc».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tbo_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
+    expected: |
+      Cùng lần chạy, khổ 375x812: trang danh sách không có phần tử table hiện (bảng ẩn dưới md) và có ≥1 phần tử
+      data-slot="item" mỗi bộ; trang một bộ: hàng thẻ con có scrollWidth > clientWidth hoặc vừa khung, còn
+      document.documentElement.scrollWidth ≤ innerWidth ở cả hai trang. Khẳng định «HEP <trang>: <n> item · khong cuon
+      ngang».
+      CHIEU DO (--chieu-do bang-o-hep, bản sao): bỏ lớp ẩn bảng dưới md → «SAI AC-8: HEP danh-sach» (ghim
+      /SAI AC-8: HEP danh-sach/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tbo_dom_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/test/trang-bo-okr.dom.tsx"
+    expected: |
+      Ca «tbo-tai»: dựng trang danh sách với okr.danhSachBo treo → có khung xương (aria-busy) và tiêu đề «Bộ OKR» vẫn ở
+      DOM; cho thủ tục lỗi → có data-slot của VungTaiLoi, bấm Thử lại → thủ tục được gọi lần hai (đếm lời gọi). Ghim
+      «tbo-tai: <trang thai> <loi>».
+      CHIEU DO (ca «tbo-tai-do»): đối chứng dương — thủ tục trả dữ liệu → không còn aria-busy, không có VungTaiLoi.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tbo_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+    steps:
+      - "Chạy đúng lệnh của eval (tien-de.mjs + man-bo-okr.mjs); không gọi thẳng script con"
+      - "Mở ảnh _acceptance/trang-bo-okr/evidence/tbo-danh-sach-1440-sang.png, tbo-danh-sach-1440-toi.png, tbo-danh-sach-375-sang.png"
+      - "Mở ảnh _acceptance/trang-bo-okr/evidence/tbo-mot-bo-1440-sang.png, tbo-mot-bo-1440-toi.png, tbo-mot-bo-375-sang.png"
+    expected: "Danh sách: bảng các bộ thụt theo cấp với năm cột, lọc ba mục ở trên bảng, không có nút chính. Một bộ: tiêu đề trang giữ «Mục tiêu» (V1-19), dòng vị trí «Bộ OKR › <tên đơn vị>» với «Bộ OKR» là liên kết, hàng thẻ con gạch chân ngay dưới đầu trang với thẻ đang mở rõ ràng; không có ô chuyển kiểu xem. Chỗ lệch bản mẫu được phép chỉ gồm: ô chọn đơn vị trên trang một bộ, thẻ Chấm điểm, nội dung Sơ đồ là cây cả chu kỳ, lọc ghi URL — mọi chỗ lệch khác là FAIL. Ở cả sáng và tối, chữ và viền không chìm vào nền; ở 375 danh sách là các mục, không bảng tràn."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E15
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tbo_khong_doi_hinh
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+    expected: |
+      Từ 26/10 (sổ d-20261026T084222Z-49, chủ kho «Đồng ý A», «Đồng ý như lời khuyên»): E15 chạy `khong-doi-hinh.mjs
+      --chi-quet` — quét lớp rồi soát đổi thước (2) bên dưới, in từng «MUC <slug>#<E>», thoát 0 khi không có «SAI AC-11»,
+      mã 1 khi có; KHÔNG chạy lại eval nào của lớp. Vế (1) chạy lại lớp và so nền chuyển sang kiểm chéo đêm
+      kiem-cheo-sau-gop#AC-6 (E17, E18 nghỉ với con trỏ đó); lượt ghim lại không còn chạy (1).
+      khong-doi-hinh.mjs QUÉT LỚP LÚC CHẠY, không danh sách viết tay: mọi hồ sơ _acceptance/* status signed-off hay
+      machine-cleared; với mỗi eval executor test VÀ script, không not-run, lấy các tệp có trong lệnh đã giải (kể cả mọi
+      tệp mã cùng thư mục rang của tệp thước) — eval thuộc lớp khi một tệp ấy chứa okr/bo-okr, okr/theo-don-vi,
+      data-view-switch hay ViewSwitch, hoặc bị vòng sửa (diff merge-base…HEAD) mà không phải tệp dùng chung từ 5 hồ sơ
+      trở lên. In «quet lop: <n> ho so da ky, <m> ho so …, <k> eval may cham, <r> lan chay rieng»; cờ --chi-quet in
+      từng «MUC <slug>#<E>» rồi dừng. Cờ --phan k/n chia các lần chạy riêng (đo màn và còn lại, mỗi nhóm xoay vòng theo
+      khoá lệnh đã sắp) thành n phần rời nhau, hợp lại đúng cả lớp; E15 là phần 1/3 (kèm soát đổi thước), E17 phần 2/3,
+      E18 phần 3/3 — chia vì trần long_running của kit là 240 phút, trọn lớp đo 5 giờ 28. (1) Chạy các eval thuộc lớp; gộp theo lệnh, trừ lệnh mang EVAL= thì mỗi eval
+      một lần chạy riêng với EVAL=<id>; lần đầu trả mã 2 (không đo được) thì chạy lại một lần, in «THU LAI». Khai tay đúng hai eval loại khỏi lớp có lý do, in «THUOC THEO VONG <slug>#<E>: <lý do>»:
+      ve-sinh-do-san-onehub#E17 — thước theo vòng, soát diff của nhánh đang chạy theo nhãn vòng ấy (V1-25);
+      tro-ly-okr-tom-tat#E17 — không đo được, eval gọi model khi AI Gateway hết tiền (V1-26). Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
+      worktree origin/onehub, in «HO SO <slug>#<E>: cay <ma> · nen <ma>»; SAI AC-11 khi nền 0 mà cây khác 0, «DO SAN TREN
+      NEN <slug>#<E>» khi nền đỏ. (2) Với mỗi tệp thước hay bài kiểm (dưới _acceptance/ hoặc thư mục test/) của hồ sơ đã ký mà vòng sửa — bản đồ tệp → hồ sơ lập bằng chính lần quét; tệp dùng chung từ 5 hồ sơ mà vòng chỉ THÊM dòng in «THEM DANG KY <tep>:<dong>» và không đòi sổ; còn lại: sổ của hồ sơ có dòng fix decided_by
+      chủ kho nhắc tệp (thiếu → «SAI AC-11: THIEU SO»); rồi xét QUAN HỆ từng khối diff -U0: dòng bỏ R và dòng thêm A,
+      mỗi bên nối dòng, bỏ mọi khoảng trắng và dấu phẩy đuôi trước ) ] }, thay mọi chuỗi '…' "…" `…` bằng một chỗ giữ
+      (biểu thức trong ${…} của chuỗi mẫu giữ lại để so) — khối chỉ đổi chuỗi khi hai bên bằng nhau; khác → «SAI AC-11:
+      DOI LOGIC <tep>:<dòng đầu> <mẫu>». Tệp có phép viết lại (VIET_LAI: V1-20, V1-21, V1-22, V1-26, he-qua-donOkr cho
+      do-man-dieu-huong.mjs, đòi dòng fix nhắc «h.nhan») không SAI nhưng vẫn qua luật quan hệ và in «VIET LAI <tep>
+      (<phep>): <n> khoi doi logic» kèm từng khối, để thẻ thấy phép đã phủ gì.
+      CHIEU DO (bản sao HEAD, ghim /SAI AC-11: DOI LOGIC \S+/ đúng tệp và dòng bị chèn, mã 1, in «CHIEU DO <kieu>: bat
+      duoc <tep>:<dong>»): «--chieu-do» thêm dòng `export const doiLogicThu = 1 + 1;` cuối vo-khu-muc-tieu.dom.tsx;
+      «--chieu-do tron» trộn trong CÙNG một dòng của khối đang chỉ đổi chuỗi (vkm-mot-lop, dòng chờ [data-the-con-bo])
+      một đổi chuỗi bộ chọn và `&& true` vào điều kiện → vẫn «SAI AC-11: DOI LOGIC <tep>:<dong>» dù khối có token được phép.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tbo_khong_doi_hinh_2
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
+    long_running: 200
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+    expected: |
+      Như E15, phần 2/3 của lớp (--phan 2/3), không soát đổi thước. «KET LUAN khong-doi-hinh: dat»; SAI AC-11 khi một
+      eval của phần này đỏ trên cây mà xanh trên origin/onehub.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tbo_khong_doi_hinh_3
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
+    long_running: 200
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+    expected: |
+      Như E15, phần 3/3 của lớp (--phan 3/3), không soát đổi thước. «KET LUAN khong-doi-hinh: dat»; SAI AC-11 khi một
+      eval của phần này đỏ trên cây mà xanh trên origin/onehub.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

@@ -147,30 +147,6 @@ describe("sk-duong", () => {
 		soO += 1;
 	});
 
-	test("Soạn khi chưa có cuộc: mở bản ghi soan trên Theo đơn vị, không rời trang", async () => {
-		await moKhung("pb:pb-1", { sanSang: SAN_SANG_BAT });
-		await bam(nut(m.nut.soan));
-		await cho(() => banGhiCuoi() !== null, "ghi record");
-		expect(banGhiCuoi()).toBe("soan:cuoc-1");
-		expect(`van day sang trang rieng: ${diTrang.length}`).toBe(
-			"van day sang trang rieng: 0",
-		);
-	});
-
-	test("Tiếp tục: mở đúng cuộc đang soạn", async () => {
-		await moKhung("pb:pb-1", {
-			sanSang: {
-				...SAN_SANG_BAT,
-				cuocDang: { ...CUOC, id: "cuoc-dang", soDongTong: 3, soDongNhan: 1 },
-				soCuocDaDung: 1,
-			},
-		});
-		await bam(nut(m.nut.tiep));
-		await cho(() => banGhiCuoi() !== null, "ghi record");
-		expect(banGhiCuoi()).toBe("soan:cuoc-dang");
-		expect(diTrang.length).toBe(0);
-	});
-
 	test("link cũ ?cuocSoan= thành record=soan bằng thay thế, bỏ cuocSoan", async () => {
 		await moKhung("pb:pb-1", {
 			sanSang: SAN_SANG_BAT,
@@ -190,12 +166,12 @@ describe("sk-duong", () => {
 
 	test("đường cũ chuyển về Theo đơn vị của cuộc, kèm record", () => {
 		const co = new URL(duongMoCuoc("ws", "cuoc-1", donViCua(CUOC)), "http://x");
-		expect(co.pathname).toBe("/ws/okr/theo-don-vi");
+		expect(co.pathname).toBe("/ws/okr/bo-okr");
 		expect(co.searchParams.get(SEARCH_PARAM.okr.ky)).toBe("q1");
 		expect(co.searchParams.get(SEARCH_PARAM.okr.don)).toBe("pb:pb-1");
 		expect(co.searchParams.get("record")).toBe("soan:cuoc-1");
 		const khong = new URL(duongMoCuoc("ws", "cuoc-x", null), "http://x");
-		expect(khong.pathname).toBe("/ws/okr/theo-don-vi");
+		expect(khong.pathname).toBe("/ws/okr/bo-okr");
 		expect([...khong.searchParams.keys()]).toEqual(["record"]);
 	});
 
@@ -213,7 +189,7 @@ describe("sk-duong", () => {
 	});
 
 	test("đếm ô sk-duong", () => {
-		expect(soO).toBe(5);
+		expect(soO).toBe(3);
 	});
 });
 
@@ -236,10 +212,10 @@ describe("sk-record", () => {
 
 	test("recordHref của soan mở được khung soạn khi dùng làm địa chỉ", async () => {
 		const u = new URL(
-			recordHref("ws", "/okr/theo-don-vi", "soan", CUOC.id),
+			recordHref("ws", "/okr/bo-okr", "soan", CUOC.id),
 			"http://x",
 		);
-		expect(u.pathname).toBe("/ws/okr/theo-don-vi");
+		expect(u.pathname).toBe("/ws/okr/bo-okr");
 		await moKhungBanGhi(u.search.slice(1));
 		await cho(() => q("[data-slot=sheet-header]") !== null, "dau khung");
 		expect(q("[data-slot=sheet-content]")?.getAttribute("data-size")).toBe(

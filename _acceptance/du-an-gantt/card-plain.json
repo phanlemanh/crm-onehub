@@ -1,0 +1,11 @@
+{
+  "feature_plain": "Người cầm một đợt triển khai gom việc vào một dự án, xem dự án trên sơ đồ Gantt có việc phải chờ, mốc và ngày nghỉ, kéo đổi ngày thì các việc phía sau tự dời.",
+  "scope_plain": "Những phần dưới đây cố ý để lượt sau, đã khai từ lúc duyệt phạm vi:",
+  "decisions": [
+    {
+      "id": "E14",
+      "q": "Từ điển và tài liệu API đã nói đúng nghĩa Dự án, Mốc, Lịch làm việc chưa?",
+      "why": "Hội đồng ba góc nhìn cùng khuyên Đạt; việc thuộc hồ sơ T3 nên anh phải tự chấm mục này."
+    }
+  ]
+}

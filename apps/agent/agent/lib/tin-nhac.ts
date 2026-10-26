@@ -1,5 +1,6 @@
 import { dinhUsd } from "@crm/db/ai-chi-phi-danh-muc";
 import { LOAI_NHAC_AI, type ViecAi } from "@crm/db/ai-nhac";
+import type { ViecGoiY } from "@crm/db/goi-y-nhac";
 import type { ViecOkr } from "@crm/db/okr-nhac";
 import type { ViecTomTat } from "@crm/db/okr-tom-tat";
 import { OKR_TOM_TAT } from "@crm/db/okr-tro-ly-danh-muc";
@@ -23,6 +24,7 @@ export const TIEU_DE = {
 	"buoc-sap-han": "Sắp hạn",
 	"ke-hoach-im": "Kế hoạch im",
 	"moc-ngay": "Mốc ngày",
+	"goi-y-ke-hoach": "Deal đã thắng",
 	"viec-qua-han": "Việc quá hạn",
 	"viec-sap-han": "Việc sắp hạn",
 	"viec-cho-danh-gia": "Việc chờ bạn đánh giá",
@@ -34,8 +36,8 @@ export const TIEU_DE = {
 	"okr-nhac-ten": "Nhắc tên",
 	"okr-ghi-nhan": "Ghi nhận",
 	"okr-theo-doi": "Đang theo dõi",
-	"okr-hoi-y-gop": "Hỏi ý mục tiêu",
-	"okr-hoi-y-cong-bo": "Hỏi ý đã công bố",
+	"okr-hoi-y-gop": "Lấy ý kiến",
+	"okr-hoi-y-cong-bo": "Lấy ý kiến đã công bố",
 	"okr-tom-tat": "Kara · OKR",
 	"tai-lieu-cho-duyet": "Kho tài liệu",
 	"ai-tran": "Ngân sách AI",
@@ -124,7 +126,7 @@ function noiDungOkr(v: ViecOkr, chu: (s: string) => string): string {
 		case "okr-tra-lai":
 			return `${chu(v.nguoiTraLai)} trả lại mục tiêu «${chu(v.nhan)}»: ${chu(v.lyDo)}`;
 		case "okr-hoi-y-gop":
-			return `Công ty đang hỏi ý cho mục tiêu ${chu(v.nhan)} — hạn ${gioHan(v.hanLuc)}`;
+			return `Công ty đang lấy ý kiến cho mục tiêu ${chu(v.nhan)} — hạn ${gioHan(v.hanLuc)}`;
 		case "okr-hoi-y-cong-bo":
 			return `Mục tiêu ${chu(v.nhan)} đã công bố — xem ý của bạn đi đâu`;
 	}
@@ -173,8 +175,8 @@ const NHAN_LIEN_KET_OKR = {
 	"okr-theo-doi": "mở mục tiêu",
 	"okr-cho-duyet": "mở mục tiêu",
 	"okr-tra-lai": "mở mục tiêu",
-	"okr-hoi-y-gop": "mở hỏi ý",
-	"okr-hoi-y-cong-bo": "mở hỏi ý",
+	"okr-hoi-y-gop": "mở Lấy ý kiến",
+	"okr-hoi-y-cong-bo": "mở Lấy ý kiến",
 } as const satisfies { [K in ViecOkr["loai"]]: string };
 
 function dongOkr(
@@ -201,6 +203,17 @@ function dongTaiLieu(
 	const chu = `${v.so} bản đề xuất chờ bạn duyệt`;
 	if (khuon === "tron") return `${so}. ${chu}${url ? ` — ${url}` : ""}`;
 	return `• ${chu}${url ? ` — <${url}|mở tab Chờ duyệt>` : ""}`;
+}
+
+function dongGoiY(
+	v: ViecGoiY,
+	so: number,
+	url: string | null,
+	khuon: KhuonTin,
+): string {
+	const chu = `${v.companyName} · Deal ${v.dealName} đã thắng — mở kế hoạch 30 ngày?`;
+	if (khuon === "tron") return `${so}. ${chu}${url ? ` — ${url}` : ""}`;
+	return `• ${thoat(chu)}${url ? ` — <${url}|mở deal>` : ""}`;
 }
 
 const DONG_TOM_TAT = "Tóm tắt tuần";
@@ -243,6 +256,7 @@ function dong(v: ViecNhac, so: number, lienKet: LienKet, khuon: KhuonTin) {
 	if (laNhacViec(v)) return dongViec(v, so, url, khuon);
 	if ("planId" in v) return dongKeHoach(v, so, url, khuon);
 	if (v.loai === "tai-lieu-cho-duyet") return dongTaiLieu(v, so, url, khuon);
+	if (v.loai === "goi-y-ke-hoach") return dongGoiY(v, so, url, khuon);
 	if (v.loai === "okr-tom-tat") return dongTomTat(v, so, url, khuon);
 	if (v.loai === "ai-tran" || v.loai === "ai-doi-soat-lech") {
 		return dongAi(v, so, url, khuon);

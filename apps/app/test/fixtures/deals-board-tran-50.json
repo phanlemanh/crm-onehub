@@ -22,23 +22,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmuev1vlp001woxcfmxf37x1l",
+					"id": "cmvixdlmt001wsq8gbc2081zs",
 					"name": "C00",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -48,26 +48,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:00.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlp001xoxcf1gixto0a",
+					"id": "cmvixdlmv001xsq8grhqgvbdf",
 					"name": "C01",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -77,26 +79,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:01.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlq001yoxcf4tgkntjp",
+					"id": "cmvixdlmw001ysq8glcvxrtej",
 					"name": "C02",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -106,26 +110,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:02.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlq001zoxcfl7tqd8zg",
+					"id": "cmvixdlmw001zsq8gzqq7snyr",
 					"name": "C03",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -135,26 +141,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:03.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlr0020oxcfnnxakzl7",
+					"id": "cmvixdlmw0020sq8gv7genjzd",
 					"name": "C04",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -164,26 +172,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:04.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlr0021oxcflfhqpxmo",
+					"id": "cmvixdlmx0021sq8gg3l9nzqb",
 					"name": "C05",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -193,26 +203,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:05.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlt0022oxcfx8in73s8",
+					"id": "cmvixdlmx0022sq8gtotng209",
 					"name": "C06",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -222,26 +234,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:06.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlu0023oxcf9fn8ta9v",
+					"id": "cmvixdlmy0023sq8g4drs454r",
 					"name": "C07",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -251,26 +265,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:07.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlu0024oxcfc08qts0j",
+					"id": "cmvixdlmy0024sq8g9xbgftcz",
 					"name": "C08",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -280,26 +296,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:08.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlv0025oxcf1khxrhl8",
+					"id": "cmvixdlmz0025sq8gd0uqvn16",
 					"name": "C09",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -309,26 +327,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:09.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlv0026oxcf48wmzva4",
+					"id": "cmvixdlmz0026sq8gasrcacmo",
 					"name": "C10",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -338,26 +358,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:10.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlv0027oxcf1xso3w6t",
+					"id": "cmvixdln00027sq8g1bdf69as",
 					"name": "C11",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -367,26 +389,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:11.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlw0028oxcf5ap1sty0",
+					"id": "cmvixdln00028sq8gwthu6ndc",
 					"name": "C12",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -396,26 +420,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:12.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlw0029oxcf3zl3so84",
+					"id": "cmvixdln00029sq8geppj8622",
 					"name": "C13",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -425,26 +451,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:13.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlx002aoxcf6etmv680",
+					"id": "cmvixdln1002asq8g51c3yaib",
 					"name": "C14",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -454,26 +482,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:14.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlx002boxcfpyxx6mqh",
+					"id": "cmvixdln1002bsq8gz02vnwfn",
 					"name": "C15",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -483,26 +513,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:15.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlx002coxcf7rnhou7e",
+					"id": "cmvixdln2002csq8gmnw12zae",
 					"name": "C16",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -512,26 +544,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:16.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vly002doxcfrd7846t7",
+					"id": "cmvixdln2002dsq8gnr2ypx5p",
 					"name": "C17",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -541,26 +575,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:17.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vly002eoxcfjf8oms2o",
+					"id": "cmvixdln3002esq8g091qt1zp",
 					"name": "C18",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -570,26 +606,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:18.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlz002foxcf6g8lqsa5",
+					"id": "cmvixdln3002fsq8gfhl1o5w0",
 					"name": "C19",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -599,26 +637,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:19.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlz002goxcfz98ccedt",
+					"id": "cmvixdln4002gsq8g5g61llkq",
 					"name": "C20",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -628,26 +668,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:20.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vlz002hoxcfk7l4li1c",
+					"id": "cmvixdln4002hsq8gx5oag9nd",
 					"name": "C21",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -657,26 +699,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:21.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm0002ioxcftoc8b7q2",
+					"id": "cmvixdln5002isq8g2t7vjft9",
 					"name": "C22",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -686,26 +730,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:22.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm0002joxcftwwlhl0v",
+					"id": "cmvixdln5002jsq8gblg19pfm",
 					"name": "C23",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -715,26 +761,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:23.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm1002koxcfhgig7426",
+					"id": "cmvixdln6002ksq8gmz2wl0ij",
 					"name": "C24",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -744,26 +792,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:24.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm1002loxcfexffqsqk",
+					"id": "cmvixdln6002lsq8gdyed1ods",
 					"name": "C25",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -773,26 +823,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:25.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm1002moxcfy7cmlh2k",
+					"id": "cmvixdln6002msq8g4i0m7480",
 					"name": "C26",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -802,26 +854,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:26.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm2002noxcfp7cwxy82",
+					"id": "cmvixdln7002nsq8ggz74ck57",
 					"name": "C27",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -831,26 +885,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:27.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm2002ooxcfc09rqqo5",
+					"id": "cmvixdln7002osq8g36yg8hah",
 					"name": "C28",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -860,26 +916,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:28.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm3002poxcfdsm1o9q7",
+					"id": "cmvixdln8002psq8gwiwd6lh9",
 					"name": "C29",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -889,26 +947,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:29.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm3002qoxcf66c1tn8m",
+					"id": "cmvixdln8002qsq8g7k5q4gkl",
 					"name": "C30",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -918,26 +978,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:30.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm4002roxcf0e5z1qym",
+					"id": "cmvixdln8002rsq8grujfo8us",
 					"name": "C31",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -947,26 +1009,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:31.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm4002soxcfpxdcjafh",
+					"id": "cmvixdln9002ssq8gxww1qdir",
 					"name": "C32",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -976,26 +1040,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:32.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm4002toxcf3mc6h1pk",
+					"id": "cmvixdln9002tsq8gmetycpto",
 					"name": "C33",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1005,26 +1071,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:33.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm5002uoxcfze4d3lt7",
+					"id": "cmvixdln9002usq8g1mtw5oa1",
 					"name": "C34",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1034,26 +1102,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:34.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm5002voxcfyqu8q8ts",
+					"id": "cmvixdlna002vsq8gl6zov7vd",
 					"name": "C35",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1063,26 +1133,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:35.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm6002woxcfmmgzq8gk",
+					"id": "cmvixdlna002wsq8gmj85qrg1",
 					"name": "C36",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1092,26 +1164,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:36.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm6002xoxcfofi9a3x5",
+					"id": "cmvixdlnb002xsq8gev4t5r40",
 					"name": "C37",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1121,26 +1195,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:37.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm6002yoxcfbdh4lg4i",
+					"id": "cmvixdlnb002ysq8gfw5m158z",
 					"name": "C38",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1150,26 +1226,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:38.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm7002zoxcfypw6d2bf",
+					"id": "cmvixdlnc002zsq8gkrykb21i",
 					"name": "C39",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1179,26 +1257,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:39.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm70030oxcfv82krnl6",
+					"id": "cmvixdlnd0030sq8gkgq6q6kk",
 					"name": "C40",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1208,26 +1288,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:40.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm70031oxcffd34s8ud",
+					"id": "cmvixdlnd0031sq8gqwqbpgjl",
 					"name": "C41",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1237,26 +1319,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:41.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm80032oxcfr33mem4a",
+					"id": "cmvixdlnd0032sq8gvo214x7c",
 					"name": "C42",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1266,26 +1350,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:42.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm80033oxcfhvxslrdc",
+					"id": "cmvixdlne0033sq8gmdqd98c5",
 					"name": "C43",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1295,26 +1381,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:43.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm90034oxcf32tcl9iv",
+					"id": "cmvixdlne0034sq8gos5kq8vx",
 					"name": "C44",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1324,26 +1412,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:44.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm90035oxcf5cifi30p",
+					"id": "cmvixdlne0035sq8gt9ps8stt",
 					"name": "C45",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1353,26 +1443,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:45.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vm90036oxcfunb3qoxk",
+					"id": "cmvixdlnf0036sq8gxck80nbp",
 					"name": "C46",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1382,26 +1474,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:46.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vma0037oxcfxdvdr1pk",
+					"id": "cmvixdlnf0037sq8gjjeptgo7",
 					"name": "C47",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1411,26 +1505,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:47.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vma0038oxcftyfqvtlh",
+					"id": "cmvixdlng0038sq8gpgwh0jhw",
 					"name": "C48",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1440,26 +1536,28 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:48.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmuev1vmb0039oxcf21fgyopp",
+					"id": "cmvixdlng0039sq8gx5su2p8o",
 					"name": "C49",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-c-muev1u5x4dld",
-						"name": "user-board-c-muev1u5x4dld",
-						"email": "user-board-c-muev1u5x4dld@example.test",
+						"id": "user-board-c-ttp",
+						"name": "user-board-c-ttp",
+						"email": "user-board-c-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 1000,
@@ -1469,7 +1567,9 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:49.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {},
+					"soTepTheoTruong": {}
 				}
 			]
 		},

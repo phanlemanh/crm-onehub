@@ -11,34 +11,6 @@
   },
   "moc": [
     {
-      "ten": "Nhân sự gửi danh sách người, phòng ban, bộ phận, trưởng — đã xong trên production",
-      "ngay": "2026-10-07",
-      "ai": "Nhân sự",
-      "khoa": "m-1007",
-      "that": "2026-10-04",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Ban lãnh đạo gửi OKR quý 4 cấp OneHub — đã gửi (chủ kho báo 11/10)",
-      "ngay": "2026-10-09",
-      "ai": "Ban lãnh đạo",
-      "den": "2026-10-12",
-      "khoa": "m-1009",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Dựng cây tổ chức, nhập người, đào tạo theo bộ phận, nối kênh nhắc — đã xong trên production",
-      "ngay": "2026-10-09",
-      "ai": "Chủ kho",
-      "den": "2026-10-13",
-      "khoa": "m-1009b",
-      "that": "2026-10-04",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
       "ten": "Làn R1 vá xong trên production, trước ngày dùng thật",
       "ngay": "2026-10-12",
       "loai": "phat-hanh",
@@ -56,43 +28,18 @@
       "that": "2026-10-06"
     },
     {
-      "ten": "Kit phát hành 2.28.0 — mốc ổn định, có gói dieu-phoi đã vá trước đợt r2 (DP8)",
-      "ngay": "2026-10-13",
-      "that": "2026-10-13",
-      "khoa": "m-1013k",
-      "loai": "ngoai",
-      "ai": "Kit",
-      "hang": []
-    },
-    {
-      "ten": "crm nhận kit 2.28.0 và chuyển sang gói dieu-phoi (#373) — chủ kho dời từ 15/10 ngày 13/10",
-      "ngay": "2026-10-13",
-      "khoa": "m-1013n",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
-      "hang": []
-    },
-    {
       "ten": "Công bố OKR quý 4 — các phòng ban đã dùng thử OKR và Kho tài liệu từ trước",
       "ngay": "2026-10-14",
       "loai": "han-cung",
       "ai": "Mọi phòng ban",
       "hang": [
-        "1",
         "4n",
         "S",
         "S2",
         "ZT"
       ],
-      "khoa": "m-1014"
-    },
-    {
-      "ten": "Mở đợt r2 từ gói dieu-phoi của kit — chủ kho duyệt thẻ khởi tạo một lần",
-      "ngay": "2026-10-14",
-      "khoa": "m-1014d",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
-      "hang": []
+      "khoa": "m-1014",
+      "that": "2026-10-14"
     },
     {
       "ten": "Vòng tín hiệu khép lần đầu — tín hiệu tự về kho, quản trị thấy mọi tín hiệu, ai cũng có chuông thông báo, hộp gửi tín hiệu sửa xong",
@@ -104,7 +51,8 @@
         "TH4",
         "TB1",
         "TH6"
-      ]
+      ],
+      "that": "2026-10-16"
     },
     {
       "ten": "Lộ trình nhiều sản phẩm — bước 1: trang đọc bản chụp",
@@ -113,28 +61,22 @@
       "loai": "phat-hanh",
       "hang": [
         "LT1c"
-      ]
+      ],
+      "that": "2026-10-17"
     },
     {
       "ten": "OKR · Khu Mục tiêu dễ đi — khung Mục tiêu, trang đơn vị một bảng, Của tôi ba phần",
-      "ngay": "2026-10-20",
+      "ngay": "2026-10-18",
       "loai": "phat-hanh",
       "khoa": "m-1020dh",
       "hang": [
         "DH1",
         "DH2",
-        "DH3",
-        "DH11"
+        "DH3"
       ],
-      "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410."
-    },
-    {
-      "ten": "Phòng ban công bố OKR quý 4",
-      "ngay": "2026-10-21",
-      "ai": "Phòng ban",
-      "khoa": "m-1021",
-      "loai": "ngoai",
-      "hang": []
+      "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410.",
+      "ly_do": "Cắt theo giờ máy: còn DH2 (4–7 giờ máy) sau vòng vệ sinh của M5; M5 ước Cổng 2 khoảng 17:30Z 17/10, gộp tối 17/10 → 18/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm. Về đích 18/10 00:13Z: DH2 gộp qua #471 (b22c0a329), đúng ngày cắt theo giờ máy.",
+      "that": "2026-10-18"
     },
     {
       "ten": "OKR · Sơ đồ căn chỉnh — theo đơn vị và quanh một mục tiêu",
@@ -145,7 +87,20 @@
         "DH4",
         "DH5"
       ],
-      "nghia": "Lãnh đạo mở Toàn cảnh › Sơ đồ thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt; trưởng đơn vị xem quanh một mục tiêu nó góp vào đâu. Ước theo giờ máy: bắt đầu ~15/10 · ~18 giờ máy (DH4 tính T3: thêm React Flow + dagre, chạm packages/ui, gộp ×1,3) · % hạn mức tuần chưa ước · hoàn tất dự kiến 21/10 · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10."
+      "nghia": "Lãnh đạo mở Toàn cảnh › Sơ đồ thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt; trưởng đơn vị xem quanh một mục tiêu nó góp vào đâu. Ước theo giờ máy: bắt đầu ~15/10 · ~18 giờ máy (DH4 tính T3: thêm React Flow + dagre, chạm packages/ui, gộp ×1,3) · % hạn mức tuần chưa ước · hoàn tất dự kiến 21/10 · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10.",
+      "that": "2026-10-16"
+    },
+    {
+      "ten": "Lộ trình bước 2 — ngày dự kiến, tên ngành tiếng Việt, tiêu điểm sau xoá",
+      "ngay": "2026-10-21",
+      "loai": "phat-hanh",
+      "khoa": "m-1021lt",
+      "hang": [
+        "LT1e",
+        "VN1"
+      ],
+      "ly_do": "LT1e gộp 18/10 (#475), VN1 gộp 18/10 (#472). TH6b chuyển sang mốc m-1029th của làn MacBook Pro. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z.",
+      "that": "2026-10-18"
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
@@ -159,7 +114,6 @@
         "L2",
         "L3",
         "L4",
-        "E4b",
         "E5",
         "E6b",
         "NM1",
@@ -174,40 +128,8 @@
         "LT1b",
         "LT2"
       ],
-      "khoa": "m-1031"
-    },
-    {
-      "ten": "Phiên nghiệm thu R1",
-      "ngay": "2026-11-13",
-      "ai": "Chủ sản phẩm, người dùng đại diện",
-      "hang": [
-        "2",
-        "3",
-        "5"
-      ],
-      "khoa": "m-1113"
-    },
-    {
-      "ten": "Đọc số lượt 6",
-      "ngay": "2026-12-01",
-      "ai": "Chủ kho",
-      "hang": [
-        "6",
-        "8a"
-      ],
-      "khoa": "m-1201"
-    },
-    {
-      "ten": "Ban lãnh đạo đặt OKR năm 2027 cấp OneHub",
-      "ngay": "2026-12-07",
-      "ai": "Ban lãnh đạo",
-      "den": "2026-12-18",
-      "hang": [
-        "H",
-        "9b",
-        "D"
-      ],
-      "khoa": "m-1207"
+      "khoa": "m-1031",
+      "that": "2026-10-17"
     },
     {
       "ten": "Hạn cứng: lượt 7 lên production",
@@ -216,54 +138,111 @@
       "hang": [
         "7n"
       ],
-      "khoa": "m-1214"
+      "khoa": "m-1214",
+      "ly_do": "Phòng ban đặt và công bố OKR quý 1 từ 21/12: lượt 7 phải lên production trước đó. Dự kiến theo giờ máy: 7n (≈7 giờ máy cao ≈ 25 giờ lịch) xong ≈ 19/10, đầu dãy 7n→10→8b của R3. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     },
     {
-      "ten": "R3 lên production",
-      "ngay": "2026-12-18",
+      "ten": "R3 lên production — sau Vỏ khu Mục tiêu, trần 18/12",
+      "ngay": "2026-11-05",
       "loai": "phat-hanh",
       "hang": [
         "10",
         "8b",
         "L",
-        "T",
-        "K5"
+        "T"
       ],
-      "khoa": "m-1218"
+      "khoa": "m-1218",
+      "den": "2026-12-18",
+      "ly_do": "Trần 18/12: trước khi phòng ban đặt OKR quý 1 (21/12). Làn Mac Studio làm Vỏ khu Mục tiêu trước (mốc m-1026vk), R3 xếp sau: 7n → 10 → 8b và L → T. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     },
     {
-      "ten": "Phòng ban đặt và công bố OKR quý 1",
-      "ngay": "2026-12-21",
-      "ai": "Phòng ban",
-      "den": "2027-01-11",
-      "khoa": "m-1221",
-      "loai": "ngoai",
-      "hang": []
+      "ten": "K5 Chat và Deal về một khung lên production",
+      "ngay": "2026-12-18",
+      "loai": "phat-hanh",
+      "khoa": "m-1218k",
+      "hang": [
+        "K5"
+      ]
     },
     {
-      "ten": "Chấm và nhìn lại quý 4 trong công cụ",
-      "ngay": "2026-12-28",
-      "ai": "Phòng ban",
-      "den": "2027-01-08",
-      "khoa": "m-1228",
-      "loai": "ngoai",
-      "hang": []
+      "ten": "Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR",
+      "ngay": "2026-10-26",
+      "loai": "phat-hanh",
+      "khoa": "m-1026vk",
+      "hang": [
+        "VK1",
+        "VK2",
+        "VK3",
+        "VK4",
+        "VK5",
+        "VK6",
+        "VK7",
+        "VK8",
+        "VK9",
+        "VK10",
+        "VK11",
+        "VK12",
+        "DH11",
+        "DH12",
+        "DH13"
+      ],
+      "ly_do": "Đợt okr-vo-khu-1810 (#478). Ba dãy: VK1→VK2→VK3→VK10 · VK4→VK5 · sau VK2: VK6, VK9, VK11, VK12, VK8; VK7 sau VS8 (M5 làm chủ record-sheet). VK4 được đổi chuỗi tên cũ → mới trong khẳng định thước hồ sơ đã ký (chủ kho 19/10). Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     },
     {
-      "ten": "Tết Đinh Mùi",
-      "ngay": "2027-02-06",
-      "khoa": "m-0206",
-      "loai": "ngoai",
-      "ai": "Công ty",
-      "hang": []
+      "ten": "Tín hiệu và trang Lộ trình theo kit 2.33",
+      "ngay": "2026-10-29",
+      "loai": "phat-hanh",
+      "khoa": "m-1029th",
+      "hang": [
+        "LT1f",
+        "TH5",
+        "TH2",
+        "TH2b",
+        "TH3",
+        "TB2",
+        "TH6b",
+        "LT3"
+      ],
+      "ly_do": "Làn MacBook Pro, sau mốc kit 22/10. LT1f trước LT3 (cùng vùng); TB2 sau l7 (M5). Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     },
     {
-      "ten": "Đo bốn tuần đầu quý 1: Cổng Giá trị R1–R3",
-      "ngay": "2027-02-09",
-      "ai": "Chủ kho",
-      "khoa": "m-0209",
-      "loai": "ngoai",
-      "hang": []
+      "ten": "Hồ sơ đã ký luôn tươi — dọn hồ sơ cũ và sửa thước",
+      "ngay": "2026-10-31",
+      "loai": "phat-hanh",
+      "khoa": "m-1031f",
+      "hang": [
+        "F26",
+        "F36",
+        "F35",
+        "F28",
+        "F31",
+        "F34"
+      ],
+      "ly_do": "Làn MacBook Pro, dùng giu-tuoi của kit 2.33 (K-A). Tồn đọng 262 hồ sơ ngày 19/10. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+    },
+    {
+      "ten": "Ngăn bản ghi trượt mượt — cùng đợt sửa record-sheet với l5",
+      "ngay": "2026-10-22",
+      "loai": "phat-hanh",
+      "khoa": "m-1022vs",
+      "hang": [
+        "VS8"
+      ],
+      "ly_do": "Làn M5 (đề xuất M5 #375 13:52Z): VS8 đi ngay sau l5 «Sửa một đợt» (lộ trình Kho tài liệu, 22/10) vì cùng vùng apps/app/components/crm/record-sheet; mốc riêng vì mốc không gom hàng của hai tệp lộ trình. VK7 của làn Mac Studio đứng sau. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng.",
+      "that": "2026-10-19"
+    },
+    {
+      "ten": "Hạn: Quý 4 trên CRM, mọi phòng ban cập nhật và họp tuần hằng tuần — Họp tuần phải mở đúng bộ và họp được trên bảng",
+      "ngay": "2026-10-26",
+      "loai": "han",
+      "khoa": "m-1026ht",
+      "hang": [
+        "HT1",
+        "HT2",
+        "HT3",
+        "HT4"
+      ],
+      "ly_do": "Sự kiện của người: «Quý 4 trên CRM, mọi phòng ban» từ 26/10 (docs/plan/lo-trinh-okr.md:17). Công cụ trễ thì các phòng vẫn họp bằng đường cũ, nên là han, không phải han-cung. HT1 đứng sau VK3 (mốc m-1026vk), HT2 sau HT1 trên cùng dãy vì cùng tệp hop-tuan.tsx; HT3, HT4 song song. HT5 không gắn mốc này."
     }
   ],
   "hang": [
@@ -610,7 +589,7 @@
       "nhom": "okr",
       "thu_tu": 72,
       "ghi_chu": "Hai mục Cổng Bằng chứng lượt 7 (28/09) định mở hợp đồng mới. 04/10: Ngoài-1 và Ngoài-3 của khep-ky-okr kiểm lại vẫn mở (rà đặt lịch tương lai đóng không được; mang sang rơi vào kỳ đã chấm).",
-      "buoc_ke": "Làn B sau 8c; phải lên trước 14/12",
+      "buoc_ke": "Làn Mac Studio · thứ 15",
       "chay_khi": "8c đã gộp (làn B)",
       "cho_ai": "điều kiện",
       "han": "2026-12-14"
@@ -713,7 +692,7 @@
       "nhom": "okr",
       "thu_tu": 82,
       "ghi_chu": "XEM-08, XEM-09, NH-05 — thành T3 ở Cổng Đáng của 8a vì cần hai chỗ lưu.",
-      "buoc_ke": "Làn B, cuối cùng",
+      "buoc_ke": "Làn Mac Studio · thứ 17",
       "chay_khi": "Làn B sau lượt 10",
       "cho_ai": "điều kiện"
     },
@@ -793,7 +772,7 @@
       "nhom": "okr",
       "thu_tu": 100,
       "ghi_chu": "Từ 28/09 (anh quyết): dựng bằng dữ liệu mẫu, bật bằng dữ liệu thật. Giữ cảnh báo trượt và nút trong Slack; hỏi đáp OKR tách sang C.",
-      "buoc_ke": "Làn B sau 7n, và khi 9c đã gộp",
+      "buoc_ke": "Làn Mac Studio · thứ 16",
       "chay_khi": "7n và 9c đã gộp (9c cùng chạm nhắc buổi sáng); 9c chậm thì 8b đi trước",
       "cho_ai": "điều kiện"
     },
@@ -1058,7 +1037,7 @@
       "nhom": "tro-ly",
       "thu_tu": 270,
       "ghi_chu": "Dùng lại sổ đề xuất của 9b.",
-      "buoc_ke": "Làn A sau C; Cổng Đáng cần một mã mới trong bản phạm vi",
+      "buoc_ke": "Làn Mac Studio · thứ 18",
       "chay_khi": "C đã gộp (làn A); dựng trên quý 3 mẫu của M",
       "cho_ai": "điều kiện"
     },
@@ -1079,7 +1058,7 @@
       "nhom": "tro-ly",
       "thu_tu": 280,
       "ghi_chu": "Gộp từ các bản tóm tắt phòng ban đã kiểm, không đọc lại Cập nhật tuần gốc.",
-      "buoc_ke": "Làn A, cuối cùng",
+      "buoc_ke": "Làn Mac Studio · thứ 19",
       "chay_khi": "L đã gộp (làn A)",
       "cho_ai": "điều kiện"
     },
@@ -1401,7 +1380,7 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo»",
       "ghi_chu": "Chủ kho chốt 04/10: tính năng và UX trước, câu chữ sau. Khoảng 30 chỗ «Trợ lý»/«Tác nhân». Ghim khoá mới ở messages-guard.",
-      "buoc_ke": "R2 — lên production 31/10 (tạm); sau K4 (đã gộp)",
+      "buoc_ke": "Làn MacBook Pro · gom vào F35 (#411 đóng)",
       "trang_thai": "chưa mở",
       "dung_tren": [
         "K4"
@@ -1422,7 +1401,7 @@
         "K1"
       ],
       "ghi_chu": "T3 vì chạm đường chat chung của apps/agent và bản ghi deal. Gom: chốt nghĩa chữ «tác nhân», bộ dựng có «Kara đang…».",
-      "buoc_ke": "Sau 07/12",
+      "buoc_ke": "Làn Mac Studio · thứ 20",
       "ngay": "2026-10-04"
     },
     {
@@ -1744,7 +1723,7 @@
       "ten_ngan": "Lọc chung",
       "ngay": "2026-10-09",
       "cau_giao": "«Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc»",
-      "ghi_chu": "Khảo sát 09/10. Phạm vi: số đếm trong chip thành prop của packages/ui (hôm nay opacity-60 ở onboarding/danh-muc-cong-cu.tsx, text-muted-foreground ở tai-lieu/danh-sach-trang.tsx:193); lọc Tài liệu sang nuqs (danh-sach-trang.tsx:109,184 tự ghép chuỗi); Thoả thuận và Onboarding dùng ViewSwitch. Hai câu cho Cổng Phạm vi: «thẻ trạng thái» chọn một điều khiển (hôm nay menu thả của DataTable ở Thoả thuận, ToggleGroup ở Onboarding, Tabs gạch chân ở OKR và Tài liệu); bảng DataTable trên điện thoại cuộn ngang (Thoả thuận) hay thành thẻ dọc (Tài liệu). Chạm deals-table.tsx nên đứng sau V2.",
+      "ghi_chu": "Khảo sát 09/10. Phạm vi: số đếm trong chip thành prop của packages/ui (hôm nay opacity-60 ở onboarding/danh-muc-cong-cu.tsx, text-muted-foreground ở tai-lieu/danh-sach-trang.tsx:193); lọc Tài liệu sang nuqs (danh-sach-trang.tsx:109,184 tự ghép chuỗi); Thoả thuận và Onboarding dùng ViewSwitch. Hai câu cho Cổng Phạm vi: «thẻ trạng thái» chọn một điều khiển (hôm nay menu thả của DataTable ở Thoả thuận, ToggleGroup ở Onboarding, Tabs gạch chân ở OKR và Tài liệu); bảng DataTable trên điện thoại cuộn ngang (Thoả thuận) hay thành thẻ dọc (Tài liệu). Chạm deals-table.tsx nên đứng sau V2. Chủ kho 25/10 «Đồng ý hết theo khuyến nghị» (docs/findings/2026-10-25-bo-okr-gom-lan/README.md mục 6): luật «Thứ tự một màn» và «Hàng công cụ» của docs/design.md trả lời câu thẻ trạng thái — chip ToggleGroup ở một hàng công cụ ngoài Card. Hàng này nhận thêm: All KRs dính chip thành thanh (okr/moi-kr/moi-kr.tsx:113, spacing={0}) và tách Lọc, Cột sang hàng khác; Map đặt chip trong Card (okr/cay-can-chinh.tsx:218) nếu VK6 gộp mà còn; và luật anti-slop trong tools/oxlint cấm ToggleGroup spacing={0}, ToggleGroup trong CardContent, mục gập có số đếm sau bảng.",
       "buoc_ke": "R2 — lên production 31/10 (tạm); sau NM1 (V2 đã gộp)",
       "trang_thai": "chưa mở"
     },
@@ -1863,7 +1842,8 @@
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "Q4"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 2"
     },
     {
       "ma": "TH1",
@@ -1927,12 +1907,13 @@
       "tieu_chi": 10,
       "vi_sao": "Zalo và Slack đang là đường đi riêng của tác nhân; rẽ chúng từ cùng bản ghi thì đã đọc ở một nơi là đủ, và người dùng tự chọn để không bị nhiễu.",
       "bat_khi": "Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TB1 theo luật cắt 4 (cỡ một vòng). Đổi cài đặt thông báo có thể chạm bảng dữ liệu cài đặt nên để hạng T3; giữ nguyên hồ sơ Zalo đã ký.",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TB1 theo luật cắt 4 (cỡ một vòng). Đổi cài đặt thông báo có thể chạm bảng dữ liệu cài đặt nên để hạng T3; giữ nguyên hồ sơ Zalo đã ký. Kênh Zalo/Slack do làn Mac Studio làm chủ: TB2 chỉ thêm cổng rẽ, đứng sau l7 (M5).",
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "N3",
         "N4"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 5"
     },
     {
       "ma": "TH2",
@@ -1952,12 +1933,31 @@
       "tieu_chi": 8,
       "vi_sao": "Gom nhóm và cắt lượt hôm nay cần người mở phiên máy và gõ lệnh; đây là chỗ thứ hai của vòng chưa ai làm.",
       "bat_khi": "Mỗi tín hiệu kéo về có chỗ trong bản gom trong vòng 2 ngày; chủ kho sửa ít hơn một nhóm trên năm (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Phần chạy theo lịch của skill gom và cắt lượt thuộc kit — sửa ở kho kit qua chip riêng, crm chỉ khai lịch và nhận PR. Quản trị nhận «Có n tín hiệu mới» qua TB1.",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Phần chạy theo lịch của skill gom và cắt lượt thuộc kit — sửa ở kho kit qua chip riêng, crm chỉ khai lịch và nhận PR. Quản trị nhận «Có n tín hiệu mới» qua TB1. Chủ kho 19/10: TH2 chỉ mở PR nháp đề xuất hàng; chủ nhóm của tệp lộ trình gộp.",
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "G1",
         "N5"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 3"
+    },
+    {
+      "ma": "TH2b",
+      "slug": "gia-co-gom-tin-hieu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 444.5,
+      "dung_tren": [
+        "TH2"
+      ],
+      "ten": "Gia cố lịch gom tín hiệu",
+      "ten_ngan": "Gia cố gom",
+      "ngay": "2026-10-21",
+      "cau_giao": "«Một tín hiệu cài lời dặn không lấy được khoá nào của lịch gom và không đẩy được gì ngoài PR đề xuất»",
+      "vai": "Chủ kho",
+      "vi_sao": "Lịch gom (TH2) đưa nội dung tín hiệu người ngoài nhập vào lời dặn của phiên gom, trong khi phiên đó được chạy lệnh tuỳ ý và biến môi trường của nó có token ghi kho cùng khoá mô hình; bước hậu kiểm chỉ soi tệp bị đổi nên không thấy kiểu lạm dụng này.",
+      "ghi_chu": "Từ TH2 Ngoài-1, chủ kho chọn mở hợp đồng mới 20/10 (Cổng Bằng chứng TH2, yêu cầu S1-11). Gợi ý: giới hạn công cụ của phiên gom đúng ba lệnh kit theo đường tuyệt đối; bỏ GH_TOKEN/TIN_HIEU_TOKEN khỏi env của lời gọi claude; gỡ url.insteadOf mang token khỏi gitconfig toàn cục sau bước cài gói; chặn ghi vào .git/. Chưa đặt bí mật ANTHROPIC_API_KEY cho lịch gom tới khi hàng này gộp.",
+      "buoc_ke": "Làn MacBook Pro · sau TH2"
     },
     {
       "ma": "TH3",
@@ -1983,7 +1983,8 @@
       "phu": [
         "S1",
         "S2"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 4"
     },
     {
       "ma": "TH6",
@@ -2032,7 +2033,8 @@
       "vi_sao": "Gốc: _acceptance/sua-giao-dien-tin-hieu/ — Ngoài-6 ở Cổng Bằng chứng TH6 15/10, chủ kho chọn «mở hợp đồng mới».",
       "bat_khi": "Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)",
       "ghi_chu": "Mở từ thẻ Cổng Bằng chứng TH6 (chủ kho 15/10). Chưa gắn mốc.",
-      "dot": "vong-tin-hieu-1410"
+      "dot": "vong-tin-hieu-1410",
+      "buoc_ke": "Làn MacBook Pro · thứ 6"
     },
     {
       "ma": "LT1c",
@@ -2118,7 +2120,56 @@
         "L3",
         "L4",
         "L5"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 7"
+    },
+    {
+      "ma": "DH12",
+      "slug": "khung-cho-don-vi-mot-hinh",
+      "nhom": "okr",
+      "thu_tu": 458.12,
+      "ngay": "2026-10-19",
+      "ten": "Khung chờ trang đơn vị một hình",
+      "ten_ngan": "Khung chờ một hình",
+      "cau_giao": "«Mở trang Theo đơn vị lúc đang tải chỉ thấy một khung chờ đúng hình bảng, không hai khung khác hình nối nhau»",
+      "ghi_chu": "Ngoài-1 của trang-don-vi-mot-bang (DH2), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 17/10 (d-20261017T223322Z-56). Sửa đúng tầng: thêm biến thể cho khung xương chung của packages/ui.",
+      "dung_tren": [
+        "DH2"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 13"
+    },
+    {
+      "ma": "DH13",
+      "slug": "loc-don-vi-khong-tu-dong",
+      "nhom": "okr",
+      "thu_tu": 458.13,
+      "ngay": "2026-10-19",
+      "ten": "Lọc trang đơn vị không tự đóng",
+      "ten_ngan": "Lọc không tự đóng",
+      "cau_giao": "«Chọn một mục trong Lọc ở trang Theo đơn vị thì menu Lọc vẫn mở, khung Lọc trên điện thoại không tự thu lại»",
+      "ghi_chu": "Ngoài-3 của trang-don-vi-mot-bang (DH2), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 17/10 (d-20261017T223322Z-57). Nguyên nhân: bảng chuyển sang khung chờ khi đang tải lại.",
+      "dung_tren": [
+        "DH2"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 14"
+    },
+    {
+      "ma": "LT1f",
+      "slug": "trang-lo-trinh-mo-hinh-hien-thi",
+      "nhom": "crm-chung",
+      "thu_tu": 446.6,
+      "ngay": "2026-10-19",
+      "ten": "Trang Lộ trình đọc mô hình hiển thị",
+      "ten_ngan": "Lộ trình đọc mô hình",
+      "cau_giao": "«Trang Lộ trình trong CRM hiện việc chưa hẹn mốc và tên hiển thị đúng như LO-TRINH.html, không còn cờ vàng «khối chưa mang mô hình hiển thị»»",
+      "ghi_chu": "Mục 4 CHANGELOG kit 2.33.0: trang đọc năm khoá ten_hien_thi, hien, viec_hien, con_lai, chua_hen_moc thay vì tự lọc, kèm ca đối chiếu trang với tập hiển thị của khối. Đứng sau #483 (khuôn đã mang năm khoá).",
+      "dung_tren": [
+        "LT1e"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn MacBook Pro · thứ 1"
     },
     {
       "ma": "F8",
@@ -2557,7 +2608,8 @@
       "dot": "okr-dieu-huong-1410",
       "phu": [
         "Ngoài-9 DH3"
-      ]
+      ],
+      "buoc_ke": "Làn Mac Studio · gộp vào VK2 (cùng màn Của tôi)"
     },
     {
       "ma": "DH5",
@@ -2590,12 +2642,12 @@
       "ten": "Giai đoạn bỏ mặc định",
       "ten_ngan": "Bỏ mặc định",
       "cau_giao": "«Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu»",
-      "ghi_chu": "Lối A tách khỏi E4 (#345). Chỉ mở khi tro-ly-okr-nen và bo-okr-mau đã gỡ kẹt; khi đó check-types bắt mọi đường tạo thiếu stage.",
+      "ghi_chu": "Lối A tách khỏi E4 (#345). Chỉ mở khi tro-ly-okr-nen và bo-okr-mau đã gỡ kẹt; khi đó check-types bắt mọi đường tạo thiếu stage. Chủ kho giao lại từ làn M5 sang làn Mac Studio ngày 20/10 («Giao lại các hạng mục OKR của M5 cho Mac Studio»).",
       "dung_tren": [
         "E4"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 31/10 (tạm)"
+      "buoc_ke": "Làn Mac Studio"
     },
     {
       "ma": "E6b",
@@ -2748,9 +2800,9 @@
       "ten": "Thước hồi quy chạy được lệnh cần gh",
       "ten_ngan": "Thước cần gh",
       "cau_giao": "«Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây»",
-      "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
+      "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng. Gộp #396 (kiểm chéo dựng lại cây, cùng scripts/kiem-cheo).",
       "trang_thai": "chưa mở",
-      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mở sau khi #373 gộp"
+      "buoc_ke": "Làn MacBook Pro · thứ 8"
     },
     {
       "ma": "MH1",
@@ -2786,13 +2838,16 @@
       "dung_tren": [
         "C"
       ],
-      "trang_thai": "đang dựng",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T12:22:27Z"
       },
-      "buoc_ke": "Chờ DH1 (M5) lên onehub; mốc chốt ở Cổng Phạm vi; tạm dừng vì chồng vùng DH1 (M5)"
+      "buoc_ke": "Đã gộp 17/10 03:53Z (#456)",
+      "pr": [
+        456
+      ]
     },
     {
       "ma": "F28",
@@ -2808,7 +2863,7 @@
         "F26"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mốc chốt ở Cổng Phạm vi"
+      "buoc_ke": "Làn MacBook Pro · thứ 11"
     },
     {
       "ma": "F29",
@@ -2821,13 +2876,16 @@
       "cau_giao": "«Thước soi quyền xem OKR không báo lộ giả: tám chỗ đã phân loại, và thước chạy ở CI cho PR chạm vùng OKR»",
       "ghi_chu": "Phân loại 8 chỗ ghd_soi_xem: 0 lộ thật, thước lệch mã sau #290, #300, #342, #395. (a) 7 dòng MIEN_XEM kèm lý do, đổi khoá removeAlignment thành congSuaCanChinh, ghim lại gioi-han-duyet-cay-okr. (b) ghd_soi_xem chạy ở CI cho PR chạm apps/api/src/okr/**, packages/db/src/okr-*, apps/agent/agent/lib/okr/**. Chủ kho ký Cổng Đáng 15/10 21:30:26Z. Dãy P0. Mã tạm cấp 16/10 01:38Z.",
       "dung_tren": [],
-      "trang_thai": "đang dựng",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T21:30:04Z"
       },
-      "buoc_ke": "Đợt r2, dãy P0; mốc chốt ở Cổng Phạm vi; đã qua Cổng Phạm vi, chờ S4"
+      "buoc_ke": "Đã gộp 16/10 (#436)",
+      "pr": [
+        436
+      ]
     },
     {
       "ma": "F30",
@@ -2858,7 +2916,1067 @@
       "ghi_chu": "Đề xuất 15/10 22:20Z từ F23: paths của E15 (ui-check) đang là apps/app/lib/messages/**, nên #424 sửa tin-hieu.ts làm #427 phải ghim lại. Cùng lớp E17 đã sửa ở F23. Chờ Cổng Đáng.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ Cổng Đáng; mốc chốt ở Cổng Phạm vi"
+      "buoc_ke": "Làn MacBook Pro · thứ 12"
+    },
+    {
+      "ma": "F32",
+      "slug": "paths-judgment-hep",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.8,
+      "ngay": "2026-10-16",
+      "ten": "Paths judgment hẹp",
+      "ten_ngan": "Paths hẹp",
+      "cau_giao": "«Eval chấm bằng giám khảo khai paths phủ mọi tệp ngoài T1 mà nó đọc»",
+      "ghi_chu": "Đề xuất từ F31. Đo lại theo luật lưới bash: 0/60 eval lọt tệp thật (CONTEXT.md là T1 qua glob_variants). Chủ kho chọn đóng (P0-23: a, 17/10 00:07Z); không PR.",
+      "dung_tren": [],
+      "trang_thai": "xong",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Đóng không sửa: lỗ không có thật"
+    },
+    {
+      "ma": "F33",
+      "slug": "tai-lieu-khoi-phuc-chap-chon",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.9,
+      "ngay": "2026-10-16",
+      "ten": "Ca khôi phục chập chờn",
+      "ten_ngan": "Khôi phục chập chờn",
+      "cau_giao": "«Hai ca lưu trữ và khôi phục của Kho tài liệu đếm sự kiện theo id, hết đỏ ngẫu nhiên ở pre-push»",
+      "ghi_chu": "tai-lieu-luu-tru.spec.ts:290 đếm từ Date.now()-1 nên lọt sự kiện DE_XUAT cùng mili-giây; #413 đã vấp. Dãy P4.",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        450
+      ],
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Đã gộp 17/10 (#450)"
+    },
+    {
+      "ma": "F34",
+      "slug": "cham-bo-do-chiu-cau-loi",
+      "nhom": "ve-sinh",
+      "thu_tu": 501,
+      "ngay": "2026-10-16",
+      "ten": "Chấm bộ đo chịu câu lỗi",
+      "ten_ngan": "Bộ đo chịu lỗi",
+      "cau_giao": "«E15 của tro-ly-doc-kho coi lượt đủ mã là đã đo, ghi câu lỗi model vào cột riêng, có trần»",
+      "ghi_chu": "Một câu lỗi model (~2%) làm cả lượt ra mã 2; đỏ sẵn trên onehub. Bộ bo-cau-hoi-mau đã làm theo cách này.",
+      "dung_tren": [
+        "F32"
+      ],
+      "trang_thai": "chưa mở",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Làn MacBook Pro · thứ 13"
+    },
+    {
+      "ma": "K7",
+      "slug": "cho-tac-nhan-lau",
+      "nhom": "crm-chung",
+      "thu_tu": 450.3,
+      "ngay": "2026-10-16",
+      "ten": "Chờ Tác nhân lâu",
+      "ten_ngan": "Chờ Tác nhân",
+      "cau_giao": "«Tác nhân dựng quá 200 giây thì người dùng thấy tiến độ, được rời trang, và nhận báo trên chuông khi xong»",
+      "ghi_chu": "Dãy P7. Năm vòng S4 (chủ kho cho thêm vòng 4, 5). Ngoài-13 mở hợp đồng mới: chuông còn đếm thông báo của chính cuộc đang mở (conversations.service.ts markRead).",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        457
+      ],
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T05:33:48Z"
+      },
+      "buoc_ke": "Đã gộp 2026-10-17 (#457)"
+    },
+    {
+      "ma": "VN1",
+      "slug": "dich-ten-nganh-bang-bang",
+      "nhom": "crm-chung",
+      "thu_tu": 446.4,
+      "ngay": "2026-10-17",
+      "ten": "Dịch tên ngành bằng bảng",
+      "ten_ngan": "Tên ngành tiếng Việt",
+      "cau_giao": "«Tra cứu thương hiệu Việt Nam hiện tên ngành tiếng Việt từ một bảng, không dịch máy từng lần»",
+      "ghi_chu": "Hỏi-5 của tra-cuu-thuong-hieu-viet-nam (#462). Làn MacBook Pro, nhóm 1, ~2 giờ máy.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn MacBook Pro sau LT1e (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+    },
+    {
+      "ma": "K7b",
+      "slug": "chuong-cuoc-dang-mo",
+      "nhom": "crm-chung",
+      "thu_tu": 450.4,
+      "ngay": "2026-10-17",
+      "ten": "Chuông không đếm cuộc đang mở",
+      "ten_ngan": "Chuông cuộc đang mở",
+      "cau_giao": "«Ngồi trên màn chat thấy kết quả rồi gõ tiếp thì chuông không còn đếm thông báo của chính cuộc đó»",
+      "ghi_chu": "Ngoài-13 của K7, chủ kho chọn «mở hợp đồng mới» khi ký 17/10. Tệp gốc apps/api/src/conversations/conversations.service.ts (markRead chỉ chạy khi lastAssistantAt > lastReadAt).",
+      "dung_tren": [
+        "K7"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · gộp vào K5 (cùng conversations)"
+    },
+    {
+      "ma": "VS8",
+      "slug": "ngan-ban-ghi-giu-danh-tinh",
+      "nhom": "crm-chung",
+      "thu_tu": 450.5,
+      "ngay": "2026-10-17",
+      "ten": "Ngăn bản ghi không dựng lại khi mở, đóng",
+      "ten_ngan": "Ngăn bản ghi trượt mượt",
+      "cau_giao": "«Mở hay đóng ngăn bản ghi thì ngăn trượt ra, vào như cũ, không biến mất rồi hiện lại, mà vẫn chỉ nạp sẵn đúng các khoá của #469»",
+      "ghi_chu": "Ngoài-8 của ve-sinh-do-san-onehub (Known limit ở Cổng 2). Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx: HydrationBoundary chỉ bọc khi stack.length > 0 nên RecordSheetHost bị dựng lại. Chứng minh: bài kiểm DOM về danh tính RecordSheetHost qua mở, đóng; ca đối chứng apps/app/test/ngan-ban-ghi-nap-san.dom.tsx giữ xanh. T2, M5 ước 3–4 giờ máy. Đi sau khi #469 gộp. Gộp qua #498 (c689ed957) ngày 19/10.",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Làn M5 · thứ 1"
+    },
+    {
+      "ma": "VS11",
+      "slug": "bao-loi-tac-nhan-sau-cau-hoi",
+      "nhom": "crm-chung",
+      "thu_tu": 450.6,
+      "ngay": "2026-10-17",
+      "ten": "Báo lỗi tác nhân cả sau câu hỏi giữa chừng",
+      "ten_ngan": "Báo lỗi tác nhân",
+      "cau_giao": "«Tác nhân hỏng trong lúc dựng thì người dùng nhận đúng một thông báo, kể cả khi đã trả lời một câu hỏi giữa chừng»",
+      "ghi_chu": "Ngoài-11 của ve-sinh-do-san-onehub. Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/agent/agent/lib/thong-bao-tac-nhan.ts: dòng tac-nhan-hong chỉ ghi khi lần gửi cuối là CREATE_AGENT. T2. Đi sau khi #469 gộp.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 21"
+    },
+    {
+      "ma": "K7c",
+      "slug": "don-sau-cho-tac-nhan",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.1,
+      "ngay": "2026-10-17",
+      "ten": "Dọn giao diện sau K7",
+      "ten_ngan": "Dọn sau K7",
+      "cau_giao": "«TheDangDung sống ở packages/ui; CardAction và CardFooter không bị className đổi khoảng cách ở chỗ gọi»",
+      "ghi_chu": "Ngoài-5 và Ngoài-11 của K7 (ghi Known limits khi ký 17/10), trái docs/design.md.",
+      "dung_tren": [
+        "K7"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 22"
+    },
+    {
+      "ma": "F35",
+      "slug": "don-ho-so-cu",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.2,
+      "ngay": "2026-10-17",
+      "ten": "Dọn hồ sơ cũ",
+      "ten_ngan": "Dọn hồ sơ cũ",
+      "cau_giao": "«Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A»",
+      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c, Ngoài-15 của ve-sinh-do-san-onehub (thước _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts dò mã nguồn bằng indexOf thay vì chạy hành vi — chủ kho chọn gom vào F35 ở phiên Mac Studio 17/10) và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng. Đêm 17→18/10 gom thêm chín ca cùng lớp «thước của hồ sơ đã ký gãy khi vào onehub» làm bằng chứng cho K-A (#375 03:40Z): hop-thoai-giu-cho-dang-nhap E11 (--ca thiet-ke lệch phạm vi §12; --ca huy dùng danh sách hộp viết tay, thừa 11 hộp); trang-don-vi-mot-bang E12, E16 (gốc so merge-base với onehub, gãy khi chính nó gộp) và E14 (không khai paths); dieu-huong-khu-muc-tieu E3 (coNutHoiKara grep cả thư mục); ve-sinh-do-san-onehub E18 (bất biến lúc gộp); so-do-quanh-muc-tieu E14 (ranh-gioi.mjs buộc nhánh feat/so-do-can-chinh-don-vi); tac-nhan-glm-5-3-cham E5 (so-tac-nhan.ts --pham-vi đếm mọi tệp đổi trên nhánh); tac-nhan-va E9 (lỗi kit resolveConfigKey không bỏ thoát hai nháy đơn). Luật tạm 18/10 (chủ kho đồng ý): máy không tự sửa thước hồ sơ đã ký tới khi có K-A. Nhận thêm DA0c và K6a (#411). Chủ kho duyệt 19/10: sửa thước hồ sơ đã ký nhóm F35/F28/F31/F34 với nghi thức hai chiều + dòng sổ fix, chỉ khi làn chủ hồ sơ không có vòng đã ký chờ gộp.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "chay_khi": "crm nhận mốc kit có K-A (ho-so-da-ky-giu-tuoi)",
+      "buoc_ke": "Làn MacBook Pro · thứ 10"
+    },
+    {
+      "ma": "F36",
+      "slug": "chu-thich-glob-md",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.3,
+      "ngay": "2026-10-17",
+      "ten": "Sửa chú thích glob .md",
+      "ten_ngan": "Chú thích glob",
+      "cau_giao": "«Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho»",
+      "ghi_chu": "Phát hiện của F32 (glob_variants GLOB-DOUBLESTAR-ZERO-DIRS). T1. Đi sau t1-ma-doc vì cùng khối config.",
+      "dung_tren": [
+        "C-1b"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn MacBook Pro · thứ 9"
+    },
+    {
+      "ma": "C-1b",
+      "slug": "t1-ma-doc",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.4,
+      "ngay": "2026-10-16",
+      "ten": "T1 cho mã đọc",
+      "ten_ngan": "T1 mã đọc",
+      "cau_giao": "«Lần đẩy chỉ chạm tệp đọc được phân loại đúng T1»",
+      "ghi_chu": "Làn M5. Cổng Đáng và Cổng Phạm vi đã ký, S3 xong, chờ làn.",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Đã gộp #480 (96a1cb64a) 18/10"
+    },
+    {
+      "ma": "C-1c",
+      "slug": "push-ghim-lai-t1",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.5,
+      "ngay": "2026-10-17",
+      "ten": "Đẩy chỉ ghim lại là T1",
+      "ten_ngan": "Ghim lại là T1",
+      "cau_giao": "«Lần đẩy chỉ ghim lại (run-log, decisions) bỏ test và build, mà acceptance gate vẫn chạy và recheck bằng chứng vẫn đỏ được»",
+      "ghi_chu": "Đo 17/10: mỗi push ghim lại vẫn chạy test + build ~15′. Điều kiện bắt buộc ghi vào hợp đồng: acceptance gate chạy, recheck đỏ được (như #452); thiếu thì không mở.",
+      "dung_tren": [
+        "C-1b"
+      ],
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Đã gộp #481 (0c71e76c3) 18/10"
+    },
+    {
+      "ma": "VK1",
+      "slug": "thanh-ben-khu-dung-chung",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 450.8,
+      "dung_tren": [],
+      "ten": "Thanh bên khu dùng chung",
+      "ten_ngan": "Thanh bên khu",
+      "ngay": "2026-10-18",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên mở Cài đặt hay Hội thoại và gặp cùng một thanh bên khu — cùng bề rộng, cùng nhãn nhóm, trên điện thoại thành một hàng cuộn ngang»",
+      "vi_sao": "Cài đặt dựng thanh bên 224px bằng NavGroup/NavItem/NavStrip, Hội thoại tự dựng vỏ riêng 213px: hai bản của một mẫu. Khu Mục tiêu sắp là nơi thứ ba dùng mẫu này, luật kho bắt chuyển vào packages/ui trước khi dùng lần hai.",
+      "bat_khi": "Cài đặt và Hội thoại dùng chung một thành phần thanh bên khu trong packages/ui; docs/design.md có luật khi nào dùng thanh bên khu, khi nào dùng thẻ con",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Hàng nền cho VK2.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V1"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 1"
+    },
+    {
+      "ma": "VK2",
+      "slug": "vo-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.5,
+      "dung_tren": [
+        "VK1"
+      ],
+      "ten": "Vỏ khu Mục tiêu",
+      "ten_ngan": "Vỏ Mục tiêu",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Mục tiêu và đi giữa Của tôi, Bộ OKR, Lấy ý kiến và Báo cáo bằng một thanh bên, chu kỳ chọn một lần ở đầu thanh, và mọi đường dẫn cũ vẫn mở đúng chỗ»",
+      "vi_sao": "Hôm nay trang đơn vị có ba lớp điều khiển ngang chồng nhau; ô chu kỳ lẫn giữa các nút hành động; chia theo phạm vi (của tôi · đơn vị · cả công ty) làm người dùng không biết một mục nói về bộ OKR hay số liệu. Tability chia theo việc và vật, phạm vi là bộ lọc trong trang.",
+      "bat_khi": "Trên trang đơn vị chỉ còn một lớp thẻ ngang; mọi đường dẫn cũ (?donOkr=, ?xemOkr=, /okr/theo-don-vi, /okr/toan-canh, /okr/quanh-muc-tieu/…, /okr?tu=nhac) chuyển tới đúng chỗ mới",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Bản mẫu /proto/vo-khu-muc-tieu (nhánh feat/vo-khu-muc-tieu) là đầu vào của Cổng Phạm vi; slug bản mẫu trùng slug hàng. Chạy làn ghim lại chung với VK4 vì cả hai chạm cùng màn. C4 (Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77)): một chu kỳ cho cả khu, thay mỗi màn một mặc định — hàng VK17.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V2"
+      ],
+      "tieu_chi": 10,
+      "buoc_ke": "Làn Mac Studio · thứ 2"
+    },
+    {
+      "ma": "VK3",
+      "slug": "trang-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.51,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Trang Bộ OKR",
+      "ten_ngan": "Bộ OKR",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Bộ OKR, lọc Tôi dẫn, mở bộ OKR của đơn vị mình và đi giữa OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm bằng thẻ con có đường dẫn riêng»",
+      "vi_sao": "Ô chọn đơn vị trên một màn chung thay cho trang riêng của từng bộ; cách xem và chip lọc trông giống hệt nhau. Mỗi bộ OKR một trang, như Plan của Tability.",
+      "bat_khi": "Mỗi bộ OKR có đường dẫn riêng; đổi thẻ con không mất chu kỳ và bộ đang xem; bộ lọc Tất cả · Tôi dẫn · Đang theo dõi ghi trên đường dẫn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). C1 (Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77)): khuyến nghị (a) bỏ thẻ con Sơ đồ khỏi trang một bộ tới khi VK14 giao; lối tạm cụ thể chủ kho chọn ở hàng gộp sau trong VK3, VK6, kèm dòng sổ ở hồ sơ của nó. VK14 dựng lại thẻ với đơn vị cha và con.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V2b"
+      ],
+      "tieu_chi": 9,
+      "buoc_ke": "Làn Mac Studio · thứ 3"
+    },
+    {
+      "ma": "VK4",
+      "slug": "doi-nhan-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.52,
+      "dung_tren": [],
+      "ten": "Đổi nhãn khu Mục tiêu",
+      "ten_ngan": "Đổi nhãn",
+      "ngay": "2026-10-18",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên đọc khu Mục tiêu thấy một tên cho một khái niệm: Góp vào cho căn chỉnh, OneHub cho đơn vị gốc, Lấy ý kiến thay Hỏi ý — ở cả bản tiếng Việt và tiếng Anh»",
+      "vi_sao": "Căn chỉnh mang chín tên trên màn, đơn vị gốc năm tên, «Hỏi ý» đứng cạnh «Hỏi Kara». Từ điển đã chốt 18/10 (PR #477).",
+      "bat_khi": "Không còn chuỗi «căn chỉnh», «Đường lý do», «Gắn căn chỉnh», «Chưa nối lên», «Hỏi ý», «Toàn công ty», «Toàn OneHub» trong tệp chữ của khu ở hai thứ tiếng; bản mẫu /proto không đổi",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Khoảng 70 chuỗi trong apps/app/lib/messages/okr*.ts; gốc «OneHub» lấy tên không gian làm việc ở ba màn. 35 hồ sơ đã ký và 46 tệp kiểm nhắc tên cũ (cận trên) — chạy làn ghim lại chung với VK2.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "A2"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 5"
+    },
+    {
+      "ma": "VK5",
+      "slug": "chu-may-sinh-ten-moi",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.53,
+      "dung_tren": [
+        "VK4"
+      ],
+      "ten": "Chữ máy sinh dùng tên mới",
+      "ten_ngan": "Chữ máy sinh",
+      "ngay": "2026-10-18",
+      "vai": "nen",
+      "cau_giao": "«Câu báo lỗi của máy chủ, tin nhắc buổi sáng và lời Kara về OKR dùng đúng tên mới: Góp vào, Lấy ý kiến, OneHub»",
+      "vi_sao": "Khoảng 25 câu báo lỗi trong apps/api/src/okr/okr-config.ts, tin nhắc trong apps/agent/agent/lib/tin-nhac.ts và lời dặn soạn của Kara vẫn nói «căn chỉnh», «hỏi ý»: màn đổi tên mà máy nói tên cũ.",
+      "bat_khi": "Không còn tên cũ trong câu báo lỗi và tin nhắc người dùng thấy; bộ chấm soạn của Kara (eval okr-soan) không tụt so với đường nền trước khi đổi lời dặn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Gộp A3 và A3k: cả hai giao một kết quả (máy nói đúng tên mới). Đổi lời dặn gửi model phải đo lại bộ chấm soạn.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "A3",
+        "A3k"
+      ],
+      "tieu_chi": 9,
+      "buoc_ke": "Làn Mac Studio · thứ 6"
+    },
+    {
+      "ma": "VK6",
+      "slug": "so-do-toan-vung",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.54,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Sơ đồ ở khung toàn vùng",
+      "ten_ngan": "Sơ đồ toàn vùng",
+      "ngay": "2026-10-18",
+      "vai": "Ban lãnh đạo",
+      "cau_giao": "«Ban lãnh đạo mở Báo cáo › Sơ đồ, thấy sơ đồ góp vào chiếm trọn vùng nội dung, bấm Toàn màn hình để thu thanh bên, và mở sơ đồ lấy tâm một mục tiêu từ ngăn của nó»",
+      "vi_sao": "Sơ đồ quanh mục tiêu dựng khung trang lồng trong khung trang nên bị nhốt trong bề rộng tối đa và một đầu trang lớn; căn chỉnh hiện ở sáu chỗ với ba cách vẽ. Tability đặt bản đồ trong vỏ nhưng cho nó trọn vùng, có Full screen.",
+      "bat_khi": "Sơ đồ không còn bề rộng tối đa của trang; một màn Sơ đồ thay cho Cây căn chỉnh và trang Sơ đồ quanh mục tiêu; Esc thoát toàn màn hình",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Đứng trên DH4, DH5 đã ký. C1 (Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77)): khuyến nghị (a) bỏ thẻ con Sơ đồ khỏi trang một bộ tới khi VK14 giao; lối tạm cụ thể chủ kho chọn ở hàng gộp sau trong VK3, VK6, kèm dòng sổ ở hồ sơ của nó. VK14 dựng lại thẻ với đơn vị cha và con.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V3"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 7"
+    },
+    {
+      "ma": "VK7",
+      "slug": "ngan-kr-mot-cho",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.55,
+      "dung_tren": [],
+      "ten": "Ngăn KR một chỗ",
+      "ten_ngan": "Ngăn KR",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm một KR ở bất kỳ đâu và mở cùng một ngăn KR, bấm Cập nhật ở đầu ngăn hay ngay trên dòng KR, thấy điểm mới nằm đâu so với đích, rồi sang KR kế mà không đóng ngăn»",
+      "vi_sao": "Hôm nay một KR có ba ngăn và một hộp, bấm ở bốn chỗ ra bốn nơi; cập nhật một KR mất 5–6 bấm qua menu «…». Tability: một ngăn KR, «Create check-in» ở đầu, ‹ › sang KR kế — 3 bấm.",
+      "bat_khi": "Cập nhật một KR từ trang bộ OKR trong 3 bấm; mọi lối bấm vào KR mở cùng một ngăn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Gộp B1 và B1b, 11 tiêu chí: kết quả «cập nhật một KR ở một chỗ» không tách được mà giữ nghĩa — nút trên dòng mở đúng ngăn ấy.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B1",
+        "B1b"
+      ],
+      "tieu_chi": 11,
+      "buoc_ke": "Làn Mac Studio · thứ 12"
+    },
+    {
+      "ma": "VK8",
+      "slug": "bo-okr-co-so",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.56,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Bộ OKR có hàng số",
+      "ten_ngan": "Hàng số",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở bộ OKR của đơn vị mình và biết ngay đội đang ra sao: ngày còn lại, tiến độ so với kỳ vọng, số KR đã cập nhật tuần này, số KR tự tin thấp, và mọi KR đã mở sẵn»",
+      "vi_sao": "Trang đơn vị hôm nay gập mục tiêu, không có số tóm tắt; phải mở từng dòng. Trang kế hoạch của Tability mở ra là thấy bốn ô số.",
+      "bat_khi": "Bốn ô số ở đầu thẻ OKR của mọi bộ; nút Mở tất cả / Gập tất cả",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Dưới mục tiêu cỡ (6) nhưng không gộp với VK3: VK3 là đường dẫn và thẻ con, hàng này là nội dung thẻ OKR. Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D3 nhận cách đọc hẹp của HT1 — E4 chỉ dò hàng số của VK8 ở thẻ OKR, không dò StatGroup của Họp tuần; VK8 gộp trước HT1, hàng nào gộp sau dùng lại hàm ngày còn lại của hàng gộp trước.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B2"
+      ],
+      "tieu_chi": 6,
+      "buoc_ke": "Làn Mac Studio · thứ 11"
+    },
+    {
+      "ma": "VK9",
+      "slug": "mot-nut-tao-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.57,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Một nút tạo mục tiêu",
+      "ten_ngan": "Một nút tạo",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm Thêm mục tiêu và chọn một đường trong một hộp: tự viết, từ mẫu, từ bảng tính hay soạn cùng Kara; ở Báo cáo không có nút tạo nào»",
+      "vi_sao": "Sáu đường tạo mục tiêu ở bốn nơi; đầu trang sáu điều khiển; nút chính hiện cả trên màn chỉ đọc, trái nếp «Trang chỉ đọc không có nút chính». Tability: một nút mở hộp chọn đường.",
+      "bat_khi": "Đầu trang khu chỉ còn một nút chính, chỉ ở Của tôi và Bộ OKR",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B3"
+      ],
+      "tieu_chi": 7,
+      "buoc_ke": "Làn Mac Studio · thứ 8"
+    },
+    {
+      "ma": "VK10",
+      "slug": "che-do-soan-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.58,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Chế độ Soạn bộ OKR",
+      "ten_ngan": "Chế độ Soạn",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm Soạn OKR và viết cả bộ như một tài liệu — mục tiêu, KR liền mạch — với góp ý của Kara và điểm chất lượng ở cột bên, rồi công bố»",
+      "vi_sao": "Tạo một mục tiêu có ba KR mất khoảng mười bấm qua hộp tạo rồi từng hộp KR; góp ý Kara chiếm hai phần ba chiều cao ngăn theo dõi. Tability tách «Edit content» khỏi màn theo dõi.",
+      "bat_khi": "Tạo một mục tiêu có ba KR và công bố trong khoảng 3 bấm cộng phần gõ; ngăn theo dõi chỉ còn một chip góp ý",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Cần phiên design-pass trước Cổng Phạm vi. 11 tiêu chí: viết cả bộ, góp ý và điểm chất lượng ở cột bên, công bố là một kết quả — tách ra thì nửa đầu không giao được gì người dùng thấy.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5a"
+      ],
+      "tieu_chi": 11,
+      "buoc_ke": "Làn Mac Studio · thứ 4"
+    },
+    {
+      "ma": "VK11",
+      "slug": "moi-kr-ca-cong-ty",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.59,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Mọi KR cả công ty",
+      "ten_ngan": "Mọi KR",
+      "ngay": "2026-10-18",
+      "vai": "Ban lãnh đạo",
+      "cau_giao": "«Ban lãnh đạo bấm ô Trượt ở Báo cáo › Sức khoẻ và đọc mọi KR đang trượt của cả công ty trong một danh sách lọc được theo đơn vị và người»",
+      "vi_sao": "Hôm nay không có lối thẳng tới mọi KR đang trượt — phải đi từng đơn vị; ô số ở Toàn cảnh không bấm được. Tability: All data › Key Results, ô Off track trên trang chủ dẫn thẳng tới đó.",
+      "bat_khi": "Từ Sức khoẻ tới danh sách KR trượt trong 1 bấm; bộ lọc ghi trên đường dẫn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5b"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 9"
+    },
+    {
+      "ma": "VK12",
+      "slug": "cap-nhat-gan-day",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.6,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Cập nhật gần đây",
+      "ten_ngan": "Cập nhật gần đây",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Cập nhật gần đây trước buổi họp tuần, đọc mọi lần cập nhật của bộ OKR mình dẫn, mới nhất trước, và trả lời ngay dưới từng lần»",
+      "vi_sao": "Lần cập nhật chỉ đọc được trong thẻ Trao đổi của từng mục tiêu; không có chỗ đọc chung. Tability có Recent updates lọc theo kế hoạch đang theo dõi, đội, cấp dưới.",
+      "bat_khi": "Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D5 giữ trả lời chỉ ở lần mới nhất (Hỏi-1 lối a, T2, không migration); trả lời từng lần sang HT5. D7 thêm mục thứ bảy trên thanh bên thì sửa thước vo-khu-muc-tieu DO.soMuc 6 → 7 trong làn của VK12, kèm dòng sổ fix và cham-tep. D8 bấm dòng tin mở chi tiết KR (useMoNganKr/openRecord), thêm ô vào MA_TRAN của ngan-kr-mot-cho. Nguồn: ghi chú bàn giao V3-doi-chieu-hop-tuan-2410.md mục 2, 5, 7. C5 (Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77)): chip lọc dùng đúng chữ của VK3 «Tất cả · Tôi dẫn · Đang theo dõi», thay «Bộ OKR bạn dẫn · Bạn theo dõi»; mục từ ở CONTEXT.md, cùng mục «Cập nhật gần đây». Hợp đồng trên feat/cap-nhat-gan-day (21/10) còn ghi tham số ?ky= trong khi kho dùng kyOkr.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5c"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 10"
+    },
+    {
+      "ma": "VK13",
+      "slug": "gon-dau-trang-lay-y-kien",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.7,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Gọn đầu trang Lấy ý kiến",
+      "ten_ngan": "Gọn đầu Lấy ý kiến",
+      "ngay": "2026-10-20",
+      "vai": "Thành viên góp ý",
+      "cau_giao": "«Trên điện thoại 390×812, người góp ý mở Lấy ý kiến và thấy nút Gửi ngay trong màn đầu, không phải cuộn»",
+      "vi_sao": "Nút «Gửi» của Lấy ý kiến ở 390×812 nằm 927px trên onehub (941px sau VK2) — quá màn đầu 812px; hồ sơ đã ký dot-hoi-y-tuong-okr E12 bước 5 đỏ sẵn trên nền. Chủ kho chọn (a) cho V1-4 ngày 20/10: ghi đỏ sẵn trên thẻ VK2 và tách việc riêng.",
+      "bat_khi": "Ở 390×812 nút «Gửi» của Lấy ý kiến nằm trọn trong màn đầu; dot-hoi-y-tuong-okr E12 bước 5 xanh lại mà không đổi hình đã ký của hồ sơ khác",
+      "ghi_chu": "Tách từ V1-4 của VK2 (đợt vo-khu-muc-tieu, 20/10). Chủ kho gõ «gon-dau-trang-lay-y-kien: build» ở phiên giám sát vk.",
+      "dot": "okr-vo-khu-1810",
+      "buoc_ke": "Làn Mac Studio · sau VK2"
+    },
+    {
+      "ma": "NS1",
+      "slug": "sheets-lay-so-linh-hoat",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502,
+      "ten": "Google Sheets lấy số linh hoạt",
+      "ten_ngan": "Sheets linh hoạt",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR dán đường dẫn bảng tính, chọn trang từ danh sách, chọn lấy ô cố định, giá trị cuối hàng hay cuối cột, và thấy máy đọc được số nào ở ô nào»",
+      "vi_sao": "Bảng tính vận hành thêm dòng mỗi tuần chứ không ghi đè một ô; ba trên tám công cụ OKR chỉ lấy một ô cố định và Weekdone ghi rõ nó gãy khi dời ô hay đổi tên trang (hồ sơ C2).",
+      "bat_khi": "Bảng tính thêm một dòng mỗi tuần: KR tự lấy số của dòng mới nhất mà không ai sửa nguồn; đổi tên trang không làm nguồn gãy",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Lưu trang theo sheetId số của Google, cấu hình riêng của bảng tính vào cột có khuôn (hồ sơ 4.2–4.3); hàng cũ chuyển bằng migration dữ liệu. Sheets giả theo hợp đồng Sheets API v4 thật qua OKR_SHEETS_API_URL.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "S1"
+      ],
+      "tieu_chi": 9
+    },
+    {
+      "ma": "NS2",
+      "slug": "sheets-dia-chi-doc-rieng",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.1,
+      "ten": "Mỗi workspace một địa chỉ đọc Google",
+      "ten_ngan": "Địa chỉ đọc riêng",
+      "vai": "Quản trị viên",
+      "cau_giao": "«Quản trị viên thấy địa chỉ đọc Google riêng của workspace mình ở Kết nối › Google Sheets, và bảng tính chỉ chia sẻ cho workspace khác thì KR ở đây không đọc được»",
+      "vi_sao": "Hôm nay cả kho đọc bảng tính bằng một service account chung trong .env, nên ai biết mã bảng tính là đọc vòng qua quyền chia sẻ của Google; rủi ro lớn dần theo số loại người dùng và workspace.",
+      "bat_khi": "Hai workspace mẫu: bảng tính chỉ chia sẻ cho địa chỉ của B, KR của A báo «chưa chia sẻ»; KR cũ vẫn đọc được trong thời gian chuyển",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Cách B ở hồ sơ 4.3. Trần service account mỗi dự án Google Cloud và cách tạo bằng IAM API chưa kiểm trên tài liệu Google — kiểm ở Cổng Phạm vi; không khả thi thì đổi sang cách A (workspace dán khoá của mình). Thiếu quyền tạo thì mất khả năng, không ném.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "S2"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "NS3",
+      "slug": "webhook-vao-kr",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.2,
+      "ten": "Webhook vào riêng từng KR",
+      "ten_ngan": "Webhook vào",
+      "vai": "Người làm tự động hoá",
+      "cau_giao": "«Người làm tự động hoá mở cửa nhận số cho một KR, chép đường dẫn và lệnh mẫu vào n8n hay Apps Script, gửi một số và thấy số ấy trên KR mà không cần khoá API cá nhân»",
+      "vi_sao": "Hệ thống không có tài khoản OneHub (máy bán hàng, kịch bản của phòng khác) không gửi số được; khoá API hiện có mở mọi thứ người giữ khoá làm được. Không công cụ OKR nào trong tám công cụ đã xét có cửa này (hồ sơ C3).",
+      "bat_khi": "Một kịch bản không có tài khoản OneHub gửi số qua đường dẫn của KR và số hiện trên KR; thu hồi xong thì cùng lời gọi bị từ chối",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Token lưu băm theo mẫu conversation-share-token, hiện một lần; quyền ghi mượn từ người mở cửa, kiểm lại mỗi lần. Trường kieu bắt buộc ngay từ đầu, hàng này chỉ nhận dat để NS4 thêm cong không làm gãy người gọi. Một giao dịch: bản chụp nguồn webhook + dòng vết ghi-so-webhook. Hạn mức theo token.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "W1"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "NS4",
+      "slug": "cong-don-chong-lap",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.3,
+      "dung_tren": [
+        "NS3"
+      ],
+      "ten": "Cộng dồn có mã chống lặp",
+      "ten_ngan": "Cộng dồn",
+      "vai": "nen",
+      "cau_giao": "«Một sự kiện gửi lặp chỉ được cộng vào số của KR một lần, dù qua webhook vào hay API»",
+      "vi_sao": "Đếm sự kiện rời rạc (mỗi đơn +1) cần cộng dồn; Tability cộng dồn không có khoá chống lặp nên gửi lại là số tăng hai lần.",
+      "bat_khi": "Gửi cùng một mã sự kiện mười lần, kể cả đồng thời, số của KR tăng đúng một lần; người gọi API cũ không khai kiểu vẫn ghi như trước",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Đứng trên cửa vào của NS3. Dùng lockIdempotencyKey của @crm/db/idempotency. API thêm kieu tuỳ chọn, vắng là dat. Mã lỗi máy đọc được: khong-nhan-api, ky-chua-toi, ky-da-qua, khong-hop-kieu. Ghi lùi ngày trong chu kỳ. KR mốc và phần trăm từ chối cong.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "W2"
+      ],
+      "tieu_chi": 9
+    },
+    {
+      "ma": "NS5",
+      "slug": "nhip-doc-va-lan-cuoi",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.4,
+      "ten": "Nhịp đọc và lần đọc cuối",
+      "ten_ngan": "Nhịp đọc",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR chọn đọc số mỗi ngày hay mỗi tuần, và trên bảng KR thấy lần đọc cuối hoặc lý do đọc hỏng mà không phải mở hộp thoại nguồn số»",
+      "vi_sao": "Hộp thoại nguồn số đã hiện «Đọc được X lúc Y», nhưng nguồn hỏng chỉ lộ ra khi có người mở hộp thoại; nhịp ngày hoặc tuần là mức các công cụ khác cho (hồ sơ C7).",
+      "bat_khi": "Một bảng tính bị bỏ chia sẻ: lý do hiện trên bảng KR ngay sau lần đọc kế, không ai phải mở hộp thoại",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. trangThaiDoc trong nguon-so-luat.ts đã có cho hộp thoại; hàng này đưa trạng thái ra bảng KR và thêm nhịp tuần (migration). 7 tiêu chí, dưới mục tiêu: gộp vào NS1 thì thành 16, quá ngưỡng tách.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "D1"
+      ],
+      "tieu_chi": 7
+    },
+    {
+      "ma": "NS6",
+      "slug": "webhook-ra",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.5,
+      "ten": "Webhook ra",
+      "ten_ngan": "Webhook ra",
+      "vai": "Quản trị viên",
+      "cau_giao": "«Quản trị viên đăng ký một đường dẫn nhận ở Kết nối › Webhook, gửi thử thấy kết quả, và từ đó mỗi số mới của KR và mỗi cập nhật tuần tới hệ thống của mình kèm chữ ký kiểm được»",
+      "vi_sao": "Báo cáo BI, kênh chat và hệ thống lương thưởng cần nhận số mà không hỏi lại OneHub; mẫu đáng học là Workpath (vỏ có mã sự kiện, ký thân, gửi lại cùng mã — hồ sơ C5).",
+      "bat_khi": "Phía nhận sập hai giờ rồi sống lại: mọi sự kiện tới đủ, không trùng mã sự kiện; quá ngưỡng thử lại thì webhook treo và màn nói vì sao",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Tác tử gửi từ AgentTask mà API xếp cùng giao dịch với lần ghi. Ký HMAC-SHA256, chặn địa chỉ nội bộ, chỉ https trên production. 11 tiêu chí (mức cho phép): gửi thử, ký, thử lại, treo và chặn địa chỉ nội bộ cùng là một lời hứa «gửi ra an toàn», tách ra thì hàng đầu giao một cửa ra không an toàn.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "W3"
+      ],
+      "tieu_chi": 11
+    },
+    {
+      "ma": "HT1",
+      "slug": "hop-tuan-mo-dung-bo",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.71,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Họp tuần mở đúng bộ",
+      "ten_ngan": "Họp tuần mở đúng bộ",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm Họp tuần và vào thẳng bảng của bộ OKR mình dẫn, thấy hàng số của tuần ở đầu; bộ chưa có KR công bố hay chu kỳ chưa chạy thì màn nói đúng lý do và chỉ sang đơn vị có KR»",
+      "vi_sao": "Production 22/10: bấm Họp tuần không kèm đơn vị thì bảng là của OneHub, cấp này không có KR công bố nên màn hiện «0/0 KR» và câu «Chưa có lần cập nhật nào để bàn» trong khi phòng của người xem đã cập nhật đủ (okr-xem.service.ts:160-161, :586). VK3 AC-7 vẫn giữ «xemOkr trần mở bộ OneHub»; VK8 AC-3 đặt hàng số chỉ ở thẻ OKR. Tability mở đúng plan của đội và có bốn ô số ở đầu plan.",
+      "bat_khi": "Trưởng phòng mở Họp tuần từ Bộ OKR › Tôi dẫn › bộ › thẻ con, từ Của tôi › đơn vị bạn dẫn, hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn; không còn màn «0/0 KR» với câu «chưa có lần cập nhật» khi bộ của người xem đã có cập nhật",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi luật AC-7 đã duyệt của VK3 (xemOkr trần → OneHub): chủ kho chốt ở Cổng Phạm vi của hàng này. Thước của VK3 đo thẻ Họp tuần; sửa sau khi VK3 ký có thể phải ghim lại hồ sơ trang-bo-okr. Chủ kho bỏ mục «Họp tuần» trên thanh bên 24/10 (Cổng Phạm vi HT1; docs/findings/2026-10-22-hop-tuan/README.md §1). Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D1 giữ AC-2 — người dẫn cả bộ phận và phòng ban vào bộ phận, theo thuTuDan của Của tôi; sửa chữ F01 của README cho khớp. D2 «tiêu đề là tên phòng ban» đọc là dòng vị trí «Bộ OKR › tên đơn vị» theo VK3 V1-19 (d-14), không mở lại V1-19. D4 cập nhật từ Họp tuần dùng lối sheet, không thêm lối hop-tuan vào LOI_VAO.",
+      "phu": [
+        "H1",
+        "H2",
+        "H4"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "HT2",
+      "slug": "hop-tuan-tren-bang",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.72,
+      "dung_tren": [
+        "VK7",
+        "HT1"
+      ],
+      "ten": "Đi họp ngay trên bảng Họp tuần",
+      "ten_ngan": "Họp trên bảng",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị đi họp ngay trên bảng Họp tuần: mỗi KR hiện ghi chú mới nhất và mức đổi so với lần trước ở mọi khổ màn, cập nhật được ngay từ dòng, và ngăn KR mở từ bảng đi ‹ › theo thứ tự đáng bàn»",
+      "vi_sao": "Dưới 1024px cột «Ghi chú mới nhất» biến mất (hop-tuan.tsx:137, :162); phần «Còn lại» không có ghi chú; dòng bảng chỉ mở ngăn KR, và ‹ › của ngăn đi trong một mục tiêu (kr-sheet.tsx:400-401). Tability: trình chiếu hiện câu phân tích mới nhất cho mọi KR kèm mức đổi, ngăn KR đi ‹ › qua mọi KR của plan, nút Create check-in ở ngăn và ở từng trang trình chiếu.",
+      "bat_khi": "Ở 375, 768 và 1440 mọi dòng Họp tuần có ghi chú mới nhất; cập nhật một KR từ bảng không phải rời bảng; ‹ › trong ngăn mở từ bảng đi đúng thứ tự của bảng",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi AC-2 đã ký của VK7 (thứ tự ‹ › theo position của mục tiêu) chỉ khi ngăn mở từ Họp tuần — xét thước ngan-kr-mot-cho theo luật tạm «không tự sửa thước hồ sơ đã ký». Cùng tệp hop-tuan.tsx với HT1: đi sau HT1 trên cùng dãy. Cập nhật từ dòng = nút mở hộp cập nhật một KR như NutCapNhatDong; không ô nhập trên dòng; không gửi nhiều KR (Lối (b), SV1).",
+      "phu": [
+        "H3",
+        "H5"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "HT3",
+      "slug": "hop-cap-nhat-lan-truoc",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.73,
+      "dung_tren": [],
+      "ten": "Hộp cập nhật hiện lần trước",
+      "ten_ngan": "Cập nhật thấy lần trước",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR mở hộp cập nhật và thấy lần cập nhật trước — ngày, số, mức tự tin, ghi chú — cùng câu hỏi gợi ý cho ô ghi chú, trước khi gửi»",
+      "vi_sao": "Hộp cập nhật đã có đồ thị xem trước và điền sẵn mức tự tin lần trước (VK7), nhưng không hiện ghi chú lần trước, nên người viết không biết tuần trước đã hứa gì. Form check-in của Tability đặt «Previous check-in» cạnh form và gợi ba câu hỏi cho ô phân tích.",
+      "bat_khi": "Mở hộp cập nhật của một KR đã có lần cập nhật thì thấy ghi chú lần trước mà không bấm thêm; KR chưa có lần nào thì không có khối trống",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Không chạm tệp của HT1, HT2; chạy song song được.",
+      "phu": [
+        "H6"
+      ],
+      "tieu_chi": 6
+    },
+    {
+      "ma": "HT4",
+      "slug": "tom-tat-tuan-dang-cho",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.74,
+      "dung_tren": [],
+      "ten": "Tóm tắt tuần có trạng thái chờ",
+      "ten_ngan": "Tóm tắt tuần đang chờ",
+      "vai": "Trưởng phòng ban",
+      "cau_giao": "«Trưởng phòng ban mở Họp tuần của phòng đã bật Tóm tắt tuần nhưng chưa có bản, và thấy bản đầu tiên tới lúc nào»",
+      "vi_sao": "Đo 22/10 trên phiên đo: bật nấc «bật» cho một phòng bằng okr.setProgram thì okr.troLyTomTat vẫn trả ban: null, dangSoan: false, chuaCapNhat: false và khối trả null (khoi-tom-tat.tsx:346) — trưởng phòng không biết tính năng đã bật.",
+      "bat_khi": "Phòng ở nấc bật mà chưa có bản thì Họp tuần hiện một dòng nêu ngày giờ bản đầu tiên; nấc tắt và chế độ ẩn vẫn không hiện gì",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Chỉ chạm khoi-tom-tat.tsx và đường đọc tóm tắt; chạy song song được.",
+      "phu": [
+        "H7"
+      ],
+      "tieu_chi": 5
+    },
+    {
+      "ma": "HT5",
+      "slug": "cam-xuc-tren-cap-nhat",
+      "hang": "T3",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.75,
+      "dung_tren": [
+        "VK12"
+      ],
+      "ten": "Thả cảm xúc trên lần cập nhật",
+      "ten_ngan": "Cảm xúc trên cập nhật",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên thả cảm xúc lên một lần cập nhật tuần ở Cập nhật gần đây, thẻ con Họp tuần của bộ OKR và ngăn KR, và người cập nhật thấy ai đã thả»",
+      "vi_sao": "VK12 mang trả lời dưới từng lần cập nhật; chưa có cách ghi nhận nhẹ hơn một câu trả lời. Tability có Reply và Like trên từng check-in ở ba chỗ: Recent updates, ngăn KR, trình chiếu.",
+      "bat_khi": "Một lần thả hiện ở cả ba chỗ trong cùng phiên; thả lại thì gỡ; người ngoài quyền xem mục tiêu không thấy",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). T3: thêm bảng ở packages/db/prisma. Đứng trên dòng tin của VK12. Quyết định 24/10 (chủ kho «Đồng ý hết theo khuyến nghị»): D5 trả lời trên từng lần cập nhật (Hỏi-1 lối b của VK12) đi cùng hàng này. D6 thêm checkInId cho OkrComment trong cùng migration với bảng cảm xúc, để trả lời và cảm xúc dùng một khoá lần cập nhật; VK12 đổi cách gắn trả lời ở vòng sau. Không dùng OkrGhiNhan cho cảm xúc. Nguồn: ghi chú bàn giao V3-doi-chieu-hop-tuan-2410.md mục 5, 6, 10.",
+      "phu": [
+        "H8"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "SV1",
+      "slug": "cua-toi-chi-liet-kr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.76,
+      "dung_tren": [
+        "HT2"
+      ],
+      "ten": "Của tôi chỉ liệt KR, cập nhật qua bộ",
+      "ten_ngan": "Cập nhật qua bộ",
+      "ngay": "2026-10-24",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR mở Của tôi hay bấm tin nhắc 08:30, thấy các KR cần cập nhật tuần này, bấm một KR thì ngăn KR mở trong bộ OKR của nó và cập nhật bằng hộp một KR»",
+      "vi_sao": "Hôm nay có hai đường cập nhật: bảng hàng loạt ở Của tôi (phan-can-cap-nhat.tsx → BangCapNhat, lối nhac · viec-cua-toi · cua-toi trong LOI_VAO) và hộp một KR từ ngăn KR; tin nhắc «N KR chờ» dẫn tới /okr?tu=nhac (nhac-ke-hoach.ts:192-193). Tability không có trang cập nhật riêng: My focus liệt KR, cập nhật trong ngăn KR (README hop-tuan §4, ảnh tab/t09-my-focus.jpg, tab/t03-ngan-kr.jpg).",
+      "bat_khi": "Của tôi không còn bảng cập nhật hàng loạt; tin nhắc, Của tôi, ngăn KR và dòng bộ OKR đều mở cùng hộp một KR; bấm tin nhắc «N KR chờ» tới KR chứ không tới /okr?tu=nhac",
+      "ly_do": "Chủ kho chốt 24/10 ở phiên HT1 (Cổng Phạm vi hop-tuan-mo-dung-bo), nguyên văn «Lối (b), nhưng tôi hỏi lúc research tability đã quyết định như vậy, nhưng phiên này không giữ được gì từ quyết định research». Câu hỏi gốc 22/10: «Tôi nhớ Tability cập nhật trực tiếp trong bộ okr giúp đơn giản hóa chứ không có trang riêng?». Nghiên cứu: docs/findings/2026-10-22-hop-tuan/README.md §1, §4, §6. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §1.",
+      "ghi_chu": "Lật hàng đã ký DH3 cua-toi-ba-phan (#443, 15/10): eval đo bảng hàng loạt của DH3 cần superseded_by trỏ hàng này. Đi sau HT2 (nút cập nhật trên dòng Họp tuần, ‹ › theo bảng). Bản mẫu /proto/hop-tuan-mo-dung-bo, commit 5ebcd43dc trên feat/hop-tuan-mo-dung-bo (ST-htmb-ngan-kr, ST-htmb-hop-cap-nhat, «Cần cập nhật tuần này»). Mã Tability có hộp cập nhật hàng loạt (modals.bulkCheckin) nhưng không phải lối chính; chủ kho chọn bỏ. Đọc Known limits HT3 Ngoài-4, Ngoài-5 (bản phạm vi §6) trước khi chạm đường «lần trước». Chủ kho 25/10 chọn Q5 (a) của docs/findings/2026-10-25-bo-okr-gom-lan/README.md: bỏ mục gập «Đang theo dõi (n)» khỏi Của tôi (okr/cua-toi.tsx:64), theo dõi xem ở Bộ OKR › Đang theo dõi.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "LB"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "SV2",
+      "slug": "thuoc-sau-mot-nut-tao",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.6,
+      "dung_tren": [],
+      "ten": "Thước hồ sơ đã ký sau Một nút tạo",
+      "ten_ngan": "Thước sau một nút tạo",
+      "ngay": "2026-10-24",
+      "vai": "nen",
+      "cau_giao": "«Thước màn của mọi hồ sơ đã ký không còn bấm lối tạo mục tiêu mà VK9 đã gỡ, và chiều đỏ E16 của canh-kr-okr đỏ lại khi danh sách mẫu phía màn không lọc theo đơn vị»",
+      "vi_sao": "VK9 gỡ menu «…», «Bắt đầu từ mẫu» và nhóm Soạn ở đầu trang. V2-20 b2 đã sửa bốn bàn đo nhưng chưa lượt quét nào chứng là không còn thước nào bấm lối cũ. Hộp chọn khoá dòng «Từ mẫu» theo useCoMau, nên bản sao lỗi của E16 không còn tới màn chọn mẫu: E16 xanh mà thôi chứng danh sách mẫu lọc theo đơn vị.",
+      "bat_khi": "Quét evals.yaml và rang/ của mọi hồ sơ đã ký: 0 bước bấm lối VK9 đã gỡ mà thiếu superseded_by; man-canh-kr.mjs --chieu-do E16 thoát 1 đúng câu ghim «tên mẫu lọt»",
+      "ly_do": "VK9 mot-nut-tao-muc-tieu (#545) Ngoài-3, chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 22/10 15:00Z và giữ ở lượt ký lại 22:09Z (d-20261022T150049Z-23, d-20261022T220930Z-39, decided_by Phan Le Manh); phần lớn đã xử theo «V2-20 b2» (22/10 12:57Z). E16: phát hiện ở dòng sổ canh-kr-okr d-20261022T152758Z-39, nguyên văn «--chieu-do E16 nay LOT vì dòng Từ mẫu của trưởng kho-van bị khoá theo bộ lọc riêng của hộp». Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §2, §3.",
+      "ghi_chu": "Sửa thước hồ sơ đã ký: luật tạm 18/10 — Cổng Phạm vi của hàng này là chỗ chủ kho duyệt từng tệp. Bốn bàn đo đã sửa: man-canh-kr.mjs, man-okr.mjs (dat-okr-trong-crm), do-man.mjs (okr-soat-anh-luot-3), man-dau-trang.mjs (dieu-huong-khu-muc-tieu). 5 tiêu chí, dưới mục tiêu: không gộp với SV4 vì SV4 phải chờ VK6 gộp, hàng này không.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "N3",
+        "E16"
+      ],
+      "tieu_chi": 5
+    },
+    {
+      "ma": "SV3",
+      "slug": "cac-cuoc-da-soan-khi-het-luot",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.77,
+      "dung_tren": [],
+      "ten": "Các cuộc đã soạn khi hết lượt",
+      "ten_ngan": "Cuộc đã soạn",
+      "ngay": "2026-10-24",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị đã dùng hết cuộc soạn cùng Kara trong kỳ vẫn mở được Các cuộc đã soạn từ hộp Thêm mục tiêu và đọc lại từng cuộc»",
+      "vi_sao": "Từ VK9, hết cuộc soạn trong kỳ thì lối «Các cuộc đã soạn» biến mất (duong-soan.ts) — đúng ca mà quyết định d-15 của VK9 muốn giữ. Không mất dữ liệu nhưng mất cách xem lại.",
+      "bat_khi": "Đơn vị hết cuộc soạn: dòng «Soạn cùng Kara» khoá kèm lý do và lối «Các cuộc đã soạn» vẫn mở danh sách; đơn vị chưa có cuộc nào thì không có lối rỗng",
+      "ly_do": "VK9 mot-nut-tao-muc-tieu (#545) Ngoài-9 (mức high), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 22/10 15:00Z và giữ ở lượt ký lại 22:09Z (d-20261022T150049Z-29, d-20261022T220930Z-45, decided_by Phan Le Manh). Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §2.",
+      "ghi_chu": "Tệp apps/app/app/(app)/[slug]/okr/soan/duong-soan.ts. 5 tiêu chí, dưới mục tiêu; không hàng okr nào cùng vùng để gộp.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "N9"
+      ],
+      "tieu_chi": 5
+    },
+    {
+      "ma": "SV4",
+      "slug": "giu-ho-so-quet-du",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.7,
+      "dung_tren": [
+        "VK6"
+      ],
+      "ten": "Bộ rà hồ sơ cũ quét đủ tệp",
+      "ten_ngan": "giu-ho-so quét đủ",
+      "ngay": "2026-10-24",
+      "vai": "nen",
+      "cau_giao": "«Bộ rà hồ sơ cũ giu-ho-so đọc đủ mọi tệp thước khai ở paths và quét đủ chuỗi đường đã bỏ, không rơi tệp nào xen kẽ»",
+      "vi_sao": "chuCuaEval và TEP_THUOC dùng regex cờ /g với .test() trong filter: lastIndex giữ giữa hai lần gọi nên cứ hai tệp thước thì mất một, vế quét chuỗi bỏ hụt mà không báo. Hôm nay chưa sót gì, nhưng lỗi im lặng.",
+      "bat_khi": "Ca kiểm có bốn tệp thước liền nhau trong paths: cả bốn vào danh sách quét; bản sao regex có cờ /g làm ca kiểm đỏ đúng câu",
+      "ly_do": "VK6 so-do-toan-vung Ngoài-5 và Ngoài-10, chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 22/10 14:59Z (d-20261022T145948Z-42, -47 trên feat/so-do-toan-vung, decided_by Phan Le Manh). Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §4.",
+      "ghi_chu": "Tệp _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs (có trên onehub khi VK6 gộp). Kiểm cùng lúc bản giu-ho-so.mjs của ngan-kr-mot-cho — đọc bản đã đổi neo theo commit gộp #525 (d691d20ec, sổ ngan-kr-mot-cho d-20261022T235101Z-97). Ngoài-9 của VK6 (GIU.kiemDuong thiếu đối chứng dương khung-man-chung, Known limits) chạm đúng tệp này.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "N5",
+        "N10"
+      ],
+      "tieu_chi": 5
+    },
+    {
+      "ma": "SV5",
+      "slug": "thuoc-man-sau-vo-khu",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.8,
+      "dung_tren": [
+        "VK6"
+      ],
+      "ten": "Thước màn đúng sau vỏ khu",
+      "ten_ngan": "Thước màn sau vỏ khu",
+      "ngay": "2026-10-24",
+      "vai": "nen",
+      "cau_giao": "«Thước màn trang-don-vi-mot-bang E2 và toan-canh-okr E10, E21 xanh trên onehub sau vỏ khu Mục tiêu và chỉ đỏ khi màn hỏng thật»",
+      "vi_sao": "Sau V3-27 B, 14 ô thước gãy đã sửa tại chỗ trên feat/so-do-toan-vung. Còn hai lớp chưa có chốt máy đúng: trang-don-vi E2 SAI «khoang lech 4px — KHOANG 1440: don vi 65px · Thoa thuan 69px» (sổ trang-don-vi d-20261022T223644Z-59 ghi là giới hạn sản phẩm thật ở 1440), và toan-canh E10, E21 (ui-check) hỏng năm bước — thẻ số 5 ≠ 4 sau Mọi KR, breadcrumb (sổ toan-canh d-20261022T235101Z-55).",
+      "bat_khi": "Lượt ghim lại trang-don-vi-mot-bang và toan-canh-okr trên onehub: E2, E10, E21 xanh; cấy lại khoảng lệch 4px hay thêm một thẻ số thì đúng ô đó đỏ",
+      "ly_do": "Chủ kho 22/10 22:14Z nguyên văn «Đồng ý A» (V3-25): «thước dải lượt và màn đỏ sẵn not-run có lý do, mở một hàng sửa thước»; 22:18Z «V3-27 B»: máy sửa tại chỗ 14 ô, riêng trang-don-vi E3 E4 E5 E17 chẩn trước. Sổ đợt .acceptance-runs/dieu-phoi-vo-khu-muc-tieu/yeu-cau/V3-25.json, tra-loi/V3-25.json, V3-27. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §5.",
+      "ghi_chu": "Nếu khoảng lệch 4px ở 1440 là sản phẩm thì sửa màn trong hàng này (hàng công cụ trang đơn vị, giới hạn đã biết từ VK2 — vo-khu-muc-tieu d-20261020T224928Z-43). Lớp thước gắn ref nhánh, dải lượt (gãy khi chính hồ sơ gộp) thuộc F35 don-ho-so-cu, không cắt lại ở đây. 6 tiêu chí, dưới mục tiêu: không gộp với SV4 — kết quả khác (thước màn vs công cụ rà).",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "T25"
+      ],
+      "tieu_chi": 6
+    },
+    {
+      "ma": "SV6",
+      "slug": "bam-kr-mo-chi-tiet-kr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.78,
+      "dung_tren": [],
+      "ten": "Bấm KR mở chi tiết KR",
+      "ten_ngan": "Bấm KR mở KR",
+      "ngay": "2026-10-24",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR bấm một KR ở Của tôi, Việc, Sơ đồ hay bảng KR trong chi tiết mục tiêu và luôn mở chi tiết KR, không mở mục tiêu chứa nó; màn và tin nhắc gọi mỗi lần ghi là «Cập nhật»»",
+      "vi_sao": "Bốn chỗ bấm KR còn mở mục tiêu hoặc không bấm được: apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx:85 (Của tôi mở objective), apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx:260 (onSelect mở objective), apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx:194 (việc có keyResultId vẫn mở objective), tên KR ở apps/app/app/(app)/[slug]/okr/bang-kr.tsx:366 là chữ trơn. «Cập nhật tuần» còn dùng như danh từ trên màn và tin nhắc: apps/app/lib/messages/okr.ts:340, okr-toan-canh.ts:107, :109, okr-soan.ts:271, apps/agent/agent/lib/tin-nhac.ts:31.",
+      "bat_khi": "Mọi lối bấm KR trong khu Mục tiêu mở openRecord({ kind: \"kr\" }); không còn chữ «Cập nhật tuần» làm danh từ trên màn hay tin nhắc, cụm «cập nhật tuần này» chỉ khoảng thời gian vẫn giữ",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu tài liệu Họp tuần của ba dãy V1, V2, V3). Luật «Bấm vào KR và cập nhật» ở docs/design.md mục «Nếp màn»; từ «Cập nhật» ở CONTEXT.md. Bảng bốn chỗ sai ở docs/findings/2026-10-22-hop-tuan/README.md mục 8. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §8.",
+      "ghi_chu": "Giao dãy V2 làm ngay, không chờ VK3. Thêm lối bấm KR thì thêm ô vào MA_TRAN của _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs và bài vk7-moi-loi (nay 9 ô), cùng lớp V3-27 B — dòng sổ fix decided_by chủ kho. Đổi chữ tin nhắc chạm apps/agent/test/okr-nhac.integration.spec.ts:407 và _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs (hồ sơ đã ký): luật tạm 18/10, chủ kho duyệt ở Cổng Phạm vi của hàng này. VK6 so-do-toan-vung xoá cay-can-chinh.tsx khi gộp; khi đó luật áp cho nút KR trên màn Sơ đồ toàn vùng (okr/so-do/).",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "BK"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "SV7",
+      "slug": "lich-su-moi-lan-cap-nhat",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.79,
+      "dung_tren": [
+        "SV6"
+      ],
+      "ten": "Lịch sử hiện mọi lần cập nhật",
+      "ten_ngan": "Lịch sử mọi lần",
+      "ngay": "2026-10-24",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR mở chi tiết KR và thấy trong Lịch sử mọi lần cập nhật, kể cả nhiều lần trong một tuần, và biểu đồ có một điểm cho mỗi lần»",
+      "vi_sao": "Ngăn KR gom lịch sử theo tuần, nên gửi lần thứ hai trong tuần thì số dòng lịch sử không tăng. OkrCheckIn không có khoá duy nhất theo tuần (chỉ @@index([weekStart]) ở packages/db/prisma/schema.prisma), và «Cập nhật» ghi lúc nào cũng được (CONTEXT.md 24/10). Tability: Timeline của ngăn KR hiện từng lần kèm số, mức đổi và câu phân tích (README hop-tuan, ảnh tab/t03b-ngan-kr-dong-thoi-gian.jpg).",
+      "bat_khi": "Gửi hai lần cập nhật cho một KR trong cùng tuần: Lịch sử tăng hai dòng và biểu đồ có hai điểm",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu tài liệu Họp tuần của ba dãy V1, V2, V3). Đổi hành vi đã ký của VK7 ngan-kr-mot-cho Ngoài-1 (Known limits «lịch sử gom theo tuần», d-20261020T125111Z-30, d-20261021T121547Z-76): cần dòng sổ decided_by chủ kho ở hồ sơ ngan-kr-mot-cho. Bản phạm vi: docs/plan/pham-vi-okr-sau-vo-khu-2410.md §8.",
+      "ghi_chu": "Đi sau SV6 vì cùng ngăn KR. Bước E12 của VK7 («số dòng lịch sử trong ngăn tăng 1») sẽ đúng lại sau hàng này. Bấm một lần cũ để xem riêng lần ấy: mục chờ SV-C1.",
+      "dot": "okr-sau-vo-khu-2410",
+      "phu": [
+        "LS"
+      ],
+      "tieu_chi": 6
+    },
+    {
+      "ma": "VK14",
+      "slug": "so-do-cua-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.8,
+      "dung_tren": [
+        "VK3",
+        "VK6"
+      ],
+      "ten": "Sơ đồ của một bộ OKR",
+      "ten_ngan": "Sơ đồ của bộ",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở thẻ con Sơ đồ của bộ OKR đơn vị mình và thấy ngay trong trang bộ đơn vị đó cùng đơn vị cha và các đơn vị con, mục tiêu nào góp vào mục tiêu nào, mà không rời sang Báo cáo»",
+      "vi_sao": "VK3 dựng thẻ «Sơ đồ góp vào» của trang bộ bằng cây cả chu kỳ (xemOkr=cay), còn VK6 chuyển ?xemOkr=cay sang /okr/so-do?moDonVi và bỏ Cây căn chỉnh: gộp cả hai thì thẻ con của một vật bật ra một nơi khác của khu, trái luật thẻ con ở docs/design.md. Nghiên cứu 18/10 đặt «Sơ đồ — đơn vị này với cha và con» làm thẻ con của một bộ (báo cáo 18/10, «Hình dạng hai màn chính»; wiki đợt okr-vo-khu-1810), như khối cha–con của một Plan trên Tability.",
+      "bat_khi": "Trang một bộ có lại thẻ con Sơ đồ; sơ đồ chỉ gồm đơn vị của bộ, đơn vị cha và các đơn vị con; bấm một đơn vị khác mở bộ OKR của đơn vị ấy; đổi thẻ con không mất chu kỳ và bộ đang xem",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C1 thẻ Sơ đồ của bộ: (a) bỏ tới khi có hàng mới VK14». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Lối tạm cho thẻ Sơ đồ tới khi hàng này giao (khuyến nghị (a): bỏ thẻ khỏi trang bộ) chủ kho chọn ở hàng gộp sau trong VK3, VK6; dòng sổ ở hồ sơ hàng ấy do dãy của nó ghi. Dùng lại FlowMap của VK6, không dựng sơ đồ thứ hai. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/so-do-cua-bo-okr (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "phu": [
+        "DC1"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK15",
+      "slug": "cot-phai-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.81,
+      "dung_tren": [
+        "VK8",
+        "VK19"
+      ],
+      "ten": "Cột phải của bộ OKR",
+      "ten_ngan": "Cột phải bộ",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở bộ OKR của đơn vị mình và thấy ở cột phải đơn vị góp vào mục tiêu nào của cấp trên, bấm một dòng để mở mục tiêu ấy»",
+      "vi_sao": "Muốn biết đơn vị góp vào đâu, hôm nay phải mở từng mục tiêu, khoảng hai bấm mỗi mục tiêu; danh sách đơn vị trực thuộc chỉ có ở cách xem cũ của Theo đơn vị. Nghiên cứu 18/10 đặt khối «Góp vào» và «Đơn vị trực thuộc» ở cột phải trang một bộ, như cột quan hệ của trang Plan trên Tability: «Thấy đơn vị góp vào đâu» từ 2 bấm còn 0 (báo cáo 18/10, «Trước và sau theo việc hằng tuần», «Bảng chuyển chỗ»).",
+      "bat_khi": "Trang một bộ có cột phải với khối Góp vào từ md trở lên, xếp dưới thẻ OKR ở khổ điện thoại; mỗi dòng bấm được; bộ chưa góp vào đâu có câu rỗng riêng",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C2 cột phải bộ (Góp vào · Đơn vị trực thuộc): cắt hàng sau VK8». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Chủ kho 25/10 «Đồng ý hết theo khuyến nghị» cho Q7 của docs/findings/2026-10-25-bo-okr-gom-lan/README.md: khối «Đơn vị trực thuộc» rời hàng này, đơn vị trực thuộc chỉ đi qua menu ở mắt xích cuối của dòng vị trí (docs/design.md «Thanh bên khu và thẻ con», hàng VK19). Khối «Hỏi nhanh Kara» của bản mẫu 18/10 không thuộc hàng này: lần đối chiếu 24/10 không trình nó. Đọc dữ liệu căn chỉnh và cây tổ chức có sẵn, không đổi lược đồ. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/cot-phai-bo-okr (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "phu": [
+        "DC2"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK16",
+      "slug": "mot-tin-hieu-tren-dong",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.82,
+      "dung_tren": [
+        "VK8"
+      ],
+      "ten": "Một tín hiệu trên dòng",
+      "ten_ngan": "Một tín hiệu",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên đọc một dòng mục tiêu hay KR và chỉ thấy tình trạng cạnh mức tự tin; nhãn loại và «Đã công bố» không còn trên dòng, nhãn trạng thái chỉ hiện khi mục tiêu là nháp hay chờ duyệt»",
+      "vi_sao": "Một dòng hôm nay mang cùng lúc tình trạng, mức tự tin, nhãn loại, «Đã công bố» và chip Kara; Tability để một ô màu và một thanh tiến độ. P12 của nghiên cứu 18/10 («Một tín hiệu trên dòng») giữ tình trạng và mức tự tin cạnh nhau, vì lúc hai thứ lệch nhau là lúc đáng bàn.",
+      "bat_khi": "Trên mọi dòng mục tiêu và KR của khu Mục tiêu không còn nhãn loại và «Đã công bố»; nhãn Nháp và Chờ duyệt vẫn hiện; tình trạng và mức tự tin đứng cạnh nhau; loại mục tiêu vẫn đọc được trong chi tiết mục tiêu",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C3 P12 một tín hiệu trên dòng: thành hàng; trang một người: chân trời». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Đi sau VK8 vì cùng dòng của thẻ OKR (KR mở sẵn). Màu nhãn theo StatusIndicator và bảng nghĩa ở docs/design.md «Màu trạng thái». Hồ sơ đã ký đo theo nhãn trên dòng thì ghim lại theo luật tạm 18/10. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/mot-tin-hieu-tren-dong (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "phu": [
+        "DC3a"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK17",
+      "slug": "mot-chu-ky-ca-khu",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.83,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Một chu kỳ cho cả khu",
+      "ten_ngan": "Một chu kỳ",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên chọn chu kỳ một lần ở đầu thanh bên Mục tiêu và mọi nơi đến trong khu — Của tôi, Cập nhật gần đây, Bộ OKR, Lấy ý kiến, Báo cáo — hiện cùng chu kỳ ấy cho tới khi đổi lại»",
+      "vi_sao": "VK2 cho mỗi màn giữ chu kỳ mặc định riêng (d-20261019T170009Z-7 của hồ sơ vo-khu-muc-tieu): Lấy ý kiến mặc định chu kỳ đang lập kế hoạch, nên đi từ Của tôi sang Lấy ý kiến thì chu kỳ tự đổi. Nghiên cứu 18/10 đặt ô chu kỳ «áp cho mọi nơi trong khu», để «hết cảnh chuyển thẻ thì kỳ tự đổi» (báo cáo 18/10, đặc tả vỏ). Mặc định nằm ở apps/app/app/(app)/[slug]/okr/okr-search-params.ts, chon-chu-ky.tsx, layout.tsx.",
+      "bat_khi": "Chọn một chu kỳ rồi đi qua mọi mục của thanh bên: kyOkr trên đường dẫn và chu kỳ trên ô không đổi; Lấy ý kiến chỉ mặc định chu kỳ đang lập kế hoạch khi đường dẫn không mang kyOkr",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C4 ô chu kỳ: một chu kỳ cho cả khu». Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Đổi hành vi đã ký của VK2: cần dòng sổ decided_by chủ kho ở hồ sơ vo-khu-muc-tieu và ghim lại okr-giai-ky-an. Đi sau VK3 vì thẻ con của trang một bộ mang kyOkr trên đường dẫn. Ô chu kỳ giữ ở header của AreaSidebar theo docs/design.md «Thanh bên khu và thẻ con». Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/mot-chu-ky-ca-khu (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "phu": [
+        "DC4"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK18",
+      "slug": "sau-ten-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-24",
+      "thu_tu": 104.84,
+      "dung_tren": [
+        "VK8"
+      ],
+      "ten": "Sáu tên còn treo của khu Mục tiêu",
+      "ten_ngan": "Sáu tên",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên thấy một tên cho lịch sử, mức chắc của lý do, danh sách đáng bàn và nút thêm việc: Lịch sử thay Vết và Diễn biến, Phỏng đoán thay Đặt cược, Đáng bàn thay Cần bàn, Thêm việc, Tiếp tục soạn OKR; bản tiếng Anh ghi Tasks và Company-wide»",
+      "vi_sao": "Màn còn các tên mà bảng «Đặt tên» của nghiên cứu 18/10 đề xuất đổi: «Vết» (apps/app/lib/messages/okr.ts:222, :223, okr-canh-kr.ts:131, :193), «Diễn biến» (okr-toan-canh.ts:170, :172), «Đặt cược» (okr.ts:217, :363), «Cần bàn» (okr.ts:161), «Tiếp cuộc đang soạn» (okr.ts:69, okr-soan.ts:40), nút «Thêm» trần của cột Việc; bản tiếng Anh gọi cột Việc là «Actions» (okr-canh-kr.ts:298) và thẻ cả công ty là «Overview» (okr.ts:789), trùng trang chủ CRM. CONTEXT.md mục Trao đổi (OKR) còn viết «sau «Vết»».",
+      "bat_khi": "Không còn «Vết», «Diễn biến», «Đặt cược», «Cần bàn», «Tiếp cuộc đang soạn» trên màn khu Mục tiêu; chi tiết mục tiêu có một thẻ Lịch sử; bản tiếng Anh không còn cột «Actions» cho việc và thẻ «Overview»; CONTEXT.md sửa trước khi đổi nhãn",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C8 sáu tên VK-C1: duyệt cả bảng». Mục chờ VK-C1 đóng và thành hàng này; hàng giữ dot okr-vo-khu-1810 và gánh mã C1 của bản phạm vi 18/10 để bảng phủ của đợt ấy vẫn ở một chỗ. Nghiên cứu: docs/findings/2026-10-18-vo-khu-muc-tieu/README.md mục 4. Bản phạm vi: docs/plan/pham-vi-okr-doi-chieu-vo-khu-2410.md.",
+      "ghi_chu": "Theo cách làm của bảng «Đặt tên»: sửa từ điển trước, rồi một lượt đổi nhãn cho cả hai thứ tiếng. Đi sau VK8 vì VK8 dựng chip «Cần bàn». VK10 chạm «Tiếp cuộc đang soạn» ở chế độ Soạn: hàng nào gộp sau giữ tên mới. Cột thao tác «Actions» (okr.ts:1023, cotThaoTac) là cột thao tác thật, không đổi. Hồ sơ đã ký đo theo nhãn (DH1–DH5, VK4) ghim lại sau lượt đổi nhãn. Con trỏ: crm-onehub-nguon:raw/2026-10-18-vo-khu-muc-tieu/bao-cao-tability-1810.md@88462c4. Luật chủ kho 24/10 (docs/proto.md «Mỗi vòng có bản mẫu hay sơ đồ cạnh tiêu chí»): S1 dựng /proto/sau-ten-khu-muc-tieu (design-pass) trên dữ liệu mẫu dày; chủ kho bấm thử trước Cổng 1, ảnh 1440 và 375 đặt cạnh từng tiêu chí.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "C1"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "VK19",
+      "slug": "bo-okr-chi-don-vi",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-25",
+      "thu_tu": 104.805,
+      "dung_tren": [
+        "HT1"
+      ],
+      "ten": "Bộ OKR chỉ của một đơn vị",
+      "ten_ngan": "Bộ một đơn vị",
+      "vai": "Trưởng bộ phận",
+      "cau_giao": "«Trưởng khối mở bộ OKR của khối mình chỉ thấy mục tiêu của khối, và sang bộ của từng phòng bằng dòng vị trí»",
+      "vi_sao": "Mở bộ của một bộ phận (donOkr=bp:<id>) thì bảng gom cả mục tiêu của mọi phòng ban con, không cột đơn vị, rồi chính các phòng ấy hiện lần nữa ở lưới «Đơn vị trực thuộc» dưới bảng. Nguyên nhân: dieuKienDonVi ở apps/api/src/okr/okr-xem.service.ts:168-179 mở bp sang phòng ban con, dùng cho cả bốn thẻ con (danhSach :282, viecCuaBo :465, hopTuan :657, bangCham okr-khep.service.ts:630); pb và goc không gom. Bộ mẫu: Khối Kinh doanh 1 mục tiêu riêng hiện 15, Khối Hỗ trợ 0 riêng hiện 10 trong khi danh sách Bộ OKR ghi 0. Trang một bộ còn ba đường sang đơn vị khác (dòng vị trí, ô chọn đơn vị, lưới trực thuộc) và mục gập «Đã bỏ (n)» kẹp giữa bảng và lưới.",
+      "bat_khi": "okr.danhSach, viecCuaBo, hopTuan, bangCham với bp:<id> chỉ trả mục tiêu cấp bộ phận của bộ phận ấy; hàng bộ phận ở danh sách Bộ OKR có tiến độ và KR tự tin thấp là số riêng, khớp cột Mục tiêu; trang một bộ không còn ô chọn đơn vị và lưới đơn vị trực thuộc, mắt xích cuối của dòng vị trí mở menu đơn vị cha, ngang hàng và trực thuộc; Đã bỏ là nút cuối hàng công cụ; bộ phận chưa có mục tiêu riêng có câu rỗng riêng; Toàn cảnh vẫn gộp phòng ban con",
+      "ly_do": "Chủ kho 25/10 nguyên văn «Đồng ý hết theo khuyến nghị» cho Q1 (a) bỏ gộp ở mọi thẻ con, Q2 (a) số riêng ở danh sách Bộ OKR, Q3 (a) hàng mới sau HT1, Q4 đổi AC-1 đã ký của toan-canh-okr và thước gop-y-dung-cho, Q6 Đã bỏ thành nút, Q7 đơn vị trực thuộc qua dòng vị trí. Báo cáo: docs/findings/2026-10-25-bo-okr-gom-lan/README.md mục 4–6.",
+      "ghi_chu": "Hồ sơ đã ký phải đổi luật, mỗi hồ sơ một dòng sổ fix decided_by chủ kho, đo hai chiều: toan-canh-okr AC-1 và E1 (okr-toan-canh.spec.ts «bp gồm con», chiều đỏ lật); gop-y-dung-cho (gop-y-dung-cho.spec.ts:75-76 đổi bp:BP_KD sang pb của phòng chứa M1, M2); tro-ly-okr-tom-tat theo E1; trang-bo-okr AC-7 (liên kết Đơn vị con) và AC-10 (ô chọn đơn vị), thêm ca bộ phận vào E5. Đứng sau HT1. Bốn điểm của HT1 hàng này gánh vì Q1 (a), theo giám sát 25/10 (phiên V1, chủ kho «Đồng ý theo khuyến nghị»): (1) HT1 AC-6 hứa số trên mục «Đơn vị có KR» (lấy okr.toanCanh, số gộp) bằng số Họp tuần của đơn vị ấy; khi hopTuan(bp) chỉ còn số riêng thì E7, E8 của HT1 đỏ — chọn đếm số riêng hoặc bỏ mục bộ phận; (2) HT1 AC-2 xếp «dẫn cả bộ phận lẫn phòng ban → bộ phận», sau Q1 (a) trưởng bộ phận dễ gặp bộ rỗng — xét lại thứ tự; (3) HT1 E8 có chiều đỏ «hopTuan(bp) bỏ con → đỏ» khoá hành vi gộp — cần dòng sổ fix decided_by chủ kho; (4) danh sách «Đơn vị có KR» trong màn rỗng bộ OneHub của HT1 chuyển sang menu ở dòng vị trí theo Q7. Toàn cảnh giữ gộp (toan-canh-okr AC-5, quyết định 04/10). Đi trước VK15 để cột phải dựng trên tập mục tiêu đúng. Luật chủ kho 24/10 (docs/proto.md): S1 dựng /proto/bo-okr-chi-don-vi trên dữ liệu mẫu dày, chủ kho bấm thử trước Cổng 1."
     }
   ],
   "chan_troi": [
@@ -2931,6 +4049,82 @@
         "E5"
       ],
       "mo_lai_khi": "NM2 chốt chỗ đặt và khu Mục tiêu cần theo"
+    },
+    {
+      "ma": "VK-C2",
+      "dot": "okr-vo-khu-1810",
+      "cau_giao": "«Trưởng đơn vị thấy trong Của tôi ai trong đơn vị chưa cập nhật tuần này»",
+      "ly_do": "Từ điển (mục Họp tuần) cố ý không liệt kê người chưa cập nhật và tránh chữ «điểm danh», để họp tuần bàn KR chứ không bàn người. Bản mẫu 18/10 có khối này; giữ hay bỏ là quyết định sản phẩm của chủ kho. Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C7, C9, C10: giữ hiện trạng»: Của tôi không liệt kê người chưa cập nhật.",
+      "phu": [
+        "C2"
+      ],
+      "mo_lai_khi": "Trưởng đơn vị cần biết ai chưa cập nhật mà bảng họp tuần xếp theo KR không đủ, và chủ kho sửa mục Họp tuần của từ điển"
+    },
+    {
+      "ma": "NS-C1",
+      "dot": "okr-nguon-so-2110",
+      "cau_giao": "«Người phụ trách KR chọn tệp bằng tài khoản Google của mình khi tệp không chia sẻ được cho địa chỉ đọc của workspace»",
+      "ly_do": "Địa chỉ đọc riêng (NS2) phủ phần lớn trường hợp; kết nối Google cá nhân gãy khi người nối rời đi, và không tài liệu nào của tám công cụ đã xét nói cách xử lý (hồ sơ C1).",
+      "phu": [
+        "G1"
+      ],
+      "mo_lai_khi": "Có người dùng thật không chia sẻ được bảng tính cho địa chỉ đọc của workspace, vd chính sách cấm chia sẻ ra ngoài miền công ty"
+    },
+    {
+      "ma": "NS-C2",
+      "dot": "okr-nguon-so-2110",
+      "cau_giao": "«Trưởng đơn vị theo dõi một chỉ số dài hạn ngoài chu kỳ OKR, số tự cập nhật như KR»",
+      "ly_do": "OneHub chưa có khái niệm chỉ số dài hạn ngoài chu kỳ; Tability dùng chung cơ chế nguồn số cho KPI.",
+      "phu": [
+        "K1"
+      ],
+      "mo_lai_khi": "Có hàng lộ trình dựng chỉ số dài hạn (KPI) ngoài chu kỳ OKR"
+    },
+    {
+      "ma": "NS-C3",
+      "dot": "okr-nguon-so-2110",
+      "cau_giao": "«Người phụ trách KR chọn HubSpot, một câu SQL hay một báo cáo BI làm nguồn số»",
+      "ly_do": "Webhook vào (NS3) và Sheets phủ được các hệ thống này qua n8n, Make hay Apps Script; mở cổng vào cơ sở dữ liệu của phòng ban là rủi ro lớn hơn giá trị (hồ sơ 4.9).",
+      "phu": [
+        "N1"
+      ],
+      "mo_lai_khi": "Một nguồn cụ thể có người cần thật mà webhook vào không thay được"
+    },
+    {
+      "ma": "HT-C1",
+      "dot": "okr-hop-tuan-2210",
+      "cau_giao": "«Trưởng đơn vị chiếu buổi họp tuần ở một chế độ riêng: trang tổng quan rồi mỗi KR một trang, cập nhật và trả lời ngay trên trang»",
+      "ly_do": "HT1 và HT2 biến chính bảng Họp tuần thành chỗ họp (ghi chú mọi KR, hàng số, cập nhật từ dòng). Chưa biết các phòng còn cần màn chiếu riêng như Presentation mode của Tability hay không.",
+      "phu": [
+        "H9"
+      ],
+      "mo_lai_khi": "Phiên nghiệm thu Họp tuần (Cổng Giá trị của lượt 5) cho thấy trưởng đơn vị vẫn chiếu bằng công cụ khác sau khi HT1, HT2 đã giao"
+    },
+    {
+      "ma": "SV-C1",
+      "dot": "okr-sau-vo-khu-2410",
+      "cau_giao": "«Người phụ trách KR bấm một lần cập nhật cũ trong Lịch sử của chi tiết KR và xem riêng lần ấy: số, mức tự tin, ghi chú, trả lời»",
+      "ly_do": "Chủ kho 24/10 «Đồng ý hết theo khuyến nghị»: SV7 hiện mọi lần ngay trong Lịch sử, đủ để đọc từng lần; chưa biết người dùng có cần một màn riêng cho một lần hay không.",
+      "phu": [
+        "CT1"
+      ],
+      "mo_lai_khi": "Sau khi SV7 giao, người dùng cần xem riêng một lần cập nhật (trả lời, cảm xúc hay sửa sai) mà Lịch sử không đủ chỗ"
+    },
+    {
+      "ma": "VK-C3",
+      "dot": "okr-doi-chieu-vo-khu-2410",
+      "cau_giao": "«Thành viên mở trang của một người và thấy cùng khuôn trang một bộ OKR: hàng số, KR người ấy phụ trách, việc và hoạt động»",
+      "ly_do": "Chủ kho 24/10 nguyên văn «Đồng ý hết theo khuyến nghị» (qua phiên giám sát vk, sau đối chiếu bộ nghiên cứu 18/10 với hiện trạng onehub 1591d8b77), cho dòng «C3 P12 một tín hiệu trên dòng: thành hàng; trang một người: chân trời». Nguyên tắc 3 của nghiên cứu 18/10 (một khuôn cho mọi vật chứa); VK3 để OKR cá nhân ngoài phạm vi.",
+      "phu": [
+        "DC3b"
+      ],
+      "mo_lai_khi": "Chương trình OKR bật OKR cá nhân, hoặc người dùng cần xem OKR của một người mà Mọi KR lọc theo người không đủ"
+    },
+    {
+      "ma": "TH-C1",
+      "cau_giao": "«Một tín hiệu cài lời dặn không lấy được khoá mô hình của lịch gom, kể cả khi Claude Code có lỗi phân quyền»",
+      "ly_do": "Hỏi-2 của TH2b (gia-co-gom-tin-hieu), chủ kho duyệt «để sau» 21/10: cách ly hệ điều hành cho phiên gom — người dùng hệ điều hành riêng, chặn mạng theo người dùng, proxy giữ khoá mô hình. TH2b chỉ dựa vào lớp phân quyền của Claude Code, và cách ly hệ điều hành chỉ kiểm được trên Actions.",
+      "mo_lai_khi": "Lịch gom tín hiệu đã chạy thật với khoá mô hình"
     }
   ],
   "da_bac": [

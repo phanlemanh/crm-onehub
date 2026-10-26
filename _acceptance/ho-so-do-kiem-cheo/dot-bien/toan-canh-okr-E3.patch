@@ -1,0 +1,11 @@
+--- a/apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx
++++ b/apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx
+@@ -159,7 +159,7 @@
+ 	);
+ 	const byUnit = useQuery({
+ 		...trpc.okr.danhSach.queryOptions(
+-			currentId === null ? skipToken : { cycleId: currentId, unit: don, loc },
++			currentId === null ? skipToken : { cycleId: currentId, unit: don },
+ 		),
+ 		placeholderData:
+ 			currentId === null

@@ -1,0 +1,1 @@
+E3 network: driver la script do-man.mjs (chay qua tien-de.mjs), khong co read_network_requests/read_console_messages -> n-a (driver)

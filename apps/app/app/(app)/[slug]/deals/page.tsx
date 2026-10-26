@@ -59,7 +59,12 @@ async function Deals({
 }: Pick<PageProps<"/[slug]/deals">, "searchParams">) {
 	const [, values, { view }] = await Promise.all([
 		requireSession(),
-		dealsSearchParams.load(searchParams),
+		getServerQueryClient()
+			.fetchQuery(
+				getServerTrpc().fields.filters.queryOptions({ entity: "DEAL" }),
+			)
+			.catch(() => [])
+			.then((truong) => dealsSearchParams.load(searchParams, truong)),
 		loadDealsView(searchParams),
 	]);
 	const input = dealsSearchParams.toInput(values);
@@ -74,6 +79,9 @@ async function Deals({
 				)
 			: Promise.resolve(),
 		queryClient.prefetchQuery(trpc.users.list.queryOptions()),
+		queryClient.prefetchQuery(
+			trpc.fields.filters.queryOptions({ entity: "DEAL" }),
+		),
 		queryClient.prefetchQuery(trpc.giaiDoan.list.queryOptions()),
 		queryClient.prefetchQuery(trpc.companies.options.queryOptions({ q: "" })),
 	]);

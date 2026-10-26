@@ -40,6 +40,16 @@ export const TINH_TRANG = [
 ] as const;
 export type TinhTrang = (typeof TINH_TRANG)[number];
 
+export const TINH_TRANG_KR = [
+	"truot",
+	"cham-nhip",
+	"dung-nhip",
+	"chua-co-ky-vong",
+	"moc-chua",
+	"moc-xong",
+] as const;
+export type TinhTrangKr = (typeof TINH_TRANG_KR)[number];
+
 export function tinhTrang(
 	phanTram: number,
 	kyVong: number | null,

@@ -1,42 +1,28 @@
 "use client";
 
+import { sapDuocTheoKieu, TIEN_TO_COT_TRUONG } from "@crm/db/fields-shape";
 import type { DataTableColumn } from "@crm/ui/components/data-table";
-import { EmptyCellValue } from "@crm/ui/components/empty-cell";
-import { useLocale } from "@crm/ui/components/locale-provider";
-import { formatDay } from "@crm/ui/lib/format";
-import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { type Owner, OwnerCell } from "@/components/crm/owner-cell";
-import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 import type { FieldEntity } from "./fields-entity";
+import {
+	anDuoiTheoKieu,
+	canhTheoKieu,
+	giaTriTrongHang,
+	type HangCoTruong,
+	OTruongBang,
+} from "./kieu-truong";
 
-type WithFields = { fields: Record<string, string | number | boolean | null> };
-
-function render(
-	type: string,
-	value: string | number | boolean | null,
-	users: Map<string, Owner>,
-	locale: Locale,
-) {
-	if (value === null || value === "") return <EmptyCellValue />;
-
-	if (type === "CHECKBOX") {
-		const misc = crmMessages(locale).misc;
-		return value === true ? misc.yes : misc.no;
-	}
-	if (type === "DATE") return formatDay(String(value), locale);
-	if (type === "USER") {
-		const user = users.get(String(value));
-		return user ? <OwnerCell owner={user} /> : <EmptyCellValue />;
-	}
-	if (type === "NUMBER") {
-		return <span className="tabular-nums">{String(value)}</span>;
-	}
-
-	return String(value);
+function nhanTrongO(
+	giaTri: string | number | boolean | null,
+): { value: string; label: string }[] {
+	if (giaTri === null || giaTri === "") return [];
+	const nhan = String(giaTri);
+	return [{ value: nhan, label: nhan }];
 }
+
+type WithFields = HangCoTruong;
 
 export function useFieldColumns<Row extends WithFields>(
 	entity: FieldEntity,
@@ -50,27 +36,26 @@ export function useFieldColumns<Row extends WithFields>(
 	const fields = query.data;
 	const members = users.data;
 
-	const locale = useLocale();
-	const byId = useMemo(
-		() => new Map((members ?? []).map((user) => [user.id, user])),
-		[members],
-	);
-
 	return useMemo(() => {
 		if (!fields) return [];
 
 		return fields
 			.filter((field) => field.showOnTable)
 			.map((field) => ({
-				id: `field:${field.key}`,
+				id: `${TIEN_TO_COT_TRUONG}${field.key}`,
 				header: field.label,
 				width: "w-[12%]",
-				hideBelow: "lg" as const,
+				sortable: sapDuocTheoKieu(field.type),
+				hideBelow: anDuoiTheoKieu(field.type),
+				align: canhTheoKieu(field.type),
 				cell: (row: Row) => (
-					<span className="truncate">
-						{render(field.type, row.fields[field.key] ?? null, byId, locale)}
-					</span>
+					<OTruongBang
+						kieu={field.type}
+						giaTri={giaTriTrongHang(field.type, row, field.key)}
+						luaChon={nhanTrongO(row.fields[field.key] ?? null)}
+						nguoiDung={members}
+					/>
 				),
 			}));
-	}, [fields, byId, locale]);
+	}, [fields, members]);
 }

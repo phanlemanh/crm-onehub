@@ -81,12 +81,14 @@ describe("quet-khi-dang-nhap", () => {
 		"ung-dung-da-dong: ung dung da dong khong quet khi co nguoi dang nhap, ung dung dang chay van nhan",
 		async () => {
 			const a = await createApp();
+			await a.listen(0, "127.0.0.1");
 			const quetA = spyOn(a.get(BackfillService), "auto").mockResolvedValue({
 				started: false,
 			});
 			await a.close();
 
 			const b = await createApp();
+			await b.listen(0, "127.0.0.1");
 			const quetB = spyOn(b.get(BackfillService), "auto").mockResolvedValue({
 				started: false,
 			});
@@ -110,6 +112,7 @@ describe("quet-khi-dang-nhap", () => {
 		"van-quet-that: dang nhap tren ung dung dang chay van xep identify, bai don dung dong luot quet sinh ra",
 		async () => {
 			const app = await createApp();
+			await app.listen(0, "127.0.0.1");
 			const moc = new Date();
 			const le = await db.contact.create({
 				data: { firstName: `${TIEN_TO}-le` },
