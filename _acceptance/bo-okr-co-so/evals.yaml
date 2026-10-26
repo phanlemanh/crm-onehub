@@ -227,6 +227,10 @@ evals:
       - "_acceptance/*/rang/**"
       - "_acceptance/bo-okr-co-so/rang/thuoc-da-ky.mjs"
     expected: |
+      Từ 26/10 (sổ d-20261026T125504Z-35, chủ kho «VK8 E13: đồng ý theo mẫu KDH»): E13 chạy «thuoc-da-ky.mjs --chi-quet» — đối
+      chứng dương của quét, quét lớp (1) và soát đổi thước (2)–(3) bên dưới, in từng «MUC <slug>#<E>», thoát 0 khi
+      không có «SAI AC-9», mã 1 khi có; KHÔNG chạy lại eval nào của lớp. Vế (4) chạy lại lớp trên cây vòng và trên nền
+      chuyển sang kiểm chéo đêm kiem-cheo-sau-gop#AC-6 (như trang-bo-okr E17, E18, sổ d-20261026T084222Z-49).
       thuoc-da-ky.mjs: (1) quét mọi tệp thước của hồ sơ có contract status signed-off/machine-cleared, cùng
       apps/app/test/*.dom.tsx, tìm tệp đo bảng mục tiêu hay khung trang của trang đơn vị và trang một bộ theo bốn mẫu khai
       trong script: bấm mở dòng (aria-expanded, expandRow, nhãn «Mở <tên>», data-mo-dong), tham số URL expand, hàng công cụ
