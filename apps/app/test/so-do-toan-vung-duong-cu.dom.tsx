@@ -24,6 +24,9 @@ mock.module("@/lib/trpc/server", () => ({
 const GOC_APP = resolve(import.meta.dir, "..");
 const GOC_KHO = resolve(GOC_APP, "../..");
 const O = join(GOC_APP, "app/(app)/[slug]/okr");
+const NHANH_NEN = "onehub";
+const REF_NEN = `origin/${NHANH_NEN}`;
+const DO_SAU_LAY_NEN = 500;
 
 const { default: nextConfig } = await import("../next.config");
 const { duongSoDoTuSucKhoe, duongSoDoTuBoOkr } = await import(
@@ -122,6 +125,55 @@ function git(...lenh: string[]): string {
 	if (r.exitCode !== 0)
 		throw new Error(`git ${lenh.join(" ")}: ${r.stderr.toString()}`);
 	return r.stdout.toString();
+}
+
+function gitThu(...lenh: string[]): { ma: number; ra: string; loi: string } {
+	const r = Bun.spawnSync(["git", "-C", GOC_KHO, ...lenh]);
+	return {
+		ma: r.exitCode,
+		ra: r.stdout.toString().trim(),
+		loi: r.stderr.toString().trim(),
+	};
+}
+
+function gocSoVoiNen(): string {
+	const nong = gitThu("rev-parse", "--is-shallow-repository").ra === "true";
+	const coSan = gitThu("merge-base", "HEAD", REF_NEN);
+	if (!nong && coSan.ma === 0) return coSan.ra;
+	const sau = `--depth=${DO_SAU_LAY_NEN}`;
+	if (gitThu("rev-parse", "--verify", "--quiet", REF_NEN).ma !== 0) {
+		const lay = gitThu(
+			"fetch",
+			"--no-tags",
+			sau,
+			"origin",
+			`+refs/heads/${NHANH_NEN}:refs/remotes/${REF_NEN}`,
+		);
+		if (lay.ma !== 0)
+			throw new Error(
+				`khong lay duoc ${REF_NEN} de so next.config.ts: ${lay.loi}`,
+			);
+	}
+	if (nong) {
+		const dau = gitThu("rev-parse", "HEAD").ra;
+		const dao = gitThu(
+			"fetch",
+			"--no-tags",
+			`--deepen=${DO_SAU_LAY_NEN}`,
+			"origin",
+			dau,
+		);
+		if (dao.ma !== 0)
+			throw new Error(
+				`khong dao sau duoc HEAD de tim goc chung voi ${REF_NEN}: ${dao.loi}`,
+			);
+	}
+	const goc = gitThu("merge-base", "HEAD", REF_NEN);
+	if (goc.ma !== 0)
+		throw new Error(
+			`khong tim duoc goc chung HEAD va ${REF_NEN} sau khi lay ${sau}: ${goc.loi}`,
+		);
+	return goc.ra;
 }
 
 function tepDuoi(thuMuc: string): string[] {
@@ -228,7 +280,7 @@ describe("vk6-duong-cu", () => {
 				: `SAI khong-bat-nham: ${khong} · ${bang}`,
 		);
 
-		const goc = git("merge-base", "HEAD", "origin/onehub").trim();
+		const goc = gocSoVoiNen();
 		const doi = git(
 			"diff",
 			"--name-only",
