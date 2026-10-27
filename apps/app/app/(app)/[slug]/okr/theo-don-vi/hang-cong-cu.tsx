@@ -7,8 +7,8 @@ import type { ReactNode } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { GOC } from "../don-dich";
-import { HangSoBoDangTai } from "./hang-so-bo";
 import { loadOkrSearchParams } from "../okr-search-params";
+import { HangSoBoDangTai } from "./hang-so-bo";
 import { TheConBo } from "./the-con";
 import { ViTriBo } from "./vi-tri-bo";
 
