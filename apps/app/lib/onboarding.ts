@@ -30,7 +30,10 @@ type Doc = { hetPhien: boolean; data: unknown };
 
 const KHONG_DOC: Doc = { hetPhien: false, data: null };
 
-async function read(request: NextRequest, procedure: string): Promise<Doc> {
+export async function readProcedure(
+	request: NextRequest,
+	procedure: string,
+): Promise<Doc> {
 	const cookie = request.headers.get("cookie");
 
 	if (!cookie) return KHONG_DOC;
@@ -68,7 +71,7 @@ export type WorkspaceGate = {
 export async function readWorkspaceGate(
 	request: NextRequest,
 ): Promise<WorkspaceGate> {
-	const doc = await read(request, "workspace.get");
+	const doc = await readProcedure(request, "workspace.get");
 	const workspace = workspaceAnswer.parse(doc.data);
 
 	const slug = workspace.slug;
@@ -98,5 +101,7 @@ export async function readWorkspaceGate(
 }
 
 export async function readResearchGate(request: NextRequest): Promise<Gate> {
-	return congNghienCuu((await read(request, "settings.researchKey")).data);
+	return congNghienCuu(
+		(await readProcedure(request, "settings.researchKey")).data,
+	);
 }

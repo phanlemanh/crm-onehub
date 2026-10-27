@@ -142,8 +142,8 @@ const NHOM = {
 				thay: [
 					[
 						`${OKR}/phan-don-vi-dan.tsx`,
-						"	return [\n		...theo(headOf.divisions, bpCay)",
-						'	return [\n		...headOf.departments.map((id) => ({ loai: "pb" as const, id })),\n		...theo(headOf.divisions, bpCay)',
+						"	return thuTuDanTheoCay(headOf, cay);",
+						'	return thuTuDanTheoCay(headOf, cay).sort((a, b) => Number(b.loai === "pb") - Number(a.loai === "pb"));',
 					],
 				],
 				ghim: "ctbp-don-vi-dan: the 1 la phong ban, mong bo phan",
