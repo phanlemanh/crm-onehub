@@ -44,7 +44,7 @@ import { moHoiYInput, suaHoiYInput, cycleIdInput, hoiYIdInput, gopYInput, suaYIn
 import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput, hoiYDoPhuOutput, congBoOutput, hieuViSaoOutput } from "../okr/okr-hoi-y.contracts";
 import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../okr/okr-khep.contracts";
 import { datHienThiInput, traLaiInput, chuyenDonViInput, moCoiInput } from "@crm/validation/okr-hien-thi";
-import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, danhSachBoOutput, viecCuaBoInput, viecCuaBoOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, quanhMucTieuInput, quanhMucTieuOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
+import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, danhSachBoOutput, soBoInput, soBoOutput, viecCuaBoInput, viecCuaBoOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, quanhMucTieuInput, quanhMucTieuOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moiKrInput, moiKrOutput } from "../okr/okr-moi-kr.contracts";
 import { capNhatGanDayInput, capNhatGanDayOutput } from "../okr/okr-cap-nhat-gan-day.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
@@ -1181,6 +1181,10 @@ const appRouter = t.router({
     danhSachBo: publicProcedure
       .input(cycleOnlyInput)
       .output(danhSachBoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    soBo: publicProcedure
+      .input(soBoInput)
+      .output(soBoOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     viecCuaBo: publicProcedure
       .input(viecCuaBoInput)

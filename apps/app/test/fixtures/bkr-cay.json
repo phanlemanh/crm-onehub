@@ -1,0 +1,55 @@
+{
+	"roots": [
+		{
+			"id": "O",
+			"loai": "muc-tieu",
+			"objectiveId": "O",
+			"unitName": "CRM",
+			"title": "BKR · mục tiêu O",
+			"progress": 44,
+			"status": "cong-bo",
+			"kind": "cam-ket",
+			"gop": 0,
+			"lapLai": false,
+			"hienThi": "cong-khai",
+			"soNguoiXem": 0,
+			"expected": null,
+			"children": [
+				{
+					"id": "K1",
+					"loai": "kr",
+					"objectiveId": "O",
+					"unitName": "CRM",
+					"title": "BKR · kết quả K1",
+					"progress": 25,
+					"status": "cong-bo",
+					"kind": "cam-ket",
+					"gop": 0,
+					"lapLai": false,
+					"hienThi": "cong-khai",
+					"soNguoiXem": 0,
+					"expected": null,
+					"children": []
+				},
+				{
+					"id": "K2",
+					"loai": "kr",
+					"objectiveId": "O",
+					"unitName": "CRM",
+					"title": "BKR · kết quả K2",
+					"progress": 63,
+					"status": "cong-bo",
+					"kind": "cam-ket",
+					"gop": 0,
+					"lapLai": false,
+					"hienThi": "cong-khai",
+					"soNguoiXem": 0,
+					"expected": null,
+					"children": []
+				}
+			]
+		}
+	],
+	"chuaCanChinh": [],
+	"canh": []
+}

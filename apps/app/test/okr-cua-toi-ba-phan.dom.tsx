@@ -1014,7 +1014,7 @@ describe("ctbp-bon-the", () => {
 				moTaCuaToi:
 					locale === "vi"
 						? "Việc cần cập nhật tuần này, đơn vị bạn dẫn và KR bạn phụ trách."
-						: "Your weekly updates, the units you lead and the key results you own.",
+						: "Your updates, the units you lead and the key results you own.",
 				giuThamSo: true,
 			});
 		});

@@ -1,0 +1,56 @@
+{
+  "feature_plain": "Bấm một KR ở Của tôi, Cây căn chỉnh, Việc OKR hay trong chi tiết mục tiêu thì mở đúng chi tiết KR; chữ «Cập nhật tuần» khi là tên việc check-in thành «Cập nhật».",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ mở chi tiết KR khi bấm tên KR ở mục «KR bạn phụ trách» của Của tôi, thay vì mở mục tiêu."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ mở chi tiết KR khi chọn một nút KR trên Cây căn chỉnh; nút mục tiêu vẫn mở mục tiêu."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ cho việc OKR gắn một KR nút «Mở KR» mở chi tiết KR; việc chỉ gắn mục tiêu giữ «Mở mục tiêu»."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ biến tên KR trong bảng KR của chi tiết mục tiêu thành nút bấm được bằng chuột và bàn phím, mở chi tiết KR chồng lên mục tiêu."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ đổi «Cập nhật tuần» khi là tên việc check-in thành «Cập nhật» ở mọi chữ của app và tin nhắc, giữ nguyên cụm «… tuần này»."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ chạy lại bài kiểm của các việc đã ký có chạm vòng này, cùng hai thước màn Của tôi; không bài nào xấu hơn bản đang chạy, ảnh chụp tin nhắc cũ không đổi."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ chặn lại mọi chỗ bấm KR mới dưới khu Mục tiêu mà mở nhầm mục tiêu, bằng một bảng liệt kê viết trước."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "OOS-1",
+      "p": "Không chạm các chỗ đã đúng: bảng Danh sách, Họp tuần, KR của tôi, Mới KR, Quanh mục tiêu."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không làm nút «Cập nhật» trên dòng và Họp tuần là thẻ con — thuộc HT1, HT2, SV1."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không gỡ bảng cập nhật hàng loạt (SV1), không làm lịch sử mọi lần cập nhật (SV7)."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi lời dặn model của Tóm tắt tuần và nhãn bản mẫu."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không sửa CONTEXT.md — đổi trong PR #557."
+    }
+  ],
+  "scope_plain": "Phạm vi lấy từ bốn luật «Bấm vào KR và cập nhật» chủ kho chốt 24/10."
+}

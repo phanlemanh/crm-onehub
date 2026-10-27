@@ -268,7 +268,7 @@ const vi = {
 			sauToken: "Cỡ gói sau khi cắt (token)",
 			chienLuocCatKyTu: "Trang chiến lược cắt bớt (ký tự)",
 			tenBuoc: {
-				"3-tom-gon": "Lớp 3: dòng tóm gọn Cập nhật tuần",
+				"3-tom-gon": "Lớp 3: dòng tóm gọn lần cập nhật",
 				"3-kr": "Lớp 3: KR chu kỳ trước",
 				"ngang-cap": "Mục tiêu ngang cấp",
 				"2a-kr": "Lớp 2a: KR của cấp trên",
@@ -628,7 +628,7 @@ const en: OkrSoanMessages = {
 			sauToken: "Pack size after cutting (tokens)",
 			chienLuocCatKyTu: "Strategy page trimmed (characters)",
 			tenBuoc: {
-				"3-tom-gon": "Layer 3: weekly update summaries",
+				"3-tom-gon": "Layer 3: update summaries",
 				"3-kr": "Layer 3: last cycle's KRs",
 				"ngang-cap": "Peer Objectives",
 				"2a-kr": "Layer 2a: KRs of the level above",

@@ -1128,23 +1128,23 @@ describe("dvb-dong-mo", () => {
 		dongCua(o, id)?.querySelector<HTMLButtonElement>("button[aria-expanded]") ??
 		null;
 
-	test("mac dinh moi dong thu; M1, M2 co nut aria-expanded=false, M3 khong", async () => {
+	test("mac dinh moi dong mo; M1, M2 co nut aria-expanded=true, M3 khong", async () => {
 		datDon("pb:P1", ba());
 		const s = await moTrang("pb:P1");
 		await choBang(s);
 		const soKr = s.o.querySelectorAll("[data-kr]").length;
-		phai(soKr === 0, `dvb-dong-mo: mac dinh ${soKr} dong KR, mong 0`);
+		phai(soKr === 3, `dvb-dong-mo: mac dinh ${soKr} dong KR, mong 3`);
 		expect({
 			M1: nutMo(s.o, "M1")?.getAttribute("aria-expanded"),
 			M2: nutMo(s.o, "M2")?.getAttribute("aria-expanded"),
 			M3: nutMo(s.o, "M3"),
-		}).toEqual({ M1: "false", M2: "false", M3: null });
+		}).toEqual({ M1: "true", M2: "true", M3: null });
 	});
 
 	const CACH = ["nut mui ten", "o trong cua dong"] as const;
 	for (const cach of CACH) {
 		for (const id of ["M1", "M2"]) {
-			test(`${cach} x ${id}: KR hien ngay duoi, cung so cot, URL expand`, async () => {
+			test(`${cach} x ${id}: bam gap ghi URL gap, bam lai KR hien ngay duoi, cung so cot`, async () => {
 				datDon("pb:P1", ba());
 				const s = await moTrang("pb:P1");
 				await choBang(s);
@@ -1156,6 +1156,17 @@ describe("dvb-dong-mo", () => {
 				if (!dich) throw new Error(`dvb-dong-mo: ${id} khong co ${cach}`);
 				await act(async () => {
 					(dich as HTMLElement).click();
+				});
+				await cho(
+					() => s.url().getAll("gap").join(",").includes(id),
+					`url gap ${id}`,
+				);
+				const dichLai =
+					cach === "nut mui ten"
+						? nutMo(s.o, id)
+						: (dongCua(s.o, id)?.querySelectorAll("td")[3] ?? null);
+				await act(async () => {
+					(dichLai as HTMLElement).click();
 				});
 				const mt = ba().find((x) => x.id === id);
 				const kr = mt?.keyResults.map((k) => k.id) ?? [];
@@ -1180,17 +1191,17 @@ describe("dvb-dong-mo", () => {
 					`dvb-dong-mo: ${id}: dong KR ${soCotKr} cot, cha ${soCot}`,
 				);
 				await cho(
-					() => s.url().getAll("expand").join(",").includes(id),
-					`url expand ${id}`,
+					() => !s.url().getAll("gap").join(",").includes(id),
+					`url gap bo ${id}`,
 				);
-				expect(s.url().getAll("expand").join(",")).toContain(id);
+				expect(s.url().getAll("gap").join(",")).not.toContain(id);
 			});
 		}
 	}
 
-	test("dung lai voi expand=M2 -> M2 mo, M1 thu", async () => {
+	test("dung lai voi gap=M1 -> M2 mo, M1 thu", async () => {
 		datDon("pb:P1", ba());
-		const s = await moTrang("pb:P1", { expand: "M2" });
+		const s = await moTrang("pb:P1", { gap: "M1" });
 		await choBang(s);
 		expect({
 			M1: nutMo(s.o, "M1")?.getAttribute("aria-expanded"),
@@ -1201,7 +1212,7 @@ describe("dvb-dong-mo", () => {
 		}).toEqual({ M1: "false", M2: "true", kr: ["M2-k1"] });
 	});
 
-	test("bam ten M1 mo ngan chi tiet muc tieu, khong doi expand; bam dong KR mo ngan KR", async () => {
+	test("bam ten M1 mo ngan chi tiet muc tieu, khong doi gap; bam dong KR mo ngan KR", async () => {
 		datDon("pb:P1", ba());
 		const s = await moTrang("pb:P1");
 		await choBang(s);
@@ -1211,12 +1222,9 @@ describe("dvb-dong-mo", () => {
 		await cho(() => s.url().get("record") !== null, "url record");
 		expect({
 			record: s.url().get("record"),
-			expand: s.url().get("expand"),
+			gap: s.url().get("gap"),
 			kr: s.o.querySelectorAll("[data-kr]").length,
-		}).toEqual({ record: "objective:M1", expand: null, kr: 0 });
-		const nut = nutMo(s.o, "M1");
-		if (!nut) throw new Error("dvb-dong-mo: M1 khong co nut mo");
-		await act(async () => nut.click());
+		}).toEqual({ record: "objective:M1", gap: null, kr: 3 });
 		const dongKr = s.o.querySelector('[data-kr="M1-k1"]')?.closest("tr");
 		if (!dongKr) throw new Error("dvb-dong-mo: khong co dong KR M1-k1");
 		await act(async () => (dongKr as HTMLElement).click());
@@ -1227,7 +1235,7 @@ describe("dvb-dong-mo", () => {
 		expect(s.url().get("record")?.split(",").at(-1)).toBe("kr:M1-k1");
 	});
 
-	test("ban phim: nut mo cua M1 la button co aria-label chua ten; Enter mo, Space thu", async () => {
+	test("ban phim: nut mo cua M1 la button co aria-label chua ten; Enter thu, Space mo", async () => {
 		datDon("pb:P1", ba());
 		const s = await moTrang("pb:P1");
 		await choBang(s);
@@ -1261,9 +1269,9 @@ describe("dvb-dong-mo", () => {
 			});
 		};
 		await nhan("Enter");
-		expect(nutMo(s.o, "M1")?.getAttribute("aria-expanded")).toBe("true");
-		await nhan(" ");
 		expect(nutMo(s.o, "M1")?.getAttribute("aria-expanded")).toBe("false");
+		await nhan(" ");
+		expect(nutMo(s.o, "M1")?.getAttribute("aria-expanded")).toBe("true");
 	});
 
 	test("kho hep: tien do cua dong muc tieu va dong KR nam duoi ten (md:hidden), cot Tien do va Tinh trang an duoi md", async () => {

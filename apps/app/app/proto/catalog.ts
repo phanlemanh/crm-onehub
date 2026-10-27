@@ -11,6 +11,30 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "bo-okr-co-so",
+		ten: "Bộ OKR có hàng số — bốn ô số ở đầu thẻ OKR, KR mở sẵn, nút Mở/Gập tất cả",
+		states: [
+			{
+				id: "ST-bco-coso",
+				nhan: "Phòng ban — bốn ô, KR mở sẵn, nút Gập tất cả",
+			},
+			{
+				id: "ST-bco-gap-mot",
+				nhan: "Gập tay một dòng — nút đổi thành Mở tất cả",
+			},
+			{ id: "ST-bco-dagap", nhan: "Sau Gập tất cả — mọi dòng gập" },
+			{ id: "ST-bco-bo-phan", nhan: "Bộ phận — số gồm cả phòng ban con" },
+			{ id: "ST-bco-dangtai", nhan: "Số đang tải — bốn ô khung xương" },
+			{ id: "ST-bco-loi", nhan: "Số lỗi — vùng lỗi, bảng vẫn dùng được" },
+			{ id: "ST-bco-chuacongbo", nhan: "Bộ chưa công bố mục tiêu" },
+			{ id: "ST-bco-chuabatdau", nhan: "Chu kỳ chưa bắt đầu" },
+			{ id: "ST-bco-ngay-cuoi", nhan: "Hôm nay là ngày cuối chu kỳ" },
+			{ id: "ST-bco-daketthuc", nhan: "Chu kỳ đã kết thúc" },
+			{ id: "ST-bco-the-hop-tuan", nhan: "Thẻ Họp tuần — không có hàng số" },
+			{ id: "ST-bco-ca-nhan", nhan: "Bộ cá nhân — số của chính bộ" },
+		],
+	},
+	{
 		slug: "ngan-kr-mot-cho",
 		ten: "Ngăn KR một chỗ — Cập nhật ở đầu ngăn và trên dòng, sang KR kế",
 		states: [
@@ -1549,6 +1573,70 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 				id: "ST-cua-toi-da-luu-tru",
 				nhan: "Tín hiệu đã gửi — người gửi thấy tín hiệu bị lưu trữ",
 			},
+		],
+	},
+	{
+		slug: "bam-kr-mo-chi-tiet-kr",
+		ten: "Bấm KR mở chi tiết KR — bốn chỗ bấm, Cập nhật từ chi tiết KR, chữ «Cập nhật»",
+		states: [
+			{
+				id: "ST-bkr-cua-toi",
+				nhan: "Của tôi — KR bạn phụ trách và Việc OKR mở KR",
+			},
+			{ id: "ST-bkr-so-do", nhan: "Bộ OKR › Sơ đồ — nút KR mở KR" },
+			{
+				id: "ST-bkr-ngan-muc-tieu",
+				nhan: "Chi tiết mục tiêu — tên KR bấm được",
+			},
+			{ id: "ST-bkr-ngan-kr", nhan: "Chi tiết KR — nút Cập nhật ở đầu" },
+			{ id: "ST-bkr-hop-cap-nhat", nhan: "Hộp cập nhật một KR" },
+			{ id: "ST-bkr-hom-nay", nhan: "Hôm nay — bấm KR mở mục tiêu" },
+			{ id: "ST-bkr-chu", nhan: "Chữ — «Cập nhật tuần» thành «Cập nhật»" },
+		],
+	},
+	{
+		slug: "hop-tuan-mo-dung-bo",
+		ten: "Họp tuần mở đúng bộ — bộ mình dẫn, hàng số của tuần, màn rỗng nói lý do",
+		states: [
+			{
+				id: "ST-htmb-cua-toi",
+				nhan: "Của tôi — KR cần cập nhật, mở từng KR",
+			},
+			{
+				id: "ST-htmb-the-okr",
+				nhan: "Bộ mình › thẻ OKR (nút Cập nhật từng KR)",
+			},
+			{
+				id: "ST-htmb-ngan-kr",
+				nhan: "Ngăn KR — Cập nhật ở đầu",
+			},
+			{
+				id: "ST-htmb-hop-cap-nhat",
+				nhan: "Hộp cập nhật một KR",
+			},
+			{
+				id: "ST-htmb-bo-okr-toi-dan",
+				nhan: "Đường vào: Bộ OKR › Tôi dẫn (như Tability)",
+			},
+			{
+				id: "ST-htmb-co-du-lieu",
+				nhan: "Bộ mình › thẻ con Họp tuần — có dữ liệu",
+			},
+			{
+				id: "ST-htmb-hom-nay",
+				nhan: "Hôm nay (trước HT1) — bảng OneHub 0/0 KR",
+			},
+			{
+				id: "ST-htmb-chua-kr-onehub",
+				nhan: "OneHub chưa có KR — liệt đơn vị có KR",
+			},
+			{
+				id: "ST-htmb-chua-kr-phong-ban",
+				nhan: "Phòng ban chưa có KR — Xem mọi bộ OKR",
+			},
+			{ id: "ST-htmb-chu-ky-chua-chay", nhan: "Chu kỳ chưa chạy" },
+			{ id: "ST-htmb-chua-ai-cap-nhat", nhan: "Có KR, chưa ai cập nhật" },
+			{ id: "ST-htmb-dang-tai", nhan: "Đang tải" },
 		],
 	},
 	{

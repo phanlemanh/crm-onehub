@@ -15,7 +15,9 @@ mock.module("next/server", () => ({
 	...serverThat,
 	connection: async () => undefined,
 }));
+const sessionThat = await import("@/lib/session");
 mock.module("@/lib/session", () => ({
+	...sessionThat,
 	getSession: async () => phienHienTai,
 }));
 

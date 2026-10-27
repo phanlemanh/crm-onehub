@@ -404,3 +404,17 @@ export type DanhSachBoOutput = z.infer<typeof danhSachBoOutput>;
 export type ViecCuaBoInput = z.infer<typeof viecCuaBoInput>;
 export type ViecCuaBoOutput = z.infer<typeof viecCuaBoOutput>;
 export type NhomViecBo = z.infer<typeof nhomViecBo>;
+
+export const soBoInput = z.object({ cycleId: ma, unit: donViChon });
+
+export const soBoOutput = hangToanCanh.pick({
+	tienDo: true,
+	kyVong: true,
+	soMucTieu: true,
+	soKr: true,
+	tuTin: true,
+	daCapNhat: true,
+});
+
+export type SoBoInput = z.infer<typeof soBoInput>;
+export type SoBoOutput = z.infer<typeof soBoOutput>;

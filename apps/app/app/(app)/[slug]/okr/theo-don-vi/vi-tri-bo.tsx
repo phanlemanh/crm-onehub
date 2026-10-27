@@ -14,6 +14,13 @@ import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
+export function useHrefDanhSachBo(ky: string | null): string {
+	const url = useWorkspaceUrl();
+	const q = new URLSearchParams();
+	if (ky) q.set(SEARCH_PARAM.okr.ky, ky);
+	return `${url("/okr/bo-okr")}${q.size > 0 ? `?${q}` : ""}`;
+}
+
 export function ViTriBo({
 	ky,
 	tenBo,
@@ -22,7 +29,7 @@ export function ViTriBo({
 	tenBo?: string | null;
 }) {
 	const nhan = okrVoKhuMessages(useLocale()).boOkr.viTri;
-	const url = useWorkspaceUrl();
+	const veDanhSach = useHrefDanhSachBo(ky);
 	if (tenBo === undefined)
 		return (
 			<Breadcrumb data-vi-tri-bo="danh-sach">
@@ -33,9 +40,6 @@ export function ViTriBo({
 				</BreadcrumbList>
 			</Breadcrumb>
 		);
-	const q = new URLSearchParams();
-	if (ky) q.set(SEARCH_PARAM.okr.ky, ky);
-	const veDanhSach = `${url("/okr/bo-okr")}${q.size > 0 ? `?${q}` : ""}`;
 	return (
 		<Breadcrumb data-vi-tri-bo="mot-bo">
 			<BreadcrumbList>

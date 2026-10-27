@@ -474,6 +474,7 @@ const THU_TUC_OKR_LUOT_QUANH = ["quanhMucTieu"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_TRANG_BO = ["danhSachBo", "viecCuaBo"].map(
 	(t) => `okr.${t}`,
 );
+const THU_TUC_OKR_LUOT_BO_CO_SO = ["soBo"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_DAP = [
 	"hoiMo",
 	"hoiPhanHoi",
@@ -1632,6 +1633,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_SO_DO,
 				...THU_TUC_OKR_LUOT_QUANH,
 				...THU_TUC_OKR_LUOT_TRANG_BO,
+				...THU_TUC_OKR_LUOT_BO_CO_SO,
 				...THU_TUC_OKR_LUOT_HOI_DAP,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 				...THU_TUC_OKR_LUOT_MOI_KR,
@@ -2072,6 +2074,11 @@ const THU_TU_DOC_OKR = {
 	"okr.countByUnit": { vao: cuaKy, K: "vang", khac: 200 },
 	"okr.cycles": { vao: () => undefined, K: "vang", khac: 200 },
 	"okr.danhSachBo": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.soBo": {
+		vao: (s) => ({ cycleId: s.ky, unit: { loai: "pb", id: s.pb } }),
+		K: "vang",
+		khac: 200,
+	},
 	"okr.danhSach": {
 		vao: (s) => ({
 			cycleId: s.ky,

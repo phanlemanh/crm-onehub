@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4ea4d500c62d180a22132b852f6c1ac54293f2eb
+verified_commit: f32bc5acf7b14fa89db8790d728f56339302bf5a
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -342,3 +342,7 @@ sha: 77ca8466b8f4c1811411348d879271b9936b155c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-06, do khai lại paths trỏ tệp không còn trong kho
 run_id: repin-20261006T060047Z-57794
 sha: 4ea4d500c62d180a22132b852f6c1ac54293f2eb · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E14, E18 · AC không có chốt máy: AC-15
+
+### Re-pin lần 4 — 2026-10-27, do V1-51 «B»: ba mock @/lib/session trải bản thật (f32bc5acf)
+run_id: repin-20261027T034630Z-39076
+sha: f32bc5acf7b14fa89db8790d728f56339302bf5a · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E14, E18 · diff chạm vật đo ngoài làn máy: E18 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

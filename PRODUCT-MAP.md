@@ -13,7 +13,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>160 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>188 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>192 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -51,11 +51,13 @@ flowchart TD
 
 - «Test của agent không nhập mã của app; danh sách thoả thuận Kara trả có một schema dùng chung» (`agent-test-khong-nhap-app`)
 - Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do (`ba-ho-so-do-san`)
+- Người dùng bấm một KR ở Của tôi, Cây căn chỉnh, Việc OKR hay trong chi tiết mục tiêu thì mở chi tiết KR, không mở chi tiết mục tiêu; chữ «Cập nhật tuần» dùng như danh từ thành «Cập nhật» (`bam-kr-mo-chi-tiet-kr`)
 - Bàn gieo góp ý dùng chung chạy lại được sau khi công cụ nộp của Trợ lý OKR tự đóng việc, để ba bàn đo màn OKR đo được lại (`ban-gieo-gop-y-sau-nop`)
 - Tác nhân hỏng trong lúc dựng thì người dùng nhận đúng một thông báo, kể cả khi đã trả lời một câu hỏi giữa chừng (`bao-loi-tac-nhan-sau-cau-hoi`)
 - Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố (`bo-ca-mau-quy-4`)
 - Bộ 50 câu hỏi mẫu viết theo tám trang mẫu của kho đo — câu trả lời được, câu phải nói không biết, câu gõ như tin Zalo — kèm lệnh kiểm bộ và lệnh đo trợ lý kho trên bộ bằng script chấm sẵn có (`bo-cau-hoi-mau`)
 - Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp (`bo-cuc-hep-ngan-va-kanban`)
+- Trưởng đơn vị mở bộ OKR của đơn vị mình và biết ngay đội đang ra sao: ngày còn lại, tiến độ so với kỳ vọng, số KR đã cập nhật tuần này, số KR tự tin thấp, và mọi KR đã mở sẵn (`bo-okr-co-so`)
 - Bộ xương Kara trong packages/ui — sáu khối KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact, một nút «Thử lại», và ba điểm cắm cho K2: co giãn trong thanh kéo, khoá đề xuất khi Kara đang soạn, nhận theo nhóm (`bo-xuong-kara`)
 - Ca kiểm chập chờn theo máy thôi làm đỏ lượt dài — dọn eve mồ côi của lượt bị ngắt, chờ route thật có trần, trần hook dựng Nest có tên, công tắc bỏ ca tới được test (`ca-chap-chon-cach-ly`)
 - Ba ca chập chờn còn lại chạy tất định — hai đối chứng «the fixture bites» của tasks.integration giữ thống kê đứng yên và gọi tên khi kế hoạch đổi; ma() của bộ gieo agent-okr không sinh chữ số (`ca-chap-chon-con-lai`)
@@ -90,6 +92,7 @@ flowchart TD
 - Thành viên đọc khu Mục tiêu thấy một tên cho một khái niệm: Góp vào cho căn chỉnh, OneHub cho đơn vị gốc, Lấy ý kiến thay Hỏi ý — ở cả bản tiếng Việt và tiếng Anh (`doi-nhan-khu-muc-tieu`)
 - Đổi tên sản phẩm trên mọi chữ người đọc từ «CRM» sang «OneHub Center» (trùng tên miền onehub.center), và làm lại cột trái /sign-in theo hướng A — nền lưới chấm bằng token cho năm trang AuthShell, dòng neo cỡ lớn, ba bước nối bằng đường dọc, không Card (`doi-ten-onehub-center`)
 - Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A (`don-ho-so-cu`)
+- TheDangDung sống ở packages/ui; CardAction và CardFooter không bị className đổi khoảng cách ở chỗ gọi (`don-sau-cho-tac-nhan`)
 - «Dòng thời gian giữ các hoạt động đã tải khi «Xem cũ hơn» hay làm mới ngầm bị lỗi» — lỗi sau khi đã có dữ liệu không thay danh sách bằng khung lỗi; thông báo tại chỗ kèm «Thử lại» tải đúng phần hỏng (`dong-thoi-gian-giu-khi-loi`)
 - «Thông báo lỗi của dòng thời gian theo đúng lượt tải đã hỏng, không theo lượt đang chạy» — khi lỗi «Xem cũ hơn» và lỗi làm mới chồng nhau, thông báo chỉ đổi khi một lượt tải đã xong (`dong-thoi-gian-loi-dung-luot`)
 - Hỏi ý mục tiêu — trước mỗi kỳ đặt OKR cả công ty góp ý cho mục tiêu công ty, người gom xếp ý thành chủ đề, người chọn (CEO) viết trước rồi kết luận từng chủ đề bằng lý do tự viết, chủ đề chọn thành bản nháp mục tiêu cấp OneHub, ai góp cũng thấy ý mình đi đâu và vì sao (bước 1–2 chu kỳ OKR, hạng mục 11 lộ trình OKR) (`dot-hoi-y-tuong-okr`)
@@ -118,6 +121,7 @@ flowchart TD
 - Người phụ trách KR mở hộp cập nhật và thấy lần cập nhật trước — ngày, số, mức tự tin, ghi chú — cùng câu hỏi gợi ý cho ô ghi chú, trước khi gửi (`hop-cap-nhat-lan-truoc`)
 - Lệnh nạp mẫu tạo bộ hợp đồng mẫu PDF và DOCX có nhãn và gắn vào ô Tệp của bản ghi mẫu qua đường ghi thật (`hop-dong-mau`)
 - Người dùng CRM thấy mọi điều CRM muốn báo ở chuông trên đầu trang, biết số chưa đọc và bấm vào là tới đúng chỗ cần làm (`hop-thong-bao-tren-web`)
+- Trưởng đơn vị bấm Họp tuần và vào thẳng bảng của bộ OKR mình dẫn, thấy hàng số của tuần ở đầu; bộ chưa có KR công bố hay chu kỳ chưa chạy thì màn nói đúng lý do và chỉ sang đơn vị có KR (`hop-tuan-mo-dung-bo`)
 - Tôi kéo việc giữa các cột Chưa làm, Đang làm, Chờ đánh giá, Xong, và tách một việc to thành việc con (`kanban-viec`)
 - Kara góp ý OKR lượt 2: vùng Kara dùng khung chung và không biến mất khi lỗi, không chờ mãi, Căn chỉnh có Hoàn tác, người phụ trách nhiều KR nhờ được Kara, chữ và ngày giờ nhất quán (`kara-gop-y-luot-2`)
 - Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo (`kara-mot-ten`)
