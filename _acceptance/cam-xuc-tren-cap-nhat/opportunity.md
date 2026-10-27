@@ -3,10 +3,10 @@ schema_version: 1
 slug: cam-xuc-tren-cap-nhat
 feature: Thành viên thả cảm xúc lên một lần cập nhật tuần ở Cập nhật gần đây, thẻ con Họp tuần của bộ OKR và ngăn KR, và người cập nhật thấy ai đã thả
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided               # discovery | decided | archived
+decision: build        # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Phan Le Manh
+decided_at: 2026-10-27T08:27:29Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -41,7 +41,7 @@ thật đọc sau khi gộp, lúc bật cho người dùng.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Người cập nhật có nhận được ghi nhận của đồng đội trên lần cập nhật của mình không — tức thành viên có thật sự thả cảm xúc hay trả lời trên từng lần cập nhật của bộ OKR đang chạy?
-- Kết quả nào là SỐNG: [đề xuất] Sau hai buổi họp tuần kể từ khi bật cho người dùng, ít nhất 30% lần cập nhật của các bộ OKR quý 4 đang chạy nhận ít nhất một cảm xúc hoặc một trả lời từ người khác người cập nhật; và trên máy: một lần thả hiện ở cả ba chỗ trong cùng phiên, thả lại thì gỡ, người ngoài quyền xem mục tiêu không thấy.
-- Kết quả nào là CHẾT: [đề xuất] Sau hai buổi họp tuần, dưới 10% lần cập nhật nhận cảm xúc hoặc trả lời → không mở rộng (không thêm loại cảm xúc, không đưa lên trình chiếu HT-C1); giữ trả lời trên từng lần, cân nhắc gỡ cảm xúc. Giữa 10% và 30% → iterate (hỏi người dùng vì sao không thả).
-- Timebox: [đề xuất] Dựng xong và gộp onehub trước 2026-10-31; đọc số hai buổi họp tuần sau ngày bật cho người dùng (dự kiến 2026-11-14).
+- Câu hỏi phép đo trả lời: Người cập nhật có nhận được ghi nhận của đồng đội trên lần cập nhật của mình không — tức thành viên có thật sự thả cảm xúc hay trả lời trên từng lần cập nhật của bộ OKR đang chạy?
+- Kết quả nào là SỐNG: Sau hai buổi họp tuần kể từ khi bật cho người dùng, ít nhất 30% lần cập nhật của các bộ OKR quý 4 đang chạy nhận ít nhất một cảm xúc hoặc một trả lời từ người khác người cập nhật; và trên máy: một lần thả hiện ở cả ba chỗ trong cùng phiên, thả lại thì gỡ, người ngoài quyền xem mục tiêu không thấy.
+- Kết quả nào là CHẾT: Sau hai buổi họp tuần, dưới 10% lần cập nhật nhận cảm xúc hoặc trả lời → không mở rộng (không thêm loại cảm xúc, không đưa lên trình chiếu HT-C1); giữ trả lời trên từng lần, cân nhắc gỡ cảm xúc. Giữa 10% và 30% → iterate (hỏi người dùng vì sao không thả).
+- Timebox: Dựng xong và gộp onehub trước 2026-10-31; đọc số hai buổi họp tuần sau ngày bật cho người dùng (dự kiến 2026-11-14).
