@@ -23,14 +23,16 @@ kèm mức đổi, ngăn KR đi ‹ › «4 of 5» qua mọi KR của plan, nút
    chú mới nhất), `donVi` (đơn vị của KR), `giaTriMoi` (giá trị lần mới nhất, `null` khi chưa có lần nào) và `mucDoi`. `mucDoi` là `{ tu, den, ngayTruoc }` khi có lần để so, `null` khi chưa. Lần để so
    là **lần cập nhật cuối thuộc một tuần trước tuần của lần mới nhất** — cùng luật với «tụt mức tự tin» của
    `toan-canh-okr` AC-7: KR cập nhật hai lần trong tuần vẫn hiện mức đổi của cả tuần. Giá trị so là giá trị của chính KR
-   (`OkrCheckIn.value`), không phải điểm tiến độ. Không thêm khoá nào khác; các trường cũ giữ nguyên nghĩa.
+   (`OkrCheckIn.value`), không phải điểm tiến độ. KR chưa có lần nào ở tuần trước mà đã có từ hai lần (tuần đầu chu kỳ)
+   thì so với lần đầu tiên; «Lần đầu cập nhật» chỉ khi KR có đúng một lần (Hỏi-3). Không thêm khoá nào khác; các trường cũ giữ nguyên nghĩa.
 2. **Dòng bảng** — một dòng mang: tên KR (bấm mở ngăn KR, như nay) · mục tiêu và người phụ trách · nhãn lý do · tiến độ
    và tự tin · ghi chú mới nhất kèm ngày · mức đổi · nút «Cập nhật». Từ 1024px ghi chú và mức đổi là hai cột; 768–1023
    chúng xếp dưới tên KR trong cột KR; dưới 768 bảng thành danh sách `Item` (nếp «Danh sách» của `docs/design.md`), mỗi
    mục mang đủ các phần trên. «Còn lại» dùng cùng dòng.
 3. **Nút «Cập nhật» trên dòng** — mở đúng hộp cập nhật một KR (`useCapNhatKr` / `HopThoaiCapNhatKr`, như nút trên dòng
    của trang đơn vị); hiện khi `coNutCapNhat` đúng. Không ô nhập trên dòng, không gửi nhiều KR (luật «Bấm vào KR và cập
-   nhật» của `docs/design.md`; Lối (b) 24/10). Gửi xong hộp đóng, người vẫn ở bảng; bảng và hàng số tải lại.
+   nhật» của `docs/design.md`; Lối (b) 24/10). Gửi xong hộp đóng, người vẫn ở bảng; bảng và hàng số tải lại. KR vừa
+   gửi rời Đang bàn sang Còn lại đang gập thì Còn lại tự mở và tiêu điểm về nút Cập nhật của KR (Hỏi-4).
    `NutCapNhatDong` đang sống trong `theo-don-vi/bang.tsx` — dùng lần hai thì chuyển nó sang một tệp chung của khu OKR
    trước (luật «dùng lần thứ hai» của `docs/design.md`; nó gọi tRPC nên không vào được `packages/ui`).
 4. **‹ › theo thứ tự bảng** — ngăn KR mở từ Họp tuần đếm «n/N» và đi ‹ › theo thứ tự bảng: các dòng Đang bàn rồi các dòng
