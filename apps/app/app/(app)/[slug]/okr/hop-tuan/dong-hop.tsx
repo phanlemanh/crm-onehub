@@ -172,7 +172,7 @@ function BangRong({
 		{
 			id: "tien-do",
 			header: m.cotTienDo,
-			width: "w-[20%]",
+			width: "w-[26%]",
 			className: "hidden md:table-cell",
 		},
 		{
