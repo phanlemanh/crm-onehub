@@ -2234,6 +2234,15 @@ executors:
     vkm_chuyen_huong: "cd apps/app && bun test ./test/vo-khu-chuyen-huong.spec.ts -t vkm-chuyen-huong"
     vkm_don_vi_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-don-vi-dan-cay.dom.tsx -t vkm-don-vi-dan"
     vkm_loi_vao_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-ba-phan.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test ./test/okr-giai-ky-an.spec.ts ./test/okr-chuyen-huong-cap-nhat.spec.ts"
+    vk6_khung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-khung"
+    vk6_toan_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-toan-man && bun test ./test/okr-toan-man-hinh.spec.ts"
+    vk6_hai_kieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-hai-kieu"
+    vk6_loi_vao: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-loi-vao.dom.tsx -t vk6-loi-vao"
+    vk6_duong_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/so-do-toan-vung-duong-cu.dom.tsx -t vk6-duong-cu"
+    vk6_bo_cay: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-bo-cay && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/so-do-toan-vung-duong-cu.dom.tsx -t vk6-bo-cay"
+    vk6_hep: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-hep"
+    vk6_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-trang-thai"
+    vk6_chu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-chu && bun test ./test/messages-guard.spec.ts"
     mnt_dau_trang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-dau-trang"
     mnt_man_doc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-man-doc"
     mnt_hop: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-hop"
@@ -2891,6 +2900,7 @@ executors:
     dok_san_thiet_ke: "bun _acceptance/dat-okr-trong-crm/rang/san-thiet-ke.mjs"
     dok_migration_chi_them: "node _acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs"
     tco_man_chrome: 'PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
+    tco_man_chrome_may: 'PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} EVAL=E3,E28,E29 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
     tco_soi_ma: "bun _acceptance/toan-canh-okr/rang/soi-ma.mjs"
     sot_soi_chi_them: "bun _acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca chi-them"
     sot_san_thiet_ke: "bun _acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca thiet-ke"
@@ -3411,6 +3421,7 @@ executors:
     nltk_pham_vi: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs --pham-vi
     # trang-don-vi-mot-bang (DH2)
     dvb_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"'
+    dvb_man_may: 'EVAL=E3,E4,E5,E17 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"'
     dvb_ho_so_da_ky: 'bun _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ho-so-da-ky'
     dvb_proto: 'bun _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs && cd apps/app && bun test test/proto-catalog.spec.ts && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-proto'
     dvb_ghim_nam: 'bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ghim-nam'
@@ -3519,6 +3530,10 @@ executors:
     tmc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-mot-cach-cu-xu/rang/do-man.mjs"'
     vkm_quet: bun _acceptance/vo-khu-muc-tieu/rang/quet-duong-cu.mjs
     vkm_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vo-khu-muc-tieu/rang/do-man.mjs"'
+    vk6_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-do-toan-vung/rang/man.mjs"'
+    vk6_giu_ho_so: bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs
+    vk6_giu_ho_so_man: bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs --chi-man --ghi-man .acceptance-runs/so-do-toan-vung/man-ket-qua.json
+    vk6_giu_ho_so_s4: bun test _acceptance/so-do-toan-vung/rang/giu-ho-so.test.mjs && bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs --bo-man --doc-man .acceptance-runs/so-do-toan-vung/man-ket-qua.json
     mnt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/mot-nut-tao-muc-tieu/rang/do-man.mjs"'
     mkc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"'
     cng_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-gan-day/rang/do-man.mjs"'

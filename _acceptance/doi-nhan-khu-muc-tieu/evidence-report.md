@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e61caf2faf124f5b835b281c653b732303de45b3
+verified_commit: d781e14c762cc3a507b015ad043adac3a6e34d7b
 human_signoff: Phan Le Manh 2026-10-20 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 15/15 eval, 7/7 lệnh suite, hội đồng E14 đạt; vòng 1 REJECT đã sửa). Ngoài-1, 3, 4, 5 ghi Known limits; Ngoài-2 chấp nhận, không sửa; đồng ý cắt; Treo phê hết.
 ---
 
@@ -252,3 +252,27 @@ sha: 981b0903455633d53634e4b7d1ad82c6596d0b46 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-19, do ghim lại sau gộp onehub VS8 #498
 run_id: repin-20261019T233524Z-37839
 sha: e61caf2faf124f5b835b281c653b732303de45b3 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E14, E15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-23, do hoá cũ do so-do-toan-vung (VK6) — thước sửa tại chỗ theo V3-25 A, V3-27 B, V3-30; AC-10 chứng ở bước ghim lại
+run_id: repin-20261023T053547Z-88592
+sha: 61a3518c3b50b551c3eb7be75d9e72af7bd1b95f · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→so-do-toan-vung#AC-6 · ngoài làn máy: E14, E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-25, do hoá cũ do so-do-toan-vung (VK6) sau gộp onehub 49843223e — thước sửa tại chỗ theo V3-25 A, V3-27 B, V3-33, V3-38, V3-39 A, C1 lối b; AC-10 chứng ở bước ghim lại
+run_id: repin-20261025T052030Z-41118
+sha: d403a78797777bac13fd466678416f4d576179bb · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→so-do-toan-vung#AC-6 · ngoài làn máy: E14, E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · chập chờn (đỏ lần đầu, đạt khi chạy lại): trang-bo-okr E2 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-25, do V3-44 A: bài đường cũ VK6 chạy tiến trình riêng (.dom.tsx) sau CI #567 đỏ
+run_id: repin-20261025T125204Z-55247
+sha: af18f068e26b7d35589459e8062337afac57e12c · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→so-do-toan-vung#AC-6 · ngoài làn máy: E14, E15 · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-26, do hoá cũ do gộp origin/onehub 5ff537e4c (#571 KDH) vào VK6; thước E15 nhận cmd viết thẳng (V3-55 a) (lượt 1/2)
+run_id: repin-20261026T153905Z-92888
+sha: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→so-do-toan-vung#AC-6 · ngoài làn máy: E14, E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-27, do hoá cũ do gộp origin/onehub dd53c3870 (#574 VK12) vào VK6; bài đường cũ tự lấy origin/onehub (lượt 1/2)
+run_id: repin-20261027T015606Z-77455
+sha: 11629978b324374e5522438772741cf73f3885eb · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→so-do-toan-vung#AC-6 · ngoài làn máy: E14, E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-27, do bài đường cũ VK6 lấy nền dần từ độ sâu 20, hạn ca 50 giây (CI #567 quá hạn 5 s)
+run_id: repin-20261027T031312Z-87766
+sha: d781e14c762cc3a507b015ad043adac3a6e34d7b · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→so-do-toan-vung#AC-6 · ngoài làn máy: E14, E15 · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

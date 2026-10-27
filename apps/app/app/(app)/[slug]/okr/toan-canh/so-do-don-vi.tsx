@@ -1,5 +1,6 @@
 "use client";
 
+import { Card, CardContent } from "@crm/ui/components/card";
 import {
 	FlowMap,
 	type FlowMapEdge,
@@ -170,31 +171,36 @@ export function dungSoDo(du: SoDoKhach, tt: TrangThaiSoDo) {
 	};
 }
 
-function KhungSoDo({ nhan }: { nhan: string }) {
+export type LopSoDo = "trang" | "toan-vung";
+
+function KhungSoDo({ nhan, lop }: { nhan: string; lop: LopSoDo }) {
 	return (
-		<div
+		<Card
 			aria-busy="true"
 			aria-live="polite"
-			className="flex flex-col items-center gap-16 rounded-lg border p-8"
-			style={{ height: SO_DO.khung.caoPx }}
+			className={lop === "toan-vung" ? "min-h-0 flex-1" : undefined}
+			data-so-do-dang-tai
+			style={lop === "toan-vung" ? undefined : { height: SO_DO.khung.caoPx }}
 		>
-			<span className="sr-only">{nhan}</span>
-			<Skeleton className="h-28 w-64" />
-			<div className="flex gap-10">
-				<Skeleton className="h-28 w-64" />
-				<Skeleton className="h-28 w-64" />
-				<Skeleton className="h-28 w-64" />
-			</div>
-		</div>
+			<CardContent>
+				<div className="flex flex-col items-center gap-16">
+					<span className="sr-only">{nhan}</span>
+					<Skeleton className="h-28 w-64" />
+					<div className="flex gap-10">
+						<Skeleton className="h-28 w-64" />
+						<Skeleton className="h-28 w-64" />
+						<Skeleton className="h-28 w-64" />
+					</div>
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
 
-export default function SoDoDonVi({ cycleId }: { cycleId: string }) {
-	const m = okrToanCanhMessages(useLocale()).soDo;
+function useSoDoVe(cycleId: string) {
 	const trpc = useTRPC();
 	const q = useQuery(trpc.okr.soDoDonVi.queryOptions({ cycleId }));
 	const [thamSo, datThamSo] = useQueryStates(soDoParsers);
-	const hep = useIsMobile();
 	const loc = thamSo[SEARCH_PARAM.okr.locSoDo];
 	const moDonVi = thamSo[SEARCH_PARAM.okr.moDonVi];
 	const moNhanh = thamSo[SEARCH_PARAM.okr.moNhanh];
@@ -202,6 +208,51 @@ export default function SoDoDonVi({ cycleId }: { cycleId: string }) {
 		() => (q.data ? dungSoDo(q.data, { loc, moDonVi, moNhanh }) : null),
 		[q.data, loc, moDonVi, moNhanh],
 	);
+	return { q, ve, loc, moDonVi, moNhanh, datThamSo };
+}
+
+export function LocSoDoDonVi({ cycleId }: { cycleId: string }) {
+	const m = okrToanCanhMessages(useLocale()).soDo;
+	const { ve, loc, datThamSo } = useSoDoVe(cycleId);
+	if (!ve) return null;
+	return (
+		<>
+			<ToggleGroup
+				aria-label={m.locNhan}
+				onValueChange={(v) => {
+					if (v === "moi" || v === "chu-y")
+						void datThamSo({ [SEARCH_PARAM.okr.locSoDo]: v });
+				}}
+				size="sm"
+				type="single"
+				value={loc}
+				variant="outline"
+			>
+				<ToggleGroupItem count={ve.soMoi} data-loc-so-do="moi" value="moi">
+					{m.moi}
+				</ToggleGroupItem>
+				<ToggleGroupItem count={ve.soChuY} data-loc-so-do="chu-y" value="chu-y">
+					{m.chuY}
+				</ToggleGroupItem>
+			</ToggleGroup>
+			<span aria-live="polite" className="sr-only">
+				{m.soDangLoc(ve.soChuY, ve.soMoi)}
+			</span>
+		</>
+	);
+}
+
+export default function SoDoDonVi({
+	cycleId,
+	lop = "trang",
+}: {
+	cycleId: string;
+	lop?: LopSoDo;
+}) {
+	const m = okrToanCanhMessages(useLocale()).soDo;
+	const { q, ve, loc, moDonVi, moNhanh, datThamSo } = useSoDoVe(cycleId);
+	const hep = useIsMobile();
+	const toanVung = lop === "toan-vung";
 
 	if (q.isError)
 		return (
@@ -211,7 +262,7 @@ export default function SoDoDonVi({ cycleId }: { cycleId: string }) {
 				tieuDe={m.loiTieuDe}
 			/>
 		);
-	if (!q.data || !ve) return <KhungSoDo nhan={m.dangTai} />;
+	if (!q.data || !ve) return <KhungSoDo lop={lop} nhan={m.dangTai} />;
 
 	const mo = (khoa: string) =>
 		void datThamSo({ [SEARCH_PARAM.okr.moDonVi]: khoa });
@@ -245,40 +296,51 @@ export default function SoDoDonVi({ cycleId }: { cycleId: string }) {
 		},
 	}));
 
+	const chuGiai = (
+		<ul className="hidden flex-wrap items-center gap-x-4 gap-y-1 text-muted-foreground text-xs md:flex">
+			{CHU_GIAI_SO_DO.map((k) => (
+				<li key={k}>{m[k]}</li>
+			))}
+		</ul>
+	);
+
 	return (
-		<div className="flex flex-col gap-3" data-so-do>
-			<div className="flex flex-wrap items-center justify-between gap-3">
-				<ToggleGroup
-					aria-label={m.locNhan}
-					onValueChange={(v) => {
-						if (v === "moi" || v === "chu-y")
-							void datThamSo({ [SEARCH_PARAM.okr.locSoDo]: v });
-					}}
-					size="sm"
-					type="single"
-					value={loc}
-					variant="outline"
-				>
-					<ToggleGroupItem count={ve.soMoi} data-loc-so-do="moi" value="moi">
-						{m.moi}
-					</ToggleGroupItem>
-					<ToggleGroupItem
-						count={ve.soChuY}
-						data-loc-so-do="chu-y"
-						value="chu-y"
+		<div
+			className={
+				toanVung ? "flex min-h-0 flex-1 flex-col gap-3" : "flex flex-col gap-3"
+			}
+			data-so-do
+		>
+			{toanVung ? null : (
+				<div className="flex flex-wrap items-center justify-between gap-3">
+					<ToggleGroup
+						aria-label={m.locNhan}
+						onValueChange={(v) => {
+							if (v === "moi" || v === "chu-y")
+								void datThamSo({ [SEARCH_PARAM.okr.locSoDo]: v });
+						}}
+						size="sm"
+						type="single"
+						value={loc}
+						variant="outline"
 					>
-						{m.chuY}
-					</ToggleGroupItem>
-				</ToggleGroup>
-				<span aria-live="polite" className="sr-only">
-					{m.soDangLoc(ve.soChuY, ve.soMoi)}
-				</span>
-				<ul className="hidden flex-wrap items-center gap-x-4 gap-y-1 text-muted-foreground text-xs md:flex">
-					{CHU_GIAI_SO_DO.map((k) => (
-						<li key={k}>{m[k]}</li>
-					))}
-				</ul>
-			</div>
+						<ToggleGroupItem count={ve.soMoi} data-loc-so-do="moi" value="moi">
+							{m.moi}
+						</ToggleGroupItem>
+						<ToggleGroupItem
+							count={ve.soChuY}
+							data-loc-so-do="chu-y"
+							value="chu-y"
+						>
+							{m.chuY}
+						</ToggleGroupItem>
+					</ToggleGroup>
+					<span aria-live="polite" className="sr-only">
+						{m.soDangLoc(ve.soChuY, ve.soMoi)}
+					</span>
+					{chuGiai}
+				</div>
+			)}
 			{kyRong ? (
 				<div className="flex flex-col gap-3">
 					{ve.nut
@@ -295,7 +357,14 @@ export default function SoDoDonVi({ cycleId }: { cycleId: string }) {
 					{m.khongChuY}
 				</p>
 			) : hep ? (
-				<div className="flex flex-col gap-2" data-so-do-danh-sach>
+				<div
+					className={
+						toanVung
+							? "flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto"
+							: "flex flex-col gap-2"
+					}
+					data-so-do-danh-sach
+				>
 					{ve.nut.map((n) => (
 						<div
 							data-cap={n.data.cap}
@@ -307,6 +376,19 @@ export default function SoDoDonVi({ cycleId }: { cycleId: string }) {
 							{the(n, "dong")}
 						</div>
 					))}
+				</div>
+			) : toanVung ? (
+				<div className="relative min-h-0 flex-1">
+					<FlowMap
+						centerId={moDonVi}
+						edges={ve.day}
+						label={m.nhan}
+						nodeTypes={KIEU_NUT}
+						nodes={nutKhung}
+					/>
+					<div className="pointer-events-none absolute top-2 right-2">
+						{chuGiai}
+					</div>
 				</div>
 			) : (
 				<div style={{ height: SO_DO.khung.caoPx }}>

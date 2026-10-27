@@ -26,6 +26,7 @@ import {
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type { DonChonOkr } from "@/app/(app)/[slug]/okr/okr-search-params";
+import type { TheBo } from "@/app/(app)/[slug]/okr/theo-don-vi/the-con";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import type { ChuKyOutput } from "../../api/src/okr/okr.contracts";
 import type { ToanCanhOutput } from "../../api/src/okr/okr-xem.contracts";
@@ -389,7 +390,7 @@ const demViewSwitch = (o: ParentNode) =>
 
 type CotPha = "dang-tai" | PhaChuKy;
 type MongO = {
-	the: readonly (readonly [CachXemOkr, string])[];
+	the: readonly (readonly [TheBo, string])[];
 	mo: Record<CachXemOkr, CachXemOkr>;
 };
 
@@ -397,21 +398,19 @@ const BON_THE = [
 	["danh-sach", "OKR"],
 	["hop-tuan", "Họp tuần"],
 	["viec", "Việc"],
-	["cay", "Sơ đồ góp vào"],
+	["so-do", "Sơ đồ góp vào"],
 ] as const;
 const NAM_THE = [...BON_THE, ["cham", "Chấm điểm"]] as const;
 const MO_KHONG_CHAM = {
 	"danh-sach": "danh-sach",
 	"hop-tuan": "hop-tuan",
 	viec: "viec",
-	cay: "cay",
 	cham: "danh-sach",
 } as const;
 const MO_CO_CHAM = {
 	"danh-sach": "danh-sach",
 	"hop-tuan": "hop-tuan",
 	viec: "viec",
-	cay: "cay",
 	cham: "cham",
 } as const;
 
@@ -422,7 +421,7 @@ const MA_TRAN_THE = {
 	"cham-diem": { the: NAM_THE, mo: MO_CO_CHAM },
 	"da-dong": { the: NAM_THE, mo: MO_CO_CHAM },
 } satisfies Record<CotPha, MongO>;
-const XEM_MA_TRAN = ["danh-sach", "hop-tuan", "viec", "cay", "cham"] as const;
+const XEM_MA_TRAN = ["danh-sach", "hop-tuan", "viec", "cham"] as const;
 
 function kiemThe(o: ParentNode, nhan: string, mong: MongO, xem: CachXemOkr) {
 	const loi = (s: string) => `tbo-the: ${nhan} ${s}`;
@@ -477,7 +476,7 @@ describe("tbo-the", () => {
 		expect([...XEM_MA_TRAN].sort()).toEqual([...CACH_XEM_OKR].sort());
 	});
 	for (const cot of Object.keys(MA_TRAN_THE) as CotPha[]) {
-		test(`${cot}: 5 cach xem — the con la lien ket dung thu tu, mot the dang mo, khong ViewSwitch`, async () => {
+		test(`${cot}: 4 cach xem — the con la lien ket dung thu tu, mot the dang mo, khong ViewSwitch`, async () => {
 			for (const xem of XEM_MA_TRAN) {
 				const s = await moBo(cot, xem);
 				kiemThe(s.o, `${cot}/${xem}`, MA_TRAN_THE[cot], xem);
@@ -669,7 +668,13 @@ function hrefBanNhap() {
 function hrefTheCon() {
 	const cua = (don: { loai: "goc" } | { loai: "pb"; id: string }) =>
 		XEM_MA_TRAN.map((the) =>
-			hrefThe({ goc: "/ws/okr/bo-okr", don, ky: "q4", the }),
+			hrefThe({
+				goc: "/ws/okr/bo-okr",
+				soDo: "/ws/okr/so-do",
+				don,
+				ky: "q4",
+				the,
+			}),
 		);
 	return { goc: cua({ loai: "goc" }), "pb:P1": cua({ loai: "pb", id: "P1" }) };
 }
