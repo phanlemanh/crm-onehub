@@ -186,8 +186,18 @@ const dongKr = z.object({
 	tuTin: tuTin.nullable(),
 });
 
+export const mucDoiHop = z.object({
+	tu: z.number(),
+	den: z.number(),
+	ngayTruoc: z.string(),
+});
+
 export const dongHop = dongKr.extend({
 	ghiChu: z.string().nullable(),
+	ghiChuNgay: z.string().nullable(),
+	donVi: z.string(),
+	giaTriMoi: z.number().nullable(),
+	mucDoi: mucDoiHop.nullable(),
 	lyDo: z.array(lyDoHop),
 });
 

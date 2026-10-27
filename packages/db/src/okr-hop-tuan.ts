@@ -58,6 +58,24 @@ export function moiNhatDenTuan(kr: KrSo, tuan: string): LanCapNhat | null {
 	return kr.lan.filter((l) => l.tuan <= tuan).at(-1) ?? null;
 }
 
+export type MucDoiKr = { tu: number; den: number; ngayTruoc: string };
+
+export function mucDoiCua(kr: KrSo): MucDoiKr | null {
+	const moi = moiNhat(kr);
+	if (!moi || kr.lan.length < 2) return null;
+	const so =
+		kr.lan.filter((l) => l.tuan < moi.tuan).at(-1) ?? kr.lan[0] ?? null;
+	if (!so) return null;
+	return { tu: so.giaTri, den: moi.giaTri, ngayTruoc: ngayVN(so.luc) };
+}
+
+export function ghiChuMoiNhatCua(
+	kr: KrSo,
+): { ghiChu: string; ngay: string } | null {
+	const ghi = [...kr.lan].reverse().find((l) => l.ghiChu.trim() !== "");
+	return ghi ? { ghiChu: ghi.ghiChu, ngay: ngayVN(ghi.luc) } : null;
+}
+
 export function lyDoCua(kr: KrSo, homNay: Date): LyDoHop[] {
 	const tuan = dauTuanVN(homNay);
 	const ra: LyDoHop[] = [];
