@@ -401,12 +401,11 @@ const KY_CHAM = cyclesOutput.parse({
 	currentId: "q4",
 });
 
-const THE = ["danh-sach", "hop-tuan", "viec", "cay", "cham"] as const;
+const THE = ["danh-sach", "hop-tuan", "viec", "cham"] as const;
 const THE_CO_HANG = {
 	"danh-sach": true,
 	"hop-tuan": false,
 	viec: false,
-	cay: false,
 	cham: false,
 } satisfies Record<(typeof THE)[number], boolean>;
 
