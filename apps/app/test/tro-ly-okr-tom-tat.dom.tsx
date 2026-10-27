@@ -258,6 +258,8 @@ const HOP_TUAN: HopTuanOutput = hopTuanOutput.parse({
 			tuTin: "vua",
 			ghiChu: "Chậm hai hợp đồng lớn ở Hải Phòng",
 			lyDo: [{ loai: "ghi-chu", ngay: "2026-10-12" }],
+			checkInId: null,
+			camXuc: [],
 		},
 	],
 	conLai: [],
