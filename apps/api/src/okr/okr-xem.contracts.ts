@@ -1,3 +1,4 @@
+import { tomTatCamXuc } from "@crm/validation/okr-cam-xuc";
 import { LOAI_VIEC_KR } from "@crm/validation/okr-canh-kr";
 import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import { MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
@@ -187,6 +188,8 @@ const dongKr = z.object({
 });
 
 export const dongHop = dongKr.extend({
+	checkInId: z.string().nullable(),
+	camXuc: tomTatCamXuc,
 	ghiChu: z.string().nullable(),
 	lyDo: z.array(lyDoHop),
 });
@@ -215,6 +218,8 @@ export const dienBienOutput = z.object({
 	diem: z.array(
 		z.object({
 			tuan: z.string(),
+			checkInId: z.string().nullable(),
+			camXuc: tomTatCamXuc,
 			giaTri: z.number().nullable(),
 			kyVong: z.number().nullable(),
 			tuTin: tuTin.nullable(),

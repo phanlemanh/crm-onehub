@@ -45,6 +45,7 @@ import {
 	OkrAccessService,
 	type Quyen,
 } from "./okr-access.service";
+import { OkrCamXucService } from "./okr-cam-xuc.service";
 import { OKR } from "./okr-config";
 import { OKR_XEM } from "./okr-xem.config";
 import type {
@@ -159,6 +160,7 @@ export class OkrXemService {
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrService) private readonly okr: OkrService,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
+		@Inject(OkrCamXucService) private readonly camXuc: OkrCamXucService,
 	) {}
 
 	dieuKienDonVi(unit: DonViChon, q: Quyen): Prisma.OkrObjectiveWhereInput {
@@ -224,6 +226,7 @@ export class OkrXemService {
 				objective: { select: { publishedAt: true } },
 				checkIns: {
 					select: {
+						id: true,
 						weekStart: true,
 						value: true,
 						confidence: true,
@@ -242,6 +245,7 @@ export class OkrXemService {
 					khoaLuc: k.startLockedAt ?? k.objective.publishedAt,
 					lan: k.checkIns
 						.map((c) => ({
+							id: c.id,
 							tuan: c.weekStart.toISOString().slice(0, 10),
 							luc: c.session.submittedAt ?? c.createdAt,
 							tuTin: mucTuTin.parse(c.confidence),
@@ -685,19 +689,35 @@ export class OkrXemService {
 					expected: laMoc ? null : x.m.expected,
 					laMoc,
 					tuTin: moi?.tuTin ?? null,
+					checkInId: moi?.id ?? null,
+					camXuc: [],
 					ghiChu: ghi?.ghiChu ?? null,
 					lyDo: d.lyDo,
 				},
 			];
 		};
 		const tatCa = [...so.values()];
+		const dangBan = xep.dangBan.flatMap(dong);
+		const conLai = xep.conLai.flatMap(dong);
+		const camXuc = await this.camXuc.tomTat(
+			this.db,
+			[...dangBan, ...conLai].flatMap((d) =>
+				d.checkInId ? [d.checkInId] : [],
+			),
+			userId,
+			this.quyenOkr.nguCanhXem(q, userId),
+		);
+		const gan = (d: DongHop): DongHop => ({
+			...d,
+			camXuc: d.checkInId ? (camXuc.get(d.checkInId) ?? []) : [],
+		});
 		return {
 			tuan,
 			tuanDau: tatCa.every((k) => k.lan.length === 0),
 			daCapNhat: tatCa.filter((k) => cuoiTrongTuan(k, tuan) !== null).length,
 			tongKr: tatCa.length,
-			dangBan: xep.dangBan.flatMap(dong),
-			conLai: xep.conLai.flatMap(dong),
+			dangBan: dangBan.map(gan),
+			conLai: conLai.map(gan),
 		};
 	}
 
@@ -795,6 +815,29 @@ export class OkrXemService {
 				: null;
 		const kieu = kieuKr.parse(kr.kind);
 		const so = { id: kr.id, thuTu: 0, ...(lan.get(kr.id) ?? RONG_LAN) };
+		const diem = dienBienKr(
+			{
+				...so,
+				kieu,
+				khoi: kr.startValue.toNumber(),
+				dich: kr.targetValue.toNumber(),
+			},
+			cacTuan(c.startsOn, c.endsOn),
+			homNay,
+			(tuan) =>
+				kyVongTheoNgay(
+					kr.objective.publishedAt,
+					c.endsOn,
+					new Date(`${tuan}T00:00:00+07:00`),
+					nghi,
+				),
+		);
+		const camXuc = await this.camXuc.tomTat(
+			this.db,
+			diem.flatMap((d) => (d.checkInId ? [d.checkInId] : [])),
+			userId,
+			nc,
+		);
 		return {
 			kieu,
 			tieuDe: kr.title,
@@ -803,23 +846,10 @@ export class OkrXemService {
 			donVi: kr.unit,
 			coCapNhat: so.lan.length > 0,
 			tuanDau: tuanCapNhatDau(c.startsOn, kr.objective.publishedAt, homNay),
-			diem: dienBienKr(
-				{
-					...so,
-					kieu,
-					khoi: kr.startValue.toNumber(),
-					dich: kr.targetValue.toNumber(),
-				},
-				cacTuan(c.startsOn, c.endsOn),
-				homNay,
-				(tuan) =>
-					kyVongTheoNgay(
-						kr.objective.publishedAt,
-						c.endsOn,
-						new Date(`${tuan}T00:00:00+07:00`),
-						nghi,
-					),
-			),
+			diem: diem.map((d) => ({
+				...d,
+				camXuc: d.checkInId ? (camXuc.get(d.checkInId) ?? []) : [],
+			})),
 		};
 	}
 

@@ -130,6 +130,7 @@ export const BINH_LUAN_CNG: {
 	ai: NguoiCng;
 	mucTieu: string;
 	kr: string | null;
+	lan: string | null;
 	luc: string;
 }[] = [
 	{
@@ -137,6 +138,7 @@ export const BINH_LUAN_CNG: {
 		ai: "A",
 		mucTieu: "b1",
 		kr: "b1",
+		lan: null,
 		luc: "2026-10-20T02:00:00Z",
 	},
 	{
@@ -144,6 +146,7 @@ export const BINH_LUAN_CNG: {
 		ai: "A",
 		mucTieu: "b1",
 		kr: "b1",
+		lan: "l-b1-1",
 		luc: "2026-10-20T04:00:00Z",
 	},
 	{
@@ -151,6 +154,7 @@ export const BINH_LUAN_CNG: {
 		ai: "A",
 		mucTieu: "b1",
 		kr: "b1",
+		lan: "l-b1-2",
 		luc: "2026-10-20T06:00:00Z",
 	},
 	{
@@ -158,6 +162,7 @@ export const BINH_LUAN_CNG: {
 		ai: "A",
 		mucTieu: "b1",
 		kr: "b1x",
+		lan: null,
 		luc: "2026-10-20T06:30:00Z",
 	},
 	{
@@ -165,6 +170,7 @@ export const BINH_LUAN_CNG: {
 		ai: "A",
 		mucTieu: "b1",
 		kr: null,
+		lan: null,
 		luc: "2026-10-20T06:40:00Z",
 	},
 ];

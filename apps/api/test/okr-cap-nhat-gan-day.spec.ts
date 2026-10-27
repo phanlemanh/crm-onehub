@@ -270,6 +270,7 @@ async function gieo(): Promise<void> {
 				{
 					objectiveId: san.mucTieu.get(c.mucTieu) ?? "",
 					keyResultId: c.kr ? san.kr.get(c.kr) : undefined,
+					checkInId: c.lan ? san.lan.get(c.lan) : undefined,
 					body: `Bình luận ${c.ma}`,
 					mentionUserIds: [],
 				},
@@ -581,7 +582,7 @@ describe("cng-tra-loi", () => {
 		);
 	});
 
-	test("tra loi chi o lan moi nhat, tu thoi diem lan do", async () => {
+	test("tra loi gan dung lan cap nhat, ca lan cu (D5)", async () => {
 		const rows = await moiTrang(san.cookie.A);
 		const t2 = rows.find((r) => maLan(r.checkInId) === "l-b1-2");
 		const t1 = rows.find((r) => maLan(r.checkInId) === "l-b1-1");
@@ -590,9 +591,11 @@ describe("cng-tra-loi", () => {
 		expect(t2?.traLoi.map((b) => b.id)).toEqual([
 			san.binhLuan.get("c-1300") ?? "",
 		]);
-		expect(t1?.traLoi).toEqual([]);
+		expect(t1?.traLoi.map((b) => b.id)).toEqual([
+			san.binhLuan.get("c-1100") ?? "",
+		]);
 		expect(t2?.mentionNguoiCapNhat).toBe(san.nguoi.U);
-		expect(t1?.mentionNguoiCapNhat).toBeNull();
+		expect(t1?.mentionNguoiCapNhat).toBe(san.nguoi.U);
 	});
 
 	test("tra loi moi hien duoi lan moi nhat va o the Trao doi", async () => {
@@ -603,6 +606,7 @@ describe("cng-tra-loi", () => {
 				{
 					objectiveId: san.mucTieu.get("b1") ?? "",
 					keyResultId: san.kr.get("b1"),
+					checkInId: san.lan.get("l-b1-2"),
 					body: "Trả lời lúc 14 giờ",
 					mentionUserIds: [san.nguoi.U],
 				},
@@ -688,5 +692,81 @@ describe("cng-tra-loi", () => {
 		const rows = await moiTrang(san.cookie.A);
 		const t2 = rows.find((r) => maLan(r.checkInId) === "l-b1-2");
 		expect(t2?.mentionNguoiCapNhat).toBeNull();
+	});
+});
+
+describe("cx-tra-loi", () => {
+	const lanCua = (ma: string) => san.lan.get(ma) ?? "";
+	const ghi = (vao: Record<string, string | undefined>) =>
+		goi(
+			"okr.addComment",
+			{
+				objectiveId: san.mucTieu.get("b1") ?? "",
+				body: "Trả lời một lần cũ",
+				mentionUserIds: [],
+				...vao,
+			},
+			san.cookie.A,
+		);
+
+	test("tra loi lan cu sau khi da co lan moi hon: hien duoi lan cu", async () => {
+		await luc("2026-10-20T08:00:00Z");
+		const tra = ok<{ id: string }>(
+			await ghi({ keyResultId: san.kr.get("b1"), checkInId: lanCua("l-b1-1") }),
+			"tra loi t1",
+		);
+		await luc(MOC_CNG.doc);
+		const rows = await moiTrang(san.cookie.A);
+		const t1 = rows.find((r) => maLan(r.checkInId) === "l-b1-1");
+		const t2 = rows.find((r) => maLan(r.checkInId) === "l-b1-2");
+		expect(t1?.traLoi.map((b) => b.id)).toContain(tra.id);
+		expect(
+			t2?.traLoi.map((b) => b.id),
+			"binh luan tren t1 hien duoi t2",
+		).not.toContain(tra.id);
+		const traoDoi = await doc<{
+			comments: { id: string; keyResultId: string | null }[];
+		}>("okr.comments", san.cookie.A, {
+			objectiveId: san.mucTieu.get("b1") ?? "",
+		});
+		expect(traoDoi.comments.find((c) => c.id === tra.id)?.keyResultId).toBe(
+			san.kr.get("b1") ?? "",
+		);
+	});
+
+	test("chi checkInId: KR lay tu lan", async () => {
+		const tra = ok<{ id: string }>(
+			await ghi({ checkInId: lanCua("l-b1-2") }),
+			"chi checkInId",
+		);
+		const hang = await db.okrComment.findUnique({
+			where: { id: tra.id },
+			select: { keyResultId: true, checkInId: true },
+		});
+		expect(hang).toEqual({
+			keyResultId: san.kr.get("b1") ?? "",
+			checkInId: lanCua("l-b1-2"),
+		});
+	});
+
+	test("lan cua KR khac cung muc tieu: tu choi capNhatKhacKr", async () => {
+		const truoc = await db.okrComment.count();
+		const tra = await ghi({
+			keyResultId: san.kr.get("b1x"),
+			checkInId: lanCua("l-b1-1"),
+		});
+		expect(tra.status).toBe(400);
+		expect(tra.loi, "u1 nhan binh luan cua k1").toBe(
+			OKR.thongDiep.traoDoi.capNhatKhacKr,
+		);
+		expect(await db.okrComment.count()).toBe(truoc);
+	});
+
+	test("lan thuoc muc tieu khac: cung cau voi muc tieu khong ton tai", async () => {
+		const truoc = await db.okrComment.count();
+		const tra = await ghi({ checkInId: lanCua("l-g1") });
+		expect(tra.status).toBe(404);
+		expect(tra.loi).toBe(OKR.thongDiep.khongThayMucTieu);
+		expect(await db.okrComment.count()).toBe(truoc);
 	});
 });
