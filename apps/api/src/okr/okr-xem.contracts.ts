@@ -194,10 +194,10 @@ export const mucDoiHop = z.object({
 
 export const dongHop = dongKr.extend({
 	ghiChu: z.string().nullable(),
-	ghiChuNgay: z.string().nullable(),
-	donVi: z.string(),
-	giaTriMoi: z.number().nullable(),
-	mucDoi: mucDoiHop.nullable(),
+	ghiChuNgay: z.string().nullable().default(null),
+	donVi: z.string().default(""),
+	giaTriMoi: z.number().nullable().default(null),
+	mucDoi: mucDoiHop.nullable().default(null),
 	lyDo: z.array(lyDoHop),
 });
 

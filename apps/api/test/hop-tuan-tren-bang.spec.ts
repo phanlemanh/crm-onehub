@@ -7,6 +7,7 @@ import {
 	type HopTuanOutput,
 	hopTuanOutput,
 } from "../src/okr/okr-xem.contracts";
+import { OkrXemService } from "../src/okr/okr-xem.service";
 import {
 	type AiHoacCookie,
 	CHUONG_TRINH_RONG,
@@ -230,9 +231,14 @@ function chupKhoaCu(
 	};
 }
 
-function lechCa(ten: string, dong: Dong, mong: Mong): string[] {
+function lechCa(
+	ten: string,
+	dong: Dong,
+	khoaTho: string[],
+	mong: Mong,
+): string[] {
 	const loi: string[] = [];
-	const khoa = Object.keys(dong).sort();
+	const khoa = [...khoaTho].sort();
 	const can = [...KHOA_CU, ...KHOA_MOI].sort();
 	if (JSON.stringify(khoa) !== JSON.stringify(can))
 		loi.push(`htb-muc-doi: ${ten} khoa ${khoa.join(",")}`);
@@ -291,6 +297,19 @@ describe("htb-muc-doi", () => {
 						await capNhat(truong.nguoi, krCua.get(ca.ten) ?? "", l);
 
 				setSystemTime(GIO_DO);
+				const tho = await ungDung()
+					.get(OkrXemService)
+					.hopTuan(
+						truong.nguoi,
+						{ cycleId: quy, unit: { loai: "pb", id: P } },
+						GIO_DO,
+					);
+				const khoaThoCua = new Map(
+					[...tho.dangBan, ...tho.conLai].map((d) => [
+						d.keyResultId,
+						Object.keys(d),
+					]),
+				);
 				const ht = hopTuanOutput.parse(
 					await doc("okr.hopTuan", "quan", {
 						cycleId: quy,
@@ -340,7 +359,7 @@ describe("htb-muc-doi", () => {
 					const donVi = ca.kieu === "moc" ? "" : "đại lý";
 					if (d.donVi !== donVi)
 						loi.push(`htb-muc-doi: ${ca.ten} donVi=${d.donVi} can ${donVi}`);
-					loi.push(...lechCa(ca.ten, d, mong));
+					loi.push(...lechCa(ca.ten, d, khoaThoCua.get(id) ?? [], mong));
 					dem += 1;
 				}
 			} finally {

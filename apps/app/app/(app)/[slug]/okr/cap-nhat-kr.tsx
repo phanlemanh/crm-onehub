@@ -30,7 +30,9 @@ export type CapNhatKr = {
 	hop: ReactNode;
 };
 
-export function useCapNhatKr(): CapNhatKr {
+export function useCapNhatKr(
+	tuyChon: { onDaGui?: (keyResultId: string) => void } = {},
+): CapNhatKr {
 	const trpc = useTRPC();
 	const [hop, setHop] = useState<Hop | null>(null);
 	const lanMo = useRef(0);
@@ -64,6 +66,7 @@ export function useCapNhatKr(): CapNhatKr {
 			loiMo={moPhien.isError}
 			moLai={() => mo(hop.mt, hop.kr)}
 			dong={() => setHop(null)}
+			onDaGui={tuyChon.onDaGui}
 		/>
 	) : null;
 
