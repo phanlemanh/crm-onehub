@@ -5,7 +5,9 @@ import ArrowsVertical from "@carbon/icons-react/es/ArrowsVertical";
 import ArrowUp from "@carbon/icons-react/es/ArrowUp";
 import ChevronDown from "@carbon/icons-react/es/ChevronDown";
 import ChevronRight from "@carbon/icons-react/es/ChevronRight";
+import CollapseAll from "@carbon/icons-react/es/CollapseAll";
 import Column from "@carbon/icons-react/es/Column";
+import ExpandAll from "@carbon/icons-react/es/ExpandAll";
 import Filter from "@carbon/icons-react/es/Filter";
 import { Button } from "@crm/ui/components/button";
 import { Checkbox } from "@crm/ui/components/checkbox";
@@ -116,6 +118,7 @@ export type DataTableExpandable<TRow, TSub> = {
 	renderSubCell: (sub: TSub, columnId: string, row: TRow) => ReactNode;
 	onSubRowClick?: (sub: TSub, row: TRow) => void;
 	rowLabel?: (row: TRow) => string;
+	moSan?: boolean;
 };
 
 export type DataTableSelection<TRow> = {
@@ -603,6 +606,12 @@ export function DataTable<TRow, TSub = unknown>({
 		parseAsArrayOf(parseAsString).withDefault([]),
 	);
 	const expanded = useMemo(() => new Set(expandedIds), [expandedIds]);
+	const [gapIds, setGapIds] = useQueryState(
+		"gap",
+		parseAsArrayOf(parseAsString).withDefault([]),
+	);
+	const gap = useMemo(() => new Set(gapIds), [gapIds]);
+	const moSan = expandable?.moSan === true;
 	const defaultHiddenIds = useMemo(
 		() => columns.filter((column) => column.defaultHidden).map((c) => c.id),
 		[columns],
@@ -627,6 +636,31 @@ export function DataTable<TRow, TSub = unknown>({
 		expandable != null &&
 		deferredRows.some((row) => expandable.isExpandable(row));
 	const selecting = selection != null && selection.state.count > 0;
+	const idMoDuoc =
+		moSan && expandable != null
+			? deferredRows
+					.filter((row) => expandable.isExpandable(row))
+					.map((row) => getRowId(row))
+			: [];
+	const coDongGap = idMoDuoc.some((id) => gap.has(id));
+	const nutMoGap =
+		idMoDuoc.length > 0 ? (
+			<Button
+				type="button"
+				variant="outline"
+				size="sm"
+				className="order-first self-start sm:order-none lg:self-auto"
+				data-nut-mo-gap-tat-ca={coDongGap ? "mo" : "gap"}
+				onClick={() => void setGapIds(coDongGap ? null : idMoDuoc)}
+			>
+				{coDongGap ? (
+					<ExpandAll data-icon="inline-start" />
+				) : (
+					<CollapseAll data-icon="inline-start" />
+				)}
+				{coDongGap ? msg.table.moTatCa : msg.table.gapTatCa}
+			</Button>
+		) : null;
 
 	const pageSize = query.pageSize;
 	const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -863,6 +897,7 @@ export function DataTable<TRow, TSub = unknown>({
 						{actions}
 					</div>
 				</div>
+				{nutMoGap}
 			</div>
 
 			{bocVungBang(
@@ -1008,11 +1043,20 @@ export function DataTable<TRow, TSub = unknown>({
 						{deferredRows.map((row) => {
 							const id = getRowId(row);
 							const canExpand = expandable?.isExpandable(row) ?? false;
-							const isOpen = canExpand && expanded.has(id);
+							const isOpen =
+								canExpand && (moSan ? !gap.has(id) : expanded.has(id));
 							const isSelected = selection?.state.has(id) ?? false;
 							const clickable = canExpand || !!onRowClick;
 							const handleClick = () => {
-								if (canExpand) {
+								if (canExpand && moSan) {
+									setGapIds((prev) => {
+										const set = new Set(prev ?? []);
+										if (set.has(id)) set.delete(id);
+										else set.add(id);
+										const next = [...set];
+										return next.length > 0 ? next : null;
+									});
+								} else if (canExpand) {
 									setExpandedIds((prev) => {
 										const set = new Set(prev ?? []);
 										if (set.has(id)) set.delete(id);
