@@ -7,6 +7,7 @@ const vi = {
 	},
 	muc: {
 		cuaToi: "Của tôi",
+		capNhatGanDay: "Cập nhật gần đây",
 		boOkr: "Bộ OKR",
 		layYKien: "Lấy ý kiến",
 		sucKhoe: "Sức khoẻ",
@@ -88,6 +89,7 @@ const en: OkrVoKhuMessages = {
 	},
 	muc: {
 		cuaToi: "Mine",
+		capNhatGanDay: "Recent updates",
 		boOkr: "OKR sets",
 		layYKien: "Call for ideas",
 		sucKhoe: "Health",

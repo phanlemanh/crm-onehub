@@ -2721,5 +2721,29 @@
 			}
 		],
 		"yLa": ["y25"]
+	},
+	"traoDoi": {
+		"theoDoi": [
+			{ "nguoi": "nguyen-thi-lan", "mucTieu": "q4-kd-nam-1" },
+			{ "nguoi": "nguyen-thi-lan", "mucTieu": "q4-cham-soc-1" },
+			{ "nguoi": "tran-quoc-bao", "mucTieu": "q4-kd-bac-1" }
+		],
+		"traLoi": [
+			{
+				"nguoi": "nguyen-thi-lan",
+				"kr": "q4-kd-bac-1-k1",
+				"noiDung": "Khoa gửi chị danh sách đối tác bán lẻ còn treo trước buổi họp thứ Hai nhé."
+			},
+			{
+				"nguoi": "tran-quoc-bao",
+				"kr": "q4-kd-bac-1-k2",
+				"noiDung": "Nhi giữ nhịp này, tuần sau anh muốn thấy thêm hai đối tác chuỗi."
+			},
+			{
+				"nguoi": "ly-thanh-tam",
+				"kr": "q4-kd-nam-1-k1",
+				"noiDung": "Ngọc chốt lịch gặp ba đối tác mới ngay trong tuần này."
+			}
+		]
 	}
 }

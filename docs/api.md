@@ -977,6 +977,15 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   pins that at 50 departments × 2000 KRs. The pure roll-ups (`danh-sach.ts`, `toan-canh.ts`) take
   plain data and are tested without a database. Caps and the admin message live in
   `OKR_XEM` (`okr-xem.config.ts`).
+- **`okr.capNhatGanDay` (POST `/okr/updates/list`) is the recent-updates feed.** One row per
+  `OkrCheckIn` of a published OneHub, division or department objective of the cycle that the viewer
+  may see, newest first by the session's `submittedAt`, `OKR_XEM.capNhatGanDay.coTrang` rows a page.
+  `phamVi` is the area scope of `PHAM_VI_BO` with the same meaning as `okr.danhSachBo`: `toi-dan` is the
+  sets of the units the viewer heads (no child departments, never OneHub), `theo-doi` every check-in of
+  a set in which the viewer follows at least one objective. `facetCounts.phamVi` counts each scope with
+  the same visibility. Only the latest check-in of a KR carries `traLoi` — the comments tagged to that KR
+  from its moment on — and `mentionNguoiCapNhat`; a reply is an ordinary `okr.addComment`, so it shows in
+  the Trao đổi tab too. A fixed number of queries per call (`okr-cap-nhat-gan-day.spec.ts`, `cng-trang`).
 - **Weekly numbers are read from check-ins, never stored again.** `okr.hopTuan`
   sorts a unit's KRs by why they are worth discussing (`hop-tuan.ts`: confidence
   dropped, then silent for `OKR_NHAC.imNgay` days, then a new note since the start of

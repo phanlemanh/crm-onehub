@@ -26,6 +26,7 @@ import {
 } from "@crm/validation/okr-kr";
 import { mauNoiDung } from "@crm/validation/okr-mau";
 import { crmHopKieu, parseOkrNguon } from "@crm/validation/okr-nguon";
+import { z } from "zod";
 import { LoiBoMau, OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 import { dienBien } from "../scripts/okr-mau/dien-bien";
 import { docBoOkrMau, type KichBan } from "../scripts/okr-mau/khuon";
@@ -921,6 +922,7 @@ const BANG_CO_MAU = [
 	"okrDiemKr",
 	"okrNhinLai",
 	"okrMangSang",
+	"okrFollow",
 	...SAU_BANG,
 	"okrHoiY",
 	"okrHoiYBanTruoc",
@@ -2521,6 +2523,83 @@ describe("okx", () => {
 			const motViec = chayLenh([OKR_MAU.co.xoa]);
 			expect(dongGiu(motViec.loi)).toEqual(["viec.nguoiThucHienId (1)"]);
 			await donViecNgoai();
+		},
+		CHO,
+	);
+});
+
+const vetBinhLuan = z.object({ commentId: z.string() });
+
+describe("cap-nhat-gan-day", () => {
+	const KY_QUY4 = idMau("chu-ky", "quy4");
+	const TRUONG = nguoiMau("nguyen-thi-lan");
+
+	async function demTraoDoi() {
+		const traLoi = await db.okrComment.findMany({
+			where: { keyResultId: { not: null }, objective: { cycleId: KY_QUY4 } },
+			select: { id: true },
+		});
+		const mucTieu = await db.okrObjective.findMany({
+			where: { cycleId: KY_QUY4 },
+			select: { id: true },
+		});
+		const idTraLoi = new Set(traLoi.map((b) => b.id));
+		const vet = (
+			await db.okrTrail.findMany({
+				where: {
+					action: "binh-luan",
+					objectiveId: { in: mucTieu.map((m) => m.id) },
+				},
+				select: { after: true },
+			})
+		).filter((v) => {
+			const sau = vetBinhLuan.safeParse(v.after);
+			return sau.success && idTraLoi.has(sau.data.commentId);
+		}).length;
+		return {
+			theoDoi: await db.okrFollow.count({
+				where: { objective: { cycleId: KY_QUY4 } },
+			}),
+			traLoi: traLoi.length,
+			vet,
+		};
+	}
+
+	test(
+		"bộ mẫu có theo dõi và trả lời qua đường ghi thật; Đang theo dõi khác 0, lần mới nhất có trả lời; nạp lại không nhân đôi",
+		async () => {
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+			const khai = {
+				theoDoi: bo.traoDoi.theoDoi.length,
+				traLoi: bo.traoDoi.traLoi.length,
+				vet: bo.traoDoi.traLoi.length,
+			};
+			expect(await demTraoDoi()).toEqual(khai);
+			const cookie = await phienCua(TRUONG);
+			const theoDoi = await doc<{
+				facetCounts: { phamVi: { value: string; count: number }[] };
+			}>("okr.capNhatGanDay", cookie, {
+				cycleId: KY_QUY4,
+				phamVi: "theo-doi",
+				trang: 1,
+			});
+			expect(
+				theoDoi.facetCounts.phamVi.find((p) => p.value === "theo-doi")?.count ??
+					0,
+			).toBeGreaterThan(0);
+			const toiDan = await doc<{
+				rows: { moiNhat: boolean; traLoi: unknown[] }[];
+			}>("okr.capNhatGanDay", cookie, {
+				cycleId: KY_QUY4,
+				phamVi: "toi-dan",
+				trang: 1,
+			});
+			expect(toiDan.rows.some((r) => r.moiNhat && r.traLoi.length > 0)).toBe(
+				true,
+			);
+			await napMau(MOC_THU_NAM);
+			expect(await demTraoDoi()).toEqual(khai);
 		},
 		CHO,
 	);

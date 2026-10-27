@@ -205,6 +205,7 @@ function mucTrenAside(): HTMLElement[] {
 
 const MA_TRAN_SANG: [string, string][] = [
 	["/ws/okr", "/ws/okr"],
+	["/ws/okr/cap-nhat-gan-day", "/ws/okr/cap-nhat-gan-day"],
 	["/ws/okr/bo-okr", "/ws/okr/bo-okr"],
 	["/ws/okr/bo-okr?donOkr=pb:x", "/ws/okr/bo-okr"],
 	["/ws/okr/lay-y-kien", "/ws/okr/lay-y-kien"],
@@ -215,6 +216,7 @@ const MA_TRAN_SANG: [string, string][] = [
 
 const HREF_MUC = [
 	"/ws/okr",
+	"/ws/okr/cap-nhat-gan-day",
 	"/ws/okr/bo-okr",
 	"/ws/okr/lay-y-kien",
 	"/ws/okr/suc-khoe",
@@ -229,7 +231,7 @@ async function don() {
 }
 
 describe("vkm-thanh-ben", () => {
-	test("vkm-thanh-ben: nhan, ba nhom, nam muc va dung mot muc sang o 7 duong", async () => {
+	test("vkm-thanh-ben: nhan, ba nhom, bay muc va dung mot muc sang o 8 duong", async () => {
 		const ket: string[] = [];
 		for (const [duong, mong] of MA_TRAN_SANG) {
 			datNen();
@@ -257,6 +259,7 @@ describe("vkm-thanh-ben", () => {
 			const nhanMuc = muc.map((a) => a.textContent);
 			const mongNhan = [
 				t.muc.cuaToi,
+				t.muc.capNhatGanDay,
 				t.muc.boOkr,
 				t.muc.layYKien,
 				t.muc.sucKhoe,
@@ -277,7 +280,7 @@ describe("vkm-thanh-ben", () => {
 			ket.push(`${duong} → ${mong}`);
 			await don();
 		}
-		expect(ket).toHaveLength(7);
+		expect(ket).toHaveLength(MA_TRAN_SANG.length);
 	});
 
 	test("vkm-thanh-ben: so y kien can gop tren muc Lay y kien, khong so khi bang 0", async () => {
@@ -423,7 +426,7 @@ describe("vkm-chu-ky", () => {
 	test("vkm-chu-ky: lien ket muc mang kyOkr dang xem, va doi theo khi chon chu ky khac", async () => {
 		datNen();
 		await dung(<ThanhBenMucTieu />, "/ws/okr?kyOkr=c2");
-		await cho(() => mucTrenAside().length === 6, "nam muc");
+		await cho(() => mucTrenAside().length === HREF_MUC.length, "nam muc");
 		const coKy = hrefMuc();
 		if (
 			!coKy.every(
@@ -437,7 +440,10 @@ describe("vkm-chu-ky", () => {
 
 		datNen();
 		await dung(<ThanhBenMucTieu />, "/ws/okr");
-		await cho(() => mucTrenAside().length === 6, "nam muc khong ky");
+		await cho(
+			() => mucTrenAside().length === HREF_MUC.length,
+			"nam muc khong ky",
+		);
 		const khongKy = hrefMuc();
 		if (khongKy.some((h) => h.includes("kyOkr")))
 			throw new Error(
@@ -472,7 +478,10 @@ describe("vkm-chu-ky", () => {
 			datNen();
 			urlGhi.length = 0;
 			await dung(<ThanhBenMucTieu />, ca.duong);
-			await cho(() => mucTrenAside().length === 6, `nam muc ${ca.duong}`);
+			await cho(
+				() => mucTrenAside().length === HREF_MUC.length,
+				`nam muc ${ca.duong}`,
+			);
 			await chonKy(ca.ten);
 			const cuoi = urlGhi.at(-1) ?? "";
 			if (new URLSearchParams(cuoi).get("kyOkr") !== ca.id)

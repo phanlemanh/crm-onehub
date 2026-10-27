@@ -6,6 +6,7 @@ export const OKR_XEM = {
 	thoiGian: { phutMs: PHUT_MS, ngayMs: NGAY_MS },
 	moHopTuan: { gopMs: 30 * PHUT_MS },
 	khoiCuaToi: { toiDa: 5 },
+	capNhatGanDay: { coTrang: 20 },
 	thongDiep: {
 		chiQuanTri: "Chỉ quản trị xem được sức khoẻ chương trình.",
 	},
