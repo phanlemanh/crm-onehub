@@ -5,7 +5,7 @@ slug: don-sau-cho-tac-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-27-don-sau-cho-tac-nhan-design.md
 approved_by: Manh Phan
 approved_at: 2026-10-27T07:25:51Z
