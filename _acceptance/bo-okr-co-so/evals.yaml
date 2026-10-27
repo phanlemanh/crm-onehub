@@ -1,0 +1,267 @@
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.bco_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/api/src/okr/toan-canh.ts"
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/bo-okr-co-so/rang/man-bo-okr-co-so*.mjs"
+    expected: |
+      man-bo-okr-co-so.mjs trên phiên đo riêng (tien-de.mjs), bộ OKR mẫu, người xem là trưởng một phòng ban mẫu, khổ
+      1440. Ma trận viết trước 4 bộ {goc, bp:<bộ phận mẫu có phòng ban con có mục tiêu>, pb:<phòng ban của người xem>,
+      nguoi:<người xem>}.
+      Mỗi bộ: mở /okr/bo-okr?donOkr=<khoá>, đọc [data-slot=stat-group] đầu tiên dưới hàng thẻ con; đọc okr.toanCanh,
+      okr.danhSachBo và okr.danhSach (không lọc) qua API trong cùng phiên (cookie của người xem) và chu kỳ đang xem qua okr.cycles. Khẳng định từng bộ đúng một
+      hàng số, đứng sau hàng thẻ con và trước hàng công cụ của bảng (thứ tự DOM: [data-the-con-bo] < [data-hang-so-bo] < nút Gập tất cả), bốn nhãn đúng thứ tự, và bốn giá trị bằng
+      (ngayConLai tính từ endsOn theo giờ VN, tienDo%, daCapNhat/soKr, tuTin.thap) của hàng key=<khoá> (với nguoi: tienDo = trung bình làm tròn progress của các
+      dòng okr.danhSach chưa bỏ đã công bố, soKr = tổng KR của chúng — tính độc lập trong thước); mô tả Tiến độ chứa
+      kyVong; ô Tiến độ và KR tự tin thấp bằng tienDo, tuTinThap của hàng okr.danhSachBo cùng khoá (Hỏi-6: số của chính
+      bộ đó, cùng nguồn với danh sách Bộ OKR). In «DUNG AC-1 <khoá>: <4 giá trị>» hoặc «SAI AC-1 <khoá>: <ô> man=<x> api=<y>», mã 1.
+      Gieo trước khi đo qua đường ghi thật: một lần cập nhật tuần này tự tin thấp cho một KR của phòng ban, để
+      daCapNhat và tuTin.thap khác 0 (bộ mẫu Quý 4 có thể chưa có lần cập nhật nào trong tuần chạy).
+      CHIEU DO (--chieu-do khoa-goc, bản sao): hàng số luôn đọc hàng key=goc → «SAI AC-1 pb:<id>: tien-do» (ghim
+      /SAI AC-1 (bp|pb):\S+: /), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.bco_dom_o_so
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/test/bo-okr-co-so.dom.tsx"
+    expected: |
+      apps/app/test/bo-okr-co-so.dom.tsx ca «bco-o-so»: dựng TheoDonVi với trpc giả trả okr.soBo khác số theo từng
+      unit (goc, bp:B, pb:P, nguoi:U) và chu kỳ có endsOn cố định; đồng hồ ghim (setSystemTime) giữa chu kỳ. Ma trận viết trước 4 bộ ×
+      4 ô = 16 khẳng định: giá trị ô bằng số okr.soBo của đúng unit bộ đang xem (input của lần gọi mang unit ấy), thứ tự nhãn đúng, đúng một
+      [data-slot=stat-group] nằm giữa thanh thẻ con và bảng. Thông điệp ghim «bco-o-so: <khoá>/<ô> lech».
+      CHIEU DO (ca «bco-o-so-do», cùng fixture): bản gọi okr.soBo với unit cố định goc (tham số thử)
+      → khẳng định đỏ «bco-o-so: pb:P/tien-do lech»; và okr.soBo trả soKr 0 cho pb:P → ô hiện trạng thái chưa công bố
+      chứ không mượn số bộ khác.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.bco_dom_bien
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/test/bo-okr-co-so.dom.tsx"
+    expected: |
+      Ca «bco-bien»: hàm thuần oSoBo(hang, chuKy, homNay). Ma trận viết trước 12 khẳng định (5 + 3 + 2 + 2 biên giờ): {trước startsOn 1 ngày, đúng
+      startsOn, giữa chu kỳ, đúng endsOn, sau endsOn 1 ngày} × ngày còn lại kỳ vọng {—/Bắt đầu, n, n, 1, 0/Đã kết thúc}
+      + {kyVong null → «chưa có vạch», kyVong 0 → «vừa công bố», kyVong 70 → «lẽ ra 70%»} + {không có hàng, soKr 0} →
+      {«—», «0/0», «0»}. Mỗi ô một khẳng định; thêm khẳng định chung: chuỗi bốn ô không chứa NaN, undefined, «-<số>».
+      Thông điệp ghim «bco-bien: <ca> lech».
+      Biên giờ: homNay = 23:30 giờ VN ngày endsOn (16:30Z) vẫn là «1»; 00:10 giờ VN hôm sau (17:10Z hôm trước) là «0».
+      CHIEU DO (ca «bco-bien-do»): bản tính ngày theo UTC (tham số thử) → «bco-bien: 00:10-vn lech»; bản không cộng ngày
+      cuối → «bco-bien: dung-endsOn lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.bco_dom_the
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/test/bo-okr-co-so.dom.tsx"
+    expected: |
+      Ca «bco-the»: ma trận viết trước 5 cách xem {danh-sach, hop-tuan, viec, cay, cham} × có hàng bốn ô [data-hang-so-bo] {có, không, không,
+      không, không} (cham ở chu kỳ pha cham-diem); 3 thao tác ở thẻ OKR {bật locNhanh=can-ban, phuTrach=<một người>,
+      sap=tien-do desc} → bốn giá trị y hệt lúc chưa lọc dù số dòng bảng đổi (khẳng định số dòng đổi, để thước không
+      xanh vì lọc không chạy); 1 đơn vị không có hàng {pb:<id không có trong cây>} → không có
+      [data-hang-so-bo]. Ca thẻ khác chỉ dò [data-hang-so-bo], không dò [data-slot=stat-group] (D3, chủ kho 24/10: Họp
+      tuần của HT1 có StatGroup riêng). Thông điệp ghim «bco-the: <ca> lech».
+      CHIEU DO (ca «bco-the-do»): bản truyền rows đã lọc vào hàm dựng ô (tham số thử) → «bco-the: can-ban lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.bco_ui_mo_san
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/test/data-table-mo-san.dom.tsx"
+    expected: |
+      packages/ui/test/data-table-mo-san.dom.tsx ca «bco-mo-san»: DataTable với expandable.moSan=true, 4 dòng {A có 2
+      con, B có 1 con, C không mở được, D không mở được}, URL trống. Khẳng định A, B aria-expanded=true và 3 dòng con
+      hiện; C, D không có nút mở. Bấm nút của A → A gập (0 con của A), B giữ mở, URL khoá gap=[A], không có khoá expand.
+      Thông điệp ghim «bco-mo-san: <dong> lech».
+      CHIEU DO (ca «bco-mo-san-do», cùng fixture): moSan bỏ (false) → khẳng định «mọi dòng mở sẵn» đỏ với «bco-mo-san: A
+      lech» (đối chứng dương: thước bắt được bảng gập).
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bco_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/bo-okr-co-so/rang/man-bo-okr-co-so*.mjs"
+    expected: |
+      Cùng lần chạy E1, bộ pb của người xem. Gieo trước qua đường ghi thật (service okr, không chèn bảng): một mục tiêu
+      có hai KR rồi bỏ nó, và một mục tiêu không KR. Đếm dòng KR hiện ([data-kr]) ngay khi bảng tải xong, so với tổng số
+      KR của các mục tiêu chưa bỏ đọc qua okr.danhSach trong cùng phiên; số nút mở có aria-expanded=true bằng số mục tiêu
+      chưa bỏ có KR; hai mục vừa gieo không có nút mở. In «DUNG AC-4 mo-san: <n>/<n> KR · da-bo khong nut · khong-kr khong
+      nut» hoặc «SAI AC-4 <ca>: man=<x> api=<y>», mã 1.
+      CHIEU DO (--chieu-do khong-mo-san, bản sao): BangDonVi bỏ moSan → «SAI AC-4 mo-san: man=0» (ghim /SAI AC-4
+      mo-san/), mã 1; (--chieu-do mo-moi-dong, bản sao): isExpandable của BangDonVi luôn true → «SAI AC-4 khong-kr» (ghim
+      /SAI AC-4 (da-bo|khong-kr)/; mục tiêu đã bỏ nằm ở nhóm Đã bỏ, không trong bảng), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.bco_ui_mo_san
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/test/data-table-mo-san.dom.tsx"
+    expected: |
+      Ca «bco-mo-san-nut», cùng fixture E5. Chuỗi viết trước 5 bước × (nhãn nút, số dòng mở, URL gap):
+      đầu {Gập tất cả, 2, vắng}; gập tay A {Mở tất cả, 1, [A]}; bấm Mở tất cả {Gập tất cả, 2, vắng}; bấm Gập tất cả
+      {Mở tất cả, 0, [A,B]}; dựng lại với URL gap=[A,B] (mô phỏng tải lại) {Mở tất cả, 0, [A,B]}. Nút lấy bằng
+      getByRole("button", { name: <nhãn> }); một bước bằng phím: focus nút rồi Enter. Thông điệp ghim «bco-mo-san-nut:
+      buoc <n> lech».
+      CHIEU DO (ca «bco-mo-san-nut-do»): nhãn nút cố định (tham số thử) → «bco-mo-san-nut: buoc 2 lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.bco_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/bo-okr-co-so/rang/man-bo-okr-co-so*.mjs"
+    expected: |
+      Cùng lần chạy E1, bộ pb: bấm «Gập tất cả» → 0 dòng KR hiện, URL có gap; tải lại → vẫn 0, nút «Mở tất cả»; mở URL ở
+      trang mới → vẫn 0; Tab tới nút «Mở tất cả» rồi Enter → số dòng KR bằng E6, URL không còn gap. In «DUNG AC-5
+      <buoc>» hoặc «SAI AC-5 <buoc>: …», mã 1.
+      CHIEU DO (--chieu-do gap-trong-state, bản sao): trạng thái gập giữ trong useState → «SAI AC-5 tai-lai» (ghim
+      /SAI AC-5 tai-lai/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.bco_ui_mo_san
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/test/data-table-mo-san.dom.tsx"
+      - "apps/app/**/*.tsx"
+    expected: |
+      Ca «bco-mac-dinh»: (1) cùng fixture E5 nhưng moSan vắng → mọi dòng gập, bấm A ghi khoá expand=[A], không khoá gap,
+      không có nút tên «Mở tất cả»/«Gập tất cả». (2) danh sách viết tay các tệp trong apps/app khai `expandable=` cho
+      DataTable khớp kết quả quét tệp (quét đếm mọi tệp .tsx dưới apps/app có `expandable={`), và trong danh sách chỉ
+      theo-don-vi/bang.tsx mang moSan. Thông điệp ghim «bco-mac-dinh: <tep|ca> lech».
+      CHIEU DO (ca «bco-mac-dinh-do»): fixture moSan vắng nhưng bản dựng đặt mặc định moSan=true (tham số thử) → «bco-mac-dinh:
+      gap-mac-dinh lech»; và một tệp giả có `expandable={` mà không có trong danh sách viết tay → «bco-mac-dinh: <tep>
+      lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.bco_dom_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/test/bo-okr-co-so.dom.tsx"
+    expected: |
+      Ca «bco-tai»: trpc giả với okr.soBo treo (promise không xong) → 4 ô khung xương trong [data-slot=stat-group]
+      (aria-busy), dòng vị trí «Bộ OKR» và hàng thẻ con trong DOM, bảng mục tiêu hiện (danhSach đã xong). okr.soBo
+      lỗi → VungTaiLoi chỗ hàng số với nút Thử lại; bấm nút → số lần gọi okr.soBo tăng 1; bảng mục tiêu vẫn có dòng và
+      nút mở dòng bấm được. Thông điệp ghim «bco-tai: <ca> lech».
+      CHIEU DO (ca «bco-tai-do»): bản để lỗi okr.soBo rơi xuống Loi toàn thẻ (tham số thử) → «bco-tai: bang-van-hien
+      lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.bco_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/components/stat-card.tsx"
+      - "packages/ui/src/components/dashboard.tsx"
+      - "_acceptance/bo-okr-co-so/rang/man-bo-okr-co-so*.mjs"
+    expected: |
+      Cùng lần chạy E1, bộ pb, hai khổ. 1440: bốn [data-slot=stat-card] cùng offsetTop. 375 (phiên riêng của khổ):
+      offsetTop tạo đúng 2 hàng × 2 ô; document.scrollingElement.scrollWidth ≤ innerWidth; mỗi nhãn ô có
+      scrollWidth ≤ clientWidth (không cắt chữ); nút «Gập tất cả» có getBoundingClientRect khác 0 và trong khung nhìn sau khi cuộn
+      tới mà KHÔNG bấm nút «Lọc» (nút không nằm trong phần gập của hàng công cụ). In «DUNG AC-8 <kho>: …» hoặc «SAI AC-8 <kho>: …», mã 1. Chụp bco-1440-sang, bco-1440-toi, bco-375-sang, bco-375-toi,
+      cùng hàng số Toàn cảnh OKR trong cùng phiên (bco-toan-canh-1440-sang, bco-toan-canh-375-sang) vào
+      .acceptance-runs/bo-okr-co-so/evidence/ (chép vào hồ sơ chỉ khi BCO_CHEP_ANH=1).
+      CHIEU DO (--chieu-do nhan-cat, bản sao): nhãn ô thêm truncate → «SAI AC-8 375: nhan cat» (ghim /SAI AC-8 375:
+      nhan cat/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bco_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/components/stat-card.tsx"
+    steps:
+      - "Chạy đúng lệnh của eval với BCO_CHEP_ANH=1 (tien-de.mjs + man-bo-okr-co-so.mjs); không gọi thẳng script con"
+      - "Mở ảnh _acceptance/bo-okr-co-so/evidence/bco-1440-sang.png, bco-1440-toi.png, bco-375-sang.png, bco-375-toi.png"
+      - "Mở ảnh đối chiếu _acceptance/bo-okr-co-so/evidence/bco-toan-canh-1440-sang.png, bco-toan-canh-375-sang.png (hàng số Toàn cảnh OKR cùng phiên)"
+    expected: "Thẻ OKR của một phòng ban: bốn ô số ngay dưới hàng thẻ con, trên hàng công cụ của bảng mục tiêu, cùng nếp hàng số Toàn cảnh OKR trong ảnh đối chiếu — cùng khối viền ngoài, cùng đường chia ô, cùng cỡ và màu nhãn, cùng cỡ giá trị, cùng đệm trong ô; bảng bên dưới đã mở sẵn các KR. Ở 1440 bốn ô một hàng; ở 375 hai cột hai hàng, không nhãn nào bị cắt mất chữ, trang không tràn ngang. Nút Mở tất cả / Gập tất cả nhìn thấy trên hàng công cụ của bảng, ở 375 không phải mở «Lọc» mới thấy. Ở cả sáng và tối, chữ và viền không chìm vào nền."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E13
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.bco_thuoc_da_ky
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/test/**"
+      - "_acceptance/*/rang/**"
+      - "_acceptance/bo-okr-co-so/rang/thuoc-da-ky.mjs"
+    expected: |
+      Từ 26/10 (sổ d-20261026T125504Z-35, chủ kho «VK8 E13: đồng ý theo mẫu KDH»): E13 chạy «thuoc-da-ky.mjs --chi-quet» — đối
+      chứng dương của quét, quét lớp (1) và soát đổi thước (2)–(3) bên dưới, in từng «MUC <slug>#<E>», thoát 0 khi
+      không có «SAI AC-9», mã 1 khi có; KHÔNG chạy lại eval nào của lớp. Vế (4) chạy lại lớp trên cây vòng và trên nền
+      chuyển sang kiểm chéo đêm kiem-cheo-sau-gop#AC-6 (như trang-bo-okr E17, E18, sổ d-20261026T084222Z-49).
+      thuoc-da-ky.mjs: (1) quét mọi tệp thước của hồ sơ có contract status signed-off/machine-cleared, cùng
+      apps/app/test/*.dom.tsx, tìm tệp đo bảng mục tiêu hay khung trang của trang đơn vị và trang một bộ theo bốn mẫu khai
+      trong script: bấm mở dòng (aria-expanded, expandRow, nhãn «Mở <tên>», data-mo-dong), tham số URL expand, hàng công cụ
+      của bảng (số mục, một hàng), khoảng dưới [data-the-con-bo]. Danh sách viết tay ở S3 khớp kết quả quét. Đối chứng
+      dương của quét: _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs và apps/app/test/okr-trang-don-vi.dom.tsx
+      phải có trong kết quả, thiếu → «SAI AC-9 quet: thieu <tep>».
+      (2) với mỗi tệp trong danh sách: `git diff origin/onehub...HEAD` của tệp chỉ đổi dòng thuộc ba lớp Hỏi-1 cho phép
+      (bước mở, expand→gap; số mục hàng công cụ và khoảng dưới thẻ con; thứ tự mở/gập của khẳng định bàn phím), khớp mẫu
+      khai trong script; có dòng đổi khác → «SAI AC-9 <tep>: doi ngoai lop cho phep». (3) mỗi hồ sơ chủ tệp có dòng sổ
+      fix mang decided_by chủ kho trỏ tệp ấy. (4) chạy eval máy của các hồ sơ ấy trên cây vòng và trên worktree
+      origin/onehub: mục xanh trên nền mà đỏ trên cây → «SAI AC-9 <ho so>/<E>: xau hon nen»; mục đỏ cả hai → «do san tren
+      nen». In «DUNG AC-9: <n> ho so, <k> do san tren nen», mã 0; còn lại mã 1.
+      CHIEU DO (--chieu-do doi-khang-dinh, bản sao): sửa thêm một khẳng định số trong một thước của danh sách →
+      «SAI AC-9 <tep>: doi ngoai lop cho phep» (ghim /SAI AC-9 \S+: doi ngoai lop cho phep/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bco_api_so_bo
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/okr-so-bo.spec.ts"
+    expected: |
+      apps/api/test/okr-so-bo.spec.ts ca «bco-so-bo» trên cơ sở dữ liệu thử: gieo qua đường ghi thật một chu kỳ đang chạy,
+      một bộ phận có một phòng ban con, mục tiêu đã công bố ở goc, bp, pb và một mục tiêu cá nhân của người U, một mục tiêu
+      phòng ban có KR do U phụ trách, một mục tiêu nháp của U; một lần cập nhật tuần này tự tin thấp cho một KR của U.
+      Ma trận viết trước 4 unit {goc, bp:B, pb:P, nguoi:U} × 5 trường {tienDo, kyVong, soKr, daCapNhat, tuTin.thap}:
+      goc, bp, pb bằng hàng okr.toanCanh cùng khoá; nguoi:U bằng số viết tay của ca (tính trên mục tiêu cá nhân và mục
+      tiêu phòng ban có KR của U, không đếm mục tiêu nháp). Thông điệp ghim «bco-so-bo: <unit>/<truong> lech».
+      CHIEU DO (ca «bco-so-bo-do»): thủ tục tra hàng okr.toanCanh theo khoá thay vì tính trên tập của bộ (tham số thử)
+      → «bco-so-bo: nguoi:U/soKr lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

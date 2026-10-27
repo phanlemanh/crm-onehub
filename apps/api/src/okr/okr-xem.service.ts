@@ -63,6 +63,8 @@ import type {
 	LocDanhSach,
 	NutCayDayDu,
 	QuanhMucTieuOutput,
+	SoBoInput,
+	SoBoOutput,
 	SoDoDonViOutput,
 	SucKhoeOutput,
 	ToanCanhOutput,
@@ -74,10 +76,12 @@ import { type DauVaoSoDo, gopSoDoDonVi } from "./so-do-don-vi";
 import {
 	type CayGon,
 	cong,
+	dungHangSo,
 	gopSucKhoe,
 	gopToanCanh,
 	KHONG,
 	khoaCuaMucTieu,
+	type MucTieuTinh,
 	type SoRieng,
 } from "./toan-canh";
 
@@ -383,34 +387,71 @@ export class OkrXemService {
 		return this.toanCanhTheo(q, userId, cycleId, homNay);
 	}
 
+	private async mucTieuTinh(
+		q: Quyen,
+		userId: string,
+		cycleId: string,
+		them: Prisma.OkrObjectiveWhereInput,
+		pham: PhamDoc = "so-gop",
+	): Promise<{ ds: MucTieuTinh[]; tuanKy: string[] }> {
+		const where = { cycleId, status: "cong-bo", AND: [them] };
+		const [congBo, lan, tuanKy] = await Promise.all([
+			this.okr.docMucTieu(this.db, where, userId, q, pham),
+			this.lanCuaKr(where, pham),
+			this.tuanCuaKy(cycleId),
+		]);
+		const so = this.krSoCua(congBo, lan);
+		const ds = congBo.map((m) => ({
+			level: m.level,
+			unitId: m.unitId,
+			progress: m.progress,
+			expected: m.expected,
+			kr: m.keyResults.flatMap((k) => {
+				const x = so.get(k.id);
+				return x ? [x] : [];
+			}),
+		}));
+		return { ds, tuanKy };
+	}
+
 	private async toanCanhTheo(
 		q: Quyen,
 		userId: string,
 		cycleId: string,
 		homNay: Date,
 	): Promise<ToanCanhOutput> {
-		const where = { cycleId, status: "cong-bo" };
-		const [congBo, lan, tuanKy] = await Promise.all([
-			this.okr.docMucTieu(this.db, where, userId, q, "so-gop"),
-			this.lanCuaKr(where, "so-gop"),
-			this.tuanCuaKy(cycleId),
-		]);
-		const so = this.krSoCua(congBo, lan);
-		return gopToanCanh(
-			cayGon(q),
-			congBo.map((m) => ({
-				level: m.level,
-				unitId: m.unitId,
-				progress: m.progress,
-				expected: m.expected,
-				kr: m.keyResults.flatMap((k) => {
-					const x = so.get(k.id);
-					return x ? [x] : [];
-				}),
-			})),
-			await readTenGoc(this.db),
+		const { ds, tuanKy } = await this.mucTieuTinh(q, userId, cycleId, {});
+		return gopToanCanh(cayGon(q), ds, await readTenGoc(this.db), {
+			tuanKy,
+			homNay,
+		});
+	}
+
+	async soBo(
+		userId: string,
+		input: SoBoInput,
+		homNay = new Date(),
+	): Promise<SoBoOutput> {
+		const q = await this.quyenOkr.quyen(userId);
+		const pham: PhamDoc =
+			input.unit.loai === "nguoi"
+				? { nguCanh: this.quyenOkr.nguCanhXem(q, userId) }
+				: "so-gop";
+		const { ds, tuanKy } = await this.mucTieuTinh(
+			q,
+			userId,
+			input.cycleId,
+			this.dieuKienDonVi(input.unit, q),
+			pham,
+		);
+		const { tienDo, kyVong, soMucTieu, soKr, tuTin, daCapNhat } = dungHangSo(
+			"",
+			"",
+			"goc",
+			ds,
 			{ tuanKy, homNay },
 		);
+		return { tienDo, kyVong, soMucTieu, soKr, tuTin, daCapNhat };
 	}
 
 	async danhSachBo(

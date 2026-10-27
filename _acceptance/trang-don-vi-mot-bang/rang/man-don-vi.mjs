@@ -181,8 +181,34 @@ async function doKhoang(t) {
 			.querySelector("[data-slot=page-shell-header]")
 			?.getBoundingClientRect();
 		const day = tl ? tl.bottom : (hd?.bottom ?? null);
+		const khoangHangSo = () => {
+			const hs = [...document.querySelectorAll("[data-hang-so-bo]")].find(
+				(e) => e.getClientRects().length > 0,
+			);
+			const ke = hs?.nextElementSibling;
+			const khoangSo =
+				hs && ke
+					? ke.getBoundingClientRect().top - hs.getBoundingClientRect().top
+					: 0;
+			const nutGap = [
+				...document.querySelectorAll("[data-nut-mo-gap-tat-ca]"),
+			].find((e) => e.getClientRects().length > 0);
+			const oChon = [...document.querySelectorAll("[data-chon-don-vi]")].find(
+				(e) => e.getClientRects().length > 0,
+			);
+			const khoangNut =
+				nutGap &&
+				oChon &&
+				nutGap.getBoundingClientRect().bottom <=
+					oChon.getBoundingClientRect().top
+					? oChon.getBoundingClientRect().top -
+						nutGap.getBoundingClientRect().top
+					: 0;
+			return { khoangSo, khoangNut };
+		};
+		const { khoangSo } = khoangHangSo();
 		return {
-			khoang: th && day !== null ? Math.round(th.top - day) : null,
+			khoang: th && day !== null ? Math.round(th.top - day - khoangSo) : null,
 			nguon: tl ? "day thanh the" : "day dau trang",
 		};
 	});
@@ -242,16 +268,42 @@ async function viTri(t) {
 		const hien = (e) => Boolean(e) && e.offsetParent !== null;
 		const o = [...document.querySelectorAll("[data-chon-don-vi]")].find(hien);
 		const x = [...document.querySelectorAll("[data-the-con-bo]")].find(hien);
-		const r = (e) => {
+		const khoangHangSo = () => {
+			const hs = [...document.querySelectorAll("[data-hang-so-bo]")].find(
+				(e) => e.getClientRects().length > 0,
+			);
+			const ke = hs?.nextElementSibling;
+			const khoangSo =
+				hs && ke
+					? ke.getBoundingClientRect().top - hs.getBoundingClientRect().top
+					: 0;
+			const nutGap = [
+				...document.querySelectorAll("[data-nut-mo-gap-tat-ca]"),
+			].find((e) => e.getClientRects().length > 0);
+			const oChon = [...document.querySelectorAll("[data-chon-don-vi]")].find(
+				(e) => e.getClientRects().length > 0,
+			);
+			const khoangNut =
+				nutGap &&
+				oChon &&
+				nutGap.getBoundingClientRect().bottom <=
+					oChon.getBoundingClientRect().top
+					? oChon.getBoundingClientRect().top -
+						nutGap.getBoundingClientRect().top
+					: 0;
+			return { khoangSo, khoangNut };
+		};
+		const { khoangSo, khoangNut } = khoangHangSo();
+		const r = (e, khoang = 0) => {
 			if (!e) return null;
 			const b = e.getBoundingClientRect();
-			return { top: Math.round(b.top), left: Math.round(b.left) };
+			return { top: Math.round(b.top - khoang), left: Math.round(b.left) };
 		};
 		const dangXem = x
 			? (x.querySelector("a[aria-current=page]")?.textContent ?? "").trim()
 			: "";
 		return {
-			o: r(o),
+			o: r(o, khoangSo + khoangNut),
 			x: r(x),
 			xHien: Boolean(x),
 			ten: (o?.innerText ?? "").trim(),
@@ -396,11 +448,6 @@ try {
 				);
 			}
 			await d.chup(t, `don-vi-danh-sach-${kho}.png`);
-			const nutMo = await t.evaluateHandle(
-				() => window.__tim("[data-mo-dong]")[0],
-			);
-			await nutMo.click();
-			await choMs(400);
 			const mo = await t.evaluate(() => ({
 				mo:
 					document
@@ -566,6 +613,31 @@ try {
 				const n = tat(s)[0];
 				return n ? Math.round(n.getBoundingClientRect()[canh]) : null;
 			};
+			const khoangHangSo = () => {
+				const hs = [...document.querySelectorAll("[data-hang-so-bo]")].find(
+					(e) => e.getClientRects().length > 0,
+				);
+				const ke = hs?.nextElementSibling;
+				const khoangSo =
+					hs && ke
+						? ke.getBoundingClientRect().top - hs.getBoundingClientRect().top
+						: 0;
+				const nutGap = [
+					...document.querySelectorAll("[data-nut-mo-gap-tat-ca]"),
+				].find((e) => e.getClientRects().length > 0);
+				const oChon = [...document.querySelectorAll("[data-chon-don-vi]")].find(
+					(e) => e.getClientRects().length > 0,
+				);
+				const khoangNut =
+					nutGap &&
+					oChon &&
+					nutGap.getBoundingClientRect().bottom <=
+						oChon.getBoundingClientRect().top
+						? oChon.getBoundingClientRect().top -
+							nutGap.getBoundingClientRect().top
+						: 0;
+				return { khoangSo, khoangNut };
+			};
 			const lay = () => {
 				const oThat = tat("[data-chon-don-vi]");
 				const oKhung = tat("[data-hang-cong-cu-don-vi-khung]");
@@ -577,7 +649,13 @@ try {
 					luc: Math.round(performance.now()),
 					cay: tat("[data-nut-cay]").length + tat("[role=tree]").length,
 					o: oThat.length + oKhung.length,
-					dinh: dau ? Math.round(dau.getBoundingClientRect().top) : null,
+					dinh: dau
+						? Math.round(
+								dau.getBoundingClientRect().top -
+									khoangHangSo().khoangSo -
+									khoangHangSo().khoangNut,
+							)
+						: null,
 					xuong: tat("[data-slot=skeleton]").length,
 					quay: tat(
 						"[data-slot=page-shell-content] [data-slot=spinner], [data-slot=page-shell-content] .animate-spin",
@@ -619,7 +697,35 @@ try {
 				const o = [...document.querySelectorAll("[data-chon-don-vi]")].find(
 					(e) => e.offsetParent !== null,
 				);
-				return o ? Math.round(o.getBoundingClientRect().top) : null;
+				const khoangHangSo = () => {
+					const hs = [...document.querySelectorAll("[data-hang-so-bo]")].find(
+						(e) => e.getClientRects().length > 0,
+					);
+					const ke = hs?.nextElementSibling;
+					const khoangSo =
+						hs && ke
+							? ke.getBoundingClientRect().top - hs.getBoundingClientRect().top
+							: 0;
+					const nutGap = [
+						...document.querySelectorAll("[data-nut-mo-gap-tat-ca]"),
+					].find((e) => e.getClientRects().length > 0);
+					const oChon = [
+						...document.querySelectorAll("[data-chon-don-vi]"),
+					].find((e) => e.getClientRects().length > 0);
+					const khoangNut =
+						nutGap &&
+						oChon &&
+						nutGap.getBoundingClientRect().bottom <=
+							oChon.getBoundingClientRect().top
+							? oChon.getBoundingClientRect().top -
+								nutGap.getBoundingClientRect().top
+							: 0;
+					return { khoangSo, khoangNut };
+				};
+				const { khoangSo, khoangNut } = khoangHangSo();
+				return o
+					? Math.round(o.getBoundingClientRect().top - khoangSo - khoangNut)
+					: null;
 			});
 		/* Chặn đúng yêu cầu tRPC okr.danhSach của trình duyệt cho tới khi thả. */
 		const datChan = async (t) => {

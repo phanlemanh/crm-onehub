@@ -8,6 +8,7 @@ import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { GOC } from "../don-dich";
 import { loadOkrSearchParams } from "../okr-search-params";
+import { HangSoBoDangTai } from "./hang-so-bo";
 import { TheConBo } from "./the-con";
 import { ViTriBo } from "./vi-tri-bo";
 
@@ -51,6 +52,7 @@ function KhungTheoUrl({ children }: { children: ReactNode }) {
 					xem={xem ?? "danh-sach"}
 				/>
 			</div>
+			{(xem ?? "danh-sach") === "danh-sach" ? <HangSoBoDangTai /> : null}
 			{children}
 		</div>
 	);

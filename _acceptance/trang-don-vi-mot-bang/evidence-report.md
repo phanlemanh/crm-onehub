@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d781e14c762cc3a507b015ad043adac3a6e34d7b
+verified_commit: 2bd4770799820a3cd867a64b45ba80f357354e3e
 human_signoff: manh 2026-10-17
 ---
 
@@ -326,3 +326,7 @@ sha: 58e62de63995b2944d6c11840587d478c758e122 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 10 — 2026-10-27, do bài đường cũ VK6 lấy nền dần từ độ sâu 20, hạn ca 50 giây (CI #567 quá hạn 5 s)
 run_id: repin-20261027T031312Z-87766
 sha: d781e14c762cc3a507b015ad043adac3a6e34d7b · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 11 — 2026-10-27, do gộp onehub 5084ffe74 (#566, #567 VK6, #575) vào VK8; sửa hydrat khung xương, khung chờ có hàng số và thước bco-the (V4-8); xếp import cho lint
+run_id: repin-20261027T120842Z-80884
+sha: 2bd4770799820a3cd867a64b45ba80f357354e3e · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2, AC-12 · chập chờn (đỏ lần đầu, đạt khi chạy lại): muc-tieu-va-kr E14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
