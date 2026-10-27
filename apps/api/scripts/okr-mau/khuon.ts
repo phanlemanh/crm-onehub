@@ -261,6 +261,11 @@ const traoDoiMau = z.strictObject({
 			noiDung: z.string().trim().min(1).max(BINH_LUAN_TOI_DA),
 		}),
 	),
+	camXuc: z.strictObject({
+		nguoiTha: z.array(ma).min(2),
+		boQuaMoi: z.number().int().min(2),
+		nhieu: z.strictObject({ kr: ma, nguoi: z.array(ma).min(5) }),
+	}),
 });
 
 const boTho = z.strictObject({

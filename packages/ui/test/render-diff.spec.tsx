@@ -56,6 +56,7 @@ import { SortableItem } from "../src/components/sortable-list";
 import { Spinner } from "../src/components/spinner";
 import { TablePagination } from "../src/components/table-pagination";
 import { TargetLineChart } from "../src/components/target-line-chart";
+import { ThanhCamXuc } from "../src/components/thanh-cam-xuc";
 import { ThinkingIndicator } from "../src/components/thinking-indicator";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
@@ -441,6 +442,27 @@ const CA: Ca[] = [
 				thanks={DU_LIEU.tieuDeHopThoai}
 			/>
 		),
+	},
+	{
+		ten: "ThanhCamXuc",
+		ve: () => (
+			<ThanhCamXuc
+				bo={[{ loai: "dong-y", emoji: "👍", ten: DU_LIEU.nhomLoc }]}
+				muc={[
+					{
+						loai: "dong-y",
+						emoji: "👍",
+						ten: DU_LIEU.nhomLoc,
+						so: 2,
+						cuaToi: true,
+						nguoi: [DU_LIEU.tenCongTy],
+					},
+				]}
+				tenToiDa={1}
+				onDao={() => {}}
+			/>
+		),
+		bam: () => document.querySelector("[data-mo-cam-xuc]"),
 	},
 	{
 		ten: "Kara",
