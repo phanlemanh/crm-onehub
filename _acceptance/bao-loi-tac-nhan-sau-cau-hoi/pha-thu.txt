@@ -1,0 +1,37 @@
+# Phá-thử trên 34f483d93 + bản sửa bộ ghi (2026-10-27T01:26:08Z)
+== 1: tra loi luon CHAT
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+error: hong sau tra loi: mot-cau
+(fail) bao-loi-sau-cau-hoi > blth-mot-cau: dung, hoi mot cau, tra loi, turn.failed -> dung mot hong [83.23ms]
+error: hong sau tra loi: hai-cau
+(fail) bao-loi-sau-cau-hoi > blth-hai-cau: dung, hai cau noi nhau, tra loi ca hai, session.failed -> dung mot hong [53.28ms]
+error: hong sau tra loi: hai-su-kien
+(fail) bao-loi-sau-cau-hoi > blth-hai-su-kien: turn.failed roi session.failed cung luot sau tra loi -> van mot hong [24.04ms]
+error: hong sau tra loi: het-han-muc
+(fail) bao-loi-sau-cau-hoi > blth-het-han-muc: het han muc, chon Cap them, turn.failed -> dung mot hong [26.34ms]
+ 4 pass
+ 4 fail
+== 2: khoa moi moi lan ghi
+error: dung mot hong: hai-su-kien
+(fail) bao-loi-sau-cau-hoi > blth-hai-su-kien: turn.failed roi session.failed cung luot sau tra loi -> van mot hong [41.30ms]
+ 7 pass
+ 1 fail
+== 3: bo dieu kien CREATE_AGENT
+error: tro chuyen khong bao hong
+(fail) bao-loi-sau-cau-hoi > blth-tro-chuyen: tro chuyen thuong, hoi, tra loi, turn.failed -> khong bao hong [31.22ms]
+error: tro chuyen chen giua khong bao hong lan hai
+(fail) bao-loi-sau-cau-hoi > blth-chen-roi-hong: luot dung hong, tin chen giua duoc giao roi cung hong -> van mot hong [22.41ms]
+ 6 pass
+ 2 fail
+== 4: go dieu kien trang thai giao
+error: chen giua van bao hong
+(fail) bao-loi-sau-cau-hoi > blth-chen-hong: tin tro chuyen chen giua luc dung, luot dung hong -> dung mot hong cua lan dung [14.18ms]
+error: chen giua van bao xong
+(fail) bao-loi-sau-cau-hoi > blth-chen-xong: tin tro chuyen chen giua luc dung, luot dung xong -> dung mot xong cua lan dung [14.91ms]
+error: tro chuyen chen giua khong bao hong lan hai
+(fail) bao-loi-sau-cau-hoi > blth-chen-roi-hong: luot dung hong, tin chen giua duoc giao roi cung hong -> van mot hong [18.05ms]
+ 5 pass
+ 3 fail
+== hoan lai
+ 8 pass
+ 0 fail
