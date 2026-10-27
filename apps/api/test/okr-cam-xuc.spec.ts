@@ -233,7 +233,10 @@ describe("cx-dao", () => {
 	test("go mot loai khong dung loai khac", async () => {
 		await tha(L.lanId, "dong-y");
 		await tha(L.lanId, "da-xem");
-		expect(await dem({ checkInId: L.lanId })).toBe(2);
+		expect(
+			await dem({ checkInId: L.lanId }),
+			"go dong-y xoa luon da-xem",
+		).toBe(2);
 		const tom = await tha(L.lanId, "dong-y");
 		expect(
 			tom.map((m) => m.loai),
