@@ -701,8 +701,20 @@ const TUAN: Nguoi = {
 	email: "tuan@onehub.vn",
 };
 
+const WORKSPACE_MAU = {
+	id: "ws",
+	name: "OneHub",
+	slug: "ws",
+	viewerRole: "admin",
+	canRename: true,
+	canChangeRoles: false,
+	canManageMembers: true,
+	canIssuePasswordLink: false,
+};
+
 async function veTrangBo(thamSo: string): Promise<void> {
 	dat("okr.countByUnit", () => ({}));
+	dat("workspace.get", () => WORKSPACE_MAU);
 	await mo(
 		<>
 			<DauTrangOkr cauNoi />
@@ -2495,16 +2507,7 @@ async function moNgan({ n, soGopYChoThat = n, diemCam }: CaNgan) {
 	if (!ct) throw new Error("vk10-ngan: thieu muc tieu mau");
 	dat("okr.objective", () => ({ ...ct, soGopYCho: soGopYChoThat }));
 	dat("okr.comments", () => ({ comments: [], dong: [] }));
-	dat("workspace.get", () => ({
-		id: "ws",
-		name: "OneHub",
-		slug: "ws",
-		viewerRole: "admin",
-		canRename: true,
-		canChangeRoles: false,
-		canManageMembers: true,
-		canIssuePasswordLink: false,
-	}));
+	dat("workspace.get", () => WORKSPACE_MAU);
 	dat("okr.troLySanSang", () =>
 		troLySanSangOutput.parse({ bat: true, conLaiUsd: 5 }),
 	);

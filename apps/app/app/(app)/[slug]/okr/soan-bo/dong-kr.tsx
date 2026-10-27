@@ -44,7 +44,7 @@ export function giaKrCo(
 		dich: sua?.dich ?? chuSo(kr, kr.targetValue, locale),
 		donVi: sua?.donVi ?? kr.unit,
 		kieu: kr.kind,
-		nguoi: kr.owner.id,
+		nguoi: sua?.nguoi ?? kr.owner.id,
 	};
 }
 
@@ -74,9 +74,62 @@ export function DauTheoKara() {
 	return <KaraTrace label={okrSoanBoMessages(useLocale()).taiLieu.theoKara} />;
 }
 
+function MuiTen() {
+	return (
+		<span aria-hidden className="text-muted-foreground text-sm">
+			→
+		</span>
+	);
+}
+
+function ONguoi({
+	value,
+	nguoi,
+	daChon,
+	disabled,
+	onDoi,
+}: {
+	value: string;
+	nguoi: ComboboxOption[];
+	daChon?: ComboboxOption;
+	disabled: boolean;
+	onDoi: (nguoi: string) => void;
+}) {
+	const locale = useLocale();
+	const m = okrSoanBoMessages(locale);
+	const okr = okrMessages(locale);
+	return (
+		<div className="w-44">
+			<Combobox
+				size="sm"
+				translate="no"
+				aria-label={m.taiLieu.nguoiPhuTrach}
+				options={nguoi}
+				selectedOption={daChon}
+				value={value}
+				onValueChange={onDoi}
+				disabled={disabled}
+				placeholder={okr.hopThoai.chonNguoi}
+				searchPlaceholder={okr.hopThoai.timNguoi}
+				empty={okr.hopThoai.khongAi}
+			/>
+		</div>
+	);
+}
+
+function NhanKr({ nhan }: { nhan: string }) {
+	return (
+		<span className="shrink-0 whitespace-nowrap pt-0.5 text-muted-foreground text-sm tabular-nums">
+			{nhan}
+		</span>
+	);
+}
+
 export function DongKrDoc({
 	kr,
+	thuTu,
 	gia,
+	nguoi,
 	khoaTen,
 	khoaSo,
 	trangThai,
@@ -87,7 +140,9 @@ export function DongKrDoc({
 	onXoa,
 }: {
 	kr: KrSoan;
+	thuTu: number;
 	gia: DongKrNhap;
+	nguoi: ComboboxOption[];
 	khoaTen: boolean;
 	khoaSo: boolean;
 	trangThai: TrangThaiLuu | null;
@@ -99,6 +154,7 @@ export function DongKrDoc({
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).hopThoai;
+	const nhan = okrSoanBoMessages(locale).taiLieu.krThu(String(thuTu));
 	const dangBo = useRef(false);
 	const doi = (phan: Partial<DongKrNhap>, khoa: boolean) => {
 		if (!khoa) onDoi(phan);
@@ -117,24 +173,27 @@ export function DongKrDoc({
 				if (!dangBo.current && roiKhoi(e)) onRoi();
 			}}
 		>
-			<Textarea
-				variant="tai-lieu"
-				size="dong"
-				rows={1}
-				aria-label={m.tenKr}
-				value={gia.ten}
-				onChange={(e) => doi({ ten: e.target.value }, khoaTen)}
-				onKeyDown={(e) => {
-					if (!xoaDuoc || khoaTen || !laBackspaceXoa(e, gia)) return;
-					e.preventDefault();
-					dangBo.current = true;
-					onXoa();
-					focusDongTren(e.currentTarget);
-				}}
-				disabled={khoaTen}
-				translate="no"
-				data-o-nhap="ten"
-			/>
+			<div className="flex items-start gap-2">
+				<NhanKr nhan={nhan} />
+				<Textarea
+					variant="tai-lieu"
+					size="dong"
+					rows={1}
+					aria-label={m.tenKr}
+					value={gia.ten}
+					onChange={(e) => doi({ ten: e.target.value }, khoaTen)}
+					onKeyDown={(e) => {
+						if (!xoaDuoc || khoaTen || !laBackspaceXoa(e, gia)) return;
+						e.preventDefault();
+						dangBo.current = true;
+						onXoa();
+						focusDongTren(e.currentTarget);
+					}}
+					disabled={khoaTen}
+					translate="no"
+					data-o-nhap="ten"
+				/>
+			</div>
 			<div className="flex flex-wrap items-center gap-2" data-o-so={kr.id}>
 				<InputGroup className="w-24">
 					<InputGroupInput
@@ -146,6 +205,7 @@ export function DongKrDoc({
 						data-o-nhap="khoi"
 					/>
 				</InputGroup>
+				<MuiTen />
 				<InputGroup className="w-24">
 					<InputGroupInput
 						aria-label={m.dich}
@@ -166,6 +226,13 @@ export function DongKrDoc({
 						data-o-nhap="don-vi"
 					/>
 				</InputGroup>
+				<ONguoi
+					value={gia.nguoi ?? kr.owner.id}
+					nguoi={nguoi}
+					daChon={{ value: kr.owner.id, label: kr.owner.name }}
+					disabled={khoaSo}
+					onDoi={(v) => doi({ nguoi: v }, khoaSo)}
+				/>
 				{theoKara ? <DauTheoKara /> : null}
 			</div>
 			{trangThai ? <TrangThaiDong trangThai={trangThai} /> : null}
@@ -273,9 +340,7 @@ export function DongKrMoi({
 			}}
 		>
 			<div className="flex items-start gap-2">
-				<span className="shrink-0 whitespace-nowrap pt-0.5 text-muted-foreground text-sm tabular-nums">
-					{nhan}
-				</span>
+				<NhanKr nhan={nhan} />
 				<Textarea
 					ref={ten}
 					variant="tai-lieu"
@@ -307,9 +372,7 @@ export function DongKrMoi({
 						data-o-nhap="khoi"
 					/>
 				</InputGroup>
-				<span aria-hidden className="text-muted-foreground text-sm">
-					→
-				</span>
+				<MuiTen />
 				<InputGroup className="w-24">
 					<InputGroupInput
 						aria-label={m.taiLieu.dich}
@@ -351,19 +414,12 @@ export function DongKrMoi({
 						</DropdownMenuRadioGroup>
 					</DropdownMenuContent>
 				</DropdownMenu>
-				<div className="w-44">
-					<Combobox
-						size="sm"
-						translate="no"
-						aria-label={m.taiLieu.nguoiPhuTrach}
-						options={nguoi}
-						value={kr.nguoi ?? nguoiMacDinh}
-						onValueChange={(v) => onDoi({ nguoi: v })}
-						placeholder={okr.hopThoai.chonNguoi}
-						searchPlaceholder={okr.hopThoai.timNguoi}
-						empty={okr.hopThoai.khongAi}
-					/>
-				</div>
+				<ONguoi
+					value={kr.nguoi ?? nguoiMacDinh}
+					nguoi={nguoi}
+					disabled={false}
+					onDoi={(v) => onDoi({ nguoi: v })}
+				/>
 			</div>
 			<TrangThaiDong trangThai={trangThai} />
 		</li>

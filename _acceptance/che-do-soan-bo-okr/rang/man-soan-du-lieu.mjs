@@ -45,7 +45,7 @@ export const DO = {
 	cho: {
 		taiMs: 180 * GIAY_MS,
 		khungMs: 120 * GIAY_MS,
-		luuMs: 30 * GIAY_MS,
+		luuMs: 90 * GIAY_MS,
 		apiMs: 20 * GIAY_MS,
 		onDinhMs: 1500,
 		nhipMs: 250,
@@ -101,6 +101,10 @@ const BAT_KARA = {
 	aiDeXuatDonVi: [],
 	aiDeXuatAnPhamVi: "tat",
 	aiDeXuatAnDonVi: [],
+	aiSoanPhamVi: "toan-cong-ty",
+	aiSoanDonVi: [],
+	aiSoanAnPhamVi: "tat",
+	aiSoanAnDonVi: [],
 };
 
 const MUC_TIEU_MO = [

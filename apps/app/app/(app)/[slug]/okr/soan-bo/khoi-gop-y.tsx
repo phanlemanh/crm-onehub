@@ -387,11 +387,12 @@ export function KhoiGopY({
 			</div>
 		</section>
 	);
+	const boTrong = mucTieu.length === 0;
 	const nut =
-		th.nhoDuoc && mucTieu.length > 0 ? (
+		boTrong || th.nhoDuoc ? (
 			<NutDocBo
 				nhan={nhan}
-				khoa={false}
+				khoa={boTrong}
 				onClick={() => datLenh((l) => ({ ...l, nho: l.nho + 1 }))}
 			/>
 		) : null;

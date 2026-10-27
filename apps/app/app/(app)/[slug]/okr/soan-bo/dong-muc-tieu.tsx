@@ -123,3 +123,54 @@ export function DongMucTieuMoi({
 		</>
 	);
 }
+
+export function OViSao({
+	value,
+	disabled,
+	onDoi,
+	onRoi,
+}: {
+	value: string;
+	disabled: boolean;
+	onDoi: (viSao: string) => void;
+	onRoi: () => void;
+}) {
+	const m = okrSoanBoMessages(useLocale()).taiLieu;
+	return (
+		<Textarea
+			variant="tai-lieu"
+			size="dong"
+			rows={1}
+			aria-label={m.viSao}
+			placeholder={m.viSao}
+			value={value}
+			disabled={disabled}
+			onChange={(e) => onDoi(e.target.value)}
+			onBlur={onRoi}
+			onKeyDown={(e) => {
+				if (!laEnterGhi(e)) return;
+				e.preventDefault();
+				onRoi();
+			}}
+			translate="no"
+			data-o-nhap="vi-sao"
+		/>
+	);
+}
+
+export function NutThemKr({ onThem }: { onThem: () => void }) {
+	const m = okrSoanBoMessages(useLocale()).taiLieu;
+	return (
+		<Button
+			variant="ghost"
+			size="sm"
+			type="button"
+			className="w-fit"
+			data-nut="them-kr"
+			onClick={onThem}
+		>
+			{m.themKr}
+			<Badge variant="mono">{m.phimThemKr}</Badge>
+		</Button>
+	);
+}

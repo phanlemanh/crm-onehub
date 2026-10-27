@@ -29,6 +29,8 @@ import {
 	suaKrCo,
 	suaMucTieu,
 	suaTenCo,
+	suaViSao,
+	suaViSaoCo,
 	themKr,
 	themMucTieu,
 } from "./ban-nhap";
@@ -41,7 +43,12 @@ import {
 	laEnterGhi,
 	TrangThaiDong,
 } from "./dong-kr";
-import { DongMucTieuMoi, MenuMucTieu } from "./dong-muc-tieu";
+import {
+	DongMucTieuMoi,
+	MenuMucTieu,
+	NutThemKr,
+	OViSao,
+} from "./dong-muc-tieu";
 import { type DongKrNhap, dongKrTrong, type suyKieuKr } from "./du-lieu-bo";
 import { NhoKaraSoan } from "./nho-kara-soan";
 import { usePhuThuocSoan } from "./phu-thuoc";
@@ -202,7 +209,14 @@ function KhoiMucTieuMoi({ mt, bc }: { mt: MtNhap; bc: BoiCanh }) {
 				}}
 				onRoi={() => ghi.luuMucTieu(mt)}
 			/>
+			<OViSao
+				value={mt.viSao}
+				disabled={false}
+				onDoi={(viSao) => bc.datBanNhap((bn) => suaViSao(bn, mt.khoa, viSao))}
+				onRoi={() => ghi.luuMucTieu(mt)}
+			/>
 			<DanhSachKrMoi mt={mtCuaKr} dau={0} bc={bc} />
+			<NutThemKr onThem={() => moKrMoi(bc, mt.khoa)} />
 		</section>
 	);
 }
@@ -264,13 +278,15 @@ function DanhSachKrCo({
 	if (krHien.length === 0) return null;
 	return (
 		<ol className="flex flex-col gap-2">
-			{krHien.map((kr) => {
+			{krHien.map((kr, i) => {
 				const gia = giaKrCo(kr, bc?.banNhap.krCo[kr.id], locale);
 				return (
 					<DongKrDoc
 						key={kr.id}
 						kr={kr}
+						thuTu={i + 1}
 						gia={gia}
+						nguoi={bc?.nguoi ?? []}
 						khoaTen={khoa.ten}
 						khoaSo={khoa.so}
 						trangThai={bc ? bc.luuDong.trangThai(kr.id) : null}
@@ -280,7 +296,7 @@ function DanhSachKrCo({
 							if (bc === null) return;
 							bc.datBanNhap((bn) => suaKrCo(bn, kr.id, phan));
 							bc.luuDong.danhDauGo(kr.id, true);
-							if (bc.moiPhim)
+							if (bc.moiPhim || phan.nguoi !== undefined)
 								bc.ghi.luuKrCo(mt, kr, { ...gia, ...phan }, khoa.so);
 						}}
 						onRoi={() => {
@@ -312,6 +328,7 @@ function KhoiMucTieuDoc({
 	const khoa = khoaCua(mt, chiXem, phuThuoc.khoaSoCongBo);
 	const themDuoc = bc !== null && mt.status === "nhap";
 	const ten = bc?.banNhap.tenCo[mt.id] ?? mt.title;
+	const viSao = bc?.banNhap.viSaoCo[mt.id] ?? mt.whyNow;
 	const xoaDuoc = bc !== null && mt.status === "nhap" && mt.quyen?.xoa === true;
 	const luuTen = (chu: string) => {
 		if (bc !== null && !khoa.ten) bc.ghi.luuTenCo(mt, chu);
@@ -326,6 +343,7 @@ function KhoiMucTieuDoc({
 			<div className="flex flex-wrap items-center gap-2">
 				<ChamTrangThai status={mt.status} />
 				<Badge variant="outline">{m.loai[mt.kind]}</Badge>
+				{bc ? <CauKhoa mt={mt} khoa={khoa} /> : null}
 				{xoaDuoc && bc ? (
 					<div className="ml-auto">
 						<MenuMucTieu
@@ -366,14 +384,27 @@ function KhoiMucTieuDoc({
 			/>
 			{dauMt(mtGoc, bc) ? <DauTheoKara /> : null}
 			{bc ? <TrangThaiDong trangThai={bc.luuDong.trangThai(mt.id)} /> : null}
-			{bc ? <CauKhoa mt={mt} khoa={khoa} /> : null}
+			<OViSao
+				value={viSao}
+				disabled={khoa.ten}
+				onDoi={(chu) => {
+					if (bc === null || khoa.ten) return;
+					bc.datBanNhap((bn) => suaViSaoCo(bn, mt.id, chu));
+				}}
+				onRoi={() => {
+					if (bc !== null && !khoa.ten) bc.ghi.luuViSaoCo(mt, viSao);
+				}}
+			/>
 			<DanhSachKrCo mt={mt} khoa={khoa} locale={locale} bc={bc} />
 			{bc !== null && themDuoc ? (
-				<DanhSachKrMoi
-					mt={{ khoa: mt.id, idCoSan: mt.id }}
-					dau={krCoHien(mt, bc).length}
-					bc={bc}
-				/>
+				<>
+					<DanhSachKrMoi
+						mt={{ khoa: mt.id, idCoSan: mt.id }}
+						dau={krCoHien(mt, bc).length}
+						bc={bc}
+					/>
+					<NutThemKr onThem={() => moKrMoi(bc, mt.id)} />
+				</>
 			) : null}
 		</section>
 	);
@@ -551,7 +582,7 @@ export function noiDungCham(
 	const coSan = mucTieuCoHien(bo.mucTieu, soan).map((mt) =>
 		dongCham(
 			soan.banNhap.tenCo[mt.id] ?? mtTheoKara(mt, soan).title,
-			mt.whyNow,
+			soan.banNhap.viSaoCo[mt.id] ?? mt.whyNow,
 			`[data-dong-mt="${mt.id}"]`,
 			[
 				...krCoHien(mt, soan).map((kr) => krCoCham(kr, soan)),
@@ -565,7 +596,7 @@ export function noiDungCham(
 		.map((mt) =>
 			dongCham(
 				mt.ten,
-				"",
+				mt.viSao,
 				`[data-dong-moi="${mt.khoa}"]`,
 				krMoiCua(soan, mt.khoa, bo.nguoiMacDinh, suyKieu),
 			),

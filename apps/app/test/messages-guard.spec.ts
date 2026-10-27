@@ -128,6 +128,7 @@ const KHONG_DAU = new Set([
 	"datMatKhau.xong.title",
 	"sheet.tabKr",
 	"taiLieu.krThu",
+	"taiLieu.phimThemKr",
 	"sheet.quaKr",
 	"khoiMucTieu.soKr",
 	"cot.kr",
@@ -222,7 +223,6 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"okr-soan-bo.dauKhung.dong",
 	"okr-soan-bo.theSoan.bo",
 	"okr-soan-bo.theSoan.cotBen",
-	"okr-soan-bo.taiLieu.themKr",
 	"okr-soan-bo.taiLieu.daLuu",
 	"okr-soan-bo.chiXem.khong-sua",
 	"okr-soan-bo.chiXem.ky-dong",
@@ -431,6 +431,10 @@ const GHIM_OKR_SOAN = {
 
 const GHIM_OKR_SOAN_BO = {
 	"okr-soan-bo:taiLieu.krThu": ["KR 1", "KR 12"],
+	"okr-soan-bo:taiLieu.soNhap": [
+		"1 mục tiêu nháp · tự lưu",
+		"12 mục tiêu nháp · tự lưu",
+	],
 	"okr-soan-bo:taiLieu.hoiXoa.tieuDe": [
 		"Xoá mục tiêu «1»?",
 		"Xoá mục tiêu «12»?",

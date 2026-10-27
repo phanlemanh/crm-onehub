@@ -15,6 +15,8 @@ import {
 	suaKr as suaKrNhap,
 	suaMucTieu,
 	suaTenCo,
+	suaViSao,
+	suaViSaoCo,
 } from "./ban-nhap";
 import { SOAN_BO } from "./cau-hinh";
 import { type DongKrNhap, dongKrTrong, donViMucTieuCua } from "./du-lieu-bo";
@@ -33,6 +35,7 @@ type GiaKr = {
 	startValue: number;
 	targetValue: number;
 	unit: string;
+	ownerUserId: string;
 };
 
 type DoiKr = Partial<GiaKr> & { currentValue?: number };
@@ -41,6 +44,7 @@ export type GhiBanNhap = {
 	luuMucTieu: (mt: MtNhap) => void;
 	luuKr: (mt: MtCuaKr, kr: KrNhap) => void;
 	luuTenCo: (mt: MucTieuSoan, ten: string) => void;
+	luuViSaoCo: (mt: MucTieuSoan, viSao: string) => void;
 	luuKrCo: (
 		mt: MucTieuSoan,
 		kr: KrSoan,
@@ -66,6 +70,7 @@ const giaGoc = (kr: KrSoan): GiaKr => ({
 	startValue: kr.startValue,
 	targetValue: kr.targetValue,
 	unit: kr.unit,
+	ownerUserId: kr.owner.id,
 });
 
 const doiNeuKhac = <K extends keyof GiaKr>(
@@ -83,6 +88,7 @@ function khacGia(cu: GiaKr, moi: Partial<GiaKr>): Partial<GiaKr> {
 		...doiNeuKhac("startValue", cu, moi),
 		...doiNeuKhac("targetValue", cu, moi),
 		...doiNeuKhac("unit", cu, moi),
+		...doiNeuKhac("ownerUserId", cu, moi),
 	};
 }
 
@@ -103,6 +109,7 @@ export function useGhiBanNhap(
 	const boKr = useMutation(trpc.okr.removeKeyResult.mutationOptions());
 	const boMt = useMutation(trpc.okr.xoaMucTieu.mutationOptions());
 	const tenDaGui = useRef<ReadonlyMap<string, string>>(new Map());
+	const viSaoDaGui = useRef<ReadonlyMap<string, string>>(new Map());
 	const krDaGui = useRef<ReadonlyMap<string, GiaKr>>(new Map());
 
 	const sauLoi = (xoaChu: () => void) => {
@@ -139,12 +146,13 @@ export function useGhiBanNhap(
 			luuDong.chuaLuu(mt.khoa, "thieu-ten");
 			return;
 		}
+		const whyNow = mt.viSao.trim();
 		guiMotLan(
 			mt.khoa,
-			title,
+			JSON.stringify({ title, whyNow }),
 			(id) =>
 				id
-					? suaMt.mutateAsync({ id, title })
+					? suaMt.mutateAsync({ id, title, whyNow })
 					: taoMt.mutateAsync({
 							cycleId: bo.khoa.cycleId,
 							unit: donViMucTieuCua(bo.khoa.don),
@@ -152,10 +160,11 @@ export function useGhiBanNhap(
 							kind: "cam-ket",
 							ownerUserId: bo.nguoiMacDinh,
 							participantIds: [],
-							whyNow: "",
+							whyNow,
 							hienThi: "cong-khai",
 						}),
-			() => datBanNhap((bn) => suaMucTieu(bn, mt.khoa, "")),
+			() =>
+				datBanNhap((bn) => suaViSao(suaMucTieu(bn, mt.khoa, ""), mt.khoa, "")),
 		);
 	};
 
@@ -209,12 +218,19 @@ export function useGhiBanNhap(
 		);
 	};
 
-	const datTenDaGui = (id: string, ten: string | null) => {
-		const moi = new Map(tenDaGui.current);
-		if (ten === null) moi.delete(id);
-		else moi.set(id, ten);
-		tenDaGui.current = moi;
+	const datDaGui = (
+		so: { current: ReadonlyMap<string, string> },
+		id: string,
+		chu: string | null,
+	) => {
+		const moi = new Map(so.current);
+		if (chu === null) moi.delete(id);
+		else moi.set(id, chu);
+		so.current = moi;
 	};
+
+	const datTenDaGui = (id: string, ten: string | null) =>
+		datDaGui(tenDaGui, id, ten);
 
 	const luuTenCo = (mt: MucTieuSoan, ten: string) => {
 		const title = ten.trim();
@@ -235,6 +251,25 @@ export function useGhiBanNhap(
 			} catch (loi) {
 				datTenDaGui(mt.id, truoc);
 				sauLoi(() => datBanNhap((bn) => suaTenCo(bn, mt.id, "")));
+				throw loi;
+			}
+		});
+	};
+
+	const luuViSaoCo = (mt: MucTieuSoan, viSao: string) => {
+		const whyNow = viSao.trim();
+		if ((viSaoDaGui.current.get(mt.id) ?? mt.whyNow) === whyNow) return;
+		luuDong.luu(mt.id, async () => {
+			const truoc = viSaoDaGui.current.get(mt.id) ?? null;
+			if ((truoc ?? mt.whyNow) === whyNow) return { id: mt.id };
+			datDaGui(viSaoDaGui, mt.id, whyNow);
+			try {
+				const kq = await suaMt.mutateAsync({ id: mt.id, whyNow });
+				void cache.okr(mt.id);
+				return kq;
+			} catch (loi) {
+				datDaGui(viSaoDaGui, mt.id, truoc);
+				sauLoi(() => datBanNhap((bn) => suaViSaoCo(bn, mt.id, "")));
 				throw loi;
 			}
 		});
@@ -265,6 +300,7 @@ export function useGhiBanNhap(
 					startValue: kq.khoi,
 					targetValue: kq.dich,
 					unit: gia.donVi.trim(),
+					ownerUserId: gia.nguoi ?? kr.owner.id,
 				};
 		const coSo = () => krDaGui.current.get(kr.id) ?? giaGoc(kr);
 		luuDong.chuaLuu(kr.id, null);
@@ -317,5 +353,13 @@ export function useGhiBanNhap(
 		});
 	};
 
-	return { luuMucTieu, luuKr, luuTenCo, luuKrCo, xoaKr, xoaMucTieu };
+	return {
+		luuMucTieu,
+		luuKr,
+		luuTenCo,
+		luuViSaoCo,
+		luuKrCo,
+		xoaKr,
+		xoaMucTieu,
+	};
 }

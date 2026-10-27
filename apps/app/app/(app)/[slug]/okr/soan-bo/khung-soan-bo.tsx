@@ -123,6 +123,12 @@ function CotBen({
 	);
 }
 
+function SoNhap({ bo, soan }: { bo: BoXong; soan: SoanTaiLieu }) {
+	const m = okrSoanBoMessages(useLocale()).taiLieu;
+	const n = mucCongBoCua(bo, soan).filter((mt) => mt.status === "nhap").length;
+	return n === 0 ? m.khongNhap : m.soNhap(String(n));
+}
+
 function OTaiLieu({
 	bo,
 	m,
@@ -144,6 +150,9 @@ function OTaiLieu({
 		>
 			<VatPhamDock
 				title={<span translate="no">{bo.ten}</span>}
+				meta={
+					bo.quyen.loai === "soan" ? <SoNhap bo={bo} soan={soan} /> : undefined
+				}
 				footer={
 					bo.quyen.loai === "soan" ? (
 						<CongBo mucTieu={mucCongBoCua(bo, soan)} veTheoDoi={close} />

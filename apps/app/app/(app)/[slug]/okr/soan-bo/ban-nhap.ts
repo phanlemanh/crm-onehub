@@ -3,12 +3,13 @@ import type { DongKrNhap } from "./du-lieu-bo";
 
 export type KrNhap = DongKrNhap & { khoa: string };
 
-export type MtNhap = { khoa: string; ten: string };
+export type MtNhap = { khoa: string; ten: string; viSao: string };
 
 export type BanNhap = {
 	moi: readonly MtNhap[];
 	kr: Readonly<Record<string, readonly KrNhap[]>>;
 	tenCo: Readonly<Record<string, string>>;
+	viSaoCo: Readonly<Record<string, string>>;
 	krCo: Readonly<Record<string, Partial<DongKrNhap>>>;
 	boDi: readonly string[];
 	focus: { khoa: string; lan: number } | null;
@@ -21,13 +22,14 @@ export const BAN_NHAP_DAU: BanNhap = {
 	moi: [],
 	kr: {},
 	tenCo: {},
+	viSaoCo: {},
 	krCo: {},
 	boDi: [],
 	focus: { khoa: KHOA_MT_DAU, lan: 0 },
 	dem: 1,
 };
 
-const MT_DAU: MtNhap = { khoa: KHOA_MT_DAU, ten: "" };
+const MT_DAU: MtNhap = { khoa: KHOA_MT_DAU, ten: "", viSao: "" };
 
 export function mucTieuMoiHien(
 	bn: BanNhap,
@@ -57,6 +59,10 @@ export function suaTenCo(bn: BanNhap, id: string, ten: string): BanNhap {
 	return { ...bn, tenCo: { ...bn.tenCo, [id]: ten } };
 }
 
+export function suaViSaoCo(bn: BanNhap, id: string, viSao: string): BanNhap {
+	return { ...bn, viSaoCo: { ...bn.viSaoCo, [id]: viSao } };
+}
+
 export function suaKrCo(
 	bn: BanNhap,
 	id: string,
@@ -79,20 +85,32 @@ export function themMucTieu(bn: BanNhap): BanNhap {
 	const khoa = `moi-${bn.dem}`;
 	return {
 		...bn,
-		moi: [...bn.moi, { khoa, ten: "" }],
+		moi: [...bn.moi, { khoa, ten: "", viSao: "" }],
 		focus: { khoa, lan: bn.dem },
 		dem: bn.dem + 1,
 	};
 }
 
-export function suaMucTieu(bn: BanNhap, khoa: string, ten: string): BanNhap {
+function suaMtMoi(
+	bn: BanNhap,
+	khoa: string,
+	phan: Partial<Omit<MtNhap, "khoa">>,
+): BanNhap {
 	const coSan = bn.moi.some((mt) => mt.khoa === khoa);
 	return {
 		...bn,
 		moi: coSan
-			? bn.moi.map((mt) => (mt.khoa === khoa ? { ...mt, ten } : mt))
-			: [...bn.moi, { khoa, ten }],
+			? bn.moi.map((mt) => (mt.khoa === khoa ? { ...mt, ...phan } : mt))
+			: [...bn.moi, { khoa, ten: "", viSao: "", ...phan }],
 	};
+}
+
+export function suaMucTieu(bn: BanNhap, khoa: string, ten: string): BanNhap {
+	return suaMtMoi(bn, khoa, { ten });
+}
+
+export function suaViSao(bn: BanNhap, khoa: string, viSao: string): BanNhap {
+	return suaMtMoi(bn, khoa, { viSao });
 }
 
 export function themKr(bn: BanNhap, khoaMt: string, sau?: string): BanNhap {
@@ -144,6 +162,10 @@ export function boChuDaGo(
 	if (truong === "title" && id in bn.tenCo) {
 		const { [id]: _bo, ...tenCo } = bn.tenCo;
 		return { ...bn, tenCo };
+	}
+	if (truong === "whyNow" && id in bn.viSaoCo) {
+		const { [id]: _bo, ...viSaoCo } = bn.viSaoCo;
+		return { ...bn, viSaoCo };
 	}
 	const sua = bn.krCo[id];
 	if (truong === "kr.title" && sua?.ten !== undefined) {

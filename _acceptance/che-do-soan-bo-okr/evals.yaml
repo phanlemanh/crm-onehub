@@ -338,6 +338,7 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.vk10_khong_doi_hinh
+    long_running: 200
     paths:
       - "_acceptance/*/rang/**"
       - "_acceptance/*/evals.yaml"

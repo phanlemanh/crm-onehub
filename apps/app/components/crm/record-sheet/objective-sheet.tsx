@@ -1001,7 +1001,6 @@ export function ObjectiveSheet({
 						<>
 							<Badge variant="outline">{t.loai[mt.kind]}</Badge>
 							<NhanTrangThai status={mt.status} />
-							<ChipKhung mt={mt} />
 							{mt.hienThi === "gioi-han" ? (
 								<NhanGioiHan
 									soNguoiXem={mt.nguoiXem.length}
@@ -1015,6 +1014,7 @@ export function ObjectiveSheet({
 				actions={
 					mt ? (
 						<>
+							<ChipKhung mt={mt} />
 							<NutXemQuanh id={mt.id} />
 							<NutTheoDoi mt={mt} />
 							{ghiDuoc(mt) ||
