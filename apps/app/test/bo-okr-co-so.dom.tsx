@@ -504,12 +504,8 @@ async function voiHangSo(
 
 function HangSoBoTheoLoc(p: PropHangSo) {
 	const [loc] = useQueryState("locNhanhOkr");
-	return (
-		<HangSoBoThat
-			{...p}
-			unit={{ ...p.unit, ...(loc ? { loc } : {}) } as PropHangSo["unit"]}
-		/>
-	);
+	const unit = loc ? { ...p.unit, loc } : p.unit;
+	return <HangSoBoThat {...p} unit={unit as PropHangSo["unit"]} />;
 }
 
 class LoiToanThe extends Component<{ children: ReactNode }, { loi: boolean }> {
