@@ -755,7 +755,7 @@ describe("cx-tra-loi", () => {
 			keyResultId: san.kr.get("b1x"),
 			checkInId: lanCua("l-b1-1"),
 		});
-		expect(tra.status).toBe(400);
+		expect(tra.status, "u1 nhan binh luan cua k1").toBe(400);
 		expect(tra.loi, "u1 nhan binh luan cua k1").toBe(
 			OKR.thongDiep.traoDoi.capNhatKhacKr,
 		);
