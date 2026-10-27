@@ -127,7 +127,7 @@ function git(...lenh: string[]): string {
 	return r.stdout.toString();
 }
 
-function gitThu(...lenh: string[]): { ma: number; ra: string; loi: string } {
+function gitThu(...lenh: string[]) {
 	const r = Bun.spawnSync(["git", "-C", GOC_KHO, ...lenh]);
 	return {
 		ma: r.exitCode,
