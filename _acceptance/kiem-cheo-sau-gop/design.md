@@ -71,6 +71,17 @@ ký và so nền của AC-11 `trang-bo-okr` chuyển sang AC-6 của hồ sơ n�
 | trang-bo-okr/E17 | phần 2/3 của lớp không đỏ thêm so với nền | AC-6 |
 | trang-bo-okr/E18 | phần 3/3 của lớp không đỏ thêm so với nền | AC-6 |
 
+## `hop-tuan-mo-dung-bo` (sau ký, 27/10)
+
+Chủ kho «Đồng ý tất cả theo khuyên» (27/10, qua giám sát; sổ `hop-tuan-mo-dung-bo`): E12 chạy trọn lớp hồ sơ đã ký
+(~170′ mỗi lần ghim lại) nghỉ theo mẫu `trang-bo-okr`. Vế chạy lại lớp và so nền của AC-10 chuyển sang AC-6 của hồ
+sơ này. Vế soát đổi thước của E12 không có nơi thay: AC-6 không soát diff, và `hop-tuan-mo-dung-bo` không giữ một
+eval `--chi-quet` riêng như `trang-bo-okr/E15`.
+
+| Eval cũ | Lời hứa | AC thay |
+| --- | --- | --- |
+| hop-tuan-mo-dung-bo/E12 | lớp hồ sơ đã ký chạm Họp tuần, bộ OKR, theo đơn vị không đỏ thêm so với nền | AC-6 |
+
 ## Đo
 
 - `node --test scripts/kiem-cheo/*.test.mjs`: kho git giả trong thư mục tạm (vài lần gộp first-parent), hồ sơ giả;

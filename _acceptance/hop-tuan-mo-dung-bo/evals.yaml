@@ -260,6 +260,8 @@ evals:
     criterion: AC-10
     executor: script
     cmd: config:executors.script.htmb_khong_doi_hinh
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
     long_running: 200
     paths:
       - "_acceptance/*/rang/**"
