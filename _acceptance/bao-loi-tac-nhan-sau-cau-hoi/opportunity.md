@@ -3,10 +3,10 @@ schema_version: 1
 slug: bao-loi-tac-nhan-sau-cau-hoi
 feature: Tác nhân hỏng trong lúc dựng thì người dùng nhận đúng một thông báo, kể cả khi đã trả lời một câu hỏi giữa chừng
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build        # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Phan Le Manh
+decided_at: 2026-10-27T00:40:54Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -15,6 +15,8 @@ lo_trinh_tep: docs/plan/lo-trinh-okr.json
 ---
 
 ## Vấn đề & ai gặp
+
+Chủ kho gõ ở phiên VS11 lúc 2026-10-27T00:40:54Z: «Cổng Đáng bao-loi-tac-nhan-sau-cau-hoi: làm».
 
 Mở từ hàng VS11 của «OKR» (`docs/plan/lo-trinh-okr.json`).
 Mốc: chưa gắn — hàng nằm trong backlog «Làn Mac Studio · thứ 21»; chủ kho giao MacBook Pro làm thay ngày 27/10 (crm-onehub#375).
