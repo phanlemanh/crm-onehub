@@ -7,7 +7,7 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import type { Locale } from "@crm/ui/lib/locale";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
-import { giaTri } from "../bang-kr";
+import { giaTri } from "../gia-tri-kr";
 import { chuSo } from "../nguon-so";
 
 export type DongMucDoi = {

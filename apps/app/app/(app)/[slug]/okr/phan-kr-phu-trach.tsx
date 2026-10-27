@@ -11,8 +11,8 @@ import {
 } from "@crm/ui/components/simple-table";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
-import { giaTri } from "./bang-kr";
 import { ChipGopY, DIEM_CAM_GOP_Y } from "./chip-gop-y";
+import { giaTri } from "./gia-tri-kr";
 import type { MucTieu } from "./kieu";
 import { NhomMucTieuGap } from "./nhom-da-bo";
 import { NhanTinhTrang, ThanhTienDo } from "./tien-do-kr";

@@ -44,8 +44,8 @@ import {
 	useState,
 } from "react";
 import { toast } from "sonner";
-import { giaTri } from "@/app/(app)/[slug]/okr/bang-kr";
 import { coNutCapNhat, useCapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
+import { giaTri } from "@/app/(app)/[slug]/okr/gia-tri-kr";
 import { CANH_KR } from "@/app/(app)/[slug]/okr/kieu";
 import { useXemDuocBanGhi } from "@/app/(app)/[slug]/okr/nguon-so";
 import {
@@ -83,6 +83,7 @@ import {
 import { dien, dienNode } from "./plan-copy";
 import { recordKey, useRecordSheetView, useRecordStack } from "./record-stack";
 import { NoiDungSoKr } from "./so-kr-sheet";
+import { useThuTuHopTuan } from "./thu-tu-hop-tuan";
 
 const TAB = {
 	viec: "viec",
@@ -387,20 +388,22 @@ function NutSangKr({
 function DauNganHanhDong({
 	keyResultId,
 	mt,
+	thuTu,
 	onCapNhat,
 }: {
 	keyResultId: string;
 	mt: ChiTiet | undefined;
+	thuTu: string[] | null;
 	onCapNhat: (mt: ChiTiet, kr: KrCuaMt) => void;
 }) {
 	const m = okrCanhKrMessages(useLocale()).khung;
 	const { thayDinh } = useRecordStack();
 	const truoc = useRef<HTMLButtonElement>(null);
 	const ke = useRef<HTMLButtonElement>(null);
-	const ds = mt?.keyResults ?? [];
-	const viTri = ds.findIndex((k) => k.id === keyResultId);
-	const kr = ds[viTri];
-	const daBiet = kr !== undefined;
+	const ds = thuTu ?? (mt?.keyResults ?? []).map((k) => k.id);
+	const viTri = ds.indexOf(keyResultId);
+	const kr = mt?.keyResults.find((k) => k.id === keyResultId);
+	const daBiet = viTri >= 0;
 
 	useEffect(() => {
 		const huong = CHUYEN_KR.huong;
@@ -417,7 +420,7 @@ function DauNganHanhDong({
 		const dich = ds[viTri + (huong === "ke" ? 1 : -1)];
 		if (!dich) return;
 		CHUYEN_KR.huong = huong;
-		thayDinh({ kind: "kr", id: dich.id });
+		thayDinh({ kind: "kr", id: dich });
 	};
 
 	return (
@@ -435,8 +438,17 @@ function DauNganHanhDong({
 							<span aria-hidden="true" data-dem-kr>
 								{viTri + 1}/{ds.length}
 							</span>
+							{thuTu ? (
+								<span aria-hidden="true" data-thu-tu-kr="bang">
+									{" · "}
+									{m.theoThuTuBang}
+								</span>
+							) : null}
 							<span className="sr-only">
-								{dien(m.dem, { n: viTri + 1, tong: ds.length })}
+								{dien(thuTu ? m.demBang : m.dem, {
+									n: viTri + 1,
+									tong: ds.length,
+								})}
 							</span>
 						</span>
 					) : null}
@@ -803,6 +815,7 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 		trpc.okr.objective.queryOptions(mtId ? { id: mtId } : skipToken),
 	);
 	const capNhat = useCapNhatKr();
+	const thuTu = useThuTuHopTuan(keyResultId);
 	const ghi = useGhiCanh(keyResultId, objectiveId);
 	const duoiMotMinh = stack.length === 1;
 	const loiNguoiLam = (loi: Error, vao: ViecVao) =>
@@ -848,6 +861,7 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 						<DauNganHanhDong
 							keyResultId={keyResultId}
 							mt={krMt ? mt : undefined}
+							thuTu={thuTu}
 							onCapNhat={capNhat.mo}
 						/>
 					),

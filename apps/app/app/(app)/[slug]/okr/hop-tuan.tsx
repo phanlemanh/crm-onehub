@@ -21,10 +21,11 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { StatCard } from "@crm/ui/components/stat-card";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { type ReactNode, useEffect, useState } from "react";
 import { useMoDienBien } from "@/components/crm/record-sheet/dien-bien-kr";
+import { khoaThuTuHop } from "@/components/crm/record-sheet/thu-tu-hop-tuan";
 import { okrHopTuanBoMessages } from "@/lib/messages/okr-hop-tuan-bo";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -51,27 +52,34 @@ import { DangTai } from "./trang-thai-okr";
 
 type HopTuanDuLieu = RouterOutputs["okr"]["hopTuan"];
 
-function DongBan({ dong }: { dong: DongHop }) {
+function DongBan({ dong, thuTu }: { dong: DongHop; thuTu: string }) {
 	const moDienBien = useMoDienBien();
 	return (
 		<TenDong
 			dong={dong}
-			moKr={() => moDienBien(dong.objectiveId, dong.keyResultId)}
+			moKr={() => moDienBien(dong.objectiveId, dong.keyResultId, thuTu)}
 		/>
 	);
 }
 
-function useBangHop(): {
+function useBangHop(thuTu: string): {
 	hanhDong: HanhDongDong;
 	hop: ReactNode;
 	vuaGui: string | null;
 	xongGui: () => void;
 } {
+	const trpc = useTRPC();
+	const qc = useQueryClient();
 	const [vuaGui, setVuaGui] = useState<string | null>(null);
-	const capNhat = useCapNhatKr({ onDaGui: setVuaGui });
+	const capNhat = useCapNhatKr({
+		onDaGui: (keyResultId) => {
+			setVuaGui(keyResultId);
+			void qc.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() });
+		},
+	});
 	return {
 		hanhDong: {
-			tenKr: (d) => <DongBan dong={d} />,
+			tenKr: (d) => <DongBan dong={d} thuTu={thuTu} />,
 			nutCapNhat: (d) => (
 				<NutCapNhatDong
 					keyResultId={d.keyResultId}
@@ -300,7 +308,7 @@ export function HopTuan({
 	const [url] = useQueryStates(okrParsers);
 	const ky = url[SEARCH_PARAM.okr.ky];
 	const mo = useMutation(trpc.okr.moHopTuan.mutationOptions());
-	const bang = useBangHop();
+	const bang = useBangHop(khoaThuTuHop(cycleId, unit));
 	useMountEffect(() => {
 		mo.mutate({ cycleId, unit });
 	});
