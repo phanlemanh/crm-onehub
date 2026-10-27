@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Một PR chỉ sửa chữ ở màn khác thôi bị đòi ghim lại hồ sơ màn giai đoạn thoả thuận, và các hồ sơ đã ký trong danh sách thôi bị coi là cũ chỉ vì một eval chấm tay không khai tệp nó đọc.",
+  "analyst_plain": "Lượt 5 đạt trọn: mọi phép đo của hợp đồng và mọi lệnh kiểm chung đều xanh trên cây đã gộp onehub. Phép đo đối chiếu với bản trước khi sửa không chạy được vì lỗi công cụ của tác tử, không ảnh hưởng kết quả."
+}
