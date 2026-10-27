@@ -1,6 +1,6 @@
 import type { Db } from "@crm/db";
 import { tomTatCamXucCua } from "@crm/db/okr-cam-xuc";
-import type { NguCanhXem } from "@crm/db/okr-hien-thi";
+import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import {
 	LOAI_CAM_XUC,
 	type NguoiThaCamXucOutput,
@@ -32,6 +32,30 @@ export class OkrCamXucService {
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 	) {}
 
+	private async lanXemDuoc(userId: string, checkInId: string) {
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
+		const lan = await this.db.okrCheckIn.findFirst({
+			where: {
+				id: checkInId,
+				keyResult: { objective: dieuKienXemMucTieu(nc) },
+			},
+			select: {
+				keyResultId: true,
+				keyResult: {
+					select: {
+						objectiveId: true,
+						objective: { select: { cycleId: true } },
+					},
+				},
+			},
+		});
+		if (!lan) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
+		return { nc, lan };
+	}
+
 	tomTat(
 		db: Db | Tx,
 		checkInIds: readonly string[],
@@ -50,19 +74,9 @@ export class OkrCamXucService {
 		input: ThaCamXucInput,
 		now = new Date(),
 	): Promise<TomTatCamXuc> {
-		const lan = await this.db.okrCheckIn.findUnique({
-			where: { id: input.checkInId },
-			select: {
-				keyResultId: true,
-				keyResult: { select: { objectiveId: true } },
-			},
-		});
-		if (!lan) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
+		const { nc, lan } = await this.lanXemDuoc(userId, input.checkInId);
 		const objectiveId = lan.keyResult.objectiveId;
-		const { nc, mt } = await this.quyenOkr.assertXemMucTieu(
-			userId,
-			objectiveId,
-		);
+		const cycleId = lan.keyResult.objective.cycleId;
 		const khoa = {
 			checkInId: input.checkInId,
 			userId,
@@ -71,7 +85,7 @@ export class OkrCamXucService {
 		const dich = { objectiveId, keyResultId: lan.keyResultId };
 		await this.db
 			.$transaction(async (tx) => {
-				await this.okr.assertKyChuaAn(tx, mt.cycleId);
+				await this.okr.assertKyChuaAn(tx, cycleId);
 				const go = await tx.okrCamXuc.deleteMany({ where: khoa });
 				if (go.count > 0) {
 					await this.okr.vet(
@@ -105,15 +119,7 @@ export class OkrCamXucService {
 		userId: string,
 		checkInId: string,
 	): Promise<NguoiThaCamXucOutput> {
-		const lan = await this.db.okrCheckIn.findUnique({
-			where: { id: checkInId },
-			select: { keyResult: { select: { objectiveId: true } } },
-		});
-		if (!lan) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
-		const { nc } = await this.quyenOkr.assertXemMucTieu(
-			userId,
-			lan.keyResult.objectiveId,
-		);
+		const { nc } = await this.lanXemDuoc(userId, checkInId);
 		const tom = await tomTatCamXucCua(this.db, [checkInId], nc, {
 			thuTu: LOAI_CAM_XUC,
 			tenToiDa: Number.MAX_SAFE_INTEGER,
