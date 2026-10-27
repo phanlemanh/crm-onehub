@@ -73,7 +73,16 @@ bun run okr:mau                      # nạp, hoặc nạp lại — xoá bộ c
 bun run okr:mau --moc 2026-11-12     # ghim ngày: tuần 6 là tuần chứa ngày đó
 bun run okr:mau --xoa                # gỡ bộ mẫu; cấu hình OKR lùi về bản trước bộ mẫu, mất mã đơn vị mẫu
 bun run okr:mau --tep <tệp.json>     # nạp một bản công ty khác cùng khuôn
+bun run okr:mau --ca hop-tuan        # nạp rồi thêm ca Họp tuần, in một dòng JSON cho bàn đo
 ```
+
+`--ca hop-tuan` thêm ca của Họp tuần (`okr-mau/ca-hop-tuan.ts`) sau khi nạp bộ mẫu, qua
+service thật của API chứ không chèn bảng: một quý «lập kế hoạch» trong năm kế, một năm
+và quý con đang chạy mà OneHub không có mục tiêu, mười hai phòng ban chưa xếp có KR công
+bố (một tên dài 60 ký tự) và lần cập nhật lối `sheet`, một phòng ban có trưởng mà không KR,
+một lần cập nhật tuần này cho phòng ban mẫu đầu tiên. Dòng cuối là JSON `{ truongP,
+thanhVienM, quanTriA, boP, boRong, chuKyCon, chuKyKeHoach }`. Hàng của ca mang mã sinh;
+mọi lần chạy `okr:mau` (kể cả `--xoa`) gỡ chúng trước, tìm theo tên bắt đầu «Ca Họp tuần».
 
 Dữ liệu viết tay ở `apps/api/scripts/okr-mau/cong-ty.json`, đọc qua khuôn của chính
 sản phẩm (luật số theo kiểu KR, trần mục tiêu, nguồn CRM) trước khi ghi. Không `--moc`
