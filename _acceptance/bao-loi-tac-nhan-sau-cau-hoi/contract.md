@@ -5,7 +5,7 @@ slug: bao-loi-tac-nhan-sau-cau-hoi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -95,3 +95,5 @@ thái giao nào viết tay.
 ## Notes
 
 - Bảng đo trước thiết kế (tám ca, trên mã chưa sửa) ở design doc.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-27:
+  - Ngoài-1: Người gửi thêm một tin trò chuyện từ tab khác trong lúc Kara đang dựng có thể nhận hai thông báo «xong» cho cùng một lần dựng, khi tin đó được giao và chạy hết sau lượt dựng.
