@@ -1,7 +1,9 @@
 import { beforeAll, beforeEach, describe, expect, test } from "bun:test";
 import { db, setPrismaLogSink } from "@crm/db";
+import { gomTomTat } from "@crm/db/okr-cam-xuc";
 import {
 	LOAI_CAM_XUC,
+	loaiCamXuc,
 	nguoiThaCamXucOutput,
 	type TomTatCamXuc,
 	tomTatCamXuc,
@@ -185,6 +187,49 @@ describe("cx-tha", () => {
 			cuaToi: false,
 			nguoi: [{ id: phien.okr.nguoi, name: await ten(phien.okr.nguoi) }],
 		});
+	});
+
+	test("thu tu LOAI_CAM_XUC thang thu tu theo so giam va theo luc tha dau", async () => {
+		const L2 = await gieoLan(ky);
+		luc("2026-10-20T05:00:00Z");
+		await tha(L2.lanId, "co-len", "quan");
+		luc("2026-10-20T05:01:00Z");
+		await tha(L2.lanId, "co-len", "thuong");
+		luc("2026-10-20T05:02:00Z");
+		await tha(L2.lanId, "co-len", "okr");
+		luc("2026-10-20T05:03:00Z");
+		const tom = await tha(L2.lanId, "dong-y", "quan");
+		expect(
+			tom.map((m) => [m.loai, m.so]),
+			"thu tu loai lech LOAI_CAM_XUC (co-len nhieu hon va som hon dong-y)",
+		).toEqual([
+			["dong-y", 1],
+			["co-len", 3],
+		]);
+	});
+
+	test("loai la doc tu co so du lieu nem loi, khong bo im khoi tom tat", () => {
+		const nguoi = { id: "u", name: "U" };
+		const cach = {
+			thuTu: LOAI_CAM_XUC,
+			docLoai: (loai: string) => loaiCamXuc.parse(loai),
+			tenToiDa: OKR_CAM_XUC.tenToiDa,
+			nguoiXemId: "u",
+		};
+		expect(
+			gomTomTat([{ userId: "u", loai: "dong-y", nguoi }], cach).map(
+				(m) => m.so,
+			),
+		).toEqual([1]);
+		expect(() =>
+			gomTomTat(
+				[
+					{ userId: "u", loai: "dong-y", nguoi },
+					{ userId: "u", loai: "vo-tay", nguoi },
+				],
+				cach,
+			),
+		).toThrow();
 	});
 
 	test("ten cat o tenToiDa, so dem du", async () => {
@@ -500,6 +545,7 @@ describe("cx-ba-cho", () => {
 			}
 			return ra;
 		};
+		const co = await docBa();
 		const truoc = await dem();
 		const moi: string[] = [];
 		for (let i = 0; i < 15; i++) {
@@ -535,8 +581,40 @@ describe("cx-ba-cho", () => {
 				),
 			),
 		});
-		luc("2026-10-21T03:00:00Z");
+		luc("2026-10-21T02:00:00Z");
 		await keoDaiPhien();
+		const krThem: string[] = [];
+		for (let i = 0; i < 3; i++) krThem.push(await taoKrBa(`kr them ${i}`));
+		const lanThem: string[] = [];
+		for (const ngay of ["2026-10-21", "2026-10-27", "2026-11-03"]) {
+			luc(`${ngay}T03:00:00Z`);
+			await keoDaiPhien();
+			for (const k of [k1, ...krThem]) lanThem.push(await guiLan(k));
+		}
+		await db.okrCamXuc.createMany({
+			data: lanThem.flatMap((checkInId) =>
+				LOAI_CAM_XUC.map((loai) => ({
+					checkInId,
+					userId: phien.thuong.nguoi,
+					loai,
+				})),
+			),
+		});
+		luc("2026-11-04T03:00:00Z");
+		await keoDaiPhien();
+		const coSau = await docBa();
+		expect(
+			coSau.hop.dangBan.length + coSau.hop.conLai.length,
+			"hopTuan khong tang so dong",
+		).toBe(co.hop.dangBan.length + co.hop.conLai.length + krThem.length);
+		expect(
+			coSau.db1.diem.filter((d) => d.checkInId).length,
+			"dienBien khong tang so tuan co lan",
+		).toBeGreaterThan(co.db1.diem.filter((d) => d.checkInId).length);
+		expect(
+			coSau.cng.rows.length,
+			"capNhatGanDay khong tang so dong",
+		).toBeGreaterThan(co.cng.rows.length);
 		const sau = await dem();
 		expect(
 			sau,
@@ -608,6 +686,18 @@ describe("cx-quyen doc", () => {
 			await doc("okr.capNhatGanDay", H, { cycleId: ky }),
 		);
 		expect(cng.rows.some((r) => r.checkInId === G.lanId)).toBe(false);
+		const rM = cng.rows.find((r) => r.checkInId === M.lanId);
+		expect(
+			rM?.camXuc.find((m) => m.loai === "da-xem")?.nguoi.map((n) => n.id),
+			"doi chung duong: capNhatGanDay cua H phai co Lm voi cam xuc cua H",
+		).toEqual([phien.thuong.nguoi]);
+		const cngQuan = capNhatGanDayOutput.parse(
+			await doc("okr.capNhatGanDay", "quan", { cycleId: ky }),
+		);
+		expect(
+			cngQuan.rows.some((r) => r.checkInId === G.lanId),
+			"doi chung duong: quan tri thay Lg o cung trang",
+		).toBe(true);
 	});
 
 	test("nguoiThaCamXuc: H khong xem duoc Lg; quan tri thay du ten", async () => {

@@ -36,7 +36,9 @@ const VUNG_KHONG_MO =
 
 function boQuaBam(e: MouseEvent<HTMLElement>): boolean {
 	return (
-		e.target instanceof Element && e.target.closest(VUNG_KHONG_MO) !== null
+		!(e.target instanceof Node) ||
+		!e.currentTarget.contains(e.target) ||
+		(e.target instanceof Element && e.target.closest(VUNG_KHONG_MO) !== null)
 	);
 }
 

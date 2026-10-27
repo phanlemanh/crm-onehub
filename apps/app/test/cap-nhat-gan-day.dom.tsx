@@ -753,4 +753,31 @@ describe("cx-lac-quan", () => {
 		await cho(() => chip("dong-y") !== null, "chip ve lai");
 		expect(trangThai("dong-y")).toEqual({ bam: "true", so: "1", tat: false });
 	});
+
+	test("cx-lac-quan: bam vung ten trong bang cam xuc khong mo ngan KR, bam dong thi mo", async () => {
+		toastLoi.length = 0;
+		datCapNhat([
+			dong("cx", {
+				camXuc: [{ loai: "dong-y", so: 2, cuaToi: false, nguoi: nguoi(2) }],
+			}),
+		]);
+		const san = await dung(<CapNhatGanDay />, "");
+		await cho(() => dongTin().length === 1, "mot dong");
+		const nut = qs('[data-dong-tin="cx"] [data-mo-cam-xuc]');
+		if (!nut) throw new Error("khong co nut Tha cam xuc");
+		await bamChuot(nut);
+		await cho(() => qs("[data-ten-loai]") !== null, "bang mo");
+		const ten = qs("[data-ten-loai]");
+		if (!ten) throw new Error("khong co dong ten");
+		await bamChuot(ten);
+		await nhip(5);
+		expect(san.url().get("record"), "bam ten trong bang mo ngan KR").toBeNull();
+		const vung = qs('[data-dong-tin="cx"] [data-dong-muc-tieu]');
+		if (!vung) throw new Error("khong co dong muc tieu");
+		await bamChuot(vung);
+		await cho(
+			() => san.url().get("record") !== null,
+			"doi chung: bam dong mo ngan",
+		);
+	});
 });

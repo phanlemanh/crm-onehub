@@ -2,6 +2,7 @@ import { copyFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "../../../packages/db/src/index.ts";
 import { isMeasureDatabase } from "../../../packages/db/src/measure-database.ts";
+import { OKR_CAM_XUC } from "../../../packages/validation/src/okr-cam-xuc.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 import {
 	ket,
@@ -28,6 +29,8 @@ const BANG_CHUNG_HO_SO = join(GOC, "_acceptance", HO_SO, "evidence");
 const DONG = "[data-dong-tin]";
 const CHO_MS = 10_000;
 const LOAI = ["dong-y", "chuc-mung", "co-len", "da-xem"];
+const VA_NGUOI_KHAC = /và (\d+) người khác/;
+const TRANG_TOI_DA = 30;
 const CHON = new Set(
 	(process.env.EVAL ?? "")
 		.split(",")
@@ -66,7 +69,10 @@ function chepAnh(ten) {
 	copyFileSync(join(BANG_CHUNG, ten), join(BANG_CHUNG_HO_SO, ten));
 }
 
-const duongCng = (n) => n.w(`/okr/cap-nhat-gan-day?kyOkr=${n.ky.hienHanh}`);
+const duongCng = (n, trang = 1) =>
+	n.w(
+		`/okr/cap-nhat-gan-day?kyOkr=${n.ky.hienHanh}${trang > 1 ? `&trangCapNhat=${trang}` : ""}`,
+	);
 const duongHop = (n, bo) =>
 	n.w(`/okr/bo-okr?xemOkr=hop-tuan&donOkr=${bo}&kyOkr=${n.ky.hienHanh}`);
 
@@ -283,21 +289,120 @@ async function chup(t, ten) {
 	chepAnh(ten);
 }
 
+async function cuon(t, sel) {
+	await t.trang.$eval(sel, (x) => x.scrollIntoView({ block: "center" }));
+	await nghi(DO.cho.langMs);
+}
+
+async function chonNhieu(n) {
+	for (let trang = 1; trang <= TRANG_TOI_DA; trang += 1) {
+		const api = await n.api.truong.hoi("okr.capNhatGanDay", {
+			cycleId: n.ky.hienHanh,
+			phamVi: "tat-ca",
+			trang,
+		});
+		for (const d of api.rows) {
+			const m = d.camXuc.find((x) => x.so > OKR_CAM_XUC.tenToiDa);
+			if (m) return { x: d.checkInId, loai: m.loai, so: m.so, trang };
+		}
+		if (api.rows.length === 0) break;
+	}
+	return null;
+}
+
+async function dungChuaCapNhat(n, c) {
+	const goc = await db.okrKeyResult.findUniqueOrThrow({
+		where: { id: c.k },
+		select: { objectiveId: true, ownerUserId: true },
+	});
+	const moi = await n.api.quanTri.lam("okr.createKeyResult", {
+		objectiveId: goc.objectiveId,
+		title: "HT5 KR chua cap nhat",
+		kind: "tang-toi",
+		ownerUserId: goc.ownerUserId,
+		startValue: 0,
+		targetValue: 100,
+		currentValue: 0,
+		unit: "",
+		dueOn: null,
+		weight: 1,
+	});
+	const hop = await n.api.truong.hoi("okr.hopTuan", {
+		cycleId: n.ky.hienHanh,
+		unit: donCua(c.bo),
+	});
+	for (const [khoi, ds] of [
+		["dang-ban", hop.dangBan],
+		["con-lai", hop.conLai],
+	]) {
+		const dong = ds.find((h) => h.keyResultId === moi.id);
+		if (dong?.checkInId === null) return { bo: c.bo, k: moi.id, khoi };
+	}
+	return null;
+}
+
+async function moDongChua(t, cc) {
+	const sel = `[data-kr-hop="${cc.k}"]`;
+	if (cc.khoi === "dang-ban") return (await choThay(t.trang, sel)) ? sel : null;
+	const trong = `[data-con-lai] ${sel}`;
+	for (let lan = 0; lan < 3; lan += 1) {
+		if (await t.trang.$(trong)) return trong;
+		await t.trang.click("[data-con-lai] button");
+		await choThay(t.trang, trong);
+	}
+	return (await t.trang.$(trong)) ? trong : null;
+}
+
 async function e10(n) {
 	const t = n.may.truong;
 	const c = await chonLan(n);
 	if (!c)
 		await khongDo("KHONG DO DUOC: khong dung duoc Given AC-9 — khong co lan");
+	const nh = await chonNhieu(n);
+	if (!nh)
+		await khongDo(
+			`KHONG DO DUOC: khong co lan nao trong ${TRANG_TOI_DA} trang Cap nhat gan day co hon ${OKR_CAM_XUC.tenToiDa} nguoi tha mot loai (ST-camxuc-nhieu)`,
+		);
+	const cc = await dungChuaCapNhat(n, c);
+	if (!cc)
+		await khongDo(
+			"KHONG DO DUOC: KR moi tao qua okr.createKeyResult khong hien tren Hop tuan voi checkInId rong (ST-hop-chua-cap-nhat)",
+		);
 	mkdirSync(BANG_CHUNG, { recursive: true });
+	const dongNhieu = `${DONG.slice(0, -1)}="${nh.x}"]`;
 	const lech = [];
 	for (const kho of [DO.kho.mayTinh, DO.kho.dienThoai]) {
 		await t.trang.setViewport({ width: kho.rong, height: kho.cao });
-		await mo(t, duongCng(n), DONG);
+		await mo(t, duongCng(n, nh.trang), dongNhieu);
+		await cuon(t, dongNhieu);
+		const soChip = await t.trang.$eval(
+			`${dongNhieu} [data-cam-xuc="${nh.loai}"]`,
+			(x) => Number((x.textContent ?? "").replace(/\D+/g, "")),
+		);
+		bao(
+			soChip === nh.so,
+			`DUNG AC-9 ${kho.ten} ST-camxuc-nhieu: chip ${nh.loai} hien so ${nh.so}`,
+			`SAI AC-9 ${kho.ten} ST-camxuc-nhieu: chip ${nh.loai} hien ${soChip}, API ${nh.so}`,
+		);
 		await chup(t, `cng-${kho.ten}.png`);
 		const tCng = await tranNgang(t.trang);
 		await mo(t, duongHop(n, c.bo), `[data-kr-hop="${c.k}"]`);
+		await cuon(t, `[data-kr-hop="${c.k}"]`);
 		await chup(t, `hop-${kho.ten}.png`);
 		const tHop = await tranNgang(t.trang);
+		await mo(t, duongHop(n, cc.bo), "[data-kr-hop]");
+		const selChua = await moDongChua(t, cc);
+		if (selChua) {
+			await cuon(t, selChua);
+			const coNut = await t.trang.$(`${selChua} [data-mo-cam-xuc]`);
+			bao(
+				!coNut,
+				`DUNG AC-9 ${kho.ten} ST-hop-chua-cap-nhat: KR chua cap nhat khong co hang cam xuc`,
+				`SAI AC-9 ${kho.ten} ST-hop-chua-cap-nhat: KR chua cap nhat van co nut tha`,
+			);
+			await chup(t, `hop-chua-cap-nhat-${kho.ten}.png`);
+		} else lech.push(`khong thay dong KR chua cap nhat ${cc.k}`);
+		await mo(t, duongHop(n, c.bo), `[data-kr-hop="${c.k}"]`);
 		await moNgan(t, c.k);
 		await nghi(DO.cho.langMs);
 		await chup(t, `ngan-${kho.ten}.png`);
@@ -310,12 +415,13 @@ async function e10(n) {
 				["ngan-kr", tNgan],
 			])
 				if (so > 0) lech.push(`tran ngang ${so} (${ten})`);
-			await mo(t, duongCng(n), DONG);
-			const chip = await t.trang.$(`${DONG} [data-cam-xuc]`);
+			await mo(t, duongCng(n, nh.trang), dongNhieu);
+			await cuon(t, dongNhieu);
+			const chip = await t.trang.$(`${dongNhieu} [data-cam-xuc]`);
 			const bamTruoc = chip
 				? await chip.evaluate((x) => x.getAttribute("aria-pressed"))
 				: null;
-			await t.trang.click(`${DONG} [data-mo-cam-xuc]`);
+			await t.trang.click(`${dongNhieu} [data-mo-cam-xuc]`);
 			const coTen = await choThay(t.trang, "[data-ten-loai]");
 			const bamSau = chip
 				? await chip.evaluate((x) => x.getAttribute("aria-pressed"))
@@ -328,14 +434,22 @@ async function e10(n) {
 			);
 			await t.trang.keyboard.press("Escape");
 		} else {
-			await mo(t, duongCng(n), DONG);
-			const chip = await t.trang.$(`${DONG} [data-cam-xuc]`);
-			if (chip) {
-				await chip.hover();
-				await choThay(t.trang, "[data-ten-nguoi]");
-				await nghi(DO.cho.langMs);
-				await chup(t, "tooltip-1280.png");
-			} else lech.push("khong chip nao de chup tooltip");
+			await mo(t, duongCng(n, nh.trang), dongNhieu);
+			await cuon(t, dongNhieu);
+			await t.trang.hover(`${dongNhieu} [data-cam-xuc="${nh.loai}"]`);
+			await choThay(t.trang, "[data-ten-nguoi]");
+			await nghi(DO.cho.langMs);
+			const ten = await t.trang.$eval(
+				"[data-ten-nguoi]",
+				(x) => x.textContent ?? "",
+			);
+			const con = ten.match(VA_NGUOI_KHAC);
+			bao(
+				Number(con?.[1]) === nh.so - OKR_CAM_XUC.tenToiDa,
+				`DUNG AC-5 1280 tooltip: ${OKR_CAM_XUC.tenToiDa} ten roi «và ${nh.so - OKR_CAM_XUC.tenToiDa} người khác»`,
+				`SAI AC-5 1280 tooltip: «${ten}»`,
+			);
+			await chup(t, "tooltip-1280.png");
 		}
 	}
 	await t.trang.setViewport({

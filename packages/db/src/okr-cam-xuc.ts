@@ -19,6 +19,7 @@ type Hang = {
 
 export type CachGom<L extends string> = {
 	thuTu: readonly L[];
+	docLoai: (loai: string) => L;
 	tenToiDa: number;
 	nguoiXemId: string;
 };
@@ -27,8 +28,9 @@ export function gomTomTat<L extends string>(
 	hang: readonly Hang[],
 	cach: CachGom<L>,
 ): MucTomTat<L>[] {
+	const daDoc = hang.map((h) => ({ ...h, loai: cach.docLoai(h.loai) }));
 	return cach.thuTu.flatMap((loai) => {
-		const cua = hang.filter((h) => h.loai === loai);
+		const cua = daDoc.filter((h) => h.loai === loai);
 		if (cua.length === 0) return [];
 		return [
 			{

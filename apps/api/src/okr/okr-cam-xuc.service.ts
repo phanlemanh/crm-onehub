@@ -3,6 +3,7 @@ import { tomTatCamXucCua } from "@crm/db/okr-cam-xuc";
 import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import {
 	LOAI_CAM_XUC,
+	loaiCamXuc,
 	type NguoiThaCamXucOutput,
 	type ThaCamXucInput,
 	type TomTatCamXuc,
@@ -58,6 +59,7 @@ export class OkrCamXucService {
 	): Promise<Map<string, TomTatCamXuc>> {
 		return tomTatCamXucCua(db, checkInIds, nc, {
 			thuTu: LOAI_CAM_XUC,
+			docLoai: (loai) => loaiCamXuc.parse(loai),
 			tenToiDa: OKR_CAM_XUC.tenToiDa,
 			nguoiXemId,
 		});
@@ -120,6 +122,7 @@ export class OkrCamXucService {
 		const { nc } = await this.lanXemDuoc(userId, checkInId);
 		const tom = await tomTatCamXucCua(this.db, [checkInId], nc, {
 			thuTu: LOAI_CAM_XUC,
+			docLoai: (loai) => loaiCamXuc.parse(loai),
 			tenToiDa: Number.MAX_SAFE_INTEGER,
 			nguoiXemId: userId,
 		});
