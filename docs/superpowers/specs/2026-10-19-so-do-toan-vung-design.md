@@ -197,7 +197,7 @@ lượt rà Tability 18/10 (`vi_sao` của VK6) ghi Strategy map đặt trong v�
 
 ## Eval cũ thay bởi hồ sơ này
 
-Mười hai ô của hồ sơ đã ký khai `status: not-run` kèm `superseded_by` trỏ về đây; vòng này nhận việc thay (cùng
+Mười ba ô của hồ sơ đã ký khai `status: not-run` kèm `superseded_by` trỏ về đây; vòng này nhận việc thay (cùng
 ánh xạ với `_acceptance/so-do-toan-vung/rang/anh-xa-nghi.json`).
 
 | Eval cũ | AC mới | Eval mới chứng |
@@ -212,6 +212,7 @@ Mười hai ô của hồ sơ đã ký khai `status: not-run` kèm `superseded_b
 | cay-can-chinh-co-ly-do/E11 | AC-6 | E6 |
 | doi-nhan-khu-muc-tieu/E12 | AC-6 | E6 |
 | toan-canh-okr/E5 | AC-6 | E6 |
+| bam-kr-mo-chi-tiet-kr/E2 | AC-6 | E6 |
 | so-do-can-chinh-don-vi/E12 | AC-10 | E10 |
 | so-do-quanh-muc-tieu/E12 | AC-10 | E10 |
 
