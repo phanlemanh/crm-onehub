@@ -2,6 +2,22 @@
 schema_version: 1
 slug: don-sau-cho-tac-nhan
 feature: TheDangDung sống ở packages/ui; CardAction và CardFooter không bị className đổi khoảng cách ở chỗ gọi
+owner: phanlemanh@gmail.com
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-27T04:02:08Z
+prototype:
+  base_commit:
+  disposition:
+lo_trinh_ma: K7c
+lo_trinh_tep: docs/plan/lo-trinh-okr.json
+---
+
+## Vấn đề & ai gặp
+
+Mở từ hàng K7c của lộ trình OKR (`docs/plan/lo-trinh-okr.json`). Chủ kho ký Cổng Đáng 27/10: «Cổng Đáng
+don-sau-cho-tac-nhan: build».
 
 Hai mục Known limits chủ kho ghi khi ký K7 (`cho-tac-nhan-lau`, Cổng Bằng chứng 17/10, sổ
 `d-20261017T031653Z-32` và `-38`):
