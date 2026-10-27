@@ -17,178 +17,95 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { Icon } from "@crm/ui/components/icon";
-import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
-import { ConfidenceIndicator } from "@crm/ui/components/okr-status";
-import {
-	SimpleTable,
-	type SimpleTableColumn,
-	SimpleTableRow,
-} from "@crm/ui/components/simple-table";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { StatCard } from "@crm/ui/components/stat-card";
-import { StatusIndicator } from "@crm/ui/components/status-indicator";
-import { TableCell } from "@crm/ui/components/table";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useMoDienBien } from "@/components/crm/record-sheet/dien-bien-kr";
 import { okrHopTuanBoMessages } from "@/lib/messages/okr-hop-tuan-bo";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { useCapNhatKr } from "./cap-nhat-kr";
 import { giaiDon } from "./don-dich";
 import { DonViCoKr, XemMoiBo } from "./don-vi-co-kr";
 import { ghep } from "./hoi-y/chu";
+import {
+	BangHop,
+	type DongHop,
+	type HanhDongDong,
+	TenDong,
+} from "./hop-tuan/dong-hop";
 import { KhoiTomTat } from "./khoi-tom-tat";
 import { lyDoRong } from "./ly-do-rong";
+import { NutCapNhatDong } from "./nut-cap-nhat-dong";
 import { type OSo, oSoHop } from "./o-so-hop";
 import { type DonChonOkr, okrParsers } from "./okr-search-params";
 import { useTenGoc } from "./ten-goc";
-import { ThanhTienDo } from "./tien-do-kr";
 import { LoiXem } from "./toan-canh/toan-canh";
 import { DangTai } from "./trang-thai-okr";
 
 type HopTuanDuLieu = RouterOutputs["okr"]["hopTuan"];
-type DongHop = HopTuanDuLieu["dangBan"][number];
-type LyDo = DongHop["lyDo"][number];
-
-function NhanLyDo({ lyDo }: { lyDo: LyDo }) {
-	const mt = okrToanCanhMessages(useLocale());
-	const ui = useMessages();
-	const tenMuc = {
-		cao: ui.okr.tuTinCao.toLocaleLowerCase(),
-		vua: ui.okr.tuTinVua.toLocaleLowerCase(),
-		thap: ui.okr.tuTinThap.toLocaleLowerCase(),
-	};
-	switch (lyDo.loai) {
-		case "tut":
-			return (
-				<StatusIndicator
-					data-ly-do="tut"
-					label={mt.hopTuan.tut(tenMuc[lyDo.tu], tenMuc[lyDo.den])}
-					size="sm"
-					tone="error"
-				/>
-			);
-		case "im":
-			return (
-				<StatusIndicator
-					data-ly-do="im"
-					label={mt.hopTuan.im(String(lyDo.soNgay))}
-					size="sm"
-					tone="warning"
-				/>
-			);
-		case "ghi-chu":
-			return (
-				<StatusIndicator
-					data-ly-do="ghi-chu"
-					label={mt.hopTuan.ghiChuMoi}
-					size="sm"
-					tone="info"
-				/>
-			);
-	}
-}
-
-function TienDoDong({ dong }: { dong: DongHop }) {
-	return (
-		<div className="flex flex-col gap-1.5">
-			<span className="flex items-center gap-3">
-				<ThanhTienDo
-					expected={dong.expected}
-					progress={dong.progress}
-					ten={dong.tieuDe}
-				/>
-				<span className="w-9 shrink-0 text-right text-xs tabular-nums">
-					{dong.progress}%
-				</span>
-			</span>
-			{dong.tuTin ? <ConfidenceIndicator level={dong.tuTin} size="sm" /> : null}
-		</div>
-	);
-}
 
 function DongBan({ dong }: { dong: DongHop }) {
-	const mt = okrToanCanhMessages(useLocale());
 	const moDienBien = useMoDienBien();
 	return (
-		<SimpleTableRow data-kr-hop={dong.keyResultId}>
-			<TableCell className="px-3 py-3 align-top whitespace-normal">
-				<div className="flex flex-col gap-1.5">
-					<button
-						className="text-start text-sm underline-offset-2 hover:underline focus-visible:underline"
-						data-mo-kr={dong.keyResultId}
-						onClick={() => moDienBien(dong.objectiveId, dong.keyResultId)}
-						translate="no"
-						type="button"
-					>
-						{dong.tieuDe}
-					</button>
-					<span className="text-muted-foreground text-xs">
-						<span translate="no">{dong.mucTieu}</span>
-						{" · "}
-						{mt.hopTuan.phuTrach(dong.chuTen)}
-					</span>
-					{dong.lyDo.length > 0 ? (
-						<span className="flex flex-wrap gap-x-4 gap-y-1">
-							{dong.lyDo.map((l) => (
-								<NhanLyDo key={l.loai} lyDo={l} />
-							))}
-						</span>
-					) : null}
-					<span className="md:hidden">
-						<TienDoDong dong={dong} />
-					</span>
-				</div>
-			</TableCell>
-			<TableCell className="hidden px-3 py-3 align-top md:table-cell">
-				<TienDoDong dong={dong} />
-			</TableCell>
-			<TableCell className="hidden px-3 py-3 align-top text-sm whitespace-normal lg:table-cell">
-				{dong.ghiChu ? (
-					<span translate="no">«{dong.ghiChu}»</span>
-				) : (
-					<span className="text-muted-foreground">—</span>
-				)}
-			</TableCell>
-		</SimpleTableRow>
+		<TenDong
+			dong={dong}
+			moKr={() => moDienBien(dong.objectiveId, dong.keyResultId)}
+		/>
 	);
 }
 
-function BangBan({ dong }: { dong: DongHop[] }) {
-	const mt = okrToanCanhMessages(useLocale());
-	const cot: SimpleTableColumn[] = [
-		{ id: "kr", header: mt.hopTuan.cotKr },
-		{
-			id: "tien-do",
-			header: mt.hopTuan.cotTienDo,
-			width: "w-[26%]",
-			className: "hidden md:table-cell",
+function useBangHop(): {
+	hanhDong: HanhDongDong;
+	hop: ReactNode;
+	vuaGui: string | null;
+	xongGui: () => void;
+} {
+	const [vuaGui, setVuaGui] = useState<string | null>(null);
+	const capNhat = useCapNhatKr({ onDaGui: setVuaGui });
+	return {
+		hanhDong: {
+			tenKr: (d) => <DongBan dong={d} />,
+			nutCapNhat: (d) => (
+				<NutCapNhatDong
+					keyResultId={d.keyResultId}
+					mo={capNhat.mo}
+					objectiveId={d.objectiveId}
+					ten={d.tieuDe}
+				/>
+			),
 		},
-		{
-			id: "ghi-chu",
-			header: mt.hopTuan.cotGhiChu,
-			width: "w-[30%]",
-			className: "hidden lg:table-cell",
-		},
-	];
-	return (
-		<SimpleTable columns={cot} surface="page">
-			{dong.map((d) => (
-				<DongBan dong={d} key={d.keyResultId} />
-			))}
-		</SimpleTable>
-	);
+		hop: capNhat.hop,
+		vuaGui,
+		xongGui: () => setVuaGui(null),
+	};
 }
 
-function PhanConLai({ dong }: { dong: DongHop[] }) {
+function PhanConLai({
+	dong,
+	hanhDong,
+	mo,
+	onDoi,
+}: {
+	dong: DongHop[];
+	hanhDong: HanhDongDong;
+	mo: boolean;
+	onDoi: (mo: boolean) => void;
+}) {
 	const mt = okrToanCanhMessages(useLocale());
 	if (dong.length === 0) return null;
 	return (
-		<Collapsible data-con-lai>
+		<Collapsible
+			data-con-lai={mo ? "mo" : "dong"}
+			onOpenChange={onDoi}
+			open={mo}
+		>
 			<CollapsibleTrigger asChild>
 				<Button className="self-start" size="sm" variant="ghost">
 					<Icon icon={ChevronDown} data-icon="inline-start" />
@@ -196,9 +113,51 @@ function PhanConLai({ dong }: { dong: DongHop[] }) {
 				</Button>
 			</CollapsibleTrigger>
 			<CollapsibleContent className="pt-3">
-				<BangBan dong={dong} />
+				<BangHop dong={dong} hanhDong={hanhDong} />
 			</CollapsibleContent>
 		</Collapsible>
+	);
+}
+
+function BangCoDuLieu({
+	d,
+	bang,
+	dau,
+}: {
+	d: HopTuanDuLieu;
+	bang: ReturnType<typeof useBangHop>;
+	dau: ReactNode;
+}) {
+	const [moConLai, setMoConLai] = useState(false);
+	const { vuaGui, xongGui } = bang;
+	const trongConLai =
+		vuaGui !== null && d.conLai.some((x) => x.keyResultId === vuaGui);
+	const coDong =
+		vuaGui !== null &&
+		(trongConLai || d.dangBan.some((x) => x.keyResultId === vuaGui));
+	const canMo = trongConLai && !moConLai;
+	useEffect(() => {
+		if (canMo) {
+			setMoConLai(true);
+			return;
+		}
+		if (!coDong || vuaGui === null) return;
+		const nut = document.querySelector<HTMLElement>(
+			`[data-kr-hop="${vuaGui}"] [data-nut="cap-nhat-dong-kr"]`,
+		);
+		nut?.focus();
+		xongGui();
+	}, [canMo, coDong, vuaGui, xongGui]);
+	return (
+		<>
+			{dau}
+			<PhanConLai
+				dong={d.conLai}
+				hanhDong={bang.hanhDong}
+				mo={moConLai}
+				onDoi={setMoConLai}
+			/>
+		</>
 	);
 }
 
@@ -341,6 +300,7 @@ export function HopTuan({
 	const [url] = useQueryStates(okrParsers);
 	const ky = url[SEARCH_PARAM.okr.ky];
 	const mo = useMutation(trpc.okr.moHopTuan.mutationOptions());
+	const bang = useBangHop();
 	useMountEffect(() => {
 		mo.mutate({ cycleId, unit });
 	});
@@ -348,16 +308,20 @@ export function HopTuan({
 		unit.loai === "pb" ? (
 			<KhoiTomTat cycleId={cycleId} departmentId={unit.id} />
 		) : null;
-	const boc = (than: ReactNode, dau?: ReactNode) =>
-		khoi || dau ? (
-			<div className="flex flex-col gap-6">
-				{dau}
-				{khoi}
-				{than}
-			</div>
-		) : (
-			than
-		);
+	const boc = (than: ReactNode, dau?: ReactNode) => (
+		<>
+			{khoi || dau ? (
+				<div className="flex flex-col gap-6">
+					{dau}
+					{khoi}
+					{than}
+				</div>
+			) : (
+				than
+			)}
+			{bang.hop}
+		</>
+	);
 
 	if (ht.isPending || cycles.isPending) return boc(<DangTai />, <HangSoCho />);
 	if (ht.isError)
@@ -418,7 +382,7 @@ export function HopTuan({
 						<EmptyDescription>{mt.hopTuan.yenAngMoTa}</EmptyDescription>
 					</EmptyHeader>
 				</Empty>
-				<PhanConLai dong={d.conLai} />
+				<BangCoDuLieu bang={bang} d={d} dau={null} />
 			</div>,
 			hangSo,
 		);
@@ -434,8 +398,11 @@ export function HopTuan({
 				<Badge variant="secondary">{d.dangBan.length}</Badge>
 			</p>
 			<p className="text-muted-foreground text-xs">{mt.hopTuan.xepTheo}</p>
-			<BangBan dong={d.dangBan} />
-			<PhanConLai dong={d.conLai} />
+			<BangCoDuLieu
+				bang={bang}
+				d={d}
+				dau={<BangHop dong={d.dangBan} hanhDong={bang.hanhDong} />}
+			/>
 		</section>,
 		hangSo,
 	);

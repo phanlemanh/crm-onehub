@@ -37,6 +37,15 @@ const vi = {
 		tuanDauMoTa:
 			"Bảng họp tuần xếp KR theo mức tự tin tụt, KR im và ghi chú mới — từ sau lần cập nhật tuần đầu tiên.",
 		loi: "Không dựng được bảng họp tuần. OKR của đơn vị vẫn xem được ở cách xem Danh sách.",
+		cotMucDoi: "Mức đổi",
+		cotCapNhat: "Cập nhật",
+		chuaCoGhiChu: "Chưa có ghi chú",
+		chuaDoi: "Chưa đổi",
+		lanDau: "Lần đầu cập nhật",
+		chuaCapNhat: "Chưa cập nhật",
+		chuaCoLanNao: "chưa có lần cập nhật nào",
+		chuaCoLanTruoc: "chưa có lần trước để so",
+		soVoi: (ngay: string) => `so với ${ngay}`,
 	},
 	toanCanh: {
 		tienDoTB: "Tiến độ trung bình",
@@ -287,6 +296,15 @@ const en: OkrToanCanhMessages = {
 		tuanDauMoTa:
 			"The meeting board sorts KRs by dropped confidence, silence and new notes — starting after the first weekly update.",
 		loi: "Couldn't build the meeting board. The unit's OKRs are still in the List view.",
+		cotMucDoi: "Change",
+		cotCapNhat: "Update",
+		chuaCoGhiChu: "No note yet",
+		chuaDoi: "No change",
+		lanDau: "First update",
+		chuaCapNhat: "Not updated",
+		chuaCoLanNao: "no updates yet",
+		chuaCoLanTruoc: "nothing earlier to compare",
+		soVoi: (ngay: string) => `vs ${ngay}`,
 	},
 	toanCanh: {
 		tienDoTB: "Average progress",
