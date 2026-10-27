@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
+import { Card, CardContent } from "@crm/ui/components/card";
 import {
 	FlowMap,
 	type FlowMapEdge,
@@ -136,27 +137,40 @@ function DongGopLen({ q }: { q: QuanhMucTieu }) {
 	);
 }
 
-function KhungCho({ nhan }: { nhan: string }) {
+function KhungCho({ nhan, lop }: { nhan: string; lop: LopQuanh }) {
 	return (
-		<div
+		<Card
 			aria-busy="true"
 			aria-live="polite"
-			className="flex flex-col items-center gap-10 rounded-lg border p-8"
+			className={lop === "toan-vung" ? "min-h-0 flex-1" : undefined}
 			data-quanh-dang-tai
-			style={{ height: QUANH.khung.caoPx }}
+			style={lop === "toan-vung" ? undefined : { height: QUANH.khung.caoPx }}
 		>
-			<span className="sr-only">{nhan}</span>
-			<Skeleton className="h-24 w-64" />
-			<Skeleton className="h-24 w-64" />
-			<div className="flex gap-8">
-				<Skeleton className="h-20 w-56" />
-				<Skeleton className="h-20 w-56" />
-			</div>
-		</div>
+			<CardContent>
+				<div className="flex flex-col items-center gap-10">
+					<span className="sr-only">{nhan}</span>
+					<Skeleton className="h-24 w-64" />
+					<Skeleton className="h-24 w-64" />
+					<div className="flex gap-8">
+						<Skeleton className="h-20 w-56" />
+						<Skeleton className="h-20 w-56" />
+					</div>
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
 
-export function QuanhMucTieuNoiDung({ objectiveId }: { objectiveId: string }) {
+export type LopQuanh = "trang" | "toan-vung";
+
+export function QuanhMucTieuNoiDung({
+	objectiveId,
+	lop = "trang",
+}: {
+	objectiveId: string;
+	lop?: LopQuanh;
+}) {
+	const toanVung = lop === "toan-vung";
 	const locale = useLocale();
 	const m = okrQuanhMessages(locale);
 	const t = okrVoKhuMessages(locale);
@@ -172,7 +186,9 @@ export function QuanhMucTieuNoiDung({ objectiveId }: { objectiveId: string }) {
 				<div className="flex flex-col items-start gap-3" data-quanh-khong-thay>
 					<p className="text-sm">{m.khongThay}</p>
 					<Button asChild size="sm" variant="outline">
-						<Link href={url(DUONG_SO_DO)}>{t.veSoDo}</Link>
+						<Link href={url(DUONG_SO_DO)}>
+							{toanVung ? t.soDo.veCaCongTy : t.veSoDo}
+						</Link>
 					</Button>
 				</div>
 			);
@@ -184,12 +200,19 @@ export function QuanhMucTieuNoiDung({ objectiveId }: { objectiveId: string }) {
 			/>
 		);
 	}
-	if (!q.data || !khung) return <KhungCho nhan={m.dangTai} />;
+	if (!q.data || !khung) return <KhungCho lop={lop} nhan={m.dangTai} />;
 
 	const tam = q.data.nut.find((n) => n.id === q.data.tamId);
 
 	return (
-		<div className="flex min-w-0 flex-col gap-3" data-quanh>
+		<div
+			className={
+				toanVung
+					? "flex min-h-0 min-w-0 flex-1 flex-col gap-3"
+					: "flex min-w-0 flex-col gap-3"
+			}
+			data-quanh
+		>
 			<p className="min-w-0 text-sm">
 				<span className="text-muted-foreground">{m.dangXemQuanh} </span>
 				<span className="font-medium" translate="no">
@@ -198,7 +221,14 @@ export function QuanhMucTieuNoiDung({ objectiveId }: { objectiveId: string }) {
 			</p>
 			<DongGopLen q={q.data} />
 			{hep ? (
-				<div className="flex flex-col gap-4" data-quanh-danh-sach>
+				<div
+					className={
+						toanVung
+							? "flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto"
+							: "flex flex-col gap-4"
+					}
+					data-quanh-danh-sach
+				>
 					{nhomDanhSach(q.data)
 						.filter((g) => g.nut.length > 0)
 						.map((g) => (
@@ -227,7 +257,10 @@ export function QuanhMucTieuNoiDung({ objectiveId }: { objectiveId: string }) {
 			) : (
 				<>
 					<p className="text-muted-foreground text-xs">{m.chuThich}</p>
-					<div style={{ height: QUANH.khung.caoPx }}>
+					<div
+						className={toanVung ? "min-h-0 flex-1" : undefined}
+						style={toanVung ? undefined : { height: QUANH.khung.caoPx }}
+					>
 						<FlowMap
 							centerId={q.data.tamId}
 							edges={khung.canh}

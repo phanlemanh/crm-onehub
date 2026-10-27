@@ -28,6 +28,7 @@ import { KIEU_KR, kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
 import { luuMauInput, mauNoiDung } from "@crm/validation/okr-mau";
 import { TRANG_THAI_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import { crmHopKieu } from "@crm/validation/okr-nguon";
+import { BINH_LUAN_TOI_DA } from "@crm/validation/okr-trao-doi";
 import { LOAI_TRANG } from "@crm/validation/tai-lieu";
 import { TO_CHUC_TRAN } from "@crm/validation/to-chuc";
 import { z } from "zod";
@@ -251,6 +252,17 @@ const hoiYMau = z.strictObject({
 	yLa: z.array(ma),
 });
 
+const traoDoiMau = z.strictObject({
+	theoDoi: z.array(z.strictObject({ nguoi: ma, mucTieu: ma })),
+	traLoi: z.array(
+		z.strictObject({
+			nguoi: ma,
+			kr: ma,
+			noiDung: z.string().trim().min(1).max(BINH_LUAN_TOI_DA),
+		}),
+	),
+});
+
 const boTho = z.strictObject({
 	congTy: z.string(),
 	chuKy: z.strictObject({ nam: chuKy, namKe: chuKy, quy3: chuKy, quy4: chuKy }),
@@ -262,6 +274,7 @@ const boTho = z.strictObject({
 	canhKr,
 	taiLieu: z.array(taiLieu),
 	hoiY: hoiYMau,
+	traoDoi: traoDoiMau,
 });
 
 export type BoOkrMau = z.infer<typeof boTho>;
@@ -271,6 +284,7 @@ export type KrMau = MucTieuMau["krs"][number];
 export type CanhKrMau = BoOkrMau["canhKr"];
 export type TaiLieuMau = BoOkrMau["taiLieu"][number];
 export type HoiYMau = BoOkrMau["hoiY"];
+export type TraoDoiMau = BoOkrMau["traoDoi"];
 export type KetLuanHoiYMau = NonNullable<HoiYMau["chuDe"][number]["ketLuan"]>;
 
 function trungMa(ds: { ma: string }[]): string | null {
@@ -293,6 +307,21 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 	const krTheoMa = new Map(
 		bo.mucTieu.flatMap((m) => m.krs.map((k) => [k.ma, k] as const)),
 	);
+	bo.traoDoi.theoDoi.forEach((f, i) => {
+		if (!nguoiTheoMa.has(f.nguoi))
+			loi(["traoDoi", "theoDoi", i, "nguoi"], `không có người ${f.nguoi}`);
+		if (!mtTheoMa.has(f.mucTieu))
+			loi(
+				["traoDoi", "theoDoi", i, "mucTieu"],
+				`không có mục tiêu ${f.mucTieu}`,
+			);
+	});
+	bo.traoDoi.traLoi.forEach((t, i) => {
+		if (!nguoiTheoMa.has(t.nguoi))
+			loi(["traoDoi", "traLoi", i, "nguoi"], `không có người ${t.nguoi}`);
+		if (!krTheoMa.has(t.kr))
+			loi(["traoDoi", "traLoi", i, "kr"], `không có KR ${t.kr}`);
+	});
 
 	const trungNguoi = trungMa(bo.nguoi);
 	if (trungNguoi) loi(["nguoi"], `mã người trùng: ${trungNguoi}`);

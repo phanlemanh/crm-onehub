@@ -17,6 +17,7 @@ export const OKR_MAU = {
 		gomSauHanGio: 2,
 		ketLuanSauHanGio: 4,
 	},
+	traoDoi: { sauCapNhatGio: 1 },
 	mayCucBo: ["localhost", "127.0.0.1", "::1", "[::1]"],
 	moiTruongCam: {
 		NODE_ENV: ["production"],

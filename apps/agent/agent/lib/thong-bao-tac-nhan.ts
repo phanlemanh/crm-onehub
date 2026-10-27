@@ -43,6 +43,7 @@ export async function noiDungTacNhan(
 			title: true,
 			pendingInputRequest: true,
 			submissions: {
+				where: { status: { in: ["SENDING", "ACCEPTED"] } },
 				orderBy: { createdAt: "desc" },
 				take: 1,
 				select: { id: true, createdAt: true, commandType: true },
