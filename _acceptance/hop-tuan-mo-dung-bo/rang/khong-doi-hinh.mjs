@@ -119,10 +119,11 @@ function evalMayCua(slug, cauHinh) {
 	return evals.flatMap((e) => {
 		if (!EXECUTOR_MAY.has(String(e.executor).trim())) return [];
 		if (String(e.status ?? "").trim() === "not-run") return [];
-		const ref = String(e.cmd ?? "")
-			.trim()
-			.replace(/^config:/, "");
-		const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
+		const cmd = String(e.cmd ?? "").trim();
+		const ref = cmd.replace(/^config:/, "");
+		const lenh = String(
+			cmd.startsWith("config:") ? (resolveConfigKey(cauHinh, ref) ?? "") : cmd,
+		).trim();
 		if (lenh === "")
 			throw new Error(`khong giai duoc ${slug}#${e.id} (${ref})`);
 		const kyVong = Number(String(e.expected_exit ?? "0").trim());
@@ -357,9 +358,19 @@ function lopCuaKhoi(tep, k, dongMa) {
 	);
 }
 
+const coOGoc = (coSo, tep, cwd) =>
+	spawnSync("git", ["cat-file", "-e", `${coSo}:${tep}`], {
+		cwd,
+		stdio: "ignore",
+	}).status === 0;
+
 function soatMotTep(tep, cacHoSo, coSo, cwd) {
 	const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", tep], cwd);
 	if (diff === "") return [];
+	if (!coOGoc(coSo, tep, cwd)) {
+		console.log(`THUOC MOI ${tep}: chua co o goc nhanh, khong soat`);
+		return [];
+	}
 	const khoi = khoiDiff(diff);
 	if (
 		cacHoSo.length >= NGUONG_TEP_CHUNG &&
