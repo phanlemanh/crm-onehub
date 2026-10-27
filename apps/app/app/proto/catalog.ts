@@ -1577,6 +1577,28 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-cng-loi", nhan: "Tải hỏng — thử lại" },
 		],
 	},
+	{
+		slug: "cam-xuc-tren-cap-nhat",
+		ten: "Cảm xúc và trả lời trên từng lần cập nhật — Cập nhật gần đây, Họp tuần, ngăn KR",
+		states: [
+			{
+				id: "ST-camxuc-cng",
+				nhan: "Cập nhật gần đây — cảm xúc và Trả lời trên mọi dòng",
+			},
+			{
+				id: "ST-camxuc-nhieu",
+				nhan: "Nhiều người thả — tooltip nêu tên và «và n người khác»",
+			},
+			{
+				id: "ST-camxuc-hop",
+				nhan: "Họp tuần — cảm xúc trên lần mới nhất của mỗi KR",
+			},
+			{
+				id: "ST-camxuc-ngan",
+				nhan: "Ngăn KR — cảm xúc trên lần cuối của mỗi tuần",
+			},
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
