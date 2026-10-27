@@ -22,7 +22,9 @@ mock.module("@/app/(landing)/sign-in/sso-sign-in", () => ({
 	SsoSignIn: CuaSso,
 }));
 
+const sessionThat = await import("@/lib/session");
 mock.module("@/lib/session", () => ({
+	...sessionThat,
 	getSession: async () => null,
 }));
 

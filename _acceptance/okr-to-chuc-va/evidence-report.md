@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9b246f0a57bae04226f308c1d481f95b31a15217
+verified_commit: 2bd4770799820a3cd867a64b45ba80f357354e3e
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (23/23 eval đạt, 0 phát hiện trong hợp đồng). Mười một mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 3, 4, 5, 7 ghi Known limits; Ngoài-6, 8, 9, 10, 11 chấp nhận không sửa. Hai phát hiện round 1 rơi khỏi thẻ (bài so-kr chỉ kiểm URL record, bài nut-them chỉ kiểm khoá URL) ghi Known limits. Phạm vi cắt/hoãn đồng ý cắt; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -350,3 +350,7 @@ sha: 182f3f37b4297aa0fb84b00bcba8a7be5c72125a · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 13 — 2026-10-24, do VK3 trang-bo-okr sửa thước và vật — ghim lại sau chữ ký, ba thước theo «duyệt cả ba» (9b246f0a5)
 run_id: repin-20261024T133834Z-50324
 sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E10 · thay bởi hồ sơ đã ký: E10→mot-nut-tao-muc-tieu#AC-8 · ngoài làn máy: E3, E11, E13, E18, E20 · diff chạm vật đo ngoài làn máy: E11, E13, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 14 — 2026-10-27, do gộp onehub 5084ffe74 (#566, #567 VK6, #575) vào VK8; sửa hydrat khung xương, khung chờ có hàng số và thước bco-the (V4-8); xếp import cho lint
+run_id: repin-20261027T120842Z-80884
+sha: 2bd4770799820a3cd867a64b45ba80f357354e3e · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E10 · thay bởi hồ sơ đã ký: E10→mot-nut-tao-muc-tieu#AC-8 · ngoài làn máy: E3, E11, E13, E18, E20 · diff chạm vật đo ngoài làn máy: E3, E11, E13, E18, E20 — chưa chứng lại, đi vòng S4 delta · chập chờn (đỏ lần đầu, đạt khi chạy lại): muc-tieu-va-kr E14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

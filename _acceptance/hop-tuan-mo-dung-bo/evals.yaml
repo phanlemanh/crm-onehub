@@ -1,0 +1,281 @@
+schema_version: 1
+slug: hop-tuan-mo-dung-bo
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.htmb_man_duong
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx"
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/hop-tuan-proxy.ts"
+      - "packages/validation/src/okr-bo-hop-tuan.ts"
+      - "apps/app/next.config.ts"
+      - "apps/api/scripts/okr-mau/ca-hop-tuan.ts"
+      - "_acceptance/hop-tuan-mo-dung-bo/rang/man.mjs"
+    expected: |
+      Bàn đo rang/man.mjs --phan duong, phiên đo riêng của cây qua mot-luot.sh (không cổng 3000/3001), bộ mẫu có ca Họp
+      tuần. Phần A — đăng nhập trưởng phòng ban P của ca (có KR công bố, đã cập nhật tuần này). Ma trận viết trước 3 URL
+      = 3 dòng: /okr/bo-okr?xemOkr=hop-tuan · /okr/bo-okr?xemOkr=hop-tuan&kyOkr=<ky> · /okr/theo-don-vi?xemOkr=hop-tuan.
+      Mỗi dòng:
+      (a) yêu cầu đầu tiên tới /okr/bo-okr (fetch redirect manual, cookie phiên) trả 307 với Location mang donOkr=pb:P,
+      xemOkr=hop-tuan, và kyOkr đúng như URL vào (dòng 2 có, dòng 1 và 3 không); (b) trình duyệt mở URL ấy: URL cuối
+      đúng như (a), dòng vị trí [data-vi-tri-bo="mot-bo"] là «Bộ OKR › P» và tiêu đề trang «Mục tiêu», không lúc nào dòng
+      vị trí mang tên gốc «OneHub» trước khi tới (bắt bằng MutationObserver gắn từ lúc điều hướng); (c) chữ của [data-hang-so-hop] ô Đã cập nhật bằng «<n>/<m>» với n = số
+      KR công bố của P có OkrCheckIn tuần này (giờ VN) và m = số KR công bố của P, cả hai đếm bằng SQL trên kho đo;
+      (d) textContent trang không chứa «0/0» và không chứa câu tuanDau của tệp chữ. Phần B — hai vai khác, mỗi vai một
+      phiên dev:session, URL /okr/bo-okr?xemOkr=hop-tuan: thành viên M của ca (không dẫn, phòng ban chính Q) → Location
+      mang donOkr=pb:Q; quản trị A của ca (không dẫn) → Location mang donOkr=goc. Phần C — bấm trong trình duyệt, đăng
+      nhập P (điều hướng phía khách): từ /okr bấm «Bộ OKR» trên thanh bên → bấm lọc «Tôi dẫn» → bấm hàng bộ P → bấm thẻ
+      con «Họp tuần»; và từ /okr bấm thẻ «đơn vị bạn dẫn» P → bấm thẻ con «Họp tuần». Mỗi đường: URL cuối mang
+      donOkr=pb:P, xemOkr=hop-tuan và kyOkr của chu kỳ đang xem, dòng vị trí là «Bộ OKR › P», MutationObserver không bắt
+      dòng vị trí mang tên OneHub. In «DUNG <dong>» từng dòng; đếm dòng đã chạy = 7. KET LUAN: mã 0 mọi dòng
+      DUNG, 1 có SAI, 2 không đo được.
+      CHIEU DO (--chieu-do, bản sao): proxy.ts bỏ đường chuyển Họp tuần (lưới ở page.tsx còn, chuyển phía khách sau 200) → «SAI AC-1: <dong> khong chuyen (200)», mã 1;
+      --chieu-do giu-ky: nhánh chuyển bỏ kyOkr → «SAI AC-1: ky-okr mat kyOkr», mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htmb_bo_api
+    paths:
+      - "packages/validation/src/okr-bo-hop-tuan.ts"
+      - "apps/api/src/okr/okr.service.ts"
+      - "apps/api/src/okr/okr-access.service.ts"
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/hop-tuan-mo-dung-bo.spec.ts"
+    expected: |
+      Ca «htmb-bo» trên CSDL thử: dựng cây và người qua đường ghi thật (org.* của ToChucService, vai workspace qua
+      đường mời/đổi vai thật), rồi với MỖI người xem gọi okr.access và org.tree qua router caller thật, parse bằng
+      okrAccessOutput và orgTreeOutput, đưa vào boHopTuan. Ma trận viết trước 8 người xem = 8 assert:
+      trưởng bộ phận → bp:B; dẫn bp:B và pb:P2 → bp:B; dẫn pb:P1 và pb:P3 (P1 trước P3 trong cây) → pb:P1; quản trị
+      không dẫn → goc (nguon quan-tri); quản trị kiêm trưởng pb:P1 → pb:P1 (nguon dan); thành viên phòng ban chính P2 →
+      pb:P2 (nguon phong-ban-chinh); thành viên không phòng ban → goc (nguon goc); người từng là trưởng P4 rồi bị chuyển
+      phòng ban chính sang P2 qua org.addPeople → pb:P2, không phải pb:P4. Đếm ô đã chạy = 8.
+      Đối chứng dương: trước khi chuyển, cùng người đó → pb:P4.
+      CHIEU DO (bản sao): boHopTuan đặt nhánh quản trị trước nhánh dẫn → đỏ «htmb-bo: quan-tri-kiem-truong ra goc, can
+      pb:P1»; bỏ thứ tự cây (sắp theo id) → đỏ «htmb-bo: dan-hai-phong ra pb:P3, can pb:P1».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.htmb_chuyen
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/chuyen-hop-tuan.ts"
+      - "apps/app/test/hop-tuan-mo-dung-bo.spec.ts"
+    expected: |
+      Ca «htmb-chuyen»: hàm duongChuyenHopTuan(thamSo, don) mà page.tsx gọi. Ma trận viết trước 6 ô:
+      xemOkr=hop-tuan không donOkr → đích mang donOkr của don; thêm kyOkr=q4 → giữ kyOkr=q4; donOkr=goc&xemOkr=hop-tuan →
+      null (không chuyển); donOkr=pb:X&xemOkr=hop-tuan → null; xemOkr=viec không donOkr → null; không tham số → null.
+      Đếm ô = 6. Ca «htmb-chuyen-loi»: ma trận 2 ô — page.tsx với okr.access giả ném lỗi; với org.tree giả ném lỗi —
+      mỗi ô lời gọi trang ném chính lỗi ấy (await rejects), không trả phần tử của bộ OneHub; đối chứng: cả hai trả bình
+      thường → trang ném NEXT_REDIRECT với đích mang donOkr.
+      CHIEU DO: bản sao hàm coi donOkr=goc là «không có» → đỏ «htmb-chuyen: donOkr=goc bi chuyen»; page.tsx bắt lỗi
+      rồi dùng goc → đỏ «htmb-chuyen-loi: loi roi ve goc»; bản sao bắt lỗi org.tree rồi dùng cây rỗng → đỏ
+      «htmb-chuyen-loi: org.tree loi roi ve goc».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.htmb_thanh_ben
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/tab-okr.ts"
+      - "apps/app/app/(app)/[slug]/okr/thanh-ben-muc-tieu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/phan-don-vi-dan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/the-con.tsx"
+      - "apps/app/test/hop-tuan-mo-dung-bo.dom.tsx"
+    expected: |
+      Ca «htmb-thanh-ben»: dựng ThanhBenMucTieu thật trong DOM (AreaSidebar của packages/ui, router giả) ở ba URL viết
+      trước — /ws/okr, /ws/okr/bo-okr?kyOkr=q4, /ws/okr/bo-okr?donOkr=pb:X&xemOkr=hop-tuan — mỗi URL: nhóm OKR có đúng
+      các mục theo thứ tự «Bộ OKR», «Lấy ý kiến»; không phần tử nào trong thanh bên có chữ «Họp tuần»; không href nào
+      của thanh bên chứa xemOkr. Đếm ô = 3. Đối chứng dương: ở URL thứ ba «Bộ OKR» mang aria-current="page".
+      Ca «htmb-duong-vao»: hai đường viết trước = 2 ô, dựng thành phần thật với dữ liệu parse bằng khuôn thật — (a) hàng
+      bộ P của DanhSachBo (lọc toi-dan, kyOkr=q4) → href mang donOkr=pb:P và kyOkr=q4; dựng TheConBo của bộ đó → href thẻ
+      «Họp tuần» mang donOkr=pb:P, xemOkr=hop-tuan, kyOkr=q4; (b) thẻ P của «đơn vị bạn dẫn» ở Của tôi → href mang
+      donOkr=pb:P; nối với TheConBo như (a).
+      CHIEU DO: bản sao thêm lại mục hop-tuan vào NHOM_THANH_BEN → đỏ «htmb-thanh-ben: thanh ben co muc Hop tuan»;
+      bản sao TheConBo bỏ donOkr khỏi href thẻ con → đỏ «htmb-duong-vao: the con mat donOkr».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.htmb_hang_so
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/o-so-hop.ts"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"
+      - "apps/app/lib/messages/okr-hop-tuan-bo.ts"
+      - "apps/app/test/hop-tuan-mo-dung-bo.dom.tsx"
+    expected: |
+      Ca «htmb-hang-so»: HopTuan thật với tRPC giả, đầu ra parse bằng hopTuanOutput thật: tuan 2026-11-09, tongKr 5,
+      daCapNhat 3, dangBan 2 dòng (một dòng tuTin thap), conLai 3 dòng (một thap, một null); chu kỳ đang chạy kết thúc
+      2026-12-31, hôm nay 2026-11-12 giờ VN. Đúng một [data-hang-so-hop] có đúng 4 [data-slot="stat-card"] theo thứ tự
+      nhãn của tệp chữ: Đã cập nhật «3/5» với mô tả chứa «09/11»; Đáng bàn «2»; Tự tin thấp «2»; Ngày còn lại «50».
+      [data-hang-so-hop] đứng trước khối tóm tắt và bảng theo thứ tự DOM; không còn [data-tom-tat-hop].
+      Ca «htmb-hang-so-the-khac»: TheoDonVi với xemOkr lần lượt danh-sach, viec, cay → không [data-hang-so-hop] (3 ô);
+      đối chứng: xemOkr hop-tuan → có.
+      CHIEU DO: bản sao đếm tự tin thấp chỉ trên dangBan → đỏ «htmb-hang-so: tu tin thap 1, can 2».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.htmb_o_so
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/o-so-hop.ts"
+      - "apps/app/test/hop-tuan-mo-dung-bo.spec.ts"
+    expected: |
+      Ca «htmb-o-so», lệnh chạy hai lượt TZ=UTC và TZ=Asia/Ho_Chi_Minh. Ma trận viết trước 6 ô cho oSoHop (chu kỳ
+      2026-10-01…2026-12-31): hôm nay 2026-09-30T17:30Z (đã 01/10 giờ VN) → «92»; 2026-09-30T16:00Z (23:00 ngày 30/09 giờ
+      VN) → «—» kèm «Bắt đầu 01/10»; 2026-12-31T05:00Z → «1»; 2027-01-01T03:00Z → «0» kèm «Đã kết thúc 31/12»;
+      không dòng nào thap → Tự tin thấp «0»; mọi tuTin null → «0». Mỗi ô: không ô nào có chuỗi NaN, undefined hay
+      dấu trừ đứng trước chữ số. Đếm ô = 6, mỗi lượt TZ.
+      CHIEU DO: bản sao tính ngày bằng getDate() theo giờ máy → đỏ ở lượt UTC «htmb-o-so: dau-ky ra —, can 92».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.htmb_chua_kr
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/don-vi-co-kr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/ly-do-rong.ts"
+      - "apps/app/lib/messages/okr-hop-tuan-bo.ts"
+      - "apps/app/test/hop-tuan-mo-dung-bo.dom.tsx"
+    expected: |
+      Ca «htmb-chua-kr»: hopTuan thật parse (tongKr 0, tuanDau true như máy chủ trả cho bộ rỗng), chu kỳ đang chạy,
+      toanCanh parse bằng toanCanhOutput thật, cây có bộ phận B1 (soKr 4, daCapNhat 1), B2 (soKr 0), B3 (soKr 2 chỉ từ
+      phòng ban con), phòng ban chưa xếp X (soKr 1). Ma trận 3 bộ đang xem: goc → danh sách đúng [B1, B3, X] theo thứ
+      tự cây, mỗi mục chữ «4 KR · đã cập nhật 1» v.v. và href /ws/okr/bo-okr?donOkr=<khoá>&xemOkr=hop-tuan&kyOkr=q4;
+      bp:B2 (hàng toanCanh soKr 0, các phòng ban con soKr 0 — đúng hình mà dieuKienDonVi bộ phận cho phép) → không
+      danh sách, liên kết «Xem mọi bộ OKR» href /ws/okr/bo-okr?kyOkr=q4; pb:P → như bp:B2; goc khi mọi hàng soKr 0 →
+      liên kết «Xem mọi bộ OKR». Mỗi ô: câu chứa tên bộ và tên chu kỳ; không [data-hang-so-hop]; textContent không chứa
+      «0/0» và không chứa câu tuanDau; tên đơn vị trong phần tử translate="no". Đếm ô = 4. Fixture toanCanh của ô goc
+      chép từ đầu ra thật của E8 (tệp test/fixtures/htmb-toan-canh.json, E8 ghi lại khi chạy với cờ HTMB_GHI=1 và so
+      byte khi chạy thường — lệch là đỏ «htmb-toan-canh: fixture lech dau ra that»).
+      CHIEU DO: bản sao xét tuanDau trước tongKr → đỏ «htmb-chua-kr: bo rong ra cau tuanDau»; bản sao liệt cả B2 →
+      đỏ «htmb-chua-kr: liet don vi soKr 0 (B2)».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htmb_toan_canh_api
+    paths:
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/src/okr/toan-canh.ts"
+      - "apps/api/test/hop-tuan-mo-dung-bo.spec.ts"
+      - "apps/api/test/fixtures/htmb-toan-canh.json"
+    expected: |
+      Ca «htmb-toan-canh» trên CSDL thử: chu kỳ đang chạy; bộ OneHub không mục tiêu công bố; bộ phận B có 3 KR công bố
+      ở phòng ban con P — một KR có OkrCheckIn tuần này, một KR chỉ có OkrCheckIn tuần trước (qua OkrCapNhatService với
+      now cố định), một KR chưa lần nào; phòng ban chưa xếp X có 1 KR công bố; phòng ban Q chỉ có một mục tiêu hạn chế
+      (người xem ngoài danh sách được xem) mang 3 KR. Gọi okr.toanCanh và okr.hopTuan bằng router caller với người xem là
+      thành viên thường. Khẳng định: hopTuan(goc).tongKr = 0 và hopTuan(goc).tuanDau = false; hàng toanCanh bp:B soKr
+      3, daCapNhat 1 (KR chỉ có lần tuần trước KHÔNG tính), khớp hai lệnh đếm SQL trên OkrKeyResult và OkrCheckIn tuần
+      này giờ VN. QUAN HỆ, ma trận viết trước mọi khoá có soKr > 0 trong toanCanh (bp:B, pb:P, pb:X = 3 ô): với mỗi
+      khoá, hopTuan(khoá).tongKr = soKr và hopTuan(khoá).daCapNhat = daCapNhat của hàng toanCanh. Hàng pb:Q soKr 0 hoặc
+      vắng. Đối chứng dương: đổi mục tiêu Q sang công khai (okr.datHienThi) → hàng pb:Q soKr 3 và hopTuan(pb:Q).tongKr 3; người trong danh sách được xem vẫn thấy pb:Q soKr 0 (số gộp bỏ mục tiêu hạn chế với mọi người, docs/api.md). Ghi hoặc so
+      byte test/fixtures/htmb-toan-canh.json (đầu ra toanCanh của người xem thường) cho E7.
+      CHIEU DO: bản sao bỏ lọc hạn chế ở toanCanh → đỏ «htmb-toan-canh: pb:Q lo muc tieu han che (3)»; bản sao
+      hopTuan(bp) bỏ phòng ban con → đỏ «htmb-toan-canh: bp:B liet 3, hopTuan 0»; bản sao trả lại every() trên mảng rỗng
+      → đỏ «htmb-toan-canh: goc rong tuanDau true».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.htmb_ly_do
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/ly-do-rong.ts"
+      - "apps/app/lib/messages/okr-hop-tuan-bo.ts"
+      - "apps/app/test/hop-tuan-mo-dung-bo.dom.tsx"
+    expected: |
+      Ca «htmb-ly-do»: ma trận viết trước 5 ô cho lyDoRong và màn HopTuan (đầu ra parse bằng hopTuanOutput thật):
+      chu kỳ lap-ke-hoach, tongKr 0 → chu-ky-chua-chay, câu «Chu kỳ <tên> bắt đầu dd/mm…», không hàng số;
+      chu kỳ dang-chay nhưng startsOn sau hôm nay giờ VN, tongKr 3 chưa lần nào → chu-ky-chua-chay;
+      dang-chay, tongKr 0, tuanDau true → chua-kr-cong-bo (không bao giờ chua-ai-cap-nhat);
+      dang-chay, tongKr 4, tuanDau true → chua-ai-cap-nhat, hàng số «0/4» và câu tuanDau;
+      dang-chay, có cập nhật → null, hàng số và bảng. Đếm ô = 5.
+      CHIEU DO: bản sao bỏ điều kiện startsOn → đỏ «htmb-ly-do: chua-toi-ngay ra chua-ai-cap-nhat».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.htmb_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/don-vi-co-kr.tsx"
+      - "apps/app/test/hop-tuan-mo-dung-bo.dom.tsx"
+    expected: |
+      Ca «htmb-tai»: TheoDonVi xemOkr=hop-tuan, hopTuan treo → [data-hang-so-hop] có đúng 4 khung xương
+      [data-slot="skeleton"] cùng lưới của StatGroup, tiêu đề trang, dòng vị trí và [data-the-con-bo] còn; hopTuan lỗi →
+      [data-trang-thai="ST-hoptuan-loi"], bấm Thử lại → số lần gọi hopTuan tăng 1. Nhánh bộ rỗng: toanCanh treo → câu
+      lý do có, [data-trang-thai="ST-hoptuan-donvi-tai"] có khung xương; toanCanh lỗi → câu lý do còn,
+      [data-trang-thai="ST-hoptuan-donvi-loi"], Thử lại gọi lại toanCanh đúng 1 lần. Đếm ô = 4.
+      CHIEU DO: bản sao để lỗi toanCanh thay cả câu lý do → đỏ «htmb-tai: loi toanCanh mat cau ly do».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.htmb_man
+    steps:
+      - "Phiên đo riêng qua mot-luot.sh (tien-de.mjs dựng api và app của CÂY ĐANG XÉT trên cổng tự do, kho crm_<cây>_do); không dùng cổng 3000/3001"
+      - "Bàn đo gieo bộ OKR mẫu (okr:mau) có ca Họp tuần; đăng nhập trưởng phòng ban P (có dữ liệu)"
+      - "Khổ 1440 rồi 375, sáng rồi tối: bấm «Bộ OKR» trên thanh bên (ở 375 trong hàng cuộn ngang) → «Tôi dẫn» → bộ P → thẻ con «Họp tuần», chờ [data-hang-so-hop], chụp htmb-co-du-lieu-<kho>-<sang|toi>.png; mở Họp tuần của bộ phòng ban chưa có KR trong ca, chờ danh sách hoặc liên kết, chụp htmb-chua-kr-<kho>-<sang|toi>.png; với chu kỳ con của ca (OneHub không KR, các đơn vị có KR) mở Họp tuần donOkr=goc, chờ [data-don-vi-co-kr], chụp htmb-ds-don-vi-<kho>-<sang|toi>.png vào evidence/"
+      - "Mỗi khổ đo: scrollWidth của tài liệu ≤ bề rộng khung nhìn (đối chứng: chèn khối 4000px phải làm tràn); số cột của lưới [data-hang-so-hop] (1440: 4 ô cùng hàng theo offsetTop; 375: 2 hàng 2 ô); mỗi nhãn ô scrollWidth ≤ clientWidth + 1; danh sách đơn vị có ≥ 2 mục Item và mỗi tên, mỗi dòng «n KR · đã cập nhật m» scrollWidth ≤ clientWidth + 1"
+      - "Đọc dòng KET LUAN cuối: mã 0 = mọi dòng DUNG; mã 1 = có dòng SAI; mã 2 = không đo được"
+      - "Mở mười hai ảnh và đối chiếu bằng mắt với Expected"
+    inputs:
+      - _acceptance/hop-tuan-mo-dung-bo/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/don-vi-co-kr.tsx"
+      - "_acceptance/hop-tuan-mo-dung-bo/rang/man.mjs"
+    expected: |
+      Mười hai ảnh. Ảnh có dữ liệu: đầu thẻ Họp tuần là hàng bốn ô — 1440 một hàng, 375 lưới hai cột hai hàng — nhãn đọc trọn,
+      số không bị cắt; dưới là khối tóm tắt (nếu có) rồi bảng. Ảnh chưa có KR: câu lý do nêu tên bộ và chu kỳ, danh sách
+      liên kết «Xem mọi bộ OKR» thấy được, không hàng số. Ảnh danh sách đơn vị (màn production 22/10): câu «OneHub chưa
+      có KR công bố…», danh sách từ hai mục, mỗi mục tên và «n KR · đã cập nhật m» đọc trọn, liên kết thấy được. Thanh bên (1440)
+      hay hàng cuộn ngang (375) có «Bộ OKR» đang mở và không có mục «Họp tuần». Sáng và tối: không chữ, viền, ô số nào chìm vào nền. Bàn đo in DUNG cho không
+      tràn ngang, đối chứng tràn, lưới ô, nhãn không cắt, danh sách đơn vị — ở cả hai khổ. Thiếu ảnh nào → không đạt.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot, observed]
+
+  - id: E12
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.htmb_khong_doi_hinh
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
+    long_running: 200
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+      - "apps/api/test/**"
+    expected: |
+      khong-doi-hinh.mjs QUÉT LỚP LÚC CHẠY (cùng khuôn của VK3 E15): mọi hồ sơ signed-off hay machine-cleared; eval
+      test và script không not-run thuộc lớp khi tệp trong lệnh đã giải (kể cả mã cùng thư mục rang) chứa hop-tuan,
+      okr/bo-okr, okr/theo-don-vi hoặc thanh-ben-muc-tieu, hoặc bị vòng sửa. In «quet lop: <n> ho so, <k> eval».
+      (1) Chạy các eval thuộc lớp trên cây; mục đỏ chạy lại trên worktree origin/onehub: «SAI AC-10» khi nền 0 mà cây
+      khác 0, «DO SAN TREN NEN <slug>#<E>» khi nền đỏ. (2) Mỗi tệp thước hay bài kiểm của hồ sơ đã ký mà vòng sửa: sổ của
+      hồ sơ có dòng fix decided_by chủ kho nhắc tệp (thiếu → «SAI AC-10: THIEU SO <tep>»); khối diff chỉ được thuộc một
+      lớp khai trước — trang-bo-okr E10: chuỗi kỳ vọng tiêu đề/đường của ca xem-khong-don — khác → «SAI AC-10: DOI LOGIC
+      <tep>:<dong>».
+      CHIEU DO (bản sao HEAD): thêm `export const doiLogicThu = 1 + 1;` cuối một tệp thước đã ký trong lớp → «SAI AC-10:
+      DOI LOGIC <tep>:<dong>», mã 1; xoá dòng sổ fix → «SAI AC-10: THIEU SO <tep>».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

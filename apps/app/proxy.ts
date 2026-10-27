@@ -2,6 +2,7 @@ import { AUTH_COOKIE_PREFIX } from "@crm/auth/cookies";
 import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 import { isMarketing } from "@/lib/env";
+import { chuyenHopTuan } from "@/lib/hop-tuan-proxy";
 import {
 	ONBOARDING_PATH,
 	RESEARCH_PATH,
@@ -94,6 +95,13 @@ export async function proxy(request: NextRequest) {
 	const settled = workspace.gate === "settled" && research === "settled";
 
 	if (!settled || !workspace.slug) return NextResponse.next();
+
+	const hopTuan = await chuyenHopTuan(
+		request,
+		workspace.slug,
+		boSlug(pathname, workspace.slug),
+	);
+	if (hopTuan) return hopTuan;
 
 	return sendTo(appPath(pathname, workspace.slug), request);
 }

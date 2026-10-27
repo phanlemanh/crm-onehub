@@ -218,6 +218,8 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"record-sheet.contact.firstName",
 	"record-sheet.contact.lastName",
 	"record-sheet.deal.noDate",
+	"okr-toan-canh.hopTuan.tuan",
+	"okr-toan-canh.hopTuan.daCapNhat",
 ];
 
 const GHIM_TRO_LY_OKR = {
@@ -491,6 +493,9 @@ const GHIM = {
 		"Không có bộ OKR nào trong «1»",
 		"Không có bộ OKR nào trong «12»",
 	],
+	"okr-vo-khu:boOkr.so.den": ["đến 1", "đến 12"],
+	"okr-vo-khu:boOkr.so.batDau": ["Bắt đầu 1", "Bắt đầu 12"],
+	"okr-vo-khu:boOkr.so.daKetThuc": ["Đã kết thúc 1", "Đã kết thúc 12"],
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"crm:truongKieu.trong": ["1 không được để trống.", "12 không được để trống."],
@@ -1111,6 +1116,22 @@ const GHIM = {
 		"đã cập nhật 12/A KR",
 	],
 	"okr-toan-canh:hopTuan.phuTrach": ["Phụ trách 1", "Phụ trách 12"],
+	"okr-hop-tuan-bo:moTa.tuan": ["Tuần 1", "Tuần 12"],
+	"okr-hop-tuan-bo:moTa.ketThuc": ["Kết thúc 1", "Kết thúc 12"],
+	"okr-hop-tuan-bo:moTa.batDau": ["Bắt đầu 1", "Bắt đầu 12"],
+	"okr-hop-tuan-bo:moTa.daKetThuc": ["Đã kết thúc 1", "Đã kết thúc 12"],
+	"okr-hop-tuan-bo:rong.chuKyChuaChay": [
+		"Chu kỳ 1 bắt đầu A — Họp tuần có số từ tuần đầu của chu kỳ.",
+		"Chu kỳ 12 bắt đầu A — Họp tuần có số từ tuần đầu của chu kỳ.",
+	],
+	"okr-hop-tuan-bo:rong.chuaKr": [
+		"1 chưa có KR công bố trong A.",
+		"12 chưa có KR công bố trong A.",
+	],
+	"okr-hop-tuan-bo:donViCoKr.dong": [
+		"1 KR · đã cập nhật A",
+		"12 KR · đã cập nhật A",
+	],
 	"okr-toan-canh:soDo.soMucTieu": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
 	"okr-toan-canh:soDo.tienDo": ["1% tiến độ", "12% tiến độ"],
 	"okr-quanh:tienDo": ["1% tiến độ", "12% tiến độ"],

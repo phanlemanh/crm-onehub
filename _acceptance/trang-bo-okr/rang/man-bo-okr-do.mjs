@@ -676,7 +676,10 @@ export async function e10(n) {
 		n,
 		"xem-khong-don",
 		`/${n.slug}/okr/bo-okr?${new URLSearchParams({ [THAM.xem]: "hop-tuan" })}`,
-		{ tham: { [THAM.xem]: "hop-tuan" }, ten: n.tenGoc },
+		{
+			tham: { [THAM.xem]: "hop-tuan", [THAM.don]: `pb:${n.pb.id}` },
+			ten: n.pb.name,
+		},
 	);
 }
 

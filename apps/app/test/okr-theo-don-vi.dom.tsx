@@ -226,6 +226,7 @@ mock.module("@/lib/trpc/client", () => ({
 			danhSach: thuTuc("danhSach", docDanhSach),
 			cayCanChinh: thuTuc("cayCanChinh", docCayCanChinh),
 			objective: thuTuc("objective", () => null),
+			soBo: thuTuc("soBo", () => null),
 			moCapNhat: {
 				mutationOptions: () => ({ mutationFn: async () => null }),
 			},
@@ -409,7 +410,8 @@ function soDongKrDuoi(o: Element): number {
 	return so;
 }
 
-const SO_NUT_HANG_CONG_CU = 8;
+const KHUNG_BANG = '[aria-busy="true"]:not([data-khung-xuong="hang-so"])';
+const SO_NUT_HANG_CONG_CU = 9;
 
 const nutCo = (o: ParentNode, chu: string) =>
 	[...o.querySelectorAll("button")].some((b) => b.textContent?.trim() === chu);
@@ -696,10 +698,9 @@ describe("khung-xuong", () => {
 		};
 	};
 	const doc = (o: HTMLElement) => ({
-		busy: o.querySelector('[aria-busy="true"]') !== null,
+		busy: o.querySelector(KHUNG_BANG) !== null,
 		dangTai:
-			o.querySelector('[aria-busy="true"] [role="status"]')?.textContent ??
-			null,
+			o.querySelector(`${KHUNG_BANG} [role="status"]`)?.textContent ?? null,
 		rong: (o.textContent ?? "").includes(RONG),
 		the: [...o.querySelectorAll("[data-muc-tieu]")].map((k) =>
 			k.getAttribute("data-muc-tieu"),

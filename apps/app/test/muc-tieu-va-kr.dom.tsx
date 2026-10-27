@@ -537,9 +537,9 @@ function hangCuaMt(id: string): Element[] {
 	return ra;
 }
 const dangThu = (url: URLSearchParams, ds: { id: string }[]) => {
-	const mo = new Set((url.get("expand") ?? "").split(",").filter(Boolean));
+	const gap = new Set((url.get("gap") ?? "").split(",").filter(Boolean));
 	return ds
-		.filter((x) => !mo.has(x.id))
+		.filter((x) => gap.has(x.id))
 		.map((x) => x.id)
 		.join(",");
 };
@@ -1958,7 +1958,7 @@ const CA_TRANG_THAI = {
 		}),
 	"ST-mtkr-da-thu": () =>
 		motMan(async (man) => {
-			const san = await dungMan(man, HAI_MT(), "?expand=mt-b");
+			const san = await dungMan(man, HAI_MT(), "?gap=mt-a");
 			soCa(
 				{
 					hang: hangCuaMt("mt-a").map(khoaHang),

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { BamKrMoChiTietKrMau } from "./_modules/bam-kr-mo-chi-tiet-kr";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
+import { BoOkrCoSoMau } from "./_modules/bo-okr-co-so";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CapNhatGanDayMau } from "./_modules/cap-nhat-gan-day";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
@@ -21,6 +22,7 @@ import { GoTinHieuRacMau } from "./_modules/go-tin-hieu-rac";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
 import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
 import { HopThongBaoMau } from "./_modules/hop-thong-bao-tren-web";
+import { HopTuanMoDungBoMau } from "./_modules/hop-tuan-mo-dung-bo";
 import { KanbanViecMau } from "./_modules/kanban-viec";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
@@ -65,6 +67,7 @@ import { PROTO_CATALOG } from "./catalog";
 export type ProtoComponent = (props: { state: string }) => ReactNode;
 
 const BANG_GHEP = {
+	"bo-okr-co-so": BoOkrCoSoMau,
 	"giai-doan-thoa-thuan": GiaiDoanThoaThuanProto,
 	"cua-toi-ba-phan": CuaToiBaPhanMau,
 	"dieu-huong-khu-muc-tieu": DieuHuongKhuMucTieuMau,
@@ -126,6 +129,7 @@ const BANG_GHEP = {
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
 	"cho-tac-nhan-lau": ChoTacNhanLauMau,
+	"hop-tuan-mo-dung-bo": HopTuanMoDungBoMau,
 	"ngan-kr-mot-cho": NganKrMotChoMau,
 	"bam-kr-mo-chi-tiet-kr": BamKrMoChiTietKrMau,
 	"cap-nhat-gan-day": CapNhatGanDayMau,
