@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ae0cbcc0b43094b04fe3b343c9f440097c5a3eea
+verified_commit: 58e62de63995b2944d6c11840587d478c758e122
 human_signoff: manh 2026-10-17
 ---
 
@@ -318,3 +318,7 @@ sha: af18f068e26b7d35589459e8062337afac57e12c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-26, do hoá cũ do gộp origin/onehub 5ff537e4c (#571 KDH) vào VK6; thước E15 nhận cmd viết thẳng (V3-55 a) (lượt 2/2)
 run_id: repin-20261026T155633Z-79086
 sha: ae0cbcc0b43094b04fe3b343c9f440097c5a3eea · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-27, do hoá cũ do gộp origin/onehub dd53c3870 (#574 VK12) vào VK6; bài đường cũ tự lấy origin/onehub (lượt 2/2)
+run_id: repin-20261027T021439Z-73385
+sha: 58e62de63995b2944d6c11840587d478c758e122 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
