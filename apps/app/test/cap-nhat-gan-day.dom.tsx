@@ -674,7 +674,7 @@ describe("cx-lac-quan", () => {
 
 	function treo() {
 		let giai: (v: Tom) => void = () => {};
-		let tuChoi: (e: unknown) => void = () => {};
+		let tuChoi: (e: Error) => void = () => {};
 		kho.ghiRieng.set(
 			"okr.thaCamXuc",
 			() =>
@@ -683,7 +683,7 @@ describe("cx-lac-quan", () => {
 					tuChoi = loi;
 				}),
 		);
-		return { giai: (v: Tom) => giai(v), tuChoi: (e: unknown) => tuChoi(e) };
+		return { giai: (v: Tom) => giai(v), tuChoi: (e: Error) => tuChoi(e) };
 	}
 
 	const chip = (loai: string) =>

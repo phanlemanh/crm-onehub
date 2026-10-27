@@ -89,7 +89,7 @@ async function binhLuan(
 	const c = ok<{ id: string }>(
 		await goi("okr.addComment", {
 			objectiveId: san.mucTieu,
-			...(keyResultId ? { keyResultId } : {}),
+			keyResultId,
 			body: `Bình luận ${ma}`,
 			mentionUserIds: [],
 		}),

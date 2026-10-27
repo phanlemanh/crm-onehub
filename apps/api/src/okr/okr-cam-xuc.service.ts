@@ -1,4 +1,4 @@
-import type { Db } from "@crm/db";
+import { type Db, Prisma } from "@crm/db";
 import { tomTatCamXucCua } from "@crm/db/okr-cam-xuc";
 import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import {
@@ -17,12 +17,6 @@ import { OKR_CAM_XUC } from "./okr-xem.config";
 type Tx = Parameters<Parameters<Db["$transaction"]>[0]>[0];
 
 const MA_TRUNG = "P2002";
-
-const laTrung = (loi: unknown): boolean =>
-	typeof loi === "object" &&
-	loi !== null &&
-	"code" in loi &&
-	loi.code === MA_TRUNG;
 
 @Injectable()
 export class OkrCamXucService {
@@ -108,8 +102,12 @@ export class OkrCamXucService {
 					khoaVet(khoa),
 				);
 			})
-			.catch((loi: unknown) => {
-				if (!laTrung(loi)) throw loi;
+			.catch((loi) => {
+				if (
+					!(loi instanceof Prisma.PrismaClientKnownRequestError) ||
+					loi.code !== MA_TRUNG
+				)
+					throw loi;
 			});
 		const tom = await this.tomTat(this.db, [input.checkInId], userId, nc);
 		return tom.get(input.checkInId) ?? [];

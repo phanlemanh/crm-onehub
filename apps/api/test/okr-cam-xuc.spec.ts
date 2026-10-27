@@ -386,7 +386,7 @@ describe("cx-ba-cho", () => {
 	let objectiveId: string;
 	let k1: string;
 	let k2: string;
-	const lan: Record<"t1" | "t2" | "t3", string> = { t1: "", t2: "", t3: "" };
+	const lan = { t1: "", t2: "", t3: "" };
 
 	async function taoKrBa(tieuDe: string): Promise<string> {
 		return ok<{ id: string }>(

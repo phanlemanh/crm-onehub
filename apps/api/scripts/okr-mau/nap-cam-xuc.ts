@@ -1,5 +1,7 @@
 import type { Db } from "@crm/db";
 import { LOAI_CAM_XUC, type LoaiCamXuc } from "@crm/validation/okr-cam-xuc";
+import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";
+import { z } from "zod";
 import { AgentTriggerService } from "../../src/agent/agent-trigger.service";
 import { OkrService } from "../../src/okr/okr.service";
 import { OkrAccessService } from "../../src/okr/okr-access.service";
@@ -10,11 +12,11 @@ import type { BoOkrMau } from "./khuon";
 
 export type DemCamXuc = { camXuc: number };
 
-const LOAI_THEO_TU_TIN: Record<string, LoaiCamXuc> = {
+const LOAI_THEO_TU_TIN = {
 	thap: "co-len",
 	vua: "dong-y",
 	cao: "chuc-mung",
-};
+} as const satisfies Record<MucTuTin, LoaiCamXuc>;
 
 function dungDichVu(db: Db): OkrCamXucService {
 	const quyen = new OkrAccessService(db, new ToChucService(db));
@@ -88,7 +90,11 @@ export async function napCamXucMau(
 		);
 		const nguoi = ung.find((n) => idMau("nguoi", n) !== l.authorUserId);
 		if (!nguoi) continue;
-		await tha(l, nguoi, LOAI_THEO_TU_TIN[l.confidence] ?? "dong-y");
+		await tha(
+			l,
+			nguoi,
+			LOAI_THEO_TU_TIN[z.enum(MUC_TU_TIN).parse(l.confidence)],
+		);
 	}
 	const moiNhat = await db.okrCheckIn.findFirst({
 		where: { keyResultId: idMau("kr", cx.nhieu.kr) },
