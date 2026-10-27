@@ -1,0 +1,227 @@
+schema_version: 1
+slug: hop-tuan-tren-bang
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.httb_api
+    paths:
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/src/okr/okr-xem.contracts.ts"
+      - "packages/db/src/okr-hop-tuan.ts"
+      - "apps/api/test/hop-tuan-tren-bang.spec.ts"
+    expected: |
+      Ca «htb-muc-doi» trên CSDL thử: dựng một bộ phòng ban có tám KR công bố qua đường ghi thật (okr.* của OkrService,
+      lần cập nhật qua okr.guiCapNhat với đồng hồ ghim theo giờ Việt Nam), mỗi KR một ca của AC-1, viết trước thành ma trận
+      tám dòng = tám assert. Gọi okr.hopTuan qua router caller thật, parse bằng hopTuanOutput. Với mỗi dòng (gộp dangBan
+      và conLai): (a) tập khoá của dòng = tập khoá cũ ∪ {ghiChuNgay, donVi, giaTriMoi, mucDoi}, không thừa không thiếu;
+      (b) giaTriMoi, mucDoi.tu, mucDoi.den, mucDoi.ngayTruoc, ghiChu, ghiChuNgay bằng giá trị đọc từ OkrCheckIn bằng
+      Prisma theo luật của AC-1, tính độc lập trong bài (không gọi hàm của mã đang xét). Ca hai lần cùng tuần: mucDoi.tu
+      = giá trị lần của tuần trước, KHÁC giá trị lần liền trước (đối chứng dương trong cùng ca: assert hai số ấy khác
+      nhau trước khi so). Ca chưa lần nào: giaTriMoi, mucDoi, ghiChu, ghiChuNgay đều null. Các khoá cũ (tuan, daCapNhat,
+      tongKr, thứ tự dangBan/conLai) bằng bản chụp lấy trên cùng dữ liệu trước khi đổi mã (tệp mồi trong bài). Đếm ô đã
+      chạy = 8, in «htb-muc-doi: 8/8».
+      CHIEU DO (bản sao): mucDoi so với lần liền trước thay vì lần của tuần trước → đỏ «htb-muc-doi: hai-lan-cung-tuan
+      tu=<x> can <y>».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.httb_ghi_chu
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan/**"
+      - "apps/app/test/hop-tuan-tren-bang.dom.tsx"
+    expected: |
+      Ca «htb-ghi-chu»: dữ liệu okr.hopTuan dựng từ mồi parse bằng hopTuanOutput thật (Đang bàn 3 dòng, Còn lại 2 dòng,
+      một dòng ghiChu null), Còn lại mở. Ma trận viết trước ba khổ (1440, 900, 375 — đặt bề rộng khung và matchMedia của
+      bản dựng) × năm dòng = 15 ô. Mỗi ô: trong [data-kr-hop=<id>] đếm phần tử [data-ghi-chu] ĐANG HIỆN (không nằm trong
+      tổ tiên ẩn theo khổ) = 1; chữ của nó là «<ghi chú>» kèm dd/mm của ghiChuNgay, hoặc «Chưa có ghi chú» ở dòng null;
+      phần tử chữ ghi chú có translate="no". In «htb-ghi-chu: 15/15».
+      CHIEU DO (bản sao): trả lại `hidden lg:table-cell` cho cột ghi chú và bỏ bản dưới tên KR → đỏ «htb-ghi-chu:
+      <dong>@900 hien 0 lan».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.httb_muc_doi_chu
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan/**"
+      - "apps/app/app/(app)/[slug]/okr/bang-kr.tsx"
+      - "apps/app/test/hop-tuan-tren-bang.dom.tsx"
+    expected: |
+      Ca «htb-muc-doi-chu»: ma trận viết trước tám ca của AC-3 = tám dòng mồi parse bằng hopTuanOutput (tăng % ; giảm
+      «tỷ đồng» 1,17 → 1,08; tăng «đại lý»; không đổi; mucDoi null có giaTriMoi; chưa lần nào; KR mốc 0 → 1; đơn vị %
+      giảm). Mỗi ô: [data-muc-doi=<id>] có đúng hai dòng chữ; dòng trên và dòng dưới bằng chuỗi kỳ vọng viết sẵn trong
+      bài (ví dụ «−0,09 tỷ đồng» / «1,17 → 1,08 · so với 10/10»; KR mốc «Chưa xong → Xong»); không chuỗi nào chứa NaN,
+      undefined; chuỗi không chứa số tiến độ của dòng khi tiến độ khác giá trị (ca tỷ đồng: tiến độ 60 không xuất hiện).
+      Ô hiện ở 1440 và 375. In «htb-muc-doi-chu: 8/8».
+      CHIEU DO (bản sao): tính mức đổi trên progress thay vì giá trị → đỏ «htb-muc-doi-chu: ty-dong tren=<x> can −0,09 tỷ
+      đồng».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.httb_cap_nhat
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan/**"
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-kr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/nut-cap-nhat-dong.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/bang.tsx"
+      - "apps/app/test/hop-tuan-tren-bang.dom.tsx"
+    expected: |
+      Ca «htb-cap-nhat»: bảng mồi hai dòng K (okr.objective cho K có quyền cập nhật) và J (không quyền), tRPC giả ghi
+      lại mọi lời gọi. (a) [data-kr-hop=K] có đúng một nút [data-nut="cap-nhat-dong-kr"] với aria-label «Cập nhật <tên K>»;
+      [data-kr-hop=J] có 0; không dòng nào chứa input, textarea hay [contenteditable]. (b) bấm nút của K: hộp
+      HopThoaiCapNhatKr mở với tiêu đề mang tên K; openRecord giả không được gọi. (c) gửi giá trị và ghi chú: okr.guiCapNhat
+      gọi đúng một lần với keyResultId K; hộp đóng; router giả ghi 0 lần push/replace đổi pathname; okr.hopTuan được
+      làm mới (lần gọi tăng 1). (d) nút «Cập nhật» đầu ngăn KR của K mở cùng thành phần hộp (cùng data-slot). In
+      «htb-cap-nhat: 4/4».
+      CHIEU DO (bản sao): nút trên dòng gọi openRecord thay vì mở hộp → đỏ «htb-cap-nhat: bam dong mo ngan, khong mo hop».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.httb_sang
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan/**"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/dien-bien-kr.ts"
+      - "apps/app/test/hop-tuan-tren-bang.dom.tsx"
+    expected: |
+      Ca «htb-sang»: Họp tuần mồi Đang bàn [A, B, C], Còn lại [D, E] (Còn lại gập), A và C khác mục tiêu với B, và
+      okr.objective của mục tiêu B có ba KR theo position khác thứ tự bảng (đối chứng: nếu ngăn đi theo mục tiêu thì kề
+      của B khác). Ma trận viết trước sáu bước = sáu assert: mở B → [data-dem-kr] «2/5» và chữ «theo thứ tự bảng»; ‹ →
+      ngăn của A; › từ B → C; › từ C → D; ở A [data-nut="kr-truoc"] disabled; ở E [data-nut="kr-ke"] disabled; mở D từ
+      bảng → «4/5». Thêm: bảng một KR → không [data-dem-kr], không nút ‹ ›. In «htb-sang: 7/7».
+      CHIEU DO (bản sao): ngăn bỏ qua nguồn Họp tuần → đỏ «htb-sang: B ke la <x> can C».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.httb_nguon
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/dien-bien-kr.ts"
+      - "apps/app/components/crm/record-sheet/record-stack.ts"
+      - "apps/app/test/hop-tuan-tren-bang.dom.tsx"
+    expected: |
+      Ca «htb-nguon» (nuqs adapter thử với URL thật): (a) mở C từ Họp tuần, lấy chuỗi URL, dựng lại cây mới từ chính chuỗi
+      ấy (mô phỏng tải lại) → ngăn của C, «3/5», › đi D; (b) đóng ngăn: URL không còn tham số nguồn; mở C qua lối của trang
+      đơn vị và của Của tôi → đếm theo position trong mục tiêu của C (bằng chỉ số tính từ mồi okr.objective); (c) URL mang
+      nguồn Họp tuần với KR Z không có trong bảng → ngăn của Z đếm theo mục tiêu, không ném lỗi. In «htb-nguon: 4/4».
+      Kèm chạy lại thước quét lối của VK7 (bun _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs) — mã 0, không dòng «loi
+      ngoai ma tran».
+      CHIEU DO (bản sao): giữ nguồn trong state React thay vì URL → đỏ «htb-nguon: tai lai mat thu tu bang».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.httb_sau_gui
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/hop-tuan-tren-bang.dom.tsx"
+    expected: |
+      Ca «htb-sau-gui»: ngăn của B (Đang bàn [A, B, C], Còn lại [D]) mở từ bảng; gửi cập nhật từ nút đầu ngăn; okr.hopTuan
+      giả trả lần hai với B ở Còn lại (Đang bàn [A, C], Còn lại [B, D]). Sau khi làm mới: ngăn vẫn của B, [data-dem-kr]
+      «3/4», ‹ → C, › → D; bảng sau ngăn có B trong phần Còn lại. Đối chứng dương: trước khi gửi «2/4». In «htb-sau-gui:
+      4/4».
+      CHIEU DO (bản sao): ngăn giữ danh sách chụp lúc mở → đỏ «htb-sau-gui: dem <x> can 3/4».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.httb_man
+    steps:
+      - "Phiên đo riêng qua mot-luot.sh (tien-de.mjs dựng api và app của CÂY ĐANG XÉT trên cổng tự do, kho crm_<cây>_do); không dùng cổng 3000/3001"
+      - "Bàn đo gieo bộ OKR mẫu (okr:mau) có ca Họp tuần; đăng nhập trưởng phòng ban P (có dữ liệu, có dòng ở Còn lại)"
+      - "Khổ 1440, 768, 375; sáng rồi tối: mở Họp tuần của P qua thẻ con, mở Còn lại, chụp htb-bang-<kho>-<sang|toi>.png; bấm tên KR dòng hai, chụp htb-ngan-<kho>-<sang|toi>.png; bấm ›, đọc KR của ngăn"
+      - "Mỗi khổ đo: số [data-kr-hop] = số dòng có [data-ghi-chu] đang hiện = số dòng có [data-muc-doi] đang hiện; mỗi nút [data-nut=cap-nhat-dong-kr] có getBoundingClientRect().right ≤ innerWidth; scrollWidth tài liệu ≤ innerWidth (đối chứng: chèn khối 4000px phải làm tràn); mỗi ghi chú, mức đổi, nhãn scrollWidth ≤ clientWidth + 1; [data-dem-kr] = «2/<số dòng>» và KR sau › = KR dòng ba trên bảng"
+      - "Đọc dòng KET LUAN cuối: mã 0 = mọi dòng DUNG; mã 1 = có dòng SAI; mã 2 = không đo được"
+      - "Mở mười hai ảnh và đối chiếu bằng mắt với Expected"
+    inputs:
+      - _acceptance/hop-tuan-tren-bang/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan/**"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "_acceptance/hop-tuan-tren-bang/rang/man.mjs"
+    expected: |
+      Mười hai ảnh. Ảnh bảng: hàng số ở đầu; mọi dòng của Đang bàn và Còn lại có ghi chú mới nhất (hoặc «Chưa có ghi
+      chú») kèm ngày, ô mức đổi hai dòng, nút «Cập nhật» đọc trọn và không bị đẩy ra ngoài khung — 1440 năm cột, 768 ghi
+      chú và mức đổi dưới tên KR, 375 danh sách thẻ. Ảnh ngăn: đầu ngăn «2/<n> · theo thứ tự bảng», hai nút ‹ ›, nút Cập
+      nhật. Sáng và tối: tên KR, ghi chú, mức đổi, viền không chìm vào nền. Bàn đo in DUNG cho đếm dòng, nút trong khung,
+      không tràn, đối chứng tràn, không cắt chữ, đếm ngăn và › — ở cả ba khổ. Thiếu ảnh nào → không đạt.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot, observed]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.httb_chu
+    paths:
+      - "apps/app/lib/messages/okr*.ts"
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan/**"
+      - "apps/app/test/hop-tuan-tren-bang.dom.tsx"
+    expected: |
+      Ca «htb-chu»: (a) tám nhãn của AC-9 lấy từ tệp chữ của khu OKR có bản vi và en khác rỗng, khác nhau; dựng bảng ở
+      locale en thì không còn chuỗi tiếng Việt nào trong tám nhãn (quét textContent theo danh sách tám chuỗi vi). (b) mở
+      hộp từ nút trên dòng rồi đóng bằng Huỷ: document.activeElement là chính nút ấy. (c) bấm › trong ngăn: activeElement
+      là [data-nut="kr-ke"]. Kèm chạy messages-guard của apps/app. In «htb-chu: 3/3».
+      CHIEU DO (bản sao): viết cứng «Mức đổi» trong thành phần → đỏ «htb-chu: chuoi cung o locale en: Mức đổi».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.httb_khong_doi_hinh
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+      - "apps/api/test/**"
+    expected: |
+      Quét lớp lúc chạy như HT1 E12: mọi hồ sơ signed-off hay machine-cleared có eval test/script không not-run mà tệp
+      trong lệnh đã giải chứa hop-tuan, kr-sheet, okr-xem hoặc cap-nhat-dong. Chạy trên cây; mục đỏ chạy lại trên
+      worktree origin/onehub: «SAI AC-10» khi nền 0 mà cây khác 0, «DO SAN TREN NEN <slug>#<E>» khi nền đỏ. Mọi tệp thước
+      hay bài kiểm của hồ sơ đã ký bị vòng sửa → «SAI AC-10: SUA THUOC DA KY <tep>».
+      CHIEU DO (bản sao HEAD): thêm một dòng cuối _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs → «SAI AC-10: SUA THUOC DA
+      KY _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs», mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.httb_man_gui
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/nut-cap-nhat-dong.tsx"
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "_acceptance/hop-tuan-tren-bang/rang/man.mjs"
+    expected: |
+      Bàn đo rang/man.mjs --phan gui, phiên đo riêng của cây qua mot-luot.sh, bộ mẫu có ca Họp tuần, đăng nhập trưởng
+      phòng ban P. Đọc bằng SQL n0 = số OkrCheckIn của KR K (dòng một của Đang bàn) và giá trị lần cuối của tuần trước.
+      Bấm [data-nut=cap-nhat-dong-kr] trên dòng K, gõ giá trị mới và ghi chú «htb <run>», Gửi. Đo: (a) SQL n1 = n0 + 1, lần
+      mới mang đúng giá trị và ghi chú; (b) location.pathname và donOkr, xemOkr không đổi trong suốt (MutationObserver và
+      lắng nghe popstate/pushState); (c) trong [data-kr-hop=K] chữ ghi chú là «htb <run>», dòng trên mức đổi bằng chênh
+      giữa giá trị mới và giá trị lần cuối của tuần trước (tính trong bàn đo từ SQL); (d) ô Đã cập nhật của hàng số đổi
+      khi K chưa cập nhật tuần này. In «DUNG <muc>» từng mục; KET LUAN mã 0/1/2.
+      CHIEU DO (--chieu-do, bản sao): nút trên dòng điều hướng sang trang đơn vị → «SAI AC-4: roi bang», mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
