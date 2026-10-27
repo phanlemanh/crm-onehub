@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e24a8c2f895271c82fcf731b4a4cf8065b68be8e
+verified_commit: 37519e7b095caab197e03b4f92c1195052e09342
 human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 2 (17/17 phép kiểm máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E13 Đạt). Ngoài-1 đến 3, 5 đến 15, 17 đến 20 ghi Known limits; Ngoài-4, 16, 21 đến 24 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -306,3 +306,7 @@ sha: 34487982603b686115969b63e6567a390991efb0 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 7 — 2026-10-27, do ghim lại sau gộp onehub 1a151f3f7 cho #560 (chạy lại 4 hồ sơ đỏ vì CLAUDE_PLUGIN_ROOT trỏ nhầm feature-loop)
 run_id: repin-20261027T174805Z-82273
 sha: e24a8c2f895271c82fcf731b4a4cf8065b68be8e · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E13 (E13 không khai paths), E14 · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-27, do ghim lại sau gộp onehub 881f05825 (#576, #577) cho #560
+run_id: repin-20261027T180432Z-57103
+sha: 37519e7b095caab197e03b4f92c1195052e09342 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E13 (E13 không khai paths), E14 · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
