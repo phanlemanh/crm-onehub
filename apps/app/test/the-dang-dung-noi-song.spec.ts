@@ -9,10 +9,9 @@ const DUOI = /\.(ts|tsx)$/;
 
 const TEP_THE = "packages/ui/src/components/the-dang-dung.tsx";
 const TEP_CU = "apps/app/components/agent-builder/the-dang-dung.tsx";
-const CHO_GOI = [
-	"apps/app/components/agent-builder/agent-builder-chat.tsx",
-	"apps/app/app/proto/_modules/cho-tac-nhan-lau/index.tsx",
-];
+const MAN_CHAT = "apps/app/components/agent-builder/agent-builder-chat.tsx";
+const BAN_MAU = "apps/app/app/proto/_modules/cho-tac-nhan-lau/index.tsx";
+const CHO_GOI = [MAN_CHAT, BAN_MAU];
 const NHAP_UI = '"@crm/ui/components/the-dang-dung"';
 
 const DINH_NGHIA = /\b(function|const|let|class)\s+TheDangDung\b/;
@@ -85,7 +84,7 @@ const MA_TRAN: [string, Map<string, string>, string][] = [
 	],
 	[
 		"(b) man chat nhap duong cu",
-		sua(CHO_GOI[0], (nd) => nd.replaceAll(NHAP_UI, '"./the-dang-dung"')),
+		sua(MAN_CHAT, (nd) => nd.replaceAll(NHAP_UI, '"./the-dang-dung"')),
 		"cho goi khong nhap tu @crm/ui/components/the-dang-dung",
 	],
 	[
@@ -117,7 +116,7 @@ const MA_TRAN: [string, Map<string, string>, string][] = [
 	],
 	[
 		"(g) ban mau nhap duong cu",
-		sua(CHO_GOI[1], (nd) =>
+		sua(BAN_MAU, (nd) =>
 			nd.replaceAll(NHAP_UI, '"@/components/agent-builder/the-dang-dung"'),
 		),
 		"cho goi khong nhap tu @crm/ui/components/the-dang-dung",
