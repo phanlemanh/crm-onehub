@@ -29,13 +29,14 @@ export type MucTieuHop = { id: string; tieuDe: string };
 export type PhanBang = "dang-ban" | "con-lai";
 
 export type MucDoi =
-	| { loai: "lan-dau"; den: number }
-	| { loai: "chua-doi"; den: number; ngayTruoc: string }
+	| { loai: "lan-dau"; den: number; donViDo: string }
+	| { loai: "chua-doi"; den: number; donViDo: string; ngayTruoc: string }
 	| {
 			loai: "tang" | "giam";
-			diem: number;
+			chenh: number;
 			tu: number;
 			den: number;
+			donViDo: string;
 			ngayTruoc: string;
 	  };
 
@@ -52,6 +53,8 @@ export const BO_OKR = {
 	tuan: "19/10",
 	dauTuanTruoc: "12/10",
 	vuaGui: "Vừa xong",
+	ketThuc: "31/12",
+	ngayConLai: "65",
 } as const;
 
 export const NHAN_TU_TIN = {

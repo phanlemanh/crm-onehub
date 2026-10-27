@@ -6,9 +6,19 @@ import {
 	AreaSidebarGroup,
 	AreaSidebarItem,
 } from "@crm/ui/components/area-sidebar";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@crm/ui/components/breadcrumb";
 import { Button } from "@crm/ui/components/button";
+import { StatGroup } from "@crm/ui/components/dashboard";
 import { Icon } from "@crm/ui/components/icon";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
+import { StatCard } from "@crm/ui/components/stat-card";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import { type ReactNode, useState } from "react";
 import {
@@ -32,7 +42,7 @@ import {
 import { BangHomNay } from "./hom-nay";
 import { HopCapNhatKr } from "./hop";
 import { NganKrHop, type ViTriNgan } from "./ngan";
-import { themLan } from "./tinh";
+import { daCapNhatTuan, themLan } from "./tinh";
 
 const ST = {
 	bang: "ST-ht2-bang",
@@ -93,7 +103,44 @@ function ThanhBen() {
 	);
 }
 
-function Khung({ moTa, children }: { moTa: string; children: ReactNode }) {
+function HangSo({ bo }: { bo: BoKr }) {
+	const tong = [...bo.dangBan, ...bo.conLai];
+	const thap = tong.filter((kr) => kr.lan[0].tuTin === "thap").length;
+	return (
+		<StatGroup data-hang-so-hop="">
+			<StatCard
+				description={`Tuần ${BO_OKR.tuan}`}
+				label="Đã cập nhật"
+				value={`${daCapNhatTuan(tong)}/${tong.length}`}
+			/>
+			<StatCard
+				description="KR cần bàn tuần này"
+				label="Đáng bàn"
+				value={String(bo.dangBan.length)}
+			/>
+			<StatCard
+				description="theo lần cập nhật mới nhất"
+				label="Tự tin thấp"
+				value={String(thap)}
+			/>
+			<StatCard
+				description={`Kết thúc ${BO_OKR.ketThuc}`}
+				label="Ngày còn lại"
+				value={BO_OKR.ngayConLai}
+			/>
+		</StatGroup>
+	);
+}
+
+function Khung({
+	moTa,
+	bo,
+	children,
+}: {
+	moTa: string;
+	bo: BoKr;
+	children: ReactNode;
+}) {
 	return (
 		<div className="flex min-h-0 flex-col gap-4 md:flex-row">
 			<ThanhBen />
@@ -101,23 +148,39 @@ function Khung({ moTa, children }: { moTa: string; children: ReactNode }) {
 				<PageShell>
 					<PageShellHeader>
 						<PageShellHeading>
-							<PageShellTitle translate="no">{BO_OKR.donVi}</PageShellTitle>
+							<PageShellTitle>Mục tiêu</PageShellTitle>
 							<PageShellDescription>{moTa}</PageShellDescription>
 						</PageShellHeading>
 					</PageShellHeader>
 					<PageShellContent>
 						<div className="flex flex-col gap-6">
-							<Tabs value="hop-tuan">
-								<TabsList aria-label="Phần của bộ OKR" variant="line">
-									<TabsTrigger value="okr">OKR</TabsTrigger>
-									<TabsTrigger aria-current="page" value="hop-tuan">
-										Họp tuần
-									</TabsTrigger>
-									<TabsTrigger value="viec">Việc</TabsTrigger>
-									<TabsTrigger value="so-do">Sơ đồ</TabsTrigger>
-									<TabsTrigger value="cham-diem">Chấm điểm</TabsTrigger>
-								</TabsList>
-							</Tabs>
+							<div className="flex flex-col gap-3 pb-1">
+								<Breadcrumb>
+									<BreadcrumbList>
+										<BreadcrumbItem>
+											<BreadcrumbLink href="#">Bộ OKR</BreadcrumbLink>
+										</BreadcrumbItem>
+										<BreadcrumbSeparator />
+										<BreadcrumbItem>
+											<BreadcrumbPage translate="no">
+												{BO_OKR.donVi}
+											</BreadcrumbPage>
+										</BreadcrumbItem>
+									</BreadcrumbList>
+								</Breadcrumb>
+								<Tabs value="hop-tuan">
+									<TabsList aria-label="Phần của bộ OKR" variant="line">
+										<TabsTrigger value="okr">OKR</TabsTrigger>
+										<TabsTrigger aria-current="page" value="hop-tuan">
+											Họp tuần
+										</TabsTrigger>
+										<TabsTrigger value="viec">Việc</TabsTrigger>
+										<TabsTrigger value="so-do">Sơ đồ</TabsTrigger>
+										<TabsTrigger value="cham-diem">Chấm điểm</TabsTrigger>
+									</TabsList>
+								</Tabs>
+							</div>
+							<HangSo bo={bo} />
 							{children}
 						</div>
 					</PageShellContent>
@@ -201,10 +264,11 @@ function NoiDung({ state }: { state: string }) {
 
 	return (
 		<Khung
+			bo={bo}
 			moTa={
 				homNay
 					? "Hôm nay — bảng Họp tuần đang chạy, để so với đề xuất."
-					: `Bộ OKR ${BO_OKR.chuKy} của đơn vị — họp tuần ngay trên bảng.`
+					: "Mục tiêu và KR của đơn vị trong chu kỳ đang xem."
 			}
 		>
 			{homNay ? (

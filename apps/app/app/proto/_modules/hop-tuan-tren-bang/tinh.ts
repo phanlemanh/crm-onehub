@@ -32,23 +32,28 @@ export function tienDoMoiNhat(kr: KrHop): number {
 	return tienDo(kr, kr.lan[0].giaTri);
 }
 
-export function soSanh(den: number, truoc: number, ngayTruoc: string): MucDoi {
-	const diem = den - truoc;
-	if (diem === 0) return { loai: "chua-doi", den, ngayTruoc };
+export function soSanh(
+	den: number,
+	truoc: number,
+	donViDo: string,
+	ngayTruoc: string,
+): MucDoi {
+	const chenh = den - truoc;
+	if (chenh === 0) return { loai: "chua-doi", den, donViDo, ngayTruoc };
 	return {
-		loai: diem > 0 ? "tang" : "giam",
-		diem: Math.abs(diem),
+		loai: chenh > 0 ? "tang" : "giam",
+		chenh: Math.abs(chenh),
 		tu: truoc,
 		den,
+		donViDo,
 		ngayTruoc,
 	};
 }
 
 export function mucDoi(kr: KrHop): MucDoi {
 	const [moi, truoc] = kr.lan;
-	const den = tienDo(kr, moi.giaTri);
-	if (!truoc) return { loai: "lan-dau", den };
-	return soSanh(den, tienDo(kr, truoc.giaTri), truoc.ngay);
+	if (!truoc) return { loai: "lan-dau", den: moi.giaTri, donViDo: kr.donViDo };
+	return soSanh(moi.giaTri, truoc.giaTri, kr.donViDo, truoc.ngay);
 }
 
 export function ghiChuMoiNhat(kr: KrHop): LanCapNhat | null {

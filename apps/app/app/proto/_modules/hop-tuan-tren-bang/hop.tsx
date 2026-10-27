@@ -35,14 +35,7 @@ import {
 	type TuTin,
 } from "./du-lieu";
 import { OMucDoi } from "./o-dong";
-import {
-	dinhDangSo,
-	docSo,
-	soSanh,
-	soTran,
-	tienDo,
-	tienDoMoiNhat,
-} from "./tinh";
+import { dinhDangSo, docSo, soSanh, soTran } from "./tinh";
 
 const MUC_TU_TIN: TuTin[] = ["cao", "vua", "thap"];
 
@@ -82,7 +75,7 @@ export function HopCapNhatKr({
 	const [ghiChu, setGhiChu] = useState("");
 	const so = docSo(chu);
 	const doi =
-		so === null ? null : soSanh(tienDo(kr, so), tienDoMoiNhat(kr), truoc.ngay);
+		so === null ? null : soSanh(so, kr.lan[0].giaTri, kr.donViDo, truoc.ngay);
 
 	const gui = () => {
 		if (so === null) return;

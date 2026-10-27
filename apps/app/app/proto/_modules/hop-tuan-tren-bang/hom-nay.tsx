@@ -99,15 +99,11 @@ export function BangHomNay({
 			data-bang-hop="hom-nay"
 		>
 			<p className="text-muted-foreground text-xs" data-ghi-chu-mau="">
-				Hôm nay (onehub 49843223e): dưới 1024 px cột ghi chú biến mất, không có
+				Hôm nay (onehub 5084ffe74): dưới 1024 px cột ghi chú biến mất, không có
 				mức đổi, dòng không có nút Cập nhật, và ‹ › trong chi tiết KR chỉ đi
 				trong cùng một mục tiêu.
 			</p>
-			<DauBang
-				dangBan={dangBan.length}
-				tong={[...dangBan, ...conLai]}
-				xepTheo={XEP_THEO_HOM_NAY}
-			/>
+			<DauBang dangBan={dangBan.length} xepTheo={XEP_THEO_HOM_NAY} />
 			<BangHomNayKr ds={dangBan} onMoKr={onMoKr} />
 			<PhanConLai mo={mo} onDoi={setMo} so={conLai.length}>
 				<BangHomNayKr ds={conLai} onMoKr={onMoKr} />

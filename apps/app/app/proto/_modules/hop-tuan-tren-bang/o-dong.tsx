@@ -8,7 +8,7 @@ import { ConfidenceIndicator } from "@crm/ui/components/okr-status";
 import { Progress } from "@crm/ui/components/progress";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { type KrHop, type LyDo, type MucDoi, NHAN_TU_TIN } from "./du-lieu";
-import { ghiChuMoiNhat, tienDoMoiNhat } from "./tinh";
+import { dinhDangSo, ghiChuMoiNhat, soTran, tienDoMoiNhat } from "./tinh";
 
 export function NhanLyDo({ lyDo }: { lyDo: LyDo }) {
 	switch (lyDo.loai) {
@@ -88,15 +88,28 @@ export function GhiChuMoiNhat({ kr }: { kr: KrHop }) {
 const ICON_DOI = { tang: ArrowUp, giam: ArrowDown } as const;
 
 export function chuMucDoi(doi: MucDoi): string {
+	const so = (n: number) => dinhDangSo(n, doi.donViDo);
 	switch (doi.loai) {
 		case "lan-dau":
-			return `Lần đầu cập nhật · ${doi.den}%`;
+			return "Lần đầu cập nhật";
 		case "chua-doi":
-			return `Chưa đổi · ${doi.den}%`;
+			return "Chưa đổi";
 		case "tang":
-			return `+${doi.diem} điểm · ${doi.tu}% → ${doi.den}%`;
+			return `+${so(doi.chenh)}`;
 		case "giam":
-			return `−${doi.diem} điểm · ${doi.tu}% → ${doi.den}%`;
+			return `−${so(doi.chenh)}`;
+	}
+}
+
+export function phuMucDoi(doi: MucDoi): string {
+	switch (doi.loai) {
+		case "lan-dau":
+			return `${dinhDangSo(doi.den, doi.donViDo)} · chưa có lần trước để so`;
+		case "chua-doi":
+			return `${dinhDangSo(doi.den, doi.donViDo)} · so với ${doi.ngayTruoc}`;
+		case "tang":
+		case "giam":
+			return `${soTran(doi.tu)} → ${soTran(doi.den)} · so với ${doi.ngayTruoc}`;
 	}
 }
 
@@ -109,10 +122,8 @@ export function OMucDoi({ doi }: { doi: MucDoi }) {
 				<Icon icon={icon} />
 				{chuMucDoi(doi)}
 			</span>
-			<span className="text-muted-foreground text-xs">
-				{doi.loai === "lan-dau"
-					? "Chưa có lần trước để so"
-					: `so với ${doi.ngayTruoc}`}
+			<span className="text-muted-foreground text-xs tabular-nums">
+				{phuMucDoi(doi)}
 			</span>
 		</span>
 	);

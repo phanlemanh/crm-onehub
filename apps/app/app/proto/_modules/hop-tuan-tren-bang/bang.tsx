@@ -24,9 +24,9 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import type { ReactNode } from "react";
-import { BO_OKR, type KrHop, type PhanBang } from "./du-lieu";
+import type { KrHop, PhanBang } from "./du-lieu";
 import { DongLyDo, GhiChuMoiNhat, OMucDoi, TienDoKr } from "./o-dong";
-import { daCapNhatTuan, mucDoi, tenMucTieu } from "./tinh";
+import { mucDoi, tenMucTieu } from "./tinh";
 
 export type HanhDongBang = {
 	onMoKr: (phan: PhanBang, viTri: number) => void;
@@ -54,9 +54,15 @@ const COT: SimpleTableColumn[] = [
 function TenKr({ kr, onMo }: { kr: KrHop; onMo: () => void }) {
 	return (
 		<span className="flex flex-col items-start gap-0.5">
-			<Button data-mo-kr={kr.id} onClick={onMo} size="xs-wrap" variant="link">
-				<span translate="no">{kr.tieuDe}</span>
-			</Button>
+			<button
+				className="text-start text-sm underline-offset-2 hover:underline focus-visible:underline"
+				data-mo-kr={kr.id}
+				onClick={onMo}
+				translate="no"
+				type="button"
+			>
+				{kr.tieuDe}
+			</button>
 			<span className="text-muted-foreground text-xs">
 				<span translate="no">{tenMucTieu(kr)}</span> · Phụ trách{" "}
 				<span translate="no">{kr.chuTen}</span>
@@ -129,7 +135,7 @@ function BangRong({
 					<SimpleTableCell className="hidden py-3 align-top whitespace-normal lg:table-cell">
 						<GhiChuMoiNhat kr={kr} />
 					</SimpleTableCell>
-					<SimpleTableCell className="hidden py-3 align-top lg:table-cell">
+					<SimpleTableCell className="hidden py-3 align-top whitespace-normal lg:table-cell">
 						<OMucDoi doi={mucDoi(kr)} />
 					</SimpleTableCell>
 					<SimpleTableCell align="right" className="py-3 align-top">
@@ -228,25 +234,14 @@ const XEP_THEO =
 
 export function DauBang({
 	dangBan,
-	tong,
 	xepTheo = XEP_THEO,
 }: {
 	dangBan: number;
-	tong: KrHop[];
 	xepTheo?: string;
 }) {
 	return (
 		<div className="flex flex-col gap-1">
-			<SectionHeading
-				actions={
-					<span className="text-muted-foreground text-xs" data-tom-tat-hop="">
-						Tuần {BO_OKR.tuan} · đã cập nhật {daCapNhatTuan(tong)}/{tong.length}{" "}
-						KR
-					</span>
-				}
-				id="dang-ban"
-				level={2}
-			>
+			<SectionHeading id="dang-ban" level={2}>
 				Đáng bàn tuần này <Badge variant="secondary">{dangBan}</Badge>
 			</SectionHeading>
 			<p className="text-muted-foreground text-xs">{xepTheo}</p>
@@ -273,7 +268,7 @@ export function BangHop({
 			className="flex flex-col gap-4"
 			data-bang-hop="de-xuat"
 		>
-			<DauBang dangBan={dangBan.length} tong={[...dangBan, ...conLai]} />
+			<DauBang dangBan={dangBan.length} />
 			<PhanKr ds={dangBan} hanhDong={hanhDong} phan="dang-ban" />
 			<PhanConLai mo={moConLai} onDoi={onDoiConLai} so={conLai.length}>
 				<PhanKr ds={conLai} hanhDong={hanhDong} phan="con-lai" />
