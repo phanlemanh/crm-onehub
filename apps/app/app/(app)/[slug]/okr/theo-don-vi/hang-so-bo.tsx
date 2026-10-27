@@ -5,6 +5,7 @@ import { HangSoDangTai } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatCard } from "@crm/ui/components/stat-card";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
+import { formatDayShort } from "@crm/ui/lib/format";
 import { homNayVN } from "@crm/validation/ngay-vn";
 import { useQuery } from "@tanstack/react-query";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
@@ -17,11 +18,6 @@ function useChuOSo(): ChuOSo {
 	const locale = useLocale();
 	const m = okrVoKhuMessages(locale).boOkr;
 	const tc = okrToanCanhMessages(locale).toanCanh;
-	const dinh = new Intl.DateTimeFormat(locale === "en" ? "en-US" : "vi-VN", {
-		day: "2-digit",
-		month: "2-digit",
-		timeZone: "UTC",
-	});
 	return {
 		ngayConLai: m.so.ngayConLai,
 		tienDo: m.cot.tienDo,
@@ -33,7 +29,7 @@ function useChuOSo(): ChuOSo {
 		leRa: tc.leRa,
 		chuaCoVach: tc.chuaCoVach,
 		vuaCongBo: tc.vuaCongBo,
-		ngay: (iso) => dinh.format(new Date(`${iso}T00:00:00Z`)),
+		ngay: (iso) => formatDayShort(iso, locale),
 	};
 }
 

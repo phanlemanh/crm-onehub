@@ -1,5 +1,11 @@
-import { afterEach, describe, expect, test } from "bun:test";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { afterEach, describe, expect, mock, test } from "bun:test";
+import {
+	readdirSync,
+	readFileSync,
+	rmSync,
+	statSync,
+	writeFileSync,
+} from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act } from "react";
@@ -189,38 +195,60 @@ function lechChuoi(thuc: Buoc[]): string[] {
 	});
 }
 
+async function chayChuoi() {
+	const thuc: Buoc[] = [];
+	let o = await ve(true);
+	thuc.push(docBuoc(o));
+	await bam(nutDong(o, "A"));
+	await choUrl(() => danhSach("gap")?.join() === "A");
+	thuc.push(docBuoc(o));
+	const nut = nutTatCa(o);
+	const nutInfo = {
+		kieu: nut?.type,
+		ten: nut?.getAttribute("aria-label") ?? nut?.textContent?.trim(),
+	};
+	nut?.focus();
+	const focus = document.activeElement === nut;
+	await bam(nut);
+	await choUrl(() => !url.has("gap"));
+	thuc.push(docBuoc(o));
+	await bam(nutTatCa(o));
+	await choUrl(() => danhSach("gap")?.length === 2);
+	thuc.push(docBuoc(o));
+	const ban = url.toString();
+	act(() => root?.unmount());
+	khung?.remove();
+	o = await ve(true, ban);
+	thuc.push(docBuoc(o));
+	return { thuc, nutInfo, focus };
+}
+
+const DUONG_CHU = "../src/lib/messages";
+const chuGoc = await import(DUONG_CHU);
+
 describe("bco-mo-san-nut", () => {
 	test("bco-mo-san-nut: nut doi nhan theo dong gap, Mo tat ca xoa gap, Gap tat ca ghi moi dong, dung lai voi URL giu nguyen", async () => {
-		const thuc: Buoc[] = [];
-		let o = await ve(true);
-		thuc.push(docBuoc(o));
-		await bam(nutDong(o, "A"));
-		await choUrl(() => danhSach("gap")?.join() === "A");
-		thuc.push(docBuoc(o));
-		const nut = nutTatCa(o);
-		expect(nut?.type).toBe("button");
-		expect(nut?.getAttribute("aria-label") ?? nut?.textContent?.trim()).toBe(
-			"Mở tất cả",
-		);
-		nut?.focus();
-		expect(document.activeElement).toBe(nut);
-		await bam(nut);
-		await choUrl(() => !url.has("gap"));
-		thuc.push(docBuoc(o));
-		await bam(nutTatCa(o));
-		await choUrl(() => danhSach("gap")?.length === 2);
-		thuc.push(docBuoc(o));
-		const ban = url.toString();
-		act(() => root?.unmount());
-		khung?.remove();
-		o = await ve(true, ban);
-		thuc.push(docBuoc(o));
+		const { thuc, nutInfo, focus } = await chayChuoi();
+		expect(nutInfo).toEqual({ kieu: "button", ten: "Mở tất cả" });
+		expect(focus).toBe(true);
 		expect(lechChuoi(thuc)).toEqual([]);
 	});
 
-	test("bco-mo-san-nut-do: nhan nut co dinh thi buoc 2 lech", () => {
-		const coDinh = CHUOI.map((b) => ({ ...b, nhan: "Gập tất cả" }));
-		expect(lechChuoi(coDinh)).toContain("bco-mo-san-nut: buoc 2 lech");
+	test("bco-mo-san-nut-do: ban DataTable co nhan nut co dinh thi buoc 2 lech", async () => {
+		const goc = chuGoc.messages;
+		mock.module(DUONG_CHU, () => ({
+			...chuGoc,
+			messages: (l: Parameters<typeof goc>[0]) => {
+				const m = goc(l);
+				return { ...m, table: { ...m.table, moTatCa: m.table.gapTatCa } };
+			},
+		}));
+		try {
+			const { thuc } = await chayChuoi();
+			expect(lechChuoi(thuc)).toContain("bco-mo-san-nut: buoc 2 lech");
+		} finally {
+			mock.module(DUONG_CHU, () => ({ ...chuGoc }));
+		}
 	});
 });
 
@@ -256,6 +284,16 @@ function lechDanhSach(quet: string[], vietTay: string[]): string[] {
 	];
 }
 
+function quetExpandable(): string[] {
+	return quetTsx(join(GOC_APP, "app"))
+		.concat(quetTsx(join(GOC_APP, "components")))
+		.filter((t) => readFileSync(t, "utf8").includes("expandable={"))
+		.map((t) => relative(GOC_APP, t))
+		.sort();
+}
+
+const TEP_GIA = "app/__bco-tep-gia.tsx";
+
 describe("bco-mac-dinh", () => {
 	test("bco-mac-dinh: khong moSan thi gap mac dinh, bam ghi expand, khong nut tat ca; chi bang mot bo mang moSan", async () => {
 		const o = await ve(undefined);
@@ -268,12 +306,7 @@ describe("bco-mac-dinh", () => {
 		if (danhSach("expand")?.join() !== "A")
 			loi.push("bco-mac-dinh: expand lech");
 		if (url.has("gap")) loi.push("bco-mac-dinh: gap lech");
-		const tep = quetTsx(join(GOC_APP, "app"))
-			.concat(quetTsx(join(GOC_APP, "components")))
-			.filter((t) => readFileSync(t, "utf8").includes("expandable={"))
-			.map((t) => relative(GOC_APP, t))
-			.sort();
-		loi.push(...lechDanhSach(tep, CO_EXPANDABLE));
+		loi.push(...lechDanhSach(quetExpandable(), CO_EXPANDABLE));
 		const moSan = CO_EXPANDABLE.filter((t) =>
 			/moSan:\s*true/.test(readFileSync(join(GOC_APP, t), "utf8")),
 		);
@@ -287,8 +320,16 @@ describe("bco-mac-dinh", () => {
 		if (nutDong(o, "A")?.getAttribute("aria-expanded") !== "false")
 			loi.push("bco-mac-dinh: gap-mac-dinh lech");
 		expect(loi).toEqual(["bco-mac-dinh: gap-mac-dinh lech"]);
-		expect(
-			lechDanhSach([...CO_EXPANDABLE, "app/tep-gia.tsx"], CO_EXPANDABLE),
-		).toEqual(["bco-mac-dinh: app/tep-gia.tsx lech"]);
+		writeFileSync(
+			join(GOC_APP, TEP_GIA),
+			"export const X = <DataTable expandable={{}} />;\n",
+		);
+		try {
+			expect(lechDanhSach(quetExpandable(), CO_EXPANDABLE)).toEqual([
+				`bco-mac-dinh: ${TEP_GIA} lech`,
+			]);
+		} finally {
+			rmSync(join(GOC_APP, TEP_GIA), { force: true });
+		}
 	});
 });

@@ -1,5 +1,15 @@
-import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
+import {
+	afterEach,
+	describe,
+	expect,
+	mock,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { homNayVN } from "@crm/validation/ngay-vn";
+import { useQuery } from "@tanstack/react-query";
+import { useQueryState } from "nuqs";
+import { Component, type ComponentProps, type ReactNode } from "react";
 import {
 	type ChuOSo,
 	type KhungChuKy,
@@ -416,35 +426,115 @@ function lechThaoTac(
 	});
 }
 
+function datBoThe() {
+	datKho((k) => SO_THEO.get(k) as SoBoOutput);
+	kho.doc.set("okr.cycles", () => KY_CHAM);
+	for (const ten of [
+		"okr.hopTuan",
+		"okr.moHopTuan",
+		"okr.viecCuaBo",
+		"okr.cayCanChinh",
+		"okr.bangCham",
+	])
+		kho.doc.set(ten, () => TREO());
+	kho.doc.set("okr.danhSach", (vao) => {
+		const loc = vao?.loc as { phuTrach?: string[] } | undefined;
+		const rows = [
+			mucTieu("m1", { expected: 95 }),
+			mucTieu("m2", {
+				expected: 5,
+				owner: { ...HUNG, id: "khac", name: "Người khác" },
+			}),
+			mucTieu("m3", { expected: 5 }),
+		].filter(
+			(m) =>
+				(loc?.phuTrach ?? []).length === 0 ||
+				loc?.phuTrach?.includes(m.owner.id),
+		);
+		return danhSachTu(rows, []);
+	});
+}
+
+async function docSauThaoTac() {
+	await moBo("pb:P1");
+	const goc = docO().map((o) => o.giaTri);
+	const dongGoc = soDongMucTieu();
+	const sau: {
+		ca: string;
+		giaTri: string[];
+		dong: number;
+		dongGoc: number;
+	}[] = [];
+	for (const [ca, them] of [
+		["can-ban", "&locNhanhOkr=can-ban"],
+		["phu-trach", `&phuTrachOkr=${HUNG.id}`],
+		["sap", "&sapOkr=tien-do&chieuOkr=desc"],
+	] as const) {
+		document.body.innerHTML = "";
+		await moBo("pb:P1", them);
+		await nhip(5);
+		sau.push({
+			ca,
+			giaTri: docO().map((o) => o.giaTri),
+			dong: soDongMucTieu(),
+			dongGoc,
+		});
+	}
+	document.body.innerHTML = "";
+	return { goc, sau };
+}
+
+const { useTRPC } = await import("@/lib/trpc/client");
+const DUONG_HANG_SO = "@/app/(app)/[slug]/okr/theo-don-vi/hang-so-bo";
+const hangSoGoc = await import(DUONG_HANG_SO);
+const HangSoBoThat = hangSoGoc.HangSoBo;
+type PropHangSo = ComponentProps<typeof HangSoBoThat>;
+
+async function voiHangSo(
+	thay: (p: PropHangSo) => ReturnType<typeof HangSoBoThat>,
+	lam: () => Promise<void>,
+) {
+	mock.module(DUONG_HANG_SO, () => ({ ...hangSoGoc, HangSoBo: thay }));
+	try {
+		await lam();
+	} finally {
+		mock.module(DUONG_HANG_SO, () => ({ ...hangSoGoc }));
+	}
+}
+
+function HangSoBoTheoLoc(p: PropHangSo) {
+	const [loc] = useQueryState("locNhanhOkr");
+	return (
+		<HangSoBoThat
+			{...p}
+			unit={{ ...p.unit, ...(loc ? { loc } : {}) } as PropHangSo["unit"]}
+		/>
+	);
+}
+
+class LoiToanThe extends Component<{ children: ReactNode }, { loi: boolean }> {
+	state = { loi: false };
+	static getDerivedStateFromError() {
+		return { loi: true };
+	}
+	render() {
+		return this.state.loi ? <div data-loi-toan-the="" /> : this.props.children;
+	}
+}
+
+function HangSoBoRoi(p: PropHangSo) {
+	const trpc = useTRPC();
+	const kq = useQuery(
+		trpc.okr.soBo.queryOptions({ cycleId: p.cycleId, unit: p.unit }),
+	);
+	if (kq.isError) throw kq.error;
+	return <HangSoBoThat {...p} />;
+}
+
 describe("bco-the", () => {
 	test("bco-the: hang bon o chi o the OKR, khong doi khi loc hay sap, don vi khong thay khong co hang", async () => {
 		setSystemTime(new Date("2026-10-25T03:00:00Z"));
-		datKho((k) => SO_THEO.get(k) as SoBoOutput);
-		kho.doc.set("okr.cycles", () => KY_CHAM);
-		for (const ten of [
-			"okr.hopTuan",
-			"okr.moHopTuan",
-			"okr.viecCuaBo",
-			"okr.cayCanChinh",
-			"okr.bangCham",
-		])
-			kho.doc.set(ten, () => TREO());
-		kho.doc.set("okr.danhSach", (vao) => {
-			const loc = vao?.loc as { phuTrach?: string[] } | undefined;
-			const rows = [
-				mucTieu("m1", { expected: 95 }),
-				mucTieu("m2", {
-					expected: 5,
-					owner: { ...HUNG, id: "khac", name: "Người khác" },
-				}),
-				mucTieu("m3", { expected: 5 }),
-			].filter(
-				(m) =>
-					(loc?.phuTrach ?? []).length === 0 ||
-					loc?.phuTrach?.includes(m.owner.id),
-			);
-			return danhSachTu(rows, []);
-		});
+		datBoThe();
 		const loi: string[] = [];
 		for (const the of THE) {
 			const them = the === "danh-sach" ? "" : `&xemOkr=${the}`;
@@ -454,44 +544,35 @@ describe("bco-the", () => {
 			if (co !== THE_CO_HANG[the]) loi.push(`bco-the: ${the} lech`);
 			document.body.innerHTML = "";
 		}
-		await moBo("pb:P1");
-		const goc = docO().map((o) => o.giaTri);
-		const dongGoc = soDongMucTieu();
-		const sau: {
-			ca: string;
-			giaTri: string[];
-			dong: number;
-			dongGoc: number;
-		}[] = [];
-		for (const [ca, them] of [
-			["can-ban", "&locNhanhOkr=can-ban"],
-			["phu-trach", `&phuTrachOkr=${HUNG.id}`],
-			["sap", "&sapOkr=tien-do&chieuOkr=desc"],
-		] as const) {
-			document.body.innerHTML = "";
-			await moBo("pb:P1", them);
-			await nhip(5);
-			sau.push({
-				ca,
-				giaTri: docO().map((o) => o.giaTri),
-				dong: soDongMucTieu(),
-				dongGoc,
-			});
-		}
+		const { goc, sau } = await docSauThaoTac();
 		loi.push(...lechThaoTac(goc, sau));
 		document.body.innerHTML = "";
 		await dung(<TheoDonVi />, "?donOkr=pb:KHONG-CO");
 		await nhip(20);
+		if (
+			document.body.querySelector("[data-trang-thai='ST-donvi-khongthay']") ===
+			null
+		)
+			loi.push("bco-the: khong-thay-chua-dung lech");
 		if (hangSo() !== null) loi.push("bco-the: khong-thay lech");
 		expect(loi).toEqual([]);
 	});
 
-	test("bco-the-do: ban dung o tu dong da loc thi can-ban lech", () => {
-		const goc = ["68", "46%", "9/14", "3"];
-		const tuDongLoc = [
-			{ ca: "can-ban", giaTri: ["68", "40%", "2/4", "0"], dong: 1, dongGoc: 3 },
-		];
-		expect(lechThaoTac(goc, tuDongLoc)).toEqual(["bco-the: can-ban lech"]);
+	test("bco-the-do: ban HangSoBo dua bo loc vao okr.soBo thi so doi theo loc va can-ban lech", async () => {
+		setSystemTime(new Date("2026-10-25T03:00:00Z"));
+		datBoThe();
+		kho.doc.set("okr.soBo", (vao) => {
+			const u = vao?.unit as { loc?: string } | undefined;
+			return u?.loc
+				? so(40, 27, 2, 4, 0)
+				: (SO_THEO.get("pb:P1") as SoBoOutput);
+		});
+		let loi: string[] = [];
+		await voiHangSo(HangSoBoTheoLoc, async () => {
+			const { goc, sau } = await docSauThaoTac();
+			loi = lechThaoTac(goc, sau);
+		});
+		expect(loi).toContain("bco-the: can-ban lech");
 	});
 });
 
@@ -549,15 +630,22 @@ describe("bco-tai", () => {
 		expect(loi).toEqual([]);
 	});
 
-	test("bco-tai-do: loi so roi xuong Loi toan the (bang mat) thi bang-van-hien lech", async () => {
+	test("bco-tai-do: ban de loi okr.soBo nem ra ca the thi bang mat va bang-van-hien lech", async () => {
+		setSystemTime(new Date("2026-10-25T03:00:00Z"));
 		datKho(() => {
 			throw new Error("may chu khong tra loi");
 		});
-		kho.doc.set("okr.danhSach", () => {
-			throw new Error("may chu khong tra loi");
+		let loi: string[] = [];
+		await voiHangSo(HangSoBoRoi, async () => {
+			await dung(
+				<LoiToanThe>
+					<TheoDonVi />
+				</LoiToanThe>,
+				"?donOkr=pb:P1",
+			);
+			await nhip(20);
+			loi = lechTai("loi");
 		});
-		await dung(<TheoDonVi />, "?donOkr=pb:P1");
-		await nhip(20);
-		expect(lechTai("loi")).toContain("bco-tai: bang-van-hien lech");
+		expect(loi).toContain("bco-tai: bang-van-hien lech");
 	});
 });
