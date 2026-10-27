@@ -76,6 +76,7 @@ export const SEARCH_PARAM = {
 		thuMucTieu: "thuMucTieu",
 		gopY: "gopYOkr",
 		phamViBo: "phamViBo",
+		trangCapNhat: "trangCapNhat",
 		neoGopY: "neoGopY",
 		neoGopYKr: "neoGopYKr",
 		cuocSoan: "cuocSoan",

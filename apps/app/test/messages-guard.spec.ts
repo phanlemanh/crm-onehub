@@ -477,6 +477,16 @@ const GHIM = {
 	...GHIM_OKR_GOP_Y,
 	...GHIM_OKR_SOAN,
 	...GHIM_LO_TRINH,
+	"okr-cap-nhat-gan-day:chuaGui": ["Chưa gửi được: 1", "Chưa gửi được: 12"],
+	"okr-cap-nhat-gan-day:oTraLoi": [
+		"Trả lời lần cập nhật của 1",
+		"Trả lời lần cập nhật của 12",
+	],
+	"okr-cap-nhat-gan-day:rongLoc.tieuDe": [
+		"Chưa có lần cập nhật nào ở «1»",
+		"Chưa có lần cập nhật nào ở «12»",
+	],
+	"okr-cap-nhat-gan-day:thayCho": ["cập nhật thay 1", "cập nhật thay 12"],
 	"okr-vo-khu:boOkr.rongLoc.tieuDe": [
 		"Không có bộ OKR nào trong «1»",
 		"Không có bộ OKR nào trong «12»",

@@ -46,6 +46,7 @@ import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../
 import { datHienThiInput, traLaiInput, chuyenDonViInput, moCoiInput } from "@crm/validation/okr-hien-thi";
 import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, danhSachBoOutput, viecCuaBoInput, viecCuaBoOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, quanhMucTieuInput, quanhMucTieuOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moiKrInput, moiKrOutput } from "../okr/okr-moi-kr.contracts";
+import { capNhatGanDayInput, capNhatGanDayOutput } from "../okr/okr-cap-nhat-gan-day.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
 import { canhKrInput, canhKrOutput, idOutput, goViecInput, goBangChungInput, goGhiNhanInput } from "../okr/okr-canh-kr.contracts";
@@ -1191,6 +1192,10 @@ const appRouter = t.router({
     moiKr: publicProcedure
       .input(moiKrInput)
       .output(moiKrOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    capNhatGanDay: publicProcedure
+      .input(capNhatGanDayInput)
+      .output(capNhatGanDayOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     cayCanChinh: publicProcedure
       .input(cycleOnlyInput)

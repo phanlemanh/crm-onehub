@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c
+verified_commit: d4f2c47346d94525f30ca93f8632a1e94887c0b6
 human_signoff: Phan Le Manh 2026-10-21
 ---
 
@@ -240,3 +240,7 @@ sha: af18f068e26b7d35589459e8062337afac57e12c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-26, do hoá cũ do gộp origin/onehub 5ff537e4c (#571 KDH) vào VK6; thước E15 nhận cmd viết thẳng (V3-55 a) (lượt 1/2)
 run_id: repin-20261026T153905Z-92888
 sha: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-27, do hoá cũ do gộp VK12 cap-nhat-gan-day sau onehub 518f05802 (lượt 2, sau khi vẽ lại LO-TRINH.html)
+run_id: repin-20261027T002451Z-69475
+sha: d4f2c47346d94525f30ca93f8632a1e94887c0b6 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

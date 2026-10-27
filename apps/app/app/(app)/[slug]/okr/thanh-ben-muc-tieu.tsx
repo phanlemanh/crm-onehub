@@ -53,6 +53,7 @@ function useNhan() {
 	>;
 	const muc = {
 		"cua-toi": t.muc.cuaToi,
+		"cap-nhat-gan-day": t.muc.capNhatGanDay,
 		"bo-okr": t.muc.boOkr,
 		"lay-y-kien": t.muc.layYKien,
 		"suc-khoe": t.muc.sucKhoe,
