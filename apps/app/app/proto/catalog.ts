@@ -25,7 +25,7 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 			{
 				id: "ST-ht2-ngan-kr",
-				nhan: "Chi tiết KR — 3/9 theo thứ tự đang bàn, ‹ › sang dòng kề",
+				nhan: "Chi tiết KR — 3/14 theo thứ tự bảng, ‹ › sang dòng kề",
 			},
 			{
 				id: "ST-ht2-hom-nay",

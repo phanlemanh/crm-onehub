@@ -37,7 +37,6 @@ import {
 	HOP,
 	type KrHop,
 	type LanCapNhat,
-	type PhanBang,
 } from "./du-lieu";
 import { BangHomNay } from "./hom-nay";
 import { HopCapNhatKr } from "./hop";
@@ -52,16 +51,13 @@ const ST = {
 	homNay: "ST-ht2-hom-nay",
 } as const;
 
-const THU_TU = {
-	"dang-ban": "theo thứ tự đang bàn",
-	"con-lai": "theo thứ tự còn lại",
-} as const satisfies Record<PhanBang, string>;
+const THU_TU = "theo thứ tự bảng";
 
 const THU_TU_HOM_NAY = "trong cùng mục tiêu";
 
 type MoNen =
 	| { loai: "bang" }
-	| { loai: "ngan"; phan: PhanBang; viTri: number }
+	| { loai: "ngan"; viTri: number }
 	| { loai: "ngan-hom-nay"; krId: string };
 
 type Mo = MoNen | { loai: "hop"; krId: string; ve: MoNen };
@@ -76,7 +72,7 @@ function moBanDau(state: string): Mo {
 		return { loai: "hop", krId: kr?.id ?? "", ve: BANG };
 	}
 	if (state === ST.nganKr) {
-		return { loai: "ngan", phan: "dang-ban", viTri: HOP.viTriNganMoSan };
+		return { loai: "ngan", viTri: HOP.viTriNganMoSan };
 	}
 	return BANG;
 }
@@ -201,13 +197,13 @@ function NganTheoMo({
 }) {
 	if (mo.loai === "bang") return null;
 	if (mo.loai === "ngan") {
-		const ds = mo.phan === "dang-ban" ? bo.dangBan : bo.conLai;
+		const ds = [...bo.dangBan, ...bo.conLai];
 		const kr = ds[mo.viTri];
 		if (!kr) return null;
 		const viTri: ViTriNgan = {
 			viTri: mo.viTri,
 			tong: ds.length,
-			thuTu: THU_TU[mo.phan],
+			thuTu: THU_TU,
 		};
 		return (
 			<NganKrHop
@@ -282,7 +278,11 @@ function NoiDung({ state }: { state: string }) {
 					conLai={bo.conLai}
 					dangBan={bo.dangBan}
 					hanhDong={{
-						onMoKr: (phan, viTri) => setMo({ loai: "ngan", phan, viTri }),
+						onMoKr: (phan, viTri) =>
+							setMo({
+								loai: "ngan",
+								viTri: phan === "dang-ban" ? viTri : bo.dangBan.length + viTri,
+							}),
 						onCapNhat: (krId) => setMo({ loai: "hop", krId, ve: BANG }),
 					}}
 					moConLai={moConLai}

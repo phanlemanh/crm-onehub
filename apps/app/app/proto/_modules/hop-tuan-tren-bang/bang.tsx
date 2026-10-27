@@ -230,7 +230,7 @@ export function PhanConLai({
 }
 
 const XEP_THEO =
-	"Xếp theo: tự tin tụt, rồi KR im lâu nhất, rồi ghi chú mới. ‹ › trong chi tiết KR đi đúng thứ tự này.";
+	"Xếp theo: tự tin tụt, rồi KR im lâu nhất, rồi ghi chú mới. ‹ › trong chi tiết KR đi đúng thứ tự này, rồi sang phần Còn lại.";
 
 export function DauBang({
 	dangBan,
