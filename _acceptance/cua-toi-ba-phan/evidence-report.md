@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: be571a245ff6d0b130a5dc5e7e47ce553faf9623
+verified_commit: 51e94386d358c3074f3c3bf05f74653c77ee0ab9
 human_signoff: manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 vòng 2, wf_6a944dda-fd4, engine feature-loop 2.30.0). E17 Đạt; Ngoài-1, 3, 5, 10–17, 19, 20 ghi Known limits; Ngoài-2, 4, 6, 7, 8, 18 chấp nhận, không sửa (4, 7, 8 đã sửa qua AC-14); Ngoài-9 mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -334,3 +334,7 @@ sha: f32bc5acf7b14fa89db8790d728f56339302bf5a · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-27, do gộp onehub d62a4e667 (#567 VK6) vào nhánh HT1; vẽ lại LO-TRINH.html
 run_id: repin-20261027T042904Z-39457
 sha: be571a245ff6d0b130a5dc5e7e47ce553faf9623 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15, E17 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-27, do ghim lại sau gộp onehub f14f591eb (#575)
+run_id: repin-20261027T083411Z-32432
+sha: 51e94386d358c3074f3c3bf05f74653c77ee0ab9 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15, E17 · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
