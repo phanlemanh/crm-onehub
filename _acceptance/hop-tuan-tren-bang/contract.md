@@ -5,7 +5,7 @@ slug: hop-tuan-tren-bang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-10-27-hop-tuan-tren-bang-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-27
