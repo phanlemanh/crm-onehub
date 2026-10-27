@@ -663,6 +663,14 @@ async function bamIm(trang, sel) {
 	return true;
 }
 
+async function moQuaUrl(trang, mt) {
+	await trang.bringToFront();
+	const u = new URL(trang.url());
+	u.searchParams.set("record", `objective:${mt}`);
+	await trang.goto(u.href, { waitUntil: "load" });
+	return true;
+}
+
 async function bam(trang, sel) {
 	await trang.bringToFront();
 	return bamEl(
@@ -878,7 +886,7 @@ async function moSheet(trang, mt, nhan) {
 		))
 	)
 		return false;
-	await bam(trang, `[data-mo-muc-tieu='${mt}']`);
+	await moQuaUrl(trang, mt);
 	return doi(
 		trang,
 		`${nhan}: khung muc tieu ${mt} tai xong`,
@@ -978,7 +986,7 @@ async function tienDeGioiHan(t) {
 		))
 	)
 		return `khong thay nut mo G sau ${DO.choMs}ms`;
-	await bamIm(t, `[data-mo-muc-tieu='${K.G}']`);
+	await moQuaUrl(t, K.G);
 	if (
 		!(await thayNgay(
 			t,
@@ -1448,7 +1456,7 @@ async function buocTrangThaiLoi() {
 		},
 	});
 	await coMat(t, `[data-mo-muc-tieu='${K.G}']`, `${nhom}: nut mo G`);
-	await bam(t, `[data-mo-muc-tieu='${K.G}']`);
+	await moQuaUrl(t, K.G);
 	await doi(
 		t,
 		`${nhom}: chan okr.objective -> Empty loi co «${CHU.loiTai.thuLai}»`,

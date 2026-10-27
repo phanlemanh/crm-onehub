@@ -561,7 +561,7 @@ const CA = {
 			"chua cap nhat",
 		);
 		expect(chu(trangThai("ST-tomtat-chua-cap-nhat"))).toContain(
-			"Tuần này chưa có Cập nhật tuần nào",
+			"Tuần này chưa có lần cập nhật nào",
 		);
 		expect(khoi()?.querySelector("li[data-cau]")).toBeNull();
 	},

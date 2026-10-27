@@ -186,6 +186,19 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 			</Button>
 		);
 	}
+	const krId = "keyResultId" in viec ? viec.keyResultId : undefined;
+	if (krId)
+		return (
+			<Button
+				size="sm"
+				variant="outline"
+				data-mo-kr={krId}
+				data-mo-muc-tieu={viec.objectiveId}
+				onClick={() => openRecord({ kind: "kr", id: krId })}
+			>
+				{m.moKr}
+			</Button>
+		);
 	return (
 		<Button
 			size="sm"

@@ -911,7 +911,7 @@ describe("mo-coi", () => {
 		}).toEqual({
 			url: "pb:pb-cu",
 			muc: ["o9"],
-			tu: "Từ «Kho vận Củ Chi». Mục tiêu giữ KR, cập nhật tuần, chỗ góp vào, người xem và vết.",
+			tu: "Từ «Kho vận Củ Chi». Mục tiêu giữ KR, lần cập nhật, chỗ góp vào, người xem và vết.",
 		});
 	});
 

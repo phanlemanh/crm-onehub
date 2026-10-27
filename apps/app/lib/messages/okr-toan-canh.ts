@@ -35,7 +35,7 @@ const vi = {
 			"Không KR nào tụt mức tự tin, không KR nào im lâu, không có ghi chú mới từ đầu tuần trước.",
 		tuanDau: "Chưa có lần cập nhật nào để bàn",
 		tuanDauMoTa:
-			"Bảng họp tuần xếp KR theo mức tự tin tụt, KR im và ghi chú mới — từ sau lần cập nhật tuần đầu tiên.",
+			"Bảng họp tuần xếp KR theo mức tự tin tụt, KR im và ghi chú mới — từ sau lần cập nhật đầu tiên.",
 		loi: "Không dựng được bảng họp tuần. OKR của đơn vị vẫn xem được ở cách xem Danh sách.",
 	},
 	toanCanh: {
@@ -63,7 +63,7 @@ const vi = {
 		banGhiChu: (n: string) => `${n} KR có ghi chú mới`,
 		heatmap: "Mức tự tin theo tuần",
 		heatmapMoTa:
-			"Mỗi ô là phần trăm KR báo tự tin cao trong số KR có cập nhật tuần đó.",
+			"Mỗi ô là phần trăm KR báo tự tin cao trong số KR có lần cập nhật trong tuần đó.",
 		suKhoe: "Sức khoẻ chương trình",
 		tuanDau: "Chưa có số để so",
 		tuanDauMoTa:
@@ -97,9 +97,9 @@ const vi = {
 			"Thường xong trong vài phút. Khối tự hiện khi có câu, không cần tải lại.",
 		quaHanMoTa: "Vẫn chưa xong sau hai phút. Tải lại để xem lần nữa.",
 		taiLai: "Tải lại",
-		chuaCapNhat: "Tuần này chưa có Cập nhật tuần nào",
+		chuaCapNhat: "Tuần này chưa có lần cập nhật nào",
 		chuaCapNhatMoTa:
-			"Kara tóm tắt sáng hôm sau ngày cập nhật, khi phòng có ít nhất một lần Cập nhật tuần.",
+			"Kara tóm tắt sáng hôm sau ngày cập nhật, khi phòng có ít nhất một lần cập nhật.",
 		locHet: "Không có câu nào bạn xem được trong tóm tắt tuần này",
 		locHetMoTa:
 			"Mọi câu đều dựa vào Mục tiêu bạn không xem được. Bảng đáng bàn bên dưới vẫn đủ các KR bạn xem được.",
@@ -155,7 +155,7 @@ const vi = {
 		boNgan: (n: string) => `bỏ ${n}`,
 		rong: "Tuần này chưa có tóm tắt nào",
 		rongMoTa:
-			"Việc tóm tắt chạy lúc 06:00 sáng hôm sau ngày cập nhật của chu kỳ, cho phòng ban ở nấc bật hay chế độ ẩn có ít nhất một lần Cập nhật tuần.",
+			"Việc tóm tắt chạy lúc 06:00 sáng hôm sau ngày cập nhật của chu kỳ, cho phòng ban ở nấc bật hay chế độ ẩn có ít nhất một lần cập nhật.",
 		loi: "Không tải được tóm tắt tuần của các phòng ban.",
 		tuanNgan: (ngay: string) => `tuần ${ngay}`,
 		boTrenTong: (bo: string, tong: string) => `bỏ ${bo}/${tong} câu`,
@@ -285,7 +285,7 @@ const en: OkrToanCanhMessages = {
 			"No KR dropped in confidence, none has gone silent, and there are no new notes since the start of last week.",
 		tuanDau: "No updates to discuss yet",
 		tuanDauMoTa:
-			"The meeting board sorts KRs by dropped confidence, silence and new notes — starting after the first weekly update.",
+			"The meeting board sorts KRs by dropped confidence, silence and new notes — starting after the first update.",
 		loi: "Couldn't build the meeting board. The unit's OKRs are still in the List view.",
 	},
 	toanCanh: {
@@ -348,9 +348,9 @@ const en: OkrToanCanhMessages = {
 			"This usually takes a few minutes. The block fills in by itself — no need to reload.",
 		quaHanMoTa: "Still not done after two minutes. Reload to check again.",
 		taiLai: "Reload",
-		chuaCapNhat: "No weekly updates yet this week",
+		chuaCapNhat: "No updates yet this week",
 		chuaCapNhatMoTa:
-			"Kara summarises the morning after the update day, once the department has at least one weekly update.",
+			"Kara summarises the morning after the update day, once the department has at least one update.",
 		locHet: "There are no sentences you can see in this week's summary",
 		locHetMoTa:
 			"Every sentence rests on objectives you can't see. The table below still has every KR you can see.",
@@ -408,7 +408,7 @@ const en: OkrToanCanhMessages = {
 		boNgan: (n: string) => `${n} dropped`,
 		rong: "No summaries this week yet",
 		rongMoTa:
-			"The summary job runs at 06:00 the morning after the cycle's update day, for departments that are on or in hidden mode and have at least one weekly update.",
+			"The summary job runs at 06:00 the morning after the cycle's update day, for departments that are on or in hidden mode and have at least one update.",
 		loi: "Couldn't load the departments' weekly summaries.",
 		tuanNgan: (ngay: string) => `week of ${ngay}`,
 		boTrenTong: (bo: string, tong: string) =>

@@ -836,7 +836,6 @@ async function buocE11() {
 		`E11 buoc 2: URL phai co donOkr=${pb("pb1")}, thay ${thamSo(t, "donOkr")}`,
 		thamSo(t, "donOkr") === pb("pb1"),
 	);
-	await bamSel(t, `[data-mo-dong='${OKR.o3.id}']`);
 	await hienSel(t, `[data-kr='${OKR.o3.kr[0]}']`);
 	// AC-14 loi-hua-moi: trang-don-vi-mot-bang AC-3 — KR la dong con cung 4 cot cua bang don vi, khong con bang KR rieng trong the.
 	const cot = await t.evaluate(

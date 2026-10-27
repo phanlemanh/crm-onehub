@@ -140,6 +140,8 @@ evals:
     executor: script
     layer: backend-effect
     cmd: PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} CHI=E13,E14 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs]
     expected: "Cùng lần chạy với E13: sau khi C tới màn cập nhật qua thẻ, script đọc db.okrCheckInSession mới nhất của C (SQL thẳng DATABASE_URL của cây) → entry = viec-cua-toi. CHIỀU ĐỎ: màn bỏ đọc ?tu= → entry = tab, bài đỏ in entry."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
