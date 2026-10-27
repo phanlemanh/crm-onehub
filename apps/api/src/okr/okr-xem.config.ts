@@ -12,6 +12,4 @@ export const OKR_XEM = {
 	},
 } as const;
 
-export const OKR_CAM_XUC = {
-	tenToiDa: 3,
-} as const;
+export { OKR_CAM_XUC } from "@crm/validation/okr-cam-xuc";

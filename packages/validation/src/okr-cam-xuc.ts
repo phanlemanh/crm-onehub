@@ -8,6 +8,10 @@ export const LOAI_CAM_XUC = [
 ] as const;
 export type LoaiCamXuc = (typeof LOAI_CAM_XUC)[number];
 
+export const OKR_CAM_XUC = {
+	tenToiDa: 3,
+} as const;
+
 const ma = z.string().trim().min(1).max(120);
 
 export const thaCamXucInput = z
