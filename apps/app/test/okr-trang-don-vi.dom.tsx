@@ -1031,9 +1031,9 @@ describe("dvb-chon-don-vi", () => {
 
 describe("dvb-hang-cong-cu", () => {
 	const PHA = ["dang-chay", "cham-diem"] as const;
-	const XEM = ["danh-sach", "cay", "hop-tuan", "cham"] as const;
+	const XEM = ["danh-sach", "hop-tuan", "cham"] as const;
 	for (const pha of PHA) {
-		test(`trang ${pha}: 4 cach xem cung mot hang cong cu, cung lop khung, khong nut tao/nhap/soan`, async () => {
+		test(`trang ${pha}: 3 cach xem cung mot hang cong cu, cung lop khung, khong nut tao/nhap/soan`, async () => {
 			cycles = { cycles: [{ ...QUY, phase: pha }], currentId: QUY.id };
 			datDon("pb:P1", [mucTieu("M1", 1)]);
 			let lopDanhSach = "";
@@ -1820,7 +1820,7 @@ describe("dvb-giu-xem", () => {
 	test("20 lien ket the: tap tham so = giao {kyOkr, donOkr, xemOkr} voi duong dan dang dung", async () => {
 		const DUONG_DAN = [
 			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan",
-			"?kyOkr=q4&xemOkr=cay",
+			"?kyOkr=q4&xemOkr=hop-tuan",
 			"?xemOkr=cham",
 			"?kyOkr=q4&donOkr=pb:P2",
 			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan&phuTrachOkr=U2&expand=M1",

@@ -329,7 +329,7 @@ function cham(tepDau: string, gocApp: string, gocUi: string): string[] | null {
 const GOC_UI = join(GOC_KHO, "packages/ui/src");
 
 describe("dh4-cach-xem", () => {
-	test("thẻ Theo đơn vị có Bảng · Sơ đồ, mặc định Bảng, khung vẽ chỉ nạp động", async () => {
+	test("Sức khoẻ không còn cách xem Sơ đồ; đồ thị nhập tĩnh từ Sức khoẻ không chạm khung vẽ", async () => {
 		const { ToanCanh } = await import(
 			"@/app/(app)/[slug]/okr/toan-canh/toan-canh"
 		);
@@ -365,30 +365,21 @@ describe("dh4-cach-xem", () => {
 			],
 		});
 		tcDuLieu = tc;
-		await dung(<ToanCanh />);
-		const nhom = document.body.querySelector(
-			'[data-cach-xem-toan-canh] [data-view-switch="nut"]',
-		);
-		const muc = [...(nhom?.querySelectorAll('[role="radio"]') ?? [])].map(
-			(e) => e.textContent,
-		);
-		expect(muc).toEqual([vi.bang, vi.soDo]);
-		expect(nhom?.querySelector('[data-state="on"]')?.textContent).toBe(vi.bang);
-		expect(document.body.querySelector("[data-so-do]")).toBeNull();
-		for (const ts of ["xemToanCanh=so-do", "xemToanCanh=la"]) {
+		for (const ts of ["", "xemToanCanh=so-do", "xemToanCanh=la"]) {
 			for (const r of dangMo) act(() => r.unmount());
 			dangMo = [];
 			document.body.innerHTML = "";
 			await dung(<ToanCanh />, ts);
-			const coSoDo = document.body.querySelector("[data-so-do]") !== null;
-			expect({ ts, coSoDo }).toEqual({ ts, coSoDo: ts.endsWith("so-do") });
+			expect({
+				ts,
+				cachXem: document.body.querySelector("[data-cach-xem-toan-canh]"),
+				soDo: document.body.querySelector("[data-so-do]"),
+			}).toEqual({ ts, cachXem: null, soDo: null });
 		}
 
 		expect(cham(TEP_TOAN_CANH, GOC_APP, GOC_UI)).toBeNull();
 		expect(cham(TEP_SO_DO, GOC_APP, GOC_UI)).not.toBeNull();
-		expect(readFileSync(TEP_TOAN_CANH, "utf8")).toMatch(
-			/dynamic\(\s*\(\)\s*=>\s*import\(["']\.\/so-do-don-vi["']\)/,
-		);
+		expect(readFileSync(TEP_TOAN_CANH, "utf8")).not.toMatch(/so-do-don-vi/);
 		const tam = mkdtempSync(join(tmpdir(), "dh4-cach-xem-"));
 		const appTam = join(tam, "app");
 		const uiTam = join(tam, "ui");
