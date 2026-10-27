@@ -814,8 +814,14 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 	const mtQ = useQuery(
 		trpc.okr.objective.queryOptions(mtId ? { id: mtId } : skipToken),
 	);
-	const capNhat = useCapNhatKr();
 	const thuTu = useThuTuHopTuan(keyResultId);
+	const qc = useQueryClient();
+	const capNhat = useCapNhatKr({
+		onDaGui: () => {
+			if (thuTu)
+				void qc.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() });
+		},
+	});
 	const ghi = useGhiCanh(keyResultId, objectiveId);
 	const duoiMotMinh = stack.length === 1;
 	const loiNguoiLam = (loi: Error, vao: ViecVao) =>

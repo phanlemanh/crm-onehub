@@ -45,7 +45,7 @@ const vi = {
 		chuaCapNhat: "Chưa cập nhật",
 		chuaCoLanNao: "chưa có lần cập nhật nào",
 		chuaCoLanTruoc: "chưa có lần trước để so",
-		soVoi: (ngay: string) => `so với ${ngay}`,
+		soVoi: "so với {ngay}",
 	},
 	toanCanh: {
 		tienDoTB: "Tiến độ trung bình",
@@ -304,7 +304,7 @@ const en: OkrToanCanhMessages = {
 		chuaCapNhat: "Not updated",
 		chuaCoLanNao: "no updates yet",
 		chuaCoLanTruoc: "nothing earlier to compare",
-		soVoi: (ngay: string) => `vs ${ngay}`,
+		soVoi: "vs {ngay}",
 	},
 	toanCanh: {
 		tienDoTB: "Average progress",

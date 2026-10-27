@@ -6,6 +6,7 @@ import Subtract from "@carbon/icons-react/es/Subtract";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import type { Locale } from "@crm/ui/lib/locale";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { giaTri } from "../gia-tri-kr";
 import { chuSo } from "../nguon-so";
@@ -45,7 +46,7 @@ export function chuMucDoi(d: DongMucDoi, locale: Locale): ChuMucDoi {
 			duoi: `${so(d.giaTriMoi)} · ${m.chuaCoLanTruoc}`,
 		};
 	const { tu, den, ngayTruoc } = d.mucDoi;
-	const soVoi = m.soVoi(ngayThang(ngayTruoc));
+	const soVoi = dien(m.soVoi, { ngay: ngayThang(ngayTruoc) });
 	if (tu === den)
 		return { huong: "yen", tren: m.chuaDoi, duoi: `${so(den)} · ${soVoi}` };
 	const huong = den > tu ? "tang" : "giam";
