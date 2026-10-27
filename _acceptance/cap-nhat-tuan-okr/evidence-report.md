@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 396409faaf30dc62041ef1806d28d312e1925223
+verified_commit: e24a8c2f895271c82fcf731b4a4cf8065b68be8e
 human_signoff: Manh Phan 2026-09-26
 ---
 
@@ -411,3 +411,7 @@ sha: 938c2f430a111234071aac844de83b7c917b4843 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-26, do hoá cũ do gộp origin/onehub 1478ac08a và sửa răng toan-canh-okr theo trang-bo-okr
 run_id: repin-20261026T080827Z-59889
 sha: 396409faaf30dc62041ef1806d28d312e1925223 · suites: 7 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E7 · thay bởi hồ sơ đã ký: E7→cua-toi-ba-phan#AC-2 · ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 · diff chạm vật đo ngoài làn máy: E6, E13, E16, E18 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-27, do ghim lại sau gộp onehub 1a151f3f7 cho #560 (chạy lại 4 hồ sơ đỏ vì CLAUDE_PLUGIN_ROOT trỏ nhầm feature-loop)
+run_id: repin-20261027T174805Z-82273
+sha: e24a8c2f895271c82fcf731b4a4cf8065b68be8e · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E7, E14 · thay bởi hồ sơ đã ký: E7→cua-toi-ba-phan#AC-2, E14→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 · diff chạm vật đo ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
