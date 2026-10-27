@@ -94,6 +94,11 @@ const MA_TRAN = [
 		tep: "apps/app/app/(app)/[slug]/okr/bang-kr.tsx",
 		ham: "HangKr",
 	},
+	{
+		o: "cap-nhat-gan-day",
+		tep: "apps/app/app/(app)/[slug]/okr/cap-nhat-gan-day/cap-nhat-gan-day.tsx",
+		ham: "DongTinChuKy",
+	},
 ];
 
 function docThamSo(argv) {

@@ -172,6 +172,11 @@ import {
 } from "./okr-canh-kr.contracts";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import {
+	capNhatGanDayInput,
+	capNhatGanDayOutput,
+} from "./okr-cap-nhat-gan-day.contracts";
+import { OkrCapNhatGanDayService } from "./okr-cap-nhat-gan-day.service";
 import { OkrChuKyService } from "./okr-chu-ky.service";
 import { OkrDuyetService } from "./okr-duyet.service";
 import { OkrHienThiService } from "./okr-hien-thi.service";
@@ -258,6 +263,8 @@ export class OkrRouter {
 		@Inject(OkrTaiCoCauService) private readonly taiCoCau: OkrTaiCoCauService,
 		@Inject(OkrChuKyService) private readonly chuKy: OkrChuKyService,
 		@Inject(OkrMoiKrService) private readonly moiKrDv: OkrMoiKrService,
+		@Inject(OkrCapNhatGanDayService)
+		private readonly capNhatGanDayDv: OkrCapNhatGanDayService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -1355,6 +1362,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof moiKrInput>,
 	) {
 		return this.moiKrDv.moiKr(ctx.user.id, input);
+	}
+
+	@Query({
+		input: capNhatGanDayInput,
+		output: capNhatGanDayOutput,
+		meta: restMeta("POST", "/okr/updates/list", TAG),
+	})
+	capNhatGanDay(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof capNhatGanDayInput>,
+	) {
+		return this.capNhatGanDayDv.capNhatGanDay(ctx.user.id, input);
 	}
 
 	@Query({

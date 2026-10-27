@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9b246f0a57bae04226f308c1d481f95b31a15217
+verified_commit: d4f2c47346d94525f30ca93f8632a1e94887c0b6
 human_signoff: Phan Le Manh 2026-10-20
 ---
 
@@ -234,3 +234,7 @@ sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-24, do VK3 trang-bo-okr sửa thước và vật — ghim lại sau chữ ký, ba thước theo «duyệt cả ba» (9b246f0a5)
 run_id: repin-20261024T133834Z-50324
 sha: 9b246f0a57bae04226f308c1d481f95b31a15217 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-27, do hoá cũ do gộp VK12 cap-nhat-gan-day sau onehub 518f05802 (lượt 2, sau khi vẽ lại LO-TRINH.html)
+run_id: repin-20261027T002451Z-69475
+sha: d4f2c47346d94525f30ca93f8632a1e94887c0b6 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
