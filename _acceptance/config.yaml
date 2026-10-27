@@ -997,6 +997,10 @@ executors:
     lmcv_loi_khong_lam_moi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-chuyen-viec.dom.tsx -t loi-khong-lam-moi"
     ctnl_the_dung: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cho-tac-nhan-lau.dom.tsx'
     ctnl_dong_chuong: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cho-tac-nhan-lau-chuong.dom.tsx'
+    dsctn_noi_song: 'cd apps/app && bun test ./test/the-dang-dung-noi-song.spec.ts'
+    dsctn_the_ui: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/the-dang-dung.dom.tsx'
+    dsctn_k7_nguyen: 'git diff --exit-code "$(git merge-base HEAD origin/onehub)" -- apps/app/test/cho-tac-nhan-lau.dom.tsx && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cho-tac-nhan-lau.dom.tsx'
+    dsctn_noi_dung: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-dang-dung.dom.tsx'
     kagt_khong_ghi_trong_nguong: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t khong-ghi-trong-nguong"'
     kagt_bien_nguong: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t bien-nguong"'
     kagt_tu_choi_van_giu: 'bun run test -- "cd apps/api && bun test test/khoa-api-ghi-thua.spec.ts -t tu-choi-van-giu"'
@@ -3390,6 +3394,7 @@ executors:
     htb_do_man: 'NGUOI=ada@trycomp.ai bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hop-thong-bao-tren-web/rang/do-man.mjs"'
     tbk_do_man: 'NGUOI=ada@trycomp.ai bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/thong-bao-mot-nguon-nhieu-kenh/rang/do-man.mjs"'
     ctnl_do_man: 'NGUOI=ada@trycomp.ai bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cho-tac-nhan-lau/rang/do-man.mjs"'
+    dsctn_do_man: 'NGUOI=ada@trycomp.ai BANG_CHUNG=.acceptance-runs/don-sau-cho-tac-nhan/evidence bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cho-tac-nhan-lau/rang/do-man.mjs"'
     ctnl_san_thiet_ke: 'bun _acceptance/cho-tac-nhan-lau/rang/san-thiet-ke.mjs'
     htb_thiet_ke: 'for f in apps/app/components/thong-bao/*.tsx "apps/app/app/(app)/[slug]/thong-bao/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     cvc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/chep-viec-can-lam-cu/rang/man.mjs"'
