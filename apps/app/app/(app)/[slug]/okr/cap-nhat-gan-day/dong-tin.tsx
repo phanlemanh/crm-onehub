@@ -27,10 +27,12 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { giaTri } from "../bang-kr";
 import { luc } from "../bang-vet";
+import { HangCamXuc } from "../cam-xuc/hang-cam-xuc";
 
 export type DongCapNhat = RouterOutputs["okr"]["capNhatGanDay"]["rows"][number];
 
-const VUNG_KHONG_MO = "[data-khung-tra-loi], button, a, textarea";
+const VUNG_KHONG_MO =
+	"[data-khung-tra-loi], [data-hang-cam-xuc], button, a, textarea";
 
 function boQuaBam(e: MouseEvent<HTMLElement>): boolean {
 	return (
@@ -75,6 +77,7 @@ function TraLoi({ dong }: { dong: DongCapNhat }) {
 			{
 				objectiveId: dong.mucTieu.id,
 				keyResultId: dong.kr.id,
+				checkInId: dong.checkInId,
 				body: noiDung.trim(),
 				mentionUserIds: dong.mentionNguoiCapNhat
 					? [dong.mentionNguoiCapNhat]
@@ -228,13 +231,17 @@ export function DongTin({
 						{dong.ghiChu}
 					</p>
 				) : null}
-				{dong.moiNhat ? (
-					<TraLoi dong={dong} />
-				) : (
+				<HangCamXuc
+					camXuc={dong.camXuc}
+					checkInId={dong.checkInId}
+					objectiveId={dong.mucTieu.id}
+				/>
+				{dong.moiNhat ? null : (
 					<p className="pt-1 text-muted-foreground text-xs" data-co-moi-hon="">
-						{m.coMoiHon}
+						{m.coMoiHonNhan}
 					</p>
 				)}
+				<TraLoi dong={dong} />
 			</ItemContent>
 		</Item>
 	);

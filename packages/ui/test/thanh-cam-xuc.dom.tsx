@@ -1,8 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { LOAI_CAM_XUC, type LoaiCamXuc } from "@crm/validation/okr-cam-xuc";
+import {
+	LOAI_CAM_XUC,
+	type LoaiCamXuc,
+	OKR_CAM_XUC,
+} from "@crm/validation/okr-cam-xuc";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { OKR_CAM_XUC } from "../../../apps/api/src/okr/okr-xem.config";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	type MucCamXuc,

@@ -37,6 +37,8 @@ export type ThanhCamXucProps = {
 	tenToiDa: number;
 	dangGui?: boolean;
 	onDao: (loai: string) => void;
+	tenDu?: Record<string, string[]>;
+	onMoBang?: () => void;
 };
 
 type ChuCamXuc = Messages["camXuc"];
@@ -99,12 +101,14 @@ function BangCamXuc({
 	dangGui,
 	onChon,
 	chu,
+	tenDu,
 }: {
 	bo: LoaiTrongBo[];
 	co: MucCamXuc[];
 	dangGui: boolean;
 	onChon: (loai: string) => void;
 	chu: ChuCamXuc;
+	tenDu?: Record<string, string[]>;
 }) {
 	const daTha = co.filter((m) => m.cuaToi).map((m) => m.loai);
 	return (
@@ -134,7 +138,7 @@ function BangCamXuc({
 								<span className="sr-only">{m.ten}</span>
 							</dt>
 							<dd className="text-muted-foreground" translate="no">
-								{m.nguoi.join(", ")}
+								{(tenDu?.[m.loai] ?? m.nguoi).join(", ")}
 							</dd>
 						</div>
 					))}
@@ -150,6 +154,8 @@ export function ThanhCamXuc({
 	tenToiDa,
 	dangGui = false,
 	onDao,
+	tenDu,
+	onMoBang,
 }: ThanhCamXucProps) {
 	const chu = useMessages().camXuc;
 	const [moBang, setMoBang] = useState(false);
@@ -174,7 +180,13 @@ export function ThanhCamXuc({
 						tenToiDa={tenToiDa}
 					/>
 				))}
-				<Popover onOpenChange={setMoBang} open={moBang}>
+				<Popover
+					onOpenChange={(mo) => {
+						setMoBang(mo);
+						if (mo) onMoBang?.();
+					}}
+					open={moBang}
+				>
 					<PopoverTrigger asChild>
 						<Button
 							aria-label={chu.thaCamXuc}
@@ -191,6 +203,7 @@ export function ThanhCamXuc({
 						co={co}
 						dangGui={dangGui}
 						onChon={chon}
+						tenDu={tenDu}
 					/>
 				</Popover>
 			</div>
