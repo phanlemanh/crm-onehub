@@ -22,8 +22,9 @@ import {
 	nghi,
 	PHAM_VI,
 	SO_LUI,
-	TIEN_THE,
 	THAM,
+	THE_SO_DO,
+	TIEN_THE,
 	tapBang,
 	tapChu,
 } from "./man-bo-okr-du-lieu.mjs";
@@ -503,6 +504,23 @@ async function e7Mot(n, don, tienTo) {
 		await choThe(t, the);
 		await dongThe(t, `${tienTo}lui${i + 1}-${the}`, the, don, ky);
 	}
+	const soDo = await t.evaluate(
+		(th) =>
+			document
+				.querySelector(`[data-the-con-bo] a[data-the='${th}']`)
+				?.getAttribute("href") ?? null,
+		THE_SO_DO,
+	);
+	const u = soDo ? new URL(soDo, "http://x") : null;
+	const moDonVi = u?.searchParams.get("moDonVi") ?? null;
+	kd(
+		"AC-5",
+		u !== null &&
+			u.pathname.endsWith("/okr/so-do") &&
+			moDonVi === (don === "goc" ? null : don) &&
+			u.searchParams.get(THAM.ky) === ky,
+		`THE ${tienTo}${THE_SO_DO}: href ${soDo ?? "-"} (mong /okr/so-do, moDonVi ${don === "goc" ? "-" : don}, ky ${ky})`,
+	);
 	await dongTrang(t);
 }
 

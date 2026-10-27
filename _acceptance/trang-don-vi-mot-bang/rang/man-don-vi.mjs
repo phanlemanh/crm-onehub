@@ -54,7 +54,6 @@ const { okrVoKhuMessages } = await import(
 const M = okrMessages("vi");
 const NHAN_XEM = {
 	"danh-sach": okrVoKhuMessages("vi").boOkr.the["danh-sach"],
-	cay: M.cayCanChinh,
 	"hop-tuan": okrToanCanhMessages("vi").hopTuan.cachXem,
 	cham: okrKhepMessages("vi").cham.cachXem,
 };
@@ -506,7 +505,7 @@ try {
 		let dat = 0;
 		for (const kho of [1440, 390]) {
 			let goc = null;
-			for (const xem of ["danh-sach", "cay", "hop-tuan", "cham"]) {
+			for (const xem of ["danh-sach", "hop-tuan", "cham"]) {
 				const t = await d.moTrang(
 					QT,
 					kho,
@@ -541,14 +540,14 @@ try {
 			}
 		}
 		await traPha();
-		const thieu = ["hop-tuan", "cham", "cay"]
+		const thieu = ["hop-tuan", "cham"]
 			.flatMap((x) => [1440, 390].map((k) => `don-vi-${tenAnhE3(x)}-${k}.png`))
 			.filter((f) => !existsSync(join(BANG_CHUNG, f)));
 		if (thieu.length > 0) {
 			console.log(`KHONG DO DUOC: thieu anh ${thieu.join(", ")}`);
 			process.exit(2);
 		}
-		dong(dat === 8, dat === 8 ? "DUNG AC-4: 8/8 o" : `AC-4: ${dat}/8 o dung`);
+		dong(dat === 6, dat === 6 ? "DUNG AC-4: 6/6 o" : `AC-4: ${dat}/6 o dung`);
 	}
 
 	if (chay("E4")) {

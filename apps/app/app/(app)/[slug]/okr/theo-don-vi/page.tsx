@@ -10,6 +10,8 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
+import { chuyenSoDoCu } from "../so-do/chuyen-so-do-cu";
+import { duongSoDoTuBoOkr } from "../so-do/duong-so-do";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import {
 	duongChuyenHopTuan,
@@ -21,18 +23,26 @@ import { KhungDangTaiDonVi } from "./hang-cong-cu";
 import { TheoDonVi } from "./theo-don-vi";
 
 type SearchParams = Promise<ThamSoTrang>;
+type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: tieuDeTrinhDuyet(await getLocale(), "theo-don-vi") };
 }
 
 export default function TheoDonViPage({
+	params,
 	searchParams,
 }: {
+	params?: Params;
 	searchParams: SearchParams;
 }) {
 	return (
 		<>
+			{params ? (
+				<Suspense fallback={null}>
+					<ChuyenSoDoCu params={params} searchParams={searchParams} />
+				</Suspense>
+			) : null}
 			<DauTrangOkrTrang searchParams={searchParams} tab="theo-don-vi" />
 			<PageShellContent>
 				<Suspense fallback={<KhungDangTaiDonVi theoUrl />}>
@@ -41,6 +51,16 @@ export default function TheoDonViPage({
 			</PageShellContent>
 		</>
 	);
+}
+
+async function ChuyenSoDoCu({
+	params,
+	searchParams,
+}: {
+	params: Params;
+	searchParams: SearchParams;
+}): Promise<null> {
+	return chuyenSoDoCu(params, searchParams, duongSoDoTuBoOkr);
 }
 
 async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
@@ -93,11 +113,6 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 					loc: locOkr(thamSo),
 				}),
 			),
-			thamSo[SEARCH_PARAM.okr.xem] === "cay"
-				? queryClient.prefetchQuery(
-						trpc.okr.cayCanChinh.queryOptions({ cycleId }),
-					)
-				: Promise.resolve(),
 		]);
 	}
 

@@ -71,7 +71,7 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.dh5_trang_thai
-    expected: "exit 0; cùng tệp, -t dh5-trang-thai: ma trận ba trạng thái truy vấn giả — đang chạy: aria-busy, chữ sr-only === msg.dangTai (kết thúc bằng …), không [data-flow-map]; lỗi thường: VungTaiLoi với tiêu đề msg.loiTieuDe, bấm thử lại gọi refetch đúng một lần; lỗi NOT_FOUND: chữ msg.khongThay và một liên kết tới /<slug>/okr/toan-canh, không VungTaiLoi. Page dựng tiêu đề msg.tieuDe ở cả ba."
+    expected: "exit 0; cùng tệp, -t dh5-trang-thai: ma trận ba trạng thái truy vấn giả — đang chạy: aria-busy, chữ sr-only === msg.dangTai (kết thúc bằng …), không [data-flow-map]; lỗi thường: VungTaiLoi với tiêu đề msg.loiTieuDe, bấm thử lại gọi refetch đúng một lần; lỗi NOT_FOUND: chữ msg.khongThay và một liên kết tới /<slug>/okr/toan-canh, không VungTaiLoi. Trang dựng dải công cụ của màn Sơ đồ (ManSoDoCho) làm khung chờ ở cả ba."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/[objectiveId]/page.tsx", apps/app/test/okr-quanh-muc-tieu.dom.tsx]
 
@@ -96,6 +96,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.dh5_man
+    status: not-run
+    superseded_by: so-do-toan-vung#AC-10
     steps:
       - "Cảnh trước màn đầu: phiên đo riêng (mot-luot.sh), bộ mẫu nạp bằng okr:mau kèm ca sơ đồ của DH4; tâm, KR công ty kỳ vọng và mục tiêu góp hai chỗ rút từ hằng của writer bộ gieo (mtSoDo, ca-so-do.ts) — không rút từ okr.quanhMucTieu; người xem khai trong rang/ca-man.json"
       - "Ở 1440×1000: mở ngăn chi tiết của sd-a1-1 (?record=objective:<id>), bấm nút «Xem quanh mục tiêu» thật; trang sơ đồ hiện; tập KR trên dòng góp lên công ty bằng đúng tập rút từ hằng bộ gieo ({n1-k1}); thẻ KR ấy mang nhãn «Công ty»; chụp ảnh. Mở trang của sd-a3-1: mục tiêu n1 đúng một thẻ; chụp ảnh. Rê chuột lên một thẻ ngoài đường quanh tâm: có thẻ mờ; chụp ảnh"

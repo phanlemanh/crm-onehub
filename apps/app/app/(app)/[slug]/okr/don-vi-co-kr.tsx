@@ -16,8 +16,10 @@ import Link from "next/link";
 import { okrHopTuanBoMessages } from "@/lib/messages/okr-hop-tuan-bo";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { CayDuLieu } from "./kieu";
 import { type DonChonOkr, parseAsDonOkr } from "./okr-search-params";
+import { DUONG_SO_DO } from "./tab-okr";
 import { hrefThe, useGocBoOkr } from "./theo-don-vi/the-con";
 import { useHrefDanhSachBo } from "./theo-don-vi/vi-tri-bo";
 import { LoiXem } from "./toan-canh/toan-canh";
@@ -80,6 +82,7 @@ export function DonViCoKr({
 	const m = okrHopTuanBoMessages(useLocale());
 	const trpc = useTRPC();
 	const goc = useGocBoOkr();
+	const soDo = useWorkspaceUrl()(DUONG_SO_DO);
 	const tc = useQuery(trpc.okr.toanCanh.queryOptions({ cycleId }));
 	const cay = useQuery(trpc.org.tree.queryOptions());
 
@@ -117,7 +120,7 @@ export function DonViCoKr({
 					<Item asChild key={dv.khoa} size="sm" variant="outline">
 						<Link
 							data-don-vi={dv.khoa}
-							href={hrefThe({ goc, don: dv.don, ky, the: "hop-tuan" })}
+							href={hrefThe({ goc, soDo, don: dv.don, ky, the: "hop-tuan" })}
 						>
 							<ItemContent>
 								<ItemTitle translate="no">{dv.ten}</ItemTitle>

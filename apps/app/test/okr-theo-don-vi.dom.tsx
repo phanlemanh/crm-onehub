@@ -14,11 +14,9 @@ import {
 import { createRoot, type Root } from "react-dom/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import type {
-	AlignmentTreeOutput,
 	ChuKyOutput,
 	KrOutput,
 	MucTieuOutput,
-	NutCanChinh,
 } from "../../api/src/okr/okr.contracts";
 import type { TreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
 
@@ -153,31 +151,6 @@ function mucTieu(id: string, soKr: number): MucTieuOutput {
 	};
 }
 
-type NutDayDu = RouterOutputs["okr"]["cayCanChinh"]["roots"][number];
-
-function nut(
-	id: string,
-	loai: NutCanChinh["loai"],
-	children: NutDayDu[],
-): NutDayDu {
-	return {
-		id,
-		loai,
-		objectiveId: id,
-		unitName: "OneHub",
-		title: `Nút ${id}`,
-		progress: 30,
-		status: "cong-bo",
-		kind: "cam-ket",
-		gop: 1,
-		lapLai: false,
-		hienThi: "cong-khai",
-		soNguoiXem: 0,
-		expected: 25,
-		children,
-	};
-}
-
 let cycles: RouterOutputs["okr"]["cycles"];
 let quanTri: boolean;
 let theoDon: Map<string, { objectives: MucTieuOutput[]; canEdit: boolean }>;
@@ -303,11 +276,9 @@ const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
 const { khungUngDungMessages } = await import("@/lib/messages/khung-ung-dung");
-const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 const { okrGioiHanMessages } = await import("@/lib/messages/okr-gioi-han");
 
 const m = okrMessages("vi");
-const mt = okrToanCanhMessages("vi");
 
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
@@ -577,32 +548,6 @@ describe("theo-don-vi", () => {
 			],
 		}).toEqual({ truong: [false, false], thanhVien: [false, false] });
 	});
-
-	test("theo-don-vi-cay: cay can chinh thut le theo cap, nhom chua can chinh la hang tieu de", async () => {
-		cayCanChinh = {
-			roots: [
-				nut("o", "muc-tieu", [nut("k", "kr", [nut("p", "muc-tieu", [])])]),
-			],
-			chuaCanChinh: [nut("x", "muc-tieu", [])],
-			canh: [],
-		};
-		const s = await mo("goc", "cay");
-		const dong = [...s.o.querySelectorAll("[data-nut-can-chinh]")];
-		expect({
-			cay:
-				s.o.querySelector(`[role="tree"][aria-label="${mt.cay.canChinh}"]`) !==
-				null,
-			dong: dong.map(
-				(d) =>
-					`${d.getAttribute("data-nut-can-chinh")}@${d.closest('[role="treeitem"]')?.getAttribute("aria-level")}`,
-			),
-			nhom: s.o.querySelector('[data-cap-nut="nhom"]')?.textContent,
-		}).toEqual({
-			cay: true,
-			dong: ["o@1", "k@2", "p@3", "x@2"],
-			nhom: mt.cay.chuaCanChinh,
-		});
-	});
 });
 
 describe("theo-don-vi-bien", () => {
@@ -693,7 +638,7 @@ const goiY = (n: number) =>
 	n === 0 ? g.goiYKhongTen : g.goiY.replace("{n}", String(n));
 
 describe("nhan-danh-sach", () => {
-	test("nhan-danh-sach: the gioi han o Theo don vi va nut cay mang nhan khoa khong mo hop; the cong khai khong co", async () => {
+	test("nhan-danh-sach: the gioi han o Theo don vi mang nhan khoa khong mo hop; the cong khai khong co", async () => {
 		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
 			objectives: [
 				{ ...mucTieu("a", 1), hienThi: "gioi-han", soNguoiXem: 1 },
@@ -730,26 +675,6 @@ describe("nhan-danh-sach", () => {
 				},
 			],
 			c: [],
-		});
-		await act(async () => s.root.unmount());
-		dangMo = dangMo.filter((x) => x !== s);
-		cayCanChinh = {
-			roots: [
-				{ ...nut("o", "muc-tieu", []), hienThi: "gioi-han", soNguoiXem: 2 },
-			],
-			chuaCanChinh: [nut("x", "muc-tieu", [])],
-			canh: [],
-		};
-		const c = await mo("goc", "cay");
-		const nhanCay = (id: string) =>
-			[
-				...c.o.querySelectorAll(
-					`[data-nut-can-chinh="${id}"] [data-nhan-gioi-han]`,
-				),
-			].map((n) => [n.getAttribute("aria-label"), n.getAttribute("tabindex")]);
-		expect({ o: nhanCay("o"), x: nhanCay("x") }).toEqual({
-			o: [[`${g.gioiHan}: ${goiY(2)}`, null]],
-			x: [],
 		});
 	});
 });

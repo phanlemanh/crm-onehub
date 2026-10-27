@@ -126,20 +126,6 @@ export const NHAN_GHIM: readonly {
 	},
 	{
 		khai_niem: "gop-vao",
-		tep: "apps/app/lib/messages/okr-toan-canh.ts",
-		khoa: "cay.chuaCanChinh",
-		vi: "Chưa góp vào đâu",
-		en: "Not contributing anywhere",
-	},
-	{
-		khai_niem: "gop-vao",
-		tep: "apps/app/lib/messages/okr.ts",
-		khoa: "cayCanChinh",
-		vi: "Sơ đồ góp vào",
-		en: "Contribution map",
-	},
-	{
-		khai_niem: "gop-vao",
 		tep: "packages/ui/src/lib/messages.ts",
 		khoa: "soDo.day",
 		vi: "Dây góp vào",

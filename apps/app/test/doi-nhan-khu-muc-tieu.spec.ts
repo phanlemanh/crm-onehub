@@ -14,8 +14,8 @@ import {
 } from "./doi-nhan-khu-muc-tieu-luat";
 import { GOC_KHO, type MucChu, type NgonNgu } from "./kara-mot-ten-luat";
 
-const SO_GOP_VAO_VI = 51;
-const SO_GOP_VAO_EN = 55;
+const SO_GOP_VAO_VI = 48;
+const SO_GOP_VAO_EN = 52;
 const SO_LAY_Y_KIEN = 21;
 
 const CU_GOP_VAO_VI = [
