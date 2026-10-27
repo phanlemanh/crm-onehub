@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: dbb544dc319c5aebccbe3d952485d0dab226bdd1
+verified_commit: 2bd4770799820a3cd867a64b45ba80f357354e3e
 human_signoff: Phan Le Manh 2026-10-27
 ---
 
@@ -247,3 +247,7 @@ none — mọi eval chạy một lần (runs 1), kết quả thuần nhất; kh�
 
 Round 1: S4 vòng 1 bị REJECT — 16/16 lượt máy đạt nhưng có 7 phát hiện trong hợp đồng; đã sửa rồi trả về dựng lại.
 Round 2: 14/14 eval đạt, bảy lệnh suite xanh, không phát hiện trong hợp đồng; verdict PASS.
+
+### Re-pin lần 1 — 2026-10-27, do gộp onehub 5084ffe74 (#566, #567 VK6, #575) vào VK8; sửa hydrat khung xương, khung chờ có hàng số và thước bco-the (V4-8); xếp import cho lint
+run_id: repin-20261027T120842Z-80884
+sha: 2bd4770799820a3cd867a64b45ba80f357354e3e · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · chập chờn (đỏ lần đầu, đạt khi chạy lại): muc-tieu-va-kr E14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
