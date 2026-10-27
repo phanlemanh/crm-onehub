@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7ff1af1a5ee1a0ad245658ba545860dd1dc30e1b
+verified_commit: d241a5b08b585233da6e2d4f039a8dfc4c1f5bea
 human_signoff: Phan Le Manh 2026-10-23
 ---
 
@@ -310,3 +310,7 @@ sha: 772ed0f7058d90df61745ecdf3e3b9970a224a07 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-27, do gộp onehub 518f05802 (#573 sửa thước đọc lệnh viết thẳng); E12 HT1 sửa như #573 rồi nghỉ sang kiem-cheo-sau-gop#AC-6
 run_id: repin-20261027T004022Z-21289
 sha: 7ff1af1a5ee1a0ad245658ba545860dd1dc30e1b · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E17, E18 · thay bởi hồ sơ đã ký: E17→kiem-cheo-sau-gop#AC-6, E18→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E14 · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-27, do gộp onehub dd53c3870 (#574 VK12 chạm apps/api/src/okr) vào nhánh HT1
+run_id: repin-20261027T024618Z-32457
+sha: d241a5b08b585233da6e2d4f039a8dfc4c1f5bea · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E17, E18 · thay bởi hồ sơ đã ký: E17→kiem-cheo-sau-gop#AC-6, E18→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E14 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
