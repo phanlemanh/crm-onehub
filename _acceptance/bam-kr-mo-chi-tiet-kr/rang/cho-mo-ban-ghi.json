@@ -66,6 +66,12 @@
 		"nguon": "muc-tieu"
 	},
 	{
+		"tep": "soan-bo/mo-soan-bo.ts",
+		"kind": "soan-bo",
+		"id": "taoKhoaBo(cycleId, don)",
+		"nguon": "soan-bo"
+	},
+	{
 		"tep": "soan/duong-soan.ts",
 		"kind": "soan",
 		"id": "",
