@@ -71,6 +71,17 @@ ký và so nền của AC-11 `trang-bo-okr` chuyển sang AC-6 của hồ sơ n�
 | trang-bo-okr/E17 | phần 2/3 của lớp không đỏ thêm so với nền | AC-6 |
 | trang-bo-okr/E18 | phần 3/3 của lớp không đỏ thêm so với nền | AC-6 |
 
+## Hai thước đỏ sẵn khi ghim lại sau SV6 (27/10)
+
+Lượt ghim lại sau SV6 `bam-kr-mo-chi-tiet-kr` (run_id repin-20261026T184903Z-86908) thấy hai eval đỏ y hệt trên onehub
+sạch. Chủ kho «Đồng ý tất cả theo khuyên» (27/10 ~00:15Z, qua giám sát) cho mẫu này, rồi xác nhận trong phiên V2: «Đồng
+ý khai not-run + superseded_by kiem-cheo-sau-gop#AC-6 cho cap-nhat-tuan-okr E14 và hop-thoai-giu-cho-dang-nhap E9».
+
+| Eval cũ | Lời hứa | AC thay |
+| --- | --- | --- |
+| cap-nhat-tuan-okr/E14 | thước màn cửa chặn của màn Cập nhật không đỏ thêm so với nền | AC-6 |
+| hop-thoai-giu-cho-dang-nhap/E9 | soát nút huỷ đi qua nút đóng không đỏ thêm so với nền | AC-6 |
+
 ## Đo
 
 - `node --test scripts/kiem-cheo/*.test.mjs`: kho git giả trong thư mục tạm (vài lần gộp first-parent), hồ sơ giả;
