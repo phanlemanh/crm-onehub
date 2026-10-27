@@ -32,17 +32,18 @@ export type TheDangDungChu = {
 	dangGhi: string | null;
 };
 
+export type TheDangDungDuLieu = {
+	buoc: TheDangDungBuoc[];
+	daXong: number;
+	chu: TheDangDungChu;
+};
+
 export function TheDangDung({
 	buoc,
 	daXong,
 	chu,
 	nutDung,
-}: {
-	buoc: TheDangDungBuoc[];
-	daXong: number;
-	chu: TheDangDungChu;
-	nutDung: ReactNode;
-}) {
+}: TheDangDungDuLieu & { nutDung: ReactNode }) {
 	return (
 		<Card className="w-full max-w-lg" data-slot="the-dang-dung">
 			<CardHeader>

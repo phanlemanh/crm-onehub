@@ -1,9 +1,6 @@
 "use client";
 
-import type {
-	TheDangDungBuoc,
-	TheDangDungChu,
-} from "@crm/ui/components/the-dang-dung";
+import type { TheDangDungDuLieu } from "@crm/ui/components/the-dang-dung";
 import {
 	daTroiTuLucGui,
 	dongHoDaTroi,
@@ -26,7 +23,7 @@ export function useTheDangDung({
 	daXong: number;
 	dangGhi: string | null;
 	batDauLuc: string | null;
-}): { buoc: TheDangDungBuoc[]; daXong: number; chu: TheDangDungChu } {
+}): TheDangDungDuLieu {
 	const daTroiMs = daTroiTuLucGui(batDauLuc, useSeconds());
 	const dongHo = dongHoDaTroi(daTroiMs);
 	return {
