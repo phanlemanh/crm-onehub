@@ -25,7 +25,7 @@ CREATE UNIQUE INDEX "okrCamXuc_checkInId_userId_loai_key" ON "okrCamXuc"("checkI
 ALTER TABLE "okrComment" ADD CONSTRAINT "okrComment_checkInId_fkey" FOREIGN KEY ("checkInId") REFERENCES "okrCheckIn"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "okrCamXuc" ADD CONSTRAINT "okrCamXuc_checkInId_fkey" FOREIGN KEY ("checkInId") REFERENCES "okrCheckIn"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "okrCamXuc" ADD CONSTRAINT "okrCamXuc_checkInId_fkey" FOREIGN KEY ("checkInId") REFERENCES "okrCheckIn"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "okrCamXuc" ADD CONSTRAINT "okrCamXuc_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

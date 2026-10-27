@@ -11,3 +11,7 @@ export const OKR_XEM = {
 		chiQuanTri: "Chỉ quản trị xem được sức khoẻ chương trình.",
 	},
 } as const;
+
+export const OKR_CAM_XUC = {
+	tenToiDa: 3,
+} as const;

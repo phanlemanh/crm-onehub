@@ -2363,7 +2363,7 @@ model OkrComment {
 model OkrCamXuc {
   id        String     @id @default(cuid())
   checkInId String
-  checkIn   OkrCheckIn @relation(fields: [checkInId], references: [id], onDelete: Restrict)
+  checkIn   OkrCheckIn @relation(fields: [checkInId], references: [id], onDelete: Cascade)
   userId    String
   nguoi     User       @relation(fields: [userId], references: [id], onDelete: Restrict)
   loai      String

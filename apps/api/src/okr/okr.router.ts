@@ -1,3 +1,4 @@
+import { thaCamXucInput, tomTatCamXuc } from "@crm/validation/okr-cam-xuc";
 import {
 	danhDauViecInput,
 	ganSangKienInput,
@@ -162,6 +163,7 @@ import {
 	xuHuongKrOutput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
+import { OkrCamXucService } from "./okr-cam-xuc.service";
 import {
 	canhKrInput,
 	canhKrOutput,
@@ -250,6 +252,7 @@ export class OkrRouter {
 		@Inject(OkrXemService) private readonly xem: OkrXemService,
 		@Inject(OkrCapNhatService) private readonly capNhat: OkrCapNhatService,
 		@Inject(OkrTraoDoiService) private readonly traoDoi: OkrTraoDoiService,
+		@Inject(OkrCamXucService) private readonly camXuc: OkrCamXucService,
 		@Inject(OkrSoService) private readonly so: OkrSoService,
 		@Inject(TroLyOkrService) private readonly troLy: TroLyOkrService,
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
@@ -1530,6 +1533,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof addCommentInput>,
 	) {
 		return this.traoDoi.addComment(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: thaCamXucInput,
+		output: tomTatCamXuc,
+		meta: restMeta("POST", "/okr/check-ins/{checkInId}/reactions", TAG),
+	})
+	thaCamXuc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof thaCamXucInput>,
+	) {
+		return this.camXuc.thaCamXuc(ctx.user.id, input);
 	}
 
 	@Query({
