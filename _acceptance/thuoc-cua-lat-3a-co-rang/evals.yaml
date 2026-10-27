@@ -319,4 +319,8 @@ evals:
       - evidence/khai-sinh-bang.md
       - evidence/chin-khiem-khuyet-gio-ra-sao.md
       - ../nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.json
+    paths:
+      - "_acceptance/thuoc-cua-lat-3a-co-rang/evidence/khai-sinh-bang.md"
+      - "_acceptance/thuoc-cua-lat-3a-co-rang/evidence/chin-khiem-khuyet-gio-ra-sao.md"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.json"
     evidence_required: [run_id, verifier, verified_at, output]
