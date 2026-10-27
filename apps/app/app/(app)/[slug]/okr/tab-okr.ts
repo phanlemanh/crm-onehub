@@ -27,9 +27,10 @@ export function tabTuDuong(duong: string | null): TabOkr {
 
 export const DUONG_SO_DO = "/okr/so-do";
 export const DUONG_MOI_KR = "/okr/moi-kr";
+export const DUONG_CAP_NHAT_GAN_DAY = "/okr/cap-nhat-gan-day";
 
 export const NHOM_THANH_BEN = [
-	{ khoa: "dau", muc: ["cua-toi"] },
+	{ khoa: "dau", muc: ["cua-toi", "cap-nhat-gan-day"] },
 	{ khoa: "okr", muc: ["bo-okr", "lay-y-kien"] },
 	{ khoa: "bao-cao", muc: ["suc-khoe", "moi-kr", "so-do"] },
 ] as const;
@@ -38,6 +39,7 @@ export type MucThanhBen = (typeof NHOM_THANH_BEN)[number]["muc"][number];
 
 export const DUONG_MUC = {
 	"cua-toi": DUONG["cua-toi"],
+	"cap-nhat-gan-day": DUONG_CAP_NHAT_GAN_DAY,
 	"bo-okr": DUONG["theo-don-vi"],
 	"lay-y-kien": DUONG["hoi-y"],
 	"suc-khoe": DUONG["toan-canh"],

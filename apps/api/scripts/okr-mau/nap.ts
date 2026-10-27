@@ -14,6 +14,7 @@ import type { BoOkrMau, KrMau, MucTieuMau } from "./khuon";
 import { type DemCanhKr, napCanhKr, xoaCanhKr } from "./nap-canh-kr";
 import { type DemHoiY, napHoiYMau, xoaHoiY } from "./nap-hoi-y";
 import { napTaiLieuMau } from "./nap-tai-lieu";
+import { type DemTraoDoi, napTraoDoiMau } from "./nap-trao-doi";
 import { chanKeoNgoai, khoaConGiu, xoaViecVaTinHieu } from "./xoa-viec";
 
 export { idMau };
@@ -792,7 +793,7 @@ export async function napBoOkrMau(
 	db: Db,
 	bo: BoOkrMau,
 	{ moc }: { moc: Date },
-): Promise<DemBoMau> {
+): Promise<DemBoMau & DemTraoDoi> {
 	const dem = await trongGiaoDich(db, async (tx) => {
 		await kiemWorkspace(tx);
 		await kiemOkrThat(tx);
@@ -802,11 +803,12 @@ export async function napBoOkrMau(
 	try {
 		const hoiY = await napHoiYMau(db, bo, { moc, chuKyId: CHU_KY.namKe });
 		const taiLieu = await napTaiLieuMau(db, bo);
-		return { ...dem, ...hoiY, taiLieu };
+		const traoDoi = await napTraoDoiMau(db, bo, moc);
+		return { ...dem, ...hoiY, taiLieu, ...traoDoi };
 	} catch (loi) {
 		await xoaBoOkrMau(db).catch((loiDon) => {
 			console.error(
-				`Nạp lần hỏi ý hoặc trang tài liệu mẫu hỏng, và dọn bộ mẫu vừa nạp cũng hỏng — kho còn bộ mẫu dở, chạy lại với ${OKR_MAU.co.xoa}: ${loiDon instanceof Error ? loiDon.message : String(loiDon)}`,
+				`Nạp lần hỏi ý, trang tài liệu hoặc trao đổi mẫu hỏng, và dọn bộ mẫu vừa nạp cũng hỏng — kho còn bộ mẫu dở, chạy lại với ${OKR_MAU.co.xoa}: ${loiDon instanceof Error ? loiDon.message : String(loiDon)}`,
 			);
 		});
 		throw loi;

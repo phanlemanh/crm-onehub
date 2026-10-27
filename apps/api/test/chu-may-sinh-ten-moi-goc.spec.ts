@@ -171,6 +171,22 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 			).unitName,
 	},
 	{
+		ten: "capNhatGanDay.bo.ten",
+		cho: "tenDonVi@okr-cap-nhat-gan-day.service.ts",
+		doc: async () =>
+			motHang(
+				(
+					await doc<{ rows: { bo: { khoa: string; ten: string } }[] }>(
+						"okr.capNhatGanDay",
+						"quan",
+						{ cycleId: s.kyChay },
+					)
+				).rows,
+				(r) => r.bo.khoa === "goc",
+				"capNhatGanDay",
+			).bo.ten,
+	},
+	{
 		ten: "capNhatTuan.unitName",
 		cho: "tenDonVi@okr-cap-nhat.service.ts",
 		doc: async () =>
@@ -351,6 +367,27 @@ async function gieoKyChay(): Promise<void> {
 	const chuKr = await nguoiMoi("cmst-chu-kr");
 	s.cookieChuKr = await phienCua(chuKr);
 	s.goc = await mucTieuGoc(s.kyChay, chuKr);
+	const krGoc = await db.okrKeyResult.findFirstOrThrow({
+		where: { objectiveId: s.goc },
+		select: { id: true },
+	});
+	const { sessionId } = ok<{ sessionId: string }>(
+		await goi("okr.moCapNhat", { entry: "sheet" }, s.cookieChuKr),
+		"mo cap nhat goc",
+	);
+	ok(
+		await goi(
+			"okr.guiCapNhat",
+			{
+				sessionId,
+				items: [
+					{ keyResultId: krGoc.id, value: 1, confidence: "vua", note: "" },
+				],
+			},
+			s.cookieChuKr,
+		),
+		"cap nhat goc",
+	);
 	const pb = await pbMoi("cmst-pb");
 	const truong = await truongMoi("department", pb, "cmst-truong");
 	s.phong = (
