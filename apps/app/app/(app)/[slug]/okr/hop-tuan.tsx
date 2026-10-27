@@ -62,12 +62,14 @@ function DongBan({ dong, thuTu }: { dong: DongHop; thuTu: string }) {
 	);
 }
 
-function useBangHop(thuTu: string): {
+type BangHopTuan = {
 	hanhDong: HanhDongDong;
 	hop: ReactNode;
 	vuaGui: string | null;
 	xongGui: () => void;
-} {
+};
+
+function useBangHop(thuTu: string): BangHopTuan {
 	const trpc = useTRPC();
 	const qc = useQueryClient();
 	const [vuaGui, setVuaGui] = useState<string | null>(null);
@@ -133,7 +135,7 @@ function BangCoDuLieu({
 	dau,
 }: {
 	d: HopTuanDuLieu;
-	bang: ReturnType<typeof useBangHop>;
+	bang: BangHopTuan;
 	dau: ReactNode;
 }) {
 	const [moConLai, setMoConLai] = useState(false);

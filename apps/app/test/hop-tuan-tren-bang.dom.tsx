@@ -288,6 +288,38 @@ function khoCuaDong(id: string, loai: "data-ghi-chu" | "data-muc-doi") {
 	);
 }
 
+function kiemChuGhiChu(id: string, o: Element): string[] {
+	const chu = o.textContent ?? "";
+	if (id === "C")
+		return chu === mt.chuaCoGhiChu ? [] : [`htb-ghi-chu: C chu «${chu}»`];
+	const loi: string[] = [];
+	if (!chu.includes(`«ghi chu ${id}»`) || !chu.includes("20/10"))
+		loi.push(`htb-ghi-chu: ${id} chu «${chu}»`);
+	if (o.querySelector('[translate="no"]') === null)
+		loi.push(`htb-ghi-chu: ${id} thieu translate=no`);
+	return loi;
+}
+
+function kiemO(
+	id: string,
+	loai: "data-ghi-chu" | "data-muc-doi",
+	o: Element,
+	k: Kho,
+	thay: Map<string, Set<Kho>>,
+): string[] {
+	const loi: string[] = [];
+	const khoa = `${id}|${loai}`;
+	const tap = thay.get(khoa) ?? new Set<Kho>();
+	if (tap.has(k)) loi.push(`htb-ghi-chu: ${id} ${loai} lap kho ${k}`);
+	tap.add(k);
+	thay.set(khoa, tap);
+	const lop = lopTheoKho(o).split(/\s+/);
+	if (!LUAT_KHO[k].split(" ").every((x) => lop.includes(x)))
+		loi.push(`htb-ghi-chu: ${id} ${loai} kho ${k} lop «${lop.join(" ")}»`);
+	if (loai === "data-ghi-chu") loi.push(...kiemChuGhiChu(id, o));
+	return loi;
+}
+
 describe("htb-ghi-chu", () => {
 	test("htb-ghi-chu: moi dong co ghi chu moi nhat o ba kho, phan kho phu kin khong chong", async () => {
 		datKho(NAM_DONG);
@@ -300,29 +332,8 @@ describe("htb-ghi-chu", () => {
 			await moConLai();
 			for (const id of ID)
 				for (const loai of ["data-ghi-chu", "data-muc-doi"] as const)
-					for (const { o, kho: k } of khoCuaDong(id, loai)) {
-						const khoa = `${id}|${loai}`;
-						const tap = thay.get(khoa) ?? new Set<Kho>();
-						if (tap.has(k)) loi.push(`htb-ghi-chu: ${id} ${loai} lap kho ${k}`);
-						tap.add(k);
-						thay.set(khoa, tap);
-						const lop = lopTheoKho(o);
-						const can = LUAT_KHO[k];
-						if (!can.split(" ").every((x) => lop.split(/\s+/).includes(x)))
-							loi.push(`htb-ghi-chu: ${id} ${loai} kho ${k} lop «${lop}»`);
-						if (loai === "data-ghi-chu") {
-							const chu = o.textContent ?? "";
-							if (id === "C") {
-								if (chu !== mt.chuaCoGhiChu)
-									loi.push(`htb-ghi-chu: C chu «${chu}»`);
-							} else {
-								if (!chu.includes(`«ghi chu ${id}»`) || !chu.includes("20/10"))
-									loi.push(`htb-ghi-chu: ${id} chu «${chu}»`);
-								if (o.querySelector('[translate="no"]') === null)
-									loi.push(`htb-ghi-chu: ${id} thieu translate=no`);
-							}
-						}
-					}
+					for (const { o, kho: k } of khoCuaDong(id, loai))
+						loi.push(...kiemO(id, loai, o, k, thay));
 			await thaoHet();
 		}
 		let dem = 0;
