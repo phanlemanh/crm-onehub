@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 34487982603b686115969b63e6567a390991efb0
+verified_commit: bd78d92819e9ec924aaac77dd167b2688e49e4aa
 human_signoff: Manh Phan 2026-09-29
 ---
 
@@ -404,3 +404,7 @@ sha: 19567f1d3fc85ee36994b60051cecdd88b7b6028 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 11 — 2026-10-26, do SV6 bam-kr-mo-chi-tiet-kr đổi bài kiểm và thước của hồ sơ đã ký; gộp onehub 344879826
 run_id: repin-20261026T184903Z-86908
 sha: 34487982603b686115969b63e6567a390991efb0 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 12 — 2026-10-27, do ghim lại sau gộp onehub 1a151f3f7 (#567 xoá Cây căn chỉnh, #568, #575) cho #560
+run_id: repin-20261027T161630Z-60650
+sha: bd78d92819e9ec924aaac77dd167b2688e49e4aa · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
