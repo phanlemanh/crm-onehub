@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c
+verified_commit: 11629978b324374e5522438772741cf73f3885eb
 human_signoff: Phan Le Manh 2026-10-21 — ký lại Cổng Bằng chứng trên vòng chấm 4 (delta sau chữ ký, PASS, 9/9 eval, 7/7 suite; khung khớp hàng công cụ sau thanh bên khu theo V2-16 a; rang nhận /okr/bo-okr theo V2-15 i). Ngoài-1, 2, 6–9, 12–15 ghi Known limits; Ngoài-3, 4, 11 mở hợp đồng mới; Ngoài-5, 10 chấp nhận, không sửa; đồng ý cắt; Treo phê hết.
 ---
 
@@ -202,3 +202,7 @@ sha: af18f068e26b7d35589459e8062337afac57e12c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-26, do hoá cũ do gộp origin/onehub 5ff537e4c (#571 KDH) vào VK6; thước E15 nhận cmd viết thẳng (V3-55 a) (lượt 1/2)
 run_id: repin-20261026T153905Z-92888
 sha: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-1, AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-27, do hoá cũ do gộp origin/onehub dd53c3870 (#574 VK12) vào VK6; bài đường cũ tự lấy origin/onehub (lượt 1/2)
+run_id: repin-20261027T015606Z-77455
+sha: 11629978b324374e5522438772741cf73f3885eb · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-1, AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
