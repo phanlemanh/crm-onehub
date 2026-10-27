@@ -121,7 +121,12 @@ function dienBien(
 		donVi: ca.unit,
 		coCapNhat: diem.length > 0,
 		tuanDau: diem[0]?.tuan ?? null,
-		diem: diem.map((d) => ({ ...d, kyVong: null })),
+		diem: diem.map((d) => ({
+			...d,
+			kyVong: null,
+			checkInId: null,
+			camXuc: [],
+		})),
 	});
 }
 
