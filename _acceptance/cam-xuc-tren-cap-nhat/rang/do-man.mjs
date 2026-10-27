@@ -98,27 +98,58 @@ async function choChip(trang, vung, loai, mong) {
 	return { dat: false, thuc };
 }
 
+function donCua(khoa) {
+	if (khoa === "goc") return { loai: "goc" };
+	const [loai, id] = khoa.split(":");
+	return { loai, id };
+}
+
 async function chonLan(n) {
 	const api = await n.api.truong.hoi("okr.capNhatGanDay", {
 		cycleId: n.ky.hienHanh,
 		phamVi: "tat-ca",
 		trang: 1,
 	});
+	const hop = new Map();
 	for (const d of api.rows) {
 		if (!d.moiNhat) continue;
 		const loai = LOAI.find(
 			(l) => !d.camXuc.some((m) => m.loai === l && m.cuaToi),
 		);
-		if (loai)
-			return {
-				x: d.checkInId,
-				k: d.kr.id,
-				bo: d.bo.khoa,
-				loai,
-				so0: d.camXuc.find((m) => m.loai === loai)?.so ?? 0,
-			};
+		if (!loai) continue;
+		if (!hop.has(d.bo.khoa))
+			hop.set(
+				d.bo.khoa,
+				await n.api.truong.hoi("okr.hopTuan", {
+					cycleId: n.ky.hienHanh,
+					unit: donCua(d.bo.khoa),
+				}),
+			);
+		const dangBan = hop.get(d.bo.khoa).dangBan;
+		if (
+			!dangBan.some(
+				(h) => h.keyResultId === d.kr.id && h.checkInId === d.checkInId,
+			)
+		)
+			continue;
+		return {
+			x: d.checkInId,
+			k: d.kr.id,
+			bo: d.bo.khoa,
+			loai,
+			so0: d.camXuc.find((m) => m.loai === loai)?.so ?? 0,
+		};
 	}
 	return null;
+}
+
+async function moBang(t, vung, loai) {
+	for (let lan = 0; lan < 3; lan += 1) {
+		await nghi(DO.cho.langMs);
+		await t.trang.click(`${vung} [data-mo-cam-xuc]`);
+		if (await choThay(t.trang, `[data-chon-cam-xuc="${loai}"]`)) return true;
+	}
+	return false;
 }
 
 async function moNgan(t, k) {
@@ -139,7 +170,7 @@ async function e4(n) {
 			"KHONG DO DUOC: khong dung duoc Given AC-4 — khong co lan moi nhat nao tren trang dau",
 		);
 	const vungHop = `[data-kr-hop="${c.k}"]`;
-	const vungLan = `[data-hang-cam-xuc="${c.x}"]`;
+	const vungLan = `[data-lich-su-kr] [data-hang-cam-xuc="${c.x}"]`;
 	const r = await mo(t, duongHop(n, c.bo), vungHop);
 	if (!r.thay) {
 		bao(false, "", "SAI AC-4 hop-tuan khong thay dong KR");
@@ -160,8 +191,10 @@ async function e4(n) {
 	await t.trang.click(`a[href*="/okr/cap-nhat-gan-day"]`);
 	await choThay(t.trang, `[data-dong-tin="${c.x}"]`);
 	const vungDong = `[data-dong-tin="${c.x}"]`;
-	await t.trang.click(`${vungDong} [data-mo-cam-xuc]`);
-	await choThay(t.trang, `[data-chon-cam-xuc="${c.loai}"]`);
+	if (!(await moBang(t, vungDong, c.loai))) {
+		bao(false, "", "SAI AC-4 bang cam xuc khong mo");
+		return;
+	}
 	if (PHA === "khong-lam-moi-hop") {
 		await t.trang.setRequestInterception(true);
 		t.trang.on("request", (req) =>
