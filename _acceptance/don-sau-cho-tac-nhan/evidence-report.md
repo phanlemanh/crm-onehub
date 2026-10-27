@@ -6,8 +6,8 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e7f054530a483ec700b838a521f708e939c578c7
-human_signoff:
+verified_commit: e930caf3df3e5b69c78095ddbd7a8804b9916c22
+human_signoff: Manh Phan 2026-10-27 — ký Cổng Bằng chứng trên S4 vòng 1 PASS (5/5 eval, 7/7 suite); Ngoài-1 ghi Known limits; Ngoài-2 chấp nhận, không sửa; cắt/hoãn đồng ý cắt; Treo phê hết
 ---
 
 # Evidence Report: don-sau-cho-tac-nhan
@@ -141,3 +141,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, determi
 ## Iterations
 
 Round 1: E1, E2, E3, E4, E5 đều xanh, không eval nào hỏng. Baseline không đo được (BLOCKED hạ tầng).
+
+### Re-pin lần 1 — 2026-10-27, do gộp onehub 5084ffe74 sau lượt chấm
+run_id: repin-20261027T122906Z-45540
+sha: e930caf3df3e5b69c78095ddbd7a8804b9916c22 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E5 · AC không có chốt máy: AC-5 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

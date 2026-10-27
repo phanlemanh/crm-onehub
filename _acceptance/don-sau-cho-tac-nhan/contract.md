@@ -5,7 +5,7 @@ slug: don-sau-cho-tac-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-27-don-sau-cho-tac-nhan-design.md
 approved_by: Manh Phan
 approved_at: 2026-10-27T07:25:51Z
@@ -66,3 +66,5 @@ Ngưỡng của ô cơ hội đo bằng chính bộ AC, không có thước sau-
   lối khác giữ 12/8 px bằng một phần tử bọc trong thẻ. Ảnh trước/sau ở `design-pass.md`.
 - Bài kiểm của K7 vẽ thẻ qua `BuildingAgentCard` của màn chat, không nhập thẻ trực tiếp; E4 chặn mọi sửa ở tệp đó.
 - Không đụng `packages/ui/src/lib/messages.ts` (#568 đang sửa).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-27:
+  - Ngoài-1: Bài kiểm nội dung thẻ «Đang dựng» dùng tên tệp viết sẵn thay vì lấy từ màn chat; nếu màn chat đổi tên hay thứ tự tệp, bài này vẫn xanh dù thẻ trên màn hiện khác.

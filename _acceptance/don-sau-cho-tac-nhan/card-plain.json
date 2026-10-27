@@ -1,27 +1,3 @@
 {
-  "feature_plain": "Thẻ «Đang dựng tác nhân» trên màn chờ được dựng từ thư viện giao diện chung của kho, không còn là bản vẽ riêng của khu chat, và khoảng cách đầu, chân thẻ theo đúng mặc định của mọi thẻ.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ chỉ còn một thẻ «Đang dựng» dùng chung (trong thư viện giao diện); màn chat và bản mẫu cùng dùng nó."},
-    {"id": "AC-3", "p": "Sẽ giữ nguyên nội dung thẻ như K7: tiêu đề, «n trên 4», bốn bước với Xong / Đang làm / Đang xếp, đồng hồ, dòng quá 3 phút, câu «rời trang» và nút Dừng."},
-    {"id": "AC-4", "p": "Sẽ để bài kiểm thẻ của K7 chạy lại nguyên tệp, không sửa dòng nào, và vẫn xanh."},
-    {"id": "AC-5", "p": "Sẽ chụp màn chờ thật ở khổ máy tính và điện thoại, dưới và trên 3 phút, đặt cạnh ảnh K7 để so."}
-  ],
-  "wont_do": [
-    {"id": "AC-2", "p": "Sẽ KHÔNG còn chỉnh tay khoảng cách ở phần đầu (đồng hồ, tiến độ) và phần chân (câu rời trang, nút Dừng) của thẻ."},
-    {"id": "OOS-1", "p": "KHÔNG đổi khoảng giữa danh sách bước và dòng quá 3 phút — hai mục hạn chế của K7 không nêu chỗ này."},
-    {"id": "OOS-2", "p": "KHÔNG dọn các thẻ khác còn chỉnh tay khoảng cách (Toàn cảnh OKR, hai bản mẫu) — thuộc các hàng «nếp màn» của lộ trình."},
-    {"id": "OOS-3", "p": "KHÔNG chặn trình duyệt tự dịch tên tệp trên thẻ — vòng này dời thẻ nguyên trạng."},
-    {"id": "OOS-4", "p": "KHÔNG đổi chữ, luồng hay ngưỡng 3 phút của màn chờ."}
-  ],
-  "scope_plain": "Việc dọn, không đổi gì người dùng làm; chỉ hai khoảng ở đầu và chân thẻ có thể khác vài điểm ảnh.",
-  "coverage_plain": [
-    {"i": 0, "p": "Không quét thêm: tìm toàn kho chỉ ra đúng hai nơi dùng thẻ (màn chat, bản mẫu); AC-1 (một thẻ dùng chung) quét lại toàn cây mỗi lần chấm."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Máy từng coi «theo khoảng mặc định» là lối duy nhất, nhưng còn lối bọc giữ khoảng cũ — chọn giữa hai lối là gu nhìn, nay thành Hỏi-1 cho anh, kèm ảnh trước/sau."},
-    {"i": 1, "p": "Lý do bỏ quét độ phủ yếu; đã thay bằng kết quả tìm toàn kho (hai nơi dùng thẻ) và ghi rõ hai việc để ngoài (chặn tự dịch tên tệp; đổi chữ, luồng, ngưỡng)."},
-    {"i": 2, "p": "Phép chụp màn so «như K7» mà thiếu ảnh K7; đã thêm bốn ảnh K7 để người chấm so từng cặp."},
-    {"i": 3, "p": "Lời hứa «bài kiểm K7 không sửa dòng nào» chưa có gì đo; nay lệnh chấm dừng đỏ nếu tệp kiểm ấy bị sửa."},
-    {"i": 4, "p": "Phép kiểm «một thẻ dùng chung» thiếu ba ca hỏng (bản mẫu giữ bản sao, thẻ gọi gói máy chủ, định nghĩa thứ hai); đã thêm, quét toàn cây."}
-  ]
+  "feature_plain": "Thẻ «Đang dựng tác nhân» trên màn chat nay lấy từ thư viện giao diện chung; người dùng vẫn thấy đúng bốn bước, đồng hồ, dòng quá 3 phút, câu rời trang và nút Dừng như trước, chỉ khoảng ở đầu và chân thẻ theo khoảng chung của mọi thẻ."
 }
