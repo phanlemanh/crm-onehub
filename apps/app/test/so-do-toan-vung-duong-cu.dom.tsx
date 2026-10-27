@@ -26,7 +26,13 @@ const GOC_KHO = resolve(GOC_APP, "../..");
 const O = join(GOC_APP, "app/(app)/[slug]/okr");
 const NHANH_NEN = "onehub";
 const REF_NEN = `origin/${NHANH_NEN}`;
-const DO_SAU_LAY_NEN = 500;
+const GIAY_MS = 1_000;
+const LAY_NEN = {
+	doSauDau: 20,
+	buoc: 100,
+	tran: 500,
+	hanCaMs: 50 * GIAY_MS,
+} as const;
 
 const { default: nextConfig } = await import("../next.config");
 const { duongSoDoTuSucKhoe, duongSoDoTuBoOkr } = await import(
@@ -136,44 +142,49 @@ function gitThu(...lenh: string[]) {
 	};
 }
 
+function layNen(sau: number): void {
+	const lay = gitThu(
+		"fetch",
+		"--no-tags",
+		`--depth=${sau}`,
+		"origin",
+		`+refs/heads/${NHANH_NEN}:refs/remotes/${REF_NEN}`,
+	);
+	if (lay.ma !== 0)
+		throw new Error(
+			`khong lay duoc ${REF_NEN} de so next.config.ts: ${lay.loi}`,
+		);
+}
+
+function daoDau(them: number): void {
+	const dao = gitThu(
+		"fetch",
+		"--no-tags",
+		`--deepen=${them}`,
+		"origin",
+		gitThu("rev-parse", "HEAD").ra,
+	);
+	if (dao.ma !== 0)
+		throw new Error(
+			`khong dao sau duoc HEAD de tim goc chung voi ${REF_NEN}: ${dao.loi}`,
+		);
+}
+
 function gocSoVoiNen(): string {
 	const nong = gitThu("rev-parse", "--is-shallow-repository").ra === "true";
 	const coSan = gitThu("merge-base", "HEAD", REF_NEN);
 	if (!nong && coSan.ma === 0) return coSan.ra;
-	const sau = `--depth=${DO_SAU_LAY_NEN}`;
-	if (gitThu("rev-parse", "--verify", "--quiet", REF_NEN).ma !== 0) {
-		const lay = gitThu(
-			"fetch",
-			"--no-tags",
-			sau,
-			"origin",
-			`+refs/heads/${NHANH_NEN}:refs/remotes/${REF_NEN}`,
-		);
-		if (lay.ma !== 0)
+	const thieuNen = gitThu("rev-parse", "--verify", "--quiet", REF_NEN).ma !== 0;
+	for (let sau = LAY_NEN.doSauDau; ; sau += LAY_NEN.buoc) {
+		if (thieuNen) layNen(sau);
+		if (nong) daoDau(sau === LAY_NEN.doSauDau ? sau : LAY_NEN.buoc);
+		const goc = gitThu("merge-base", "HEAD", REF_NEN);
+		if (goc.ma === 0) return goc.ra;
+		if (sau >= LAY_NEN.tran)
 			throw new Error(
-				`khong lay duoc ${REF_NEN} de so next.config.ts: ${lay.loi}`,
+				`khong tim duoc goc chung HEAD va ${REF_NEN} sau khi lay toi do sau ${sau}: ${goc.loi}`,
 			);
 	}
-	if (nong) {
-		const dau = gitThu("rev-parse", "HEAD").ra;
-		const dao = gitThu(
-			"fetch",
-			"--no-tags",
-			`--deepen=${DO_SAU_LAY_NEN}`,
-			"origin",
-			dau,
-		);
-		if (dao.ma !== 0)
-			throw new Error(
-				`khong dao sau duoc HEAD de tim goc chung voi ${REF_NEN}: ${dao.loi}`,
-			);
-	}
-	const goc = gitThu("merge-base", "HEAD", REF_NEN);
-	if (goc.ma !== 0)
-		throw new Error(
-			`khong tim duoc goc chung HEAD va ${REF_NEN} sau khi lay ${sau}: ${goc.loi}`,
-		);
-	return goc.ra;
 }
 
 function tepDuoi(thuMuc: string): string[] {
@@ -224,75 +235,79 @@ describe("vk6-bo-cay", () => {
 });
 
 describe("vk6-duong-cu", () => {
-	test("vk6-duong-cu: năm ca qua lớp chuyển thật", async () => {
-		const ket: string[] = [];
-		const { r, rw } = await dsLuat();
+	test(
+		"vk6-duong-cu: năm ca qua lớp chuyển thật",
+		async () => {
+			const ket: string[] = [];
+			const { r, rw } = await dsLuat();
 
-		const quanh = r
-			.map((l) => dichTheo(l, "/ws/okr/quanh-muc-tieu/m1"))
-			.find((d) => d !== null);
-		const veThuMuc = rw
-			.map((l) => dichTheo(l, "/ws/okr/so-do/muc-tieu/m1"))
-			.find((d) => d !== null);
-		const trangQuanh = readFileSync(
-			join(O, "quanh-muc-tieu/[objectiveId]/page.tsx"),
-			"utf8",
-		);
-		const trangSoDo = readFileSync(join(O, "so-do/page.tsx"), "utf8");
-		const chungMan =
-			trangQuanh.includes("so-do/man-so-do") &&
-			trangSoDo.includes("./man-so-do") &&
-			!/PageShell\b|PageShellHeader/.test(trangQuanh);
-		ket.push(
-			quanh === "/ws/okr/so-do/muc-tieu/m1" &&
-				veThuMuc === "/ws/okr/quanh-muc-tieu/m1" &&
-				chungMan
-				? "DUNG trang-cu"
-				: `SAI trang-cu: ${quanh} · ${veThuMuc} · chung man ${chungMan}`,
-		);
+			const quanh = r
+				.map((l) => dichTheo(l, "/ws/okr/quanh-muc-tieu/m1"))
+				.find((d) => d !== null);
+			const veThuMuc = rw
+				.map((l) => dichTheo(l, "/ws/okr/so-do/muc-tieu/m1"))
+				.find((d) => d !== null);
+			const trangQuanh = readFileSync(
+				join(O, "quanh-muc-tieu/[objectiveId]/page.tsx"),
+				"utf8",
+			);
+			const trangSoDo = readFileSync(join(O, "so-do/page.tsx"), "utf8");
+			const chungMan =
+				trangQuanh.includes("so-do/man-so-do") &&
+				trangSoDo.includes("./man-so-do") &&
+				!/PageShell\b|PageShellHeader/.test(trangQuanh);
+			ket.push(
+				quanh === "/ws/okr/so-do/muc-tieu/m1" &&
+					veThuMuc === "/ws/okr/quanh-muc-tieu/m1" &&
+					chungMan
+					? "DUNG trang-cu"
+					: `SAI trang-cu: ${quanh} · ${veThuMuc} · chung man ${chungMan}`,
+			);
 
-		const mot = await dichCuaTrangSucKhoe({ xemToanCanh: "so-do" });
-		ket.push(
-			mot === "/ws/okr/so-do"
-				? "DUNG so-do-tu-suc-khoe"
-				: `SAI so-do-tu-suc-khoe: ${mot ?? "khong chuyen"}`,
-		);
+			const mot = await dichCuaTrangSucKhoe({ xemToanCanh: "so-do" });
+			ket.push(
+				mot === "/ws/okr/so-do"
+					? "DUNG so-do-tu-suc-khoe"
+					: `SAI so-do-tu-suc-khoe: ${mot ?? "khong chuyen"}`,
+			);
 
-		const hai = await dichCuaTrangSucKhoe({
-			xemToanCanh: "so-do",
-			moDonVi: "pb:x",
-			locSoDo: "chu-y",
-		});
-		const q = new URLSearchParams(hai?.split("?")[1] ?? "");
-		ket.push(
-			hai?.startsWith("/ws/okr/so-do?") &&
-				q.get("moDonVi") === "pb:x" &&
-				q.get("locSoDo") === "chu-y"
-				? "DUNG giu-tham-so"
-				: `SAI giu-tham-so: ${hai}`,
-		);
+			const hai = await dichCuaTrangSucKhoe({
+				xemToanCanh: "so-do",
+				moDonVi: "pb:x",
+				locSoDo: "chu-y",
+			});
+			const q = new URLSearchParams(hai?.split("?")[1] ?? "");
+			ket.push(
+				hai?.startsWith("/ws/okr/so-do?") &&
+					q.get("moDonVi") === "pb:x" &&
+					q.get("locSoDo") === "chu-y"
+					? "DUNG giu-tham-so"
+					: `SAI giu-tham-so: ${hai}`,
+			);
 
-		const khong = await dichCuaTrangSucKhoe({});
-		const bang = await dichCuaTrangSucKhoe({ xemToanCanh: "bang" });
-		ket.push(
-			khong === null && bang === null
-				? "DUNG khong-bat-nham"
-				: `SAI khong-bat-nham: ${khong} · ${bang}`,
-		);
+			const khong = await dichCuaTrangSucKhoe({});
+			const bang = await dichCuaTrangSucKhoe({ xemToanCanh: "bang" });
+			ket.push(
+				khong === null && bang === null
+					? "DUNG khong-bat-nham"
+					: `SAI khong-bat-nham: ${khong} · ${bang}`,
+			);
 
-		const goc = gocSoVoiNen();
-		const doi = git(
-			"diff",
-			"--name-only",
-			goc,
-			"--",
-			"apps/app/next.config.ts",
-		);
-		ket.push(doi.trim() === "" ? "DUNG next-config" : "SAI next-config-doi");
+			const goc = gocSoVoiNen();
+			const doi = git(
+				"diff",
+				"--name-only",
+				goc,
+				"--",
+				"apps/app/next.config.ts",
+			);
+			ket.push(doi.trim() === "" ? "DUNG next-config" : "SAI next-config-doi");
 
-		expect(ket).toHaveLength(5);
-		expect(ket.filter((k) => k.startsWith("SAI"))).toEqual([]);
-	});
+			expect(ket).toHaveLength(5);
+			expect(ket.filter((k) => k.startsWith("SAI"))).toEqual([]);
+		},
+		LAY_NEN.hanCaMs,
+	);
 
 	test("vk6-duong-cu: Sức khoẻ thôi cách xem Sơ đồ", () => {
 		const sai = tepDuoi(join(O, "toan-canh"))
