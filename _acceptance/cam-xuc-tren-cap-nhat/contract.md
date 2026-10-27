@@ -5,7 +5,7 @@ slug: cam-xuc-tren-cap-nhat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api, db]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-27T09:42:57Z
 design_doc: docs/superpowers/specs/2026-10-27-cam-xuc-tren-cap-nhat-design.md
