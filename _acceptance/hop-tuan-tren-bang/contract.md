@@ -63,8 +63,8 @@ ca Họp tuần. Tiếng Việt, khổ 1440×900, 768×1024 và 375×812.
   và chữ «theo thứ tự bảng»; ‹ đi A, › đi C; từ C › đi D (sang Còn lại, kể cả khi Còn lại đang gập); ở A ‹ tắt, ở E › tắt;
   bấm tên D thì đếm «4/5». Bảng chỉ một KR thì ngăn không có đếm và ‹ ›.
 - AC-6: Given ngăn KR đang mở từ Họp tuần ở KR C, When tải lại trang, Then ngăn vẫn của C, vẫn đếm và đi theo thứ tự bảng.
-  When đóng ngăn rồi mở KR C từ trang đơn vị, Của tôi hay Tổng quan, Then ngăn đếm và đi theo `position` trong mục tiêu như
-  AC-2 của VK7 `ngan-kr-mot-cho`. Given đường dẫn mang nguồn Họp tuần mà KR không có trong bảng (bị gỡ khỏi bộ), Then ngăn
+  When đóng ngăn rồi mở KR C từ trang đơn vị, Của tôi hay Tổng quan, Then ngăn đếm và đi theo `position` trong mục tiêu,
+  đúng tiêu chí AC-2 của VK7 `ngan-kr-mot-cho`. Given đường dẫn mang nguồn Họp tuần mà KR không có trong bảng (bị gỡ khỏi bộ), Then ngăn
   đi theo mục tiêu, không lỗi. Lối mở ngăn ở `hop-tuan.tsx` vẫn đi qua `useMoDienBien` — số lối mở ngăn KR trong
   `apps/app` không đổi.
 - AC-7: Given ngăn KR mở từ Họp tuần ở KR B thuộc Đang bàn, When gửi cập nhật từ «Cập nhật» đầu ngăn và B rời Đang bàn
