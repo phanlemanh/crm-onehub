@@ -123,11 +123,12 @@ function HangSo() {
 			{day(KHUNG_XUONG.hangSo.oSo, "o-so").map((k) => (
 				<StatCard
 					data-khung-hang="o-so"
-					description={<Skeleton className="h-4 w-24" />}
 					key={k}
 					label={<Skeleton className="h-4 w-20" />}
 					value={<Skeleton className="h-8 w-14" />}
-				/>
+				>
+					<Skeleton className="h-4 w-24" />
+				</StatCard>
 			))}
 		</StatGroup>
 	);
