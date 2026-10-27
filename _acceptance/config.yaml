@@ -2313,6 +2313,13 @@ executors:
     hct_sau_gui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-cap-nhat-lan-truoc.dom.tsx -t hct-sau-gui"
     hct_goi_y: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-cap-nhat-lan-truoc.dom.tsx -t hct-goi-y"
     hct_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-cap-nhat-lan-truoc.dom.tsx -t hct-tai"
+    bkr_kr_phu_trach: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/bam-kr-mo-chi-tiet-kr.dom.tsx -t bkr-kr-phu-trach"
+    bkr_cay: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/bam-kr-mo-chi-tiet-kr.dom.tsx -t bkr-cay"
+    bkr_cay_api: 'bun run test -- "cd apps/api && bun test test/bam-kr-mo-chi-tiet-kr.spec.ts -t bkr-cay-api"'
+    bkr_viec: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/bam-kr-mo-chi-tiet-kr.dom.tsx -t bkr-viec"
+    bkr_bang_kr: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/bam-kr-mo-chi-tiet-kr.dom.tsx -t bkr-bang-kr"
+    bkr_chu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 ./test/bam-kr-mo-chi-tiet-kr.spec.ts -t bkr-chu"
+    bkr_quet_mo: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 ./test/bam-kr-mo-chi-tiet-kr.spec.ts -t bkr-quet-mo"
     hct_api_moi_nhat: 'bun run test -- "cd apps/api && bun test test/hop-cap-nhat-lan-truoc.spec.ts -t hct-moi-nhat"'
     htmb_bo_api: 'bun run test -- "cd apps/api && bun test test/hop-tuan-mo-dung-bo.spec.ts -t htmb-bo"'
     htmb_toan_canh_api: 'bun run test -- "cd apps/api && bun test test/hop-tuan-mo-dung-bo.spec.ts -t htmb-toan-canh"'
@@ -2356,6 +2363,7 @@ executors:
   script:
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs
+    bkr_khong_doi_hinh: bun _acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs
     smt_quet: bun _acceptance/sort-moi-truong/rang/quet-bang-kieu.mjs
     smt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/sort-moi-truong/rang/do-man.mjs"'
     tthv_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs"
