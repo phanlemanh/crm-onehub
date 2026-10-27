@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f32bc5acf7b14fa89db8790d728f56339302bf5a
+verified_commit: be571a245ff6d0b130a5dc5e7e47ce553faf9623
 human_signoff: Phan Le Manh 2026-10-26
 ---
 
@@ -221,3 +221,7 @@ sha: d241a5b08b585233da6e2d4f039a8dfc4c1f5bea · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-27, do V1-51 «B»: ba mock @/lib/session trải bản thật (f32bc5acf)
 run_id: repin-20261027T034630Z-39076
 sha: f32bc5acf7b14fa89db8790d728f56339302bf5a · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E11 · AC không có chốt máy: AC-9, AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-27, do gộp onehub d62a4e667 (#567 VK6) vào nhánh HT1; vẽ lại LO-TRINH.html
+run_id: repin-20261027T042904Z-39457
+sha: be571a245ff6d0b130a5dc5e7e47ce553faf9623 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E11 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9, AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
