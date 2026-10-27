@@ -33,9 +33,22 @@ function quetGoc() {
 	return dong;
 }
 
+const NGHI_SO_DO = new Set([
+	"apps/app/lib/messages/okr-toan-canh.ts#cay.canChinh",
+	"apps/app/lib/messages/okr-toan-canh.ts#cay.chuaCanChinh",
+	"apps/app/lib/messages/okr.ts#cayCanChinh",
+]);
+const laNghi = (m) => NGHI_SO_DO.has(`${m.tep}#${m.khoa}`);
+
 chayRang(() => {
-	const kk = JSON.parse(readFileSync(join(GOC, KIEM_KE), "utf8"));
+	const dai = daiCuaVong();
 	const loi = [];
+	const hienHanh = JSON.parse(readFileSync(join(GOC, KIEM_KE), "utf8"));
+	for (const m of hienHanh.filter(laNghi)) loi.push(`kiem-ke con khoa da nghi ${m.tep}#${m.khoa}`);
+	const nghi = JSON.parse(git("show", `${dai.den}:${KIEM_KE}`)).filter(laNghi);
+	if (nghi.length !== NGHI_SO_DO.size)
+		loi.push(`kiem-ke luot thieu khoa da nghi: ${nghi.length} khac ${NGHI_SO_DO.size}`);
+	const kk = [...hienHanh, ...nghi];
 	const dem = (f) => kk.filter(f).length;
 	if (kk.length !== KHAI.tong) loi.push(`tong ${kk.length} khac ${KHAI.tong}`);
 	for (const [k, n] of Object.entries(KHAI.khaiNiem)) {
@@ -67,7 +80,6 @@ chayRang(() => {
 		if (!co) loi.push(`kiem-ke sot ${d.tep}:${d.dong} ${d.chu.slice(0, 60)}`);
 	}
 
-	const dai = daiCuaVong();
 	const commit = git("rev-list", "--reverse", `${dai.tu}..${dai.den}`).split("\n").filter(Boolean);
 	const viTriKiemKe = commit.indexOf(dai.commitKiemKe);
 	if (viTriKiemKe < 0) loi.push("kiem-ke viet sau khi sua: commit them kiem-ke khong o trong dai");

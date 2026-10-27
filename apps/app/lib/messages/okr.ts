@@ -44,7 +44,6 @@ const vi = {
 	demDonVi: (mt: number, kr: number) => `${mt} mục tiêu · ${kr} KR`,
 	cachXem: "Cách xem",
 	danhSach: "Danh sách",
-	cayCanChinh: "Sơ đồ góp vào",
 	themMucTieu: "Thêm mục tiêu",
 	chonDuong: {
 		moTa: "Mục tiêu mới của {ten}. Chọn cách bắt đầu.",
@@ -825,7 +824,6 @@ const en: OkrMessages = {
 		`${mt} ${mt === 1 ? "objective" : "objectives"} · ${kr} ${kr === 1 ? "KR" : "KRs"}`,
 	cachXem: "View",
 	danhSach: "List",
-	cayCanChinh: "Contribution map",
 	themMucTieu: "Add objective",
 	chonDuong: {
 		moTa: "New objective for {ten}. Choose how to start.",

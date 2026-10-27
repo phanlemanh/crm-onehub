@@ -17,6 +17,11 @@ const vi = {
 	soDo: {
 		tieuDe: "Sơ đồ",
 		moTa: "Bộ OKR của từng đơn vị góp vào mục tiêu công ty ra sao trong chu kỳ.",
+		soDoGopVao: "Sơ đồ góp vào",
+		toanManHinh: "Toàn màn hình",
+		thoatToanManHinh: "Thoát toàn màn hình",
+		veCaCongTy: "Về sơ đồ cả công ty",
+		daiCongCu: "Công cụ sơ đồ",
 	},
 	veSoDo: "Về Sơ đồ",
 	boOkr: {
@@ -88,6 +93,11 @@ const en: OkrVoKhuMessages = {
 	soDo: {
 		tieuDe: "Map",
 		moTa: "How each unit's OKR set contributes to company objectives in the cycle.",
+		soDoGopVao: "Contribution map",
+		toanManHinh: "Full screen",
+		thoatToanManHinh: "Exit full screen",
+		veCaCongTy: "Back to company map",
+		daiCongCu: "Map tools",
 	},
 	veSoDo: "Back to Map",
 	boOkr: {

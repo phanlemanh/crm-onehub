@@ -41,7 +41,6 @@ const LOI_HYDRATE = /hydrat/i;
 const MOI_EVAL = [
 	"E2",
 	"E3",
-	"E5",
 	"E10",
 	"E14",
 	"E17",
@@ -85,6 +84,7 @@ const CHU = {
 	henNgay: "tuần bắt đầu Thứ Hai",
 	hienTai: "hiện tại",
 	daDong: "đã đóng",
+	toanCanhTab: "Toàn cảnh",
 	sucKhoeMuc: "Sức khoẻ",
 	chuongTrinh: "Chương trình OKR",
 };
@@ -1370,160 +1370,6 @@ const dangCo = (t) =>
 		};
 	});
 
-async function buocCay() {
-	const t = await moTrang(cookie.truongP1, RONG, theoDonVi("xemOkr=cay"));
-	await hienSel(t, `[role='tree'][aria-label='${CHU.cayCanChinh}']`);
-	const hang = () =>
-		t.evaluate(
-			(n) =>
-				window
-					.__tim(`[role='tree'][aria-label='${n}'] [role='treeitem']`)
-					.map((e) => e.getAttribute("data-cay-khoa")),
-			CHU.cayCanChinh,
-		);
-	kiem(
-		"E5: cay can chinh co role=tree va treeitem aria-level 1",
-		await coSel(
-			t,
-			`[role='tree'][aria-label='${CHU.cayCanChinh}'] [role='treeitem'][aria-level='1']`,
-		),
-	);
-	kiem(
-		"E5: dung mot phan tu tabindex=0 trong cay can chinh",
-		(await demSel(
-			t,
-			`[role='tree'][aria-label='${CHU.cayCanChinh}'] [tabindex='0']`,
-		)) === 1,
-	);
-	const b1 = await demSel(t, `[data-nut-can-chinh='${OKR.B1.id}']`);
-	kiem(`E5: B1 gop hai cho phai hien hai lan (thay ${b1})`, b1 === 2);
-	kiem(
-		"E5: lan hien thu hai ghi cung hien o cho gop kia",
-		(
-			await chuSel(t, `[role='tree'][aria-label='${CHU.cayCanChinh}']`)
-		).includes(CHU.cungHien),
-	);
-	await chup(t, "E5-buoc-cay-1.png");
-
-	await focusDau(t, CHU.cayCanChinh);
-	const ds = await hang();
-	const buoc = [["tab", await dangCo(t)]];
-	for (const k of [
-		"ArrowDown",
-		"ArrowDown",
-		"ArrowLeft",
-		"ArrowRight",
-		"Home",
-		"End",
-	]) {
-		await t.keyboard.press(k);
-		await cho(200);
-		buoc.push([k, await dangCo(t)]);
-	}
-	console.log(
-		`  E5 tieu diem tung buoc: ${buoc.map(([k, d]) => `${k}=«${d.chu}»`).join(" → ")}`,
-	);
-	const sauHang = await hang();
-	kiem(
-		`E5: ArrowDown di tung dong (hang ${ds.slice(0, 3)}, buoc ${JSON.stringify(buoc.slice(0, 3))})`,
-		buoc[0][1].khoa === ds[0] &&
-			buoc[1][1].khoa === ds[1] &&
-			buoc[2][1].khoa === ds[2],
-	);
-	kiem(
-		`E5: ArrowLeft gap hoac ve cha, ArrowRight mo lai (${JSON.stringify(buoc.slice(3, 5))})`,
-		buoc[3][1].khoa !== null && buoc[4][1].khoa !== null,
-	);
-	kiem(
-		`E5: Home ve dong dau, End ve dong cuoi nhin thay (${JSON.stringify(buoc.slice(5))}, hang ${sauHang.length})`,
-		buoc[5][1].khoa === sauHang[0] &&
-			buoc[6][1].khoa === sauHang[sauHang.length - 1],
-	);
-	await chup(t, "E5-buoc-cay-2.png");
-
-	await t.evaluate(
-		(n, b1) => {
-			const e = window
-				.__tim(
-					`[role='tree'][aria-label='${n}'] [data-nut-can-chinh='${b1}']`,
-				)[1]
-				?.closest("[role='treeitem']");
-			if (e instanceof HTMLElement) e.focus();
-		},
-		CHU.cayCanChinh,
-		OKR.B1.id,
-	);
-	await cho(150);
-	await chup(t, "E5-buoc-cay-3.png");
-	await t.keyboard.press("Enter");
-	await doi(
-		t,
-		"E5: Enter tren B1 mo sheet cua B1",
-		(b1) =>
-			new URL(location.href).searchParams.get("record") === `objective:${b1}`,
-		OKR.B1.id,
-	);
-	await t.close();
-
-	const p = await moTrang(
-		cookie.truongP1,
-		RONG,
-		theoDonVi(`donOkr=nguoi:${id.k}`),
-	);
-	const cayDonVi = "[data-chon-don-vi]";
-	await hienSel(p, cayDonVi, "E5: trang mot nguoi co cay don vi");
-	const tab0 = await demSel(p, `${cayDonVi}:not([tabindex='-1'])`);
-	kiem(
-		`E5 (AC-3): trang mot nguoi, cay don vi co dung mot muc trong thu tu Tab (thay ${tab0})`,
-		tab0 === 1,
-	);
-	let tabNguoi = 0;
-	while (tabNguoi < 60) {
-		await p.keyboard.press("Tab");
-		tabNguoi += 1;
-		if (
-			await p.evaluate(
-				(s) => document.activeElement?.closest(s) !== null,
-				cayDonVi,
-			)
-		)
-			break;
-	}
-	kiem(
-		`E5 (AC-3): trang mot nguoi, Tab toi duoc cay don vi (${tabNguoi} lan Tab)`,
-		await p.evaluate(
-			(s) => document.activeElement?.closest(s) !== null,
-			cayDonVi,
-		),
-	);
-	await chup(p, "E5-buoc-cay-5.png");
-	await p.close();
-
-	const u = await moTrang(cookie.truongP1, RONG, theoDonVi("donOkr=goc"));
-	await hienSel(u, "[data-chon-don-vi]");
-	await u.evaluate(
-		(m) => {
-			window.__khoaDon = m;
-		},
-		await khoaTheoTenDon(),
-	);
-	await u.focus("[data-chon-don-vi]");
-	await u.keyboard.press("Enter");
-	await hienSel(u, "[cmdk-item]");
-	await u.keyboard.press("ArrowDown");
-	await cho(200);
-	const den = await dangCo(u);
-	await u.keyboard.press("Enter");
-	await doi(
-		u,
-		`E5: Enter tren don vi doi URL donOkr sang ${den.khoa}`,
-		(k) => new URL(location.href).searchParams.get("donOkr") === k,
-		den.khoa,
-	);
-	await chup(u, "E5-buoc-cay-4.png");
-	await u.close();
-}
-
 async function buocToanCanh() {
 	const api = await hoi(cookie.chiOkr, "okr.toanCanh", { cycleId: OKR.quy });
 	const cuaTa = [
@@ -1771,9 +1617,9 @@ async function buocHopTuan() {
 	await toi(t, `${hopTuan}&tuTinOkr=thap`);
 	await taiLai(t);
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
-	await bamSel(t, "[data-the='danh-sach']");
+	await bamSel(t, "[data-the-con-bo] a[data-the='danh-sach']");
 	await hienSel(t, "[data-muc-tieu]");
-	await bamSel(t, "[data-the='hop-tuan']");
+	await bamSel(t, "[data-the-con-bo] a[data-the='hop-tuan']");
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
 	await cho(1500);
 	kiem(
@@ -2193,7 +2039,7 @@ async function buocChuKy() {
 	);
 	await chup(t, "E23-buoc-chon-ky-2.png");
 
-	await bamSel(t, "[data-the='hop-tuan']");
+	await bamSel(t, "[data-the-con-bo] a[data-the='hop-tuan']");
 	await hienSel(t, "[data-trang-thai^='ST-hoptuan-']");
 	await cho(600);
 	const ht = await chuTrang(t);
@@ -2249,7 +2095,6 @@ const NHOM = [
 		gieo: gieoLoc,
 		buoc: [
 			["loc", ["E2", "E3"], buocLoc],
-			["cay", ["E5"], buocCay],
 			["toan-canh", ["E10"], buocToanCanh],
 		],
 	},

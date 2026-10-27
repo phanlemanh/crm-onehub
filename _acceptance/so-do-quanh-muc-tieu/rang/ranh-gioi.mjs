@@ -42,13 +42,15 @@ export function neo() {
 	const daLen = git(
 		"log",
 		NHANH_CHINH,
+		"--first-parent",
 		"--merges",
-		"--format=%H %P",
+		"--format=%H %P%x09%s",
 		"--grep",
 		SLUG,
-		"-n",
-		"1",
-	).trim();
+	)
+		.split("\n")
+		.map((d) => d.split("\t"))
+		.find(([, s]) => s?.endsWith(`/feat/${SLUG}`))?.[0];
 	if (daLen) {
 		const [, cha1, cha2] = daLen.split(" ");
 		return { tu: git("merge-base", cha1, cha2).trim(), den: cha2 };
