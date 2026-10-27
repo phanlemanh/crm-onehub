@@ -93,7 +93,7 @@ export async function chayLenh(args: string[]): Promise<number> {
 		const bo = docTep(ts.tep);
 		const dem = await napBoOkrMau(db, bo, { moc: ts.moc });
 		console.log(
-			`Đã nạp bộ OKR mẫu «${bo.congTy}» (tuần 6 chứa ${ts.moc.toISOString()}): ${tomTat(dem)}.`,
+			`Đã nạp bộ OKR mẫu «${bo.congTy}» (tuần 6 chứa ${ts.moc.toISOString()}): ${tomTat(dem)}, ${dem.theoDoi} lượt theo dõi, ${dem.traLoi} lần trả lời.`,
 		);
 		return 0;
 	} catch (loi) {
