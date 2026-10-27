@@ -1,4 +1,5 @@
 import { execFileSync, spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
 	existsSync,
 	mkdtempSync,
@@ -47,8 +48,41 @@ const TEP_TAY = {
 		"khung-cho-don-vi-mot-hinh",
 };
 const PHEP = "Hỏi-1";
-const LOP_CHO_PHEP =
-	/data-mo-dong|aria-expanded|expand|gap|Gập tất cả|Mở tất cả|data-nut-mo-gap-tat-ca|data-hang-so-bo|hang-so|SO_NUT|khung-xuong|KHUNG_BANG|stat-group|data-the-con-bo|data-kr|moSan|Enter|Space|ArrowRight|ArrowLeft|keyboard|press|\bmo\b|\bthu\b|so-muc|khoang|soBo/;
+const BAN_DUYET = {
+	"apps/app/test/okr-trang-don-vi.dom.tsx": {
+		lop: "lớp 1, 3",
+		bam: "bf97b48750fa6384c9dbb996e1cc974cfaf0b74c6249bdfe5022f2fc06f7946e",
+	},
+	"apps/app/test/okr-theo-don-vi.dom.tsx": {
+		lop: "lớp 2, 4",
+		bam: "5686da4c2e5eec6ee7e9eef8727c24111687afd6635ea06865a646d7f76b7c4f",
+	},
+	"apps/app/test/muc-tieu-va-kr.dom.tsx": {
+		lop: "lớp 1",
+		bam: "448520d405ef2300852c267f8ac5ea94c2fcdb2b026681da58c5147ea6067963",
+	},
+	"_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs": {
+		lop: "lớp 1, 2",
+		bam: "d346a7a1d20fb5aa5f8027cd3c16b3c2d7f553345525b66e3ad68507c61c2dbe",
+	},
+	"_acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs": {
+		lop: "lớp 4",
+		bam: "9da14f12a18b54b77c1bf8abca1085cc080ebf85906ecd42f47466f204e6d6bb",
+	},
+	"_acceptance/dat-okr-trong-crm/rang/man-okr.mjs": {
+		lop: "lớp 1",
+		bam: "e0ed36374c6afbd7a3796b5db8121a0a08343f436f3cf5d1f748197810df7a6b",
+	},
+	"_acceptance/okr-to-chuc-va/rang/man-okr.mjs": {
+		lop: "lớp 1",
+		bam: "fb90e2162ab659dff758715b6cb1abe859b300d11794b731785953957d1b4f1c",
+	},
+	"_acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs": {
+		lop: "lớp 2, 4",
+		bam: "718ee1feb057b13c1b6dbfd62bbe1b7379e1ed5a152788c0b4f159267cac685b",
+	},
+};
+const EXECUTOR_QUET = new Set(["test", "script", "ui-check"]);
 const EXECUTOR_MAY = new Set(["test", "script"]);
 const CHO_CHUOI = "\u00abS\u00bb";
 const TRAN_LENH_MS = 30 * 60_000;
@@ -91,13 +125,13 @@ function tepCuaLenh(lenh) {
 	return [...tep];
 }
 
-function evalMayCua(slug, cauHinh) {
+function evalMayCua(slug, cauHinh, cho = EXECUTOR_MAY) {
 	const evals = parseEvals(
 		readFileSync(join(GOC, "_acceptance", slug, "evals.yaml"), "utf8"),
 		["executor", "cmd", "status"],
 	);
 	return evals.flatMap((e) => {
-		if (!EXECUTOR_MAY.has(String(e.executor).trim())) return [];
+		if (!cho.has(String(e.executor).trim())) return [];
 		if (String(e.status ?? "").trim() === "not-run") return [];
 		const lenh = giaiLenh(cauHinh, slug, e);
 		return [{ slug, id: e.id, lenh, tep: tepCuaLenh(lenh) }];
@@ -154,10 +188,13 @@ function quetLop() {
 			.split("\n")
 			.filter(Boolean),
 	);
-	const tepCua = new Map(Object.entries(TEP_TAY).map(([t, s]) => [t, [s]]));
+	const tepCua = new Map();
 	const hoSo = hoSoDaKy();
 	const tatCa = hoSo.flatMap((slug) => evalMayCua(slug, cauHinh));
-	for (const e of tatCa)
+	const deQuet = hoSo.flatMap((slug) =>
+		evalMayCua(slug, cauHinh, EXECUTOR_QUET),
+	);
+	for (const e of deQuet)
 		for (const t of e.tep)
 			tepCua.set(t, [...new Set([...(tepCua.get(t) ?? []), e.slug])]);
 	const doiRieng = (t) =>
@@ -179,7 +216,7 @@ function quetLop() {
 				khoa: evalRieng ? `${e.lenh}\u0000EVAL=${evalRieng}` : e.lenh,
 			};
 		});
-	lopDaQuet = { hoSo, muc, tepCua, loai };
+	lopDaQuet = { hoSo, muc, tepCua, loai, doi };
 	return lopDaQuet;
 }
 
@@ -371,6 +408,7 @@ function soatDoiThuoc(cwd) {
 			!lop.muc.some((m) => m.lenh.includes(t.split("/").pop()))
 		)
 			sai.push(`SAI AC-9 quet: thieu ${t}`);
+	const thuocDoi = [];
 	for (const [tep, cacHoSo] of lop.tepCua) {
 		if (!LA_THUOC.test(tep)) continue;
 		const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", tep], cwd);
@@ -384,6 +422,7 @@ function soatDoiThuoc(cwd) {
 				console.log(`THEM DANG KY ${tep}:${k.dong} ${k.mau}`);
 			continue;
 		}
+		thuocDoi.push(tep);
 		const slug = cacHoSo.find((h) => soCoDongFix(h, tep, PHEP));
 		if (!slug) {
 			sai.push(
@@ -391,20 +430,41 @@ function soatDoiThuoc(cwd) {
 			);
 			continue;
 		}
-		const lech = tatCa.filter((k) => !chiDoiChuoi(k));
-		const ngoaiLop = lech.filter(
-			(k) => ![...k.bo, ...k.them].some((d) => LOP_CHO_PHEP.test(d)),
-		);
-		for (const k of ngoaiLop)
+		const duyet = BAN_DUYET[tep];
+		const bam = bamDiff(tatCa);
+		if (!duyet || duyet.bam !== bam) {
+			const dau = tatCa.find((k) => !chiDoiChuoi(k)) ?? tatCa[0];
 			sai.push(
-				`SAI AC-9 ${tep}: doi ngoai lop cho phep (dong ${k.dong}: ${k.mau})`,
+				`SAI AC-9 ${tep}: doi ngoai lop cho phep (bam ${bam.slice(0, 12)} ${duyet ? `khac ban duyet ${duyet.bam.slice(0, 12)}` : "chua co ban duyet"}; dong ${dau?.dong}: ${dau?.mau})`,
 			);
-		if (ngoaiLop.length === 0)
-			console.log(
-				`DOI THUOC ${tep}: ${lech.length} khoi doi trong lop ${PHEP}, so ${slug} co dong fix`,
-			);
+			continue;
+		}
+		console.log(
+			`DOI THUOC ${tep}: ${tatCa.length} khoi dung ban duyet (${duyet.lop}), so ${slug} co dong fix`,
+		);
 	}
+	sai.push(...soTay(thuocDoi, Object.keys(TEP_TAY)));
 	return sai;
+}
+
+function bamDiff(khoi) {
+	const noiDung = khoi
+		.map((k) =>
+			[...k.bo.map((d) => `-${d}`), ...k.them.map((d) => `+${d}`)].join("\n"),
+		)
+		.join("\n@@\n");
+	return createHash("sha256").update(noiDung).digest("hex");
+}
+
+function soTay(quet, tay) {
+	const loi = [];
+	for (const t of quet)
+		if (!tay.includes(t))
+			loi.push(`SAI AC-9 quet: ${t} lech (quet co, tay khong)`);
+	for (const t of tay)
+		if (!quet.includes(t))
+			loi.push(`SAI AC-9 quet: ${t} lech (tay co, quet khong)`);
+	return loi;
 }
 
 const TEP_CHIEU_DO = "apps/app/test/okr-trang-don-vi.dom.tsx";
@@ -417,20 +477,33 @@ function themDongLogic(ma) {
 	};
 }
 
-function tronVoiChuoi(ma) {
-	const dong = ma.split("\n");
-	const i = dong.findIndex((d) =>
-		d.includes('q("[data-the-con-bo]") !== null'),
-	);
-	if (i < 0)
+function doiKhangDinh(ma) {
+	const cu = "phai(soKr === 3,";
+	if (ma.split(cu).length !== 2)
 		throw new Error(
-			`chieu do tron: khong thay dong cho the con o ${TEP_CHIEU_DO}`,
+			`chieu do doi-khang-dinh: khong thay «${cu}» o ${TEP_CHIEU_DO}`,
 		);
-	dong[i] = dong[i].replace(
-		'q("[data-the-con-bo]") !== null',
-		`q("[data-the-con-bo='bo']") !== null && true`,
+	const so = ma.slice(0, ma.indexOf(cu)).split("\n").length;
+	return { moi: ma.replace(cu, "phai(soKr === 4,"), so };
+}
+
+function chieuDoTayThieu() {
+	const lop = quetLop();
+	const thuocDoi = [...lop.tepCua.keys()].filter(
+		(t) => LA_THUOC.test(t) && Object.hasOwn(TEP_TAY, t) && lop.doi.has(t),
 	);
-	return { moi: dong.join("\n"), so: i + 1 };
+	const bo = "apps/app/test/muc-tieu-va-kr.dom.tsx";
+	const loi = soTay(
+		thuocDoi,
+		Object.keys(TEP_TAY).filter((t) => t !== bo),
+	);
+	for (const l of loi) console.log(l);
+	const ghim = `SAI AC-9 quet: ${bo} lech (quet co, tay khong)`;
+	const bat = loi.includes(ghim);
+	console.log(
+		`CHIEU DO tay-thieu: ${bat ? "bat duoc" : "KHONG bat duoc"} ${bo}`,
+	);
+	return bat ? MA_DO : 0;
 }
 
 function chieuDo(kieu) {
@@ -440,7 +513,7 @@ function chieuDo(kieu) {
 		git(["worktree", "add", "--detach", "--quiet", sao, "HEAD"]);
 		const tep = TEP_CHIEU_DO;
 		const duong = join(sao, tep);
-		const doi = (kieu === "tron" ? tronVoiChuoi : themDongLogic)(
+		const doi = (kieu === "doi-khang-dinh" ? doiKhangDinh : themDongLogic)(
 			readFileSync(duong, "utf8"),
 		);
 		writeFileSync(duong, doi.moi);
@@ -499,7 +572,15 @@ try {
 	if (process.argv.includes("--tu-kiem-lenh")) process.exit(tuKiemLenh());
 	const viTri = process.argv.indexOf("--chieu-do");
 	if (viTri >= 0)
-		process.exit(chieuDo(process.argv[viTri + 1] === "tron" ? "tron" : "dong"));
+		process.exit(
+			process.argv[viTri + 1] === "tay-thieu"
+				? chieuDoTayThieu()
+				: chieuDo(
+						process.argv[viTri + 1] === "doi-khang-dinh"
+							? "doi-khang-dinh"
+							: "dong",
+					),
+		);
 	const phan = docPhan(process.argv);
 	const saiSo = phan.k === 1 ? soatDoiThuoc(GOC) : [];
 	for (const s of saiSo) console.log(s);
