@@ -3,6 +3,7 @@ import { tomTatCamXucCua } from "@crm/db/okr-cam-xuc";
 import type { NguCanhXem } from "@crm/db/okr-hien-thi";
 import {
 	LOAI_CAM_XUC,
+	type NguoiThaCamXucOutput,
 	type ThaCamXucInput,
 	type TomTatCamXuc,
 } from "@crm/validation/okr-cam-xuc";
@@ -98,6 +99,30 @@ export class OkrCamXucService {
 			});
 		const tom = await this.tomTat(this.db, [input.checkInId], userId, nc);
 		return tom.get(input.checkInId) ?? [];
+	}
+
+	async nguoiThaCamXuc(
+		userId: string,
+		checkInId: string,
+	): Promise<NguoiThaCamXucOutput> {
+		const lan = await this.db.okrCheckIn.findUnique({
+			where: { id: checkInId },
+			select: { keyResult: { select: { objectiveId: true } } },
+		});
+		if (!lan) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
+		const { nc } = await this.quyenOkr.assertXemMucTieu(
+			userId,
+			lan.keyResult.objectiveId,
+		);
+		const tom = await tomTatCamXucCua(this.db, [checkInId], nc, {
+			thuTu: LOAI_CAM_XUC,
+			tenToiDa: Number.MAX_SAFE_INTEGER,
+			nguoiXemId: userId,
+		});
+		return (tom.get(checkInId) ?? []).map((m) => ({
+			loai: m.loai,
+			nguoi: m.nguoi,
+		}));
 	}
 }
 

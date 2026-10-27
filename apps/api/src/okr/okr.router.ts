@@ -1,4 +1,9 @@
-import { thaCamXucInput, tomTatCamXuc } from "@crm/validation/okr-cam-xuc";
+import {
+	nguoiThaCamXucInput,
+	nguoiThaCamXucOutput,
+	thaCamXucInput,
+	tomTatCamXuc,
+} from "@crm/validation/okr-cam-xuc";
 import {
 	danhDauViecInput,
 	ganSangKienInput,
@@ -1545,6 +1550,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof thaCamXucInput>,
 	) {
 		return this.camXuc.thaCamXuc(ctx.user.id, input);
+	}
+
+	@Query({
+		input: nguoiThaCamXucInput,
+		output: nguoiThaCamXucOutput,
+		meta: restMeta("GET", "/okr/check-ins/{checkInId}/reactions", TAG),
+	})
+	nguoiThaCamXuc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof nguoiThaCamXucInput>,
+	) {
+		return this.camXuc.nguoiThaCamXuc(ctx.user.id, input.checkInId);
 	}
 
 	@Query({

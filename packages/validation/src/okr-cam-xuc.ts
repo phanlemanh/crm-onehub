@@ -24,3 +24,13 @@ export const mucCamXuc = z.object({
 
 export const tomTatCamXuc = z.array(mucCamXuc);
 export type TomTatCamXuc = z.infer<typeof tomTatCamXuc>;
+
+export const nguoiThaCamXucInput = z.object({ checkInId: ma }).strict();
+
+export const nguoiThaCamXucOutput = z.array(
+	z.object({
+		loai: z.enum(LOAI_CAM_XUC),
+		nguoi: z.array(z.object({ id: z.string(), name: z.string() })),
+	}),
+);
+export type NguoiThaCamXucOutput = z.infer<typeof nguoiThaCamXucOutput>;
