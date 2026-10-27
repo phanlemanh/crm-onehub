@@ -231,7 +231,11 @@ export class OkrTraoDoiService {
 		});
 	}
 
-	async follow(userId: string, input: FollowInput): Promise<FollowOutput> {
+	async follow(
+		userId: string,
+		input: FollowInput,
+		now = new Date(),
+	): Promise<FollowOutput> {
 		const { nc, mt } = await this.quyenOkr.assertXemMucTieu(
 			userId,
 			input.objectiveId,
@@ -241,7 +245,9 @@ export class OkrTraoDoiService {
 			const doi = input.on
 				? (
 						await tx.okrFollow.createMany({
-							data: [{ objectiveId: input.objectiveId, userId }],
+							data: [
+								{ objectiveId: input.objectiveId, userId, createdAt: now },
+							],
 							skipDuplicates: true,
 						})
 					).count

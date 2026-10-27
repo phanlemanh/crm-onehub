@@ -1,0 +1,11 @@
+--- a/apps/agent/agent/lib/so-chi-phi.ts
++++ b/apps/agent/agent/lib/so-chi-phi.ts
+@@ -91,7 +91,7 @@
+ 			inputTokens: u.inputTokens ?? null,
+ 			cacheReadTokens: u.cacheReadTokens ?? null,
+ 			outputTokens: u.outputTokens ?? null,
+-			costUsd: u.costUsd ?? null,
++			costUsd: u.costUsd == null ? null : u.costUsd * 2,
+ 		});
+ 		return true;
+ 	} catch (loi) {

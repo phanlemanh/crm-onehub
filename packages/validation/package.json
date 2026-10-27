@@ -35,6 +35,7 @@
 		"./okr-chi-so": "./src/okr-chi-so.ts",
 		"./okr-chu-ky": "./src/okr-chu-ky.ts",
 		"./okr-tham-so": "./src/okr-tham-so.ts",
+		"./okr-bo-hop-tuan": "./src/okr-bo-hop-tuan.ts",
 		"./okr-can-chinh": "./src/okr-can-chinh.ts",
 		"./okr-chuong-trinh": "./src/okr-chuong-trinh.ts",
 		"./okr-tro-ly": "./src/okr-tro-ly.ts",

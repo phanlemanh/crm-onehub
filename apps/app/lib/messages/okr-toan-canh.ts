@@ -1,13 +1,6 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
-	cay: {
-		canChinh: "Sơ đồ góp vào cả công ty",
-		chuaCanChinh: "Chưa góp vào đâu",
-		cungHien: "cũng hiện ở chỗ góp kia",
-		locTatCa: "Tất cả",
-		locRong: "Không có mục tiêu nào ở mức này trong chu kỳ.",
-	},
 	loc: {
 		phuTrach: "Người phụ trách",
 		loai: "Loại",
@@ -124,6 +117,20 @@ const vi = {
 		daGhi:
 			"Đã ghi — quản trị viên thấy số phản hồi này ở Toàn cảnh › Sức khoẻ chương trình.",
 		phanHoiLoi: "Không gửi được phản hồi. Thử lại.",
+		choBanDau: (gio: string, thu: string, ngay: string, thuCapNhat: string) =>
+			`Kara gửi bản tóm tắt đầu tiên vào khoảng ${gio} ${thu}, ${ngay} — sáng hôm sau ngày cập nhật ${thuCapNhat}.`,
+		dangXep: "Kara đang xếp bản tóm tắt đầu tiên — thường có trong vài phút.",
+		tamNghiDen: (ngay: string) => `Kara tạm nghỉ tóm tắt tuần tới ${ngay}.`,
+		chuaNoiMoHinh: "Kara chưa tóm tắt được: quản trị chưa nối mô hình AI.",
+		tenThu: [
+			"thứ Hai",
+			"thứ Ba",
+			"thứ Tư",
+			"thứ Năm",
+			"thứ Sáu",
+			"thứ Bảy",
+			"Chủ nhật",
+		],
 	},
 	quanTri: {
 		moTa: (ngay: string) =>
@@ -244,13 +251,6 @@ const vi = {
 export type OkrToanCanhMessages = typeof vi;
 
 const en: OkrToanCanhMessages = {
-	cay: {
-		canChinh: "Company-wide contribution map",
-		chuaCanChinh: "Not contributing anywhere",
-		cungHien: "also shown where it contributes",
-		locTatCa: "All",
-		locRong: "No objectives at this level in the cycle.",
-	},
 	loc: {
 		phuTrach: "Owner",
 		loai: "Type",
@@ -367,6 +367,23 @@ const en: OkrToanCanhMessages = {
 		phanHoiNhom: "Was this week's summary useful",
 		daGhi: "Noted — admins see these counts under Overview › Program health.",
 		phanHoiLoi: "Couldn't send your feedback. Try again.",
+		choBanDau: (gio: string, thu: string, ngay: string, thuCapNhat: string) =>
+			`Kara sends the first summary around ${gio} on ${thu}, ${ngay} — the morning after the ${thuCapNhat} update.`,
+		dangXep:
+			"Kara is queuing the first summary — it usually arrives within a few minutes.",
+		tamNghiDen: (ngay: string) =>
+			`Kara has paused weekly summaries until ${ngay}.`,
+		chuaNoiMoHinh:
+			"Kara can't summarise yet: an admin hasn't connected an AI model.",
+		tenThu: [
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday",
+			"Sunday",
+		],
 	},
 	quanTri: {
 		moTa: (ngay: string) =>

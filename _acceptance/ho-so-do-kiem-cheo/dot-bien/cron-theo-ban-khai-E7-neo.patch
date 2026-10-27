@@ -1,0 +1,11 @@
+--- a/_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs
++++ b/_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs
+@@ -5,7 +5,7 @@
+ import { GOC } from "./chung.mjs";
+ 
+ const CANH_BAO_GHIM = 3;
+-const CAP_GOP = "147b47a339b2f5a37cbbd5feae536553d490cf5a";
++const CAP_GOP = "0000000000000000000000000000000000000000";
+ const NHOM = ["apps", "packages", "tools"];
+ const BO_DEM_LINT = 64 * 1024 * 1024;
+ const LENH = [

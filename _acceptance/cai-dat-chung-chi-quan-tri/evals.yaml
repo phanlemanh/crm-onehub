@@ -143,10 +143,11 @@ evals:
     expected: |
       Chay toan bo apps/app/test/onboarding-gate.spec.ts sau khi bo dung researchKey gia mang
       canManage (mac dinh true — hinh that cua tra loi); roi rang khang-dinh-cu-nguyen-ven.mjs
-      lay tep do o sha CO DINH a8572437 (dinh onehub da gop vao nhanh, gom #129; git show, khong
-      merge-base), cat moi khoi
+      lay tep do o sha CO DINH c895e5bff (cap gop #184 phien-chet-ve-dang-nhap, them hetPhien:false
+      vao khang dinh cu; truoc do a8572437 gom #129; git show, khong merge-base; sha khong co
+      trong kho -> ma 2 "KHONG DO DUOC"), cat moi khoi
       it(/test( den dong dong cung muc thut, va doi moi khoi cu phai co NGUYEN VAN trong tep
-      hien tai. Ma tran toan phan: so khoi cat duoc = so dong mo khoi cua tep goc (30), khong
+      hien tai. Ma tran toan phan: so khoi cat duoc = so dong mo khoi cua tep goc (42), khong
       khop thi ma 2. Dong cuoi "KET LUAN: n DUNG, m SAI — ma thoat X".
       CHIEU DO: sua .toBe cua ca "sends an onboarded rep with no key" (dong rieng) -> SAI goi
       ten ca, ma 1; doi mot it( thut mot tab thanh it.skip( -> SAI goi ten ca; NEO hong -> ma 2.

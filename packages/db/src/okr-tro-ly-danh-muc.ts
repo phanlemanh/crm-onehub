@@ -205,6 +205,13 @@ export type TroLySanSang =
 	| { bat: true; conLaiUsd: number }
 	| { bat: false; lyDo: LyDoKhongSanSang };
 
+export const LY_DO_TAM_DUNG_TOM_TAT = [
+	"het-tran-thang",
+	"chua-co-khoa-mo-hinh",
+] as const satisfies readonly LyDoKhongSanSang[];
+
+export type LyDoTamDungTomTat = (typeof LY_DO_TAM_DUNG_TOM_TAT)[number];
+
 export const NGUON_KHOA = ["khoa-rieng", "khoa-chung", "oidc"] as const;
 
 export type NguonKhoaDb = (typeof NGUON_KHOA)[number];

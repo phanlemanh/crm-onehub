@@ -5,14 +5,24 @@ import {
 	mkdirSync,
 	readFileSync,
 	renameSync,
+	rmSync,
 	writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
-import { AGENT, duongPath, RA, taoKho, xoaKho } from "./mau-chung.mjs";
+import {
+	AGENT,
+	duongPath,
+	RA,
+	taoKho,
+	vanTayMa,
+	xoaKho,
+} from "./mau-chung.mjs";
 
 const KHO = "tln-e9";
 const TONG_KET = join(RA, "e9-tong-ket.jsonl");
 const TAM = `${TONG_KET}.dang-chay`;
+const SHA_TONG_KET = `${TONG_KET}.sha`;
+const SHA = vanTayMa();
 const EVE = join(AGENT, "node_modules/.bin/eve");
 const LAN = Number(process.argv[process.argv.indexOf("--lan") + 1] ?? 3) || 3;
 
@@ -28,6 +38,7 @@ let ma = 1;
 try {
 	const url = taoKho(KHO);
 	mkdirSync(RA, { recursive: true });
+	rmSync(SHA_TONG_KET, { force: true });
 	writeFileSync(TAM, "");
 	const r = spawnSync(EVE, ["eval", "okr/cach-ly", "--verbose"], {
 		cwd: AGENT,
@@ -55,7 +66,8 @@ try {
 	console.log(dong.join("\n"));
 	if (r.status === 0 && dong.length === LAN) {
 		renameSync(TAM, TONG_KET);
-		console.log(`pass ${LAN}/${LAN}`);
+		writeFileSync(SHA_TONG_KET, `${SHA}\n`);
+		console.log(`pass ${LAN}/${LAN} · sha ${SHA}`);
 		ma = 0;
 	} else {
 		console.log(

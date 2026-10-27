@@ -12,24 +12,32 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { LOC_MOI_KR_RONG } from "../moi-kr/tham-so";
 import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
+import { chuyenSoDoCu } from "../so-do/chuyen-so-do-cu";
+import { duongSoDoTuSucKhoe } from "../so-do/duong-so-do";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import { CuonToiNeo } from "./cuon-toi-neo";
 import { SucKhoe } from "./suc-khoe/suc-khoe";
 import { ToanCanh } from "./toan-canh";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: tieuDeTrinhDuyet(await getLocale(), "toan-canh") };
 }
 
 export default function ToanCanhPage({
+	params,
 	searchParams,
 }: {
+	params: Params;
 	searchParams: SearchParams;
 }) {
 	return (
 		<>
+			<Suspense fallback={null}>
+				<ChuyenSoDoCu params={params} searchParams={searchParams} />
+			</Suspense>
 			<DauTrangOkrTrang tab="toan-canh" />
 			<PageShellContent>
 				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
@@ -38,6 +46,16 @@ export default function ToanCanhPage({
 			</PageShellContent>
 		</>
 	);
+}
+
+async function ChuyenSoDoCu({
+	params,
+	searchParams,
+}: {
+	params: Params;
+	searchParams: SearchParams;
+}): Promise<null> {
+	return chuyenSoDoCu(params, searchParams, duongSoDoTuSucKhoe);
 }
 
 async function NoiDung({ searchParams }: { searchParams: SearchParams }) {

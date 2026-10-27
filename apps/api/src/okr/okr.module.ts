@@ -9,6 +9,7 @@ import { OkrService } from "./okr.service";
 import { OkrAccessService } from "./okr-access.service";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
+import { OkrCapNhatGanDayService } from "./okr-cap-nhat-gan-day.service";
 import { OkrChuKyService } from "./okr-chu-ky.service";
 import { OkrDuyetService } from "./okr-duyet.service";
 import { OkrHienThiService } from "./okr-hien-thi.service";
@@ -30,6 +31,7 @@ import { TroLyOkrService } from "./tro-ly.service";
 		OkrService,
 		OkrXemService,
 		OkrCapNhatService,
+		OkrCapNhatGanDayService,
 		OkrTraoDoiService,
 		OkrSoService,
 		TroLyOkrService,

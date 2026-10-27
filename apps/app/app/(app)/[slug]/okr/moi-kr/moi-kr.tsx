@@ -201,7 +201,7 @@ function useMat(dem: MoiKrOutput["facetCounts"] | undefined): DataTableFacet[] {
 	];
 }
 
-function BangMoiKr({ cycleId }: { cycleId: string }) {
+export function BangMoiKr({ cycleId }: { cycleId: string }) {
 	const t = okrMoiKrMessages(useLocale());
 	const trpc = useTRPC();
 	const moNganKr = useMoNganKr();

@@ -1,0 +1,10 @@
+--- a/packages/validation/src/okr-cuoc-soan.ts
++++ b/packages/validation/src/okr-cuoc-soan.ts
+@@ -58,6 +58,7 @@
+ 	b: { mucTieu: MucTieuNhap[] },
+ 	ctx: z.RefinementCtx,
+ ): void {
++	return;
+ 	for (const { i, khoa } of lapLai(b.mucTieu.map((m) => m.khoa)))
+ 		ctx.addIssue({
+ 			code: "custom",

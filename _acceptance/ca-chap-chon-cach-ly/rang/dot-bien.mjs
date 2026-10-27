@@ -17,7 +17,7 @@ const CAP = [
 	{
 		ten: "a mo-coi",
 		lenh: DON_VI("mo-coi"),
-		pha: [[KHOI_DONG, "\t\t\t\tawait dungMoCoi(khoa);\n", ""]],
+		pha: [[KHOI_DONG, "\tawait dungMoCoi(daGianh);\n", ""]],
 		ghim: "mo coi con song",
 	},
 	{

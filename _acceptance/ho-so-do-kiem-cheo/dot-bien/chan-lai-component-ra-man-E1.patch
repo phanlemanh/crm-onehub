@@ -1,0 +1,10 @@
+--- a/packages/ui/src/components/skeleton.tsx
++++ b/packages/ui/src/components/skeleton.tsx
+@@ -1,6 +1,6 @@
+ import { cn } from "@crm/ui/lib/utils";
+ 
+-function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
++function Skeleton({ className, "aria-label": label = "Save", ...props }: React.ComponentProps<"div">) {
+ 	return (
+ 		<div
+ 			data-slot="skeleton"

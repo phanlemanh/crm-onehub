@@ -575,6 +575,12 @@ type PropsNut = {
 	"data-nut"?: string;
 };
 
+const NUT_MAU_DOI_CHUNG = "mau-doi-chung";
+
+async function NutMauDoiChung() {
+	return <Button data-nut={NUT_MAU_DOI_CHUNG}>{NUT_MAU_DOI_CHUNG}</Button>;
+}
+
 async function nutTrangServer(el: ReactNode): Promise<Element[]> {
 	const ra: Element[] = [];
 	const di = async (n: ReactNode, trongHang: boolean): Promise<void> => {
@@ -655,11 +661,16 @@ describe("mnt-man-doc", () => {
 			await don();
 		}
 		soO += 1;
-		datNen({ xem: TB1 });
-		const veSoDo = await dauTrangServer("quanh");
+		const mau = await nutTrangServer(
+			<div>
+				<PageShellActions>
+					<NutMauDoiChung />
+				</PageShellActions>
+			</div>,
+		);
 		s.kiem(
-			veSoDo.some((e) => e.getAttribute("data-nut") === "ve-so-do"),
-			"mnt-man-doc: doi chung quanh khong thay nut ve-so-do (bo duyet trang server mu)",
+			mau.some((e) => e.getAttribute("data-nut") === NUT_MAU_DOI_CHUNG),
+			`mnt-man-doc: doi chung khong thay nut ${NUT_MAU_DOI_CHUNG} trong PageShellActions (bo duyet trang server mu)`,
 		);
 		soO += 1;
 		await dauTrang("bo-okr", { xem: TB1 }, "?donOkr=goc");

@@ -1,0 +1,9 @@
+--- a/packages/db/prisma/migrations/20261002010000_tro_ly_okr_nen/migration.sql
++++ b/packages/db/prisma/migrations/20261002010000_tro_ly_okr_nen/migration.sql
+@@ -131,3 +131,6 @@
+ -- CreateIndex
+ CREATE INDEX "aiChiPhi_sessionId_idx" ON "aiChiPhi"("sessionId");
+ 
++-- AlterTable
++ALTER TABLE "okrProgramConfig" DROP COLUMN "aiOn";
++

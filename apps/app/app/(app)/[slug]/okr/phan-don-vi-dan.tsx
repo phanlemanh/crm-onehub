@@ -13,6 +13,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { SectionHeading } from "@crm/ui/components/section-heading";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
+import { thuTuDanTheoCay } from "@crm/validation/okr-bo-hop-tuan";
 import { khoaDonOkr } from "@crm/validation/okr-tham-so";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -68,27 +69,7 @@ export function thuTuDan(
 	headOf: { divisions: string[]; departments: string[] },
 	cay: CayDuLieu | undefined,
 ): DonChonOkr[] {
-	const viTri = (ds: readonly { id: string }[], id: string) => {
-		const i = ds.findIndex((x) => x.id === id);
-		return i < 0 ? Number.MAX_SAFE_INTEGER : i;
-	};
-	const bpCay = cay?.divisions ?? [];
-	const pbCay = [
-		...(cay?.divisions.flatMap((x) => x.departments) ?? []),
-		...(cay?.chuaXep ?? []),
-	];
-	const theo = (ds: string[], cayDs: readonly { id: string }[]) =>
-		ds
-			.map((id, i) => ({ id, i }))
-			.sort((a, b) => viTri(cayDs, a.id) - viTri(cayDs, b.id) || a.i - b.i)
-			.map((x) => x.id);
-	return [
-		...theo(headOf.divisions, bpCay).map((id) => ({ loai: "bp" as const, id })),
-		...theo(headOf.departments, pbCay).map((id) => ({
-			loai: "pb" as const,
-			id,
-		})),
-	];
+	return thuTuDanTheoCay(headOf, cay);
 }
 
 export function PhanDonViDan({
