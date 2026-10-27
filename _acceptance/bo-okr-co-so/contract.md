@@ -5,7 +5,7 @@ slug: bo-okr-co-so
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-25T09:37:10Z
 design_doc: docs/superpowers/specs/2026-10-22-bo-okr-co-so-design.md
@@ -129,3 +129,8 @@ DOM test (AC-2).
   Giám sát đã xác nhận ranh giới này (22/10).
 - `packages/ui/src/components/data-table.tsx`: làn M5 có DA18 (#526) đang sửa cùng tệp; tới S3 xin `cham-tep` lại để
   giám sát hỏi trên #375 trước khi chạm.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-27:
+  - Ngoài-1: Bài kiểm nút Mở/Gập tất cả ghi tạm một tệp giả vào mã của app; bị ngắt giữa chừng thì tệp rác nằm lại và người làm phải xoá tay.
+  - Ngoài-2: Bài kiểm hàng số thay bộ chữ bằng bản giả mà không trả lại được; thêm hay đổi thứ tự bài kiểm về sau có thể làm vài bài xanh sai.
+  - Ngoài-3: Lần đầu mở thẻ OKR, khung chờ của hàng số có thể chớp một lần kèm cảnh báo trong trình duyệt; số vẫn hiện đúng.
+  - Ngoài-4: Phép soát thước đã ký (E13) so với bản duyệt do chính người làm chép ra, nên một thay đổi ngoài lớp cho phép chỉ lộ khi người ký xem lại diff.
