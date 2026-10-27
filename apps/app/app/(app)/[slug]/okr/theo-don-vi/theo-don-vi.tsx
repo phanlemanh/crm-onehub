@@ -37,7 +37,7 @@ import {
 	KhungDangTaiDonVi,
 	KhungHangCongCu,
 } from "./hang-cong-cu";
-import { HangSoBo } from "./hang-so-bo";
+import { HangSoBo, HangSoBoDangTai } from "./hang-so-bo";
 import { TheConBo } from "./the-con";
 import { ViTriBo } from "./vi-tri-bo";
 import { ViecCuaBo } from "./viec-cua-bo";
@@ -169,7 +169,12 @@ export function TheoDonVi() {
 	if (cycles.data?.cycles.length === 0 && !access.isPending)
 		return <ChuaChuKy quanTri={quanTri} />;
 	if (cycles.isPending || access.isPending || cay.isPending)
-		return coThe(<KhungDangTaiDonVi />);
+		return coThe(
+			<>
+				{xem === "danh-sach" ? <HangSoBoDangTai /> : null}
+				<KhungDangTaiDonVi />
+			</>,
+		);
 	if (cycles.isError || cay.isError) return coThe(<Loi thuLai={thuLai} />);
 	if (currentId === null) return <ChuaChuKy quanTri={quanTri} />;
 

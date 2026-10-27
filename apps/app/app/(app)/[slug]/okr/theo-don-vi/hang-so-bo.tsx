@@ -33,6 +33,15 @@ function useChuOSo(): ChuOSo {
 	};
 }
 
+export function HangSoBoDangTai() {
+	const m = okrVoKhuMessages(useLocale()).boOkr.so;
+	return (
+		<div data-hang-so-bo="dang-tai">
+			<HangSoDangTai nhan={m.dangTai} />
+		</div>
+	);
+}
+
 export function HangSoBo({
 	cycleId,
 	unit,
@@ -46,12 +55,7 @@ export function HangSoBo({
 	const chu = useChuOSo();
 	const trpc = useTRPC();
 	const so = useQuery(trpc.okr.soBo.queryOptions({ cycleId, unit }));
-	if (so.isPending || chuKy === null)
-		return (
-			<div data-hang-so-bo="dang-tai">
-				<HangSoDangTai nhan={m.dangTai} />
-			</div>
-		);
+	if (so.isPending || chuKy === null) return <HangSoBoDangTai />;
 	if (so.isError)
 		return (
 			<VungTaiLoi
