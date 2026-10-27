@@ -153,8 +153,13 @@ async function moBang(t, vung, loai) {
 }
 
 async function moNgan(t, k) {
-	await t.trang.click(`[data-mo-kr="${k}"]`);
-	return choThay(t.trang, "[data-lich-su-kr]");
+	const nut = await t.trang.$(`[data-mo-kr="${k}"]`);
+	if (!nut) return false;
+	const bam = await nut
+		.click()
+		.then(() => true)
+		.catch(() => false);
+	return bam && choThay(t.trang, "[data-lich-su-kr]");
 }
 
 async function dongNgan(t) {
@@ -223,7 +228,14 @@ async function e4(n) {
 		`DUNG AC-4 hop-tuan: ${hop0.so}->${hop0.so + 1}`,
 		`SAI AC-4 hop-tuan cu=${hop0.so} moi=${b2.thuc?.so ?? 0}`,
 	);
-	await moNgan(t, c.k);
+	if (PHA === "khong-lam-moi-hop") {
+		t.trang.removeAllListeners("request");
+		await t.trang.setRequestInterception(false);
+	}
+	if (!(await moNgan(t, c.k))) {
+		bao(false, "", "SAI AC-4 ngan-kr khong mo sau khi tha");
+		return;
+	}
 	const b3 = await choChip(t.trang, vungLan, c.loai, {
 		so: ngan0.so + 1,
 		bam: true,
@@ -251,7 +263,6 @@ async function e4(n) {
 		`SAI AC-4 go: ngan=${b4.thuc?.so ?? 0} cng=${b5.thuc?.so ?? 0}`,
 	);
 	t.trang.off("load", dem);
-	if (PHA === "khong-lam-moi-hop") await t.trang.setRequestInterception(false);
 	bao(
 		taiTrang === 0,
 		"DUNG AC-4 khong tai lai trang",
