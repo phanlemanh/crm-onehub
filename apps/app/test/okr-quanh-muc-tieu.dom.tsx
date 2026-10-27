@@ -1,12 +1,6 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-	act,
-	type ComponentProps,
-	isValidElement,
-	type ReactElement,
-	type ReactNode,
-} from "react";
+import { act, type ComponentProps, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { mucTieuThuan } from "../../api/scripts/okr-mau/ca-so-do";
 import {
@@ -157,7 +151,6 @@ const { QuanhMucTieuNoiDung } = await import(
 const TrangQuanh = (
 	await import("@/app/(app)/[slug]/okr/quanh-muc-tieu/[objectiveId]/page")
 ).default;
-const { PageShellTitle } = await import("@/components/page-shell");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrQuanhMessages } = await import("@/lib/messages/okr-quanh");
@@ -409,20 +402,8 @@ describe("dh5-hep", () => {
 	});
 });
 
-const timTieuDe = (nut: ReactNode): string | null => {
-	if (!isValidElement(nut)) return null;
-	const el = nut as ReactElement<{ children?: ReactNode }>;
-	if (el.type === PageShellTitle) return String(el.props.children);
-	const con = el.props.children;
-	for (const c of Array.isArray(con) ? con : [con]) {
-		const t = timTieuDe(c);
-		if (t) return t;
-	}
-	return null;
-};
-
 describe("dh5-trang-thai", () => {
-	test("đang tải, lỗi thường, không tìm thấy; trang luôn có tiêu đề", async () => {
+	test("đang tải, lỗi thường, không tìm thấy; trang luôn có dải công cụ của màn Sơ đồ", async () => {
 		choMai = true;
 		await dung("sd-a1-1");
 		const cho = document.body.querySelector("[aria-busy=true]");
@@ -458,7 +439,10 @@ describe("dh5-trang-thai", () => {
 		const jsx = await TrangQuanh({
 			params: Promise.resolve({ slug: "ws", objectiveId: "x" }),
 		});
-		expect(timTieuDe(jsx)).toBe(vi.tieuDe);
+		const choTrang = (
+			jsx as { props?: { fallback?: { type?: { name?: string } } } }
+		).props?.fallback?.type?.name;
+		expect(choTrang).toBe("ManSoDoCho");
 	});
 });
 

@@ -24,7 +24,7 @@ const vi = {
 		gopVaoNo: "Góp vào nó",
 	},
 	nhanKhung: "Sơ đồ quanh mục tiêu",
-	nutXemQuanh: "Xem quanh mục tiêu",
+	nutXemQuanh: "Xem trên sơ đồ",
 };
 
 export type OkrQuanhMessages = typeof vi;
@@ -53,7 +53,7 @@ const en: OkrQuanhMessages = {
 		gopVaoNo: "Contributing to it",
 	},
 	nhanKhung: "Objective map",
-	nutXemQuanh: "View objective map",
+	nutXemQuanh: "View on map",
 };
 
 export function okrQuanhMessages(locale: Locale): OkrQuanhMessages {

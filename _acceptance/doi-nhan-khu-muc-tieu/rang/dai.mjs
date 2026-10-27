@@ -31,17 +31,10 @@ function laToTien(a, b) {
 
 export function daiCuaVong({ nhanhChinh = "origin/onehub" } = {}) {
 	const k = commitThemKiemKe();
-	const gopVao = git(
-		"log",
-		"--merges",
-		"--first-parent",
-		"--ancestry-path",
-		"--format=%H",
-		`${k}..${nhanhChinh}`,
-	)
+	const gopVao = git("rev-list", "--first-parent", "--merges", "--reverse", nhanhChinh, `^${k}`)
 		.split("\n")
 		.filter(Boolean)
-		.at(-1);
+		.find((m) => laToTien(k, m) && !laToTien(k, `${m}^1`));
 	let dai;
 	if (gopVao && laToTien(gopVao, "HEAD")) {
 		dai = { tu: git("rev-parse", `${gopVao}^1`), den: git("rev-parse", `${gopVao}^2`), kieu: "da-gop" };

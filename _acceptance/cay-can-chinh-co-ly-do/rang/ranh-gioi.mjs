@@ -36,7 +36,10 @@ export function ranhGioiHopDong() {
 }
 
 export function neo() {
+	const coNhanhTren =
+		spawnSync("git", ["-C", GOC, "rev-parse", "--verify", "--quiet", NHANH_TREN]).status === 0;
 	const l2DaLen =
+		!coNhanhTren ||
 		spawnSync("git", ["-C", GOC, "merge-base", "--is-ancestor", NHANH_TREN, NHANH_CHINH]).status === 0;
 	if (!l2DaLen) return { tu: git("merge-base", "HEAD", NHANH_TREN).trim(), den: "HEAD" };
 	const daLen = git(

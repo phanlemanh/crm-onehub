@@ -29,10 +29,13 @@ const MAN = {
 	"bo-okr": { duong: "/okr/bo-okr", tao: true },
 	"lay-y-kien": { duong: "/okr/lay-y-kien", tao: false },
 	"suc-khoe": { duong: "/okr/suc-khoe", tao: false },
-	"so-do": { duong: "/okr/so-do", tao: false },
+	"so-do": { duong: "/okr/so-do", tao: false, dau: "[data-dai-cong-cu]" },
 };
 const HANG = "[data-slot=page-shell-actions]";
 const DAU = "[data-slot=page-shell-header]";
+const dauCua = (man) => MAN[man].dau ?? DAU;
+const sanSangCua = (man) =>
+	MAN[man].dau ?? `${DAU} [data-slot=page-shell-title]`;
 const HOP = "[data-hop-chon-duong]";
 const DUONG_TAO = ["tu-viet", "tu-mau", "bang-tinh", "soan"];
 
@@ -56,7 +59,7 @@ function chepAnh(ten) {
 	copyFileSync(join(BANG_CHUNG, ten), join(BANG_CHUNG_HO_SO, ten));
 }
 
-async function demNutChinh(trang) {
+async function demNutChinh(trang, dauTrang = DAU) {
 	return trang.evaluate((dau) => {
 		const goc = document.querySelector(dau);
 		if (!goc) return -1;
@@ -64,7 +67,7 @@ async function demNutChinh(trang) {
 			const v = e.getAttribute("data-variant");
 			return (v === null || v === "default") && e.getClientRects().length > 0;
 		}).length;
-	}, DAU);
+	}, dauTrang);
 }
 
 function duongCua(n, man) {
@@ -74,11 +77,7 @@ function duongCua(n, man) {
 }
 
 async function moMan(t, n, man) {
-	const kq = await mo(
-		t,
-		duongCua(n, man),
-		`${DAU} [data-slot=page-shell-title]`,
-	);
+	const kq = await mo(t, duongCua(n, man), sanSangCua(man));
 	if (!kq.thay)
 		await khongDo(
 			`KHONG DO DUOC: khong mo duoc man ${man} (status ${kq.status}, khong thay tieu de dau trang)`,
@@ -108,7 +107,7 @@ async function e3(n) {
 					nut.textContent = "x";
 					document.querySelector(hang)?.append(nut);
 				}, HANG);
-			const so = await demNutChinh(t.trang);
+			const so = await demNutChinh(t.trang, dauCua(man));
 			if (so < 0)
 				await khongDo(`KHONG DO DUOC: ${man} khong co dau trang de dem`);
 			const mong = MAN[man].tao ? 1 : 0;

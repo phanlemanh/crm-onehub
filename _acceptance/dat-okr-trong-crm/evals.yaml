@@ -98,7 +98,7 @@ evals:
     steps:
       - "Cảnh cây (rang/canh-cay.mjs của man-cai-dat-noi-tieng-viet) trước màn đầu tiên; lệch cây → mã 2"
       - "Gieo qua API thật: bộ phận, hai phòng ban có trưởng, chu kỳ quý dang-chay, mục tiêu onehub/bộ phận/phòng ban với KR; đăng nhập dev:session cho trưởng phòng ban và một thành viên thường"
-      - "Trưởng: mở {APP_URL}/<slug>/okr/theo-don-vi ở 1440/vi → chụp evidence/E11-step1.png: nav cây có nút đơn vị (data-nut-cay) đọc từ org.tree, số mục tiêu cạnh phòng ban; bấm phòng ban → URL có donOkr=, thẻ mục tiêu có bảng KR (thead có 4 cột) → E11-step2.png; bấm «Cây căn chỉnh» → bảng cây có dòng mục tiêu OneHub và dòng thụt lề → E11-step3.png; đổi chu kỳ ở Select → danh sách đổi → E11-step4.png"
+      - "Trưởng: mở {APP_URL}/<slug>/okr/theo-don-vi ở 1440/vi → chụp evidence/E11-step1.png: nav cây có nút đơn vị (data-nut-cay) đọc từ org.tree, số mục tiêu cạnh phòng ban; bấm phòng ban → URL có donOkr=, thẻ mục tiêu có bảng KR (thead có 4 cột) → E11-step2.png; đổi chu kỳ ở Select → danh sách đổi → E11-step4.png"
       - "Trưởng: có nút «Thêm mục tiêu» và «Nhập từ bảng tính»; thành viên thường mở cùng URL → không có hai nút → E11-step5.png"
       - "Chọn phòng ban không có mục tiêu → Empty rỗng → E11-step6.png; chọn phòng ban gieo không trưởng → câu «gán trưởng ở Cài đặt › Tổ chức» → E11-step7.png; chặn request okr.byUnit (setRequestInterception trả 500) → Empty + nút Thử lại; bỏ chặn, bấm Thử lại → thẻ mục tiêu hiện lại → E11-step8.png"
       - "Bản sao cơ sở dữ liệu không có chu kỳ nào (script xoá chu kỳ fixture rồi gieo lại sau): quản trị mở → câu «chưa mở chu kỳ» kèm liên kết Cài đặt; thành viên thường → cùng câu, không liên kết → E11-step9.png"
