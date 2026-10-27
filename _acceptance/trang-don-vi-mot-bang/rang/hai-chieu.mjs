@@ -82,11 +82,11 @@ const DOT_BIEN = {
 			thay: [
 				{
 					tep: "packages/ui/src/components/data-table.tsx",
-					cu: "const isOpen = canExpand && expanded.has(id);",
-					moi: "const isOpen = canExpand;",
+					cu: "canExpand && (moSan ? !gap.has(id) : expanded.has(id));",
+					moi: "canExpand && expanded.has(id);",
 				},
 			],
-			ghim: /dvb-dong-mo: mac dinh 3 dong KR, mong 0/,
+			ghim: /dvb-dong-mo: mac dinh 0 dong KR, mong 3/,
 		},
 	],
 	"dvb-hang-cong-cu": [
