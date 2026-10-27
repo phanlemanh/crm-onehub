@@ -1,0 +1,11 @@
+--- a/_acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs
++++ b/_acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs
+@@ -3,7 +3,7 @@
+ 
+ const GOC = resolve(import.meta.dirname, "..", "..", "..");
+ const TU = "a9e8bc75a04f04a9a250eb2ff7fc4fadbe0f4747";
+-const TOI = "16e80f31d62a56195253f1566b38284f8e0b4e66";
++const TOI = "0000000000000000000000000000000000000000";
+ const TASKS = "apps/agent/test/tasks.integration.spec.ts";
+ const GIEO = "apps/agent-okr/test/support/gieo.ts";
+ const GOI_SPEC = "apps/agent-okr/test/goi-soan.integration.spec.ts";

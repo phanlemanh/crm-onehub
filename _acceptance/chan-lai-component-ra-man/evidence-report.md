@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 977a9018f3511f37f189c25d26903aa9823df199
+verified_commit: 396409faaf30dc62041ef1806d28d312e1925223
 run_id: s4r1-20260906T145103Z-21187
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -238,3 +238,19 @@ sha: 6ca1ebaa11c73b8cb58a3fc1e3e3895c0727ecd2 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 11 — 2026-10-06, do sửa thước đỏ lô 2-4 (f2c)
 run_id: repin-20261006T111742Z-87303
 sha: 977a9018f3511f37f189c25d26903aa9823df199 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-10
+
+### Re-pin lần 12 — 2026-10-23, do F28 ho-so-do-kiem-cheo: sua thuoc ho so da ky kiem cheo goi ten (Cong Pham vi 23/10)
+run_id: repin-20261023T105529Z-32502
+sha: 6fdc7ed4587ef09283181bd35699a668ab3faa27 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 13 — 2026-10-24, do hoá cũ do gộp origin/onehub a971d21be vào nhánh F28 (lượt 3, từng hồ sơ)
+run_id: repin-20261024T182422Z-97721
+sha: e0389b2a953d782c9f58f04cc8c119e7a47f1d88 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 14 — 2026-10-26, do hoá cũ do gộp origin/onehub 485bdc710 vào nhánh F28
+run_id: repin-20261026T040558Z-88000
+sha: 938c2f430a111234071aac844de83b7c917b4843 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-10 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 15 — 2026-10-26, do hoá cũ do gộp origin/onehub 1478ac08a và sửa răng toan-canh-okr theo trang-bo-okr
+run_id: repin-20261026T080827Z-59889
+sha: 396409faaf30dc62041ef1806d28d312e1925223 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

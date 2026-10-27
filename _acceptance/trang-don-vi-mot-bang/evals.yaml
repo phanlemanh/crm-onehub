@@ -60,16 +60,16 @@ evals:
     criterion: AC-4
     executor: script
     layer: ui-observed
-    cmd: config:executors.script.dvb_man
+    cmd: config:executors.script.dvb_man_may
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
     expected: |
       Cung phien do (EVAL=E3), chu ky mau o pha cham-diem de co du 4 cach xem. Ma tran viet truoc: 4 cach
-      xem (danh-sach, cay, hop-tuan, cham) x 2 kho (1440, 390) = 8 o, moi o mot dong "VI TRI <xem> <kho>: o
+      xem (danh-sach, hop-tuan, cham) x 2 kho (1440, 390) = 6 o, moi o mot dong "VI TRI <xem> <kho>: o
       chon (<top>,<left>) · cach xem (<top>,<left>) · nut than <n>"; DUNG khi lech <= 1px so voi danh-sach
       cung kho, n = 0, va o 390 cach xem hien (offsetParent khac null) khong can mo «Lọc». Anh
-      don-vi-{hop-tuan,cham,cay}-{1440,390}.png. Dong cham "DUNG AC-4: 8/8 o".
+      don-vi-{hop-tuan,cham}-{1440,390}.png. Dong cham "DUNG AC-4: 6/6 o".
       CHIEU DO (DVB_PHA=cach-xem-trong-loc: ban sao dua ViewSwitch vao leadingActions) -> "SAI AC-4: danh-sach
       390 — cach xem bi giau sau Lọc", ma 1.
 
@@ -77,7 +77,7 @@ evals:
     criterion: AC-8
     executor: script
     layer: ui-observed
-    cmd: config:executors.script.dvb_man
+    cmd: config:executors.script.dvb_man_may
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
@@ -94,7 +94,7 @@ evals:
     criterion: AC-1
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.dvb_man
+    cmd: config:executors.script.dvb_man_may
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
@@ -134,7 +134,7 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-trang-don-vi.dom.tsx"
     expected: |
-      Ten ca "dvb-hang-cong-cu". Ma tran: 4 cach xem x 2 pha chu ky (dang-chay, cham-diem) = 8 o (cham ngoai
+      Ten ca "dvb-hang-cong-cu". Ma tran: 3 cach xem x 2 pha chu ky (dang-chay, cham-diem) = 6 o (cham ngoai
       pha cham roi ve danh-sach, assert rieng). Moi o: dung 1 [data-hang-cong-cu-don-vi] chua theo thu tu
       [data-chon-don-vi] roi [data-view-switch]; khung bao no co cung className voi hang cong cu cua DataTable
       (rut lop tu DOM cua o danh-sach, khong viet tay); 0 [data-nut=them-muc-tieu], [data-nut=nhap-bang-tinh],
@@ -278,7 +278,7 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-trang-don-vi.dom.tsx"
     expected: |
-      Ten ca "dvb-giu-xem". Ma tran: duong dan dang dung (ky + don + xemOkr=hop-tuan, ky + xemOkr=cay, chi
+      Ten ca "dvb-giu-xem". Ma tran: duong dan dang dung (ky + don + xemOkr=hop-tuan, ky + xemOkr=hop-tuan, chi
       xemOkr=cham, khong xemOkr, ky + don + xemOkr + phuTrach + expand) x 4 the = 20 lien ket (the Cap nhat tuan go o onehub #459), moi lien ket mot
       assert: tap tham so == giao cua {kyOkr, donOkr, xemOkr} voi tham so dang co. Vong di-ve: URL
       theo-don-vi?kyOkr=K&donOkr=pb:P2&xemOkr=hop-tuan, bam 3 the khac roi Theo don vi -> trang dung cach xem
@@ -332,7 +332,7 @@ evals:
     criterion: AC-7
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.dvb_man
+    cmd: config:executors.script.dvb_man_may
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"

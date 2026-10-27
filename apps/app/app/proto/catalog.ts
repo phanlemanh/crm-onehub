@@ -1574,6 +1574,77 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "hop-tuan-mo-dung-bo",
+		ten: "Họp tuần mở đúng bộ — bộ mình dẫn, hàng số của tuần, màn rỗng nói lý do",
+		states: [
+			{
+				id: "ST-htmb-cua-toi",
+				nhan: "Của tôi — KR cần cập nhật, mở từng KR",
+			},
+			{
+				id: "ST-htmb-the-okr",
+				nhan: "Bộ mình › thẻ OKR (nút Cập nhật từng KR)",
+			},
+			{
+				id: "ST-htmb-ngan-kr",
+				nhan: "Ngăn KR — Cập nhật ở đầu",
+			},
+			{
+				id: "ST-htmb-hop-cap-nhat",
+				nhan: "Hộp cập nhật một KR",
+			},
+			{
+				id: "ST-htmb-bo-okr-toi-dan",
+				nhan: "Đường vào: Bộ OKR › Tôi dẫn (như Tability)",
+			},
+			{
+				id: "ST-htmb-co-du-lieu",
+				nhan: "Bộ mình › thẻ con Họp tuần — có dữ liệu",
+			},
+			{
+				id: "ST-htmb-hom-nay",
+				nhan: "Hôm nay (trước HT1) — bảng OneHub 0/0 KR",
+			},
+			{
+				id: "ST-htmb-chua-kr-onehub",
+				nhan: "OneHub chưa có KR — liệt đơn vị có KR",
+			},
+			{
+				id: "ST-htmb-chua-kr-phong-ban",
+				nhan: "Phòng ban chưa có KR — Xem mọi bộ OKR",
+			},
+			{ id: "ST-htmb-chu-ky-chua-chay", nhan: "Chu kỳ chưa chạy" },
+			{ id: "ST-htmb-chua-ai-cap-nhat", nhan: "Có KR, chưa ai cập nhật" },
+			{ id: "ST-htmb-dang-tai", nhan: "Đang tải" },
+		],
+	},
+	{
+		slug: "cap-nhat-gan-day",
+		ten: "Cập nhật gần đây — dòng tin mọi lần cập nhật KR, lọc phạm vi, trả lời tại chỗ",
+		states: [
+			{ id: "ST-cng-tat-ca", nhan: "Tất cả — mới nhất trước, trang 1/11" },
+			{
+				id: "ST-cng-toi-dan",
+				nhan: "Tôi dẫn — bộ OKR của đơn vị mình làm trưởng",
+			},
+			{
+				id: "ST-cng-theo-doi",
+				nhan: "Đang theo dõi — bộ có mục tiêu mình theo dõi",
+			},
+			{
+				id: "ST-cng-tra-loi",
+				nhan: "Đang trả lời dưới lần mới nhất của một KR",
+			},
+			{
+				id: "ST-cng-rong-loc",
+				nhan: "Đang theo dõi — chưa có lần cập nhật nào",
+			},
+			{ id: "ST-cng-rong", nhan: "Chu kỳ chưa có lần cập nhật nào" },
+			{ id: "ST-cng-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-cng-loi", nhan: "Tải hỏng — thử lại" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

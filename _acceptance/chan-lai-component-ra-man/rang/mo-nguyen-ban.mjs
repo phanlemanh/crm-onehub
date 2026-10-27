@@ -6,7 +6,7 @@ import { duongLuot, xoaTaoPhamCu } from "./luot-chay.mjs";
 const GOC = join(import.meta.dirname, "..", "..", "..");
 const TAO_PHAM = duongLuot("mo-nguyen-ban.json");
 
-export const NEO_DONG = 9;
+export const NEO_DONG = 10;
 
 export function chayBoVe() {
 	xoaTaoPhamCu("mo-nguyen-ban.json");

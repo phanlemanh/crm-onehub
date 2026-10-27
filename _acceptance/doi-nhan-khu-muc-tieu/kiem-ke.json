@@ -470,32 +470,6 @@
  {
   "khai_niem": "gop-vao",
   "tep": "apps/app/lib/messages/okr-toan-canh.ts",
-  "khoa": "cay.canChinh",
-  "cu": {
-   "vi": "Cây căn chỉnh toàn công ty",
-   "en": "Company-wide alignment tree"
-  },
-  "doi": [
-   "vi",
-   "en"
-  ]
- },
- {
-  "khai_niem": "gop-vao",
-  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
-  "khoa": "cay.chuaCanChinh",
-  "cu": {
-   "vi": "Chưa căn chỉnh vào đâu",
-   "en": "Not aligned anywhere"
-  },
-  "doi": [
-   "vi",
-   "en"
-  ]
- },
- {
-  "khai_niem": "gop-vao",
-  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
   "khoa": "soDo.chuaNoiLen",
   "cu": {
    "vi": "Chưa nối lên",
@@ -583,19 +557,6 @@
    "en"
   ],
   "vai": "ten-cap"
- },
- {
-  "khai_niem": "gop-vao",
-  "tep": "apps/app/lib/messages/okr.ts",
-  "khoa": "cayCanChinh",
-  "cu": {
-   "vi": "Cây căn chỉnh",
-   "en": "Alignment tree"
-  },
-  "doi": [
-   "vi",
-   "en"
-  ]
  },
  {
   "khai_niem": "gop-vao",

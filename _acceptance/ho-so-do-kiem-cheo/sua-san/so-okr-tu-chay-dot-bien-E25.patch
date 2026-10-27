@@ -1,0 +1,12 @@
+--- a/_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs
++++ b/_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs
+@@ -472,7 +472,8 @@
+ 			]).status === 0,
+ 	)
+ 	.sort();
+-const docSql = (t) => git("show", `${DINH}:${THU_MUC}/${t}/migration.sql`);
++const docSql = (t) =>
++	`${git("show", `${DINH}:${THU_MUC}/${t}/migration.sql`)}\nALTER TABLE "okrKeyResult" ADD COLUMN "ghiChu" TEXT;\n`;
+ const { hong, dem } = soatTinh({
+ 	moi,
+ 	docSql,

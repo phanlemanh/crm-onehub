@@ -58,17 +58,18 @@ export const THAM = {
 	loc: SEARCH_PARAM.okr.phamViBo,
 };
 export const PHAM_VI = ["tat-ca", "toi-dan", "theo-doi"];
-export const TIEN_THE = ["hop-tuan", "viec", "cay", "danh-sach"];
-export const SO_LUI = 3;
+export const TIEN_THE = ["hop-tuan", "viec", "danh-sach"];
+export const SO_LUI = 2;
+export const THE_SO_DO = "so-do";
 export const MOC_THE = {
 	"danh-sach": ["ST-donvi-danhsach", "ST-donvi-rong", "ST-donvi-loc-khongkhop"],
 	"hop-tuan": [
 		"ST-hoptuan-tuandau",
 		"ST-hoptuan-yenang",
 		"ST-hoptuan-codulieu",
+		"ST-hoptuan-chua-kr",
 	],
 	viec: ["ST-bo-viec", "ST-bo-viec-rong"],
-	cay: ["ST-donvi-caycanchinh", "ST-donvi-rong"],
 };
 export const CHU = {
 	viTri: "Bộ OKR",

@@ -1,0 +1,115 @@
+schema_version: 1
+slug: bao-loi-tac-nhan-sau-cau-hoi
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.blth_mot_cau
+    paths: [apps/agent/agent/lib/thong-bao-tac-nhan.ts, apps/agent/agent/lib/builder-input.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/channels/crm.ts, apps/api/src/conversations/conversations.service.ts, packages/validation/src/builder-question.ts, packages/validation/src/thong-bao.ts, apps/agent/test/fixtures/hai-luot-hoi-that.json, apps/agent/test/fixtures/session-limit-that.json, apps/api/test/bao-loi-sau-cau-hoi.spec.ts]
+    expected: |
+      apps/api/test/bao-loi-sau-cau-hoi.spec.ts, ca "blth-mot-cau", tren kho test that, moi buoc qua bo ghi cua san pham (createBuilder/submitBuilder -> dispatchBuilderSubmission that voi send gia theo hop dong eve -> crmEvents input.requested voi su kien da chup hai-luot-hoi-that.json / session-limit-that.json va ngu canh phien bo giao dua cho eve -> session.waiting -> answerBuilderQuestion -> giao -> ket thuc luot), ket thuc bang turn.failed. Khang
+      dinh: danh sach loai thong bao cua cuoc bang dung ["tac-nhan-can-tra-loi","tac-nhan-hong"]; dong hong co
+      nguoiNhanId = nguoi mo cuoc, duongDan = /chat/<id>, luotId = id lan gui tra loi; lastAssistantAt chup truoc
+      turn.failed khac rong va gia tri sau lon hon han. Doi chung cung fixture: E5 (tro chuyen) cho 0 hong. Chieu do: ban
+      sao cho answerBuilderQuestion ghi commandType "CHAT" co dinh -> ca do voi thong diep ghim "hong sau tra loi: mot-cau".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.blth_hai_cau
+    paths: [apps/agent/agent/lib/thong-bao-tac-nhan.ts, apps/agent/agent/lib/builder-input.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/channels/crm.ts, apps/api/src/conversations/conversations.service.ts, packages/validation/src/builder-question.ts, packages/validation/src/thong-bao.ts, apps/agent/test/fixtures/hai-luot-hoi-that.json, apps/agent/test/fixtures/session-limit-that.json, apps/api/test/bao-loi-sau-cau-hoi.spec.ts]
+    expected: |
+      Ca "blth-hai-cau": cuoc dung, hai cau hoi lam ro that (phan tu 0 va 1 cua hai-luot-hoi-that.json), moi cau tra
+      loi qua answerBuilderQuestion roi giao, ket thuc bang session.failed. Danh sach loai bang dung
+      ["tac-nhan-can-tra-loi","tac-nhan-can-tra-loi","tac-nhan-hong"] (dem dung 1 hong). Chieu do: ban sao cho
+      answerBuilderQuestion ghi "CHAT" -> ca do voi thong diep ghim "hong sau tra loi: hai-cau".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.blth_hai_su_kien
+    paths: [apps/agent/agent/lib/thong-bao-tac-nhan.ts, apps/agent/agent/lib/builder-input.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/channels/crm.ts, apps/api/src/conversations/conversations.service.ts, packages/validation/src/builder-question.ts, packages/validation/src/thong-bao.ts, apps/agent/test/fixtures/hai-luot-hoi-that.json, apps/agent/test/fixtures/session-limit-that.json, apps/api/test/bao-loi-sau-cau-hoi.spec.ts]
+    expected: |
+      Ca "blth-hai-su-kien": cuoc dung, mot cau hoi, tra loi, turn.failed roi session.failed. Sau turn.failed danh
+      sach bang ["tac-nhan-can-tra-loi","tac-nhan-hong"] (doi chung duong: da co dung 1 hong); sau session.failed van
+      bang dung danh sach do. Chieu do: ban sao doi khoa cua ghiThongBaoTacNhan thanh khoa moi moi lan ghi -> ca do voi
+      thong diep ghim "dung mot hong: hai-su-kien".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.blth_het_han_muc
+    paths: [apps/agent/agent/lib/thong-bao-tac-nhan.ts, apps/agent/agent/lib/builder-input.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/channels/crm.ts, apps/api/src/conversations/conversations.service.ts, packages/validation/src/builder-question.ts, packages/validation/src/thong-bao.ts, apps/agent/test/fixtures/hai-luot-hoi-that.json, apps/agent/test/fixtures/session-limit-that.json, apps/api/test/bao-loi-sau-cau-hoi.spec.ts]
+    expected: |
+      Ca "blth-het-han-muc": cau hoi la su kien that session-limit-that.json; nguoi chon SESSION_LIMIT_OPTION_IDS.continue
+      (khong viet chuoi) qua answerBuilderQuestion roi giao; turn.failed. Danh sach loai bang dung
+      ["tac-nhan-can-tra-loi","tac-nhan-hong"]. Chieu do: ban sao cho answerBuilderQuestion ghi "CHAT" -> ca do voi
+      thong diep ghim "hong sau tra loi: het-han-muc".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.blth_tro_chuyen
+    paths: [apps/agent/agent/lib/thong-bao-tac-nhan.ts, apps/agent/agent/lib/builder-input.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/channels/crm.ts, apps/api/src/conversations/conversations.service.ts, packages/validation/src/builder-question.ts, packages/validation/src/thong-bao.ts, apps/agent/test/fixtures/hai-luot-hoi-that.json, apps/agent/test/fixtures/session-limit-that.json, apps/api/test/bao-loi-sau-cau-hoi.spec.ts]
+    expected: |
+      Ca "blth-tro-chuyen": cung buoc voi "blth-mot-cau", chi khac cuoc mo bang tin tro chuyen thuong. Khang dinh lan
+      tra loi ghi commandType "CHAT" va danh sach loai bang dung ["tac-nhan-can-tra-loi"] (0 hong). Chieu do: ban sao
+      bo dieu kien CREATE_AGENT o nhanh "hong" cua noiDungTacNhan -> ca do voi thong diep ghim "tro chuyen khong bao hong".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.blth_chen_hong
+    paths: [apps/agent/agent/lib/thong-bao-tac-nhan.ts, apps/agent/agent/lib/builder-input.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/channels/crm.ts, apps/api/src/conversations/conversations.service.ts, packages/validation/src/builder-question.ts, packages/validation/src/thong-bao.ts, apps/agent/test/fixtures/hai-luot-hoi-that.json, apps/agent/test/fixtures/session-limit-that.json, apps/api/test/bao-loi-sau-cau-hoi.spec.ts]
+    expected: |
+      Ca "blth-chen-hong": cuoc dung da giao (lan gui ACCEPTED), submitBuilder mot tin CHAT (PENDING), turn.failed.
+      Danh sach loai bang dung ["tac-nhan-hong"], luotId = id lan gui dung, tin chen giua van PENDING. Chieu do da do
+      tren onehub 518f05802 (ma chua sua): ca do voi thong diep ghim "chen giua van bao hong".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.blth_chen_xong
+    paths: [apps/agent/agent/lib/thong-bao-tac-nhan.ts, apps/agent/agent/lib/builder-input.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/channels/crm.ts, apps/api/src/conversations/conversations.service.ts, packages/validation/src/builder-question.ts, packages/validation/src/thong-bao.ts, apps/agent/test/fixtures/hai-luot-hoi-that.json, apps/agent/test/fixtures/session-limit-that.json, apps/api/test/bao-loi-sau-cau-hoi.spec.ts]
+    expected: |
+      Ca "blth-chen-xong": cuoc dung da giao, luu ban nhap (agentVersion sourceConversationId = cuoc), submitBuilder
+      mot tin CHAT, session.waiting. Danh sach loai bang dung ["tac-nhan-xong"], luotId = id lan gui dung, ten = ten tac
+      nhan. Chieu do da do tren ma chua sua: ca do voi thong diep ghim "chen giua van bao xong".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.blth_chen_roi_hong
+    paths: [apps/agent/agent/lib/thong-bao-tac-nhan.ts, apps/agent/agent/lib/builder-input.ts, apps/agent/agent/lib/session-purpose.ts, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/agent/channels/crm.ts, apps/api/src/conversations/conversations.service.ts, packages/validation/src/builder-question.ts, packages/validation/src/thong-bao.ts, apps/agent/test/fixtures/hai-luot-hoi-that.json, apps/agent/test/fixtures/session-limit-that.json, apps/api/test/bao-loi-sau-cau-hoi.spec.ts]
+    expected: |
+      Ca "blth-chen-roi-hong": cuoc dung da giao, tin CHAT chen giua, turn.failed, giao tin chen giua (dispatch that),
+      turn.failed lan hai. Danh sach loai bang dung ["tac-nhan-hong"]. Chieu do: tren ma chua sua danh sach rong (thong
+      diep ghim "tro chuyen chen giua khong bao hong lan hai"); ban sao bo dieu kien CREATE_AGENT o nhanh "hong" -> hai
+      dong hong, cung thong diep ghim.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ctnl_bao_khi_xong
+    paths: [apps/agent/agent/channels/crm.ts, apps/agent/agent/lib/thong-bao-*.ts, packages/validation/src/thong-bao.ts, apps/agent/test/cho-tac-nhan-lau.integration.spec.ts]
+    expected: |
+      Toan bo apps/agent/test/cho-tac-nhan-lau.integration.spec.ts (ma tran viet truoc 11 o, doi chung luot tro chuyen,
+      chan trung qua nua dem, ghi hong khong nem) xanh, va tep khong bi vong nay sua (git diff merge-base..HEAD khong cham no).
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

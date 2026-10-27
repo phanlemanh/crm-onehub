@@ -324,6 +324,7 @@ describe("gui-lo", () => {
 		].map((x) => x[1] ?? "");
 		expect(thuTuc.length).toBeGreaterThan(20);
 		expect(thuTuc.filter((t) => /CheckIn|CapNhat/i.test(t)).sort()).toEqual([
+			"capNhatGanDay",
 			"capNhatTuan",
 			"guiCapNhat",
 			"moCapNhat",

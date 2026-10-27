@@ -230,8 +230,8 @@ evals:
           khi luu tru (in ca hai day)
         da-luu-tru-375: kho 375, sau khi luu tru giai doan rieng, mo "Đã lưu trữ (n)": hop muc gap va nut "Khôi phục"
           co left >= 0, right <= 375; khong tran ngang trang (scrollWidth <= 375)
-      Anh: hang cuoi the Dang mo la giai doan vua khoi phuc; o 375 nut "Khôi phục" thay tron.
-      Don: giai doan tao trong lan do bi cat lai sau khi do.
+        Anh: hang cuoi the Dang mo la giai doan vua khoi phuc; o 375 nut "Khôi phục" thay tron.
+        Don: giai doan tao trong lan do bi cat lai sau khi do.
 
   - id: E12
     criterion: AC-12
@@ -260,7 +260,9 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/organization/"
       - "_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs"
     expected: |
-      rang/san-thiet-ke.mjs rut danh sach tep tu git diff --name-only --diff-filter=AM $(git merge-base HEAD
-      origin/onehub), loc *.tsx duoi apps/app va packages/ui/src (bo test/), in "<n> tep" va ten tung tep, roi chay
-      design-gate.mjs --mode static cho tung tep: khong P0. Danh sach rong -> thoat 2 ("khong co tep giao dien
-      trong diff" — khong xanh gia). --tu-thu: mot tep tam co className doi mau tren Button -> thoat 1 va goi ten tep.
+      rang/san-thiet-ke.mjs rut danh sach tep tu git diff --name-only --diff-filter=AM cua cap neo co dinh PR #311
+      (gop 45d4fde524b049b17b6887292b641585a914b754): 591bc8fb63a6505a888f80ccde43fc498e4eed2a..a33a0d62424150945bf2dc482d050dfbaaeccb6e,
+      khong theo HEAD; sha neo khong co (git cat-file -e) -> thoat 2 "KHONG DO DUOC". Loc *.tsx duoi apps/app va
+      packages/ui/src (bo test/), in "<n> tep" va ten tung tep, roi chay design-gate.mjs --mode static cho tung tep: khong P0.
+      Danh sach rong -> thoat 2 ("khong co tep giao dien trong diff" — khong xanh gia). --tu-thu: mot tep tam co className
+      doi mau tren Button -> thoat 1 va goi ten tep.

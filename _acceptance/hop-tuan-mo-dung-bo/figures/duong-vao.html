@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đường vào Họp tuần</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hỏi-2 · AC-1 · AC-3 · AC-10 · luồng</p>
+    <h1>Mọi đường vào Họp tuần không kèm đơn vị đều tới bộ của người xem</h1>
+
+    <svg viewBox="0 0 1160 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM VÀO</text>
+      <text x="340" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">next.config.ts</text>
+      <text x="600" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">page.tsx · MÁY CHỦ</text>
+      <text x="920" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐÍCH</text>
+
+      <path d="M280,92 H556 Q564,92 564,100 V152 Q564,160 572,160 H600" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="280" y1="192" x2="340" y2="192" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="540" y1="192" x2="600" y2="192" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M280,292 H556 Q564,292 564,284 V232 Q564,224 572,224 H600" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="840" y1="192" x2="920" y2="192" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <rect x="848" y="168" width="64" height="16" rx="2" fill="#fafafa"/>
+      <text x="880" y="180" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">REDIRECT</text>
+
+      <line x1="40" y1="356" x2="1120" y2="356" stroke="rgba(23,23,23,0.12)" stroke-width="0.8" stroke-dasharray="4,4"/>
+      <text x="40" y="376" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NHÁNH SONG SONG · KHÔNG ĐỔI</text>
+
+      <line x1="280" y1="420" x2="920" y2="420" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <rect x="508" y="396" width="184" height="16" rx="2" fill="#fafafa"/>
+      <text x="600" y="408" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÓ donOkr · KHÔNG CHUYỂN</text>
+
+      <rect x="40" y="64" width="240" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="160" y="88" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Liên kết gõ tay</text>
+      <text x="160" y="104" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">xemOkr=hop-tuan, không donOkr</text>
+
+      <rect x="40" y="164" width="240" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="160" y="188" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Liên kết cũ</text>
+      <text x="160" y="204" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">/okr/theo-don-vi?xemOkr=hop-tuan</text>
+
+      <rect x="40" y="264" width="240" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="160" y="288" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Liên kết trần</text>
+      <text x="160" y="304" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">/okr/bo-okr?xemOkr=hop-tuan</text>
+
+      <rect x="340" y="160" width="200" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="184" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">next.config</text>
+      <text x="440" y="200" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">theo-don-vi → bo-okr</text>
+      <text x="440" y="214" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">giữ truy vấn</text>
+
+      <rect x="600" y="136" width="240" height="112" rx="6" fill="#fafafa"/>
+      <rect x="600" y="136" width="240" height="112" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="720" y="164" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">page.tsx máy chủ</text>
+      <text x="720" y="188" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">không donOkr + xemOkr=hop-tuan</text>
+      <text x="720" y="204" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">→ boHopTuan → redirect</text>
+      <text x="720" y="220" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">thêm donOkr, giữ kyOkr</text>
+
+      <rect x="600" y="268" width="240" height="56" rx="6" fill="rgba(180,35,24,0.04)" stroke="#b42318" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="720" y="288" fill="#b42318" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">VK3 AC-7 CŨ · BỊ THAY</text>
+      <text x="720" y="310" fill="#b42318" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">trần → OneHub</text>
+      <line x1="676" y1="306" x2="764" y2="306" stroke="#b42318" stroke-width="1.2"/>
+
+      <rect x="920" y="164" width="200" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1020" y="188" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thẻ Họp tuần</text>
+      <text x="1020" y="204" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">của bộ người xem</text>
+
+      <rect x="40" y="392" width="240" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="160" y="416" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ OKR › Tôi dẫn › thẻ con</text>
+      <text x="160" y="432" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">hay Của tôi · tin sáng · có donOkr</text>
+
+      <rect x="920" y="392" width="200" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1020" y="416" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thẻ Họp tuần</text>
+      <text x="1020" y="432" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">của bộ ấy</text>
+
+      <line x1="40" y1="472" x2="1120" y2="472" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="492" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="148" y="496" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="180" y="506" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Điểm vào / đích</text>
+
+      <rect x="304" y="496" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="336" y="506" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước giữ nguyên</text>
+
+      <rect x="460" y="496" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="492" y="506" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chỗ HT1 đổi</text>
+
+      <rect x="604" y="496" width="24" height="12" rx="2" fill="rgba(180,35,24,0.04)" stroke="#b42318" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="636" y="506" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Luật đã ký bị thay (Hỏi-2)</text>
+    </svg>
+  </div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import { thanhVienMessages } from "../../../apps/app/lib/messages/settings-thanh
 import { ALLOWANCE_WITHOUT_EXPIRY } from "../../../packages/auth/src/allow-list.ts";
 import { db } from "../../../packages/db/src/index.ts";
 import { WORKSPACE_ID } from "../../../packages/db/src/workspace.ts";
+import { messages } from "../../../packages/ui/src/lib/messages.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -36,6 +37,7 @@ const NAC_CON_LAN_PX = 600;
 const CHO_CON_LAN_MS = 80;
 const SO_NHIP_DUNG_YEN = 3;
 const t = thanhVienMessages("vi");
+const tUi = messages("vi");
 
 const dong = [];
 let sai = 0;
@@ -259,25 +261,35 @@ async function doRong(ctx, slug) {
 	const p = await moTrang(ctx, kho, `/${slug}/settings/members?q=${TIM_KHONG_AI}`);
 	const thay = await p
 		.waitForFunction(
-			(cau) => {
+			(cau, nhanNut) => {
 				const bang = document.querySelector("[data-slot=page-shell-content] [data-slot=table-container]");
-				const o = [...(bang?.querySelectorAll("div") ?? [])].find((d) => d.textContent?.trim() === cau);
+				const o = [...(bang?.querySelectorAll("[data-slot=empty-title]") ?? [])].find(
+					(d) => d.textContent?.trim() === cau,
+				);
 				if (!o) return null;
+				const nut = [...bang.querySelectorAll("button")].find((b) => b.textContent?.trim() === nhanNut);
 				const hb = bang.getBoundingClientRect();
 				const ho = o.getBoundingClientRect();
 				const giua = document.elementFromPoint(ho.left + ho.width / 2, ho.top + ho.height / 2);
-				return { cao: Math.round(ho.height), trong: ho.top >= hb.top && ho.bottom <= hb.bottom + 2, nhin: giua !== null && o.contains(giua) };
+				return {
+					cao: Math.round(ho.height),
+					trong: ho.top >= hb.top && ho.bottom <= hb.bottom + 2,
+					nhin: giua !== null && o.contains(giua),
+					nut: Boolean(nut),
+				};
 			},
 			{ timeout: CHO_MS },
-			t.bang.trong,
+			tUi.table.noMatch,
+			tUi.table.resetFilters,
 		)
 		.then((h) => h.jsonValue())
 		.catch(() => null);
-	if (thay === null) khongDo(`het ${CHO_MS}ms cho cau «${t.bang.trong}» khi tim ${TIM_KHONG_AI}`);
+	if (thay === null) khongDo(`het ${CHO_MS}ms cho cau «${tUi.table.noMatch}» khi tim ${TIM_KHONG_AI}`);
 	kiem(
-		`1440: tim khong ra ai thi thay «${t.bang.trong}» (cao ${thay.cao}px, trong khung ${thay.trong}, khong bi che ${thay.nhin})`,
+		`1440: tim khong ra ai thi thay «${tUi.table.noMatch}» (cao ${thay.cao}px, trong khung ${thay.trong}, khong bi che ${thay.nhin})`,
 		thay.cao >= 16 && thay.trong && thay.nhin,
 	);
+	kiem(`1440: tim khong ra ai thi co nut «${tUi.table.resetFilters}» trong vo bang (${thay.nut})`, thay.nut);
 	await p.screenshot({ path: join(RA, "tim-khong-ra-1440.png") });
 	await p.close();
 }

@@ -31,6 +31,7 @@ import {
 	NHOM_THANH_BEN,
 } from "./tab-okr";
 import { tieuDeKhu } from "./tieu-de-khu";
+import { useToanManHinh } from "./toan-man-hinh";
 
 const DUONG_CHUONG_TRINH = "/settings/okr";
 
@@ -52,6 +53,7 @@ function useNhan() {
 	>;
 	const muc = {
 		"cua-toi": t.muc.cuaToi,
+		"cap-nhat-gan-day": t.muc.capNhatGanDay,
 		"bo-okr": t.muc.boOkr,
 		"lay-y-kien": t.muc.layYKien,
 		"suc-khoe": t.muc.sucKhoe,
@@ -120,6 +122,7 @@ function ThanhBen({
 }
 
 export function ThanhBenMucTieuCho() {
+	if (useToanManHinh().bat) return null;
 	return (
 		<ThanhBen header={<Skeleton className="h-7 w-full" />} trangThai={null} />
 	);
@@ -156,11 +159,13 @@ export function ThanhBenMucTieu() {
 	const [thamSo] = useQueryStates(okrParsers);
 	const trpc = useTRPC();
 	const access = useQuery(trpc.okr.access.queryOptions());
+	const { bat } = useToanManHinh();
 	const ky = thamSo[SEARCH_PARAM.okr.ky];
 	const goc = url(DUONG_MUC["cua-toi"]);
 	const duoi = ky
 		? `?${new URLSearchParams({ [SEARCH_PARAM.okr.ky]: ky })}`
 		: "";
+	if (bat) return null;
 	return (
 		<ThanhBen
 			footer={access.data?.canManageProgram === true ? <ChanThanhBen /> : null}

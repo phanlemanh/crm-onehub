@@ -1,0 +1,36 @@
+--- a/docs/agent.md
++++ b/docs/agent.md
+@@ -1116,7 +1116,7 @@
+   object keyed by `status`: `draft_ready` carries the immutable version ids and only
+   after save, `not_authorized` carries a reason and no ids; a `superRefine` enforces
+   which fields each status requires. It is one object rather than a
+-  `discriminatedUnion` on purpose — eve hands `outputSchema` to the model unchanged as
++  `discriminatedUnion` on purpose — eve hands `outputShape` to the model unchanged as
+   `final_output`'s input schema (`toInputSchema` does not wrap it), and a union lowers
+   to a root `oneOf` with no `type: "object"`. **Measured on 2026-09-09: the gateway
+   accepts both shapes.** Two real calls to `zai/glm-5.2-fast` through the AI Gateway,
+@@ -1178,7 +1178,7 @@
+   `choKetLuot`: lượt RUNNING mà `result` còn `null` — bộ chạy chưa gọi `finish_run` —
+   đóng bằng `RUNNER_NO_RESULT`, «Bộ chạy dừng trước khi nộp kết quả.». Kết quả lượt là
+   khuôn phẳng `ketQuaLuot` (`lib/run-result.ts`), dùng chung cho `finish_run`,
+-  `outputSchema` của bộ chạy và bộ đọc `AgentRun.result`.
++  `outputShape` của bộ chạy và bộ đọc `AgentRun.result`.
+ - **Hạn mức phiên của bộ dựng: 500k vào, 128k ra.** Ba tác nhân đọc hạn mức từ
+   `SESSION_LIMITS` trong `lib/dispatch-config.ts`, không viết số trong `agent.ts`. Model
+   có suy nghĩ tính token suy nghĩ vào phần viết ra: Gemini 3.8 Flash dùng 23.589 token
+@@ -1194,12 +1194,12 @@
+   điều phối gửi `inputResponses`. «Cấp thêm» cấp thêm một hạn mức và phiên con chạy
+   tiếp; «Dừng» làm eve huỷ lượt (`turn.cancelled`). Loại `tool-approval` vẫn bị bỏ qua —
+   bộ dựng không dùng công cụ cần duyệt.
+-- **Lời gọi bộ dựng kèm `outputSchema` làm hỏng lượt.** Công cụ `subagent` của eve nhận
+-  `{ message, outputSchema? }`, và khuôn người gọi đưa thắng khuôn riêng của bộ dựng: bộ
++- **Lời gọi bộ dựng kèm `outputShape` làm hỏng lượt.** Công cụ `subagent` của eve nhận
++  `{ message, outputShape? }`, và khuôn người gọi đưa thắng khuôn riêng của bộ dựng: bộ
+   dựng điền khuôn lạ mà không qua kiểm quyền hay chốt lưu bản nháp. GLM 5.2 Fast làm
+   đúng như vậy ngày 27/09 và trợ lý báo «đã tạo» khi không có bản nháp nào.
+   `recordBuilderDelegation` ném `BUILDER_OUTPUT_SCHEMA_MESSAGE` khi lời gọi
+-  `agent_builder` có khoá `outputSchema` (kể cả `{}`); móc ném thì lượt thành
++  `agent_builder` có khoá `outputShape` (kể cả `{}`); móc ném thì lượt thành
+   `turn.failed` và không phiên con nào được tạo. Ứng dụng eve thử ở
+   `apps/agent/test/eve-tran/` đo điều đó, và đo cả hai nhánh câu hỏi hết hạn mức, bằng
+   `mockModel` — chạy qua `bun apps/agent/test/eve-tran/chay.ts`, vì eve chụp riêng thư

@@ -2,6 +2,8 @@ import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 
 const GOC = resolve(import.meta.dirname, "..", "..", "..");
+const TU = "a9e8bc75a04f04a9a250eb2ff7fc4fadbe0f4747";
+const TOI = "16e80f31d62a56195253f1566b38284f8e0b4e66";
 const TASKS = "apps/agent/test/tasks.integration.spec.ts";
 const GIEO = "apps/agent-okr/test/support/gieo.ts";
 const GOI_SPEC = "apps/agent-okr/test/goi-soan.integration.spec.ts";
@@ -86,7 +88,17 @@ export const LUAT = {
 	},
 };
 
-const GIEO_MOI = git(["show", `HEAD:${GIEO}`]);
+for (const sha of [TU, TOI]) {
+	const r = spawnSync("git", ["cat-file", "-e", `${sha}^{commit}`], {
+		cwd: GOC,
+	});
+	if (r.status !== 0) {
+		console.log(`KHONG DO DUOC: khong co commit neo ${sha}`);
+		process.exit(2);
+	}
+}
+
+const GIEO_MOI = git(["show", `${TOI}:${GIEO}`]);
 const GIEO_THEM = `--- a/${GIEO}\n+++ b/${GIEO}\n@@ -5,0 +6 @@\n+export const X = 1;`;
 const GIEO_HONG = `--- a/${GIEO}\n+++ b/${GIEO}\n@@ -4 +4 @@\n-export const TIEN_TO = "sokr-";\n+export const TIEN_TO = "sokr2-";`;
 const DOI_CHUNG = [
@@ -131,10 +143,8 @@ for (const [ten, chay, ma, dong] of DOI_CHUNG) {
 	}
 }
 
-const coSo = git(["merge-base", "origin/onehub", "HEAD"]).trim();
-const ds = git(["diff", "--name-only", coSo, "HEAD"])
-	.split("\n")
-	.filter(Boolean);
+const coSo = TU;
+const ds = git(["diff", "--name-only", coSo, TOI]).split("\n").filter(Boolean);
 const loi = [];
 const danhSach = kiemDanhSach(ds);
 if (danhSach.ma === 2) {
@@ -142,7 +152,7 @@ if (danhSach.ma === 2) {
 	process.exit(2);
 }
 loi.push(...danhSach.dong);
-const diffCua = (tep) => git(["diff", "-U0", coSo, "HEAD", "--", tep]);
+const diffCua = (tep) => git(["diff", "-U0", coSo, TOI, "--", tep]);
 for (const tep of [CONFIG, GOI_SPEC]) {
 	const l = LUAT.chiThem(tep, diffCua(tep));
 	if (l) loi.push(l);
@@ -150,7 +160,7 @@ for (const tep of [CONFIG, GOI_SPEC]) {
 const lGieo = LUAT.gieo(diffCua(GIEO), GIEO_MOI);
 if (lGieo) loi.push(lGieo);
 const tasksCu = git(["show", `${coSo}:${TASKS}`]);
-const tasksMoi = git(["show", `HEAD:${TASKS}`]);
+const tasksMoi = git(["show", `${TOI}:${TASKS}`]);
 const hongTasks = [
 	[
 		"ca that doi",

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
+import { CapNhatGanDayMau } from "./_modules/cap-nhat-gan-day";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
 import { ChoTacNhanLauMau } from "./_modules/cho-tac-nhan-lau";
 import { CuaToiBaPhanMau } from "./_modules/cua-toi-ba-phan";
@@ -20,6 +21,7 @@ import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
 import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
 import { HopThongBaoMau } from "./_modules/hop-thong-bao-tren-web";
 import { HopTuanTrenBangMau } from "./_modules/hop-tuan-tren-bang";
+import { HopTuanMoDungBoMau } from "./_modules/hop-tuan-mo-dung-bo";
 import { KanbanViecMau } from "./_modules/kanban-viec";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
@@ -125,8 +127,10 @@ const BANG_GHEP = {
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
 	"cho-tac-nhan-lau": ChoTacNhanLauMau,
+	"hop-tuan-mo-dung-bo": HopTuanMoDungBoMau,
 	"ngan-kr-mot-cho": NganKrMotChoMau,
 	"hop-tuan-tren-bang": HopTuanTrenBangMau,
+	"cap-nhat-gan-day": CapNhatGanDayMau,
 } satisfies Record<string, ProtoComponent>;
 
 export const PROTO_COMPONENTS = new Map(Object.entries(BANG_GHEP));

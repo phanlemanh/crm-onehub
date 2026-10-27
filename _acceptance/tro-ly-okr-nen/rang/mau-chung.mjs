@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
 	existsSync,
 	mkdirSync,
@@ -27,6 +28,23 @@ export function duongPath() {
 	return existsSync(NODE_24)
 		? `${NODE_24}:${process.env.PATH ?? ""}`
 		: (process.env.PATH ?? "");
+}
+
+const DUONG_VAN_TAY = [
+	"apps/agent",
+	"packages/db",
+	"packages/validation",
+	"_acceptance/tro-ly-okr-nen/rang",
+];
+
+export function vanTayMa() {
+	const git = (...d) =>
+		spawnSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).stdout ?? "";
+	const sha = git("rev-parse", "HEAD").trim();
+	const khac = git("diff", "HEAD", "--", ...DUONG_VAN_TAY);
+	return khac
+		? `${sha}+${createHash("sha256").update(khac).digest("hex").slice(0, 16)}`
+		: sha;
 }
 
 export function taoKho(ten) {
