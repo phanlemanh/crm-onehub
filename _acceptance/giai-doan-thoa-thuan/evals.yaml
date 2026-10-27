@@ -266,7 +266,9 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/settings/giai-doan/**"
       - "apps/app/app/(app)/[slug]/deals/**"
-      - "apps/app/lib/messages/**"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/lib/messages/deals.ts"
+      - "apps/app/lib/messages/settings.ts"
       - "_acceptance/giai-doan-thoa-thuan/rang/man-giai-doan.mjs"
     steps:
       - "tien-de dung phien do rieng (kho crm_<cay>_do, API va app cua cay) va dat khoa nghien cuu gia; canh cay truoc man dau"
