@@ -1,36 +1,108 @@
 {
-  "feature_plain": "Người dựng tác nhân rời trang sẽ luôn nhận đúng một thông báo khi việc dựng hỏng hay xong — cả khi đã trả lời câu hỏi của Kara giữa chừng, cả khi lỡ gửi thêm một tin từ tab khác trong lúc đang dựng.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ báo đúng một lần «dựng hỏng» khi việc dựng hỏng sau khi người đã trả lời một câu hỏi của Kara, và cuộc trò chuyện nổi lên là có điều mới."},
-    {"id": "AC-2", "p": "Sẽ báo đúng một lần «dựng hỏng» khi Kara đã hỏi hai câu liền và người đã trả lời cả hai."},
-    {"id": "AC-3", "p": "Sẽ không báo hai lần khi máy nhận hai tín hiệu hỏng cho cùng một lượt dựng."},
-    {"id": "AC-4", "p": "Sẽ báo đúng một lần «dựng hỏng» khi người đã bấm «Cấp thêm» lúc Kara hết hạn mức rồi việc dựng vẫn hỏng."},
-    {"id": "AC-6", "p": "Sẽ báo đúng một lần «dựng hỏng» khi người lỡ gửi một tin từ tab khác trong lúc đang dựng; tin đó vẫn chờ tới lượt."},
-    {"id": "AC-7", "p": "Sẽ báo đúng một lần «xong» kèm tên tác nhân khi việc dựng xong trong lúc có một tin khác đang chờ."},
-    {"id": "AC-8", "p": "Sẽ chỉ có một thông báo «hỏng» khi lượt dựng hỏng rồi tin chen giữa sau đó cũng hỏng."},
-    {"id": "AC-9", "p": "Sẽ giữ nguyên mọi thông báo tác nhân đang chạy đúng hôm nay (bảng ca đã ký của việc «chờ tác nhân lâu»)."}
-  ],
-  "wont_do": [
-    {"id": "AC-5", "p": "Sẽ KHÔNG báo «dựng hỏng» cho một cuộc trò chuyện thường bị hỏng, kể cả khi Kara đã hỏi và người đã trả lời."},
-    {"id": "OOS-1", "p": "Cuộc trò chuyện thường có câu hỏi vẫn nhận «cần trả lời» như hôm nay — đúng ý, không đổi."},
-    {"id": "OOS-2", "p": "Không sửa bài kiểm của việc «chờ tác nhân lâu» đã ký; bài kiểm mới đứng riêng."},
-    {"id": "OOS-3", "p": "Câu chữ thông báo, kênh gửi (Zalo, Slack), chuông và màn trò chuyện không đổi."},
-    {"id": "OOS-4", "p": "Cách gửi tin cho Kara và cách trả lời câu hỏi giữ nguyên."}
-  ],
-  "scope_plain": "Ngoài vòng này:",
-  "coverage_plain": [
-    {"i": 0, "p": "Số câu Kara hỏi trước khi lượt dựng kết thúc: không câu, một câu, hai câu — mỗi mức có ca riêng (AC-1 đến AC-4, AC-6 đến AC-8; ca không câu và không chen giữa giữ bằng AC-9 bảng ca đã ký)."},
-    {"i": 1, "p": "Loại câu hỏi: câu hỏi làm rõ (AC-1) và câu hết hạn mức (AC-4); chọn «Dừng» là huỷ chứ không hỏng, đã có ca ở bảng cũ."},
-    {"i": 2, "p": "Cách lượt kết thúc: hỏng một tín hiệu, hỏng tín hiệu phiên, hai tín hiệu cùng lúc, và xong — mỗi cách một ca (AC-1, AC-2, AC-3, AC-7)."},
-    {"i": 3, "p": "Lượt đang chạy là dựng hay trò chuyện: dựng thì báo, trò chuyện thì không (AC-5, AC-8) — như GitHub Actions chỉ báo lỗi cho lượt chạy thật."},
-    {"i": 4, "p": "Tin gửi chen giữa: không có, đang chờ, đã tới lượt — đủ ba trạng thái (AC-6, AC-7, AC-8)."},
-    {"i": 5, "p": "Mọi ca đếm đúng một hoặc không thông báo, không chấp nhận «ít nhất một»."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Bản đầu bỏ ca «gửi tin từ tab khác trong lúc dựng rồi hỏng» dù ngưỡng CHẾT anh đã ký gọi đúng ca đó — đã đưa vào phạm vi (AC-6 đến AC-8) và sửa mã."},
-    {"i": 1, "p": "Bản đầu loại lối sửa mã vì lý do sai (bảo không có ca đỏ, trong khi bảng đo có) — đã đổi sang sửa mã, chiều đỏ là ca chen giữa."},
-    {"i": 2, "p": "Bản đầu ghi ba nơi báo hỏng nhưng thật ra chỉ có hai — đã đếm lại và sửa."},
-    {"i": 3, "p": "Ca một câu hỏi chỉ kiểm «có dấu điều mới», chưa kiểm dấu đó được làm mới lúc hỏng — đã so trước và sau."},
-    {"i": 4, "p": "Câu hỏi làm rõ trong bài kiểm là tự dựng — đã thay bằng câu hỏi thật chụp từ Kara và cách gửi tin thật."}
-  ]
+ "feature_plain": "Người dựng tác nhân rời trang sẽ luôn nhận đúng một thông báo khi việc dựng hỏng hay xong — cả khi đã trả lời câu hỏi của Kara giữa chừng, cả khi lỡ gửi thêm một tin từ tab khác trong lúc đang dựng.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ báo đúng một lần «dựng hỏng» khi việc dựng hỏng sau khi người đã trả lời một câu hỏi của Kara, và cuộc trò chuyện nổi lên là có điều mới."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ báo đúng một lần «dựng hỏng» khi Kara đã hỏi hai câu liền và người đã trả lời cả hai."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ không báo hai lần khi máy nhận hai tín hiệu hỏng cho cùng một lượt dựng."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ báo đúng một lần «dựng hỏng» khi người đã bấm «Cấp thêm» lúc Kara hết hạn mức rồi việc dựng vẫn hỏng."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ báo đúng một lần «dựng hỏng» khi người lỡ gửi một tin từ tab khác trong lúc đang dựng; tin đó vẫn chờ tới lượt."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ báo đúng một lần «xong» kèm tên tác nhân khi việc dựng xong trong lúc có một tin khác đang chờ."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ chỉ có một thông báo «hỏng» khi lượt dựng hỏng rồi tin chen giữa sau đó cũng hỏng."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ giữ nguyên mọi thông báo tác nhân đang chạy đúng hôm nay (bảng ca đã ký của việc «chờ tác nhân lâu»)."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-5",
+   "p": "Sẽ KHÔNG báo «dựng hỏng» cho một cuộc trò chuyện thường bị hỏng, kể cả khi Kara đã hỏi và người đã trả lời."
+  },
+  {
+   "id": "OOS-1",
+   "p": "Cuộc trò chuyện thường có câu hỏi vẫn nhận «cần trả lời» như hôm nay — đúng ý, không đổi."
+  },
+  {
+   "id": "OOS-2",
+   "p": "Không sửa bài kiểm của việc «chờ tác nhân lâu» đã ký; bài kiểm mới đứng riêng."
+  },
+  {
+   "id": "OOS-3",
+   "p": "Câu chữ thông báo, kênh gửi (Zalo, Slack), chuông và màn trò chuyện không đổi."
+  },
+  {
+   "id": "OOS-4",
+   "p": "Cách gửi tin cho Kara và cách trả lời câu hỏi giữ nguyên."
+  }
+ ],
+ "scope_plain": "Ngoài vòng này:",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Số câu Kara hỏi trước khi lượt dựng kết thúc: không câu, một câu, hai câu — mỗi mức có ca riêng (AC-1 đến AC-4, AC-6 đến AC-8; ca không câu và không chen giữa giữ bằng AC-9 bảng ca đã ký)."
+  },
+  {
+   "i": 1,
+   "p": "Loại câu hỏi: câu hỏi làm rõ (AC-1) và câu hết hạn mức (AC-4); chọn «Dừng» là huỷ chứ không hỏng, đã có ca ở bảng cũ."
+  },
+  {
+   "i": 2,
+   "p": "Cách lượt kết thúc: hỏng một tín hiệu, hỏng tín hiệu phiên, hai tín hiệu cùng lúc, và xong — mỗi cách một ca (AC-1, AC-2, AC-3, AC-7)."
+  },
+  {
+   "i": 3,
+   "p": "Lượt đang chạy là dựng hay trò chuyện: dựng thì báo, trò chuyện thì không (AC-5, AC-8) — như GitHub Actions chỉ báo lỗi cho lượt chạy thật."
+  },
+  {
+   "i": 4,
+   "p": "Tin gửi chen giữa: không có, đang chờ, đã tới lượt — đủ ba trạng thái (AC-6, AC-7, AC-8)."
+  },
+  {
+   "i": 5,
+   "p": "Mọi ca đếm đúng một hoặc không thông báo, không chấp nhận «ít nhất một»."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Bản đầu bỏ ca «gửi tin từ tab khác trong lúc dựng rồi hỏng» dù ngưỡng CHẾT anh đã ký gọi đúng ca đó — đã đưa vào phạm vi (AC-6 đến AC-8) và sửa mã."
+  },
+  {
+   "i": 1,
+   "p": "Bản đầu loại lối sửa mã vì lý do sai (bảo không có ca đỏ, trong khi bảng đo có) — đã đổi sang sửa mã, chiều đỏ là ca chen giữa."
+  },
+  {
+   "i": 2,
+   "p": "Bản đầu ghi ba nơi báo hỏng nhưng thật ra chỉ có hai — đã đếm lại và sửa."
+  },
+  {
+   "i": 3,
+   "p": "Ca một câu hỏi chỉ kiểm «có dấu điều mới», chưa kiểm dấu đó được làm mới lúc hỏng — đã so trước và sau."
+  },
+  {
+   "i": 4,
+   "p": "Câu hỏi làm rõ trong bài kiểm là tự dựng — đã thay bằng câu hỏi thật chụp từ Kara và cách gửi tin thật."
+  }
+ ]
 }
