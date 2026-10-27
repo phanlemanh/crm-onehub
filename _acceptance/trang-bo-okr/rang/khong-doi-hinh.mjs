@@ -478,12 +478,22 @@ function khoiDiff(diff) {
 const chiDoiChuoi = (k) =>
 	chuanHoa(k.bo.join("\n")) === chuanHoa(k.them.join("\n"));
 
+const coOGoc = (coSo, tep, cwd) =>
+	spawnSync("git", ["cat-file", "-e", `${coSo}:${tep}`], {
+		cwd,
+		stdio: "ignore",
+	}).status === 0;
+
 function soatDoiThuoc(cwd, k = khungLuot()) {
 	const sai = [];
 	for (const [tep, cacHoSo] of quetLop().tepCua) {
 		if (!LA_THUOC.test(tep)) continue;
 		const diff = git(["diff", "-U0", `${k.tu}...${k.den}`, "--", tep], cwd);
 		if (diff === "") continue;
+		if (!coOGoc(k.tu, tep, cwd)) {
+			console.log(`THUOC MOI ${tep}: chua co o goc nhanh, khong soat`);
+			continue;
+		}
 		const viet = VIET_LAI[tep] ?? null;
 		const tatCa = khoiDiff(diff);
 		if (
