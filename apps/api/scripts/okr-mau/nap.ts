@@ -202,6 +202,7 @@ export async function xoaTrong(
 		select: { id: true },
 	});
 	const P = { in: phien.map((p) => p.id) };
+	await tx.okrCamXuc.deleteMany({ where: { userId: U } });
 	const capNhat = await tx.okrCheckIn.deleteMany({
 		where: { OR: [{ keyResultId: K }, { sessionId: P }] },
 	});
