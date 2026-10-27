@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 58e62de63995b2944d6c11840587d478c758e122
+verified_commit: d781e14c762cc3a507b015ad043adac3a6e34d7b
 human_signoff: manh 2026-10-17
 ---
 
@@ -322,3 +322,7 @@ sha: ae0cbcc0b43094b04fe3b343c9f440097c5a3eea · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-27, do hoá cũ do gộp origin/onehub dd53c3870 (#574 VK12) vào VK6; bài đường cũ tự lấy origin/onehub (lượt 2/2)
 run_id: repin-20261027T021439Z-73385
 sha: 58e62de63995b2944d6c11840587d478c758e122 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-27, do bài đường cũ VK6 lấy nền dần từ độ sâu 20, hạn ca 50 giây (CI #567 quá hạn 5 s)
+run_id: repin-20261027T031312Z-87766
+sha: d781e14c762cc3a507b015ad043adac3a6e34d7b · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
