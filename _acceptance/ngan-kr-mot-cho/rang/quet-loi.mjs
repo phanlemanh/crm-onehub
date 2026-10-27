@@ -85,11 +85,6 @@ const MA_TRAN = [
 		ham: "DichViec",
 	},
 	{
-		o: "cay-can-chinh",
-		tep: "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
-		ham: "CayCanChinh",
-	},
-	{
 		o: "ten-kr-bang-kr",
 		tep: "apps/app/app/(app)/[slug]/okr/bang-kr.tsx",
 		ham: "HangKr",

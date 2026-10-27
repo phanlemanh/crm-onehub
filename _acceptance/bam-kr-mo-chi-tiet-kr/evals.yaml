@@ -20,6 +20,8 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.bkr_cay
+    status: not-run
+    superseded_by: so-do-toan-vung#AC-6
     paths:
       - "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx"
       - "apps/app/test/bam-kr-mo-chi-tiet-kr.dom.tsx"

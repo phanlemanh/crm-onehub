@@ -12,18 +12,6 @@
 		"nguon": "kr"
 	},
 	{
-		"tep": "cay-can-chinh.tsx",
-		"kind": "kr",
-		"id": "nut.id",
-		"nguon": "kr"
-	},
-	{
-		"tep": "cay-can-chinh.tsx",
-		"kind": "objective",
-		"id": "nut.objectiveId",
-		"nguon": "muc-tieu"
-	},
-	{
 		"tep": "chip-gop-y.tsx",
 		"kind": "objective",
 		"id": "mt.id",

@@ -4,7 +4,6 @@ import { join } from "node:path";
 import { within } from "@testing-library/dom";
 import { act } from "react";
 import { mineOutput, viecCuaToiOutput } from "../../api/src/okr/okr.contracts";
-import { cayCanChinhOutput } from "../../api/src/okr/okr-xem.contracts";
 import {
 	bamChuot,
 	bamPhim,
@@ -25,7 +24,6 @@ import {
 const { PhanKrPhuTrach } = await import(
 	"@/app/(app)/[slug]/okr/phan-kr-phu-trach"
 );
-const { CayCanChinh } = await import("@/app/(app)/[slug]/okr/cay-can-chinh");
 const { ViecOkrCuaToi } = await import("@/app/(app)/[slug]/okr/viec-cua-toi");
 const { BangKr } = await import("@/app/(app)/[slug]/okr/bang-kr");
 const { useRecordStack } = await import(
@@ -77,58 +75,6 @@ describe("bkr-kr-phu-trach", () => {
 			const loi = `bkr-kr-phu-trach: ${c.k} mo ${thuc}, can kr:${c.k}`;
 			expect(thuc, loi).toBe(`kr:${c.k}`);
 			expect(thuc.includes("objective:"), loi).toBe(false);
-			soO += 1;
-			await thaoHet();
-		}
-		expect(soO).toBe(2);
-	});
-});
-
-describe("bkr-cay", () => {
-	const cay = cayCanChinhOutput.parse(
-		JSON.parse(
-			readFileSync(join(import.meta.dir, "fixtures/bkr-cay.json"), "utf8"),
-		),
-	);
-	const goc = cay.roots.find(
-		(n) => n.loai === "muc-tieu" && n.children.some((c) => c.loai === "kr"),
-	);
-	const con = goc?.children.find((c) => c.loai === "kr");
-	if (!goc || !con)
-		throw new Error("bkr-cay: fixture khong co muc tieu co con KR");
-
-	test("bkr-cay: chon nut KR mo chi tiet KR, chon nut muc tieu mo muc tieu", async () => {
-		expect(con.objectiveId).toBe(goc.objectiveId);
-		const MA_TRAN = [
-			{
-				id: con.id,
-				loai: "kr",
-				mong: `kr:${con.id}`,
-			},
-			{
-				id: goc.id,
-				loai: "muc-tieu",
-				mong: `objective:${goc.objectiveId}`,
-			},
-		] as const;
-		let soO = 0;
-		for (const c of MA_TRAN) {
-			const san = await dung(
-				<CayCanChinh
-					canh={cay.canh}
-					chuaCanChinh={cay.chuaCanChinh}
-					roots={cay.roots}
-				/>,
-			);
-			const nhan = qs(`[data-nut-can-chinh="${c.id}"]`);
-			if (!nhan) throw new Error(`bkr-cay: khong co nhan nut ${c.id}`);
-			expect(record(san), "bkr-cay: chua chon da co record").toBe("");
-			await bamChuot(nhan);
-			const thuc = record(san);
-			expect(
-				thuc,
-				`bkr-cay: nut ${c.loai} ${c.id} mo ${thuc}, can ${c.mong}`,
-			).toBe(c.mong);
 			soO += 1;
 			await thaoHet();
 		}
