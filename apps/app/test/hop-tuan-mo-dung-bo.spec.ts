@@ -51,6 +51,8 @@ function dong(id: string, tuTin: TuTin) {
 		tuTin,
 		ghiChu: null,
 		lyDo: [],
+		checkInId: null,
+		camXuc: [],
 	};
 }
 
