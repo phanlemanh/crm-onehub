@@ -2,8 +2,8 @@
 
 import { Button } from "@crm/ui/components/button";
 import { LocaleProvider, useLocale } from "@crm/ui/components/locale-provider";
+import { TheDangDung } from "@crm/ui/components/the-dang-dung";
 import { useState } from "react";
-import { TheDangDung } from "@/components/agent-builder/the-dang-dung";
 import {
 	PageShell,
 	PageShellContent,
@@ -13,6 +13,7 @@ import {
 	PageShellTitle,
 } from "@/components/page-shell";
 import { ChuongThongBaoKhung } from "@/components/thong-bao/chuong-thong-bao";
+import { useTheDangDung } from "@/lib/agent-builder-the-dang-dung";
 import { troChuyenMessages } from "@/lib/messages/agent-builder-tro-chuyen";
 import { cauThongBao } from "@/lib/thong-bao/cau";
 import {
@@ -39,16 +40,16 @@ function TheMau({
 	state: typeof STATE.duoiNguong | typeof STATE.trenNguong;
 }) {
 	const t = troChuyenMessages(useLocale());
+	const the = useTheDangDung({
+		t,
+		buocVat: BUOC_VAT,
+		daXong: DA_XONG[state],
+		dangGhi: DANG_GHI[state],
+		batDauLuc: new Date(Date.now() - DA_TROI_MS[state]).toISOString(),
+	});
 	return (
 		<TheDangDung
-			buoc={t.man.buoc.map((nhan: string, index: number) => ({
-				nhan,
-				vat: BUOC_VAT[index] ?? null,
-			}))}
-			daXong={DA_XONG[state]}
-			dangGhi={DANG_GHI[state]}
-			batDauLuc={new Date(Date.now() - DA_TROI_MS[state]).toISOString()}
-			t={t}
+			{...the}
 			nutDung={
 				<Button variant="outline" size="sm">
 					{t.dung.dungLai}
