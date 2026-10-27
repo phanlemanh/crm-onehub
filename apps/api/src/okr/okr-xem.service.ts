@@ -693,7 +693,7 @@ export class OkrXemService {
 		const tatCa = [...so.values()];
 		return {
 			tuan,
-			tuanDau: tatCa.every((k) => k.lan.length === 0),
+			tuanDau: tatCa.length > 0 && tatCa.every((k) => k.lan.length === 0),
 			daCapNhat: tatCa.filter((k) => cuoiTrongTuan(k, tuan) !== null).length,
 			tongKr: tatCa.length,
 			dangBan: xep.dangBan.flatMap(dong),

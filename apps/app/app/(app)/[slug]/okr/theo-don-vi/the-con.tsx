@@ -46,6 +46,10 @@ export function hrefThe({
 	return `${goc}?${q.toString()}`;
 }
 
+export function useGocBoOkr(): string {
+	return useWorkspaceUrl()("/okr/bo-okr");
+}
+
 export function TheConBo({
 	don,
 	ky,
