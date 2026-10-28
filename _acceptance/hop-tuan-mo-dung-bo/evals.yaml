@@ -237,8 +237,8 @@ evals:
     steps:
       - "Phiên đo riêng qua mot-luot.sh (tien-de.mjs dựng api và app của CÂY ĐANG XÉT trên cổng tự do, kho crm_<cây>_do); không dùng cổng 3000/3001"
       - "Bàn đo gieo bộ OKR mẫu (okr:mau) có ca Họp tuần; đăng nhập trưởng phòng ban P (có dữ liệu)"
-      - "Khổ 1440 rồi 375, sáng rồi tối: bấm «Bộ OKR» trên thanh bên (ở 375 trong hàng cuộn ngang) → «Tôi dẫn» → bộ P → thẻ con «Họp tuần», chờ [data-hang-so-hop], chụp htmb-co-du-lieu-<kho>-<sang|toi>.png; mở Họp tuần của bộ phòng ban chưa có KR trong ca, chờ danh sách hoặc liên kết, chụp htmb-chua-kr-<kho>-<sang|toi>.png; với chu kỳ con của ca (OneHub không KR, các đơn vị có KR) mở Họp tuần donOkr=goc, chờ [data-don-vi-co-kr], chụp htmb-ds-don-vi-<kho>-<sang|toi>.png vào evidence/"
-      - "Mỗi khổ đo: scrollWidth của tài liệu ≤ bề rộng khung nhìn (đối chứng: chèn khối 4000px phải làm tràn); số cột của lưới [data-hang-so-hop] (1440: 4 ô cùng hàng theo offsetTop; 375: 2 hàng 2 ô); mỗi nhãn ô scrollWidth ≤ clientWidth + 1; danh sách đơn vị có ≥ 2 mục Item và mỗi tên, mỗi dòng «n KR · đã cập nhật m» scrollWidth ≤ clientWidth + 1"
+      - "Khổ 1440 rồi 375, sáng rồi tối: bấm «Bộ OKR» trên thanh bên (ở 375 trong hàng cuộn ngang) → «Tôi dẫn» → bộ P → thẻ con «Họp tuần», chờ [data-hang-so-hop], chụp htmb-co-du-lieu-<kho>-<sang|toi>.png; mở Họp tuần của bộ phòng ban chưa có KR trong ca, chờ danh sách hoặc liên kết, chụp htmb-chua-kr-<kho>-<sang|toi>.png; với chu kỳ con của ca (OneHub không KR, các đơn vị có KR) mở Họp tuần donOkr=goc, chờ liên kết «Xem mọi bộ OKR», chụp htmb-goc-rong-<kho>-<sang|toi>.png vào evidence/ (bo-okr-chi-don-vi AC-8 thay danh sách đơn vị)"
+      - "Mỗi khổ đo: scrollWidth của tài liệu ≤ bề rộng khung nhìn (đối chứng: chèn khối 4000px phải làm tràn); số cột của lưới [data-hang-so-hop] (1440: 4 ô cùng hàng theo offsetTop; 375: 2 hàng 2 ô); mỗi nhãn ô scrollWidth ≤ clientWidth + 1; Họp tuần OneHub rỗng không có [data-don-vi-co-kr], có câu chỉ sang dòng vị trí [data-chi-sang-menu] và liên kết «Xem mọi bộ OKR», cả hai scrollWidth ≤ clientWidth + 1"
       - "Đọc dòng KET LUAN cuối: mã 0 = mọi dòng DUNG; mã 1 = có dòng SAI; mã 2 = không đo được"
       - "Mở mười hai ảnh và đối chiếu bằng mắt với Expected"
     inputs:
@@ -250,10 +250,10 @@ evals:
     expected: |
       Mười hai ảnh. Ảnh có dữ liệu: đầu thẻ Họp tuần là hàng bốn ô — 1440 một hàng, 375 lưới hai cột hai hàng — nhãn đọc trọn,
       số không bị cắt; dưới là khối tóm tắt (nếu có) rồi bảng. Ảnh chưa có KR: câu lý do nêu tên bộ và chu kỳ, danh sách
-      liên kết «Xem mọi bộ OKR» thấy được, không hàng số. Ảnh danh sách đơn vị (màn production 22/10): câu «OneHub chưa
-      có KR công bố…», danh sách từ hai mục, mỗi mục tên và «n KR · đã cập nhật m» đọc trọn, liên kết thấy được. Thanh bên (1440)
+      liên kết «Xem mọi bộ OKR» thấy được, không hàng số. Ảnh OneHub rỗng (bo-okr-chi-don-vi AC-8): câu «OneHub chưa
+      có KR công bố…», câu chỉ sang tên bộ trên dòng vị trí, liên kết «Xem mọi bộ OKR» thấy được, không danh sách đơn vị. Thanh bên (1440)
       hay hàng cuộn ngang (375) có «Bộ OKR» đang mở và không có mục «Họp tuần». Sáng và tối: không chữ, viền, ô số nào chìm vào nền. Bàn đo in DUNG cho không
-      tràn ngang, đối chứng tràn, lưới ô, nhãn không cắt, danh sách đơn vị — ở cả hai khổ. Thiếu ảnh nào → không đạt.
+      tràn ngang, đối chứng tràn, lưới ô, nhãn không cắt, OneHub rỗng — ở cả hai khổ. Thiếu ảnh nào → không đạt.
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot, observed]
 
   - id: E12
