@@ -131,6 +131,7 @@ function GopYMucTieuSoan({
 	moKr: (objectiveId: string, di: LoiDiKr) => void;
 }) {
 	const phuThuoc = usePhuThuocSoan();
+	const krThu = okrSoanBoMessages(useLocale()).taiLieu.krThu;
 	const ghiDuoc = mt.status === "nhap" || mt.status === "cong-bo";
 	const gopY = useGopYMucTieu({
 		objectiveId: mt.id,
@@ -170,9 +171,20 @@ function GopYMucTieuSoan({
 			density="card"
 			gopY={gopY}
 			key={d.id}
+			label={nhanKrCua(mt, d, krThu)}
 			moKr={(di) => moKr(mt.id, di)}
 		/>
 	));
+}
+
+function nhanKrCua(
+	mt: MucTieuSoan,
+	d: DongHien,
+	krThu: (n: string) => string,
+): string | undefined {
+	if (d.keyResultId === null) return undefined;
+	const viTri = mt.keyResults.findIndex((kr) => kr.id === d.keyResultId);
+	return viTri < 0 ? undefined : krThu(String(viTri + 1));
 }
 
 function cauTat(vi: LyDoTat, locale: Locale): string {

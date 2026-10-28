@@ -113,6 +113,19 @@ const LOP_DUOC_PHEP = [
 		them: ['const MT = mucTieu("mt-kara", { canEdit: true, soGopYCho: 1 });'],
 	},
 	{
+		lop: 3,
+		ten: "okr-to-chuc-va E12: du lieu mau chu ky va quyen sua bo de chip hien (V1-60)",
+		tep: "apps/app/test/okr-to-chuc-va.dom.tsx",
+		kieu: "doi",
+		bo: [],
+		them: [
+			'dat("okr.cycles", () => ({',
+			'cycles: [{ id: MT.cycleId, kind: "quy", phase: "dang-chay" }],',
+			"}));",
+			'dat("okr.danhSach", () => ({ canEdit: true }));',
+		],
+	},
+	{
 		lop: 1,
 		ten: "mot-nut-tao-muc-tieu: xoa ba ca mnt-soan goi soanMo",
 		tep: MNT,

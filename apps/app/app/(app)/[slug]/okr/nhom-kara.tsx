@@ -135,11 +135,13 @@ export function DeXuatNeo({
 	gopY,
 	moKr,
 	density,
+	label,
 }: {
 	d: DongHien;
 	gopY: GopYMucTieu;
 	moKr: (di: LoiDiKr) => void;
 	density?: ProposedChangeDensity;
+	label?: ReactNode;
 }) {
 	const m = okrGopYMessages(useLocale());
 	const [sua, setSua] = useState<string | null>(null);
@@ -269,6 +271,7 @@ export function DeXuatNeo({
 				error={gopY.loiDong[d.id]}
 				highlighted={gopY.noi === d.id}
 				kind={kind}
+				label={label}
 				lockedReason={gopY.ghiDuoc ? undefined : m.de.khoaSua}
 				media={false}
 				pending={gopY.dangQuyet === d.id}

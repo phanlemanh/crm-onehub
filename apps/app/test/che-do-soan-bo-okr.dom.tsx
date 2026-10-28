@@ -1945,10 +1945,10 @@ const DE_XUAT_BO = [
 		id: "dx-2",
 		loai: "viet-lai",
 		objectiveId: "mt-g2",
-		keyResultId: "k-g3",
+		keyResultId: "k-g4",
 		truong: "kr.title",
-		truoc: "Làm 20 buổi thăm khách",
-		sau: "Khách được thăm gia hạn trước hạn",
+		truoc: "Tỷ lệ gia hạn hợp đồng",
+		sau: "Tỷ lệ gia hạn hợp đồng trước hạn",
 		maVanDe: "kr-la-viec",
 		targetObjectiveId: null,
 		targetKeyResultId: null,
@@ -2079,6 +2079,14 @@ async function buocGopY(kara: KaraGia): Promise<void> {
 		nhom[0]?.querySelectorAll("[data-gop-y]").length,
 		"vk10-gop-y: the lech",
 	).toBe(2);
+	expect(
+		["dx-1", "dx-2"].map(
+			(id) =>
+				q(`[data-gop-y="${id}"] [data-slot=proposed-change-label]`)
+					?.textContent ?? null,
+		),
+		"vk10-gop-y: nhan KR lech",
+	).toEqual([CHU.taiLieu.krThu("1"), CHU.taiLieu.krThu("2")]);
 	expect(
 		khoiGopY()?.querySelectorAll("[data-slot=kara-label]").length,
 		"vk10-gop-y: nhan lech",
