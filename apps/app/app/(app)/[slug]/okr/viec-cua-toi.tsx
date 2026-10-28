@@ -35,7 +35,7 @@ import {
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
-import type { LoiVao } from "@crm/validation/okr-cap-nhat";
+import { duongCapNhatKr } from "@crm/validation/okr-cap-nhat";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
@@ -50,8 +50,6 @@ import type { ViecOkr } from "./kieu";
 export type NoiHienViec = "tong-quan" | "cua-toi";
 
 export type KhiHienViec = "luon" | "khi-lien-quan" | "khi-co-viec";
-
-const LOI_VAO_THE: LoiVao = "viec-cua-toi";
 
 const ICON_VIEC = {
 	"okr-cap-nhat": Edit,
@@ -168,10 +166,9 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 	const url = useWorkspaceUrl();
 	const openRecord = useOpenRecord();
 	if (viec.loai === "okr-cap-nhat") {
-		const thamSo = new URLSearchParams({ [SEARCH_PARAM.okr.tu]: LOI_VAO_THE });
 		return (
 			<Button asChild size="sm">
-				<Link href={`${url("/okr")}?${thamSo}`}>
+				<Link href={url(duongCapNhatKr(viec.krIds))}>
 					{m.capNhatTuan}
 					<Icon icon={ArrowRight} data-icon="inline-end" />
 				</Link>

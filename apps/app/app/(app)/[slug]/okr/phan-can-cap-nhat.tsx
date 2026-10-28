@@ -1,39 +1,36 @@
 "use client";
 
-import Edit from "@carbon/icons-react/es/Edit";
-import Renew from "@carbon/icons-react/es/Renew";
-import { Button } from "@crm/ui/components/button";
+import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import { Icon } from "@crm/ui/components/icon";
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemDescription,
+	ItemGroup,
+	ItemTitle,
+} from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { ConfidenceIndicator } from "@crm/ui/components/okr-status";
 import { SectionHeading } from "@crm/ui/components/section-heading";
-import {
-	SimpleTable,
-	SimpleTableCell,
-	type SimpleTableColumn,
-	SimpleTableRow,
-} from "@crm/ui/components/simple-table";
 import { Skeleton } from "@crm/ui/components/skeleton";
-import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
-import { LOI_VAO, type LoiVao } from "@crm/validation/okr-cap-nhat";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { parseAsStringLiteral, useQueryState } from "nuqs";
-import { useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { okrMessages } from "@/lib/messages/okr";
-import { SEARCH_PARAM } from "@/lib/search-param-keys";
+import { dichKrTrongBo } from "@/lib/okr-duong-kr";
 import { useTRPC } from "@/lib/trpc/client";
+import type { RouterOutputs } from "@/lib/trpc/types";
+import { useWorkspaceSlug } from "@/lib/use-workspace-url";
 import { giaTri } from "./bang-kr";
-import {
-	BangCapNhat,
-	congNgay,
-	ngayThang,
-	TUAN,
-} from "./cap-nhat-tuan/cap-nhat-tuan";
+import { congNgay, ngayThang, TUAN } from "./cap-nhat-tuan/cap-nhat-tuan";
 import { LoiPhan } from "./loi-phan";
 
-const LOI_MO_SAN = ["nhac", "viec-cua-toi"] as const satisfies LoiVao[];
+type KrCanCapNhat = RouterOutputs["okr"]["capNhatTuan"]["items"][number];
 
-function moSan(tu: LoiVao | null): tu is (typeof LOI_MO_SAN)[number] {
-	return LOI_MO_SAN.some((l) => l === tu);
+function ngayVN(luc: string): string {
+	return new Date(luc).toLocaleDateString("en-CA", {
+		timeZone: "Asia/Ho_Chi_Minh",
+	});
 }
 
 export function PhanCanCapNhat() {
@@ -41,38 +38,6 @@ export function PhanCanCapNhat() {
 	const m = okrMessages(locale).baPhan;
 	const trpc = useTRPC();
 	const ds = useQuery(trpc.okr.capNhatTuan.queryOptions());
-	const [tu, datTu] = useQueryState(
-		SEARCH_PARAM.okr.tu,
-		parseAsStringLiteral(LOI_VAO),
-	);
-	const [phien, setPhien] = useState<string | null>(null);
-	const [sua, setSua] = useState(false);
-	const daMoTuNgoai = useRef(false);
-	const moPhien = useMutation(
-		trpc.okr.moCapNhat.mutationOptions({
-			onSuccess: (kq) => {
-				setPhien(kq.sessionId);
-				if (tu !== null) void datTu(null);
-			},
-		}),
-	);
-	const coKr = (ds.data?.items.length ?? 0) > 0;
-
-	const moTuNgoai =
-		coKr && moSan(tu) ? (
-			<MoTuNgoai
-				chay={() => {
-					if (daMoTuNgoai.current) return;
-					daMoTuNgoai.current = true;
-					moPhien.mutate({ entry: tu });
-				}}
-			/>
-		) : null;
-
-	const mo = (laSua: boolean) => {
-		setSua(laSua);
-		moPhien.mutate({ entry: "cua-toi" });
-	};
 
 	if (ds.isPending)
 		return (
@@ -90,26 +55,8 @@ export function PhanCanCapNhat() {
 	const duLieu = ds.data;
 	const thieu = duLieu.items.filter((kr) => !kr.updatedThisWeek);
 	const tuan = ngayThang(duLieu.weekStart);
-	const bien = moPhien.variables;
-	const loiMo =
-		moPhien.isError && bien ? (
-			<LoiMoPhien thuLai={() => moPhien.mutate(bien)} />
-		) : null;
 
-	if (phien !== null)
-		return (
-			<VoPhan tieuDe={m.phan1}>
-				<BangCapNhat
-					duLieu={duLieu}
-					focusDau
-					sessionId={phien}
-					suaNgay={sua}
-					taiCho
-				/>
-			</VoPhan>
-		);
-
-	if (!coKr)
+	if (duLieu.items.length === 0)
 		return (
 			<VoPhan tieuDe={m.phan1}>
 				<p className="text-muted-foreground text-sm">{m.khongKr}</p>
@@ -118,116 +65,87 @@ export function PhanCanCapNhat() {
 
 	if (thieu.length === 0)
 		return (
-			<VoPhan
-				hanhDong={
-					<Button
-						data-nut="sua-lan-gui"
-						disabled={moPhien.isPending}
-						onClick={() => mo(true)}
-						size="sm"
-						variant="outline"
-					>
-						{m.suaLanGui}
-					</Button>
-				}
-				tieuDe={m.phan1}
-			>
-				{moTuNgoai}
-				{loiMo}
-				<p className="text-muted-foreground text-sm">{m.daDu(tuan)}</p>
+			<VoPhan tieuDe={m.phan1}>
+				<p className="text-muted-foreground text-sm">
+					{m.daDu(tuan)} {m.suaThiMoKr}
+				</p>
 			</VoPhan>
 		);
 
-	const cot: SimpleTableColumn[] = [
-		{ id: "kr", header: m.cotKr },
-		{ id: "hien-tai", header: m.cotHienTai, width: "w-32" },
-	];
 	return (
-		<VoPhan
-			hanhDong={
-				<Button
-					data-nut="cap-nhat-tai-cho"
-					disabled={moPhien.isPending}
-					onClick={() => mo(false)}
-					size="sm"
-				>
-					<Icon data-icon="inline-start" icon={Edit} />
-					{m.capNhatN(thieu.length)}
-				</Button>
-			}
-			tieuDe={m.phan1}
-		>
-			{moTuNgoai}
-			{loiMo}
+		<VoPhan tieuDe={m.phan1}>
 			<p className="text-muted-foreground text-sm">
 				{m.conThieu(
 					thieu.length,
 					tuan,
 					ngayThang(congNgay(duLieu.weekStart, TUAN.chuNhat)),
-				)}
+				)}{" "}
+				{m.goiYMoKr}
 			</p>
-			<SimpleTable columns={cot} surface="page">
+			<ItemGroup>
 				{thieu.map((kr) => (
-					<SimpleTableRow data-kr={kr.keyResultId} key={kr.keyResultId}>
-						<SimpleTableCell>
-							<span className="flex flex-col gap-0.5">
-								<span translate="no">{kr.title}</span>
-								<span className="text-muted-foreground text-xs" translate="no">
-									{kr.unitName} · {kr.objectiveTitle}
-								</span>
-							</span>
-						</SimpleTableCell>
-						<SimpleTableCell className="text-sm tabular-nums">
-							{giaTri(kr, kr.currentValue, locale)}
-						</SimpleTableCell>
-					</SimpleTableRow>
+					<DongKr key={kr.keyResultId} kr={kr} />
 				))}
-			</SimpleTable>
+			</ItemGroup>
 		</VoPhan>
 	);
 }
 
-function MoTuNgoai({ chay }: { chay: () => void }) {
-	useMountEffect(chay);
-	return null;
-}
-
-function LoiMoPhien({ thuLai }: { thuLai: () => void }) {
-	const m = okrMessages(useLocale()).baPhan;
+function DongKr({ kr }: { kr: KrCanCapNhat }) {
+	const locale = useLocale();
+	const m = okrMessages(locale).baPhan;
+	const slug = useWorkspaceSlug();
+	const lan =
+		kr.lastAt === null
+			? m.chuaCapNhatLanNao
+			: m.lanTruoc(ngayThang(ngayVN(kr.lastAt)));
+	const so = giaTri(kr, kr.currentValue, locale);
 	return (
-		<div
-			className="flex flex-wrap items-center gap-3 text-sm"
-			data-trang-thai="ST-ctbp-loi-mo"
-			role="alert"
-		>
-			<span className="text-destructive">{m.loiMo}</span>
-			<Button
-				data-nut="thu-lai-mo"
-				onClick={thuLai}
-				size="sm"
-				variant="outline"
+		<Item asChild variant="outline">
+			<Link
+				data-kr={kr.keyResultId}
+				href={dichKrTrongBo(slug, kr.keyResultId, {
+					donOkr: kr.donOkr,
+					cycleId: kr.cycleId,
+				})}
 			>
-				<Icon data-icon="inline-start" icon={Renew} />
-				{m.thuLai}
-			</Button>
-		</div>
+				<ItemContent>
+					<ItemTitle translate="no">{kr.title}</ItemTitle>
+					<ItemDescription>
+						<span translate="no">{kr.unitName}</span> ·{" "}
+						<span translate="no">{kr.objectiveTitle}</span>
+					</ItemDescription>
+					<ItemDescription className="sm:hidden">
+						<span className="tabular-nums">{so}</span> · {lan}
+					</ItemDescription>
+				</ItemContent>
+				<ItemActions>
+					<span className="hidden flex-col items-end gap-0.5 text-xs sm:flex">
+						<span className="font-medium tabular-nums">{so}</span>
+						<span className="text-muted-foreground">{lan}</span>
+					</span>
+					{kr.lastConfidence ? (
+						<span className="hidden sm:inline-flex">
+							<ConfidenceIndicator level={kr.lastConfidence} size="sm" />
+						</span>
+					) : null}
+					<Icon className="text-muted-foreground" icon={ChevronRight} />
+				</ItemActions>
+			</Link>
+		</Item>
 	);
 }
 
 function VoPhan({
 	tieuDe,
-	hanhDong,
 	children,
 }: {
 	tieuDe: string;
-	hanhDong?: React.ReactNode;
 	children: React.ReactNode;
 }) {
 	return (
 		<section className="flex flex-col gap-3" data-phan="can-cap-nhat">
-			<SectionHeading actions={hanhDong ?? null} level={2}>
-				{tieuDe}
-			</SectionHeading>
+			<SectionHeading level={2}>{tieuDe}</SectionHeading>
 			{children}
 		</section>
 	);

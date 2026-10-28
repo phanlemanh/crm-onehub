@@ -199,6 +199,10 @@ const vi = {
 		phan3: "KR bạn phụ trách",
 		krTrong: (n: number, ky: string) => `${n} KR ở mọi đơn vị trong ${ky}.`,
 		thamGia: "Mục tiêu bạn tham gia",
+		goiYMoKr: "Bấm một KR để mở nó trong bộ OKR rồi cập nhật.",
+		suaThiMoKr: "Sửa một lần đã gửi thì mở KR đó.",
+		lanTruoc: (ngay: string) => `lần trước ${ngay}`,
+		chuaCapNhatLanNao: "chưa cập nhật lần nào",
 	},
 	cuaToiRong: {
 		title: "Bạn chưa phụ trách mục tiêu hay KR nào",
@@ -981,6 +985,10 @@ const en: OkrMessages = {
 		krTrong: (n: number, ky: string) =>
 			`${n} key result${n === 1 ? "" : "s"} across all units in ${ky}.`,
 		thamGia: "Objectives you take part in",
+		goiYMoKr: "Select a key result to open it in its OKR set, then update it.",
+		suaThiMoKr: "To change an update you sent, open that key result.",
+		lanTruoc: (ngay: string) => `last ${ngay}`,
+		chuaCapNhatLanNao: "never updated",
 	},
 	cuaToiRong: {
 		title: "You don't own any objectives or KRs",
