@@ -209,6 +209,11 @@ evals:
       hay bài kiểm của hồ sơ đã ký bị vòng sửa → «SAI AC-10: SUA THUOC DA KY <tep>».
       CHIEU DO (bản sao HEAD): thêm một dòng cuối _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs → «SAI AC-10: SUA THUOC DA
       KY _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs», mã 1.
+      LỐI B (chủ kho 28/10, «HT2 E10: b»): lớp quét đủ như trên, nhưng eval mà mọi tệp trong lệnh là bài kiểm dưới
+      apps/*/test hay packages/*/test in «CI PHU <slug>#<E>» và không chạy tại chỗ — ci.yml chạy trọn bun run test khi PR
+      sẵn sàng; eval còn lại mà không tệp nào chạm Họp tuần hay nút Cập nhật trên dòng in «NGOAI LOP HEP <slug>#<E>»; chỉ
+      phần còn lại chạy tại chỗ, kèm dòng «loi b: <a> eval CI phu, <b> eval ngoai lop hep, chay tai cho <c> eval». Cờ
+      --tron-lop chạy đủ lớp như cũ.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11

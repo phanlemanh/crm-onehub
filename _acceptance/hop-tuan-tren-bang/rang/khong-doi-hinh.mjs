@@ -20,6 +20,8 @@ const { resolveConfigKey } = require(join(GOC, "lib", "evidence-core.cjs"));
 
 const NHANH_GOC = "origin/onehub";
 const MAU_DUONG = /hop-tuan|kr-sheet|okr-xem|theo-don-vi\/bang|cap-nhat-dong/;
+const MAU_HEP = /hop-tuan|hopTuan|Họp tuần|xem=hop|nut-cap-nhat|cap-nhat-dong|thuTuKr/;
+const LA_BAI_KIEM_CI = /^(?:apps|packages)\/[^/]+\/test\//;
 const TRANG_THAI_DA_KY = new Set(["signed-off", "machine-cleared"]);
 const HO_SO_NAY = "hop-tuan-tren-bang";
 const DOI_CHUNG_LOP = "ngan-kr-mot-cho";
@@ -143,6 +145,8 @@ function quetLop() {
 			const evalRieng = /\bEVAL=/.test(e.lenh) ? e.id : null;
 			return {
 				ten: `${e.slug}#${e.id}`,
+				ciPhu: e.tep.length > 0 && e.tep.every((t) => LA_BAI_KIEM_CI.test(t)),
+				hep: e.tep.some((t) => MAU_HEP.test(readFileSync(join(GOC, t), "utf8"))),
 				lenh: e.lenh,
 				evalRieng,
 				kyVong: e.kyVong,
@@ -290,6 +294,20 @@ function chayTrenNen(hong) {
 	return sai;
 }
 
+function chonMuc(muc, chi, tronLop) {
+	if (chi) return muc.filter((x) => chi.has(x.ten));
+	if (tronLop) return muc;
+	const ciPhu = muc.filter((m) => m.ciPhu);
+	const ngoaiHep = muc.filter((m) => !m.ciPhu && !m.hep);
+	for (const m of ciPhu) console.log(`CI PHU ${m.ten}`);
+	for (const m of ngoaiHep) console.log(`NGOAI LOP HEP ${m.ten}`);
+	const chon = muc.filter((m) => !m.ciPhu && m.hep);
+	console.log(
+		`loi b: ${ciPhu.length} eval CI phu, ${ngoaiHep.length} eval ngoai lop hep, chay tai cho ${chon.length} eval (${new Set(chon.map((m) => m.khoa)).size} lan chay rieng)`,
+	);
+	return chon;
+}
+
 function inQuet(lop) {
 	for (const l of lop.loai) console.log(l);
 	console.log(`quet lop: ${lop.hoSo.length} ho so, ${lop.muc.length} eval`);
@@ -314,6 +332,8 @@ try {
 	console.log(`DUNG doi chung lop: ${DOI_CHUNG_LOP} co trong lop`);
 	if (process.argv.includes("--chi-quet")) {
 		for (const m of lop.muc) console.log(`MUC ${m.ten}`);
+		for (const m of chonMuc(lop.muc, null, process.argv.includes("--tron-lop")))
+			console.log(`CHAY ${m.ten}`);
 		process.exit(sai === 0 ? 0 : MA_DO);
 	}
 	const viTriChi = process.argv.indexOf("--chi");
@@ -329,9 +349,10 @@ try {
 				`--chi khong khop eval nao trong lop: ${chi.size === 0 ? "(rong)" : lac.join(",")}`,
 			);
 	}
+	const chon = chonMuc(lop.muc, chi, process.argv.includes("--tron-lop"));
 	const daChayCay = new Map();
 	const hong = [];
-	for (const m of lop.muc.filter((x) => !chi || chi.has(x.ten))) {
+	for (const m of chon) {
 		const ma = chay(m, GOC, daChayCay);
 		if (datMa(ma, m.kyVong))
 			console.log(
