@@ -105,8 +105,7 @@ function coDongSoVk7(goc) {
 				const d = JSON.parse(dong);
 				const chu = `${d.decision ?? ""} ${d.why ?? ""}`;
 				return (
-					typeof d.decided_by === "string" &&
-					d.decided_by.trim() !== "" &&
+					String(d.decided_by ?? "").trim() !== "" &&
 					chu.includes("Ngoài-1") &&
 					chu.includes(HO_SO_NAY)
 				);

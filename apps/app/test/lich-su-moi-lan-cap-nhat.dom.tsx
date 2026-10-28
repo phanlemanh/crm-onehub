@@ -154,17 +154,17 @@ const CHIN_LAN: LanMau[] = [
 	},
 ];
 
-const NHAN_MONG: Record<string, string> = {
-	L1: "10:00 15/09/2026",
-	L2: "10:00 22/09/2026",
-	L3: "10:00 29/09/2026",
-	L4: "09:00 06/10/2026",
-	L5: "10:00 08/10/2026",
-	L6: "14:30 08/10/2026",
-	L7: "10:00 13/10/2026",
-	L8: "10:00 20/10/2026",
-	L9: "10:00 21/10/2026",
-};
+const NHAN_MONG = new Map<string, string>([
+	["L1", "10:00 15/09/2026"],
+	["L2", "10:00 22/09/2026"],
+	["L3", "10:00 29/09/2026"],
+	["L4", "09:00 06/10/2026"],
+	["L5", "10:00 08/10/2026"],
+	["L6", "14:30 08/10/2026"],
+	["L7", "10:00 13/10/2026"],
+	["L8", "10:00 20/10/2026"],
+	["L9", "10:00 21/10/2026"],
+]);
 const TRUC_MONG = [
 	"15/09",
 	"22/09",
@@ -347,9 +347,9 @@ describe("lsml-danh-sach", () => {
 					`lsml-danh-sach: dong ${i} la ${d?.getAttribute("data-lan-cap-nhat")} can ${l.id}`,
 				);
 			const nhan = d?.querySelector("[data-luc-lan]")?.textContent;
-			if (nhan !== NHAN_MONG[l.id])
+			if (nhan !== NHAN_MONG.get(l.id))
 				loi.push(
-					`lsml-danh-sach: ${l.id} nhan «${nhan}» can «${NHAN_MONG[l.id]}»`,
+					`lsml-danh-sach: ${l.id} nhan «${nhan}» can «${NHAN_MONG.get(l.id)}»`,
 				);
 			const so = d?.querySelector("[data-gia-tri-lan]")?.textContent ?? "";
 			if (

@@ -53,12 +53,12 @@ const ST = {
 	homNay: "ST-lsk-hom-nay",
 } as const;
 
-const KR_THEO_STATE: Record<string, KrMau> = {
-	[ST.cungNgay]: KR_CUNG_NGAY,
-	[ST.moc]: KR_MOC,
-	[ST.rong]: KR_RONG,
-	[ST.dai]: KR_DAI,
-};
+const KR_THEO_STATE = new Map<string, KrMau>([
+	[ST.cungNgay, KR_CUNG_NGAY],
+	[ST.moc, KR_MOC],
+	[ST.rong, KR_RONG],
+	[ST.dai, KR_DAI],
+]);
 
 type Tai = "xong" | "dang-tai" | "loi";
 
@@ -185,7 +185,7 @@ function NoiDung({ state }: { state: string }) {
 	const homNay = state === ST.homNay;
 	const [ds, setDs] = useState<readonly KrMau[]>(DS_KR);
 	const [viTri, setViTri] = useState(() =>
-		DS_KR.indexOf(KR_THEO_STATE[state] ?? KR_TANG_TOI),
+		DS_KR.indexOf(KR_THEO_STATE.get(state) ?? KR_TANG_TOI),
 	);
 	const [tai, setTai] = useState<Tai>(() => taiBanDau(state));
 	const [mo, setMo] = useState(true);
