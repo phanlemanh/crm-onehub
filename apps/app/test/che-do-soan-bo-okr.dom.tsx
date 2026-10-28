@@ -1974,17 +1974,19 @@ function datKara({
 	sanSang = { bat: true, conLaiUsd: 5 },
 	lyDo = null,
 	maKetThuc = null,
+	deXuat = DE_XUAT_BO,
 }: {
 	sanSang?: SanSangGia;
 	lyDo?: LyDoGia;
 	maKetThuc?: string | null;
+	deXuat?: readonly (typeof DE_XUAT_BO)[number][];
 } = {}): KaraGia {
 	const kara: KaraGia = { daDoc: false, tha: [], mocDanhSach: null };
 	dat("okr.troLySanSang", () => troLySanSangOutput.parse(sanSang));
 	dat("okr.troLyDanhSach", (vao) =>
 		troLyDanhSachOutput.parse({
 			dong: kara.daDoc
-				? DE_XUAT_BO.filter((d) => d.objectiveId === mucTieuCua(vao))
+				? deXuat.filter((d) => d.objectiveId === mucTieuCua(vao))
 				: [],
 			dangSoan: false,
 			maKetThuc: kara.daDoc ? "da-nop" : maKetThuc,
@@ -2680,6 +2682,83 @@ describe("vk10-sau-go", () => {
 	test("vk10-sau-xoa-kr: xoa KR duy nhat cua muc tieu vua go thi doc lai bo, het dem cong bo", async () => {
 		await moBoSauGo();
 		await kiemSauXoaKr();
+	});
+});
+
+const KR_GO_KARA = "Khách doanh nghiệp mới ký hợp đồng năm đầu";
+
+const DE_XUAT_PHIEN = [
+	dongHien.parse({
+		id: "dx-phien",
+		loai: "viet-lai",
+		objectiveId: MT_MOI,
+		keyResultId: "kr-moi-1",
+		truong: "kr.title",
+		truoc: TEN_KR_GO,
+		sau: KR_GO_KARA,
+		maVanDe: "kr-la-viec",
+		targetObjectiveId: null,
+		targetKeyResultId: null,
+		lyDo: "Ghi rõ khung thời gian để đo được.",
+		canCu: null,
+		tenDich: null,
+	}),
+];
+
+async function kiemGopYDongPhien(
+	phuThuoc: Partial<PhuThuocSoan> = {},
+): Promise<void> {
+	const sai = "vk10-gop-y-phien: dong khong doi";
+	const kara = datKara({ deXuat: DE_XUAT_PHIEN });
+	await moBoSauGo(phuThuoc);
+	await cho(() => nutDocBo() !== null, sai);
+	await bam(nutDocBo());
+	await cho(
+		() =>
+			goiCua("okr.troLyDeXuat").some((g) => mucTieuCua(g.dauVao) === MT_MOI),
+		sai,
+	);
+	kara.daDoc = true;
+	kara.mocDanhSach = goiCua("okr.troLyDanhSach").length;
+	await act(async () => {
+		for (const tha of kara.tha.splice(0)) tha();
+	});
+	try {
+		await cho(() => q('[data-gop-y="dx-phien"]') !== null, sai);
+		await bam(q('[data-gop-y="dx-phien"] [data-hanh-dong=nhan]'));
+		await cho(() => goiCua("okr.troLyQuyet").length === 1, sai);
+		await nhip(5);
+		expect(giaTri(oKr("kr-moi-1", "ten")), sai).toBe(KR_GO_KARA);
+		expect(
+			q('[data-dong-kr="kr-moi-1"] [data-slot=kara-trace]') !== null,
+			"vk10-gop-y-phien: dau lech",
+		).toBe(true);
+		const truoc = goiCua("okr.updateKeyResult").length;
+		await sua(oKr("kr-moi-1", "dich"), "50");
+		await focusVao(oTenMtDau());
+		await choLuuXong("vk10-gop-y-phien: ghi de chu Kara");
+		const sau = goiCua("okr.updateKeyResult").slice(truoc);
+		expect(sau.length, "vk10-gop-y-phien: ghi de chu Kara").toBe(1);
+		expect(sau[0]?.dauVao, "vk10-gop-y-phien: ghi de chu Kara").toMatchObject({
+			id: "kr-moi-1",
+			title: KR_GO_KARA,
+			targetValue: 50,
+		});
+	} finally {
+		await choHetHoi(kara);
+	}
+}
+
+describe("vk10-gop-y-phien", () => {
+	test("vk10-gop-y-phien: nhan viet lai cho KR vua go trong phien — dong doi ngay, co dau, lan luu sau giu chu Kara", async () => {
+		await kiemGopYDongPhien();
+	});
+
+	test("vk10-gop-y-phien-do: tai lieu khong doc lai de xuat da nhan thi dong vua go khong doi", async () => {
+		await phaiDo(
+			kiemGopYDongPhien({ docLaiSauNhan: false }),
+			"vk10-gop-y-phien: dong khong doi",
+		);
 	});
 });
 

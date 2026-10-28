@@ -26,7 +26,14 @@ import { crmMessages } from "@/lib/messages/crm";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
 import type { LoiDiKr } from "../nhom-kara";
 import { useKhoHep } from "../soan/dung-kho-hep";
-import { BAN_NHAP_DAU, type BanNhap, boChuDaGo, themKr } from "./ban-nhap";
+import {
+	BAN_NHAP_DAU,
+	type BanNhap,
+	boChuDaGo,
+	ghiChuVaoDongPhien,
+	khoaPhienCua,
+	themKr,
+} from "./ban-nhap";
 import { SOAN_BO } from "./cau-hinh";
 import { CongBo } from "./cong-bo";
 import type { DichDenDong } from "./den-dong";
@@ -351,14 +358,23 @@ export function KhungSoanBo({
 	};
 	const docLai: DocLaiKara = (id, chu) => {
 		datTheoKara((cu) => ghiTheoKara(cu, id, chu));
-		datBanNhap((bn) => boChuDaGo(bn, id, chu.truong));
+		datBanNhap((bn) =>
+			ghiChuVaoDongPhien(
+				boChuDaGo(bn, id, chu.truong),
+				khoaPhienCua(bn, luuDong.id, id),
+				chu.truong,
+				chu.giaTri,
+			),
+		);
 	};
 	const moKr = (objectiveId: string, di: LoiDiKr) => {
 		const nhap =
 			bo.trang === "xong" &&
 			bo.mucTieu.some((mt) => mt.id === objectiveId && mt.status === "nhap");
 		if (di.loai === "kr-moi" && nhap) {
-			datBanNhap((bn) => themKr(bn, objectiveId));
+			datBanNhap((bn) =>
+				themKr(bn, khoaPhienCua(bn, luuDong.id, objectiveId) ?? objectiveId),
+			);
 			return;
 		}
 		den(

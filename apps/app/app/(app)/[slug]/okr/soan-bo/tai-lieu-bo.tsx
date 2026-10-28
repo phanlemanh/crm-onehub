@@ -96,6 +96,17 @@ function dauMt(mt: MucTieuSoan, soan: SoanTaiLieu | null): boolean {
 	return docTheoKara(soan.theoKara, mt.id, "title")?.dau === true;
 }
 
+function dauPhien(
+	soan: SoanTaiLieu,
+	id: string | null,
+	truong: "title" | "kr.title",
+	chuHien: string,
+): boolean {
+	if (id === null) return false;
+	const chu = docTheoKara(soan.theoKara, id, truong);
+	return chu?.dau === true && chu.giaTri === chuHien;
+}
+
 type BoiCanh = SoanTaiLieu & {
 	bo: BoXong;
 	boTrong: boolean;
@@ -140,6 +151,7 @@ function DanhSachKrMoi({
 					lanFocus={lanFocus(banNhap, kr.khoa)}
 					trangThai={luuDong.trangThai(kr.khoa)}
 					idDaLuu={luuDong.id(kr.khoa)}
+					theoKara={dauPhien(bc, luuDong.id(kr.khoa), "kr.title", kr.ten)}
 					nguoiMacDinh={bc.nguoiMacDinh}
 					nguoi={bc.nguoi}
 					onDoi={(phan) => doi(kr, phan)}
@@ -187,6 +199,7 @@ function KhoiMucTieuMoi({ mt, bc }: { mt: MtNhap; bc: BoiCanh }) {
 				ten={mt.ten}
 				lanFocus={lanFocus(bc.banNhap, mt.khoa)}
 				trangThai={luuDong.trangThai(mt.khoa)}
+				theoKara={dauPhien(bc, id, "title", mt.ten)}
 				menu={
 					id !== null && bc.xoaDuoc(id) ? (
 						<MenuMucTieu

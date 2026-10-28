@@ -17,7 +17,7 @@ import { type ReactNode, useEffect, useRef, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrSoanBoMessages } from "@/lib/messages/okr-soan-bo";
 import { ChamTrangThai } from "../tien-do-kr";
-import { laEnterGhi, TrangThaiDong } from "./dong-kr";
+import { DauTheoKara, laEnterGhi, TrangThaiDong } from "./dong-kr";
 import type { TrangThaiLuu } from "./use-luu-dong";
 
 export function MenuMucTieu({
@@ -74,6 +74,7 @@ export function DongMucTieuMoi({
 	ten,
 	lanFocus,
 	trangThai,
+	theoKara,
 	menu,
 	onDoi,
 	onEnter,
@@ -82,6 +83,7 @@ export function DongMucTieuMoi({
 	ten: string;
 	lanFocus: number | null;
 	trangThai: TrangThaiLuu;
+	theoKara: boolean;
 	menu: ReactNode;
 	onDoi: (ten: string) => void;
 	onEnter: () => void;
@@ -119,6 +121,7 @@ export function DongMucTieuMoi({
 				translate="no"
 				data-o-nhap="ten"
 			/>
+			{theoKara ? <DauTheoKara /> : null}
 			<TrangThaiDong trangThai={trangThai} />
 		</>
 	);

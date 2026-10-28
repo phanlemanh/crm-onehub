@@ -174,3 +174,36 @@ export function boChuDaGo(
 	}
 	return bn;
 }
+
+export function khoaPhienCua(
+	bn: BanNhap,
+	idCua: (khoa: string) => string | null,
+	id: string,
+): string | null {
+	const khoa = [
+		...bn.moi.map((mt) => mt.khoa),
+		...Object.values(bn.kr).flatMap((ds) => ds.map((kr) => kr.khoa)),
+	];
+	return khoa.find((k) => idCua(k) === id) ?? null;
+}
+
+function mtChuaKr(bn: BanNhap, khoaKr: string): string | null {
+	const mt = Object.entries(bn.kr).find(([, ds]) =>
+		ds.some((kr) => kr.khoa === khoaKr),
+	);
+	return mt ? mt[0] : null;
+}
+
+export function ghiChuVaoDongPhien(
+	bn: BanNhap,
+	khoa: string | null,
+	truong: TruongVietLai,
+	giaTri: string,
+): BanNhap {
+	if (khoa === null) return bn;
+	const laMt = bn.moi.some((mt) => mt.khoa === khoa);
+	if (truong === "title" && laMt) return suaMucTieu(bn, khoa, giaTri);
+	if (truong === "whyNow" && laMt) return suaViSao(bn, khoa, giaTri);
+	const khoaMt = truong === "kr.title" ? mtChuaKr(bn, khoa) : null;
+	return khoaMt === null ? bn : suaKr(bn, khoaMt, khoa, { ten: giaTri });
+}

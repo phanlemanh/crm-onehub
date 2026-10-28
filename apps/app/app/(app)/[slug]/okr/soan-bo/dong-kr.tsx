@@ -311,6 +311,7 @@ export function DongKrMoi({
 	lanFocus,
 	trangThai,
 	idDaLuu,
+	theoKara,
 	nguoiMacDinh,
 	nguoi,
 	onDoi,
@@ -323,6 +324,7 @@ export function DongKrMoi({
 	lanFocus: number | null;
 	trangThai: TrangThaiLuu;
 	idDaLuu: string | null;
+	theoKara: boolean;
 	nguoiMacDinh: string;
 	nguoi: ComboboxOption[];
 	onDoi: (phan: Partial<DongKrNhap>) => void;
@@ -437,6 +439,7 @@ export function DongKrMoi({
 					disabled={false}
 					onDoi={(v) => onDoi({ nguoi: v })}
 				/>
+				{theoKara ? <DauTheoKara /> : null}
 			</div>
 			<TrangThaiDong trangThai={trangThai} />
 		</li>
