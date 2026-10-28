@@ -236,7 +236,9 @@ evals:
       _acceptance/<hồ sơ đã ký>/rang). Mỗi tệp trong giao của hai tập mà không thuộc danh sách cho phép của Hỏi-1 → «SAI
       AC-10: SUA THUOC DA KY <tệp>», mã 1. Tệp thuộc danh sách cho phép mà sổ _acceptance/ngan-kr-mot-cho/decisions.jsonl
       không có dòng decided_by nhắc «Ngoài-1» và «lich-su-moi-lan-cap-nhat» → «SAI AC-10: THIEU DONG SO NGAN-KR-MOT-CHO»,
-      mã 1. In «pham vi: <n> tep thuoc da ky, <k> bi sua». Mã 0 khi sạch.
+      mã 1. apps/api/test/vai-chi-okr.spec.ts được cho phép chỉ khi git diff --numstat của nó có 0 dòng xoá và mọi dòng
+      thêm thuộc khai okr.lichSuKr (dòng «"lichSuKr",» và khối «"okr.lichSuKr": {…}» chép mục okr.dienBien); lệch → «SAI
+      AC-10: VAI-CHI-OKR NGOAI DONG KHAI», mã 1. In «pham vi: <n> tep thuoc da ky, <k> bi sua». Mã 0 khi sạch.
       CHIEU DO (bản sao HEAD): thêm một dòng cuối _acceptance/hop-tuan-tren-bang/rang/man.mjs → «SAI AC-10: SUA THUOC DA
       KY _acceptance/hop-tuan-tren-bang/rang/man.mjs», mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

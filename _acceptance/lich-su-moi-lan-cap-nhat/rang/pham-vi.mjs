@@ -26,6 +26,17 @@ const CHO_PHEP = new Set([
 	"_acceptance/ngan-kr-mot-cho/rang/man.mjs",
 ]);
 const SO_VK7 = "_acceptance/ngan-kr-mot-cho/decisions.jsonl";
+const TEP_KHAI = "apps/api/test/vai-chi-okr.spec.ts";
+const DONG_KHAI_DUOC = [
+	/^\t"lichSuKr",$/,
+	/^\t"okr\.lichSuKr": \{$/,
+	/^\t\tvao: \(s\) => \(\{ keyResultId: s\.krG \}\),$/,
+	/^\t\tK: "chua-G",$/,
+	/^\t\tdau: "tieuDeKr",$/,
+	/^\t\tkhac: 404,$/,
+	/^\t\tma: "keyResultId",$/,
+	/^\t\},$/,
+];
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx|sh)$/;
 const TEP_TRONG_LENH = /[\w@./()[\]-]+\.(?:tsx|ts|mjs|cjs|js|sh)\b/g;
 const TEP_CHIEU_DO = "_acceptance/hop-tuan-tren-bang/rang/man.mjs";
@@ -115,6 +126,19 @@ function coDongSoVk7(goc) {
 		});
 }
 
+function chiThemDongKhai(goc, coSo) {
+	const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", TEP_KHAI], goc)
+		.split("\n")
+		.filter((d) => /^[-+]/.test(d) && !/^(---|\+\+\+) /.test(d));
+	const xoa = diff.filter((d) => d.startsWith("-"));
+	const them = diff.filter((d) => d.startsWith("+")).map((d) => d.slice(1));
+	return (
+		xoa.length === 0 &&
+		them.length > 0 &&
+		them.every((d) => DONG_KHAI_DUOC.some((m) => m.test(d)))
+	);
+}
+
 function soat(goc) {
 	const coSo = git(["merge-base", "HEAD", NHANH_GOC], goc);
 	const doi = git(["diff", "--name-only", `${coSo}...HEAD`], goc)
@@ -124,6 +148,12 @@ function soat(goc) {
 	const sua = doi.filter((t) => thuoc.has(t));
 	const sai = [];
 	for (const t of sua) {
+		if (t === TEP_KHAI) {
+			if (!chiThemDongKhai(goc, coSo))
+				sai.push("SAI AC-10: VAI-CHI-OKR NGOAI DONG KHAI");
+			else console.log(`CHO PHEP THEO AC-10 ${t}: chi them dong khai`);
+			continue;
+		}
 		if (!CHO_PHEP.has(t)) sai.push(`SAI AC-10: SUA THUOC DA KY ${t}`);
 	}
 	if (sua.some((t) => CHO_PHEP.has(t)) && !coDongSoVk7(goc))

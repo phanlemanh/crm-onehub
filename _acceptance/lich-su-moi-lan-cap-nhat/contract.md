@@ -5,10 +5,8 @@ slug: lich-su-moi-lan-cap-nhat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: draft
 design_doc: docs/superpowers/specs/2026-10-28-lich-su-moi-lan-cap-nhat-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-10-28
 ---
 
 # Acceptance Contract: lich-su-moi-lan-cap-nhat
@@ -54,7 +52,8 @@ lần và chuỗi biểu đồ mỗi lần một điểm; mục Lịch sử đ�
 - AC-10: Given vòng này đã làm, When soát diff của nhánh, Then không tệp thước hay bài kiểm nào của hồ sơ đã ký bị sửa,
   trừ đúng các tệp mà chủ kho cho đổi ở Hỏi-1 (`apps/app/test/ngan-kr-mot-cho.dom.tsx`,
   `_acceptance/ngan-kr-mot-cho/rang/man.mjs`) và chỉ khi sổ của `ngan-kr-mot-cho` có dòng `decided_by` chủ kho cho việc
-  lật Ngoài-1; và năm tệp DOM đã ký mồi `okr.dienBien` mà không đo Lịch sử (`okr-sheet`, `moi-kr-ca-cong-ty`,
+  lật Ngoài-1; tệp khai thủ tục đọc `apps/api/test/vai-chi-okr.spec.ts` chỉ được thêm dòng khai `okr.lichSuKr` (chủ kho
+  sửa AC-10 ngày 28/10, cham-tep V2-34), không dòng có sẵn nào bị xoá hay đổi; và năm tệp DOM đã ký mồi `okr.dienBien` mà không đo Lịch sử (`okr-sheet`, `moi-kr-ca-cong-ty`,
   `hop-tuan-tren-bang`, `hop-cap-nhat-lan-truoc`, `cap-nhat-gan-day`) chạy trên cây vẫn xanh như trên nền.
 
 ## Coverage
