@@ -9,6 +9,7 @@ export const TAB_SO_NGUON = "so-nguon";
 const thamSo = {
 	[SEARCH_PARAM.record.tab]: parseAsString,
 	[SEARCH_PARAM.okr.kr]: parseAsString,
+	[SEARCH_PARAM.record.thuTu]: parseAsString,
 };
 
 export function useKrDienBien() {
@@ -30,5 +31,13 @@ export function useMoNganKr() {
 
 export function useMoDienBien() {
 	const moNganKr = useMoNganKr();
-	return (_objectiveId: string, keyResultId: string) => moNganKr(keyResultId);
+	const [, dat] = useQueryStates(thamSo);
+	return (
+		_objectiveId: string,
+		keyResultId: string,
+		thuTu: string | null = null,
+	) => {
+		moNganKr(keyResultId);
+		void dat({ [SEARCH_PARAM.record.thuTu]: thuTu });
+	};
 }

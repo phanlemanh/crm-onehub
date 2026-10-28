@@ -21,8 +21,8 @@ import { dichKrTrongBo } from "@/lib/okr-duong-kr";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceSlug } from "@/lib/use-workspace-url";
-import { giaTri } from "./bang-kr";
 import { congNgay, ngayThang, TUAN } from "./cap-nhat-tuan/cap-nhat-tuan";
+import { giaTri } from "./gia-tri-kr";
 import { LoiPhan } from "./loi-phan";
 
 type KrCanCapNhat = RouterOutputs["okr"]["capNhatTuan"]["items"][number];

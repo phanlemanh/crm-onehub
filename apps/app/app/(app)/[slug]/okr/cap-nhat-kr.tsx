@@ -30,10 +30,13 @@ export type CapNhatKr = {
 	hop: ReactNode;
 };
 
-export function useCapNhatKr(): CapNhatKr {
+export function useCapNhatKr(
+	tuyChon: { onDaGui?: (keyResultId: string) => void } = {},
+): CapNhatKr {
 	const trpc = useTRPC();
 	const [hop, setHop] = useState<Hop | null>(null);
 	const lanMo = useRef(0);
+	const nutMo = useRef<HTMLElement | null>(null);
 	const moPhien = useMutation(trpc.okr.moCapNhat.mutationOptions());
 	const goiMo = moPhien.mutate;
 
@@ -41,6 +44,10 @@ export function useCapNhatKr(): CapNhatKr {
 		(mt: ChiTiet, kr: KetQua) => {
 			lanMo.current += 1;
 			const lan = lanMo.current;
+			nutMo.current =
+				document.activeElement instanceof HTMLElement
+					? document.activeElement
+					: null;
 			setHop({ lan, mt, kr, sessionId: null });
 			goiMo(
 				{ entry: "sheet" },
@@ -63,7 +70,14 @@ export function useCapNhatKr(): CapNhatKr {
 			sessionId={hop.sessionId}
 			loiMo={moPhien.isError}
 			moLai={() => mo(hop.mt, hop.kr)}
-			dong={() => setHop(null)}
+			dong={() => {
+				setHop(null);
+				const nut = nutMo.current;
+				requestAnimationFrame(() => {
+					if (nut?.isConnected) nut.focus();
+				});
+			}}
+			onDaGui={tuyChon.onDaGui}
 		/>
 	) : null;
 
