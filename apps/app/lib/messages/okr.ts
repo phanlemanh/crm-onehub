@@ -150,9 +150,6 @@ const vi = {
 		action: "Về cả công ty",
 	},
 	donViBang: {
-		chonDonVi: "Đơn vị",
-		timDonVi: "Tìm đơn vị…",
-		khongKhopDonVi: "Không có đơn vị nào khớp.",
 		caCongTy: "cả công ty",
 		thuoc: "Thuộc",
 		locNhanh: {
@@ -170,8 +167,6 @@ const vi = {
 			tinhTrang: "Tình trạng",
 			phuTrach: "Phụ trách",
 		},
-		donViTrucThuoc: "Đơn vị trực thuộc",
-		chuaDatOkr: "Chưa đặt OKR",
 	},
 	baPhan: {
 		phan1: "Cần cập nhật tuần này",
@@ -933,9 +928,6 @@ const en: OkrMessages = {
 		action: "Back to the whole company",
 	},
 	donViBang: {
-		chonDonVi: "Unit",
-		timDonVi: "Find a unit…",
-		khongKhopDonVi: "No unit matches.",
 		caCongTy: "whole company",
 		thuoc: "In",
 		locNhanh: {
@@ -953,8 +945,6 @@ const en: OkrMessages = {
 			tinhTrang: "Status",
 			phuTrach: "Owner",
 		},
-		donViTrucThuoc: "Units below",
-		chuaDatOkr: "No OKRs set",
 	},
 	baPhan: {
 		phan1: "Needs updating this week",

@@ -24,10 +24,7 @@ const vi = {
 			`KR của từng khối và phòng ban nằm ở Họp tuần của bộ ấy — bấm ${bo} trên dòng vị trí để sang.`,
 	},
 	donViCoKr: {
-		tieuDe: "Đơn vị có KR",
-		dong: (n: string, m: string) => `${n} KR · đã cập nhật ${m}`,
 		xemMoiBo: "Xem mọi bộ OKR",
-		loi: "Không tải được các đơn vị có KR.",
 	},
 };
 
@@ -57,10 +54,7 @@ const en: OkrHopTuanBoMessages = {
 			`Each division's and department's KRs live in that set's weekly meeting — click ${bo} in the breadcrumb to go there.`,
 	},
 	donViCoKr: {
-		tieuDe: "Units with KRs",
-		dong: (n: string, m: string) => `${n} KRs · ${m} updated`,
 		xemMoiBo: "See all OKR sets",
-		loi: "Couldn't load the units with KRs.",
 	},
 };
 
