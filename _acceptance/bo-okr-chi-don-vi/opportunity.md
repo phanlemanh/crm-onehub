@@ -3,10 +3,10 @@ schema_version: 1
 slug: bo-okr-chi-don-vi
 feature: Trưởng khối mở bộ OKR của khối mình chỉ thấy mục tiêu của khối, và sang bộ của từng phòng bằng dòng vị trí
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided                # discovery | decided | archived
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-28T04:57:47Z
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -15,6 +15,8 @@ lo_trinh_tep: docs/plan/lo-trinh-okr.json
 ---
 
 ## Vấn đề & ai gặp
+
+Chủ kho trả lời trực tiếp ở phiên V5·VK19 lúc 2026-10-28T04:57:47Z, nguyên văn: «Cổng Đáng bo-okr-chi-don-vi: build, giữ ngưỡng đề xuất».
 
 Mở từ hàng VK19 của «OKR» (`docs/plan/lo-trinh-okr.json`).
 Mốc: chưa gắn — hàng mang hạn `ngay` 2026-10-29, đứng trên HT1, VK8, VK10, SV6, HT2, HT5; chưa thuộc mốc nào của kế hoạch.
@@ -49,13 +51,13 @@ sơ một dòng sổ `fix` `decided_by` chủ kho, đo hai chiều.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] trên bộ OKR mẫu, mở bộ của một khối có còn thấy mục tiêu của phòng con, và có
+- Câu hỏi phép đo trả lời: trên bộ OKR mẫu, mở bộ của một khối có còn thấy mục tiêu của phòng con, và có
   đúng một đường (dòng vị trí) sang bộ của phòng không?
-- Kết quả nào là SỐNG: [đề xuất] trên bộ mẫu, cả bốn thẻ con của Khối Kinh doanh hiện đúng 1 mục tiêu (hôm nay 15),
+- Kết quả nào là SỐNG: trên bộ mẫu, cả bốn thẻ con của Khối Kinh doanh hiện đúng 1 mục tiêu (hôm nay 15),
   Khối Vận hành 1 (hôm nay 11), Khối Hỗ trợ 0 kèm câu rỗng riêng (hôm nay 10); hàng ba khối ở danh sách Bộ OKR có
   Mục tiêu, Tiến độ, KR tự tin thấp cùng là số riêng; trang một bộ có 0 ô chọn đơn vị, 0 lưới trực thuộc, 0 mục gập
   Đã bỏ, và mắt xích cuối dòng vị trí mở menu đơn vị cha · ngang hàng · trực thuộc; Toàn cảnh vẫn cộng phòng con.
-- Kết quả nào là CHẾT: [đề xuất] còn một thẻ con nào của bộ khối hiện mục tiêu phòng con, hoặc số trên danh sách Bộ
+- Kết quả nào là CHẾT: còn một thẻ con nào của bộ khối hiện mục tiêu phòng con, hoặc số trên danh sách Bộ
   OKR lệch số trong bộ, hoặc trưởng khối không đi được sang bộ của một phòng trong hai lần bấm từ dòng vị trí.
-- Timebox: [đề xuất] một vòng T2 ≈ 10 giờ máy (hệ số đợt, luật 25), hạn hàng 29/10; đọc lại số tuần sau gộp — trên
+- Timebox: một vòng T2 ≈ 10 giờ máy (hệ số đợt, luật 25), hạn hàng 29/10; đọc lại số tuần sau gộp — trên
   production đếm số lần mở bộ `bp:` dẫn tới một bộ `pb:` qua menu dòng vị trí.
