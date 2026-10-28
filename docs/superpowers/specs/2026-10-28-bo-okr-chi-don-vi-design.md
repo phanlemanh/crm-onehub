@@ -23,8 +23,9 @@ Trang một bộ còn ba đường sang đơn vị khác (dòng vị trí, ô ch
 3. **Dòng vị trí có menu.** Mắt xích cuối của trang một bộ (`goc`, `bp`, `pb`) là nút mở menu ba nhóm: Thuộc (đơn vị
    cha) · Cùng cấp (đơn vị cùng cha, cùng cấp) · Trực thuộc (con trực tiếp), theo thứ tự cây, mỗi mục kèm số mục tiêu
    công bố riêng (`okr.countByUnit`). Liên kết giữ `kyOkr` và thẻ con đang mở (`xemOkr`). Bộ cá nhân (`nguoi:`) giữ
-   mắt xích tĩnh. Dựng thành phần `BreadcrumbMenu` trong `packages/ui` (bậc 5: shadcn và ReUI không có mắt xích mở
-   menu; đã tra `breadcrumb` có `BreadcrumbEllipsis` chỉ cho mắt xích ẩn).
+   mắt xích tĩnh. Dựng thành phần `BreadcrumbMenu` trong `packages/ui` (bậc 5: `breadcrumb` của shadcn chỉ có
+   `BreadcrumbEllipsis` cho mắt xích ẩn; ReUI tìm «breadcrumb dropdown menu on last item» ra `c-breadcrumb-2`, gấp mắt
+   xích giữa vào nút «…» mở danh sách trang ẩn — khác việc, nên chỉ mượn cách ghép `breadcrumb` + `dropdown-menu`).
 4. **Gỡ hai đường thừa.** Bỏ ô chọn đơn vị (`chon-don-vi.tsx`) khỏi hàng công cụ và lưới «Đơn vị trực thuộc»
    (`don-vi-con.tsx`) dưới bảng; xoá hai tệp và hàm chỉ chúng dùng.
 5. **Đã bỏ là nút.** Mục gập `NhomDaBo` trên trang một bộ thành nút bật tắt «Đã bỏ (n)» cuối hàng công cụ của bảng
@@ -117,7 +118,7 @@ dòng vị trí (AC-5). Các ô của hai hồ sơ đã ký đo hai thứ ấy m
 
 | Component | Nấc (dùng / ghép / mở rộng / tạo) | Vì sao (1 dòng) |
 |---|---|---|
-| `BreadcrumbMenu` (`packages/ui/src/components/breadcrumb.tsx`) | tạo | shadcn và ReUI không có mắt xích mở menu; `docs/design.md` đòi menu ở mắt xích cuối |
+| `BreadcrumbMenu` (`packages/ui/src/components/breadcrumb.tsx`) | tạo | shadcn không có mắt xích mở menu; ReUI `c-breadcrumb-2` chỉ gấp mắt xích giữa; `docs/design.md` đòi menu ở mắt xích cuối |
 | `DropdownMenu` + nhóm, nhãn | dùng | menu chuẩn của kho, đủ phím |
 | `DataTable actions` + `Button aria-pressed` | ghép | như nút «Đã lưu trữ» của Thoả thuận (`deals-table.tsx`) |
 | `Empty` | dùng | câu rỗng của bộ phận |
