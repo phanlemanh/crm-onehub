@@ -1,9 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { within } from "@testing-library/dom";
 import { act } from "react";
-import { mineOutput, viecCuaToiOutput } from "../../api/src/okr/okr.contracts";
+import { viecCuaToiOutput } from "../../api/src/okr/okr.contracts";
 import {
 	bamChuot,
 	bamPhim,
@@ -15,15 +13,11 @@ import {
 	mucTieu,
 	nguoiDung,
 	nhip,
-	qs,
 	qsa,
 	type San,
 	thaoHet,
 } from "./khung-gop-y-dung-cho";
 
-const { PhanKrPhuTrach } = await import(
-	"@/app/(app)/[slug]/okr/phan-kr-phu-trach"
-);
 const { ViecOkrCuaToi } = await import("@/app/(app)/[slug]/okr/viec-cua-toi");
 const { BangKr } = await import("@/app/(app)/[slug]/okr/bang-kr");
 const { useRecordStack } = await import(
@@ -41,45 +35,6 @@ const chong = (...ds: string[]) => ds.join(",");
 afterEach(async () => {
 	await thaoHet();
 	datLai();
-});
-
-describe("bkr-kr-phu-trach", () => {
-	const MA_TRAN = [
-		{ k: "K1", o: "O1", ten: "Gia hạn 30 hợp đồng lớn" },
-		{ k: "K2", o: "O2", ten: "Giữ 95% khách hàng chủ chốt" },
-	] as const;
-	const mine = mineOutput.parse({
-		dangTheoDoi: [],
-		daBo: [],
-		objectives: MA_TRAN.map((c) =>
-			mucTieu(c.o, [kr(c.k, c.o, { title: c.ten, laCuaToi: true })]),
-		),
-	});
-	const ve = () =>
-		dung(<PhanKrPhuTrach ds={mine.objectives} tenKy="Quý 4/2026" />);
-
-	test("bkr-kr-phu-trach: bam ten KR mo chi tiet KR, khong mo muc tieu", async () => {
-		const goc = await ve();
-		await nhip(2);
-		expect(qsa("[data-mo-kr]").length).toBe(MA_TRAN.length);
-		expect(record(goc), "bkr-kr-phu-trach: chua bam da co record").toBe("");
-		await thaoHet();
-
-		let soO = 0;
-		for (const c of MA_TRAN) {
-			const san = await ve();
-			const nut = qs(`[data-mo-kr="${c.k}"]`);
-			if (!nut) throw new Error(`bkr-kr-phu-trach: khong co nut ${c.k}`);
-			await bamChuot(nut);
-			const thuc = record(san);
-			const loi = `bkr-kr-phu-trach: ${c.k} mo ${thuc}, can kr:${c.k}`;
-			expect(thuc, loi).toBe(`kr:${c.k}`);
-			expect(thuc.includes("objective:"), loi).toBe(false);
-			soO += 1;
-			await thaoHet();
-		}
-		expect(soO).toBe(2);
-	});
 });
 
 describe("bkr-viec", () => {

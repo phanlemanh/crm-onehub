@@ -5,7 +5,7 @@ slug: cua-toi-chi-liet-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-10-28-cua-toi-chi-liet-kr-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-28T07:18:46Z

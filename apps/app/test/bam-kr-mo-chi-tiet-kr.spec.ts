@@ -100,13 +100,13 @@ describe("bkr-quet-mo", () => {
 
 	test("bkr-quet-mo: chieu do — tra lai kind objective o cho nguon KR", () => {
 		const tim = quetMo().map((g) =>
-			g.tep === "phan-kr-phu-trach.tsx" && g.kind === "kr"
+			g.tep === "viec-cua-toi.tsx" && g.kind === "kr"
 				? { ...g, kind: "objective" }
 				: g,
 		);
 		expect(
 			soBangMo(tim, BANG).some((l) =>
-				/phan-kr-phu-trach\.tsx:\d+ nguon KR mo objective/.test(l),
+				/viec-cua-toi\.tsx:\d+ nguon KR mo objective/.test(l),
 			),
 		).toBe(true);
 		const them = [

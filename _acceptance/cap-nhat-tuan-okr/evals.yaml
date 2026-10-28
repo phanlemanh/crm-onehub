@@ -97,6 +97,8 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.cnt_mot_tin
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-4
     paths: [apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/agent/lib/tin-nhac.ts, packages/db/src/okr-nhac.ts, packages/db/src/onboarding-nhac.ts, packages/validation/src/nhac-ke-hoach.ts, apps/agent/test/okr-nhac.integration.spec.ts]
     expected: "exit 0; người A có 2 việc kế hoạch (buoc-qua-han, ke-hoach-im) và 3 việc OKR (okr-cap-nhat, okr-kr-im, okr-nhac-ten); fetch Zalo và Slack giả ghi lại lời gọi. lenLichNhac(08:31 VN) hai lần → đúng MỘT hàng agentTask kind nhac-ke-hoach subject user:A:<ngày>; chayNhac → đúng MỘT lời gọi gửi; văn bản: dòng đầu «Chào <tên>, sáng nay có 5 việc cần bạn để ý.», nhóm «Cập nhật tuần» đứng trước nhóm «Quá hạn», dòng cập nhật chứa <APP_URL>/<slug>/okr/cap-nhat-tuan?tu=nhac, dòng nhắc tên chứa /okr?record=objective:<id>; payload.daGui parse được bằng parseNhacPayload, mỗi phần tử chỉ có khoá mã (không khoá chữ nào ngoài loai), đúng 5 phần tử. Trần: 12 việc → daGui 10 phần tử và dòng «và 2 việc nữa»; Zalo trần 2.000 ký tự áp cho cả tin (tên KR dài 300 ký tự × 8) → len(text) ≤ 2000 và daGui chỉ gồm dòng đã in. Người chỉ có việc kế hoạch → câu chào đúng chuỗi cũ «… việc 30 ngày đầu cần bạn để ý.». Người B có ZaloLink, KHÔNG có kế hoạch 30 ngày nào, chỉ một KR chờ cập nhật: lenLichNhac thật → đúng 1 hàng cho B; chayNhac → Zalo giả đúng 1 lời gọi tới zaloUserId của B, outcome da-gui:1, payload.daGui = [{loai okr-cap-nhat, krIds [K]}], dòng đầu «Chào <B>, sáng nay có 1 việc cần bạn để ý.». CHIỀU ĐỎ: bản sao lenLichNhac ghi hàng riêng cho việc OKR → hai hàng, bài đỏ in đếm; bản sao sắp okr-cap-nhat cuối → với 12 việc nó bị cắt, bài đỏ in daGui; bản sao viecCanNhac chỉ duyệt người có kế hoạch → B không có hàng, bài đỏ in «B khong co hang»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -124,6 +126,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.cnt_man_chrome
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-5
     steps:
       - "Cùng lần chạy với E6. Gieo: A (vai member) và C (vai okr) mỗi người phụ trách KR chưa cập nhật tuần này, ngày chạy là ngày cập nhật (chu kỳ gieo updateWeekday = thứ của hôm nay); H được nhắc tên trong bình luận; R không có việc"
       - "A mở {APP_URL}/<slug> ở 1440 → thẻ việc OKR (data-the-viec-okr) có dòng «1 KR chờ cập nhật tuần này»; thẻ việc kế hoạch vẫn hiện → E13-step1.png; ở 390 → E13-step2.png"
@@ -160,6 +164,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.cnt_man_chrome
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-1
     steps:
       - "Cùng lần chạy với E6. U (không ZaloLink, không SlackMemberMatch) phụ trách một KR chưa cập nhật tuần này"
       - "U mở {APP_URL}/<slug> → thẻ việc OKR có dòng cập nhật → E16-step1.png; bấm → màn cập nhật, chọn mức tự tin, gửi → «Đã gửi 1 cập nhật» → E16-step2.png; SQL thẳng: okrCheckIn của U +1"

@@ -971,7 +971,6 @@ const GHIM = {
 		"Tiến độ mục tiêu 12% tính từ A KR.",
 	],
 	"okr:tienDoCua": ["Tiến độ 1: A%", "Tiến độ 12: A%"],
-	"okr:baPhan.capNhatN": ["Cập nhật 1 KR", "Cập nhật 12 KR"],
 	"okr:baPhan.conThieu": [
 		"1 KR chưa có số của tuần A, hạn B.",
 		"12 KR chưa có số của tuần A, hạn B.",

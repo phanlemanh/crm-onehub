@@ -95,6 +95,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.vkm_man
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-2
     paths:
       - "apps/app/next.config.ts"
       - "apps/app/app/(app)/[slug]/okr/**"
@@ -177,6 +179,8 @@ evals:
     criterion: AC-10
     executor: script
     cmd: config:executors.script.vkm_man
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-1
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/next.config.ts"
@@ -193,6 +197,8 @@ evals:
     criterion: AC-10
     executor: test
     cmd: config:executors.test.vkm_loi_vao_cu
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-1
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
