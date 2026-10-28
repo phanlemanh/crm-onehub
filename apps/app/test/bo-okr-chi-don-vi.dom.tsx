@@ -632,6 +632,8 @@ describe("bo-okr-chi-don-vi — trang một bộ", () => {
 		await cho(() => hangMucTieu(khong.o).length === 1, "mot hang");
 		if (khong.o.querySelector("[data-nut-da-bo]"))
 			loi.push("bcd-da-bo: nut hien khi 0");
+		if (khong.o.querySelector("[data-slot=data-table-toggles]"))
+			loi.push("bcd-da-bo: khung bo nut rong van dung khi 0");
 		const loc = await ve("kyOkr=q4&donOkr=bp:B&trangThaiOkr=cong-bo");
 		await cho(() => hangMucTieu(loc.o).length === 3, "loc trang thai");
 		if (loc.o.querySelector("[data-nut-da-bo]"))

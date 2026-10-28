@@ -224,13 +224,15 @@ export function TheoDonVi() {
 					rows={objectives}
 					tenNguoi={new Map(cay.data.people.map((p) => [p.id, p.name]))}
 					toggles={
-						<NutDaBo
-							bat={xemDaBo}
-							doi={(bat) =>
-								void datUrl({ [SEARCH_PARAM.okr.daBo]: bat ? true : null })
-							}
-							n={daBo.length}
-						/>
+						daBo.length > 0 ? (
+							<NutDaBo
+								bat={xemDaBo}
+								doi={(bat) =>
+									void datUrl({ [SEARCH_PARAM.okr.daBo]: bat ? true : null })
+								}
+								n={daBo.length}
+							/>
+						) : null
 					}
 				/>
 				{don.loai === "nguoi" ? (
