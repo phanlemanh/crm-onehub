@@ -53,6 +53,11 @@ mock.module("@/components/crm/fields/fields-sheet", () => ({
 }));
 
 const { HopTuan } = await import("@/app/(app)/[slug]/okr/hop-tuan");
+const { PhanKrPhuTrach } = await import(
+	"@/app/(app)/[slug]/okr/phan-kr-phu-trach"
+);
+const { BangDonVi } = await import("@/app/(app)/[slug]/okr/theo-don-vi/bang");
+const { useRouter } = await import("next/navigation");
 const { RecordSheetHost } = await import(
 	"@/components/crm/record-sheet/record-sheet-host"
 );
@@ -446,6 +451,33 @@ const CA_MUC_DOI = [
 	},
 ] as const;
 
+function kiemOMucDoi(
+	ca: (typeof CA_MUC_DOI)[number],
+	khoO: Kho,
+	rong: number,
+): string[] {
+	const o = qsa(`[data-kr-hop="${ca.ten}"] [data-muc-doi][data-kho="${khoO}"]`);
+	const dong = [...(o[0]?.children ?? [])].map(
+		(c) => c.textContent?.trim() ?? "",
+	);
+	const loi: string[] = [];
+	if (o.length !== 1 || dong.length !== 2)
+		return [
+			`htb-muc-doi-chu: @${rong} ${ca.ten} ${o.length} o, ${dong.length} dong`,
+		];
+	if (dong[0] !== ca.tren)
+		loi.push(
+			`htb-muc-doi-chu: @${rong} ${ca.ten} tren «${dong[0]}» can «${ca.tren}»`,
+		);
+	if (dong[1] !== ca.duoi)
+		loi.push(
+			`htb-muc-doi-chu: @${rong} ${ca.ten} duoi «${dong[1]}» can «${ca.duoi}»`,
+		);
+	if (dong.join(" ").includes("60%"))
+		loi.push(`htb-muc-doi-chu: @${rong} ${ca.ten} co so tien do`);
+	return loi;
+}
+
 describe("htb-muc-doi-chu", () => {
 	test("htb-muc-doi-chu: chin ca, hai dong chu theo don vi KR, khong so tien do", async () => {
 		const loi: string[] = [];
@@ -464,30 +496,18 @@ describe("htb-muc-doi-chu", () => {
 		}
 		datKho(() =>
 			hop(
-				[
-					{
-						id: "A",
-						donVi: "tỷ đồng",
-						progress: 60,
-						giaTriMoi: 1.08,
-						mucDoi: { tu: 1.17, den: 1.08, ngayTruoc: "2026-10-10" },
-					},
-				],
+				CA_MUC_DOI.map((ca) => ({ id: ca.ten, progress: 60, ...ca.d })),
 				[],
 			),
 		);
-		for (const rong of [1440, 375]) {
+		const KHO_RONG = [
+			[1440, "tu-lg"],
+			[375, "duoi-md"],
+		] as const;
+		for (const [rong, khoO] of KHO_RONG) {
 			datKho375(rong);
 			await dungHop();
-			const o = qsa('[data-kr-hop="A"] [data-muc-doi]').filter(
-				(x) => x.getAttribute("data-kho") !== "md-lg",
-			);
-			const dong = o[0]?.children.length ?? 0;
-			const chu = o[0]?.textContent ?? "";
-			if (o.length !== 1 || dong !== 2)
-				loi.push(`htb-muc-doi-chu: @${rong} ${o.length} o, ${dong} dong chu`);
-			if (chu.includes("60"))
-				loi.push(`htb-muc-doi-chu: @${rong} co so tien do: ${chu}`);
+			for (const ca of CA_MUC_DOI) loi.push(...kiemOMucDoi(ca, khoO, rong));
 			await thaoHet();
 		}
 		console.log(`htb-muc-doi-chu: ${dem}/9`);
@@ -495,6 +515,19 @@ describe("htb-muc-doi-chu", () => {
 		expect(dem).toBe(9);
 	});
 });
+
+function NutDieuHuongThu() {
+	const router = useRouter();
+	return (
+		<button
+			data-nut-dieu-huong-thu=""
+			onClick={() => router.push("/ws/okr/khac")}
+			type="button"
+		>
+			di
+		</button>
+	);
+}
 
 describe("htb-cap-nhat", () => {
 	test("htb-cap-nhat: nut tren dong theo quyen, mo hop mot KR, gui o lai bang, KR doi phan thi Con lai tu mo", async () => {
@@ -543,6 +576,8 @@ describe("htb-cap-nhat", () => {
 
 		const conLaiTruoc =
 			qs("[data-con-lai]")?.getAttribute("data-con-lai") ?? null;
+		const urlTruoc = san.url().toString();
+		const duongTruoc = window.location.pathname;
 		const docTruoc = docCua("okr.hopTuan").length;
 		daGui = true;
 		await guiTuHop("15", "vua gui");
@@ -553,6 +588,10 @@ describe("htb-cap-nhat", () => {
 			loi.push(`htb-cap-nhat: guiCapNhat ${gui.length} lan ${items}`);
 		if (dieuHuong.soLan !== 0)
 			loi.push(`htb-cap-nhat: router dieu huong ${dieuHuong.soLan} lan`);
+		if (san.url().toString() !== urlTruoc)
+			loi.push(`htb-cap-nhat: tham so doi «${urlTruoc}» → «${san.url()}»`);
+		if (window.location.pathname !== duongTruoc)
+			loi.push(`htb-cap-nhat: duong dan doi ${window.location.pathname}`);
 		await cho(() => docCua("okr.hopTuan").length > docTruoc, "lam moi hopTuan");
 		dem += 1;
 
@@ -602,6 +641,24 @@ describe("htb-cap-nhat", () => {
 		if (!slotNgan || slotNgan !== slotDong)
 			loi.push(`htb-cap-nhat: hai nut mo hai hop ${slotNgan} / ${slotDong}`);
 		dem += 1;
+
+		await thaoHet();
+		datLai();
+		dieuHuong.soLan = 0;
+		await dung(<NutDieuHuongThu />);
+		await bam(qs("[data-nut-dieu-huong-thu]"), "nut dieu huong thu");
+		if (dieuHuong.soLan !== 1)
+			loi.push(
+				`htb-cap-nhat: doi chung duong — bo dem router ghi ${dieuHuong.soLan}, can 1`,
+			);
+		await thaoHet();
+		datLai();
+		datKho(() => hop([{ id: "A" }], []));
+		const sanDoi = await dungHop();
+		await bam(qs('[data-kr-hop="A"] [data-mo-kr="A"]'), "ten A");
+		await cho(() => nganCua("A"), "ngan A");
+		if (!(sanDoi.url().get("record") ?? "").includes("kr:A"))
+			loi.push("htb-cap-nhat: doi chung duong — url khong ghi lan mo ngan");
 
 		console.log(`htb-cap-nhat: ${dem}/5`);
 		expect(loi.join("\n")).toBe("");
@@ -681,6 +738,73 @@ describe("htb-sang", () => {
 	});
 });
 
+const LOC_RONG = { phuTrach: [], loai: [], trangThai: [], tuTin: [], gopY: [] };
+
+function mtMot() {
+	return mucTieu(
+		"mt-1",
+		(MT_MAU[0]?.kr ?? []).map((k) =>
+			kr(k, "mt-1", { title: `KR ${k}`, laCuaToi: true }),
+		),
+		{ canEdit: true },
+	);
+}
+
+const LOI_THAT = {
+	"cua-toi": {
+		ve: () => <PhanKrPhuTrach ds={[mtMot()]} tenKy="Quý 4/2026" />,
+		nut: () =>
+			qsa("button").find((b) => b.textContent?.trim() === "KR C") ?? null,
+	},
+	"trang-don-vi": {
+		ve: () => (
+			<BangDonVi
+				boLocMay={() => {}}
+				chanBang={null}
+				dangTaiLai={false}
+				dem={undefined}
+				doiLoc={() => {}}
+				hangCongCu={null}
+				loc={LOC_RONG}
+				rong={null}
+				rows={[mtMot()]}
+				tenNguoi={new Map()}
+			/>
+		),
+		nut: () =>
+			qsa("tr").find(
+				(t) =>
+					t.className.includes("bg-muted/30") &&
+					t.textContent?.includes("KR C") === true,
+			) ?? null,
+	},
+} as const;
+
+async function moCTuLoiThat(mong: string): Promise<string[]> {
+	const loi: string[] = [];
+	for (const [ten, loiMo] of Object.entries(LOI_THAT)) {
+		await thaoHet();
+		datLai();
+		datKho(NAM_DONG);
+		const san = await dung(
+			<>
+				{loiMo.ve()}
+				<RecordSheetHost />
+			</>,
+		);
+		await cho(() => loiMo.nut() !== null, `dong C o ${ten}`);
+		await bam(loiMo.nut(), `C o ${ten}`);
+		await cho(() => nganCua("C") && demKr() !== null, `ngan C tu ${ten}`);
+		if (demKr() !== mong)
+			loi.push(`htb-nguon: ${ten} dem ${demKr()} can ${mong}`);
+		if (san.url().get("thuTuKr") !== null)
+			loi.push(`htb-nguon: ${ten} mang thuTuKr=${san.url().get("thuTuKr")}`);
+		if (qs("[data-dau-ngan-kr] [data-thu-tu-kr]") !== null)
+			loi.push(`htb-nguon: ${ten} hien «theo thu tu bang»`);
+	}
+	return loi;
+}
+
 describe("htb-nguon", () => {
 	test("htb-nguon: nguon thu tu tren duong dan, tai lai giu, cho khac theo muc tieu, KR ngoai bang khong loi", async () => {
 		datKho(NAM_DONG);
@@ -725,6 +849,7 @@ describe("htb-nguon", () => {
 		const mong = `${viTri + 1}/${MT_MAU[0]?.kr.length}`;
 		if (demKr() !== mong)
 			loi.push(`htb-nguon: cho khac dem ${demKr()} can ${mong}`);
+		for (const loi_ of await moCTuLoiThat(mong)) loi.push(loi_);
 		dem += 1;
 
 		await thaoHet();
@@ -764,9 +889,15 @@ describe("htb-sau-gui", () => {
 					),
 		);
 		await dungHop();
-		await moNganTuBang("B");
+		await moConLai();
 		const loi: string[] = [];
 		let dem = 0;
+		if (
+			qs('[data-con-lai] [data-kr-hop="D"]') === null ||
+			qs('[data-con-lai] [data-kr-hop="B"]') !== null
+		)
+			loi.push("htb-sau-gui: doi chung truoc gui — Con lai khong chi co D");
+		await moNganTuBang("B");
 		if (demKr() !== "2/4")
 			loi.push(`htb-sau-gui: doi chung truoc gui dem ${demKr()}`);
 		dem += 1;
@@ -781,12 +912,24 @@ describe("htb-sau-gui", () => {
 		await bam(nutNgan("kr-truoc"), "‹");
 		await cho(() => nganCua("C") || nganCua("A") || nganCua("b0"), "‹ sau gui");
 		if (!nganCua("C")) loi.push("htb-sau-gui: ‹ sau gui khong toi C");
+		await bam(nutNgan("kr-ke"), "› ve B");
+		await cho(() => nganCua("B"), "ve B");
+		await bam(nutNgan("kr-ke"), "› toi D");
+		await cho(() => nganCua("D") || nganCua("b2"), "› sau gui");
+		if (!nganCua("D")) loi.push("htb-sau-gui: › sau gui khong toi D");
 		dem += 1;
-		if (
-			qs('[data-con-lai] [data-kr-hop="B"]') === null &&
-			qs("[data-con-lai]")?.getAttribute("data-con-lai") === "mo"
-		)
+		if (qs("[data-con-lai]")?.getAttribute("data-con-lai") !== "mo")
+			loi.push(
+				`htb-sau-gui: Con lai «${qs("[data-con-lai]")?.getAttribute("data-con-lai")}» sau gui, can mo`,
+			);
+		if (qs('[data-con-lai] [data-kr-hop="B"]') === null)
 			loi.push("htb-sau-gui: bang chua xep B vao Con lai");
+		if (
+			qsa('[data-kr-hop="B"]').filter(
+				(d) => d.closest("[data-con-lai]") === null,
+			).length !== 0
+		)
+			loi.push("htb-sau-gui: B con o Dang ban");
 		dem += 1;
 		console.log(`htb-sau-gui: ${dem}/4`);
 		expect(loi.join("\n")).toBe("");
@@ -825,22 +968,31 @@ describe("htb-chu", () => {
 		];
 		for (const [vi, e] of cap)
 			if (!vi || !e || vi === e) loi.push(`htb-chu: nhan «${vi}» / «${e}»`);
-		datKho(() =>
-			hop(
-				[
-					{ id: "A", ghiChu: null, ghiChuNgay: null },
-					{ id: "C", giaTriMoi: null, mucDoi: null },
-				],
-				[{ id: "D", mucDoi: { tu: 12, den: 12, ngayTruoc: "2026-10-13" } }],
-			),
-		);
-		await dungHop("", "en");
-		await moConLai();
-		const chu = document.body.textContent ?? "";
-		for (const vi of TAM_CHU_VI)
-			if (chu.includes(vi)) loi.push(`htb-chu: chuoi cung o locale en: ${vi}`);
+		for (const locale of ["vi", "en"] as const) {
+			datLai();
+			datKho(() =>
+				hop(
+					[
+						{ id: "A", ghiChu: null, ghiChuNgay: null },
+						{ id: "C", giaTriMoi: null, mucDoi: null },
+						{ id: "E", giaTriMoi: 4, mucDoi: null },
+					],
+					[{ id: "D", mucDoi: { tu: 12, den: 12, ngayTruoc: "2026-10-13" } }],
+				),
+			);
+			await dungHop("", locale);
+			await moConLai();
+			await moNganTuBang("A");
+			const chu = document.body.textContent ?? "";
+			for (const vi of TAM_CHU_VI) {
+				if (locale === "vi" && !chu.includes(vi))
+					loi.push(`htb-chu: doi chung vi thieu nhan tren man: ${vi}`);
+				if (locale === "en" && chu.includes(vi))
+					loi.push(`htb-chu: chuoi cung o locale en: ${vi}`);
+			}
+			await thaoHet();
+		}
 		dem += 1;
-		await thaoHet();
 
 		datLai();
 		datKho(NAM_DONG);

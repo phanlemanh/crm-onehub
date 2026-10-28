@@ -193,7 +193,7 @@ function BangRong({
 		<SimpleTable columns={cot} surface="page">
 			{dong.map((d) => (
 				<SimpleTableRow data-kr-hop={d.keyResultId} key={d.keyResultId}>
-					<SimpleTableCell className="py-3 align-top whitespace-normal">
+					<SimpleTableCell className="align-top whitespace-normal">
 						<div className="flex flex-col gap-3">
 							{hanhDong.tenKr(d)}
 							<span className="md:hidden">
@@ -204,16 +204,16 @@ function BangRong({
 							</div>
 						</div>
 					</SimpleTableCell>
-					<SimpleTableCell className="hidden py-3 align-top md:table-cell">
+					<SimpleTableCell className="hidden align-top md:table-cell">
 						<TienDoDong dong={d} />
 					</SimpleTableCell>
-					<SimpleTableCell className="hidden py-3 align-top whitespace-normal lg:table-cell">
+					<SimpleTableCell className="hidden align-top whitespace-normal lg:table-cell">
 						<GhiChuDong dong={d} kho="tu-lg" />
 					</SimpleTableCell>
-					<SimpleTableCell className="hidden py-3 align-top whitespace-normal lg:table-cell">
+					<SimpleTableCell className="hidden align-top whitespace-normal lg:table-cell">
 						<OMucDoi dong={d} kho="tu-lg" />
 					</SimpleTableCell>
-					<SimpleTableCell align="right" className="py-3 align-top">
+					<SimpleTableCell align="right" className="align-top">
 						{hanhDong.nutCapNhat(d)}
 					</SimpleTableCell>
 				</SimpleTableRow>
