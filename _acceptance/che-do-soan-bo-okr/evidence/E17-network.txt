@@ -1,2 +1,1 @@
-driver: script (tien-de.mjs + man-soan.mjs), khong co browser tool doc network
-networkObserved: n-a (driver)
+E17: driver = bun script (man-soan.mjs, phien do rieng); khong co browser tool doc network -> n-a (driver)
