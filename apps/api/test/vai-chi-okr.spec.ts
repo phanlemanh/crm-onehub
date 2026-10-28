@@ -1988,13 +1988,8 @@ type DongDoc = {
 	K: CotK;
 	dau?: ChuoiAn;
 	khac: 200 | 404;
-	ma?:
-		| "id"
-		| "objectiveId"
-		| "keyResultId"
-		| "cuocSoanId"
-		| "cuocHoiId"
-		| "checkInId";
+	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId" | "cuocHoiId";
+	maThem?: "checkInId";
 	pha?: "da-dong";
 	chiQuanTri?: string;
 	chiQuanTriTheoMa?: true;
@@ -2205,7 +2200,7 @@ const THU_TU_DOC_OKR = {
 		vao: (s: SanDoc) => ({ checkInId: s.lanG }),
 		K: "vang",
 		khac: 404,
-		ma: "checkInId",
+		maThem: "checkInId",
 	},
 	"okr.transferPreview": {
 		vao: (_s, k) => ({ fromUserId: k }),
@@ -2430,6 +2425,19 @@ async function oDocAn(
 	const dau = d.dau ?? "tieuDeG";
 	if (ai === "K" && d.K === "chua-G" && !d.chiQuanTri && so[dau] < 1)
 		kq.thieu.push(`${o} | thieu ${dau}`);
+	if (d.maThem && vao && !(ai === "K" && !d.chiQuanTriTheoMa)) {
+		const r1 = await goiDocAn(
+			bc,
+			ten,
+			{ ...vao, [d.maThem]: `khong-co-${suffix}` },
+			duong,
+			ai,
+		);
+		if (r1.status !== 404 || r1.message !== r.message)
+			kq.cauKhac.push(
+				`${o}: G ${r.status} «${r.message}» / ma khong co ${r1.status} «${r1.message}»`,
+			);
+	}
 	if ((ai === "K" && !d.chiQuanTriTheoMa) || !d.ma || !vao) return;
 	const r0 = await goiDocAn(
 		bc,

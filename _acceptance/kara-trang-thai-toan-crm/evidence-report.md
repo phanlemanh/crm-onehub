@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a28380e0ace0a15732fe3f690237593816a0f31e
+verified_commit: 392f29497d28218340519359e23bad3a9f7fe4a3
 human_signoff: Phan Le Manh 2026-10-08 — ký Cổng Bằng chứng trên vòng chấm 2 (14/14 eval đạt, 7/7 lệnh suite xanh, hội đồng E14 đạt; vòng này không đo đường nền). Một phát hiện trong hợp đồng ở AC-4 được chấp nhận: tiêu đề lỗi theo khuôn ai-ux «Kara chưa tải tóm tắt tuần được». Mười hai mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 5, 6 mở hợp đồng mới; Ngoài-2–4, 7–12 ghi Known limits. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -265,3 +265,7 @@ sha: e7509b2c373bb4a6a8a5fce45e2c82a26e098ebc · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-09, do ghim lại sau gộp onehub 0b62cebb9 (#324)
 run_id: repin-20261009T010037Z-31258
 sha: a28380e0ace0a15732fe3f690237593816a0f31e · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-28, do HT5 cam-xuc-tren-cap-nhat đổi thước (V3-59..67) và hai trường mới checkInId, camXuc trên Họp tuần, Cập nhật gần đây, diễn biến
+run_id: repin-20261027T235917Z-18758
+sha: 392f29497d28218340519359e23bad3a9f7fe4a3 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
