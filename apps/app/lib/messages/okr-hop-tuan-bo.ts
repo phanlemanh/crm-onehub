@@ -20,6 +20,8 @@ const vi = {
 			`Chu kỳ ${ten} bắt đầu ${ngay} — Họp tuần có số từ tuần đầu của chu kỳ.`,
 		chuaKr: (bo: string, chuKy: string) =>
 			`${bo} chưa có KR công bố trong ${chuKy}.`,
+		chiSangMenu: (bo: string) =>
+			`KR của từng khối và phòng ban nằm ở Họp tuần của bộ ấy — bấm ${bo} trên dòng vị trí để sang.`,
 	},
 	donViCoKr: {
 		tieuDe: "Đơn vị có KR",
@@ -51,6 +53,8 @@ const en: OkrHopTuanBoMessages = {
 			`Cycle ${ten} starts ${ngay} — the weekly meeting has numbers from the cycle's first week.`,
 		chuaKr: (bo: string, chuKy: string) =>
 			`${bo} has no published KRs in ${chuKy}.`,
+		chiSangMenu: (bo: string) =>
+			`Each division's and department's KRs live in that set's weekly meeting — click ${bo} in the breadcrumb to go there.`,
 	},
 	donViCoKr: {
 		tieuDe: "Units with KRs",

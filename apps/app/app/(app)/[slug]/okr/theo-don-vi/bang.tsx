@@ -357,9 +357,9 @@ export function BangDonVi({
 	dangTaiLai,
 	dem,
 	tenNguoi,
-	hangCongCu,
 	chanBang,
 	rong,
+	toggles,
 }: {
 	rows: MucTieu[];
 	loc: LocOkrGiaTri;
@@ -368,9 +368,9 @@ export function BangDonVi({
 	dangTaiLai: boolean;
 	dem: DemMatLoc | undefined;
 	tenNguoi: ReadonlyMap<string, string>;
-	hangCongCu: ReactNode;
 	chanBang: ReactNode;
 	rong: ReactNode;
+	toggles?: ReactNode;
 }) {
 	const b = okrMessages(useLocale()).donViBang;
 	const openRecord = useOpenRecord();
@@ -408,7 +408,7 @@ export function BangDonVi({
 				query={query}
 				refreshing={dangTaiLai}
 				rows={hien}
-				search={hangCongCu}
+				toggles={toggles}
 				tabs={{
 					id: TAB_LOC_NHANH,
 					allLabel: b.locNhanh.tatCa,

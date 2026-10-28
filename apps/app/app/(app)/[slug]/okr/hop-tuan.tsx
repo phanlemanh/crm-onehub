@@ -39,7 +39,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { giaiDon } from "./don-dich";
-import { DonViCoKr, XemMoiBo } from "./don-vi-co-kr";
+import { XemMoiBo } from "./don-vi-co-kr";
 import { ghep } from "./hoi-y/chu";
 import { KhoiTomTat } from "./khoi-tom-tat";
 import { lyDoRong } from "./ly-do-rong";
@@ -271,12 +271,10 @@ function ManLyDo({
 	trangThai,
 	tieuDe,
 	trong,
-	duoi,
 }: {
 	trangThai: string;
 	tieuDe: ReactNode;
 	trong?: ReactNode;
-	duoi?: ReactNode;
 }) {
 	return (
 		<div className="flex flex-col gap-4" data-trang-thai={trangThai}>
@@ -286,7 +284,6 @@ function ManLyDo({
 				</EmptyHeader>
 				{trong ? <EmptyContent>{trong}</EmptyContent> : null}
 			</Empty>
-			{duoi}
 		</div>
 	);
 }
@@ -300,12 +297,10 @@ function useTenBo(unit: DonChonOkr): string | null {
 }
 
 function ChuaKrCongBo({
-	cycleId,
 	unit,
 	tenKy,
 	ky,
 }: {
-	cycleId: string;
 	unit: DonChonOkr;
 	tenKy: string;
 	ky: string | null;
@@ -315,13 +310,25 @@ function ChuaKrCongBo({
 	const laGoc = unit.loai === "goc";
 	return (
 		<ManLyDo
-			duoi={laGoc ? <DonViCoKr cycleId={cycleId} ky={ky} /> : null}
 			tieuDe={ghep(m.rong.chuaKr("{bo}", "{chuKy}"), {
 				bo: <TenKhongDich>{tenBo}</TenKhongDich>,
 				chuKy: <TenKhongDich>{tenKy}</TenKhongDich>,
 			})}
 			trangThai="ST-hoptuan-chua-kr"
-			trong={laGoc ? null : <XemMoiBo ky={ky} />}
+			trong={
+				laGoc ? (
+					<div className="flex flex-col items-center gap-3">
+						<EmptyDescription data-chi-sang-menu="">
+							{ghep(m.rong.chiSangMenu("{bo}"), {
+								bo: <TenKhongDich>{tenBo}</TenKhongDich>,
+							})}
+						</EmptyDescription>
+						<XemMoiBo ky={ky} />
+					</div>
+				) : (
+					<XemMoiBo ky={ky} />
+				)
+			}
 		/>
 	);
 }
@@ -387,7 +394,6 @@ export function HopTuan({
 	if (ly === "chua-kr-cong-bo")
 		return boc(
 			<ChuaKrCongBo
-				cycleId={cycleId}
 				ky={ky}
 				tenKy={chuKy?.name ?? ""}
 				unit={unit}
