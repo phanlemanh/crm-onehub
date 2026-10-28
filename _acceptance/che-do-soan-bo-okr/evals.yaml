@@ -311,8 +311,8 @@ evals:
       - "Mở ảnh _acceptance/che-do-soan-bo-okr/evidence/soan-1280-sang.png, soan-1280-toi.png, soan-375-sang.png, soan-375-toi.png, the-chat-luong-375-sang.png"
       - "Mở ảnh _acceptance/che-do-soan-bo-okr/evidence/trong-1280-sang.png, hoi-cong-bo-1280-sang.png, hoi-cong-bo-1280-toi.png, ngan-1280-sang.png, ngan-1280-toi.png"
       - "Đặt cạnh ảnh bản mẫu cùng trạng thái ở _acceptance/che-do-soan-bo-okr/evidence/design-pass/"
-      - "Đọc mục «Notes» của _acceptance/che-do-soan-bo-okr/contract.md, gạch đầu dòng «Chỗ lệch bản mẫu» (danh sách đóng năm chỗ)"
-    expected: "Chế độ Soạn: tài liệu bên trái đọc như một văn bản — tên mục tiêu lớn hơn dòng KR, các dòng KR thụt dưới mục tiêu với ô số xếp gọn — và cột bên phải có khối Chất lượng trên, nhóm góp ý Kara dưới với nhãn Kara một lần; nút chính duy nhất là Công bố ở chân tài liệu. Bộ trống có con trỏ ở dòng mục tiêu đầu và lối Nhờ Kara soạn nháp. Hộp hỏi công bố liệt tên mục tiêu. Ngăn theo dõi chỉ có một chip Kara ở đầu, không khối Kara. Chỗ lệch bản mẫu được phép chỉ gồm năm chỗ đánh số trong gạch đầu dòng «Chỗ lệch bản mẫu» của Notes hợp đồng (bước 4) — mọi chỗ lệch khác là FAIL. Ở cả sáng và tối, chữ và viền không chìm vào nền."
+      - "Đọc mục «Notes» của _acceptance/che-do-soan-bo-okr/contract.md, gạch đầu dòng «Chỗ lệch bản mẫu» (danh sách đóng bảy chỗ)"
+    expected: "Chế độ Soạn: tài liệu bên trái đọc như một văn bản — tên mục tiêu lớn hơn dòng KR, các dòng KR thụt dưới mục tiêu với ô số xếp gọn — và cột bên phải có khối Chất lượng trên, nhóm góp ý Kara dưới với nhãn Kara một lần; nút chính duy nhất là Công bố ở chân tài liệu. Bộ trống có con trỏ ở dòng mục tiêu đầu và lối Nhờ Kara soạn nháp. Hộp hỏi công bố liệt tên mục tiêu. Ngăn theo dõi chỉ có một chip Kara ở đầu, không khối Kara. Chỗ lệch bản mẫu được phép chỉ gồm bảy chỗ đánh số trong gạch đầu dòng «Chỗ lệch bản mẫu» của Notes hợp đồng (bước 4) — mọi chỗ lệch khác là FAIL. Ở cả sáng và tối, chữ và viền không chìm vào nền."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
   - id: E18

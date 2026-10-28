@@ -151,10 +151,14 @@ một chip góp ý».
 - Không loại bản ghi mới, không trạng thái kết thúc mới: xoá dùng `okr.xoaMucTieu` (mục tiêu chưa có lịch sử) và
   `okr.removeKeyResult` có sẵn, theo `docs/vong-doi.md` — ba câu của mục «Tính năng mới phải trả lời ba câu» không áp.
 - Chỗ lệch bản mẫu (danh sách đóng, ui-check E17 đọc mục này): (1) chế độ Soạn — tên mục tiêu lớn hơn dòng KR (ô «dòng tài
-  liệu» mới của `packages/ui`); (2) chế độ Soạn — dòng đầu khung tài liệu dựng bằng ô vật phẩm không nhãn Kara mới; (3) cột
+  liệu» mới của `packages/ui`); (2) chế độ Soạn — dòng đầu khung tài liệu dựng bằng ô vật phẩm không nhãn Kara mới, nên chữ
+  «Không có / N mục tiêu nháp» đứng ngay sau tên bộ theo cách ô vật phẩm xếp, không dạt về góc phải như bản mẫu; (3) cột
   bên — nhãn nhóm góp ý đọc «Kara · N đề xuất» và «Vì sao?» (bản mẫu hiện tiếng Anh «N suggestions», «Why?» vì vỏ `/proto`
   không đặt ngôn ngữ); (4) hộp hỏi công bố — liệt các mục tiêu với ô tích; (5) số «N trên M» theo công thức của AC-4 (số trên
-  bản mẫu chỉ minh hoạ).
+  bản mẫu chỉ minh hoạ); (6) chân tài liệu — câu đọc «Mục tiêu còn thiếu KR ở lại Nháp», theo AC-5 (KR thiếu đích không được
+  lưu, nên mục tiêu chỉ có KR thiếu đích là mục tiêu chưa có KR), không «thiếu KR hay thiếu đích» như bản mẫu; (7) chế độ Theo
+  dõi — thân ngăn là khung mục tiêu đầy đủ đang chạy, bản mẫu chỉ vẽ bản rút gọn; AC-7 chỉ đòi đúng một chip góp ý và không
+  khối Kara.
 - Chạm `apps/app/components/crm/record-sheet/**` (làn M5, luật 19) — S3 xin `cham-tep` qua phiên giám sát.
 - Câu hỏi cho Cổng Phạm vi: Hỏi-1…Hỏi-8 ở design doc; AC-2 (Hỏi-8), AC-4 (Hỏi-1), AC-5 (Hỏi-5), AC-6 (Hỏi-7), AC-7 (Hỏi-4)
   và AC-11 (Hỏi-6) viết theo khuyến nghị.
