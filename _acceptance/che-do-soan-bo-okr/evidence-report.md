@@ -2,18 +2,18 @@
 schema_version: 2
 feature_slug: che-do-soan-bo-okr
 verdict: REJECT
-failed_evals: ["E19","E17"]
+failed_evals: [E17]
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a298d0db43df63594a07f6a513e8ce6f0afc24a7
+verified_commit: b420b8ac168ce1165453604d6a5a4e89560f6097
 human_signoff:
 ---
 
 # Evidence Report: che-do-soan-bo-okr
 
-Round 4. Verdict REJECT: hai eval đỏ là E19 (AC-11, thước không-đổi-hình) và E17 (AC-10, chấm ảnh). Ngoài ra lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ và không gắn eval nào (xem mục Lệnh suite).
+Vòng 5. Một eval đỏ: E17 (ui-check, AC-10). Mọi eval máy và mọi lệnh suite còn lại xanh. Lệnh không gắn eval mà đỏ: ui-check:E17 (cover E17).
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -35,260 +35,255 @@ Round 4. Verdict REJECT: hai eval đỏ là E19 (AC-11, thước không-đổi-h
 | E16 | AC-10 | script | PASS |
 | E17 | AC-10 | ui-check | FAIL |
 | E18 | AC-10 | script | PASS |
-| E19 | AC-11 | script | FAIL |
+| E19 | AC-11 | script | PASS |
 | E20 | AC-3 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-che-do-soan-bo-okr-E1-r4
+  run_id: minted-che-do-soan-bo-okr-E1-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_mo
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 7 tests across 1 file. [5.41s]
+    Ran 7 tests across 1 file. [5.32s]
+    __EXIT=0
 
 - eval: E2
-  run_id: minted-che-do-soan-bo-okr-E2-r4
+  run_id: minted-che-do-soan-bo-okr-E2-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_man
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     phien-do: xong — mã 0
+    __EXIT=0
 
 - eval: E3
-  run_id: minted-che-do-soan-bo-okr-E3-r4
+  run_id: minted-che-do-soan-bo-okr-E3-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_viet
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 8 tests across 1 file. [6.47s]
+    Ran 8 tests across 1 file. [7.26s]
+    __EXIT=0
 
 - eval: E4
-  run_id: minted-che-do-soan-bo-okr-E4-r4
+  run_id: minted-che-do-soan-bo-okr-E4-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_man
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     phien-do: xong — mã 0
+    __EXIT=0
 
 - eval: E5
-  run_id: minted-che-do-soan-bo-okr-E5-r4
+  run_id: minted-che-do-soan-bo-okr-E5-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_sua
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 9 tests across 1 file. [3.95s]
+    Ran 9 tests across 1 file. [3.77s]
+    __EXIT=0
 
 - eval: E6
-  run_id: minted-che-do-soan-bo-okr-E6-r4
+  run_id: minted-che-do-soan-bo-okr-E6-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_cham_bo
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     Ran 6 tests across 1 file. [13.00ms]
+    __EXIT=0
 
 - eval: E7
-  run_id: minted-che-do-soan-bo-okr-E7-r4
+  run_id: minted-che-do-soan-bo-okr-E7-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_chat_luong
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 7 tests across 1 file. [2.84s]
+    Ran 7 tests across 1 file. [3.56s]
+    __EXIT=0
 
 - eval: E8
-  run_id: minted-che-do-soan-bo-okr-E8-r4
+  run_id: minted-che-do-soan-bo-okr-E8-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_gop_y
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 6 tests across 1 file. [7.55s]
+    Ran 6 tests across 1 file. [7.87s]
+    __EXIT=0
 
 - eval: E9
-  run_id: minted-che-do-soan-bo-okr-E9-r4
+  run_id: minted-che-do-soan-bo-okr-E9-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_man
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     phien-do: xong — mã 0
+    __EXIT=0
 
 - eval: E10
-  run_id: minted-che-do-soan-bo-okr-E10-r4
+  run_id: minted-che-do-soan-bo-okr-E10-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_cong_bo
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 7 tests across 1 file. [7.49s]
+    Ran 7 tests across 1 file. [7.03s]
+    __EXIT=0
 
 - eval: E11
-  run_id: minted-che-do-soan-bo-okr-E11-r4
+  run_id: minted-che-do-soan-bo-okr-E11-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_man
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     phien-do: xong — mã 0
+    __EXIT=0
 
 - eval: E12
-  run_id: minted-che-do-soan-bo-okr-E12-r4
+  run_id: minted-che-do-soan-bo-okr-E12-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_ngan
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 9 tests across 1 file. [3.17s]
+    Ran 9 tests across 1 file. [2.97s]
+    __EXIT=0
 
 - eval: E13
-  run_id: minted-che-do-soan-bo-okr-E13-r4
+  run_id: minted-che-do-soan-bo-okr-E13-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_man
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     phien-do: xong — mã 0
+    __EXIT=0
 
 - eval: E14
-  run_id: minted-che-do-soan-bo-okr-E14-r4
+  run_id: minted-che-do-soan-bo-okr-E14-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_quyen
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 7 tests across 1 file. [4.80s]
+    Ran 7 tests across 1 file. [4.56s]
+    __EXIT=0
 
 - eval: E15
-  run_id: minted-che-do-soan-bo-okr-E15-r4
+  run_id: minted-che-do-soan-bo-okr-E15-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk10_dom_tai
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    Ran 5 tests across 1 file. [3.08s]
+    Ran 5 tests across 1 file. [1.98s]
+    __EXIT=0
 
 - eval: E16
-  run_id: minted-che-do-soan-bo-okr-E16-r4
+  run_id: minted-che-do-soan-bo-okr-E16-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_man
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     phien-do: xong — mã 0
+    __EXIT=0
 
 - eval: E17
-  run_id: minted-che-do-soan-bo-okr-E17-r4
+  run_id: E17-20261028-1724
   exit_code: 1
   baseline: n-a
   verifier: config:executors.script.vk10_man
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   screenshot: evidence/E17-step1.png
   observed: |
-    Frame 1 soan-1280-sang (E17-step1): Che do Soan 1280 sang. Trai: tieu de «Kinh doanh mien Bac · Quy 4 · mau» + «Khong co muc tieu nhap» sat ben phai ten (ban mau dat o goc phai); muc tieu «Giu da tang truong ban le mien Bac» chu dam lon hon dong KR; KR1-3 thut duoi voi o so xam disabled xep gon; chan: cau «...thieu KR o lai Nhap...» + nut Cong bo mo (disabled). Phai: Chat luong «13 tren 16 diem dat», 3 muc canh bao co nut «Den dong»; duoi la nhom «Kara 1 de xuat · Vi sao?» voi the doi ten KR, khong co nhan «KR n» dau the (ban mau co «KR 3»); nut Doi ten KR xanh primary; «Kara doc lai bo» o day. Duong ke doc chia hai cot.
-    Frame 2 soan-375-sang: phu toan man, hai the «Bo OKR | Chat luong va Kara», khong tran ngang, tieu de bo cat «Khong co muc tieu...»; muc tieu lon, KR thut, o so xep hai hang; chan co Cong bo. Khop ban mau 375.
-    Frame 3 trong-1280-sang: bo trong, con tro nhap nhay o «Go muc tieu — Enter de xuong dong KR» (chu lon hon ban mau, thuoc muc 1), «Them KR Enter», «Them muc tieu» + «Kara Nho Kara soan nhap» + cau goi y; cot phai «Go muc tieu dau tien de may cham» va «Kara · Gop y». Khop y dinh.
-    Frame 4 hoi-cong-bo-1280-sang: hop thoai «Cong bo 1 muc tieu?» liet o tich «Kho lanh Bac Ninh san sang mua cao diem», nut «Cong bo 1 muc tieu» (ban mau chi «Cong bo», khong o tich — thuoc muc 4).
-    Frame 5 ngan-1280-sang: ngan theo doi co dung mot chip «Kara · 1 gop y» o dau, khong khoi Kara; nhung than la khung muc tieu day du (tab KR/Gop vao/Vet..., o Tien do-Tinh trang-Phu trach, bang KR, nut Xem tren so do, Theo doi), khac ban mau rut gon.
-    Toi: soan-1280-toi, soan-375-toi, hoi-cong-bo-1280-toi, ngan-1280-toi doc duoc, chu/vien khong chim; o so cong bo disabled mo nhung giong ban mau. Doi chieu 8 anh design-pass: layout chinh khop, nhung co cac cho lech (a)-(d) ngoai danh sach nam cho nen eval FAIL.
+    E17-step1 / soan-1280-sang: hộp "Soạn bộ OKR", trái là tài liệu (tên mục tiêu cỡ lớn đậm hơn dòng KR, ba dòng KR thụt dưới đường kẻ trái, ô số xám vì mục tiêu đã công bố), phải là khối "Chất lượng 13 trên 16 điểm đạt" ở trên và nhóm "Kara · 1 đề xuất · Vì sao?" ở dưới, nhãn Kara một lần; chân tài liệu có nút Công bố là nút chính duy nhất.
+    Các khung khác: bộ trống có con trỏ ở dòng mục tiêu đầu và lối "Nhờ Kara soạn nháp"; hộp "Công bố 1 mục tiêu?" liệt tên mục tiêu có ô tích; ngăn theo dõi chỉ một chip "Kara · 1 góp ý", không khối Kara; 375 có hai thẻ "Bộ OKR" / "Chất lượng và Kara", không tràn ngang; sáng và tối chữ, viền đọc được.
+    Chỗ lệch thứ tám ngoài bảy chỗ của Notes: dòng ô số của KR (khởi điểm, đích, đơn vị, người) xếp sát lề nhãn "KR n" (x=133 ở 1280, x=33 ở 375), bản mẫu thụt thẳng hàng dưới tiêu đề KR (x=169 ở 1280, x=69 ở 375), chênh khoảng 36 px, có ở sáng, tối, 1280, 375 và cả mục tiêu đã công bố. Phụ: ở bộ trống nút "Nhờ Kara soạn nháp" hiện chữ xám nhạt kiểu vô hiệu, bản mẫu hiện chữ đậm.
   network_observed: n-a (driver)
   output: |
-    E17 FAIL (cham anh, khong phai loi lenh). Lenh eval chay nguyen van: EVAL= bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/che-do-soan-bo-okr/rang/man-soan.mjs".
-    Lan 1: tu dat EVAL=E17 sai, script tu choi («EVAL E17 khong thuoc thuoc nay») -> bo, khong tinh.
-    Lan 2: «Unable to connect» trong man-soan-do.mjs:258 (e2), loi ket noi tam thoi cua phien do, khong lap lai.
-    Lan 3 (tinh): «KET LUAN vk10 man: 9 DUNG, 0 SAI», ANH 10/10, HTML 8/8, KHO 1280 hai o / KHO 375 hai the khong tran, NGAN vung 0 neo 0 chip 1, GOP Y nhan->moi hoan tac->cu, CONG BO 3 KR. Phien do da don.
-    Frame luu: E17-step1..5.png (soan-1280-sang, soan-375-sang, trong-1280-sang, hoi-cong-bo-1280-sang, ngan-1280-sang) trong _acceptance/che-do-soan-bo-okr/evidence/.
-    Assertion PASS: ten muc tieu lon hon dong KR; cot phai Chat luong tren, Kara duoi, nhan Kara mot lan; bo trong co con tro + loi «Nho Kara soan nhap»; hop hoi cong bo liet ten co o tich; ngan theo doi chi mot chip Kara; 375 hai the khong tran; sang va toi chu va vien khong chim.
-    Assertion FAIL «Cho lech ban mau chi gom nam cho»: co them cac cho lech ngoai danh sach dong 5 muc cua Notes:
-    (a) Dong tieu de tai lieu: «Khong co muc tieu nhap» nam sat ngay sau ten bo (trai), ban mau dat o goc phai («1 muc tieu nhap · tu luu»); DOM kara-artifact-meta nam trong nhom trai cua kara-artifact-header, khong co phan tu phai.
-    (b) The de xuat Kara kieu doi ten: ban mau co dong nhan dau the «KR 3» tren cau gach ngang; ban that khong co nhan nao (DOM proposed-change-body chi co del, ins, ly do) nen nguoi doc khong biet de xuat cho KR nao.
-    (c) Cau chan tai lieu doi chu: «...thieu KR ay o lai Nhap» thay vi «...thieu KR hay thieu dich o lai Nhap».
-    (d) Ngan theo doi: than ban mau la ban rut gon (dong «Bam chip mo che do Soan...», 3 the KR); ban that la khung muc tieu day du (tab, o Tien do/Tinh trang/Phu trach, bang KR), nut «Xem tren so do» va «Theo doi» canh chip.
-    Ghi chu phu (khong tinh FAIL): nut «Doi ten KR» cung to xanh primary canh nut Cong bo, giong ban mau.
+    Lệnh nguyên văn: EVAL= bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/che-do-soan-bo-okr/rang/man-soan.mjs"
+    ANH 10/10 · HTML 8/8 · KET LUAN vk10 man: 9 DUNG, 0 SAI · phien-do: xong — mã 0
+    Frame đã lưu: E17-step1 = soan-1280-sang; step2 = soan-375-sang; step3 = trong-1280-sang; step4 = hoi-cong-bo-1280-sang; step5 = ngan-1280-sang.
+    Assertion SAI (B1): chỗ lệch thứ tám nằm ngoài danh sách đóng bảy chỗ — lề ô số KR. Cách sửa: thụt dòng ô số KR thẳng hàng dưới tiêu đề KR như bản mẫu, hoặc thêm chỗ lệch thứ tám vào Notes nếu chủ kho duyệt. (B2, phụ, cần làm rõ): chữ nút "Nhờ Kara soạn nháp" ở bộ trống gần chìm vào nền trắng.
 
 - eval: E18
-  run_id: minted-che-do-soan-bo-okr-E18-r4
+  run_id: minted-che-do-soan-bo-okr-E18-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_san_thiet_ke
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     KET LUAN vk10 san thiet ke: 8/8 HTML, 0 P0
+    __EXIT=0
 
 - eval: E19
-  run_id: minted-che-do-soan-bo-okr-E19-r4
-  exit_code: 1
+  run_id: minted-che-do-soan-bo-okr-E19-r5
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_khong_doi_hinh
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
-    HO SO trang-don-vi-mot-bang#E18: cay 0
-    HO SO quyet-gop-y-noi-dung-ly-do#E1: cay 0
-    HO SO quyet-gop-y-noi-dung-ly-do#E2: cay 0
-    HO SO quyet-gop-y-noi-dung-ly-do#E6: cay 0
-    THU LAI quyet-gop-y-noi-dung-ly-do#E7: lan dau ma 2
-    THU LAI quyet-gop-y-noi-dung-ly-do#E8: lan dau ma 2
-    THU LAI quyet-gop-y-noi-dung-ly-do#E7: lan dau ma 2
-    DO SAN TREN NEN quyet-gop-y-noi-dung-ly-do#E7: cay 2 · nen 2
-    DO SAN TREN NEN quyet-gop-y-noi-dung-ly-do#E8: cay 2 · nen 1
-    GIU gop-y-dung-cho ... GIU quyet-gop-y-noi-dung-ly-do (17 hồ sơ có dòng GIU)
-    SAI AC-11: okr-to-chuc-va#apps/app/test/okr-to-chuc-va.dom.tsx:608 doi logic — dat("okr.cycles", () => ({
-    KET LUAN khong-doi-hinh: 1 SAI
+    KET LUAN khong-doi-hinh: dat
+    __EXIT=0
 
 - eval: E20
-  run_id: minted-che-do-soan-bo-okr-E20-r4
+  run_id: minted-che-do-soan-bo-okr-E20-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk10_man
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
   output: |
     phien-do: xong — mã 0
+    __EXIT=0
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_test_filter_api-r4
+  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_test_filter_api-r5
   exit_code: 0
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_test_filter_app_filter_crm_ui-r4
-  exit_code: 1
-  verified_at: 2026-10-28T07:19:42Z
-
-Ghi chú lệnh suite đỏ (không gắn eval nào): gói `@crm/ui` báo 387 pass, 1 fail. Ca đỏ là `dau-hook > dau-hook (i): hai ref`, dòng nguyên văn «this test timed out after 5000ms» (5594.13ms), cả gói chạy 162.66s. Các ca khác của gói và 2 tác vụ turbo còn lại xanh. Chưa rõ ca này đỏ vì chậm theo tải máy hay vì mã.
+  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_test_filter_app_filter_crm_ui-r5
+  exit_code: 0
+  verified_at: 2026-10-28T10:16:02Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_test_filter_agent_filter_crm_aut-r4
+  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_test_filter_agent_filter_crm_aut-r5
   exit_code: 0
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_test_filter_agent_okr_filter_crm-r4
+  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_test_filter_agent_okr_filter_crm-r5
   exit_code: 0
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-che-do-soan-bo-okr-SUITE-bunx_turbo_run_lint_force-r4
+  run_id: minted-che-do-soan-bo-okr-SUITE-bunx_turbo_run_lint_force-r5
   exit_code: 0
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
 
 - cmd: bun run lint:slop
-  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_lint_slop-r4
+  run_id: minted-che-do-soan-bo-okr-SUITE-bun_run_lint_slop-r5
   exit_code: 0
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-che-do-soan-bo-okr-SUITE-bunx_turbo_run_build_force-r4
+  run_id: minted-che-do-soan-bo-okr-SUITE-bunx_turbo_run_build_force-r5
   exit_code: 0
-  verified_at: 2026-10-28T07:19:42Z
+  verified_at: 2026-10-28T10:16:02Z
 
 ## Known limits
 
@@ -298,10 +293,7 @@ Ghi chú lệnh suite đỏ (không gắn eval nào): gói `@crm/ui` báo 387 pa
 
 baseline: BLOCKED ha tang — lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
-Eval không-phân-biệt: none — mọi eval feature đều red trên baseline (có phân biệt). Lưu ý: ở round này baseline không đo được nên mọi field baseline là n-a và câu này không có căn cứ đo.
-
-### Baseline khong do
-
+Baseline khong do:
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-mo: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/che-do-soan-bo-okr/rang/man-soan.mjs": BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-viet: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
@@ -316,15 +308,13 @@ Eval không-phân-biệt: none — mọi eval feature đều red trên baseline 
 - bun _acceptance/che-do-soan-bo-okr/rang/san-thiet-ke.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - bun _acceptance/che-do-soan-bo-okr/rang/khong-doi-hinh.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
-### Judge panels
-
-Round này không có judge panel nào được đề xuất; không có mục judgment chờ người. E17 là eval ui-check đã chấm bằng máy và đỏ.
+Eval không-phân-biệt (green trên cả HEAD lẫn baseline): none — moi eval feature deu red tren baseline (co phan biet). Lưu ý: dòng này không đo được ở vòng này vì baseline bị chặn hạ tầng, mọi trường baseline đều là n-a.
 
 ## Variance
 
-none — mọi eval nhiều lượt đều đồng đều (mọi eval chạy một lượt, xác định).
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1 đến 3: lịch sử nằm ở các báo cáo vòng trước, không có trong dữ liệu của round này.
-Round 4: E19 và E17 đỏ. E19: thước không-đổi-hình báo «SAI AC-11: okr-to-chuc-va» ở apps/app/test/okr-to-chuc-va.dom.tsx:608 (đổi logic ở ca dựng `okr.cycles`, chính là ca neo-kara mới thêm ở commit a298d0db4). E17: ảnh có bốn chỗ lệch bản mẫu ngoài năm chỗ được phép (a đến d ở trên). Thêm lệnh suite app và @crm/ui đỏ ở một ca hết 5000ms. Trả về cho khâu cài đặt.
+Round 5: E17 failed — chỗ lệch thứ tám ngoài bảy chỗ của Notes (lề ô số KR sát nhãn "KR n", bản mẫu thụt thẳng hàng dưới tiêu đề KR, chênh khoảng 36 px); phụ: chữ nút "Nhờ Kara soạn nháp" ở bộ trống nhạt kiểu vô hiệu. Returned to implementation.
+Rounds 1-4: dữ liệu truyền xuống vòng này không kèm lịch sử; xem run-log.jsonl và sổ quyết định S4 vòng 4 (commit cac923dbf).
