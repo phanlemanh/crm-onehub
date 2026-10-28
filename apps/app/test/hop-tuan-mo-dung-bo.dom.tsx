@@ -857,36 +857,8 @@ function kiemXemMoiBo(o: string) {
 	);
 }
 
-const MONG_DONG = [
-	{ khoa: "bp:B", ten: "B", dong: mhb.donViCoKr.dong("3", "1") },
-	{ khoa: "bp:B3", ten: "B3", dong: mhb.donViCoKr.dong("2", "0") },
-	{ khoa: "pb:X", ten: "X", dong: mhb.donViCoKr.dong("1", "0") },
-];
-
-function kiemMucDonVi(muc: Element) {
-	const k = muc.getAttribute("data-don-vi") ?? "";
-	const mong = MONG_DONG.find((x) => x.khoa === k);
-	const ten = mong?.ten ?? "";
-	const dong = mong?.dong ?? "";
-	const tieuDe = muc.querySelector('[data-slot="item-title"]');
-	phai(
-		chu(tieuDe) === ten && tieuDe?.getAttribute("translate") === "no",
-		`htmb-chua-kr: ${k} ten «${chu(tieuDe)}», can «${ten}» trong translate=no`,
-	);
-	const moTa = chu(muc.querySelector('[data-slot="item-description"]'));
-	phai(moTa === dong, `htmb-chua-kr: ${k} dong «${moTa}», can «${dong}»`);
-	const href = docHref(muc.getAttribute("href") ?? "");
-	phai(
-		href.duong === "/ws/okr/bo-okr" &&
-			href.don === k &&
-			href.xem === "hop-tuan" &&
-			href.ky === "q4",
-		`htmb-chua-kr: ${k} href «${muc.getAttribute("href")}»`,
-	);
-}
-
 describe("htmb-chua-kr", () => {
-	test("ma tran 4 o: goc liet [B, B3, X]; bp:B2, pb:P va goc moi hang soKr 0 ra lien ket Xem moi bo OKR", async () => {
+	test("ma tran 4 o: goc chi sang menu dong vi tri, khong doc toanCanh; bp:B2, pb:P va goc moi hang soKr 0 ra lien ket Xem moi bo OKR", async () => {
 		setSystemTime(HOM_NAY_VN);
 		gia.cay = CAY_KR;
 		gia.hopTuan = () => HOP_RONG;
@@ -894,20 +866,23 @@ describe("htmb-chua-kr", () => {
 
 		gia.toanCanh = () => toanCanhCay();
 		await moChuaKr({ loai: "goc" }, "OneHub");
-		kiemChungChuaKr("goc", "OneHub");
 		await cho(
-			() => document.body.querySelector("[data-don-vi-co-kr]") !== null,
-			"htmb-chua-kr: goc danh sach don vi",
+			() => document.body.querySelector('a[data-nut="xem-moi-bo"]') !== null,
+			"htmb-chua-kr: goc lien ket Xem moi bo OKR",
 		);
 		kiemChungChuaKr("goc", "OneHub");
-		const muc = [...document.body.querySelectorAll("[data-don-vi]")];
-		const khoa = muc.map((x) => x.getAttribute("data-don-vi") ?? "");
-		phai(!khoa.includes("bp:B2"), "htmb-chua-kr: liet don vi soKr 0 (B2)");
+		kiemXemMoiBo("goc");
 		phai(
-			JSON.stringify(khoa) === JSON.stringify(["bp:B", "bp:B3", "pb:X"]),
-			`htmb-chua-kr: goc liet «${khoa.join(", ")}», can «bp:B, bp:B3, pb:X»`,
+			document.body.querySelector("[data-don-vi-co-kr]") === null,
+			"htmb-chua-kr: goc con danh sach don vi co KR",
 		);
-		for (const m of muc) kiemMucDonVi(m);
+		phai(
+			(document.body.textContent ?? "").includes(
+				mhb.rong.chiSangMenu("OneHub"),
+			),
+			"htmb-chua-kr: goc thieu cau chi sang menu dong vi tri",
+		);
+		phai((daGoi.get("toanCanh") ?? 0) === 0, "htmb-chua-kr: goc goi toanCanh");
 		dem += 1;
 		await goHet();
 		daGoi.clear();
@@ -1083,7 +1058,7 @@ describe("htmb-tai", () => {
 	const cauLyDo = () =>
 		trangThai("ST-hoptuan-chua-kr")?.querySelector("[data-cau-ly-do]");
 
-	test("ma tran 4 o: hopTuan treo, hopTuan loi, toanCanh treo, toanCanh loi", async () => {
+	test("ma tran 4 o: hopTuan treo, hopTuan loi, toanCanh treo va toanCanh loi khong chan Hop tuan OneHub rong", async () => {
 		setSystemTime(HOM_NAY_VN);
 		let dem = 0;
 
@@ -1128,49 +1103,35 @@ describe("htmb-tai", () => {
 
 		const mongCau = mhb.rong.chuaKr("OneHub", TEN_KY);
 		gia.hopTuan = () => HOP_RONG;
-		gia.toanCanh = TREO_MAI;
-		await ve(<TheoDonVi />, URL_GOC);
-		await cho(
-			() => trangThai("ST-hoptuan-donvi-tai") !== null,
-			"htmb-tai: khung xuong don vi",
-		);
-		phai(
-			chu(cauLyDo()) === mongCau,
-			`htmb-tai: toanCanh treo cau «${chu(cauLyDo())}», can «${mongCau}»`,
-		);
-		phai(
-			(trangThai("ST-hoptuan-donvi-tai")?.querySelectorAll(
-				'[data-slot="skeleton"]',
-			).length ?? 0) > 0,
-			"htmb-tai: toanCanh treo khong co khung xuong",
-		);
-		dem += 1;
-		await goHet();
-		daGoi.clear();
-
-		gia.toanCanh = () => {
-			throw new Error("toanCanh hong");
-		};
-		await ve(<TheoDonVi />, URL_GOC);
-		await cho(
-			() =>
-				trangThai("ST-hoptuan-donvi-loi") !== null ||
-				((daGoi.get("toanCanh") ?? 0) > 0 && cauLyDo() == null),
-			"htmb-tai: vung loi toanCanh",
-		);
-		phai(chu(cauLyDo()) === mongCau, "htmb-tai: loi toanCanh mat cau ly do");
-		phai(
-			trangThai("ST-hoptuan-donvi-loi") !== null,
-			"htmb-tai: toanCanh loi khong co ST-hoptuan-donvi-loi",
-		);
-		const truocTc = daGoi.get("toanCanh") ?? 0;
-		await bamThuLai("ST-hoptuan-donvi-loi");
-		const sauTc = daGoi.get("toanCanh") ?? 0;
-		phai(
-			sauTc === truocTc + 1,
-			`htmb-tai: Thu lai goi toanCanh ${sauTc - truocTc} lan, can 1`,
-		);
-		dem += 1;
+		for (const [o, docToanCanh] of [
+			["toanCanh treo", TREO_MAI],
+			[
+				"toanCanh loi",
+				() => {
+					throw new Error("toanCanh hong");
+				},
+			],
+		] as const) {
+			gia.toanCanh = docToanCanh;
+			await ve(<TheoDonVi />, URL_GOC);
+			await cho(
+				() => document.body.querySelector('a[data-nut="xem-moi-bo"]') !== null,
+				`htmb-tai: ${o}: lien ket Xem moi bo OKR`,
+			);
+			phai(
+				chu(cauLyDo()) === mongCau,
+				`htmb-tai: ${o}: cau «${chu(cauLyDo())}», can «${mongCau}»`,
+			);
+			phai(
+				trangThai("ST-hoptuan-donvi-tai") === null &&
+					trangThai("ST-hoptuan-donvi-loi") === null,
+				`htmb-tai: ${o}: con khung danh sach don vi co KR`,
+			);
+			phai((daGoi.get("toanCanh") ?? 0) === 0, `htmb-tai: ${o}: goi toanCanh`);
+			dem += 1;
+			await goHet();
+			daGoi.clear();
+		}
 
 		expect(dem).toBe(4);
 	});

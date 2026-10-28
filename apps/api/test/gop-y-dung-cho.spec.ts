@@ -89,6 +89,28 @@ async function danhSach(ai: Nguoi, gopY: "cho"[] = []): Promise<DanhSach> {
 	);
 }
 
+type DonPb = { loai: "pb"; id: string };
+
+const PB_KD_BAC: DonPb = { loai: "pb", id: idMau("pb", "kd-bac") };
+const PB_KD_NAM: DonPb = { loai: "pb", id: idMau("pb", "kd-nam") };
+
+async function danhSachDon(
+	ai: Nguoi,
+	unit: DonPb,
+	gopY: "cho"[] = [],
+): Promise<DanhSach> {
+	return ok<DanhSach>(
+		await goi(
+			app,
+			"okr.danhSach",
+			"query",
+			{ cycleId, unit, loc: { ...LOC_RONG, gopY } } as never,
+			cookie[ai],
+		),
+		`danhSach ${ai} ${unit.id}`,
+	);
+}
+
 async function soCua(ai: Nguoi, mucTieu: string): Promise<number | null> {
 	const ds = await danhSach(ai);
 	return (
@@ -403,7 +425,7 @@ describe("dem-chip", () => {
 				},
 			});
 			try {
-				const ds = await danhSach("truong-bo-phan");
+				const ds = await danhSachDon("truong-bo-phan", PB_KD_NAM);
 				expect(ds.rows.length).toBeGreaterThanOrEqual(3);
 				expect(`lan doc okrDeXuat=${lan}`).toBe("lan doc okrDeXuat=1");
 			} finally {
@@ -437,15 +459,31 @@ describe("loc-gop-y", () => {
 	test(
 		"lọc Có góp ý chờ: đúng hai Mục tiêu, total và mặt lọc khớp",
 		async () => {
-			const tat = await danhSach("truong-bo-phan");
-			const loc = await danhSach("truong-bo-phan", ["cho"]);
-			expect(tat.total).toBeGreaterThan(2);
-			expect(new Set(loc.rows.map((r) => r.id))).toEqual(new Set([M1, M2]));
-			const loi = loc.total === 2 ? "ok" : `total sai: ${loc.total} != 2`;
+			const BO = [PB_KD_BAC, PB_KD_NAM];
+			const tat = await Promise.all(
+				BO.map((u) => danhSachDon("truong-bo-phan", u)),
+			);
+			const loc = await Promise.all(
+				BO.map((u) => danhSachDon("truong-bo-phan", u, ["cho"])),
+			);
+			const tong = (ds: DanhSach[]) => ds.reduce((t, d) => t + d.total, 0);
+			const demCho = (ds: DanhSach[]) =>
+				ds.reduce(
+					(t, d) =>
+						t + (d.facetCounts.gopY.find((g) => g.value === "cho")?.count ?? 0),
+					0,
+				);
+			expect(tong(tat)).toBeGreaterThan(2);
+			expect(new Set(loc.flatMap((d) => d.rows.map((r) => r.id)))).toEqual(
+				new Set([M1, M2]),
+			);
+			const loi = tong(loc) === 2 ? "ok" : `total sai: ${tong(loc)} != 2`;
 			expect(loi).toBe("ok");
-			expect(loc.facetCounts.gopY).toEqual([{ value: "cho", count: 2 }]);
-			expect(tat.facetCounts.gopY).toEqual([{ value: "cho", count: 2 }]);
-			console.log(`loc-gop-y: khong loc ${tat.total}, co loc ${loc.total}`);
+			expect(demCho(loc)).toBe(2);
+			expect(demCho(tat)).toBe(2);
+			console.log(
+				`loc-gop-y: khong loc ${tong(tat)}, co loc ${tong(loc)} tren hai bo phong ban`,
+			);
 		},
 		CHO_DB,
 	);
