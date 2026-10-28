@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 42554bef4690018f2789b88195671b05c3b770ed
+verified_commit: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15
 human_signoff: Phan Le Manh 2026-10-28
 ---
 
@@ -200,3 +200,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, xác đ
 ## Iterations
 
 Round 1: E1–E9 đạt, bảy lệnh suite hồi quy đạt; không eval nào hỏng. Baseline không đo được (hạ tầng), xem mục Analyst.
+
+### Re-pin lần 1 — 2026-10-28, do VK19 bo-okr-chi-don-vi: ghim lại các hồ sơ xanh ở làn trước (vượt trần), sau V5-9/V5-10
+run_id: repin-20261028T183615Z-69491
+sha: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
