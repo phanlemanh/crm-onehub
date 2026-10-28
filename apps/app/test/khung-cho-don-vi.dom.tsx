@@ -36,7 +36,7 @@ mock.module("@/lib/trpc/server", () => ({
 const { default: TheoDonViPage } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/page"
 );
-const { KhungDangTaiDonVi, HangCongCuDonVi } = await import(
+const { KhungDangTaiDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu"
 );
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
@@ -105,13 +105,11 @@ function fallbackCuaTrang(): ReactElement {
 }
 
 const hangThat = (
-	<HangCongCuDonVi
-		chon={
-			<button data-chon-don-vi type="button">
-				Phòng Kinh doanh
-			</button>
-		}
-	/>
+	<div>
+		<button data-chon-don-vi type="button">
+			Phòng Kinh doanh
+		</button>
+	</div>
 );
 
 function chuKy(o: HTMLElement) {
