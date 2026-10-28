@@ -5,9 +5,9 @@ slug: bo-okr-chi-don-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-28T07:18:11Z
 design_doc: docs/superpowers/specs/2026-10-28-bo-okr-chi-don-vi-design.md
 ---
 

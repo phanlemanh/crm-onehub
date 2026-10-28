@@ -59,5 +59,5 @@ sơ một dòng sổ `fix` `decided_by` chủ kho, đo hai chiều.
   Đã bỏ, và mắt xích cuối dòng vị trí mở menu đơn vị cha · ngang hàng · trực thuộc; Toàn cảnh vẫn cộng phòng con.
 - Kết quả nào là CHẾT: còn một thẻ con nào của bộ khối hiện mục tiêu phòng con, hoặc số trên danh sách Bộ
   OKR lệch số trong bộ, hoặc trưởng khối không đi được sang bộ của một phòng trong hai lần bấm từ dòng vị trí.
-- Timebox: một vòng T2 ≈ 10 giờ máy (hệ số đợt, luật 25), hạn hàng 29/10; đọc lại số tuần sau gộp — trên
-  production đếm số lần mở bộ `bp:` dẫn tới một bộ `pb:` qua menu dòng vị trí.
+- Timebox: một vòng T2 ≈ 10 giờ máy (hệ số đợt, luật 25), hạn hàng 29/10; giá trị của menu dòng vị trí đọc ở
+  phiên nghiệm thu sau gộp, không đếm trên production (Hỏi-3, chủ kho duyệt 28/10 — d-20261028T071831Z-17).
