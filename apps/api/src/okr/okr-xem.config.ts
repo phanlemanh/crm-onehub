@@ -11,3 +11,5 @@ export const OKR_XEM = {
 		chiQuanTri: "Chỉ quản trị xem được sức khoẻ chương trình.",
 	},
 } as const;
+
+export { OKR_CAM_XUC } from "@crm/validation/okr-cam-xuc";

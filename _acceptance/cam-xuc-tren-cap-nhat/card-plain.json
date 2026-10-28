@@ -1,0 +1,39 @@
+{
+  "feature_plain": "Thành viên chạm một trong bốn cảm xúc dưới từng lần cập nhật KR để ghi nhận nhau mà không phải viết câu, thấy được ai đã thả ở cả ba chỗ đọc cập nhật, và trả lời được dưới mọi lần cập nhật chứ không riêng lần mới nhất.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho người xem chạm một cảm xúc dưới một lần cập nhật ở Cập nhật gần đây; chip hiện ngay với số tăng 1, sáng ở trạng thái «của tôi», và mục tiêu ghi một dòng vết."},
+    {"id": "AC-2", "p": "Sẽ gỡ cảm xúc khi chạm lại đúng chip đã thả; chip biến mất khi về 0; mỗi người mỗi loại chỉ một lần; thả hỏng thì chip trở về như cũ kèm một thông báo nói vì sao."},
+    {"id": "AC-3", "p": "Sẽ cho Cập nhật gần đây, Họp tuần (lần mới nhất của KR) và ngăn KR (lần cuối của tuần) đọc cùng một con số và cùng danh sách người thả cho cùng một lần cập nhật, không chậm đi khi dữ liệu nhiều lên."},
+    {"id": "AC-4", "p": "Sẽ hiện cảm xúc vừa thả ở Họp tuần và ngăn KR trong cùng phiên, không cần tải lại trang; gỡ ở một chỗ thì chỗ kia cũng gỡ."},
+    {"id": "AC-5", "p": "Sẽ cho người cập nhật thấy tên người đã thả: di chuột lên chip trên máy tính, hoặc chạm nút «Thả cảm xúc» để mở bảng có đủ tên — dùng được trên điện thoại mà không lỡ tay gỡ."},
+    {"id": "AC-7", "p": "Sẽ đặt nút «Trả lời» dưới mọi lần cập nhật ở Cập nhật gần đây; mỗi lần cập nhật hiện đúng các trả lời của chính nó, và trả lời vẫn hiện ở thẻ Trao đổi của mục tiêu."},
+    {"id": "AC-8", "p": "Sẽ gắn các trả lời cũ vào đúng lần cập nhật mà hôm nay chúng đang hiện dưới đó, nên sau khi lên bản mới không trả lời nào rời khỏi chỗ người đã thấy."},
+    {"id": "AC-9", "p": "Sẽ hiện đúng các trạng thái của hàng cảm xúc (trống, có, của tôi, đang gửi, lỗi, nhiều người, bảng tên) ở khổ máy tính và điện thoại, không tràn ngang, đi được bằng bàn phím."},
+    {"id": "AC-10", "p": "Sẽ có sẵn cảm xúc và trả lời trong bộ OKR mẫu, ghi qua đường thật, và một lệnh đếm tỷ lệ lần cập nhật được phản hồi để đọc số sau khi bật."}
+  ],
+  "wont_do": [
+    {"id": "AC-6", "p": "Chặn người không được xem một mục tiêu giới hạn: họ không thấy, không thả, không trả lời được trên lần cập nhật của nó, và máy trả lời y như mục tiêu không tồn tại."},
+    {"id": "OOS-1", "p": "Sẽ KHÔNG đưa cảm xúc lên màn trình chiếu — màn đó chưa có."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG báo tin cho người cập nhật khi có người thả cảm xúc (tin buổi sáng, Zalo, thông báo)."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG đặt ô trả lời ở Họp tuần và ngăn KR — trả lời trên từng lần chỉ ở Cập nhật gần đây."},
+    {"id": "OOS-4", "p": "Sẽ KHÔNG cho thả cảm xúc lên bình luận, mục tiêu hay KR, và không có ô chọn emoji tuỳ ý."},
+    {"id": "OOS-5", "p": "Sẽ KHÔNG dùng chỗ lưu «Ghi nhận» (lời nhắn có người nhận) cho cảm xúc."}
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Người: người cập nhật, đồng đội, quản trị, người xem hẹp, người không được xem, vai «chỉ OKR» — đủ khi mỗi loại có ca kiểm thấy/không thấy (AC-5 xem tên, AC-6 quyền xem)."},
+    {"i": 1, "p": "Chỗ hiện: Cập nhật gần đây, Họp tuần, ngăn KR, thẻ Trao đổi — đủ khi một lần thả hiện cùng số ở ba chỗ (AC-3 cùng số, AC-4 cùng phiên, AC-7 trả lời); trình chiếu và tin nhắc để sau."},
+    {"i": 2, "p": "Việc của người: thả, gỡ, thả thêm loại khác, xem ai, trả lời lần mới nhất và lần cũ — đủ khi mỗi việc có một tiêu chí (AC-1, AC-2, AC-5, AC-7)."},
+    {"i": 3, "p": "Loại lần cập nhật: mới nhất, cũ, cuối tuần, giữa tuần, cập nhật thay, chu kỳ ẩn, kỳ chấm điểm hay đã đóng, dữ liệu cũ trước khi lên bản — đủ khi ba màn chọn đúng lần (AC-3), quyền và pha đúng (AC-6), trả lời cũ không lạc (AC-8)."},
+    {"i": 4, "p": "Trạng thái màn × khổ máy tính và điện thoại — đủ khi mọi trạng thái trong bảng thiết kế được chụp và đối chiếu (AC-2, AC-9)."},
+    {"i": 5, "p": "Giả định cần anh gạch: một lần cập nhật có tới vài chục người thả, trang 20 dòng — máy gom tên ở máy chủ một lượt."},
+    {"i": 6, "p": "Giả định cần anh gạch: lần cập nhật giữa tuần chỉ thấy cảm xúc ở Cập nhật gần đây, vì ngăn KR chỉ hiện lần cuối của mỗi tuần."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Máy đã tự quyết «cho thả cả khi chu kỳ đang chấm điểm hay đã đóng» bằng một câu trích không nói tới việc đó. Đã sửa: chuyển thành câu hỏi cho anh (Hỏi-4) và thêm ca kiểm cho kỳ chấm điểm, kỳ đã đóng."},
+    {"i": 1, "p": "Thiếu ca kiểm cho Họp tuần và cho trả lời mang khoá lần cập nhật của mục tiêu khác — người xem hẹp có thể gắn trả lời vào lần cập nhật họ không được thấy. Đã sửa: hợp đồng chặn rõ và có hai ca kiểm mới."},
+    {"i": 2, "p": "Bài đo «hiện ở ba chỗ cùng phiên» mở Họp tuần lần đầu sau khi thả, nên không bắt được lỗi quên làm mới dữ liệu. Đã sửa: mở Họp tuần và ngăn KR trước, rồi mới thả và quay lại."},
+    {"i": 3, "p": "Trên điện thoại không có cách xem ai đã thả (gợi ý khi di chuột không mở bằng chạm, chạm chip lại là gỡ). Đã sửa: nút «Thả cảm xúc» mở bảng có đủ tên, có ảnh bản mẫu khổ 375."},
+    {"i": 4, "p": "Không ca nào kiểm phần màn khi thả hỏng (chip phải trở về như cũ và báo vì sao). Đã sửa: thêm một bài kiểm trên màn cho thả lạc quan, lùi lại và thông báo."}
+  ]
+}

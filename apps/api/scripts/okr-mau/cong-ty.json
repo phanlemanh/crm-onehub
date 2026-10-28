@@ -2744,6 +2744,28 @@
 				"kr": "q4-kd-nam-1-k1",
 				"noiDung": "Ngọc chốt lịch gặp ba đối tác mới ngay trong tuần này."
 			}
-		]
+		],
+		"camXuc": {
+			"nguoiTha": [
+				"nguyen-thi-lan",
+				"tran-quoc-bao",
+				"ly-thanh-tam",
+				"do-minh-khoa",
+				"hoang-yen-nhi",
+				"vu-thu-ha"
+			],
+			"boQuaMoi": 3,
+			"nhieu": {
+				"kr": "q4-kd-bac-1-k1",
+				"nguoi": [
+					"nguyen-thi-lan",
+					"tran-quoc-bao",
+					"ly-thanh-tam",
+					"hoang-yen-nhi",
+					"vu-thu-ha",
+					"phan-kim-chi"
+				]
+			}
+		}
 	}
 }

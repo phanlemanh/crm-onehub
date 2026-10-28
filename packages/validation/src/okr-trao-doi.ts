@@ -14,6 +14,7 @@ export const addCommentInput = z
 	.object({
 		objectiveId: ma,
 		keyResultId: ma.optional(),
+		checkInId: ma.optional(),
 		body: z
 			.string()
 			.trim()

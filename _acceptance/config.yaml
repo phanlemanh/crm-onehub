@@ -2285,6 +2285,16 @@ executors:
     cng_trang: 'bun run test -- "cd apps/api && PRISMA_LOG_QUERIES=true bun test test/okr-cap-nhat-gan-day.spec.ts -t cng-trang"'
     cng_tra_loi: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat-gan-day.spec.ts -t cng-tra-loi"'
     cng_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t cap-nhat-gan-day"'
+    cx_tha: 'bun run test -- "cd apps/api && bun test test/okr-cam-xuc.spec.ts -t cx-tha"'
+    cx_dao: 'bun run test -- "cd apps/api && bun test test/okr-cam-xuc.spec.ts -t cx-dao"'
+    cx_ba_cho: 'bun run test -- "cd apps/api && bun test test/okr-cam-xuc.spec.ts -t cx-ba-cho"'
+    cx_thanh: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/thanh-cam-xuc.dom.tsx -t cx-thanh"
+    cx_quyen: 'bun run test -- "cd apps/api && bun test test/okr-cam-xuc.spec.ts -t cx-quyen && bun test test/vai-chi-okr.spec.ts -t ''ma-tran-trpc|danh sach viet truoc''" && bun _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca xem'
+    cx_tra_loi: 'bun run test -- "cd apps/api && bun test test/okr-cap-nhat-gan-day.spec.ts -t \"cx-tra-loi|cng-tra-loi\""'
+    cx_tra_loi_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-gan-day.dom.tsx -t cx-tra-loi-man"
+    cx_migration: 'bun run test -- "cd apps/api && bun test test/okr-cam-xuc-migration.spec.ts -t cx-migration"'
+    cx_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t cam-xuc-tren-cap-nhat"'
+    cx_lac_quan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-gan-day.dom.tsx -t cx-lac-quan"
     ntl_bo_truong: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-bo-truong"
     ntl_chua_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-chua-tai"
     ntl_giu_luat_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tra-cuu-thuong-hieu-viet-nam.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/deals-giai-doan-hydrat.dom.tsx"
@@ -3577,6 +3587,7 @@ executors:
     mkc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"'
     cng_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-gan-day/rang/do-man.mjs"'
     cng_ma_tran: bun _acceptance/cap-nhat-gan-day/rang/ma-tran-lo-mo-kr.mjs
+    cx_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cam-xuc-tren-cap-nhat/rang/do-man.mjs"'
     cng_thuoc_vkm: bun _acceptance/cap-nhat-gan-day/rang/thuoc-vkm.mjs
     ntl_quet: bun _acceptance/nhap-truong-luc-tao/rang/quet.mjs
     ntl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/nhap-truong-luc-tao/rang/do-man.mjs"'

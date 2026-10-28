@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0cbec3a68a345f22658267004b34950e4084cdee
+verified_commit: c96df72880128f933d460e863918a2b5329de0ba
 human_signoff: Manh Phan 2026-10-27
 ---
 
@@ -254,3 +254,11 @@ none — mọi eval chạy một lần và đều đồng nhất, không có eva
 
 Round 1: mọi eval PASS (S4 lượt 1) — hồ sơ ở commit 8b199b452.
 Round 2: chạy lại sau khi siết bốn thước trong hợp đồng theo S4 lượt 1 (commit 0cbec3a68) — mọi eval chạy lại PASS, E11 mang từ round 1 vì delta không chạm paths của eval; giờ verified_at của round 2 ghi theo ngày chạy 2026-10-27, mốc giờ chính xác nằm trong run-log.jsonl.
+
+### Re-pin lần 1 — 2026-10-28, do HT5 cam-xuc-tren-cap-nhat đổi thước (V3-59..67) và hai trường mới checkInId, camXuc trên Họp tuần, Cập nhật gần đây, diễn biến
+run_id: repin-20261027T235917Z-18758
+sha: 392f29497d28218340519359e23bad3a9f7fe4a3 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E14 · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-28, do HT5 cam-xuc-tren-cap-nhat: vai-chi-okr.spec.ts chỉ thêm dòng (V3-68) sau lượt ghim 18758; ghim lại các hồ sơ có paths chạm tệp đó
+run_id: repin-20261028T002925Z-69430
+sha: c96df72880128f933d460e863918a2b5329de0ba · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E14 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

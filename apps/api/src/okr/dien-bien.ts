@@ -5,6 +5,7 @@ import type { KieuKr } from "@crm/validation/okr-kr";
 
 export type DiemDienBien = {
 	tuan: string;
+	checkInId: string | null;
 	giaTri: number | null;
 	kyVong: number | null;
 	tuTin: MucTuTin | null;
@@ -26,6 +27,7 @@ export function dienBienKr(
 		const phan = laMoc ? null : kyVongTuan(tuan);
 		return {
 			tuan,
+			checkInId: lan?.id ?? null,
 			giaTri: laMoc || lan === null ? null : lan.giaTri,
 			kyVong:
 				phan === null

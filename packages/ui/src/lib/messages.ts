@@ -320,6 +320,19 @@ const en = {
 		nutDaDich: (huong: string, x: string, y: string) =>
 			`Card moved ${huong}. New position ${x}, ${y}`,
 	},
+	camXuc: {
+		thaCamXuc: "Add a reaction",
+		banDaTha: "you reacted",
+		soNguoi: (so: string) => (so === "1" ? `${so} person` : `${so} people`),
+		vaNguoiKhac: (so: string) =>
+			so === "1" ? `and ${so} other` : `and ${so} others`,
+		loai: {
+			"dong-y": "Agree",
+			"chuc-mung": "Congrats",
+			"co-len": "Keep going",
+			"da-xem": "Seen",
+		},
+	},
 };
 
 export type Messages = typeof en;
@@ -638,6 +651,18 @@ const vi = {
 		diemNoi: "Điểm nối",
 		nutDaDich: (huong: string, x: string, y: string) =>
 			`Đã dời thẻ về ${huong}. Vị trí mới ${x}, ${y}`,
+	},
+	camXuc: {
+		thaCamXuc: "Thả cảm xúc",
+		banDaTha: "bạn đã thả",
+		soNguoi: (so: string) => `${so} người`,
+		vaNguoiKhac: (so: string) => `và ${so} người khác`,
+		loai: {
+			"dong-y": "Đồng ý",
+			"chuc-mung": "Chúc mừng",
+			"co-len": "Cố lên",
+			"da-xem": "Đã xem",
+		},
 	},
 } satisfies Messages;
 

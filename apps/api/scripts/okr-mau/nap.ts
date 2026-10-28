@@ -11,6 +11,7 @@ import { z } from "zod";
 import { idMau, LoiBoMau, ngayDb, OKR_MAU } from "./cau-hinh";
 import { dienBien, type LanMau, lanQuy3, lichMau } from "./dien-bien";
 import type { BoOkrMau, KrMau, MucTieuMau } from "./khuon";
+import { type DemCamXuc, napCamXucMau } from "./nap-cam-xuc";
 import { type DemCanhKr, napCanhKr, xoaCanhKr } from "./nap-canh-kr";
 import { type DemHoiY, napHoiYMau, xoaHoiY } from "./nap-hoi-y";
 import { napTaiLieuMau } from "./nap-tai-lieu";
@@ -201,6 +202,7 @@ export async function xoaTrong(
 		select: { id: true },
 	});
 	const P = { in: phien.map((p) => p.id) };
+	await tx.okrCamXuc.deleteMany({ where: { userId: U } });
 	const capNhat = await tx.okrCheckIn.deleteMany({
 		where: { OR: [{ keyResultId: K }, { sessionId: P }] },
 	});
@@ -793,7 +795,7 @@ export async function napBoOkrMau(
 	db: Db,
 	bo: BoOkrMau,
 	{ moc }: { moc: Date },
-): Promise<DemBoMau & DemTraoDoi> {
+): Promise<DemBoMau & DemTraoDoi & DemCamXuc> {
 	const dem = await trongGiaoDich(db, async (tx) => {
 		await kiemWorkspace(tx);
 		await kiemOkrThat(tx);
@@ -804,7 +806,8 @@ export async function napBoOkrMau(
 		const hoiY = await napHoiYMau(db, bo, { moc, chuKyId: CHU_KY.namKe });
 		const taiLieu = await napTaiLieuMau(db, bo);
 		const traoDoi = await napTraoDoiMau(db, bo, moc);
-		return { ...dem, ...hoiY, taiLieu, ...traoDoi };
+		const camXuc = await napCamXucMau(db, bo, CHU_KY.quy4);
+		return { ...dem, ...hoiY, taiLieu, ...traoDoi, ...camXuc };
 	} catch (loi) {
 		await xoaBoOkrMau(db).catch((loiDon) => {
 			console.error(

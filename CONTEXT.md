@@ -748,6 +748,12 @@ Vì sao: tên gọi đúng thứ người ta đọc — các lần cập nhật 
 cho lần ghi của một KR. «Hoạt động» rộng hơn: gồm cả bình luận và sửa mục tiêu, trùng
 với Lịch sử. «Feed» lẫn tiếng.
 
+**Cảm xúc**: một chạm của một người lên một lần cập nhật — Đồng ý, Chúc mừng, Cố lên, Đã
+xem. Chạm lại là gỡ. Hiện ở Cập nhật gần đây, Họp tuần và Lịch sử của KR; người cập nhật
+thấy ai đã thả. Chốt 2026-10-27 (HT5).
+_Avoid_: thích, like, react, phản ứng, ghi nhận
+Vì sao: «Ghi nhận» đã là lời nhắn có người nhận; «Thích» chỉ đúng một trong bốn loại.
+
 **Báo cáo (khu Mục tiêu)**: nhóm thứ hai trên thanh bên khu Mục tiêu, cho mọi vai, kể
 cả «chỉ OKR» — nơi nhìn ngang cả công ty trong một chu kỳ: **Sức khoẻ** (ô số, bảng đơn
 vị, mức tự tin theo tuần, phần quản trị), **Mọi KR** (mọi KR lọc theo tình trạng, đơn vị,

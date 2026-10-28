@@ -38,6 +38,7 @@ import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { HangCamXuc } from "./cam-xuc/hang-cam-xuc";
 import { giaiDon } from "./don-dich";
 import { XemMoiBo } from "./don-vi-co-kr";
 import { ghep } from "./hoi-y/chu";
@@ -142,6 +143,13 @@ function DongBan({ dong }: { dong: DongHop }) {
 					<span className="md:hidden">
 						<TienDoDong dong={dong} />
 					</span>
+					{dong.checkInId ? (
+						<HangCamXuc
+							camXuc={dong.camXuc}
+							checkInId={dong.checkInId}
+							objectiveId={dong.objectiveId}
+						/>
+					) : null}
 				</div>
 			</TableCell>
 			<TableCell className="hidden px-3 py-3 align-top md:table-cell">

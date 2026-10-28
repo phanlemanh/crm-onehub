@@ -542,6 +542,8 @@ const dongHop = (
 	tuTin,
 	ghiChu: null,
 	lyDo: coLyDo ? [{ loai: "ghi-chu", ngay: "2026-11-09" }] : [],
+	checkInId: null,
+	camXuc: [],
 });
 
 const HOP_CO_SO = hopTuanOutput.parse({
