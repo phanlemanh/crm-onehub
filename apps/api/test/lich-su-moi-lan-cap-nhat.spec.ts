@@ -252,7 +252,9 @@ describe("lsml-lan", () => {
 					const ls = await docLichSu(id);
 					const sql = await lanSql(id);
 					if (ca.lan.length !== sql.length)
-						loi.push(`lsml-lan: ${ca.ten} SQL ${sql.length} can ${ca.lan.length}`);
+						loi.push(
+							`lsml-lan: ${ca.ten} SQL ${sql.length} can ${ca.lan.length}`,
+						);
 					loi.push(...lechLan(ca, ls, sql));
 					if (ca.ten === "hai-lan-cung-tuan") {
 						const db_ = dienBienOutput.parse(
@@ -326,7 +328,12 @@ const CA_CHUOI: CaChuoi[] = [
 		mong: [
 			trong("2026-09-28"),
 			trong("2026-10-05"),
-			{ ngay: "2026-10-14", checkInId: "a", giaTri: 20, kyVong: kv("2026-10-12") },
+			{
+				ngay: "2026-10-14",
+				checkInId: "a",
+				giaTri: 20,
+				kyVong: kv("2026-10-12"),
+			},
 			trong("2026-10-19"),
 			trong("2026-10-26"),
 			trong("2026-11-02"),
@@ -342,9 +349,24 @@ const CA_CHUOI: CaChuoi[] = [
 		],
 		mong: [
 			trong("2026-09-28"),
-			{ ngay: "2026-10-05", checkInId: "a", giaTri: 12, kyVong: kv("2026-10-05") },
-			{ ngay: "2026-10-07", checkInId: "b", giaTri: 14, kyVong: kv("2026-10-05") },
-			{ ngay: "2026-10-11", checkInId: "c", giaTri: 15, kyVong: kv("2026-10-05") },
+			{
+				ngay: "2026-10-05",
+				checkInId: "a",
+				giaTri: 12,
+				kyVong: kv("2026-10-05"),
+			},
+			{
+				ngay: "2026-10-07",
+				checkInId: "b",
+				giaTri: 14,
+				kyVong: kv("2026-10-05"),
+			},
+			{
+				ngay: "2026-10-11",
+				checkInId: "c",
+				giaTri: 15,
+				kyVong: kv("2026-10-05"),
+			},
 			trong("2026-10-12"),
 			trong("2026-10-19"),
 			trong("2026-10-26"),
@@ -359,9 +381,19 @@ const CA_CHUOI: CaChuoi[] = [
 			{ id: "b", tuan: "2026-10-12", luc: "2026-10-13T03:00:00Z", giaTri: 19 },
 		],
 		mong: [
-			{ ngay: "2026-09-29", checkInId: "a", giaTri: 11, kyVong: kv("2026-09-28") },
+			{
+				ngay: "2026-09-29",
+				checkInId: "a",
+				giaTri: 11,
+				kyVong: kv("2026-09-28"),
+			},
 			trong("2026-10-05"),
-			{ ngay: "2026-10-13", checkInId: "b", giaTri: 19, kyVong: kv("2026-10-12") },
+			{
+				ngay: "2026-10-13",
+				checkInId: "b",
+				giaTri: 19,
+				kyVong: kv("2026-10-12"),
+			},
 			trong("2026-10-19"),
 			trong("2026-10-26"),
 			trong("2026-11-02"),
@@ -540,12 +572,18 @@ describe("lsml-cam-xuc-api", () => {
 			loi.push("lsml-cam-xuc-api: L2 mang cam xuc cua L1");
 		dem += 1;
 		ok(
-			await goi("okr.thaCamXuc", { checkInId: L2, loai: "chuc-mung" }, "thuong"),
+			await goi(
+				"okr.thaCamXuc",
+				{ checkInId: L2, loai: "chuc-mung" },
+				"thuong",
+			),
 			"tha L2",
 		);
 		const sau2 = await docLichSu(krId);
 		const b = camCua(sau2, L2).find((c) => c.loai === "chuc-mung")?.so ?? 0;
-		const a2 = camCua(sau2, L1).map((c) => `${c.loai}:${c.so}`).join(",");
+		const a2 = camCua(sau2, L1)
+			.map((c) => `${c.loai}:${c.so}`)
+			.join(",");
 		if (b !== (await soCamXuc(L2, "chuc-mung")) || b !== 1 || a2 !== "dong-y:1")
 			loi.push(`lsml-cam-xuc-api: sau tha L2 — L2 chuc-mung ${b}, L1 «${a2}»`);
 		dem += 1;
@@ -596,8 +634,12 @@ describe("lsml-dien-bien-giu", () => {
 							);
 					}
 					const tuanCoLan = new Set(sql.map((s) => s.tuan));
-					if (d.diem.filter((p) => p.checkInId !== null).length !== tuanCoLan.size)
-						loi.push(`lsml-dien-bien-giu: ${ca.ten} lech ban chup so diem co lan`);
+					if (
+						d.diem.filter((p) => p.checkInId !== null).length !== tuanCoLan.size
+					)
+						loi.push(
+							`lsml-dien-bien-giu: ${ca.ten} lech ban chup so diem co lan`,
+						);
 					if (ca.ten === "hai-lan-cung-tuan") {
 						const tuanNay = sql.filter((s) => s.tuan === tuanDo);
 						if (

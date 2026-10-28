@@ -22,7 +22,7 @@ evals:
       bằng coalesce(giờ nộp của phiên, createdAt) từ SQL, ngay bằng ngày Việt Nam của luc tính bằng AT TIME ZONE trong SQL,
       tuan, giaTri, tuTin, ghiChu đúng giá trị SQL theo luật AC-1 (KR mốc giaTri null, ghi chú rỗng thì null). Ca hai lần cùng tuần: lan có 2 phần tử cùng tuan — đối chứng dương: okr.dienBien
       trên cùng KR có đúng 1 điểm có giá trị ở tuần đó. In «lsml-lan: 8/8».
-      CHIEU DO (bản sao): lichSuKr lọc lan bằng cuoiTrongTuan → đỏ «lsml-lan: hai-lan-cung-tuan 1 lan can 2».
+      CHIEU DO (bản sao): lichSuKr lọc lan bằng cuoiTrongTuan → đỏ «lsml-lan: hai-lan-cung-tuan 2 lan can 3».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -37,7 +37,7 @@ evals:
       tuần · tuần trống giữa hai tuần có lần · KR mốc · tuần sau hôm nay). Mỗi ca so chuoi với mảng kỳ vọng viết tay đầy
       đủ (ngay, checkInId, giaTri, kyVong) — số điểm = số lần + số tuần không có lần; kyVong của mỗi điểm bằng kyVong của
       tuần chứa nó; thứ tự tăng theo thời gian. In «lsml-chuoi: 6/6».
-      CHIEU DO (bản sao): gom điểm theo tuần → đỏ «lsml-chuoi: ba-lan-mot-tuan 1 diem can 3».
+      CHIEU DO (bản sao): gom điểm theo tuần → đỏ «lsml-chuoi: ba-lan-mot-tuan 6 diem can 8».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
@@ -151,7 +151,7 @@ evals:
       cảm xúc «A» trên L1 qua router caller thật okr.thaCamXuc; gọi okr.lichSuKr: camXuc của phần tử L1 khớp bảng cảm xúc
       đếm bằng SQL theo checkInId của L1 (A = 1), camXuc của L2 rỗng — đối chứng dương: trước khi thả, cả hai rỗng; thả «B»
       trên L2 thì chỉ L2 đổi. In «lsml-cam-xuc-api: 3/3».
-      CHIEU DO (bản sao): lichSuKr gắn camXuc của lần cuối tuần cho mọi lần → đỏ «lsml-cam-xuc-api: L2 mang cam xuc cua L1».
+      CHIEU DO (bản sao): lichSuKr gắn camXuc của lần cuối tuần cho mọi lần → đỏ «lsml-cam-xuc-api: L1 dong-y 0 can 1».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
@@ -169,7 +169,7 @@ evals:
       dienBienKr hay chuoiMoiLan): số điểm = số tuần của kỳ; checkInId, giaTri, tuTin, ghiChu của mỗi điểm bằng lần cuối
       ấy; điểm của tuần hai lần mang lần thứ hai, KHÁC lần thứ nhất (đối chứng dương trong cùng ca: assert hai lần khác
       giá trị trước khi so). In «lsml-dien-bien-giu: 8/8».
-      CHIEU DO (bản sao): dienBienKr dùng chuoiMoiLan → đỏ «lsml-dien-bien-giu: hai-lan-cung-tuan lech ban chup».
+      CHIEU DO (bản sao): dienBienKr dùng chuoiMoiLan → đỏ «lsml-dien-bien-giu: hai-lan-cung-tuan tuan 2026-10-19 …».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
