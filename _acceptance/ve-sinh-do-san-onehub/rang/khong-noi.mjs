@@ -119,7 +119,53 @@ function coKhai(hunk, docTep) {
 	return dong.slice(tu, den).some((d) => NHAN.some((n) => d.includes(n)));
 }
 
-function soi(diffRang, diffEvals, diffRoute, docTep, nhanTep = () => null) {
+const KHOI_EVAL = /^\s*-\s+id:/;
+const KHONG_CHAY = /^\+\s*status:\s*not-run\b/;
+const THAY_BOI = /^\s*superseded_by:\s*([^#\s]+)#(AC-\d+)\s*$/;
+
+function hoSoKyCo(cwd, slug, ac) {
+	const hd = join(cwd, "_acceptance", slug, "contract.md");
+	if (!existsSync(hd)) return false;
+	const chu = readFileSync(hd, "utf8");
+	const tt = chu.match(/^status:\s*(\S+)/m)?.[1];
+	if (tt !== "signed-off" && tt !== "machine-cleared") return false;
+	return new RegExp(`^\\s*-\\s+${ac}:`, "m").test(chu);
+}
+
+function thayBoiCuaKhoi(chu, dongMoi) {
+	const dong = chu.split("\n");
+	let dau = dongMoi - 1;
+	while (dau >= 0 && !KHOI_EVAL.test(dong[dau])) dau -= 1;
+	if (dau < 0) return null;
+	let cuoi = dongMoi;
+	while (cuoi < dong.length && !KHOI_EVAL.test(dong[cuoi])) cuoi += 1;
+	for (const d of dong.slice(dau, cuoi)) {
+		const m = THAY_BOI.exec(d);
+		if (m) return { slug: m[1], ac: m[2] };
+	}
+	return null;
+}
+
+function taoNhanNoi(cwd, docTep) {
+	return (tep, dongMoi, d) => {
+		if (!KHONG_CHAY.test(d)) return null;
+		const thay = thayBoiCuaKhoi(docTep(tep), dongMoi);
+		if (!thay || !hoSoKyCo(cwd, thay.slug, thay.ac)) return null;
+		const slug = /^_acceptance\/([^/]+)\//.exec(tep)?.[1];
+		const id = slug ? dongFixChamTep(cwd, slug, tep) : null;
+		if (!id) return null;
+		return `superseded_by ${thay.slug}#${thay.ac} (da ky) va dong fix ${id} dan cham-tep trong _acceptance/${slug}/decisions.jsonl`;
+	};
+}
+
+function soi(
+	diffRang,
+	diffEvals,
+	diffRoute,
+	docTep,
+	nhanTep = () => null,
+	nhanNoi = () => null,
+) {
 	const hong = [];
 	const nhan = new Map();
 	const hunk = hunkCua(diffRang);
@@ -134,12 +180,27 @@ function soi(diffRang, diffEvals, diffRoute, docTep, nhanTep = () => null) {
 		nhan.set(h.tep, { lyDo, so: (cu?.so ?? 0) + 1 });
 	}
 	let tepEvals = null;
+	let dongMoi = 0;
+	const nhanNoiDa = new Map();
 	for (const d of diffEvals.split("\n")) {
-		if (d.startsWith("+++ ")) tepEvals = d.slice(6);
-		else if (NOI.test(d)) hong.push(`HONG NOI ${tepEvals}`);
+		if (d.startsWith("+++ ")) {
+			tepEvals = d.slice(6);
+			continue;
+		}
+		if (d.startsWith("@@")) {
+			dongMoi = Number(d.match(/\+(\d+)/)?.[1] ?? 0);
+			continue;
+		}
+		if (!d.startsWith("+")) continue;
+		if (NOI.test(d)) {
+			const lyDo = nhanNoi(tepEvals, dongMoi, d);
+			if (lyDo) nhanNoiDa.set(`${tepEvals}:${dongMoi}`, lyDo);
+			else hong.push(`HONG NOI ${tepEvals}`);
+		}
+		dongMoi += 1;
 	}
 	if (diffRoute.trim()) hong.push("HONG ROUTE");
-	return { hong, soHunk: hunk.length, nhan };
+	return { hong, soHunk: hunk.length, nhan, nhanNoi: nhanNoiDa };
 }
 
 if (process.argv.includes("--tu-thu")) {
@@ -238,6 +299,80 @@ if (process.argv.includes("--tu-thu")) {
 				`${thucHong === mongHong ? "ok" : "SAI"} dong fix: ${ten} -> ${mongHong ? "do" : "xanh"}`,
 			);
 		}
+		const ev = "_acceptance/x/evals.yaml";
+		const khoi = (them) =>
+			["evals:", "  - id: E1", "    criterion: AC-1", ...them, ""].join("\n");
+		const hd = (tt) => `---\nstatus: ${tt}\n---\n- AC-4: mot dieu\n`;
+		const caNoi = [
+			[
+				"not-run co superseded_by da ky va dong fix",
+				["    status: not-run", "    superseded_by: y#AC-4"],
+				"signed-off",
+				true,
+				false,
+			],
+			[
+				"not-run khong superseded_by",
+				["    status: not-run"],
+				"signed-off",
+				true,
+				true,
+			],
+			[
+				"not-run tro ho so chua ky",
+				["    status: not-run", "    superseded_by: y#AC-4"],
+				"draft",
+				true,
+				true,
+			],
+			[
+				"not-run tro AC khong co",
+				["    status: not-run", "    superseded_by: y#AC-9"],
+				"signed-off",
+				true,
+				true,
+			],
+			[
+				"not-run khong dong fix",
+				["    status: not-run", "    superseded_by: y#AC-4"],
+				"signed-off",
+				false,
+				true,
+			],
+			[
+				"expected_exit du dieu kien van do",
+				["    expected_exit: 2", "    superseded_by: y#AC-4"],
+				"signed-off",
+				true,
+				true,
+			],
+		];
+		for (const [ten, them, tt, coFix, mongHong] of caNoi) {
+			const cwd = mkdtempSync(join(tam, "noi-"));
+			mkdirSync(join(cwd, "_acceptance", "x"), { recursive: true });
+			mkdirSync(join(cwd, "_acceptance", "y"), { recursive: true });
+			writeFileSync(join(cwd, "_acceptance", "y", "contract.md"), hd(tt));
+			writeFileSync(join(cwd, ev), khoi(them));
+			if (coFix)
+				writeFileSync(
+					join(cwd, "_acceptance", "x", "decisions.jsonl"),
+					`${dongSo({ decision: `${ev}: khai not-run kem superseded_by (cham-tep V5-3).` })}\n`,
+				);
+			const doc = (t) => readFileSync(join(cwd, t), "utf8");
+			const kqNoi = soi(
+				"",
+				`+++ b/${ev}\n@@ -3,0 +4,${them.length} @@\n${them.map((d) => `+${d}`).join("\n")}\n`,
+				"",
+				doc,
+				() => null,
+				taoNhanNoi(cwd, doc),
+			);
+			const thucHong = kqNoi.hong.includes(`HONG NOI ${ev}`);
+			if (thucHong !== mongHong) loi += 1;
+			console.log(
+				`${thucHong === mongHong ? "ok" : "SAI"} not-run: ${ten} -> ${mongHong ? "do" : "xanh"}`,
+			);
+		}
 		const moi = soi(
 			gia(tep, ["const a = 1;"]),
 			"",
@@ -269,20 +404,24 @@ const evals = daKy.map((t) => `_acceptance/${t}/evals.yaml`);
 const diffRang = git("diff", "-U0", `${mb}..HEAD`, "--", ...rang);
 const diffEvals = git("diff", "-U0", `${mb}..HEAD`, "--", ...evals);
 const diffRoute = git("diff", `${mb}..HEAD`, "--", ROUTE);
+const docGoc = (tep) => readFileSync(join(GOC, tep), "utf8");
 const kq = soi(
 	diffRang,
 	diffEvals,
 	diffRoute,
-	(tep) => readFileSync(join(GOC, tep), "utf8"),
+	docGoc,
 	taoNhan(
 		GOC,
 		(tep) =>
 			spawnSync("git", ["-C", GOC, "cat-file", "-e", `${mb}:${tep}`]).status ===
 			0,
 	),
+	taoNhanNoi(GOC, docGoc),
 );
 for (const [tep, { lyDo, so }] of kq.nhan)
 	console.log(`NHAN ${tep}: ${so} hunk nho ${lyDo}`);
+for (const [cho, lyDo] of kq.nhanNoi)
+	console.log(`NHAN NOI ${cho}: not-run nho ${lyDo}`);
 for (const h of kq.hong) console.log(h);
 if (kq.hong.length > 0) process.exit(1);
 const soNhan = [...kq.nhan.values()].reduce((a, n) => a + n.so, 0);
