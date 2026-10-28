@@ -19,8 +19,8 @@ import { useQuery } from "@tanstack/react-query";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrLanTruocMessages } from "@/lib/messages/okr-lan-truoc";
 import { useTRPC } from "@/lib/trpc/client";
-import { giaTri } from "./bang-kr";
 import { ngayGioVN } from "./cap-nhat-tuan/cap-nhat-tuan";
+import { giaTri } from "./gia-tri-kr";
 import type { KrCapNhat } from "./kieu";
 import { ghiChuLanTruoc, type LanTruocKr } from "./lan-truoc-kr";
 

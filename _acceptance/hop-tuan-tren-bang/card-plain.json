@@ -1,0 +1,119 @@
+{
+  "feature_plain": "Trưởng đơn vị họp trọn trên bảng Họp tuần: mỗi KR hiện ghi chú mới nhất và mức đổi so với lần trước ở mọi khổ màn, cập nhật được ngay từ dòng, và chi tiết KR mở từ bảng đi ‹ › theo đúng thứ tự bảng.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ gửi kèm mỗi dòng Họp tuần ngày của ghi chú mới nhất, đơn vị của KR, giá trị mới nhất và mức đổi so với lần trước — đúng cả khi KR được sửa hai lần trong tuần (AC-1, dữ liệu của bảng)."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ hiện ghi chú mới nhất kèm ngày trên mọi dòng, cả phần Đang bàn lẫn Còn lại, ở máy tính, khổ 768 và điện thoại — mỗi dòng đúng một lần."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ có nút «Cập nhật» trên mỗi dòng người xem được cập nhật; bấm là mở hộp cập nhật một KR, gửi xong vẫn ở lại bảng và dòng đổi ngay."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ cho chi tiết KR mở từ bảng đếm «n/N» và đi ‹ › theo thứ tự bảng: hết Đang bàn thì sang Còn lại."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ giữ thứ tự bảng khi tải lại trang; mở chi tiết KR từ chỗ khác thì vẫn đi theo mục tiêu như hôm nay."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ giữ chi tiết KR đang xem sau khi gửi cập nhật, và ‹ › đi theo thứ tự bảng mới nếu KR đổi phần."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ được đo trên màn thật ở 1440, 768 và 375, sáng và tối: không tràn ngang, nút Cập nhật luôn thấy được, chữ không chìm."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ có đủ chữ tiếng Việt và tiếng Anh cho các nhãn mới, và trả tiêu điểm về đúng nút sau khi đóng hộp hay bấm ‹ ›."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ chạy lại phép đo của các việc đã ký có chạm Họp tuần, chi tiết KR hay nút cập nhật trên dòng — không cái nào tệ đi."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG in mức đổi bằng điểm tiến độ hay chữ hỏng: mỗi ô in phần chênh theo đơn vị của KR rồi «trước → sau · so với ngày», và chỉ ghi «Lần đầu cập nhật» khi KR mới có đúng một lần."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG làm chế độ trình chiếu riêng."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG có ô nhập trên dòng, KHÔNG gửi nhiều KR một lần."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG đổi thứ tự ‹ › khi mở chi tiết KR từ chỗ khác ngoài Họp tuần."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG hiện mức đổi của mức tự tin, KHÔNG lọc hay sắp bảng theo mức đổi."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG làm thích, trả lời hay trang chi tiết một lần cập nhật (việc của hàng khác)."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG đổi luật xếp Đang bàn / Còn lại."
+    }
+  ],
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Phần của một dòng — ghi chú, mức đổi, nút Cập nhật, mở chi tiết — mỗi phần có tiêu chí riêng (AC-2, AC-3, AC-4, AC-5); đủ theo câu giao và bảng so với Tability."
+    },
+    {
+      "i": 1,
+      "p": "Ba khổ màn (dưới 768, 768–1023, từ 1024) được đo cả bằng bài kiểm lẫn trên màn thật (AC-2, AC-3, AC-8)."
+    },
+    {
+      "i": 2,
+      "p": "Chín kiểu lịch sử cập nhật của một KR, từ chưa lần nào tới hai lần trong tuần đầu, đều có ca đo riêng (AC-1, AC-3)."
+    },
+    {
+      "i": 3,
+      "p": "Bốn chỗ mở chi tiết KR — Đang bàn, Còn lại, tải lại, chỗ khác — đều có ca đo (AC-5, AC-6, AC-7)."
+    },
+    {
+      "i": 4,
+      "p": "Cắt ngang: quyền cập nhật, sau khi gửi, chữ và tiêu điểm, sáng tối, việc đã ký (AC-4, AC-7, AC-9, AC-8, AC-10)."
+    },
+    {
+      "i": 5,
+      "p": "Đối chiếu ngành: Tability, chụp thật ngày 22/10."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Mốc so của mức đổi từng ghi là máy tự quyết, nhưng đó là nghĩa người họp đọc — đã chuyển thành câu hỏi Hỏi-3 cho anh."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo «việc đã ký không tệ đi» từng định bỏ, trong khi vòng này dời nút cập nhật và đổi ‹ › mà các việc đã ký đang đo — đã khôi phục, chỉ quét các việc có chạm."
+    },
+    {
+      "i": 2,
+      "p": "Thiếu ca KR được cập nhật hai lần ngay tuần đầu (sẽ in nhầm «Lần đầu cập nhật») — đã thêm ca thứ chín và luật so với lần đầu tiên."
+    },
+    {
+      "i": 3,
+      "p": "Chưa nói gì khi gửi cập nhật làm KR rơi xuống phần Còn lại đang gập — đã thành câu hỏi Hỏi-4, khuyến nghị tự mở Còn lại và đưa tiêu điểm về KR."
+    },
+    {
+      "i": 4,
+      "p": "Phép đo «mỗi dòng một ghi chú» không thấy được lỗi hiện hai lần ở khổ 768 — đã đổi sang đếm từng dòng trên trình duyệt thật."
+    }
+  ]
+}

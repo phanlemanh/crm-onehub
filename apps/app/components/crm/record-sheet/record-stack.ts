@@ -51,6 +51,7 @@ const params = {
 	[SEARCH_PARAM.record.timeline]: timelineTabParser,
 	[SEARCH_PARAM.record.ngaySo]: parseAsString,
 	[SEARCH_PARAM.okr.hop]: parseAsString,
+	[SEARCH_PARAM.record.thuTu]: parseAsString,
 };
 
 export function recordKey(ref: RecordRef): string {
@@ -77,6 +78,7 @@ export function useRecordStack() {
 	const [values, setParams] = useQueryStates(params);
 	const record = values[SEARCH_PARAM.record.stack];
 	const ngaySo = values[SEARCH_PARAM.record.ngaySo];
+	const thuTu = values[SEARCH_PARAM.record.thuTu];
 
 	const stack = useMemo(
 		() => record.map(parseRef).filter((ref): ref is RecordRef => ref !== null),
@@ -97,11 +99,12 @@ export function useRecordStack() {
 					[SEARCH_PARAM.record.timeline]: null,
 					[SEARCH_PARAM.record.ngaySo]: giuNgaySo(stack, next) ? ngaySo : null,
 					[SEARCH_PARAM.okr.hop]: null,
+					[SEARCH_PARAM.record.thuTu]: next.length === 0 ? null : thuTu,
 				},
 				{ history },
 			);
 		},
-		[setParams, stack, ngaySo],
+		[setParams, stack, ngaySo, thuTu],
 	);
 
 	const open = useCallback(

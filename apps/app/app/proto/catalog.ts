@@ -11,6 +11,29 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "hop-tuan-tren-bang",
+		ten: "Họp tuần trên bảng — ghi chú mới nhất và mức đổi ở mọi khổ, Cập nhật từ dòng, ‹ › theo thứ tự đáng bàn",
+		states: [
+			{
+				id: "ST-ht2-bang",
+				nhan: "Bảng Họp tuần — Đang bàn 9 KR, Còn lại thu gọn",
+			},
+			{ id: "ST-ht2-con-lai", nhan: "Bảng Họp tuần — Còn lại mở ra" },
+			{
+				id: "ST-ht2-hop-cap-nhat",
+				nhan: "Hộp cập nhật một KR mở từ nút trên dòng",
+			},
+			{
+				id: "ST-ht2-ngan-kr",
+				nhan: "Chi tiết KR — 3/14 theo thứ tự bảng, ‹ › sang dòng kề",
+			},
+			{
+				id: "ST-ht2-hom-nay",
+				nhan: "Hôm nay — ghi chú ẩn dưới 1024 px, ‹ › trong một mục tiêu",
+			},
+		],
+	},
+	{
 		slug: "bo-okr-co-so",
 		ten: "Bộ OKR có hàng số — bốn ô số ở đầu thẻ OKR, KR mở sẵn, nút Mở/Gập tất cả",
 		states: [
