@@ -71,6 +71,7 @@ const mk = okrCanhKrMessages("vi").khung;
 const mo = okrMessages("vi");
 
 const DON = { loai: "bp", id: "bp-1" } as const;
+const TRE_HOP_TUAN_MS = 120;
 const KHOA_NGUON = "hop~q4~bp:bp-1";
 
 function dongHop(v: DongVao) {
@@ -663,6 +664,53 @@ describe("htb-cap-nhat", () => {
 		console.log(`htb-cap-nhat: ${dem}/5`);
 		expect(loi.join("\n")).toBe("");
 		expect(dem).toBe(5);
+	});
+});
+
+describe("htb-cap-nhat-cham", () => {
+	test("htb-cap-nhat: hopTuan tra cham sau khi gui, Con lai van tu mo va tieu diem ve K", async () => {
+		let daGui = false;
+		datKho(() =>
+			daGui
+				? (new Promise((xong) =>
+						setTimeout(
+							() =>
+								xong(
+									hop(
+										[{ id: "J" }],
+										[{ id: "K", ghiChu: "vua gui", ghiChuNgay: "2026-10-21" }],
+									),
+								),
+							TRE_HOP_TUAN_MS,
+						),
+					) as unknown as HopTuanOutput)
+				: hop([{ id: "K" }, { id: "J" }], [{ id: "L" }]),
+		);
+		await dungHop();
+		const nutK = () =>
+			qs<HTMLButtonElement>('[data-kr-hop="K"] [data-nut="cap-nhat-dong-kr"]');
+		await cho(() => nutK() !== null, "nut cap nhat K");
+		const loi: string[] = [];
+		if (qs("[data-con-lai]")?.getAttribute("data-con-lai") !== "dong")
+			loi.push("htb-cap-nhat: doi chung — truoc khi gui Con lai khong gap");
+		await bam(nutK(), "nut K");
+		await cho(() => qs("[data-hop-cap-nhat-kr]") !== null, "hop K");
+		daGui = true;
+		await guiTuHop("15", "vua gui");
+		await cho(() => qs("[data-hop-cap-nhat-kr]") === null, "hop dong");
+		await cho(
+			() => qs('[data-con-lai] [data-kr-hop="K"]') !== null,
+			"K sang Con lai",
+		);
+		await nhip(3);
+		if (qs("[data-con-lai]")?.getAttribute("data-con-lai") !== "mo")
+			loi.push("htb-cap-nhat: hopTuan cham — Con lai khong tu mo");
+		if (document.activeElement !== nutK())
+			loi.push(
+				`htb-cap-nhat: hopTuan cham — tieu diem o ${document.activeElement?.outerHTML.slice(0, 80)}`,
+			);
+		console.log("htb-cap-nhat-cham: 1/1");
+		expect(loi.join("\n")).toBe("");
 	});
 });
 

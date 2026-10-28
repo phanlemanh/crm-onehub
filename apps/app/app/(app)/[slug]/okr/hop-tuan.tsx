@@ -85,8 +85,9 @@ function useBangHop(thuTu: string): BangHopTuan {
 	const [vuaGui, setVuaGui] = useState<string | null>(null);
 	const capNhat = useCapNhatKr({
 		onDaGui: (keyResultId) => {
-			setVuaGui(keyResultId);
-			void qc.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() });
+			void qc
+				.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() })
+				.then(() => setVuaGui(keyResultId));
 		},
 	});
 	return {
