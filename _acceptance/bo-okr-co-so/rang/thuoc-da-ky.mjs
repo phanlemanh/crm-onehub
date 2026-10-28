@@ -567,6 +567,17 @@ function chieuDo(kieu) {
 		);
 		writeFileSync(duong, doi.moi);
 		git(["add", "--", tep], sao);
+		for (const slug of readdirSync(join(sao, "_acceptance"))) {
+			const L = join(sao, "_acceptance", slug, "decisions.jsonl");
+			if (!existsSync(L)) continue;
+			const dong = readFileSync(L, "utf8").split("\n");
+			const giu = dong.filter(
+				(d) => !(d.includes(tep) && DAN_CHAM_TEP.test(d)),
+			);
+			if (giu.length === dong.length) continue;
+			writeFileSync(L, giu.join("\n"));
+			git(["add", "--", L], sao);
+		}
 		git(
 			[
 				"-c",
