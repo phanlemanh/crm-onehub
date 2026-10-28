@@ -2348,6 +2348,16 @@ executors:
     httb_nguon: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-nguon && cd ../.. && bun _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs"
     httb_sau_gui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-sau-gui"
     httb_chu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-chu && bun test ./test/messages-guard.spec.ts"
+    lsml_api: 'bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-lan"'
+    lsml_chuoi: 'bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-chuoi"'
+    lsml_quyen: 'bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-quyen"'
+    lsml_dien_bien_giu: 'bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-dien-bien-giu"'
+    lsml_cam_xuc_api: 'bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-cam-xuc-api"'
+    lsml_danh_sach: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-danh-sach"
+    lsml_bieu_do: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-bieu-do"
+    lsml_sau_gui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-sau-gui"
+    lsml_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-trang-thai"
+    lsml_cam_xuc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-cam-xuc"
     ttts_doc_ban_chup: 'bun run test -- "cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-doc-ban-chup"'
     ttts_khong_lui: cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-khong-lui
     ttts_bao: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-bao"'
@@ -3605,6 +3615,9 @@ executors:
     httb_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-tuan-tren-bang/rang/man.mjs --phan anh"'
     httb_man_gui: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-tuan-tren-bang/rang/man.mjs --phan gui"'
     httb_khong_doi_hinh: "node _acceptance/hop-tuan-tren-bang/rang/khong-doi-hinh.mjs"
+    lsml_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lich-su-moi-lan-cap-nhat/rang/man.mjs"'
+    lsml_pham_vi: "node _acceptance/lich-su-moi-lan-cap-nhat/rang/pham-vi.mjs"
+    lsml_ky_xanh: "node _acceptance/lich-su-moi-lan-cap-nhat/rang/ky-xanh.mjs"
     ttts_do_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-thai-tin-hieu-song/rang/do-man.mjs"'
     ttp_quet: bun _acceptance/truong-tep/rang/quet-kieu.mjs
     ttp_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tep/rang/do-man.mjs"'

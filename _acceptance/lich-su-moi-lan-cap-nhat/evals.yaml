@@ -1,0 +1,237 @@
+schema_version: 1
+slug: lich-su-moi-lan-cap-nhat
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lsml_api
+    paths:
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/src/okr/okr-xem.contracts.ts"
+      - "apps/api/src/okr/okr.router.ts"
+      - "apps/api/src/okr/dien-bien.ts"
+      - "apps/api/test/lich-su-moi-lan-cap-nhat.spec.ts"
+    expected: |
+      Ca «lsml-lan» trên CSDL thử: dựng một bộ có tám KR công bố qua đường ghi thật (dịch vụ OKR, lần cập nhật qua
+      okr.guiCapNhat với đồng hồ ghim theo giờ Việt Nam), mỗi KR một ca của Trục A (thêm ca hai lần cùng phút: hai
+      lần ghim cùng một giây) — viết trước thành ma trận tám dòng = tám assert. Gọi okr.lichSuKr qua router caller thật, parse bằng lichSuKrOutput. Với mỗi KR: (a) số phần tử của lan bằng
+      số dòng OkrCheckIn của KR đếm bằng SQL; (b) checkInId theo thứ tự đọc từ SQL bằng ORDER BY coalesce(giờ nộp
+      của phiên, createdAt), id (đọc độc lập, không gọi hàm của mã đang xét) — ca cùng phút xác nhận khoá phụ id; (c) luc
+      bằng coalesce(giờ nộp của phiên, createdAt) từ SQL, ngay bằng ngày Việt Nam của luc tính bằng AT TIME ZONE trong SQL,
+      tuan, giaTri, tuTin, ghiChu đúng giá trị SQL theo luật AC-1 (KR mốc giaTri null, ghi chú rỗng thì null). Ca hai lần cùng tuần: lan có 2 phần tử cùng tuan — đối chứng dương: okr.dienBien
+      trên cùng KR có đúng 1 điểm có giá trị ở tuần đó. In «lsml-lan: 8/8».
+      CHIEU DO (bản sao): lichSuKr lọc lan bằng cuoiTrongTuan → đỏ «lsml-lan: hai-lan-cung-tuan 1 lan can 2».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.lsml_chuoi
+    paths:
+      - "apps/api/src/okr/dien-bien.ts"
+      - "apps/api/test/lich-su-moi-lan-cap-nhat.spec.ts"
+    expected: |
+      Ca «lsml-chuoi» thuần trên hàm chuoiMoiLan: ma trận viết trước sáu ca (kỳ 6 tuần; không lần · một lần · ba lần một
+      tuần · tuần trống giữa hai tuần có lần · KR mốc · tuần sau hôm nay). Mỗi ca so chuoi với mảng kỳ vọng viết tay đầy
+      đủ (ngay, checkInId, giaTri, kyVong) — số điểm = số lần + số tuần không có lần; kyVong của mỗi điểm bằng kyVong của
+      tuần chứa nó; thứ tự tăng theo thời gian. In «lsml-chuoi: 6/6».
+      CHIEU DO (bản sao): gom điểm theo tuần → đỏ «lsml-chuoi: ba-lan-mot-tuan 1 diem can 3».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lsml_quyen
+    paths:
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/test/lich-su-moi-lan-cap-nhat.spec.ts"
+    expected: |
+      Ca «lsml-quyen»: người ngoài phạm vi xem mục tiêu gọi okr.lichSuKr và okr.dienBien trên cùng KR — cả hai trả cùng mã
+      lỗi không tìm thấy, thông điệp giống nhau; đối chứng dương: người xem được gọi cùng KR thì lichSuKr trả lan khác rỗng.
+      In «lsml-quyen: 2/2».
+      CHIEU DO (bản sao): bỏ điều kiện dieuKienXemMucTieu trong lichSuKr → đỏ «lsml-quyen: nguoi ngoai doc duoc».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.lsml_danh_sach
+    paths:
+      - "apps/app/components/crm/record-sheet/lich-su-kr.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/lich-su-moi-lan-cap-nhat.dom.tsx"
+    expected: |
+      Ca «lsml-danh-sach» DOM: mồi okr.lichSuKr bằng lichSuKrOutput.parse (dữ liệu sinh từ chuoiMoiLan và một danh sách
+      lần viết trước: chín lần trong sáu tuần, một tuần ba lần, hai lần cùng ngày). Mở chi tiết KR bằng RecordSheetHost.
+      Mục Lịch sử có đúng chín [data-lan-cap-nhat]; thứ tự data-lan-cap-nhat bằng checkInId mới nhất trước; mỗi dòng có
+      nhãn ngày giờ đúng chuỗi kỳ vọng viết tay (giờ Việt Nam), giá trị theo đơn vị KR, mức tự tin và ghi chú của chính
+      lần đó; hai lần cùng ngày là hai dòng với hai giờ khác nhau. In «lsml-danh-sach: 9/9».
+      CHIEU DO (bản sao): danh sách gom theo tuan → đỏ «lsml-danh-sach: 6 dong can 9».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.lsml_bieu_do
+    paths:
+      - "apps/app/components/crm/record-sheet/lich-su-kr.tsx"
+      - "apps/app/lib/messages/okr-toan-canh.ts"
+      - "packages/ui/src/components/target-line-chart.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "apps/app/test/lich-su-moi-lan-cap-nhat.dom.tsx"
+    expected: |
+      Ca «lsml-bieu-do» DOM với khung đồ thị có kích thước (ResizeObserver và getBoundingClientRect giả như VK7): số chấm
+      của đường giá trị = 9 = số lần có giá trị; nhãn trục X lần lượt bằng dd/mm ngày gửi của từng lần (viết trước);
+      đường kỳ vọng và vạch đích có mặt; aria-label của biểu đồ chứa chữ «qua từng lần cập nhật» và không chứa «theo
+      tuần»; figcaption và đầu cột thứ nhất của bảng sr-only không chứa «tuần»/«Tuần» mà chứa «lần cập nhật»; console.error
+      không nhận lời báo trùng khoá nào khi dữ liệu có hai lần cùng ngày (đối chứng dương: TargetLineChart nhịp tuần với
+      cùng dữ liệu vẫn nói «tuần»). Đối chứng dương: cùng dữ liệu dựng bằng chuỗi theo tuần của okr.dienBien cho 6 chấm. In «lsml-bieu-do: 6/6».
+      CHIEU DO (bản sao): biểu đồ đọc d.diem theo tuần → đỏ «lsml-bieu-do: 6 cham can 9».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.lsml_sau_gui
+    paths:
+      - "apps/app/components/crm/record-sheet/lich-su-kr.tsx"
+      - "apps/app/lib/trpc/cache.ts"
+      - "apps/app/test/lich-su-moi-lan-cap-nhat.dom.tsx"
+    expected: |
+      Ca «lsml-sau-gui» DOM: kho giả thêm một lần vào danh sách mỗi khi okr.guiCapNhat được gọi. Mở chi tiết KR, đếm dòng
+      và chấm; gửi hai lần liên tiếp trong cùng tuần từ «Cập nhật» đầu ngăn; sau mỗi lần số [data-lan-cap-nhat] tăng đúng
+      1, dòng đầu là lần vừa gửi, số chấm tăng đúng 1; okr.lichSuKr được đọc lại sau mỗi lần; router giả ghi 0 lần điều
+      hướng — đối chứng dương: nút thử gọi router.push làm bộ đếm thành 1. In «lsml-sau-gui: 3/3».
+      CHIEU DO (bản sao): bỏ làm mới okr.lichSuKr trong cache.okr → đỏ «lsml-sau-gui: dong khong tang sau lan 1».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.lsml_trang_thai
+    paths:
+      - "apps/app/components/crm/record-sheet/lich-su-kr.tsx"
+      - "apps/app/test/lich-su-moi-lan-cap-nhat.dom.tsx"
+    expected: |
+      Ca «lsml-trang-thai» DOM, bốn ô viết trước: KR mốc → dòng có mức tự tin và ghi chú, không [data-gia-tri-lan], không
+      biểu đồ; chưa lần nào → chữ «Chưa có lần cập nhật nào», không biểu đồ; lichSuKr treo → khung xương trong mục Lịch
+      sử; lichSuKr lỗi → vùng lỗi có nút «Thử lại», bấm thì số lần đọc okr.lichSuKr tăng 1. Ở cả bốn ô, mục «Số» của ngăn
+      vẫn dựng (đối chứng dương). Ô thứ năm: 30 lần → đúng 30 [data-lan-cap-nhat]. In «lsml-trang-thai: 5/5».
+      CHIEU DO (bản sao): bỏ nhánh lỗi → đỏ «lsml-trang-thai: loi khong co Thu lai».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.lsml_cam_xuc
+    paths:
+      - "apps/app/components/crm/record-sheet/lich-su-kr.tsx"
+      - "apps/app/lib/trpc/cache.ts"
+      - "apps/app/test/lich-su-moi-lan-cap-nhat.dom.tsx"
+    expected: |
+      Ca «lsml-cam-xuc» DOM: hai lần cùng tuần L1, L2. Thả cảm xúc trên dòng L1: lời gọi okr.thaCamXuc mang checkInId của
+      L1 (không phải L2); sau khi thả, okr.lichSuKr được đọc lại và dòng L1 hiện số mới, dòng L2 giữ nguyên. Đối chứng
+      dương: thả trên L2 thì lời gọi mang checkInId của L2. In «lsml-cam-xuc: 2/2».
+      CHIEU DO (bản sao): HangCamXuc nhận checkInId của dòng đầu tuần → đỏ «lsml-cam-xuc: tha L1 gan L2».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lsml_cam_xuc_api
+    paths:
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/test/lich-su-moi-lan-cap-nhat.spec.ts"
+    expected: |
+      Ca «lsml-cam-xuc-api» trên CSDL thử: KR có hai lần cùng tuần L1, L2 gửi qua okr.guiCapNhat. Một thành viên khác thả
+      cảm xúc «A» trên L1 qua router caller thật okr.thaCamXuc; gọi okr.lichSuKr: camXuc của phần tử L1 khớp bảng cảm xúc
+      đếm bằng SQL theo checkInId của L1 (A = 1), camXuc của L2 rỗng — đối chứng dương: trước khi thả, cả hai rỗng; thả «B»
+      trên L2 thì chỉ L2 đổi. In «lsml-cam-xuc-api: 3/3».
+      CHIEU DO (bản sao): lichSuKr gắn camXuc của lần cuối tuần cho mọi lần → đỏ «lsml-cam-xuc-api: L2 mang cam xuc cua L1».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lsml_dien_bien_giu
+    paths:
+      - "apps/api/src/okr/dien-bien.ts"
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/test/lich-su-moi-lan-cap-nhat.spec.ts"
+    expected: |
+      Ca «lsml-dien-bien-giu»: trên cùng tám KR của E1, okr.dienBien parse bằng dienBienOutput; kỳ vọng tính độc lập trong
+      bài bằng SQL (với mỗi tuần của kỳ tới hôm nay, lần cuối theo coalesce(giờ nộp, createdAt), id của tuần ấy — không gọi
+      dienBienKr hay chuoiMoiLan): số điểm = số tuần của kỳ; checkInId, giaTri, tuTin, ghiChu của mỗi điểm bằng lần cuối
+      ấy; điểm của tuần hai lần mang lần thứ hai, KHÁC lần thứ nhất (đối chứng dương trong cùng ca: assert hai lần khác
+      giá trị trước khi so). In «lsml-dien-bien-giu: 8/8».
+      CHIEU DO (bản sao): dienBienKr dùng chuoiMoiLan → đỏ «lsml-dien-bien-giu: hai-lan-cung-tuan lech ban chup».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.lsml_man
+    steps:
+      - "Phiên đo riêng qua mot-luot.sh (tien-de.mjs dựng api và app của CÂY ĐANG XÉT trên cổng tự do, kho crm_<cây>_do); không dùng cổng 3000/3001"
+      - "Bàn đo gieo bộ OKR mẫu (okr:mau); đăng nhập người phụ trách một KR tăng tới của phòng ban có dữ liệu"
+      - "Khổ 1440 rồi 375, sáng rồi tối: mở chi tiết KR bằng URL record, chờ mục Lịch sử; đếm [data-lan-cap-nhat], chấm của đường giá trị, OkrCheckIn của KR bằng SQL; chụp lsml-truoc-<kho>-<sang|toi>.png"
+      - "Gửi hai lần cập nhật liên tiếp từ «Cập nhật» đầu ngăn (giá trị khác nhau); sau mỗi lần chờ dòng mới ở đầu; đếm lại; chụp lsml-sau-<kho>-<sang|toi>.png"
+      - "Đo: dòng tăng 2, chấm tăng 2, OkrCheckIn tăng 2, hai dòng đầu có hai data-lan-cap-nhat khác nhau bằng hai id OkrCheckIn mới nhất đọc từ SQL, dòng đầu mang giá trị lần hai, dòng hai mang giá trị lần một; đối chứng dương: trước khi gửi, số dòng = số OkrCheckIn"
+      - "Đọc dòng KET LUAN cuối: mã 0 = mọi dòng DUNG; mã 1 = có dòng SAI; mã 2 = không đo được"
+      - "Mở tám ảnh và đối chiếu bằng mắt với Expected"
+    inputs:
+      - _acceptance/lich-su-moi-lan-cap-nhat/evidence/
+    paths:
+      - "apps/app/components/crm/record-sheet/lich-su-kr.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "_acceptance/lich-su-moi-lan-cap-nhat/rang/man.mjs"
+    expected: |
+      Tám ảnh. Ảnh sau gửi: hai dòng mới ở đầu Lịch sử mang nhãn ngày giờ gửi, giá trị lần hai trên lần một; biểu đồ
+      thêm hai chấm ở cuối đường giá trị. 375 là drawer, danh sách đọc trọn, không tràn ngang. Sáng và tối: chữ, chấm,
+      viền không chìm vào nền. Bàn đo in DUNG cho dòng +2, chấm +2, OkrCheckIn +2, thứ tự hai dòng đầu, đối chứng dương
+      — ở cả hai khổ. Thiếu ảnh nào → không đạt.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot, observed]
+
+  - id: E13
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.lsml_ky_xanh
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/trpc/cache.ts"
+      - "apps/api/src/okr/okr-xem.contracts.ts"
+    expected: |
+      ky-xanh.mjs chạy riêng từng tệp, mỗi tệp một tiến trình bun test (preload setup-dom, TZ Việt Nam), năm tệp viết
+      trước: okr-sheet.dom.tsx, moi-kr-ca-cong-ty.dom.tsx, hop-tuan-tren-bang.dom.tsx, hop-cap-nhat-lan-truoc.dom.tsx,
+      cap-nhat-gan-day.dom.tsx. Tệp đỏ trên cây thì chạy lại trên worktree tạm của merge-base với origin/onehub: nền xanh
+      mà cây đỏ → «SAI AC-10: KY DO <tệp>», mã 1; nền cũng đỏ → «DO SAN TREN NEN <tệp>». In «ky xanh: <k>/5». Đối chứng
+      dương: danh sách viết trước đúng bằng tập tệp đã ký mồi okr.dienBien trừ hai tệp của Hỏi-1 (lệnh grep trong script
+      in tập ấy; lệch → mã 2 «danh sach lech»).
+      CHIEU DO (bản sao): lich-su-kr.tsx đọc .lan của dữ liệu null không kiểm → đỏ «SAI AC-10: KY DO hop-tuan-tren-bang.dom.tsx».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.lsml_pham_vi
+    paths:
+      - "_acceptance/*/rang/**"
+      - "apps/app/test/**"
+      - "apps/api/test/**"
+    expected: |
+      pham-vi.mjs lấy git diff --name-only <merge-base với origin/onehub>...HEAD, rút tập tệp thước và bài kiểm của hồ sơ
+      signed-off hay machine-cleared (tệp trong lệnh eval đã giải qua config, kể cả mã cùng thư mục rang, và mọi tệp dưới
+      _acceptance/<hồ sơ đã ký>/rang). Mỗi tệp trong giao của hai tập mà không thuộc danh sách cho phép của Hỏi-1 → «SAI
+      AC-10: SUA THUOC DA KY <tệp>», mã 1. Tệp thuộc danh sách cho phép mà sổ _acceptance/ngan-kr-mot-cho/decisions.jsonl
+      không có dòng decided_by nhắc «Ngoài-1» và «lich-su-moi-lan-cap-nhat» → «SAI AC-10: THIEU DONG SO NGAN-KR-MOT-CHO»,
+      mã 1. In «pham vi: <n> tep thuoc da ky, <k> bi sua». Mã 0 khi sạch.
+      CHIEU DO (bản sao HEAD): thêm một dòng cuối _acceptance/hop-tuan-tren-bang/rang/man.mjs → «SAI AC-10: SUA THUOC DA
+      KY _acceptance/hop-tuan-tren-bang/rang/man.mjs», mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

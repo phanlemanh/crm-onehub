@@ -11,6 +11,26 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "lich-su-moi-lan-cap-nhat",
+		ten: "Lịch sử KR hiện mọi lần cập nhật — mỗi lần một dòng có giờ, biểu đồ mỗi lần một điểm",
+		states: [
+			{
+				id: "ST-lsk-nhieu-lan",
+				nhan: "KR tăng tới — 9 lần trong 6 tuần, tuần 05/10 có 3 lần",
+			},
+			{ id: "ST-lsk-cung-ngay", nhan: "Hai lần cùng ngày, khác giờ" },
+			{ id: "ST-lsk-moc", nhan: "KR mốc — không số, không biểu đồ" },
+			{ id: "ST-lsk-rong", nhan: "Chưa có lần cập nhật nào" },
+			{ id: "ST-lsk-dang-tai", nhan: "Lịch sử đang tải — khung xương" },
+			{ id: "ST-lsk-loi", nhan: "Lịch sử lỗi tải — vùng lỗi và Thử lại" },
+			{ id: "ST-lsk-dai", nhan: "30 lần trong kỳ — danh sách cuộn trong ngăn" },
+			{
+				id: "ST-lsk-hom-nay",
+				nhan: "Hôm nay — gom theo tuần, cùng dữ liệu với nhiều lần",
+			},
+		],
+	},
+	{
 		slug: "hop-tuan-tren-bang",
 		ten: "Họp tuần trên bảng — ghi chú mới nhất và mức đổi ở mọi khổ, Cập nhật từ dòng, ‹ › theo thứ tự đáng bàn",
 		states: [
