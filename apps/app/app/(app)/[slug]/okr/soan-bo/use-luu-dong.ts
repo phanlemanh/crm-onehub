@@ -89,7 +89,9 @@ export function useLuuDong(cauLoi: (loi: Error) => string): LuuDong {
 			({ id }) => {
 				ghiHang(khoa, { ...layHang(khoa), id });
 				datIds((cu) => new Map(cu).set(khoa, id));
-				datTrangThai(khoa, YEN);
+				datTrang((cu) =>
+					cu.get(khoa)?.loai === "chua-luu" ? cu : new Map(cu).set(khoa, YEN),
+				);
 				tiep(khoa);
 			},
 			(loi) => {

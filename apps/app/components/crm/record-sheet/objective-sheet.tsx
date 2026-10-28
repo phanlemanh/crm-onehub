@@ -534,12 +534,14 @@ function KhuGopVao({ mt }: { mt: ChiTiet }) {
 	);
 }
 
-function useNeoChipGopY(objectiveId: string) {
+function useNeoChipGopY(mt: ChiTiet) {
+	const objectiveId = mt.id;
 	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
 	const [, setNeoKr] = useQueryState(SEARCH_PARAM.okr.neoGopYKr, parseAsString);
 	const khoKhung = useContext(CuonCaKhungContext);
+	const chip = useChipKhung(mt).hien;
 	useEffect(() => {
-		if (!neo || khoKhung === "chua-biet") return;
+		if (!neo || khoKhung === "chua-biet" || chip === "chua-biet") return;
 		const giam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 		const chip = document.querySelector<HTMLElement>(
 			`[data-okr-sheet="${CSS.escape(objectiveId)}"] [data-chip-gop-y]`,
@@ -553,7 +555,7 @@ function useNeoChipGopY(objectiveId: string) {
 		}
 		void setNeo(null);
 		void setNeoKr(null);
-	}, [neo, khoKhung, objectiveId, setNeo, setNeoKr]);
+	}, [neo, khoKhung, chip, objectiveId, setNeo, setNeoKr]);
 }
 
 function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
@@ -580,7 +582,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const diemKara: DiemCam = {
 		sauTenKr: (kr) => (theoKara.has(kr.id) ? <KaraTrace /> : null),
 	};
-	useNeoChipGopY(mt.id);
+	useNeoChipGopY(mt);
 
 	return (
 		<DetailSheetBody>
@@ -824,10 +826,19 @@ function SoMucTieu({ mt }: { mt: ChiTiet }) {
 	);
 }
 
-function ChipKhung({ mt }: { mt: ChiTiet }) {
+function useChipKhung(mt: ChiTiet) {
 	const donChon = donCuaMucTieu(mt);
 	const quyen = useQuyenSoanBo(mt.cycleId, mt.soGopYCho > 0 ? donChon : null);
-	if (donChon === null || quyen?.loai !== "soan") return null;
+	if (mt.soGopYCho === 0 || donChon === null) return { hien: "an" as const };
+	if (quyen === null) return { hien: "chua-biet" as const };
+	if (quyen.loai !== "soan") return { hien: "an" as const };
+	return { hien: "co" as const, donChon };
+}
+
+function ChipKhung({ mt }: { mt: ChiTiet }) {
+	const chip = useChipKhung(mt);
+	if (chip.hien !== "co") return null;
+	const { donChon } = chip;
 	return (
 		<ChipGopYKhung
 			mt={{

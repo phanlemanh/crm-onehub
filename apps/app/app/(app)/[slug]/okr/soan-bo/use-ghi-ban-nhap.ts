@@ -232,47 +232,68 @@ export function useGhiBanNhap(
 	const datTenDaGui = (id: string, ten: string | null) =>
 		datDaGui(tenDaGui, id, ten);
 
-	const luuTenCo = (mt: MucTieuSoan, ten: string) => {
-		const title = ten.trim();
-		if (title.length < SOAN_BO.tenToiThieu) {
+	const tenMuon = useRef<ReadonlyMap<string, string>>(new Map());
+	const viSaoMuon = useRef<ReadonlyMap<string, string>>(new Map());
+
+	const doiMucTieuCo = (mt: MucTieuSoan) => {
+		const title = (tenMuon.current.get(mt.id) ?? mt.title).trim();
+		const whyNow = (viSaoMuon.current.get(mt.id) ?? mt.whyNow).trim();
+		const tenTruoc = tenDaGui.current.get(mt.id) ?? mt.title;
+		const viSaoTruoc = viSaoDaGui.current.get(mt.id) ?? mt.whyNow;
+		return {
+			...(title.length >= SOAN_BO.tenToiThieu && title !== tenTruoc
+				? { title }
+				: {}),
+			...(whyNow !== viSaoTruoc ? { whyNow } : {}),
+		};
+	};
+
+	const dongBoMucTieuCo = (mt: MucTieuSoan) => {
+		const ten = (tenMuon.current.get(mt.id) ?? mt.title).trim();
+		if (ten.length < SOAN_BO.tenToiThieu) {
 			luuDong.chuaLuu(mt.id, "thieu-ten");
 			return;
 		}
 		luuDong.chuaLuu(mt.id, null);
-		if ((tenDaGui.current.get(mt.id) ?? mt.title) === title) return;
+		if (Object.keys(doiMucTieuCo(mt)).length === 0) return;
 		luuDong.luu(mt.id, async () => {
-			const truoc = tenDaGui.current.get(mt.id) ?? null;
-			if ((truoc ?? mt.title) === title) return { id: mt.id };
-			datTenDaGui(mt.id, title);
+			const doi = doiMucTieuCo(mt);
+			if (Object.keys(doi).length === 0) return { id: mt.id };
+			const tenTruoc = tenDaGui.current.get(mt.id) ?? null;
+			const viSaoTruoc = viSaoDaGui.current.get(mt.id) ?? null;
+			if (doi.title !== undefined) datTenDaGui(mt.id, doi.title);
+			if (doi.whyNow !== undefined) datDaGui(viSaoDaGui, mt.id, doi.whyNow);
 			try {
-				const kq = await suaMt.mutateAsync({ id: mt.id, title });
+				const kq = await suaMt.mutateAsync({ id: mt.id, ...doi });
 				void cache.okr(mt.id);
 				return kq;
 			} catch (loi) {
-				datTenDaGui(mt.id, truoc);
-				sauLoi(() => datBanNhap((bn) => suaTenCo(bn, mt.id, "")));
+				if (doi.title !== undefined) datTenDaGui(mt.id, tenTruoc);
+				if (doi.whyNow !== undefined) datDaGui(viSaoDaGui, mt.id, viSaoTruoc);
+				sauLoi(() => {
+					if (doi.title !== undefined) datDaGui(tenMuon, mt.id, null);
+					if (doi.whyNow !== undefined) datDaGui(viSaoMuon, mt.id, null);
+					datBanNhap((bn) => {
+						const boTen =
+							doi.title !== undefined ? suaTenCo(bn, mt.id, "") : bn;
+						return doi.whyNow !== undefined
+							? suaViSaoCo(boTen, mt.id, "")
+							: boTen;
+					});
+				});
 				throw loi;
 			}
 		});
 	};
 
+	const luuTenCo = (mt: MucTieuSoan, ten: string) => {
+		datDaGui(tenMuon, mt.id, ten);
+		dongBoMucTieuCo(mt);
+	};
+
 	const luuViSaoCo = (mt: MucTieuSoan, viSao: string) => {
-		const whyNow = viSao.trim();
-		if ((viSaoDaGui.current.get(mt.id) ?? mt.whyNow) === whyNow) return;
-		luuDong.luu(mt.id, async () => {
-			const truoc = viSaoDaGui.current.get(mt.id) ?? null;
-			if ((truoc ?? mt.whyNow) === whyNow) return { id: mt.id };
-			datDaGui(viSaoDaGui, mt.id, whyNow);
-			try {
-				const kq = await suaMt.mutateAsync({ id: mt.id, whyNow });
-				void cache.okr(mt.id);
-				return kq;
-			} catch (loi) {
-				datDaGui(viSaoDaGui, mt.id, truoc);
-				sauLoi(() => datBanNhap((bn) => suaViSaoCo(bn, mt.id, "")));
-				throw loi;
-			}
-		});
+		datDaGui(viSaoMuon, mt.id, viSao);
+		dongBoMucTieuCo(mt);
 	};
 
 	const datKrDaGui = (id: string, gia: GiaKr | null) => {

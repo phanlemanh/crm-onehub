@@ -1388,6 +1388,75 @@ describe("vk10-sua", () => {
 	});
 });
 
+const oViSaoMt = (id: string) =>
+	q(`[data-dong-mt="${id}"] textarea[aria-label="${CHU.taiLieu.viSao}"]`);
+const luuMt = (id: string) =>
+	q(`[data-dong-mt="${id}"]`)?.getAttribute("data-luu") ?? null;
+
+describe("vk10-mt-hai-truong", () => {
+	test("vk10-mt-hai-truong: luu ten loi roi luu vi sao — dong van bao loi, goi lai ca ten", async () => {
+		const sai = "vk10-mt-hai-truong: loi ten bi xoa";
+		await moBoSua();
+		dat("okr.updateObjective", (vao) => {
+			if (vao?.title !== undefined) throw loiMayChu("Tên mục tiêu bị từ chối.");
+			return { id: idCua(vao) ?? "", canhBao: null };
+		});
+		await sua(oTenMt("mt-nhap"), "Tăng doanh thu bị từ chối");
+		await focusVao(oTenMt("mt-cong-bo"));
+		await choLuuXong(sai);
+		expect(luuMt("mt-nhap"), sai).toBe("loi");
+		await sua(oViSaoMt("mt-nhap"), "Vì thị trường đang mở");
+		await focusVao(oTenMt("mt-cong-bo"));
+		await choLuuXong(sai);
+		const lan = goiCua("okr.updateObjective");
+		expect(lan.at(-1)?.dauVao?.title, sai).toBe("Tăng doanh thu bị từ chối");
+		expect(lan.at(-1)?.dauVao?.whyNow, sai).toBe("Vì thị trường đang mở");
+		expect(luuMt("mt-nhap"), sai).toBe("loi");
+	});
+
+	test("vk10-mt-hai-truong: ten ngan roi luu vi sao — dong giu chua luu, khong goi", async () => {
+		const sai = "vk10-mt-hai-truong: thieu ten bi xoa";
+		await moBoSua();
+		await sua(oTenMt("mt-nhap"), "T");
+		await focusVao(oTenMt("mt-cong-bo"));
+		await nhip(5);
+		expect(luuMt("mt-nhap"), sai).toBe("chua-luu");
+		await sua(oViSaoMt("mt-nhap"), "Vì thị trường đang mở");
+		await focusVao(oTenMt("mt-cong-bo"));
+		await choLuuXong(sai);
+		expect(luuMt("mt-nhap"), sai).toBe("chua-luu");
+		expect(goiCua("okr.updateObjective").length, sai).toBe(0);
+	});
+
+	test("vk10-mt-hai-truong: luu ten dang chay, vi sao cho, sua ten lan nua — whyNow van duoc gui", async () => {
+		const sai = "vk10-mt-hai-truong: vi sao cho bi de";
+		await moBoSua();
+		let mo: () => void = () => {};
+		const cong = new Promise<void>((xong) => {
+			mo = xong;
+		});
+		dat("okr.updateObjective", async (vao) => {
+			if (goiCua("okr.updateObjective").length === 1) await cong;
+			return { id: idCua(vao) ?? "", canhBao: null };
+		});
+		await sua(oTenMt("mt-nhap"), "Tăng doanh thu lần một");
+		await focusVao(oViSaoMt("mt-nhap"));
+		await go(oViSaoMt("mt-nhap"), "Vì thị trường đang mở");
+		await focusVao(oTenMt("mt-nhap"));
+		await go(oTenMt("mt-nhap"), "Tăng doanh thu lần hai");
+		await focusVao(oTenMt("mt-cong-bo"));
+		await act(async () => mo());
+		await choLuuXong(sai);
+		const lan = goiCua("okr.updateObjective");
+		expect(
+			lan.some((g) => g.dauVao?.whyNow === "Vì thị trường đang mở"),
+			sai,
+		).toBe(true);
+		expect(lan.at(-1)?.dauVao?.title, sai).toBe("Tăng doanh thu lần hai");
+		expect(luuMt("mt-nhap"), sai).toBe("yen");
+	});
+});
+
 describe("vk10-sua-do", () => {
 	test("vk10-sua-do: bo khoa so cong bo thi o5 do", async () => {
 		await moBoSua({ khoaSoCongBo: false });
