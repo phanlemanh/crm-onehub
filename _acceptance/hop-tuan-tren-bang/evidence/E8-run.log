@@ -1,11 +1,10 @@
-mot-luot: da cho 30s de toi luot
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
 phien-do: chờ phiên khác của cây này (crm_ht2_hop_tuan_tren_bang_do) dọn xong
-phien-do: kho crm_ht2_hop_tuan_tren_bang_do · app http://localhost:4834 · api http://localhost:4103
+phien-do: kho crm_ht2_hop_tuan_tren_bang_do · app http://localhost:4663 · api http://localhost:4369
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
-ban do: http://localhost:4834
+ban do: http://localhost:4663
 nap bo OKR mau + ca hop-tuan: ma 0 — }
 $ bun scripts/dev-session.ts vu-thu-ha@mau.onehub.test
 gieo them qua okr.guiCapNhat (truong P): KR mau-okr-kr-q4-cham-soc-1-k1 lan thu hai tuan 2026-10-26 (4.7 → 5, tu tin cao, ghi chu 195 ky tu)

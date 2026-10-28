@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: hop-tuan-tren-bang
-verdict: REJECT
-failed_evals: ["E10"]
+verdict: PASS
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 881935b36099143cc4711d285fc5f6542dee9004
+verified_commit: 2da26f0da9bd8cfe3c56a0050e7ca85c7c72dc0b
 human_signoff:
 ---
 
 # Evidence Report: hop-tuan-tren-bang
-
-Round 1. Một eval không đạt: E10 (AC-10, thước quét lớp «không đổi hình»). Mười eval còn lại và bảy lệnh suite đều xanh.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -26,7 +24,7 @@ Round 1. Một eval không đạt: E10 (AC-10, thước quét lớp «không đ�
 | E7 | AC-7 | test | PASS |
 | E8 | AC-8 | ui-check | PASS |
 | E9 | AC-9 | test | PASS |
-| E10 | AC-10 | script | FAIL |
+| E10 | AC-10 | script | PASS |
 | E11 | AC-4 | script | PASS |
 
 ## Evidence
@@ -36,29 +34,29 @@ Round 1. Một eval không đạt: E10 (AC-10, thước quét lớp «không đ�
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.httb_api
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/hop-tuan-tren-bang.spec.ts -t htb-muc-doi"
-    test-run: dropped crm_mvruh8p43pke_test
+    bun run test -- "cd apps/api && bun test test/hop-tuan-tren-bang.spec.ts -t htb-muc-doi"
+    test-run: dropped crm_mvrw1f5or3zi_test
 
 - eval: E2
   run_id: minted-hop-tuan-tren-bang-E2-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.httb_ghi_chu
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-ghi-chu
-    Ran 1 test across 1 file. [1.79s]
+    cd apps/app && bun test ./test/hop-tuan-tren-bang.dom.tsx -t htb-ghi-chu
+    Ran 1 test across 1 file. [1.93s]
 
 - eval: E3
   run_id: minted-hop-tuan-tren-bang-E3-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.httb_muc_doi_chu
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-muc-doi-chu
+    cd apps/app && bun test ./test/hop-tuan-tren-bang.dom.tsx -t htb-muc-doi-chu
     Ran 1 test across 1 file. [1.70s]
 
 - eval: E4
@@ -66,29 +64,30 @@ Round 1. Một eval không đạt: E10 (AC-10, thước quét lớp «không đ�
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.httb_cap_nhat
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-cap-nhat
-    Ran 1 test across 1 file. [1.78s]
+    cd apps/app && bun test ./test/hop-tuan-tren-bang.dom.tsx -t htb-cap-nhat
+    Ran 1 test across 1 file. [2.01s]
 
 - eval: E5
   run_id: minted-hop-tuan-tren-bang-E5-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.httb_sang
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-sang
-    Ran 1 test across 1 file. [2.95s]
+    cd apps/app && bun test ./test/hop-tuan-tren-bang.dom.tsx -t htb-sang
+    Ran 1 test across 1 file. [3.49s]
 
 - eval: E6
   run_id: minted-hop-tuan-tren-bang-E6-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.httb_nguon
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-nguon && cd ../.. && bun _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs
+    cd apps/app && bun test ./test/hop-tuan-tren-bang.dom.tsx -t htb-nguon
+    bun _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs
     DUNG
 
 - eval: E7
@@ -96,65 +95,62 @@ Round 1. Một eval không đạt: E10 (AC-10, thước quét lớp «không đ�
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.httb_sau_gui
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-sau-gui
-    Ran 1 test across 1 file. [1436.00ms]
+    cd apps/app && bun test ./test/hop-tuan-tren-bang.dom.tsx -t htb-sau-gui
+    Ran 1 test across 1 file. [2.10s]
 
 - eval: E8
-  run_id: E8-ht2-hop-tuan-tren-bang
+  run_id: minted-hop-tuan-tren-bang-E8-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.httb_man
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   screenshot: evidence/htb-bang-1440-sang.png
   observed: |
-    Đã mở cả 12 ảnh bằng Read. 1440 sáng/tối (bảng): hàng số đầu (Đã cập nhật 4/5, Đang bàn 2, Tự tin thấp 1, Ngày còn lại 54); Đang bàn 2 dòng và Còn lại 3 dòng, bảng NĂM cột (KR và vì sao đang bàn, Tiến độ, Ghi chú mới nhất, Mức đổi, nút Cập nhật); mỗi dòng có ghi chú «…» kèm ngày (28/10, 05/10) hoặc «Chưa có ghi chú», ô mức đổi hai dòng (vd «+0,3 điểm / 4,7 → 5 · so với 19/10»), nút «Cập nhật» đọc trọn, nằm trong khung. Ngăn 1440: đầu ngăn «Giữ điểm hài lòng trên 4,5», «2/5 · theo thứ tự bảng», hai nút ‹ ›, nút Cập nhật xanh, nút đóng.
-    768 sáng/tối: tên KR + nút Cập nhật trên cùng, bên dưới tên KR là nhãn «Ghi chú mới nhất» với ghi chú và «Mức đổi» hai dòng; cột Tiến độ còn, ghi chú/mức đổi chuyển xuống dưới tên KR; không tràn. Ngăn 768: «2/5 · theo thứ tự bảng», ‹ ›, Cập nhật.
-    375 sáng/tối: danh sách thẻ một cột, mỗi thẻ có tên KR, tiến độ, ghi chú (hoặc Chưa có ghi chú) kèm ngày, Mức đổi hai dòng, nút Cập nhật nằm trong thẻ, không tràn ngang (thanh điều hướng khu cuộn ngang trong chính nó). Ngăn 375 (dạng ngăn dưới): «2/5 · theo thứ tự bảng», hai nút ‹ ›, nút Cập nhật, nút đóng đều thấy rõ.
-    Chế độ tối: tên KR, ghi chú, mức đổi, viền thẻ/bảng, đường biểu đồ đều đọc rõ, không chìm vào nền; chế độ sáng tương tự. Không có ảnh nào mâu thuẫn Expected.
+    Đã mở và đọc cả 12 ảnh vừa chụp (ghi lúc 16:05–16:06).
+    1440 sáng (htb-bang): đầu trang Mục tiêu, tab Họp tuần đang chọn, ô chọn đơn vị Chăm sóc đối tác; hàng số 4/5, 2, 1, 54. «Đang bàn tuần này 2» và «Còn lại 3 KR — không có gì mới» đã mở. Bảng năm cột: KR và vì sao, Tiến độ, Ghi chú mới nhất, Mức đổi, nút «Cập nhật» nằm trọn trong khung ở mép phải. Cả 5 dòng có ghi chú hoặc «Chưa có ghi chú» (dòng có ghi chú dài hiện kèm ngày 28/10, dòng «Thiếu một người trực ca tối» kèm 05/10) và ô mức đổi hai dòng (ví dụ «+0,3 điểm» / «4,7 → 5 · so với 19/10»; «−0,9%» / «25,4 → 24,5 · so với 19/10»; «Chưa đổi» / «Chưa xong · so với 19/10»). Không chữ nào bị cắt.
+    1440 sáng (htb-ngan): ngăn bên phải KR «Giữ điểm hài lòng trên 4,5», đầu ngăn «2/5 · theo thứ tự bảng», hai nút ‹ ›, nút xanh «Cập nhật», nút đóng; thẻ Hiện tại 5 điểm, Tiến độ 100%, biểu đồ lịch sử và danh sách cập nhật.
+    1440 tối: cùng bố cục trên nền đen; tên KR, ghi chú, mức đổi chữ sáng, đường viền các ô và bảng vẫn nhìn rõ, không chìm vào nền; ngăn tối có «2/5 · theo thứ tự bảng», ‹ ›, Cập nhật, biểu đồ chấm trắng đọc được.
+    768 sáng (htb-bang): hàng số xếp 2×2; mỗi dòng KR có tên, tiến độ và nút Cập nhật bên phải; ghi chú mới nhất và mức đổi hai dòng nằm DƯỚI tên KR (nhãn «Ghi chú mới nhất», «Mức đổi»), đủ 5 dòng (Đang bàn 2, Còn lại 3), không tràn ngang, nút Cập nhật trong khung. 768 sáng (ngan): đầu ngăn «2/5 · theo thứ tự bảng», ‹ ›, Cập nhật đủ, tiêu đề KR hai dòng không đè nút.
+    768 tối: cùng bố cục, chữ và viền rõ trên nền tối; ngăn tối cũng đủ «2/5…», ‹ ›, Cập nhật.
+    375 sáng (htb-bang): dạng danh sách thẻ một cột; mỗi thẻ gồm tên KR, thanh tiến độ, nhãn tự tin, «Ghi chú mới nhất» (hoặc «Chưa có ghi chú» và ngày), «Mức đổi» hai dòng, nút «Cập nhật» trọn trong thẻ; không cuộn ngang. 375 sáng (ngan): ngăn dạng tấm trượt từ dưới, đầu ngăn «2/5 · theo thứ tự bảng», hai nút ‹ ›, nút Cập nhật (xuống dòng thứ hai của đầu ngăn nhưng đọc trọn).
+    375 tối: cùng thẻ trên nền đen, viền thẻ và chữ ghi chú/mức đổi rõ; ngăn tối có «2/5 · theo thứ tự bảng», ‹ ›, Cập nhật.
+    Không ảnh nào mâu thuẫn Expected. Ghi nhận phụ (ngoài phạm vi đo): lịch sử cập nhật trong ngăn cắt ghi chú dài bằng dấu «…» ở 768 và 375, không thuộc ghi chú/mức đổi/nhãn của bảng Họp tuần mà E8 đo.
   network_observed: n-a (driver)
   output: |
-    Lệnh chạy nguyên văn (config httb_man): bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-tuan-tren-bang/rang/man.mjs --phan anh"
-    phien-do: xong — mã 0. Dòng cuối: KET LUAN htb anh: 55 DUNG, 0 SAI.
-    Phiên đo riêng: kho crm_ht2_hop_tuan_tren_bang_do, app localhost:4834, api localhost:4103 (không dùng 3000/3001); phiên tự dọn khi xong.
-    Các mục DUNG ở cả ba khổ x sáng/tối: dòng, đếm dòng, đối chứng đếm, nút trong khung, không tràn, đối chứng tràn, không cắt chữ, đếm ngăn, ngăn kề.
-    Mười hai ảnh lưu ở _acceptance/hop-tuan-tren-bang/evidence/ (htb-bang-{1440,768,375}-{sang,toi}.png và htb-ngan-{1440,768,375}-{sang,toi}.png); nhật ký chạy E8-run.log.
-    Network: driver là script đo, không có đường đọc network/console, nên ghi n-a (driver).
+    Ảnh gốc ghi 16:05–16:06 ngày 28/10 tại _acceptance/hop-tuan-tren-bang/evidence/: htb-bang-{1440,768,375}-{sang,toi}.png và htb-ngan-{1440,768,375}-{sang,toi}.png.
+    Bản sao theo bước: E8-step1..E8-step12.png (1=bang-1440-sang, 2=ngan-1440-sang, 3=bang-1440-toi, 4=ngan-1440-toi, 5..8 cùng thứ tự cho 768, 9..12 cho 375). Nhật ký: E8-run.log.
+    Network: driver là script, không đọc được network; không tạo E8-network.txt.
 
 - eval: E9
   run_id: minted-hop-tuan-tren-bang-E9-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.httb_chu
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-chu && bun test ./test/messages-guard.spec.ts
-    Ran 182 tests across 1 file. [1.62s]
+    cd apps/app && bun test ./test/hop-tuan-tren-bang.dom.tsx -t htb-chu && bun test ./test/messages-guard.spec.ts
+    Ran 182 tests across 1 file. [1.53s]
 
 - eval: E10
   run_id: minted-hop-tuan-tren-bang-E10-r1
-  exit_code: 1
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.httb_khong_doi_hinh
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: node _acceptance/hop-tuan-tren-bang/rang/khong-doi-hinh.mjs
-    SAI AC-10: HO SO hop-thoai-giu-cho-dang-nhap#E11: cay 1 · nen 0
-    THU LAI PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs" EVAL=E15:
-    HO SO ve-sinh-do-san-onehub#E15: cay 2 · nen 2
-    DO SAN TREN NEN ve-sinh-do-san-onehub#E15
-    KET LUAN khong-doi-hinh: 1 SAI
-    Ghi chú: đuôi đầu ra chỉ còn dòng cuối của lớp quét; dòng «loi b: ...» và dòng «quet lop: ...» không nằm trong phần đã lưu của vòng này.
+    node _acceptance/hop-tuan-tren-bang/rang/khong-doi-hinh.mjs
+    KET LUAN khong-doi-hinh: dat
 
 - eval: E11
   run_id: minted-hop-tuan-tren-bang-E11-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.httb_man_gui
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
   output: |
-    cmd: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-tuan-tren-bang/rang/man.mjs --phan gui"
+    bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-tuan-tren-bang/rang/man.mjs --phan gui"
     phien-do: xong — mã 0
 
 ### Lệnh suite (hồi quy)
@@ -162,37 +158,37 @@ Round 1. Một eval không đạt: E10 (AC-10, thước quét lớp «không đ�
 - cmd: bun run test -- --filter=api
   run_id: minted-hop-tuan-tren-bang-SUITE-bun_run_test_filter_api-r1
   exit_code: 0
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
   run_id: minted-hop-tuan-tren-bang-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
   exit_code: 0
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
   run_id: minted-hop-tuan-tren-bang-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
   exit_code: 0
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
   run_id: minted-hop-tuan-tren-bang-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
   exit_code: 0
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
 
 - cmd: bunx turbo run lint --force
   run_id: minted-hop-tuan-tren-bang-SUITE-bunx_turbo_run_lint_force-r1
   exit_code: 0
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
 
 - cmd: bun run lint:slop
   run_id: minted-hop-tuan-tren-bang-SUITE-bun_run_lint_slop-r1
   exit_code: 0
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
 
 - cmd: bunx turbo run build --force
   run_id: minted-hop-tuan-tren-bang-SUITE-bunx_turbo_run_build_force-r1
   exit_code: 0
-  verified_at: 2026-10-28T08:19:44Z
+  verified_at: 2026-10-28T09:03:54Z
 
 ## Known limits
 
@@ -200,32 +196,22 @@ Round 1. Một eval không đạt: E10 (AC-10, thước quét lớp «không đ�
 
 ## Analyst
 
-baseline: BLOCKED ha tang — lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
+baseline: BLOCKED ha tang — lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
-Mọi field baseline ghi n-a; danh sách eval không-phân-biệt bên dưới KHÔNG đo được ở round này.
+none — danh sách eval không-phân-biệt không đo được ở round này (baseline BLOCKED hạ tầng, mọi baseline là n-a).
 
-none — moi eval feature deu red tren baseline (co phan biet). Lưu ý: baseline BLOCKED hạ tầng nên câu này chưa được đo, chỉ là danh sách rỗng do máy không có dữ liệu.
+Baseline khong do:
 
-### Baseline khong do
-
-- bun run test -- "cd apps/api && bun test test/hop-tuan-tren-bang.spec.ts -t htb-muc-doi": BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-ghi-chu: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-muc-doi-chu: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-cap-nhat: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-sang: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-nguon && cd ../.. && bun _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-sau-gui: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-chu && bun test ./test/messages-guard.spec.ts: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- node _acceptance/hop-tuan-tren-bang/rang/khong-doi-hinh.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-- bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-tuan-tren-bang/rang/man.mjs --phan gui": BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.»
-
-### Lệnh fail không gắn eval
-
-Không có lệnh nào fail mà không gắn eval. Lệnh fail duy nhất là `node _acceptance/hop-tuan-tren-bang/rang/khong-doi-hinh.mjs`, gắn với E10.
-
-### Lệnh E10 fail
-
-Thước quét lớp của AC-10 báo một mục «SAI AC-10» (hồ sơ hop-thoai-giu-cho-dang-nhap, eval E11: cây khác 0, nền 0) và một mục «DO SAN TREN NEN» (hồ sơ ve-sinh-do-san-onehub, eval E15: nền đỏ sẵn). KET LUAN của thước: 1 SAI.
+- bun run test -- "cd apps/api && bun test test/hop-tuan-tren-bang.spec.ts -t htb-muc-doi": BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-ghi-chu: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-muc-doi-chu: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-cap-nhat: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-sang: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-nguon && cd ../.. && bun _acceptance/ngan-kr-mot-cho/rang/quet-loi.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-sau-gui: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/hop-tuan-tren-bang.dom.tsx -t htb-chu && bun test ./test/messages-guard.spec.ts: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- node _acceptance/hop-tuan-tren-bang/rang/khong-doi-hinh.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
+- bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hop-tuan-tren-bang/rang/man.mjs --phan gui": BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
 ## Variance
 
@@ -233,4 +219,4 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E10 failed — thước quét lớp AC-10 báo «SAI AC-10: HO SO hop-thoai-giu-cho-dang-nhap#E11: cây 1 · nền 0» (KET LUAN khong-doi-hinh: 1 SAI); mười eval còn lại và bảy lệnh suite xanh. Returned to implementation.
+Round 1: E1–E11 đều đạt, không eval nào đỏ; verdict PASS. Baseline không đo được (hạ tầng), xem Analyst.
