@@ -23,6 +23,7 @@ import {
 	dienBienOutput,
 	hopTuanOutput,
 	khoiCuaToiOutput,
+	lichSuKrOutput,
 	quanhMucTieuOutput,
 } from "../../api/src/okr/okr-xem.contracts";
 import {
@@ -35,6 +36,7 @@ import {
 	goiCua,
 	type Json,
 	type KetQuaGhi,
+	KHOA_LAM_MOI,
 	kho,
 	kr,
 	LoiTrpc,
@@ -265,6 +267,33 @@ const CA_SO: CaKieu[] = [
 		lichSu: [90, 80, 70],
 	},
 ];
+
+function lichSuKrCua(d: ReturnType<typeof dienBienCua>) {
+	const co = d.diem.filter((p) => p.giaTri !== null);
+	return lichSuKrOutput.parse({
+		kieu: d.kieu,
+		tieuDe: d.tieuDe,
+		dich: d.dich,
+		donVi: d.donVi,
+		coCapNhat: co.length > 0,
+		lan: co.map((p) => ({
+			checkInId: `c-${p.tuan}`,
+			luc: `${p.tuan}T03:00:00.000Z`,
+			ngay: p.tuan,
+			tuan: p.tuan,
+			giaTri: p.giaTri,
+			tuTin: p.tuTin ?? "vua",
+			ghiChu: p.ghiChu,
+			camXuc: p.camXuc,
+		})),
+		chuoi: d.diem.map((p) => ({
+			ngay: p.tuan,
+			checkInId: p.giaTri === null ? null : `c-${p.tuan}`,
+			giaTri: p.giaTri,
+			kyVong: p.kyVong,
+		})),
+	});
+}
 
 function dienBienCua(ca: CaKieu) {
 	const thuHai = thuHaiTuanNay();
@@ -670,6 +699,7 @@ describe("vk7-than-ngan", () => {
 		);
 		const lichSu = dienBienCua(CA_TANG);
 		kho.rieng.set("okr.dienBien", () => lichSu);
+		kho.rieng.set("okr.lichSuKr", () => lichSuKrCua(lichSu));
 		kho.rieng.set("okr.banGhiChiSo", () =>
 			banGhiChiSoOutput.parse({
 				tenKr: "KR thứ 2 của mục tiêu",
@@ -704,9 +734,8 @@ describe("vk7-than-ngan", () => {
 		);
 		const k2 = ds[1];
 		if (!k2) throw new Error("thieu k2");
-		const moiTruoc = lichSu.diem
-			.filter((p) => p.giaTri !== null || p.tuTin !== null)
-			.map((p) => p.tuan)
+		const moiTruoc = lichSuKrCua(lichSu)
+			.lan.map((l) => l.checkInId)
 			.reverse();
 		expect({
 			thuTu: thuTuMuc(),
@@ -859,10 +888,12 @@ describe("vk7-cap-nhat-ngan", () => {
 	afterEach(() => {
 		globalThis.ResizeObserver = roCu;
 		HTMLElement.prototype.getBoundingClientRect = rectCu;
+		KHOA_LAM_MOI.delete("okr.lichSuKr");
 	});
 
 	test("vk7-cap-nhat-ngan: tu dau ngan KR — bam Cap nhat, tieu diem o o gia tri, gui; may tu lam moi canhKr va lich su, hop dong, chong giu, Hien tai moi, lich su va do thi them mot", async () => {
 		coKhungDoThi();
+		KHOA_LAM_MOI.add("okr.lichSuKr");
 		const GIA_MOI = 42;
 		const daGui = () => goiCua("okr.guiCapNhat").length > 0;
 		const dsCu = BON_KR;
@@ -871,6 +902,11 @@ describe("vk7-cap-nhat-ngan", () => {
 		);
 		kho.rieng.set("okr.dienBien", () =>
 			daGui() ? dienBienSauGui(CA_TANG, GIA_MOI) : dienBienCua(CA_TANG),
+		);
+		kho.rieng.set("okr.lichSuKr", () =>
+			lichSuKrCua(
+				daGui() ? dienBienSauGui(CA_TANG, GIA_MOI) : dienBienCua(CA_TANG),
+			),
 		);
 		const san = await dungNgan("k2", {
 			mt: () =>
@@ -887,7 +923,7 @@ describe("vk7-cap-nhat-ngan", () => {
 			dong: dongLichSu().length,
 			diem: diemDoThiNgan(),
 			canhKr: docCua("okr.canhKr").length,
-			lichSu: docCua("okr.dienBien").length,
+			lichSu: docCua("okr.lichSuKr").length,
 		};
 		const nutDau = nutCapNhatDau();
 		if (!nutDau) throw new Error("thieu nut Cap nhat o dau ngan");
@@ -920,7 +956,7 @@ describe("vk7-cap-nhat-ngan", () => {
 		await nhip(3);
 		const lamMoi = {
 			"canh-kr": docCua("okr.canhKr").length - truoc.canhKr,
-			"lich-su": docCua("okr.dienBien").length - truoc.lichSu,
+			"lich-su": docCua("okr.lichSuKr").length - truoc.lichSu,
 		};
 		for (const [truyVan, lan] of Object.entries(lamMoi)) {
 			if (lan < 1) throw new Error(`khong lam moi: ${truyVan}`);
