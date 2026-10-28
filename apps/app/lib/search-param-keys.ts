@@ -16,6 +16,7 @@ export const SEARCH_PARAM = {
 		thread: "thread",
 		timeline: "timeline",
 		ngaySo: "ngaySo",
+		thuTu: "thuTuKr",
 	},
 	fieldsSheet: {
 		entity: "manageFields",

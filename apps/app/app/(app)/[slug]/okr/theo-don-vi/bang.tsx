@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@crm/ui/components/badge";
-import { Button } from "@crm/ui/components/button";
 import {
 	DataTable,
 	type DataTableColumn,
@@ -10,19 +9,15 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PaceIndicator } from "@crm/ui/components/okr-status";
 import type { TableQueryState } from "@crm/ui/lib/table-query";
-import { useQuery } from "@tanstack/react-query";
 import { parseAsStringLiteral, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
 import { OwnerCell } from "@/components/crm/owner-cell";
-import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
-import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
-import { useTRPC } from "@/lib/trpc/client";
 import { giaTri, TienDoKrCoSo } from "../bang-kr";
-import { type CapNhatKr, coNutCapNhat, useCapNhatKr } from "../cap-nhat-kr";
+import { type CapNhatKr, useCapNhatKr } from "../cap-nhat-kr";
 import { ChipGopY } from "../chip-gop-y";
 import { type KetQua, type MucTieu, nhanKr } from "../kieu";
 import {
@@ -33,6 +28,7 @@ import {
 	laMatLoc,
 	useMatLocOkr,
 } from "../loc-okr";
+import { NutCapNhatDong } from "../nut-cap-nhat-dong";
 import {
 	NhanTinhTrang,
 	NhanTrangThai,
@@ -244,37 +240,6 @@ function useCot(): DataTableColumn<MucTieu>[] {
 	];
 }
 
-function NutCapNhatDong({
-	objectiveId,
-	kr,
-	mo,
-}: {
-	objectiveId: string;
-	kr: KetQua;
-	mo: CapNhatKr["mo"];
-}) {
-	const m = okrCanhKrMessages(useLocale()).khung;
-	const trpc = useTRPC();
-	const q = useQuery(trpc.okr.objective.queryOptions({ id: objectiveId }));
-	const mt = q.data;
-	const krMt = mt?.keyResults.find((k) => k.id === kr.id);
-	if (!mt || !krMt || !coNutCapNhat(mt, krMt)) return null;
-	return (
-		<Button
-			aria-label={dien(m.capNhatDong, { ten: kr.title })}
-			data-nut="cap-nhat-dong-kr"
-			onClick={(e) => {
-				e.stopPropagation();
-				mo(mt, krMt);
-			}}
-			size="sm"
-			variant="outline"
-		>
-			{m.capNhat}
-		</Button>
-	);
-}
-
 function TenKr({
 	kr,
 	mt,
@@ -311,7 +276,12 @@ function TenKr({
 				</span>
 			</span>
 			<span className="shrink-0 self-start">
-				<NutCapNhatDong kr={kr} mo={mo} objectiveId={mt.id} />
+				<NutCapNhatDong
+					keyResultId={kr.id}
+					mo={mo}
+					objectiveId={mt.id}
+					ten={kr.title}
+				/>
 			</span>
 		</span>
 	);

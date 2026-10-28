@@ -40,6 +40,7 @@ import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { coNoiDung, type DiemCam } from "./diem-cam";
+import { giaTri } from "./gia-tri-kr";
 import { type KetQua, type MucTieu, nhanKr } from "./kieu";
 import {
 	chuSo,
@@ -50,16 +51,7 @@ import {
 } from "./nguon-so";
 import { TienDoGon, TienDoKr } from "./tien-do-kr";
 
-export function giaTri(
-	kr: Pick<KetQua, "kind" | "unit">,
-	so: number,
-	locale: Locale,
-): string {
-	const m = okrMessages(locale);
-	if (kr.kind === "moc") return so >= 1 ? m.moc.xong : m.moc.chuaXong;
-	const chu = chuSo(so, locale);
-	return kr.unit === "%" ? `${chu}%` : `${chu} ${kr.unit}`.trim();
-}
+export { giaTri };
 
 function soTran(
 	kr: Pick<KetQua, "kind" | "unit">,

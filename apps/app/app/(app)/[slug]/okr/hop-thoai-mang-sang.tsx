@@ -24,7 +24,7 @@ import { kiemSoTheoKieu, type LoiSoTheoKieu } from "@crm/validation/okr-kr";
 import { useState } from "react";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { giaTri } from "./bang-kr";
+import { giaTri } from "./gia-tri-kr";
 
 type MucTieuMang = RouterOutputs["okr"]["bangCham"]["mucTieu"][number];
 type KrMang = MucTieuMang["krs"][number];
