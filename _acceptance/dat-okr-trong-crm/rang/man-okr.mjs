@@ -730,8 +730,6 @@ async function byUnit(c, don) {
 	return hoi(c, "okr.byUnit", { cycleId: OKR.quy, unit: don });
 }
 
-/* bo-okr-chi-don-vi (AC-5, V5-9): đổi đơn vị qua menu ở mắt xích cuối của dòng
-   vị trí — mở menu rồi bấm mục theo tên đơn vị. */
 const MO_MENU = "[data-menu-vi-tri]";
 const LUA_CHON = "[data-menu-don]";
 async function chonDon(trang, ten) {
@@ -790,7 +788,6 @@ async function buocE11() {
 	await hienSel(t, MO_MENU);
 	await bamSel(t, MO_MENU);
 	await hienSel(t, LUA_CHON);
-	// Menu liệt đơn vị cha, cùng cấp và trực thuộc của bộ đang mở; bộ đang mở là mắt xích cuối.
 	const nut = await t.evaluate(
 		(moMenu, luaChon) => [
 			...[...document.querySelectorAll(luaChon)].map((e) =>
