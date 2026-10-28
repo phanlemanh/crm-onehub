@@ -5,7 +5,7 @@ slug: che-do-soan-bo-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-22T03:08:40Z
 design_doc: docs/superpowers/specs/2026-10-22-che-do-soan-bo-okr-design.md
@@ -162,3 +162,8 @@ một chip góp ý».
 - Chạm `apps/app/components/crm/record-sheet/**` (làn M5, luật 19) — S3 xin `cham-tep` qua phiên giám sát.
 - Câu hỏi cho Cổng Phạm vi: Hỏi-1…Hỏi-8 ở design doc; AC-2 (Hỏi-8), AC-4 (Hỏi-1), AC-5 (Hỏi-5), AC-6 (Hỏi-7), AC-7 (Hỏi-4)
   và AC-11 (Hỏi-6) viết theo khuyến nghị.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-28:
+  - Ngoài-1: gõ tên mục tiêu hay đơn vị KR dài quá giới hạn thì dòng không lưu được và chỉ hiện câu chung «Chưa lưu được. Rời ô để thử lại.» cho tới khi người soạn tự rút ngắn chữ.
+  - Ngoài-5: hiếm khi, xoá một KR thất bại đúng lúc đang gõ KR khác của cùng mục tiêu thì KR đó biến khỏi tài liệu không báo lỗi, dù vẫn còn trên máy chủ và tải lại màn là thấy.
+  - Ngoài-6: bài kiểm «không còn khối Kara, không còn góp ý neo» ở khung chi tiết mục tiêu chưa chắc bắt được nếu khối Kara quay lại theo cách khác.
+  - Ngoài-7: bài kiểm «bấm ra ngoài khung thì khung vẫn mở» chưa có ca đối chứng cho thấy cú bấm ấy đóng được khung khi không có dòng chưa lưu.
