@@ -662,10 +662,19 @@ async function buocDanhSach() {
 
 async function moNgan(t, mt) {
 	await bam(t, `[data-mo-muc-tieu='${mt}']`);
-	return thayNgay(
+	const coTab = await thayNgay(
 		t,
 		() => window.__tim("[data-okr-sheet] [role='tab']").length > 0,
 	);
+	const yen = await thayNgay(t, () => {
+		const khung = document
+			.querySelector("[data-okr-sheet] [role='tab']")
+			?.closest("[role='dialog']");
+		return (
+			khung?.getAnimations().every((a) => a.playState !== "running") ?? false
+		);
+	});
+	return coTab && yen;
 }
 
 async function mucMenu(t) {

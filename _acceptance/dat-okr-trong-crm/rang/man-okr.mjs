@@ -47,6 +47,8 @@ const CHU = {
 	daKhoa: "Đã khoá khi công bố",
 	vet: "Vết",
 	thuLai: "Thử lại",
+	boLoc: "Lọc",
+	phuTrach: "Người phụ trách",
 	kieuLa:
 		"Cột kiểu chỉ nhận: tăng tới, giảm xuống, giữ trên, giữ dưới, mốc, phần trăm",
 	emailLa: "Email này chưa là thành viên OneHub Center",
@@ -936,6 +938,8 @@ async function buocE11() {
 	);
 	await chup(t, "E11-step7.png", true);
 
+	await chonDon(t, TEN.pb2);
+	await hienSel(t, `[data-muc-tieu='${OKR.o5.id}']`);
 	let chan = true;
 	await t.setRequestInterception(true);
 	const chanByUnit = (r) => {
@@ -949,7 +953,15 @@ async function buocE11() {
 		else void r.continue();
 	};
 	t.on("request", chanByUnit);
-	await chonDon(t, TEN.pb2);
+	await bamChu(t, "button[aria-haspopup='menu']", CHU.boLoc);
+	await cho(400);
+	await bamChu(t, "[role='menuitem']", CHU.phuTrach);
+	await cho(400);
+	await bamChu(t, "[role='menuitemcheckbox']", NGUOI.truong2.ten);
+	for (let i = 0; i < 3 && (await coSel(t, "[role='menu']")); i += 1) {
+		await t.keyboard.press("Escape");
+		await cho(200);
+	}
 	if (await hienSel(t, "[data-trang-thai='ST-donvi-loi']")) {
 		kiem(
 			"E11 buoc 8: Empty loi thieu nut Thu lai",
