@@ -605,6 +605,10 @@ describe("neo-kara", () => {
 			dat("okr.troLyDanhSach", () => DS);
 			dat("okr.comments", () => ({ comments: [], dong: [] }));
 			dat("okr.alignmentTargets", () => ({ targets: [] }));
+			dat("okr.cycles", () => ({
+				cycles: [{ id: MT.cycleId, kind: "quy", phase: "dang-chay" }],
+			}));
+			dat("okr.danhSach", () => ({ canEdit: true }));
 			const san = await dung(
 				<DetailSheet onOpenChange={() => {}} open>
 					<ObjectiveSheet objectiveId={MT.id} />
