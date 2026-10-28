@@ -6,21 +6,11 @@ import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import { Button } from "@crm/ui/components/button";
 import { StatGroup } from "@crm/ui/components/dashboard";
 import { Icon } from "@crm/ui/components/icon";
-import {
-	Item,
-	ItemActions,
-	ItemContent,
-	ItemDescription,
-	ItemGroup,
-	ItemTitle,
-} from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { ConfidenceIndicator } from "@crm/ui/components/okr-status";
 import { PickListDialog } from "@crm/ui/components/pick-list-dialog";
 import { Progress } from "@crm/ui/components/progress";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { StatCard } from "@crm/ui/components/stat-card";
-import { TargetLineChart } from "@crm/ui/components/target-line-chart";
 import {
 	Tooltip,
 	TooltipContent,
@@ -28,7 +18,7 @@ import {
 } from "@crm/ui/components/tooltip";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { useSearchInput } from "@crm/ui/hooks/use-search-input";
-import { formatDay, formatDayShort } from "@crm/ui/lib/format";
+import { formatDay } from "@crm/ui/lib/format";
 import {
 	skipToken,
 	useMutation,
@@ -44,7 +34,6 @@ import {
 	useState,
 } from "react";
 import { toast } from "sonner";
-import { HangCamXuc } from "@/app/(app)/[slug]/okr/cam-xuc/hang-cam-xuc";
 import { coNutCapNhat, useCapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import { giaTri } from "@/app/(app)/[slug]/okr/gia-tri-kr";
 import { CANH_KR } from "@/app/(app)/[slug]/okr/kieu";
@@ -64,7 +53,6 @@ import {
 import { okrMessages } from "@/lib/messages/okr";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { okrSoMessages } from "@/lib/messages/okr-so";
-import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -81,6 +69,7 @@ import {
 	type TrangThaiCanh,
 	type ViecVao,
 } from "./kr-viec";
+import { LichSuKr } from "./lich-su-kr";
 import { dien, dienNode } from "./plan-copy";
 import { recordKey, useRecordSheetView, useRecordStack } from "./record-stack";
 import { NoiDungSoKr } from "./so-kr-sheet";
@@ -94,7 +83,6 @@ const TAB = {
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
 type KrCuaMt = ChiTiet["keyResults"][number];
-type DienBien = RouterOutputs["okr"]["dienBien"];
 type Huong = "truoc" | "ke";
 
 export type DauNganKr = {
@@ -526,111 +514,6 @@ function OSoKr({ mt, kr }: { mt: ChiTiet; kr: KrCuaMt }) {
 				/>
 			</DetailSheetSection>
 		</>
-	);
-}
-
-function NoiDungLichSu({
-	d,
-	tenKr,
-	objectiveId,
-}: {
-	d: DienBien;
-	tenKr: string;
-	objectiveId: string;
-}) {
-	const locale = useLocale();
-	const t = okrToanCanhMessages(locale).dienBien;
-	const kieu = { kind: d.kieu, unit: d.donVi };
-	const lan = d.diem
-		.filter((p) => p.giaTri !== null || p.tuTin !== null)
-		.reverse();
-	const coDoThi = d.kieu !== "moc" && d.diem.some((p) => p.giaTri !== null);
-	return (
-		<div className="flex flex-col gap-3">
-			{coDoThi ? (
-				<TargetLineChart
-					data={d.diem.map((p) => ({
-						x: formatDayShort(p.tuan, locale),
-						value: p.giaTri,
-						expected: p.kyVong,
-					}))}
-					height={160}
-					label={t.bieuDo(tenKr)}
-					target={d.dich}
-					targetLabel={t.dich(giaTri(kieu, d.dich, locale))}
-				/>
-			) : null}
-			{lan.length === 0 ? (
-				<DetailSheetProse>{t.chuaCo}</DetailSheetProse>
-			) : (
-				<ItemGroup data-lich-su-kr>
-					{lan.map((p) => (
-						<Item
-							data-lan-cap-nhat={p.tuan}
-							key={p.tuan}
-							size="sm"
-							variant="outline"
-						>
-							<ItemContent>
-								<ItemTitle>
-									<span className="tabular-nums">
-										{formatDay(p.tuan, locale)}
-									</span>
-									{p.giaTri === null ? null : (
-										<span data-gia-tri-lan>
-											{giaTri(kieu, p.giaTri, locale)}
-										</span>
-									)}
-								</ItemTitle>
-								{p.ghiChu ? (
-									<ItemDescription translate="no">{p.ghiChu}</ItemDescription>
-								) : null}
-								{p.checkInId ? (
-									<HangCamXuc
-										camXuc={p.camXuc}
-										checkInId={p.checkInId}
-										objectiveId={objectiveId}
-									/>
-								) : null}
-							</ItemContent>
-							{p.tuTin ? (
-								<ItemActions>
-									<ConfidenceIndicator level={p.tuTin} size="sm" />
-								</ItemActions>
-							) : null}
-						</Item>
-					))}
-				</ItemGroup>
-			)}
-		</div>
-	);
-}
-
-function LichSuKr({ kr }: { kr: KrCuaMt }) {
-	const locale = useLocale();
-	const m = okrCanhKrMessages(locale).khung;
-	const t = okrToanCanhMessages(locale).dienBien;
-	const trpc = useTRPC();
-	const db = useQuery(trpc.okr.dienBien.queryOptions({ keyResultId: kr.id }));
-	return (
-		<DetailSheetSection data-muc-ngan="lich-su" title={m.lichSu}>
-			{db.isPending ? (
-				<Skeleton className="h-40 w-full" />
-			) : db.isError ? (
-				<VungTaiLoi
-					dangTai={db.isFetching}
-					moTa={db.error.message}
-					onThuLai={() => void db.refetch()}
-					tieuDe={t.loi}
-				/>
-			) : (
-				<NoiDungLichSu
-					d={db.data}
-					objectiveId={kr.objectiveId}
-					tenKr={kr.title}
-				/>
-			)}
-		</DetailSheetSection>
 	);
 }
 
