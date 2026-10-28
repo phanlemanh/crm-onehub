@@ -217,6 +217,34 @@ export const moHopTuanOutput = z.object({ ghi: z.boolean() });
 
 export const dienBienInput = z.object({ keyResultId: ma });
 
+export const lichSuKrOutput = z.object({
+	kieu: z.enum(KIEU_KR),
+	tieuDe: z.string(),
+	dich: z.number(),
+	donVi: z.string(),
+	coCapNhat: z.boolean(),
+	lan: z.array(
+		z.object({
+			checkInId: z.string(),
+			luc: z.string(),
+			ngay: z.string(),
+			tuan: z.string(),
+			giaTri: z.number().nullable(),
+			tuTin: tuTin,
+			ghiChu: z.string().nullable(),
+			camXuc: tomTatCamXuc,
+		}),
+	),
+	chuoi: z.array(
+		z.object({
+			ngay: z.string(),
+			checkInId: z.string().nullable(),
+			giaTri: z.number().nullable(),
+			kyVong: z.number().nullable(),
+		}),
+	),
+});
+
 export const dienBienOutput = z.object({
 	kieu: z.enum(KIEU_KR),
 	tieuDe: z.string(),
@@ -331,6 +359,7 @@ export type HopTuanInput = z.infer<typeof hopTuanInput>;
 export type HopTuanOutput = z.infer<typeof hopTuanOutput>;
 export type DongHop = z.infer<typeof dongHop>;
 export type DienBienOutput = z.infer<typeof dienBienOutput>;
+export type LichSuKrOutput = z.infer<typeof lichSuKrOutput>;
 export type KhoiCuaToiInput = z.infer<typeof khoiCuaToiInput>;
 export type KhoiCuaToiOutput = z.infer<typeof khoiCuaToiOutput>;
 export type DongCuaToi = z.infer<typeof dongCuaToi>;

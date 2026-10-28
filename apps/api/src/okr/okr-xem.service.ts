@@ -13,7 +13,7 @@ import {
 	xepHopTuan,
 } from "@crm/db/okr-hop-tuan";
 import { kyVongTheoNgay } from "@crm/db/okr-tien-do";
-import { dauTuanVN } from "@crm/db/onboarding-nhac";
+import { dauTuanVN, ngayVN } from "@crm/db/onboarding-nhac";
 import { readTenGoc } from "@crm/db/workspace";
 import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { kieuKr } from "@crm/validation/okr-kr";
@@ -37,7 +37,7 @@ import { dungCayCanChinh } from "./can-chinh";
 import { hangViec } from "./canh-kr";
 import { demMatLoc, type MucTieuGon } from "./danh-sach";
 import { demGopYCho } from "./dem-gop-y";
-import { dienBienKr, tuanCapNhatDau } from "./dien-bien";
+import { chuoiMoiLan, dienBienKr, tuanCapNhatDau } from "./dien-bien";
 import { khoaDonViDong } from "./don-vi";
 import type { PhamDoc } from "./hien-thi";
 import type { DonViChon, MucTieuOutput, NutCanChinh } from "./okr.contracts";
@@ -63,6 +63,7 @@ import type {
 	HopTuanOutput,
 	KhoiCuaToiInput,
 	KhoiCuaToiOutput,
+	LichSuKrOutput,
 	LocDanhSach,
 	NutCayDayDu,
 	QuanhMucTieuOutput,
@@ -817,11 +818,7 @@ export class OkrXemService {
 		});
 	}
 
-	async dienBien(
-		userId: string,
-		keyResultId: string,
-		homNay = new Date(),
-	): Promise<DienBienOutput> {
+	private async krDienBien(userId: string, keyResultId: string) {
 		const nc = this.quyenOkr.nguCanhXem(
 			await this.quyenOkr.quyen(userId),
 			userId,
@@ -862,23 +859,37 @@ export class OkrXemService {
 				: null;
 		const kieu = kieuKr.parse(kr.kind);
 		const so = { id: kr.id, thuTu: 0, ...(lan.get(kr.id) ?? RONG_LAN) };
-		const diem = dienBienKr(
-			{
+		return {
+			nc,
+			kr,
+			kieu,
+			so: {
 				...so,
 				kieu,
 				khoi: kr.startValue.toNumber(),
 				dich: kr.targetValue.toNumber(),
 			},
-			cacTuan(c.startsOn, c.endsOn),
-			homNay,
-			(tuan) =>
+			tuanKy: cacTuan(c.startsOn, c.endsOn),
+			kyVongTuan: (tuan: string) =>
 				kyVongTheoNgay(
 					kr.objective.publishedAt,
 					c.endsOn,
 					new Date(`${tuan}T00:00:00+07:00`),
 					nghi,
 				),
+		};
+	}
+
+	async dienBien(
+		userId: string,
+		keyResultId: string,
+		homNay = new Date(),
+	): Promise<DienBienOutput> {
+		const { nc, kr, kieu, so, tuanKy, kyVongTuan } = await this.krDienBien(
+			userId,
+			keyResultId,
 		);
+		const diem = dienBienKr(so, tuanKy, homNay, kyVongTuan);
 		const camXuc = await this.camXuc.tomTat(
 			this.db,
 			diem.flatMap((d) => (d.checkInId ? [d.checkInId] : [])),
@@ -892,11 +903,57 @@ export class OkrXemService {
 			dich: kr.targetValue.toNumber(),
 			donVi: kr.unit,
 			coCapNhat: so.lan.length > 0,
-			tuanDau: tuanCapNhatDau(c.startsOn, kr.objective.publishedAt, homNay),
+			tuanDau: tuanCapNhatDau(
+				kr.objective.cycle.startsOn,
+				kr.objective.publishedAt,
+				homNay,
+			),
 			diem: diem.map((d) => ({
 				...d,
 				camXuc: d.checkInId ? (camXuc.get(d.checkInId) ?? []) : [],
 			})),
+		};
+	}
+
+	async lichSuKr(
+		userId: string,
+		keyResultId: string,
+		homNay = new Date(),
+	): Promise<LichSuKrOutput> {
+		const { nc, kr, kieu, so, tuanKy, kyVongTuan } = await this.krDienBien(
+			userId,
+			keyResultId,
+		);
+		const lan = [...so.lan].sort(
+			(a, b) =>
+				a.luc.getTime() - b.luc.getTime() ||
+				(a.id ?? "").localeCompare(b.id ?? ""),
+		);
+		const ma = lan.flatMap((l) => (l.id ? [l.id] : []));
+		const camXuc = await this.camXuc.tomTat(this.db, ma, userId, nc);
+		return {
+			kieu,
+			tieuDe: kr.title,
+			dich: kr.targetValue.toNumber(),
+			donVi: kr.unit,
+			coCapNhat: lan.length > 0,
+			lan: lan.flatMap((l) =>
+				l.id
+					? [
+							{
+								checkInId: l.id,
+								luc: l.luc.toISOString(),
+								ngay: ngayVN(l.luc),
+								tuan: l.tuan,
+								giaTri: kieu === "moc" ? null : l.giaTri,
+								tuTin: l.tuTin,
+								ghiChu: l.ghiChu.trim() === "" ? null : l.ghiChu,
+								camXuc: camXuc.get(l.id) ?? [],
+							},
+						]
+					: [],
+			),
+			chuoi: chuoiMoiLan({ ...so, lan }, tuanKy, homNay, kyVongTuan),
 		};
 	}
 
