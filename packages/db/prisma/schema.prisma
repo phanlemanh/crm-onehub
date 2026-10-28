@@ -79,6 +79,7 @@ model User {
   okrViecKrTao       OkrViecKr[]       @relation("OkrViecKrTaoBoi")
   okrBangChungTacGia OkrBangChung[]    @relation("OkrBangChungTacGia")
   okrGhiNhanTacGia   OkrGhiNhan[]      @relation("OkrGhiNhanTacGia")
+  okrCamXuc          OkrCamXuc[]
   okrGhiNhanNhanDuoc OkrGhiNhanNhan[]  @relation("OkrGhiNhanNhan")
   okrMauTaoBoi       OkrMau[]          @relation("OkrMauTaoBoi")
   okrHoiYNguoiChon   OkrHoiY[]         @relation("OkrHoiYNguoiChon")
@@ -2331,6 +2332,8 @@ model OkrCheckIn {
   onBehalf     Boolean           @default(false)
   channel      String            @default("web")
   createdAt    DateTime          @default(now())
+  camXuc       OkrCamXuc[]
+  traLoi       OkrComment[]
 
   @@index([keyResultId, createdAt])
   @@index([weekStart])
@@ -2344,6 +2347,8 @@ model OkrComment {
   objective    OkrObjective  @relation(fields: [objectiveId], references: [id], onDelete: Restrict)
   keyResultId  String?
   keyResult    OkrKeyResult? @relation(fields: [keyResultId], references: [id], onDelete: SetNull)
+  checkInId    String?
+  checkIn      OkrCheckIn?   @relation(fields: [checkInId], references: [id], onDelete: SetNull)
   body         String
   authorUserId String
   createdAt    DateTime      @default(now())
@@ -2351,7 +2356,22 @@ model OkrComment {
 
   @@index([objectiveId, createdAt])
   @@index([createdAt])
+  @@index([checkInId])
   @@map("okrComment")
+}
+
+model OkrCamXuc {
+  id        String     @id @default(cuid())
+  checkInId String
+  checkIn   OkrCheckIn @relation(fields: [checkInId], references: [id], onDelete: Cascade)
+  userId    String
+  nguoi     User       @relation(fields: [userId], references: [id], onDelete: Restrict)
+  loai      String
+  createdAt DateTime   @default(now())
+
+  @@unique([checkInId, userId, loai])
+  @@index([checkInId])
+  @@map("okrCamXuc")
 }
 
 model OkrMention {

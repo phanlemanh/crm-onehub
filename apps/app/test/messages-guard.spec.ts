@@ -544,6 +544,10 @@ const GHIM = {
 	...GHIM_LO_TRINH,
 	...GHIM_OKR_SOAN_BO,
 	"okr-cap-nhat-gan-day:chuaGui": ["Chưa gửi được: 1", "Chưa gửi được: 12"],
+	"okr-cap-nhat-gan-day:chuaTha": [
+		"Chưa thả được cảm xúc: 1",
+		"Chưa thả được cảm xúc: 12",
+	],
 	"okr-cap-nhat-gan-day:oTraLoi": [
 		"Trả lời lần cập nhật của 1",
 		"Trả lời lần cập nhật của 12",

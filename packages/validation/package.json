@@ -65,6 +65,7 @@
 		"./okr-tom-tat": "./src/okr-tom-tat.ts",
 		"./okr-kiem-tom-tat": "./src/okr-kiem-tom-tat.ts",
 		"./okr-trao-doi": "./src/okr-trao-doi.ts",
+		"./okr-cam-xuc": "./src/okr-cam-xuc.ts",
 		"./okr-vet": "./src/okr-vet.ts",
 		"./onboarding-activity": "./src/onboarding-activity.ts",
 		"./onboarding-ingest": "./src/onboarding-ingest.ts",

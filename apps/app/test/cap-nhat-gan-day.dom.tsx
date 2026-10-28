@@ -58,6 +58,15 @@ mock.module("server-only", () => ({}));
 mock.module("@/components/page-transition", () => ({
 	PageTransition: ({ children }: { children: ReactNode }) => children,
 }));
+const toastLoi: string[] = [];
+mock.module("sonner", () => ({
+	toast: Object.assign(() => {}, {
+		error: (chu: string) => {
+			toastLoi.push(chu);
+		},
+		success: () => {},
+	}),
+}));
 mock.module("@/lib/trpc/server", () => ({
 	getServerTrpc: () => ({}),
 	getServerQueryClient: () => ({}),
@@ -113,6 +122,7 @@ const dong = (
 	ghiChu: `Ghi chú ${id}`,
 	moiNhat: true,
 	traLoi: [],
+	camXuc: [],
 	mentionNguoiCapNhat: "u1",
 	...doi,
 	pham: ["tat-ca", ...pham.filter((p) => p !== "tat-ca")],
@@ -332,7 +342,7 @@ describe("cng-tra-loi-man", () => {
 		luc: "2026-10-13T05:00:00.000Z",
 	});
 
-	test("cng-tra-loi-man: chỉ lần mới nhất có Trả lời, gửi đi qua okr.addComment nhắc người cập nhật, làm mới, lỗi giữ chữ", async () => {
+	test("cng-tra-loi-man: mọi lần có Trả lời (D5), gửi đi qua okr.addComment nhắc người cập nhật, làm mới, lỗi giữ chữ", async () => {
 		datCapNhat([MOI, CU]);
 		await dung(<CapNhatGanDay />, "");
 		await cho(() => dongTin().length === 2, "hai dong");
@@ -343,7 +353,12 @@ describe("cng-tra-loi-man", () => {
 			nutCu: cu?.querySelectorAll("[data-mo-tra-loi]").length,
 			coMoiHon: cu?.querySelector("[data-co-moi-hon]")?.textContent,
 			ghiChuRong: moi?.querySelectorAll("[data-dong-ghi-chu]").length,
-		}).toEqual({ nutMoi: 1, nutCu: 0, coMoiHon: t.coMoiHon, ghiChuRong: 0 });
+		}).toEqual({
+			nutMoi: 1,
+			nutCu: 1,
+			coMoiHon: t.coMoiHonNhan,
+			ghiChuRong: 0,
+		});
 		const mo = moi?.querySelector("[data-mo-tra-loi]");
 		if (!mo) throw new Error("khong co nut Tra loi");
 		expect(mo.textContent).toBe(t.traLoi);
@@ -360,6 +375,7 @@ describe("cng-tra-loi-man", () => {
 		expect(goiCua("okr.addComment")[0]?.vao).toEqual({
 			objectiveId: MT,
 			keyResultId: MOI.kr.id,
+			checkInId: "moi",
 			body: "abc",
 			mentionUserIds: ["u1"],
 		});
@@ -393,6 +409,7 @@ describe("cng-tra-loi-man", () => {
 			vao: {
 				objectiveId: MT,
 				keyResultId: "kr-tu",
+				checkInId: "tu",
 				body: "abc",
 				mentionUserIds: [],
 			},
@@ -576,5 +593,191 @@ describe("cng-trang-thai", () => {
 		expect(timTrongCay(cay, PageShellTitle, false)).toEqual([
 			{ chu: t.tieuDe, trongSuspense: false },
 		]);
+	});
+});
+
+describe("cx-tra-loi-man", () => {
+	const MOI = dong("moi", {
+		traLoi: [
+			{
+				id: "tl-moi",
+				nguoi: { id: "u2", name: "Người u2" },
+				noiDung: "Trả lời lần mới",
+				luc: "2026-10-20T06:00:00.000Z",
+			},
+		],
+	});
+	const CU = dong("cu", {
+		moiNhat: false,
+		mentionNguoiCapNhat: "u3",
+		kr: MOI.kr,
+		luc: "2026-10-13T05:00:00.000Z",
+		traLoi: [
+			{
+				id: "tl-cu",
+				nguoi: { id: "u2", name: "Người u2" },
+				noiDung: "Trả lời lần cũ",
+				luc: "2026-10-14T06:00:00.000Z",
+			},
+		],
+	});
+
+	test("cx-tra-loi-man: mọi dòng có Trả lời và đúng trả lời của mình; gửi dưới dòng cũ mang checkInId", async () => {
+		datCapNhat([MOI, CU]);
+		await dung(<CapNhatGanDay />, "");
+		await cho(() => dongTin().length === 2, "hai dong");
+		const moi = qs('[data-dong-tin="moi"]');
+		const cu = qs('[data-dong-tin="cu"]');
+		const ids = (d: Element | null) =>
+			[...(d?.querySelectorAll("[data-tra-loi]") ?? [])].map((x) =>
+				x.getAttribute("data-tra-loi"),
+			);
+		expect(
+			cu?.querySelectorAll("[data-mo-tra-loi]").length,
+			"dong cu thieu nut Tra loi",
+		).toBe(1);
+		expect(moi?.querySelector("[data-mo-tra-loi]")?.textContent).toBe(t.traLoi);
+		expect({ moi: ids(moi), cu: ids(cu) }).toEqual({
+			moi: ["tl-moi"],
+			cu: ["tl-cu"],
+		});
+		expect(cu?.querySelector("[data-co-moi-hon]")?.textContent).toBe(
+			t.coMoiHonNhan,
+		);
+		const mo = cu?.querySelector("[data-mo-tra-loi]");
+		if (!mo) throw new Error("khong co nut Tra loi dong cu");
+		await bamChuot(mo);
+		const o = qs<HTMLTextAreaElement>(
+			'[data-dong-tin="cu"] [data-o-tra-loi] textarea',
+		);
+		if (!o) throw new Error("khong co o tra loi");
+		await goChu(o, "xyz");
+		const gui = qs<HTMLButtonElement>(
+			'[data-dong-tin="cu"] [data-gui-tra-loi]',
+		);
+		if (gui) await bamChuot(gui);
+		await cho(() => goiCua("okr.addComment").length === 1, "da gui");
+		expect(goiCua("okr.addComment")[0]?.vao, "input thieu checkInId").toEqual({
+			objectiveId: MT,
+			keyResultId: MOI.kr.id,
+			checkInId: "cu",
+			body: "xyz",
+			mentionUserIds: ["u3"],
+		});
+	});
+});
+
+describe("cx-lac-quan", () => {
+	type Tom = DongCapNhat["camXuc"];
+	const nguoi = (n: number) =>
+		Array.from({ length: n }, (_, i) => ({ id: `n${i}`, name: `Người ${i}` }));
+
+	function treo() {
+		let giai: (v: Tom) => void = () => {};
+		let tuChoi: (e: Error) => void = () => {};
+		kho.ghiRieng.set(
+			"okr.thaCamXuc",
+			() =>
+				new Promise((ok, loi) => {
+					giai = (v) => ok(v as never);
+					tuChoi = loi;
+				}),
+		);
+		return { giai: (v: Tom) => giai(v), tuChoi: (e: Error) => tuChoi(e) };
+	}
+
+	const chip = (loai: string) =>
+		qs<HTMLButtonElement>(`[data-dong-tin="cx"] [data-cam-xuc="${loai}"]`);
+	const trangThai = (loai: string) => {
+		const c = chip(loai);
+		return c
+			? {
+					bam: c.getAttribute("aria-pressed"),
+					so: c.textContent?.replace(/[^0-9]/g, ""),
+					tat: c.disabled,
+				}
+			: null;
+	};
+
+	async function dungVoi(camXuc: Tom) {
+		toastLoi.length = 0;
+		datCapNhat([dong("cx", { camXuc })]);
+		await dung(<CapNhatGanDay />, "");
+		await cho(() => dongTin().length === 1, "mot dong");
+	}
+
+	test("cx-lac-quan: cham chip doi ngay, khoa khi dang gui, may chu tra thi bat lai", async () => {
+		await dungVoi([{ loai: "co-len", so: 2, cuaToi: false, nguoi: nguoi(2) }]);
+		const t1 = treo();
+		const c = chip("co-len");
+		if (!c) throw new Error("khong co chip");
+		await bamChuot(c);
+		await cho(() => trangThai("co-len")?.so === "3", "so lac quan");
+		expect(trangThai("co-len")).toEqual({ bam: "true", so: "3", tat: true });
+		t1.giai([{ loai: "co-len", so: 3, cuaToi: true, nguoi: nguoi(3) }]);
+		await cho(() => trangThai("co-len")?.tat === false, "bat lai");
+		expect(trangThai("co-len")).toEqual({ bam: "true", so: "3", tat: false });
+		expect(goiCua("okr.thaCamXuc")[0]?.vao).toEqual({
+			checkInId: "cx",
+			loai: "co-len",
+		});
+	});
+
+	test("cx-lac-quan: may chu tu choi thi chip ve dung anh chup truoc va co toast", async () => {
+		await dungVoi([{ loai: "co-len", so: 2, cuaToi: false, nguoi: nguoi(2) }]);
+		const t1 = treo();
+		const c = chip("co-len");
+		if (c) await bamChuot(c);
+		await cho(() => trangThai("co-len")?.so === "3", "so lac quan");
+		t1.tuChoi(
+			new LoiTrpc("FORBIDDEN", "Chu kỳ này đã ẩn — không ghi được nữa."),
+		);
+		await cho(() => trangThai("co-len")?.tat === false, "het gui");
+		expect(trangThai("co-len"), "so 3 != 2").toEqual({
+			bam: "false",
+			so: "2",
+			tat: false,
+		});
+		expect(toastLoi, "thieu toast").toEqual([
+			t.chuaTha("Chu kỳ này đã ẩn — không ghi được nữa."),
+		]);
+	});
+
+	test("cx-lac-quan: go chip cuoi cung thi chip mat, loi thi chip ve lai", async () => {
+		await dungVoi([{ loai: "dong-y", so: 1, cuaToi: true, nguoi: nguoi(1) }]);
+		const t1 = treo();
+		const c = chip("dong-y");
+		if (c) await bamChuot(c);
+		await cho(() => chip("dong-y") === null, "chip mat");
+		t1.tuChoi(new LoiTrpc("BAD_REQUEST", "Mất mạng"));
+		await cho(() => chip("dong-y") !== null, "chip ve lai");
+		expect(trangThai("dong-y")).toEqual({ bam: "true", so: "1", tat: false });
+	});
+
+	test("cx-lac-quan: bam vung ten trong bang cam xuc khong mo ngan KR, bam dong thi mo", async () => {
+		toastLoi.length = 0;
+		datCapNhat([
+			dong("cx", {
+				camXuc: [{ loai: "dong-y", so: 2, cuaToi: false, nguoi: nguoi(2) }],
+			}),
+		]);
+		const san = await dung(<CapNhatGanDay />, "");
+		await cho(() => dongTin().length === 1, "mot dong");
+		const nut = qs('[data-dong-tin="cx"] [data-mo-cam-xuc]');
+		if (!nut) throw new Error("khong co nut Tha cam xuc");
+		await bamChuot(nut);
+		await cho(() => qs("[data-ten-loai]") !== null, "bang mo");
+		const ten = qs("[data-ten-loai]");
+		if (!ten) throw new Error("khong co dong ten");
+		await bamChuot(ten);
+		await nhip(5);
+		expect(san.url().get("record"), "bam ten trong bang mo ngan KR").toBeNull();
+		const vung = qs('[data-dong-tin="cx"] [data-dong-muc-tieu]');
+		if (!vung) throw new Error("khong co dong muc tieu");
+		await bamChuot(vung);
+		await cho(
+			() => san.url().get("record") !== null,
+			"doi chung: bam dong mo ngan",
+		);
 	});
 });

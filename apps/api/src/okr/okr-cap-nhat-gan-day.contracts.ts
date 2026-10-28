@@ -1,3 +1,4 @@
+import { tomTatCamXuc } from "@crm/validation/okr-cam-xuc";
 import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import { KIEU_KR } from "@crm/validation/okr-kr";
 import { PHAM_VI_BO } from "@crm/validation/okr-tham-so";
@@ -38,6 +39,7 @@ export const dongCapNhat = z.object({
 	ghiChu: z.string(),
 	moiNhat: z.boolean(),
 	traLoi: z.array(traLoiCapNhat),
+	camXuc: tomTatCamXuc,
 	mentionNguoiCapNhat: z.string().nullable(),
 });
 
