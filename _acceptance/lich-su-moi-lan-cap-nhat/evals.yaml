@@ -192,6 +192,11 @@ evals:
       - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
       - "apps/api/src/okr/okr-xem.service.ts"
       - "_acceptance/lich-su-moi-lan-cap-nhat/rang/man.mjs"
+      - "_acceptance/lich-su-moi-lan-cap-nhat/rang/man-lib.mjs"
+      - "_acceptance/hop-tuan-tren-bang/rang/man-lib.mjs"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs"
+      - "_acceptance/vo-khu-muc-tieu/rang/do-man-lib.mjs"
     expected: |
       Tám ảnh. Ảnh sau gửi: hai dòng mới ở đầu Lịch sử mang nhãn ngày giờ gửi, giá trị lần hai trên lần một; biểu đồ
       thêm hai chấm ở cuối đường giá trị. 375 là drawer, danh sách đọc trọn, không tràn ngang. Sáng và tối: chữ, chấm,
