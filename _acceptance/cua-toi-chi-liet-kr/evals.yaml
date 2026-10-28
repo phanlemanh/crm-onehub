@@ -53,13 +53,16 @@ evals:
       - "apps/app/lib/okr-duong-kr.ts"
       - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
     expected: |
-      Ten ca "ctlk-dong-kr". Voi fixture 3 KR thieu: moi dong [data-kr=<id>] co href === url("/okr/kr/<id>") cua
-      workspace "ws" (rut tu ham duong chung, khong viet tay chuoi), bam dong goi dieu huong mot lan toi dung href do;
-      khong goi openRecord, khong goi moCapNhat.
-      DOI CHUNG DUONG: dong 2 tro /ws/okr/kr/<id dong 2>.
+      Ten ca "ctlk-dong-kr". Fixture 3 KR thieu o 2 don vi (pb va khoi), moi item mang donOkr va cycleId rut tu khuon
+      capNhatTuanOutput: moi dong [data-kr=<id>] co href === dichKrTrongBo("ws", id, {donOkr, cycleId}) (doc lai bang
+      URLSearchParams: path /ws/okr/bo-okr, donOkr, kyOkr, record=kr:<id>); bam dong goi dieu huong mot lan toi dung
+      href do; khong goi openRecord, khong goi moCapNhat, khong di qua /okr/kr/.
+      DOI CHUNG DUONG: dong 2 tro bo cua don vi dong 2.
       CHIEU DO (CTLK_PHA=mo-tai-cho: ban sao doi lien ket thanh openRecord({kind:"kr"})) -> "ctlk-dong-kr: bam KR mo
       tai cho, mong sang /ws/okr/kr/<id>".
       CHIEU DO (CTLK_PHA=sai-kr: ban sao dung objectiveId thay keyResultId) -> "ctlk-dong-kr: href tro id sai".
+      CHIEU DO (CTLK_PHA=sai-don: ban sao dung don vi cua dong dau cho moi dong) -> "ctlk-dong-kr: dong 2 tro bo sai
+      don vi".
 
   - id: E4
     criterion: AC-3
@@ -93,14 +96,18 @@ evals:
       - "apps/api/src/okr/okr.contracts.ts"
       - "apps/api/test/ctlk-vi-tri-kr.spec.ts"
     expected: |
-      Ten ca "ctlk-vi-tri-kr". Kho thu that (bun run test), gieo qua service ghi that (khong chen thang bang): mot
-      chu ky dang chay, bon muc tieu cong bo o goc, mot khoi, mot phong ban, mot ca nhan, moi muc tieu mot KR; mot KR
-      cua muc tieu da luu tru; mot KR cua muc tieu nguoi hoi khong duoc xem theo dieuKienXemMucTieu. okr.viTriKr
-      ({keyResultId}): bon KR xem duoc tra { donOkr: khoaDonOkr(don vi cua muc tieu), cycleId } dung voi muc tieu da
-      gieo; KR luu tru, KR khong xem duoc va id khong co deu tra null (khong nem, khong tra ten).
+      Ten ca "ctlk-vi-tri-kr". Kho thu that (bun run test), gieo qua service ghi that (khong chen thang bang): chu ky
+      dang chay K va mot chu ky da ket thuc K0; bon muc tieu cong bo trong K o goc, mot khoi, mot phong ban, mot ca
+      nhan, moi muc tieu mot KR; mot muc tieu xem duoc trong K0 co mot KR; mot KR cua muc tieu da luu tru; mot KR cua
+      muc tieu nguoi hoi khong duoc xem theo dieuKienXemMucTieu.
+      (a) okr.viTriKr({keyResultId}): bon KR trong K tra { donOkr: khoaDonOkr(don vi cua muc tieu), cycleId: K }; KR
+      cua K0 tra cycleId K0 (KHAC K); KR luu tru, KR khong xem duoc va id khong co deu tra null (khong nem, khong tra
+      ten). (b) okr.capNhatTuan cua nguoi phu trach: moi item mang donOkr, cycleId bang dung ket qua viTriKr cua KR do.
       DOI CHUNG DUONG: KR phong ban tra donOkr "pb:<departmentId>".
-      CHIEU DO (pha bang ban sao: bo dieuKienXemMucTieu khoi truy van) -> "ctlk-vi-tri-kr: KR khong duoc xem tra
-      vi tri, mong null".
+      CHIEU DO (ban sao bo dieuKienXemMucTieu khoi truy van) -> "ctlk-vi-tri-kr: KR khong duoc xem tra vi tri, mong
+      null".
+      CHIEU DO (ban sao tra chu ky dang chay thay chu ky cua muc tieu) -> "ctlk-vi-tri-kr: kyOkr la chu ky dang chay,
+      mong chu ky cua muc tieu".
 
   - id: E6
     criterion: AC-4
@@ -156,17 +163,23 @@ evals:
     executor: script
     cmd: config:executors.script.ctlk_mot_duong
     paths:
-      - "apps/app/app/**"
+      - "apps/app/app/(app)/**"
       - "apps/app/components/**"
+      - "apps/app/lib/**"
       - "_acceptance/cua-toi-chi-liet-kr/rang/mot-duong.mjs"
     expected: |
-      Quet ma bang parser TS (khong regex chuoi tron) moi tep .ts/.tsx duoi apps/app/app va apps/app/components tru
-      test va proto: (1) khong JSX <BangCapNhat> nao ngoai tep dinh nghia cap-nhat-tuan/cap-nhat-tuan.tsx va khong tep
-      nao ngoai do import BangCapNhat de render; (2) khong loi goi moCapNhat nao mang entry "nhac", "viec-cua-toi" hay
-      "cua-toi" (doc gia tri literal cua doi so); (3) khong tep nao doc SEARCH_PARAM.okr.tu; (4) ngan KR (kr-sheet.tsx)
-      va dong KR cua bo (bang-kr.tsx) moi noi co nut "Cập nhật" mo HopThoaiCapNhatKr voi entry "sheet". In
-      "DUNG AC-6: 4/4" ma 0. DOI CHUNG DUONG: ban sao chen <BangCapNhat/> vao cua-toi.tsx -> "SAI AC-6 (1):
-      cua-toi.tsx dung bang cap nhat hang loat" ma 1. Moi vi pham in ten tep va dong.
+      Quet ma bang TypeScript type checker (ts.createProgram tren tsconfig cua apps/app, khong regex chuoi tron) moi
+      tep .ts/.tsx duoi apps/app tru test/** va app/proto/**: (1) khong JSX hay import de render BangCapNhat hoac
+      CapNhatTuan ngoai tep dinh nghia cap-nhat-tuan/cap-nhat-tuan.tsx; (2) khong loi goi okr.moCapNhat nao co entry
+      giai (qua type checker: literal, hang, enum, bien const) ra "nhac", "viec-cua-toi" hay "cua-toi"; entry khong giai
+      duoc thanh literal la vi pham "SAI AC-6 (2) khong giai duoc entry"; (3) khong tep nao doc SEARCH_PARAM.okr.tu;
+      (4) ngan KR (kr-sheet.tsx) va dong KR cua bo (bang-kr.tsx) co nut "Cập nhật" goi useCapNhatKr().mo (mo
+      HopThoaiCapNhatKr voi entry "sheet"). In "DUNG AC-6: 4/4" ma 0. Moi vi pham in ten tep va dong.
+      Moi luat mot doi chung duong tren ban sao (worktree tam), ma 1 voi thong diep ghim:
+      (1) chen <CapNhatTuan/> vao cua-toi.tsx -> "SAI AC-6 (1): cua-toi.tsx:<dong> render bang cap nhat hang loat";
+      (2) them trong apps/app/lib mot hook goi moCapNhat({entry: LOI_VAO[4]}) -> "SAI AC-6 (2): <tep>:<dong> moCapNhat
+      entry cua-toi"; (3) doc SEARCH_PARAM.okr.tu trong phan-can-cap-nhat.tsx -> "SAI AC-6 (3): <tep>:<dong> doc tham so
+      tu"; (4) bo nut Cập nhật khoi kr-sheet.tsx -> "SAI AC-6 (4): kr-sheet.tsx khong mo hop mot KR".
 
   - id: E10
     criterion: AC-7
@@ -188,12 +201,17 @@ evals:
     cmd: config:executors.test.ctlk_phu_trach
     paths:
       - "apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx"
+      - "apps/app/app/(app)/[slug]/okr/khoi-kr-cua-toi.tsx"
       - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
     expected: |
-      Ten ca "ctlk-phu-trach" (theo Hoi-2 loi may khuyen). mine tra 2 muc tieu, 3 KR nguoi xem phu trach: moi ten KR
-      trong [data-phan=kr-phu-trach] la lien ket href url("/okr/kr/<id>"); bam khong goi openRecord.
+      Ten ca "ctlk-phu-trach" (theo Hoi-2 loi may khuyen). Ma tran 2 be mat x 2 chu ky: [data-phan=kr-phu-trach] cua
+      Cua toi va khoi «KR cua toi» o Tong quan; o chu ky dang chay va o chu ky da qua (o chu ky dau trang la K0). Moi o:
+      moi ten KR la lien ket href url("/okr/kr/<id>") (dich chu ky do trang may chu giai, E4/E5); bam khong goi
+      openRecord, khong goi moDienBien.
       DOI CHUNG DUONG: KR thu 3 tro dung id.
       CHIEU DO (CTLK_PHA=phu-trach-tai-cho: ban sao goi openRecord) -> "ctlk-phu-trach: ten KR mo tai cho".
+      CHIEU DO (CTLK_PHA=tong-quan-tai-cho: ban sao giu moDienBien o khoi KR cua toi) -> "ctlk-phu-trach: Tong quan
+      mo KR tai cho".
       Chu kho chon giu tai cho o Cong Pham vi -> eval nay viet lai thanh "bam goi openRecord({kind:'kr'}) va khong
       dieu huong" truoc S3.
 
@@ -250,3 +268,21 @@ evals:
       mot KR mo voi ten KR do — chup E14-hop-<kho>.png; (d) mo /<slug>/okr/kr/<id KR luu tru> -> ve /<slug>/okr, ngan KR
       bao khong thay — chup E14-khong-thay-<kho>.png. Nguoi cham nhin anh: danh sach doc duoc, ten KR khong bi cat
       mat nghia o 375, trang dich dung la bo cua KR.
+
+  - id: E15
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ctlk_vong_khep
+    layer: backend-effect
+    paths:
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "packages/db/src/okr-nhac.ts"
+      - "apps/api/test/ctlk-vong-khep.spec.ts"
+    expected: |
+      Ten ca "ctlk-vong-khep". Kho thu that, gieo qua service ghi that: nguoi A phu trach 2 KR chua cap nhat tuan nay.
+      Mo luot bang moCapNhat({entry:"sheet"}) va gui MOT lan cap nhat qua guiCapNhat cho KR 1 (dung duong hop mot KR
+      dung). Sau do: capNhatTuan(A) tra KR 1 updatedThisWeek=true, KR 2 false; ham gom muc nhac okr-cap-nhat cua
+      packages/db (cung ham buoc 08:30 goi) cho A tra krIds [KR 2], soKr 1.
+      DOI CHUNG DUONG: KR 2 van con trong ca hai.
+      CHIEU DO (ban sao loc lan cap nhat chi tinh entry nhac|cua-toi|viec-cua-toi) -> "ctlk-vong-khep: KR 1 da gui qua
+      sheet van con trong tin nhac".

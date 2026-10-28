@@ -32,12 +32,16 @@ khỏi Của tôi; theo dõi xem ở Bộ OKR › Đang theo dõi. Ghi ở `ghi_
    `/okr/bo-okr?donOkr=<khoá đơn vị của mục tiêu>&kyOkr=<chu kỳ của mục tiêu>&record=kr:<id>`. Đúng câu giao của
    hàng («ngăn KR mở trong bộ OKR của nó») và bản mẫu 24/10 (`/proto/hop-tuan-mo-dung-bo`, `5ebcd43dc`, «Bấm một KR
    để mở nó trong bộ OKR rồi cập nhật»). Đóng ngăn thì người đứng ở bộ đó; ‹ › của ngăn đi qua KR của bộ.
-3. **Một đường dẫn chung cho «mở KR trong bộ»: `/okr/kr/<keyResultId>`.** Trang máy chủ hỏi API vị trí của KR
-   (`okr.viTriKr` → `{ donOkr, cycleId }` hoặc `null` theo quyền xem của người hỏi) rồi chuyển hướng tới đích ở mục
-   2. KR không có, đã lưu trữ hay người không xem được → chuyển tới `/okr?record=kr:<id>`: Của tôi với ngăn KR tự
-   báo «không thấy» như hôm nay, không lộ tên bộ. Của tôi, tin nhắc và việc OKR đều trỏ đường này, nên phép giải
-   đơn vị sống ở một chỗ. Nó sống ở API vì đó là chỗ biết quyền xem (`dieuKienXemMucTieu`); không có trí khôn nào
-   (AGENTS.md: không chấm điểm, không suy đoán — chỉ đọc khoá đơn vị của mục tiêu).
+3. **Một hàm dựng đích, hai cách có dữ liệu.** Hàm thuần `dichKrTrongBo(slug, krId, viTri)` ở
+   `apps/app/lib/okr-duong-kr.ts` dựng đích của mục 2 từ `{ donOkr, cycleId }`, hoặc `/okr?record=kr:<id>` khi vị trí
+   là `null`.
+   - Của tôi › «Cần cập nhật tuần này» đã có dữ liệu: `okr.capNhatTuan` trả thêm `donOkr` (khoá đơn vị của mục tiêu)
+     và `cycleId` cho mỗi KR, nên dòng KR là liên kết thẳng tới đích, không qua bước chuyển hướng.
+   - Lối chỉ biết `krId` (tin nhắc, việc OKR, các danh sách KR của AC-8) trỏ `/okr/kr/<keyResultId>`. Trang máy chủ
+     hỏi `okr.viTriKr` → `{ donOkr, cycleId }` hoặc `null` theo quyền xem của người hỏi, rồi chuyển hướng bằng cùng
+     hàm. KR không có, đã lưu trữ hay người không xem được → Của tôi với ngăn KR tự báo «không thấy», không lộ tên bộ.
+   Vị trí sống ở API vì đó là chỗ biết quyền xem (`dieuKienXemMucTieu`); không có trí khôn nào (AGENTS.md: chỉ đọc
+   khoá đơn vị và chu kỳ của mục tiêu). Chu kỳ là chu kỳ của mục tiêu, không phải chu kỳ đang chạy.
 4. **Đường của tin nhắc và việc OKR theo số KR.** Một hàm dùng chung `duongCapNhatKr(krIds)` trong
    `packages/validation/src/okr-cap-nhat.ts`: một KR → `/okr/kr/<id>`; từ hai KR → `/okr` (Của tôi, phần đầu liệt
    đủ). `duongTrongApp` của agent (Zalo, Slack và dòng hộp thông báo web, vì hộp thông báo lưu đúng `duongDan` này)
@@ -49,8 +53,12 @@ khỏi Của tôi; theo dõi xem ở Bộ OKR › Đang theo dõi. Ghi ở `ghi_
    và giá trị `nhac`, `viec-cua-toi`, `cua-toi` của `LOI_VAO` ở lại: cột `OkrCheckInSession.entry` còn hàng cũ mang
    chúng, bản gieo mẫu ghi `entry:"nhac"`, và năm hồ sơ đã ký (`cap-nhat-tuan-okr` E2 · E25, `hop-cap-nhat-lan-truoc`
    E5, `man-okr-truoc-r1` E3 · E4, `da-gui-dem-dung-kr-cho` E1–E6) đo chính các vật đó. Dọn là một hàng riêng.
-8. **Hỏi-2 (chủ kho quyết):** phần «KR bạn phụ trách» hôm nay mở ngăn KR ngay trên Của tôi (SV6 vừa ký). Máy khuyên
-   đổi sang cùng đường `/okr/kr/<id>` để một màn chỉ có một cách bấm KR.
+8. **Hỏi-2 (chủ kho quyết):** «KR bạn phụ trách» ở Của tôi và khối «KR của tôi» ở Tổng quan hôm nay mở ngăn KR ngay
+   trên trang đang đứng (SV6 vừa ký). Máy khuyên đổi cả hai sang `/okr/kr/<id>` để mọi danh sách KR của người đó mở
+   cùng một cách.
+9. **Vòng khép.** Hộp một KR ghi lần cập nhật với lối `sheet`; `capNhatTuan` và bước gom nhắc 08:30 phải coi lần đó là
+   «đã cập nhật tuần này» bất kể lối, để KR rời danh sách và rời tin kế. Tra 28/10: `updatedThisWeek` so `weekStart`
+   của lần cập nhật cuối, không lọc lối — vòng này đo nó bằng một bài trên kho thật (E15), không sửa gì nếu xanh.
 
 ## Đặc tả UX
 
