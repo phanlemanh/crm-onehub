@@ -115,11 +115,9 @@ const HAI_KY = cyclesOutput.parse({
 	currentId: "q4",
 });
 
-function datCoBan(
-	du: CapNhatTuanOutput | (() => CapNhatTuanOutput) = BA_THIEU,
-) {
+function datCoBan(du: CapNhatTuanOutput = BA_THIEU) {
 	kho.doc.set("okr.cycles", () => HAI_KY);
-	kho.doc.set("okr.capNhatTuan", typeof du === "function" ? du : () => du);
+	kho.doc.set("okr.capNhatTuan", () => du);
 }
 
 const phan = (ten: string) =>
@@ -439,10 +437,7 @@ describe("ctlk-trang-thai", () => {
 	for (const locale of ["vi", "en"] as const) {
 		test(`ctlk-trang-thai: dang tai ${locale}`, async () => {
 			kho.doc.set("okr.cycles", () => HAI_KY);
-			kho.doc.set(
-				"okr.capNhatTuan",
-				() => new Promise<never>(() => {}) as unknown as object,
-			);
+			kho.doc.set("okr.capNhatTuan", () => new Promise<never>(() => {}));
 			await dung(<CuaToi />, "", locale);
 			await nhip(5);
 			const p1 = phan("can-cap-nhat");

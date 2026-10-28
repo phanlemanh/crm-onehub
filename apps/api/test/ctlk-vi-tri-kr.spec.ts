@@ -228,9 +228,11 @@ describe("ctlk-vi-tri-kr", () => {
 			for (const [kr] of mong) {
 				const muc = theoKr.get(kr);
 				kiem(muc !== undefined, `ctlk-vi-tri-kr: capNhatTuan thieu ${kr}`);
-				expect({ donOkr: muc?.donOkr, cycleId: muc?.cycleId }).toEqual(
-					await viTri(kr, cookieA),
-				);
+				const v = await viTri(kr, cookieA);
+				expect({ donOkr: muc?.donOkr, cycleId: muc?.cycleId }).toEqual({
+					donOkr: v?.donOkr,
+					cycleId: v?.cycleId,
+				});
 			}
 		},
 		CHO_MS,
