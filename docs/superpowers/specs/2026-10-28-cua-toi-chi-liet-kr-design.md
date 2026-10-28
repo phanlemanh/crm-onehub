@@ -153,10 +153,16 @@ yêu cầu `cham-tep` cho giám sát, không tự sửa. Ô nào còn đo đư�
 | hop-thong-bao-tren-web/E3 | bản chụp tin trước TB1 mang `/okr?tu=nhac` | cua-toi-chi-liet-kr#AC-4 |
 | hop-thong-bao-tren-web/E10 | như trên | cua-toi-chi-liet-kr#AC-4 |
 | thong-bao-mot-nguon-nhieu-kenh/E2 | như trên | cua-toi-chi-liet-kr#AC-4 |
+| bam-kr-mo-chi-tiet-kr/E1 | bấm tên KR ở «KR bạn phụ trách» mở ngăn tại chỗ | cua-toi-chi-liet-kr#AC-8 |
 
 Bản chụp `apps/agent/test/fixtures/tin-nhac-truoc-tb1.json` mà ba ô cuối so: sửa nó thì `bam-kr-mo-chi-tiet-kr` E6
 («ảnh chụp lịch sử không đổi» so với `origin/onehub`) đỏ trên nhánh tới khi gộp. Đây là việc của `cham-tep` ở S3:
 giám sát chọn giữa giữ bản chụp (ba ô trên thay bằng AC-4) và đổi bản chụp kèm dòng sổ `fix` cho bkr/E6.
+
+Hai thước đã ký đo nhiều lối, nên sửa thước chứ không thay cả ô (qua `cham-tep`): `bam-kr-mo-chi-tiet-kr/E7`
+(bảng `cho-mo-ban-ghi.json` bỏ dòng `phan-kr-phu-trach.tsx`, chiều đỏ chuyển sang `viec-cua-toi.tsx`) và
+`ngan-kr-mot-cho/E1` (ma trận chín lối bỏ ô «Của tôi» — khối «KR của tôi» nay đo ở `ctlk-phu-trach` — còn tám lối).
+Ca kiểm của ô đã bị thay gỡ khỏi tệp kiểm theo tiền lệ `3d0f64e55`.
 
 Hai bài không thuộc hồ sơ nào sửa thẳng: `apps/app/test/viec-okr-cua-toi.dom.tsx` (href `?tu=viec-cua-toi`) và
 `messages-guard.spec.ts` (khoá chữ thôi dùng: `baPhan.capNhatN`, `baPhan.suaLanGui`, `khoiMucTieu.nhomDangTheoDoi`).
