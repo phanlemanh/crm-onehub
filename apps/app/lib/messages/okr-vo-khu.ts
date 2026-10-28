@@ -155,7 +155,7 @@ const en: OkrVoKhuMessages = {
 			cungCap: "Same level",
 			trucThuoc: "Under it",
 			doiBo: (ten: string) => `${ten} — switch to another set`,
-			demMucTieu: (n: number) => (n === 1 ? "1 objective" : `${n} objectives`),
+			demMucTieu: (n: number) => `${n} objective${n === 1 ? "" : "s"}`,
 			chuaCoRieng: "no objectives of its own",
 		},
 		rongBoPhan: {

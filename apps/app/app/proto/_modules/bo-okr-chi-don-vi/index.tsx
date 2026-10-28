@@ -37,7 +37,7 @@ import { TableCell } from "@crm/ui/components/table";
 import type { TableQueryState } from "@crm/ui/lib/table-query";
 import Link from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
 	CAY,
 	type DonBcd,
@@ -262,7 +262,6 @@ function RongKhoi({ d }: { d: DonBcd }) {
 
 function BangBo({ d, daBoSan }: { d: DonBcd; daBoSan: boolean }) {
 	const [daBo, datDaBo] = useState(daBoSan);
-	useEffect(() => datDaBo(daBoSan), [daBoSan]);
 	const tatCa = mauCua(d);
 	const dangChay = tatCa.filter((mt) => !mt.daBo);
 	const boDi = tatCa.filter((mt) => mt.daBo);
@@ -480,7 +479,11 @@ export function BoOkrChiDonViMau({ state }: { state: string }) {
 					) : (
 						<>
 							<HangSo d={d} />
-							<BangBo d={d} daBoSan={canh.daBo} />
+							<BangBo
+								d={d}
+								daBoSan={canh.daBo}
+								key={`${d.khoa}-${canh.daBo}`}
+							/>
 						</>
 					)}
 				</KhungBo>
