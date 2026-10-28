@@ -51,7 +51,7 @@ export type GhiBanNhap = {
 		gia: DongKrNhap,
 		khoaSo: boolean,
 	) => void;
-	xoaKr: (khoa: string, id: string | null) => void;
+	xoaKr: (khoa: string, id: string | null, mtId: string | null) => void;
 	xoaMucTieu: (khoa: string, id: string, khoaKr: readonly string[]) => void;
 };
 
@@ -326,7 +326,7 @@ export function useGhiBanNhap(
 		});
 	};
 
-	const xoaKr = (khoa: string, id: string | null) => {
+	const xoaKr = (khoa: string, id: string | null, mtId: string | null) => {
 		datBanNhap((bn) => boDong(bn, khoa));
 		luuDong.quen([khoa]);
 		if (id === null && !luuDong.dangLuu(khoa)) return;
@@ -335,6 +335,7 @@ export function useGhiBanNhap(
 			if (idXoa === null) return { id: khoa };
 			try {
 				await boKr.mutateAsync({ id: idXoa });
+				void cache.okr(mtId ?? undefined);
 				return { id: idXoa };
 			} catch (loi) {
 				datBanNhap((bn) => giuDong(bn, khoa));
@@ -348,7 +349,7 @@ export function useGhiBanNhap(
 			await boMt.mutateAsync({ id });
 			datBanNhap((bn) => boDong(bn, khoa));
 			luuDong.quen([khoa, ...khoaKr]);
-			bo.thuLai();
+			void cache.okr(id);
 			return { id };
 		});
 	};

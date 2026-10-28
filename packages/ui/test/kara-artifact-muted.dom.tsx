@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { VatPhamDock } from "../src/components/kara/vat-pham";
+import { KaraArtifact } from "../src/components/kara/artifact";
 import { LocaleProvider } from "../src/components/locale-provider";
 import { Textarea } from "../src/components/textarea";
 
@@ -25,19 +25,21 @@ function lop(el: Element | null): string[] {
 	return (el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
 }
 
-describe("vk10-vat-pham", () => {
+describe("vk10-kara-artifact-muted", () => {
 	test("ô vật phẩm dựng bố cục dock mà không mang nhãn Kara", () => {
 		dung(
-			<VatPhamDock
+			<KaraArtifact
+				variant="docked"
+				metaStyle="muted"
 				title="Bộ OKR quý 4"
 				meta="Phòng Kinh doanh"
 				actions={<button type="button">Đóng</button>}
 				footer={<button type="button">Công bố 2</button>}
 			>
 				<p>Nội dung</p>
-			</VatPhamDock>,
+			</KaraArtifact>,
 		);
-		const vatPham = document.querySelector("[data-slot=vat-pham]");
+		const vatPham = document.querySelector("[data-slot=kara-artifact]");
 		expect(vatPham).not.toBeNull();
 		expect(document.querySelector("[data-slot=kara-mark]")).toBeNull();
 		expect(
@@ -47,17 +49,19 @@ describe("vk10-vat-pham", () => {
 		const chan = vatPham?.querySelector("[data-slot=kara-dock-footer]");
 		expect(chan?.textContent).toBe("Công bố 2");
 		expect(vatPham?.textContent).toContain("Bộ OKR quý 4");
-		expect(vatPham?.textContent).toContain("Phòng Kinh doanh");
+		expect(
+			vatPham?.querySelector("[data-slot=kara-artifact-meta]")?.textContent,
+		).toBe("Phòng Kinh doanh");
 		expect(vatPham?.textContent).toContain("Nội dung");
 	});
 
 	test("không có chân thì không dựng chân", () => {
 		dung(
-			<VatPhamDock title="Bộ trống">
+			<KaraArtifact variant="docked" metaStyle="muted" title="Bộ trống">
 				<p>Trống</p>
-			</VatPhamDock>,
+			</KaraArtifact>,
 		);
-		expect(document.querySelector("[data-slot=vat-pham]")).not.toBeNull();
+		expect(document.querySelector("[data-slot=kara-artifact]")).not.toBeNull();
 		expect(document.querySelector("[data-slot=kara-dock-footer]")).toBeNull();
 	});
 

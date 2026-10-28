@@ -60,6 +60,7 @@ import {
 } from "@/app/(app)/[slug]/okr/ngan-okr-url";
 import { parseAsNeoGopY } from "@/app/(app)/[slug]/okr/okr-search-params";
 import { donCuaMucTieu } from "@/app/(app)/[slug]/okr/soan-bo/du-lieu-bo";
+import { useQuyenSoanBo } from "@/app/(app)/[slug]/okr/soan-bo/use-bo-soan";
 import {
 	NhanTinhTrang,
 	NhanTrangThai,
@@ -825,7 +826,8 @@ function SoMucTieu({ mt }: { mt: ChiTiet }) {
 
 function ChipKhung({ mt }: { mt: ChiTiet }) {
 	const donChon = donCuaMucTieu(mt);
-	if (donChon === null) return null;
+	const quyen = useQuyenSoanBo(mt.cycleId, mt.soGopYCho > 0 ? donChon : null);
+	if (donChon === null || quyen?.loai !== "soan") return null;
 	return (
 		<ChipGopYKhung
 			mt={{

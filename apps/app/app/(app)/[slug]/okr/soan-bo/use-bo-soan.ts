@@ -54,6 +54,27 @@ function quyenCua(
 	return { loai: "soan" };
 }
 
+export function useQuyenSoanBo(
+	cycleId: string,
+	don: DonChonOkr | null,
+): QuyenSoan | null {
+	const trpc = useTRPC();
+	const phuThuoc = usePhuThuocSoan();
+	const caBo = don !== null && don.loai !== "nguoi" ? don : null;
+	const cycles = useQuery(trpc.okr.cycles.queryOptions());
+	const danhSach = useQuery(
+		trpc.okr.danhSach.queryOptions(
+			caBo ? { cycleId, unit: caBo, loc: LOC_TRONG } : skipToken,
+		),
+	);
+	if (don === null) return null;
+	if (!phuThuoc.chiXemTheoQuyen) return { loai: "soan" };
+	if (caBo === null) return quyenCua(don, false, false);
+	const ky = cycles.data?.cycles.find((c) => c.id === cycleId);
+	if (!danhSach.data || !ky) return null;
+	return quyenCua(don, danhSach.data.canEdit, ghiDuocOPha(ky.phase));
+}
+
 export function useBoSoan(khoaBo: string): BoSoan {
 	const trpc = useTRPC();
 	const phuThuoc = usePhuThuocSoan();

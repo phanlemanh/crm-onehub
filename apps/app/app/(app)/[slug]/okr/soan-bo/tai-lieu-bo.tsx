@@ -144,7 +144,9 @@ function DanhSachKrMoi({
 					onDoi={(phan) => doi(kr, phan)}
 					onEnter={() => enter(kr, i)}
 					onRoi={() => ghi.luuKr(mt, kr)}
-					onXoa={() => ghi.xoaKr(kr.khoa, luuDong.id(kr.khoa))}
+					onXoa={() =>
+						ghi.xoaKr(kr.khoa, luuDong.id(kr.khoa), luuDong.id(mt.khoa))
+					}
 				/>
 			))}
 		</ol>
@@ -249,7 +251,9 @@ function krCoHien(mt: MucTieuSoan, bc: SoanTaiLieu | null) {
 	return bc
 		? mt.keyResults
 				.filter(
-					(kr) => !bc.luuDong.daLuu.has(kr.id) && !daBoDi(bc.banNhap, kr.id),
+					(kr) =>
+						(mt.status !== "nhap" || !bc.luuDong.daLuu.has(kr.id)) &&
+						!daBoDi(bc.banNhap, kr.id),
 				)
 				.map((kr) => krTheoKara(kr, bc))
 		: mt.keyResults;
@@ -258,9 +262,21 @@ function krCoHien(mt: MucTieuSoan, bc: SoanTaiLieu | null) {
 function mucTieuCoHien(mucTieu: MucTieuSoan[], bc: SoanTaiLieu | null) {
 	return bc
 		? mucTieu.filter(
-				(mt) => !bc.luuDong.daLuu.has(mt.id) && !daBoDi(bc.banNhap, mt.id),
+				(mt) =>
+					(mt.status !== "nhap" || !bc.luuDong.daLuu.has(mt.id)) &&
+					!daBoDi(bc.banNhap, mt.id),
 			)
 		: mucTieu;
+}
+
+function mucTieuMoiConNhap(mucTieu: MucTieuSoan[], soan: SoanTaiLieu) {
+	const daRoiNhap = new Set(
+		mucTieu.filter((mt) => mt.status !== "nhap").map((mt) => mt.id),
+	);
+	return mucTieuMoiHien(soan.banNhap, mucTieu.length > 0).filter((mt) => {
+		const id = soan.luuDong.id(mt.khoa);
+		return id === null || !daRoiNhap.has(id);
+	});
 }
 
 function DanhSachKrCo({
@@ -303,7 +319,7 @@ function DanhSachKrCo({
 							if (bc !== null && !khoa.ten)
 								bc.ghi.luuKrCo(mt, kr, gia, khoa.so);
 						}}
-						onXoa={() => bc?.ghi.xoaKr(kr.id, kr.id)}
+						onXoa={() => bc?.ghi.xoaKr(kr.id, kr.id, mt.id)}
 					/>
 				);
 			})}
@@ -444,7 +460,7 @@ function TaiLieu({
 	const locale = useLocale();
 	const m = okrSoanBoMessages(locale);
 	const coSan = mucTieuCoHien(mucTieu, bc);
-	const moi = bc ? mucTieuMoiHien(bc.banNhap, mucTieu.length > 0) : [];
+	const moi = bc ? mucTieuMoiConNhap(mucTieu, bc) : [];
 	const goc = useRef<HTMLDivElement>(null);
 	useCuonToiMucTieu(goc);
 	return (
@@ -592,7 +608,7 @@ export function noiDungCham(
 			],
 		),
 	);
-	const moi = mucTieuMoiHien(soan.banNhap, bo.mucTieu.length > 0)
+	const moi = mucTieuMoiConNhap(bo.mucTieu, soan)
 		.map((mt) =>
 			dongCham(
 				mt.ten,

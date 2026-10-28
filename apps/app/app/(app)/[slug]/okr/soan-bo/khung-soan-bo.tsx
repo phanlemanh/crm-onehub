@@ -2,12 +2,12 @@
 
 import { FieldDescription } from "@crm/ui/components/field";
 import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
+import { KaraArtifact } from "@crm/ui/components/kara/artifact";
 import {
 	KaraDock,
 	KaraDockBody,
 	KaraDockFooter,
 } from "@crm/ui/components/kara/dock";
-import { VatPhamDock } from "@crm/ui/components/kara/vat-pham";
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Separator } from "@crm/ui/components/separator";
@@ -148,7 +148,9 @@ function OTaiLieu({
 			aria-label={m.theSoan.bo}
 			data-o="tai-lieu"
 		>
-			<VatPhamDock
+			<KaraArtifact
+				variant="docked"
+				metaStyle="muted"
 				title={<span translate="no">{bo.ten}</span>}
 				meta={
 					bo.quyen.loai === "soan" ? <SoNhap bo={bo} soan={soan} /> : undefined
@@ -167,7 +169,7 @@ function OTaiLieu({
 					) : null}
 					<TaiLieuBo bo={bo} soan={soan} />
 				</div>
-			</VatPhamDock>
+			</KaraArtifact>
 		</KaraDock>
 	);
 }

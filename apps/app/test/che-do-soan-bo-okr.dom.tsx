@@ -27,6 +27,7 @@ import {
 	cho,
 	DauTrangOkr,
 	type DauVao,
+	daLamMoi,
 	dat,
 	datLai,
 	don,
@@ -2458,6 +2459,154 @@ describe("vk10-cong-bo-do", () => {
 	});
 });
 
+type MayChuMoi = { status: TrangThaiMucTieu | null; kr: string[] };
+
+const { useQueryClient } = await import("@tanstack/react-query");
+const giuClient: { client: ReturnType<typeof useQueryClient> | null } = {
+	client: null,
+};
+
+function GiuClient() {
+	giuClient.client = useQueryClient();
+	return null;
+}
+
+const soLanLamMoiOkr = () => daLamMoi.filter((ten) => ten === "okr").length;
+
+async function lamMoiNhuCacheOkr(): Promise<void> {
+	await act(async () => {
+		await Promise.all(
+			["okr.danhSach", "okr.objective"].map((duong) =>
+				giuClient.client?.invalidateQueries({ queryKey: [duong] }),
+			),
+		);
+	});
+	await nhip(10);
+}
+
+async function moBoSauGo(phuThuoc: Partial<PhuThuocSoan> = {}) {
+	const bo = boMau({
+		muc: boCongBo(QUYEN_CONG_BO).slice(0, 1),
+		nguoiSoan: HUNG,
+		quanTri: true,
+	});
+	const may: MayChuMoi = { status: null, kr: [] };
+	const dongMoi = () =>
+		mucMau(
+			{
+				id: MT_MOI,
+				title: TEN_MT_GO,
+				status: may.status ?? "nhap",
+				kr: may.kr.map((id) => ({ id, title: TEN_KR_GO })),
+			},
+			{ loai: "pb", id: "P1" },
+			true,
+		);
+	datGhiMoi();
+	dat("okr.createObjective", () => {
+		may.status = "nhap";
+		return { id: MT_MOI, canhBao: null };
+	});
+	dat("okr.createKeyResult", () => {
+		const id = `kr-moi-${may.kr.length + 1}`;
+		may.kr = [...may.kr, id];
+		return { id, canhBao: null };
+	});
+	dat("okr.removeKeyResult", (vao) => {
+		const id = idCua(vao);
+		may.kr = may.kr.filter((k) => k !== id);
+		return { id };
+	});
+	dat("okr.danhSach", () =>
+		danhSachOutput.parse({
+			...bo.danhSach,
+			rows: [
+				...bo.danhSach.rows,
+				...(may.status ? [{ ...dongMoi(), krKhop: [] }] : []),
+			],
+		}),
+	);
+	dat("okr.objective", (vao) => {
+		const id = idCua(vao);
+		if (id === MT_MOI) return chiTiet(dongMoi(), QUYEN_CONG_BO);
+		return id ? (bo.chiTiet.get(id) ?? null) : null;
+	});
+	dat("okr.publishObjective", (vao) => {
+		if (idCua(vao) === MT_MOI) may.status = "cong-bo";
+		return { id: idCua(vao), canhBao: null };
+	});
+	await mo(
+		<PhuThuocSoanContext.Provider
+			value={{ ...PHU_THUOC_MAC_DINH, ...phuThuoc }}
+		>
+			<GiuClient />
+			<RecordSheetHost cauNoiOkr />
+			<DoRecord />
+		</PhuThuocSoanContext.Provider>,
+		`?record=${encodeURIComponent(`soan-bo:${bo.khoa}`)}`,
+	);
+	await nhip(10);
+	await choKhung();
+	await bam(q("[data-nut=them-muc-tieu-bo]"));
+	await cho(
+		() =>
+			document.activeElement !== null && document.activeElement === oTenMtDau(),
+		"vk10-sau-go: dong moi lech",
+	);
+	await phim(`${TEN_MT_GO}{Enter}`);
+	await phim(`${TEN_KR_GO}{Tab}0{Tab}40{Tab}khách{Enter}`);
+	await choLuuXong("vk10-sau-go: luu lech");
+	await lamMoiNhuCacheOkr();
+	await cho(
+		() => (nutCongBo()?.textContent ?? "") === CHU.congBo.nut("1"),
+		"vk10-sau-go: fixture lech",
+	);
+	return may;
+}
+
+const khoiDocMoi = () =>
+	q(`[data-tai-lieu-bo] [data-dong-mt="${MT_MOI}"]:not([data-dong-moi])`);
+
+async function kiemSauCongBo(): Promise<void> {
+	const sai = "vk10-sau-cong-bo: muc tieu vua go van sua so sau cong bo lech";
+	await moHopCongBo("sau-cong-bo", CHU.congBo.nut("1"));
+	await xacNhan("sau-cong-bo");
+	await cho(() => goiCua("okr.publishObjective").length === 1, sai);
+	await lamMoiNhuCacheOkr();
+	await cho(() => khoiDocMoi() !== null, sai);
+	expect(qa("[data-tai-lieu-bo] [data-dong-moi]").length, sai).toBe(0);
+	expect(khoiDocMoi()?.querySelector("[data-cau-khoa=so]"), sai).not.toBeNull();
+	for (const o of ["khoi", "dich", "don-vi"])
+		expect(oKr("kr-moi-1", o)?.hasAttribute("disabled"), sai).toBe(true);
+	expect(khoiDocMoi()?.querySelector("[data-nut=them-kr]"), sai).toBeNull();
+}
+
+async function kiemSauXoaKr(): Promise<void> {
+	const sai = "vk10-sau-xoa-kr: dem KR da xoa lech";
+	const lamMoiTruoc = soLanLamMoiOkr();
+	for (const o of ["ten", "khoi", "dich", "don-vi"])
+		await sua(oKr("kr-moi-1", o), "");
+	await focusVao(oKr("kr-moi-1", "ten"));
+	await phim("{Backspace}");
+	await choLuuXong(sai);
+	expect(goiCua("okr.removeKeyResult").length, sai).toBe(1);
+	await cho(() => soLanLamMoiOkr() > lamMoiTruoc, sai);
+	await lamMoiNhuCacheOkr();
+	expect(nutCongBo()?.textContent ?? "", sai).not.toBe(CHU.congBo.nut("1"));
+}
+
+describe("vk10-sau-go", () => {
+	test("vk10-sau-cong-bo: muc tieu go trong phien, cong bo xong thi ve bang khoi doc, khoa o so", async () => {
+		await moBoSauGo();
+		await kiemSauCongBo();
+	});
+
+	test("vk10-sau-xoa-kr: xoa KR duy nhat cua muc tieu vua go thi doc lai bo, het dem cong bo", async () => {
+		await moBoSauGo();
+		await kiemSauXoaKr();
+	});
+});
+
 const { DetailSheet } = await import("@/components/detail-sheet");
 const { ObjectiveSheet } = await import(
 	"@/components/crm/record-sheet/objective-sheet"
@@ -2490,11 +2639,26 @@ function deXuatNgan(n: number) {
 	);
 }
 
-type CaNgan = { n: number; soGopYChoThat?: number; diemCam?: DiemCamNgan };
+type CaNgan = {
+	n: number;
+	soGopYChoThat?: number;
+	diemCam?: DiemCamNgan;
+	bo?: Omit<TuyChonBo, "muc">;
+	boSuaDuoc?: boolean;
+	phuThuoc?: Partial<PhuThuocSoan>;
+};
 
-async function moNgan({ n, soGopYChoThat = n, diemCam }: CaNgan) {
+async function moNgan({
+	n,
+	soGopYChoThat = n,
+	diemCam,
+	bo: tuyChon = {},
+	boSuaDuoc = true,
+	phuThuoc = {},
+}: CaNgan) {
 	const bo = boMau({
 		don: DON_NGAN,
+		...tuyChon,
 		muc: [
 			{
 				id: MT_NGAN,
@@ -2505,6 +2669,12 @@ async function moNgan({ n, soGopYChoThat = n, diemCam }: CaNgan) {
 	});
 	const ct = bo.chiTiet.get(MT_NGAN);
 	if (!ct) throw new Error("vk10-ngan: thieu muc tieu mau");
+	if (!boSuaDuoc)
+		dat("okr.danhSach", () => ({
+			...bo.danhSach,
+			canEdit: false,
+			canCreate: false,
+		}));
 	dat("okr.objective", () => ({ ...ct, soGopYCho: soGopYChoThat }));
 	dat("okr.comments", () => ({ comments: [], dong: [] }));
 	dat("workspace.get", () => WORKSPACE_MAU);
@@ -2521,12 +2691,14 @@ async function moNgan({ n, soGopYChoThat = n, diemCam }: CaNgan) {
 		}),
 	);
 	await mo(
-		<>
+		<PhuThuocSoanContext.Provider
+			value={{ ...PHU_THUOC_MAC_DINH, ...phuThuoc }}
+		>
 			<DetailSheet onOpenChange={() => {}} open>
 				<ObjectiveSheet diemCam={diemCam} objectiveId={MT_NGAN} />
 			</DetailSheet>
 			<DoRecord />
-		</>,
+		</PhuThuocSoanContext.Provider>,
 		`?record=${encodeURIComponent(`objective:${MT_NGAN}`)}`,
 	);
 	await cho(
@@ -2589,5 +2761,41 @@ describe("vk10-ngan-do", () => {
 	test("vk10-ngan-do: chip hien khi khong co gop y cho thi n=0 do", async () => {
 		const bo = await moNgan({ n: 0, soGopYChoThat: 1 });
 		await phaiDo(kiemNgan(0, bo.khoa), "vk10-ngan: n=0 chip");
+	});
+});
+
+const MA_TRAN_NGAN_KHOA: readonly Pick<CaNgan, "bo" | "boSuaDuoc">[] &
+	readonly { ten: string }[] = [
+	{ ten: "bo ca nhan", bo: { don: { loai: "nguoi", id: LAN.id } } },
+	{ ten: "sua duoc muc tieu, khong sua duoc bo", boSuaDuoc: false },
+	{ ten: "chu ky da dong", bo: { pha: "da-dong" } },
+];
+
+async function kiemNganKhoa(ten: string): Promise<void> {
+	await nhip(10);
+	expect(
+		chipNgan().length,
+		`vk10-ngan-khoa: ${ten} chip mo khung chi xem lech`,
+	).toBe(0);
+}
+
+describe("vk10-ngan-khoa", () => {
+	for (const ca of MA_TRAN_NGAN_KHOA) {
+		test(`vk10-ngan-khoa: ${ca.ten} — n=2 ma khong soan duoc bo thi khong chip`, async () => {
+			await moNgan({ n: 2, bo: ca.bo, boSuaDuoc: ca.boSuaDuoc });
+			await kiemNganKhoa(ca.ten);
+		});
+	}
+});
+
+describe("vk10-ngan-khoa-do", () => {
+	test("vk10-ngan-khoa-do: tat luat quyen thi bo ca nhan hien chip", async () => {
+		const ca = MA_TRAN_NGAN_KHOA[0];
+		if (!ca) throw new Error("vk10-ngan-khoa: thieu ca");
+		await moNgan({ n: 2, bo: ca.bo, phuThuoc: { chiXemTheoQuyen: false } });
+		await phaiDo(
+			kiemNganKhoa(ca.ten),
+			`vk10-ngan-khoa: ${ca.ten} chip mo khung chi xem lech`,
+		);
 	});
 });
