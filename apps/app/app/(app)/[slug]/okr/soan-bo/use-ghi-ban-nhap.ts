@@ -241,12 +241,16 @@ export function useGhiBanNhap(
 		const tenTruoc = tenDaGui.current.get(mt.id) ?? mt.title;
 		const viSaoTruoc = viSaoDaGui.current.get(mt.id) ?? mt.whyNow;
 		return {
-			...(title.length >= SOAN_BO.tenToiThieu && title !== tenTruoc
-				? { title }
-				: {}),
-			...(whyNow !== viSaoTruoc ? { whyNow } : {}),
+			title:
+				title.length >= SOAN_BO.tenToiThieu && title !== tenTruoc
+					? title
+					: undefined,
+			whyNow: whyNow !== viSaoTruoc ? whyNow : undefined,
 		};
 	};
+
+	const khongDoi = (doi: { title?: string; whyNow?: string }) =>
+		doi.title === undefined && doi.whyNow === undefined;
 
 	const dongBoMucTieuCo = (mt: MucTieuSoan) => {
 		const ten = (tenMuon.current.get(mt.id) ?? mt.title).trim();
@@ -255,10 +259,10 @@ export function useGhiBanNhap(
 			return;
 		}
 		luuDong.chuaLuu(mt.id, null);
-		if (Object.keys(doiMucTieuCo(mt)).length === 0) return;
+		if (khongDoi(doiMucTieuCo(mt))) return;
 		luuDong.luu(mt.id, async () => {
 			const doi = doiMucTieuCo(mt);
-			if (Object.keys(doi).length === 0) return { id: mt.id };
+			if (khongDoi(doi)) return { id: mt.id };
 			const tenTruoc = tenDaGui.current.get(mt.id) ?? null;
 			const viSaoTruoc = viSaoDaGui.current.get(mt.id) ?? null;
 			if (doi.title !== undefined) datTenDaGui(mt.id, doi.title);
