@@ -5,10 +5,10 @@ slug: cua-toi-chi-liet-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-28-cua-toi-chi-liet-kr-design.md
-approved_by:
-approved_at:
+approved_by: Phan Le Manh
+approved_at: 2026-10-28T07:18:46Z
 ---
 
 # Acceptance Contract: cua-toi-chi-liet-kr
@@ -48,8 +48,7 @@ Source input: hàng SV1 `docs/plan/lo-trinh-okr.json` · `docs/plan/pham-vi-okr-
 - AC-7: Given người dùng đang theo dõi mục tiêu của người khác, When mở Của tôi, Then không có mục gập «Đang theo dõi
   (n)»; mục «Đã bỏ» vẫn như cũ.
 - AC-8: Given phần «KR bạn phụ trách» của Của tôi hay khối «KR của tôi» ở Tổng quan, When bấm tên một KR (kể cả KR
-  của một chu kỳ đã qua), Then mở như AC-2, tới bộ của đúng chu kỳ của mục tiêu. (theo Hỏi-2 — chủ kho chọn giữ mở
-  tại chỗ thì AC này đổi thành «mở ngăn KR ngay trên trang đang đứng», như SV6.)
+  của một chu kỳ đã qua), Then mở như AC-2, tới bộ của đúng chu kỳ của mục tiêu.
 - AC-9: Given phần «Cần cập nhật tuần này», When dữ liệu đang tải, tải hỏng, người không phụ trách KR nào, hay đã cập
   nhật đủ tuần, Then lần lượt thấy khung xương giữ tiêu đề phần · «Chưa tải được phần này» kèm «Thử lại» · câu không
   phụ trách KR · câu đã đủ tuần kèm lời «sửa thì mở KR đó».
@@ -93,9 +92,9 @@ Quét bằng `morphological-scan` (preset entity-feature, gọn) trên không gi
 
 ## Notes
 
-- Hỏi-1 (chủ kho quyết): tin nhiều KR dẫn tới Của tôi (máy khuyên) hay tới KR đầu tiên, hay tin liệt từng KR.
-- Hỏi-2 (chủ kho quyết): «KR bạn phụ trách» (Của tôi) và «KR của tôi» (Tổng quan) đổi sang mở trong bộ (máy khuyên)
-  hay giữ mở ngăn tại chỗ như SV6.
+- Hỏi-1 — chủ kho quyết 28/10 ở Cổng Phạm vi: «Hỏi-1: Của tôi». Tin nhiều KR dẫn tới Của tôi.
+- Hỏi-2 — chủ kho quyết 28/10 ở Cổng Phạm vi: «Hỏi-2: đổi sang mở trong bộ». «KR bạn phụ trách» (Của tôi) và «KR
+  của tôi» (Tổng quan) mở KR trong bộ.
 - Bản chụp `apps/agent/test/fixtures/tin-nhac-truoc-tb1.json` đụng `bam-kr-mo-chi-tiet-kr` E6 — xử qua `cham-tep` ở
   S3 (design doc).
 - Xoá khoá chữ thôi dùng ở `apps/app/lib/messages/okr.ts` cần `cham-tep` (tệp chữ chung, luật 7 của đợt).
