@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: cua-toi-chi-liet-kr
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4afe3b9d58719276998460f0f06d2eb32f285b02
+verified_commit: a6b1907a839340eb72dac2996ba89fd869986784
 human_signoff:
 ---
 
 # Evidence Report: cua-toi-chi-liet-kr
 
-Round 1. Verdict tổng REJECT vì một lệnh suite hồi quy không gắn eval nào chạy đỏ (xem mục Analyst và Iterations). Cả 15 eval của tính năng đều xanh.
+Round 2. Cả 15 eval của tính năng và cả 7 lệnh suite hồi quy đều xanh. Lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở round 1 nay đã xanh.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -36,179 +36,183 @@ Round 1. Verdict tổng REJECT vì một lệnh suite hồi quy không gắn eva
 ## Evidence
 
 - eval: E1
-  run_id: minted-cua-toi-chi-liet-kr-E1-r1
+  run_id: minted-cua-toi-chi-liet-kr-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_phan_mot
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-phan-mot: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E2
-  run_id: minted-cua-toi-chi-liet-kr-E2-r1
+  run_id: minted-cua-toi-chi-liet-kr-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_khong_tu
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-khong-tu: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E3
-  run_id: minted-cua-toi-chi-liet-kr-E3-r1
+  run_id: minted-cua-toi-chi-liet-kr-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_dong_kr
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-dong-kr: hai chieu dung (3 dot bien, worktree tam)
 
 - eval: E4
-  run_id: minted-cua-toi-chi-liet-kr-E4-r1
+  run_id: minted-cua-toi-chi-liet-kr-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_dich_kr
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-dich-kr: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E5
-  run_id: minted-cua-toi-chi-liet-kr-E5-r1
+  run_id: minted-cua-toi-chi-liet-kr-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_vi_tri_kr
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-vi-tri-kr: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E6
-  run_id: minted-cua-toi-chi-liet-kr-E6-r1
+  run_id: minted-cua-toi-chi-liet-kr-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_duong_nhac
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-duong-nhac: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E7
-  run_id: minted-cua-toi-chi-liet-kr-E7-r1
+  run_id: minted-cua-toi-chi-liet-kr-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_nhac_dong
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-nhac-dong: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E8
-  run_id: minted-cua-toi-chi-liet-kr-E8-r1
+  run_id: minted-cua-toi-chi-liet-kr-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_viec
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-viec: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E9
-  run_id: minted-cua-toi-chi-liet-kr-E9-r1
+  run_id: minted-cua-toi-chi-liet-kr-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctlk_mot_duong
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN AC-6: 4/4 luat dung, 4/4 doi chung do dung
 
 - eval: E10
-  run_id: minted-cua-toi-chi-liet-kr-E10-r1
+  run_id: minted-cua-toi-chi-liet-kr-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_theo_doi
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-theo-doi: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E11
-  run_id: minted-cua-toi-chi-liet-kr-E11-r1
+  run_id: minted-cua-toi-chi-liet-kr-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_phu_trach
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-phu-trach: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E12
-  run_id: minted-cua-toi-chi-liet-kr-E12-r1
+  run_id: minted-cua-toi-chi-liet-kr-E12-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_trang_thai
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-trang-thai: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E13
-  run_id: minted-cua-toi-chi-liet-kr-E13-r1
+  run_id: minted-cua-toi-chi-liet-kr-E13-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctlk_thay_the
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     DUNG doi chung: ban pha cho «SAI AC-10: cua-toi-ba-phan/E1 thieu status: not-run»
 
 - eval: E14
-  run_id: minted-cua-toi-chi-liet-kr-E14-r1
+  run_id: minted-cua-toi-chi-liet-kr-E14-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctlk_man
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   screenshot: evidence/E14-cua-toi-1280.png
   observed: |
-    Trang Muc tieu tab Cua toi: muc «Can cap nhat tuan nay» ("4 KR chua co so cua tuan 26/10, han 01/11") co 4 dong KR, moi dong co mui ten, khong nut cap nhat hang loat, khong o nhap, khong tran ngang; o 375 ten KR xuong dong day du, doc duoc. Ngan KR hien dung ten «Giu thoi gian duyet hop dong duoi 2 ngay» voi nut «Cap nhat» trong khung nhin (1280 la ngan ben phai, 375 la drawer duoi), bo OKR dich la cua Phap che; hop thoai «Cap nhat KR» mang dung ten KR o ca hai khổ.
-    KR luu tru: ngan hien «Khong tim thay KR nay» kem nut dong o ca hai kho; nen sau ngan o cac anh mo-kr/hop/khong-thay bi lop phu toi nen trang Cua toi phia sau khong thay, viec URL ve /okr dua vao assertion cua script. Lech nho voi Expected: bo mau co 4 KR o 2 don vi va man hien du 4/4 dong, khong phai 3 (steps chi doi «du dong»); khong mau thuan voi y Expected.
+    E14-cua-toi-1280: trang «Mục tiêu», thanh bên khu «Của tôi» đang chọn. Phần «Cần cập nhật tuần này» có câu «4 KR chưa có số của tuần 26/10, hạn 01/11. Bấm một KR để mở nó trong bộ OKR rồi cập nhật.» và 4 dòng KR («E14 · KR ở đơn vị thứ hai» của Khối Kinh doanh, ba KR còn lại của Pháp chế), mỗi dòng có tên, đơn vị và mục tiêu, giá trị, mũi tên. Không nút cập nhật hàng loạt, không ô nhập, đọc rõ. Khớp Expected trừ số dòng là 4 thay vì 3 (bộ mẫu có 4 KR ở 2 đơn vị).
+    E14-cua-toi-375: cùng bố cục xếp một cột, thanh con cuộn ngang trong chính nó, trang không cuộn ngang. Tên KR xuống dòng nhưng đủ nghĩa, không bị cắt mất nghĩa; không nút hàng loạt, không ô nhập.
+    E14-mo-kr-1280: ngăn KR mở bên phải, tiêu đề «Giữ thời gian duyệt hợp đồng dưới 2 ngày», phụ đề «Hợp đồng mùa Tết không kẹt ở pháp chế», nút «Cập nhật» xanh trong khung nhìn, Hiện tại 1,9 ngày, Tiến độ 100%, biểu đồ và lịch sử cập nhật; nền sau ngăn đen do lớp phủ. Đúng bộ OKR của Pháp chế (script xác nhận donOkr=pb:mau-okr-pb-phap-che). E14-mo-kr-375: ngăn dạng drawer ở đáy, tiêu đề xuống 3 dòng nhưng đủ chữ, nút «Cập nhật» hiện rõ, số liệu và biểu đồ đọc được.
+    E14-hop-1280: hộp «Cập nhật KR» với phụ đề «Giữ thời gian duyệt hợp đồng dưới 2 ngày», ô Giá trị 1,9 ngày, biểu đồ, mức tự tin Cao/Vừa/Thấp, ô Ghi chú, nút Huỷ và «Gửi cập nhật». Một form một KR, đúng tên KR. E14-hop-375: cùng hộp xếp một cột, tên KR đủ, hai nút đủ rộng, không tràn.
+    E14-khong-thay-1280: ngăn «Việc của KR» hiện «Không tìm thấy KR này» / «Không tìm thấy KR này, hoặc bạn không có quyền xem.» và nút «Đóng khung KR», nền là trang /okr (script xác nhận về /onehub-center/okr). E14-khong-thay-375: cùng thông báo trong drawer, đọc rõ, không tràn.
+    Tất cả khớp Expected; trang đích đúng bộ của KR được bấm.
   network_observed: n-a (driver)
 
 - eval: E15
-  run_id: minted-cua-toi-chi-liet-kr-E15-r1
+  run_id: minted-cua-toi-chi-liet-kr-E15-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctlk_vong_khep
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
   output: |
     KET LUAN ctlk-vong-khep: hai chieu dung (1 dot bien, worktree tam)
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
-  exit_code: 1
-  verified_at: 2026-10-28T15:32:06Z
+  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  exit_code: 0
+  verified_at: 2026-10-28T23:12:18Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-cua-toi-chi-liet-kr-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-cua-toi-chi-liet-kr-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
 
 - cmd: bun run lint:slop
-  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_lint_slop-r1
+  run_id: minted-cua-toi-chi-liet-kr-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-cua-toi-chi-liet-kr-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-cua-toi-chi-liet-kr-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-28T15:32:06Z
+  verified_at: 2026-10-28T23:12:18Z
 
 ## Known limits
 
@@ -218,9 +222,9 @@ Round 1. Verdict tổng REJECT vì một lệnh suite hồi quy không gắn eva
 
 baseline: BLOCKED ha tang — lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
-Danh sách eval không-phân-biệt: none. Round này baseline không đo được nên không kết luận được eval nào xanh cả hai phía; xem mục «Baseline khong do» bên dưới.
+Danh sách eval không-phân-biệt: none. Round này baseline không đo được (mọi field baseline là n-a) nên không kết luận được eval nào xanh cả hai phía; xem mục «Baseline khong do» bên dưới.
 
-Lệnh fail không gắn eval: `bun run test -- --filter=app --filter=@crm/ui` chạy đỏ (mã thoát khác 0). Đuôi đầu ra: tệp `test/hop-tuan-tren-bang.dom.tsx` ghi "7 pass / 1 fail" trong 8 ca, rồi `chay-dom` báo đỏ sau 3.4 s, `app#test` lỗi, turbo báo "Failed: app#test". Tên ca đỏ không nằm trong đuôi đầu ra đã lưu (chỉ thấy các ca htb-sau-gui và htb-chu ở dòng pass). Nguyên nhân gốc: chưa rõ. Không eval nào của tính năng khai lệnh này, nên không đổ cho eval nào được. Các lệnh suite còn lại (api, agent/auth/db, agent-okr/env/ai-okr/telemetry/validation, lint, lint:slop, build) đều xanh.
+Lệnh fail không gắn eval: không có.
 
 ### Baseline khong do
 
@@ -246,3 +250,5 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: không eval nào đỏ; lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở `test/hop-tuan-tren-bang.dom.tsx` (1 trên 8 ca), không gắn eval nào, nguyên nhân gốc chưa rõ. Verdict REJECT, trả về cho bước dựng để xem lại ca đỏ.
+
+Round 2: cả 15 eval và cả 7 lệnh suite xanh, trong đó lệnh suite đỏ ở round 1 nay xanh. Sau round 1 htb-nguon của HT2 được bỏ lối Của tôi và thay bằng AC-8 (commit a6b1907a8). Verdict PASS.
