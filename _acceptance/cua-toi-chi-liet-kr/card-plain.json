@@ -1,0 +1,40 @@
+{
+  "feature_plain": "Người phụ trách KR mở Của tôi hay bấm tin nhắc 08:30 thì thấy KR nào chưa có số tuần này, bấm một KR là sang trang bộ OKR của nó với ngăn KR mở sẵn, và chỉ cập nhật được bằng hộp một KR.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ liệt mỗi KR chưa cập nhật tuần này thành một dòng bấm được ở «Cần cập nhật tuần này» — không còn ô nhập, không còn nút «Cập nhật N KR» hay «Sửa lần gửi»; đường dẫn cũ có ?tu= cũng chỉ mở danh sách này."},
+    {"id": "AC-2", "p": "Sẽ đưa người sang đúng trang bộ OKR của đơn vị chứa KR, đúng chu kỳ của mục tiêu, với ngăn KR của chính KR đó mở sẵn và nút «Cập nhật»."},
+    {"id": "AC-3", "p": "Sẽ cho mọi liên kết «mở KR» giải đích lúc bấm: KR đã xoá, lưu trữ hay người hết quyền thì về Của tôi, ngăn KR báo không thấy, không lộ tên bộ hay tên KR."},
+    {"id": "AC-4", "p": "Sẽ cho tin nhắc 08:30 (Zalo, Slack, hộp thông báo web) dẫn thẳng tới KR khi chỉ một KR chờ, và tới Của tôi khi từ hai KR (Hỏi-1)."},
+    {"id": "AC-5", "p": "Sẽ cho nút của việc «Cập nhật» trong danh sách việc OKR dẫn theo đúng luật số KR của tin nhắc."},
+    {"id": "AC-6", "p": "Sẽ chỉ còn một đường cập nhật trên toàn app — ngăn KR hay dòng KR › «Cập nhật» mở hộp một KR — và một lần gửi qua hộp đó đưa KR ra khỏi danh sách và khỏi tin nhắc sáng hôm sau."},
+    {"id": "AC-8", "p": "Sẽ cho «KR bạn phụ trách» ở Của tôi và «KR của tôi» ở Tổng quan mở KR trong bộ của đúng chu kỳ, như dòng KR ở trên (Hỏi-2)."},
+    {"id": "AC-9", "p": "Sẽ giữ đủ bốn trạng thái của phần «Cần cập nhật»: đang tải giữ tiêu đề, tải hỏng có «Thử lại», không phụ trách KR nào, đã cập nhật đủ tuần."},
+    {"id": "AC-10", "p": "Sẽ khai rõ từng bài đo của hồ sơ đã ký nay bị thay — 27 ô ở 6 hồ sơ — mỗi ô trỏ tiêu chí của việc này đo thay nó."}
+  ],
+  "wont_do": [
+    {"id": "AC-7", "p": "Sẽ KHÔNG còn mục gập «Đang theo dõi (n)» ở Của tôi; theo dõi xem ở Bộ OKR › Đang theo dõi, «Đã bỏ» giữ nguyên."},
+    {"id": "OOS-1", "p": "KHÔNG xoá mã bảng hàng loạt cũ ở vòng này — app chỉ thôi dùng nó; năm hồ sơ đã ký còn đo nó, dọn là một hàng riêng."},
+    {"id": "OOS-2", "p": "KHÔNG đổi hộp cập nhật một KR, ngăn KR hay nút ‹ › của ngăn (thuộc HT2, HT5, SV7)."},
+    {"id": "OOS-3", "p": "KHÔNG đổi giờ, kênh hay điều kiện gửi tin nhắc 08:30; chỉ đổi liên kết và nhãn liên kết."},
+    {"id": "OOS-4", "p": "KHÔNG liệt từng KR thành một liên kết riêng trong tin nhiều KR (lối khác của Hỏi-1)."},
+    {"id": "OOS-5", "p": "Ngoài khu OKR không có chỗ nào ghi lần cập nhật KR (đã tra), nên không có gì khác phải dọn."}
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để lại cho hàng khác:",
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi lối dẫn tới việc cập nhật một KR — hai phần của Của tôi, Tổng quan, tin Zalo, tin Slack, hộp thông báo, việc OKR, liên kết cũ, ngăn KR, dòng KR trong bộ — đều có tiêu chí (AC-1, AC-4, AC-5, AC-6, AC-8)."},
+    {"i": 1, "p": "Không KR chờ, một KR, nhiều KR: mỗi số có tiêu chí riêng (AC-9 trạng thái, AC-4 tin nhắc, AC-5 việc OKR)."},
+    {"i": 2, "p": "Bấm KR còn xem được, đã lưu trữ, đã xoá hay hết quyền: AC-2 (tới bộ) và AC-3 (về Của tôi, không lộ tên)."},
+    {"i": 3, "p": "Phần «Cần cập nhật» lúc đang tải, hỏng, rỗng, đủ và có KR: AC-9 và AC-1."},
+    {"i": 4, "p": "Khổ máy tính 1280 và điện thoại 375: bài chụp màn của AC-1 và AC-2."},
+    {"i": 5, "p": "Sau khi cập nhật: KR rời danh sách, rời tin nhắc kế, KR chưa cập nhật vẫn còn — AC-6 (vòng khép)."},
+    {"i": 6, "p": "KR của chu kỳ đang chạy và của chu kỳ đã qua đều tới đúng bộ của chu kỳ đó: AC-2, AC-8."},
+    {"i": 7, "p": "Để sau: dọn mã bảng hàng loạt cũ. Không bao giờ: hộp cập nhật nhiều KR một lúc (chủ kho bỏ 24/10)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Hợp đồng nói «mọi màn chỉ một đường cập nhật» nhưng lại để Tổng quan ngoài phạm vi — đã tra: ngoài khu OKR không chỗ nào ghi lần cập nhật; khối «KR của tôi» ở Tổng quan đưa vào AC-8 và Hỏi-2."},
+    {"i": 1, "p": "Hai lựa chọn máy tự quyết lấy căn cứ «chỉ một lối» chưa đúng — đã sửa: Của tôi dẫn thẳng tới bộ (không qua bước chuyển hướng), chỉ tin nhắc và việc OKR đi qua trang giải đích lúc bấm; căn cứ mới ghi vào sổ."},
+    {"i": 2, "p": "Chưa có lời hứa «cập nhật xong thì KR rời danh sách và rời tin nhắc kế» — đã thêm vào AC-6, đo bằng một bài trên kho thật."},
+    {"i": 3, "p": "Chưa phân biệt «chu kỳ của mục tiêu» với «chu kỳ đang chạy» — đã thêm KR của chu kỳ cũ vào bài đo vị trí và bài đo hai danh sách KR."},
+    {"i": 4, "p": "Bài quét «một đường cập nhật» có kẽ hở (bỏ sót bảng cũ thứ hai, chỉ đọc chữ trần, chỉ một luật có đối chứng) — đã viết lại: quét toàn app, giải giá trị qua kiểu, mỗi luật một bản phá."}
+  ]
+}
