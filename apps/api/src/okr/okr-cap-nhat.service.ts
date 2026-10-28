@@ -19,8 +19,8 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
-import { tenDonVi } from "./don-vi";
-import type { CapNhatTuanOutput } from "./okr.contracts";
+import { khoaDonViDong, tenDonVi } from "./don-vi";
+import type { CapNhatTuanOutput, ViTriKrOutput } from "./okr.contracts";
 import {
 	chonSoMay,
 	chonTenDonVi,
@@ -36,6 +36,13 @@ const mucTuTin = z.enum(MUC_TU_TIN);
 const nguonKr = z.enum(NGUON_KR);
 const soDb = (d: Prisma.Decimal | number) => Number(d);
 const ngayDb = (s: string) => new Date(`${s}T00:00:00Z`);
+const CHON_KHOA_DON = {
+	cycleId: true,
+	level: true,
+	divisionId: true,
+	departmentId: true,
+	personUserId: true,
+} as const;
 
 @Injectable()
 export class OkrCapNhatService {
@@ -73,6 +80,7 @@ export class OkrCapNhatService {
 					select: {
 						title: true,
 						...chonTenDonVi,
+						...CHON_KHOA_DON,
 						cycle: { select: { updateWeekday: true } },
 					},
 				},
@@ -105,6 +113,8 @@ export class OkrCapNhatService {
 					objectiveId: k.objectiveId,
 					objectiveTitle: k.objective.title,
 					unitName: tenDonVi(k.objective, tenGoc),
+					donOkr: khoaDonViDong(k.objective),
+					cycleId: k.objective.cycleId,
 					kind: kieuKr.parse(k.kind),
 					unit: k.unit,
 					targetValue: soDb(k.targetValue),
@@ -120,6 +130,27 @@ export class OkrCapNhatService {
 			}),
 			weekStart: tuan,
 			dueWeekday: thu.length > 0 ? Math.min(...thu) : null,
+		};
+	}
+
+	async viTriKr(userId: string, keyResultId: string): Promise<ViTriKrOutput> {
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
+		const kr = await this.db.okrKeyResult.findFirst({
+			where: {
+				id: keyResultId,
+				objective: {
+					AND: [{ cycle: KY_CON_HIEN }, dieuKienXemMucTieu(nc)],
+				},
+			},
+			select: { objective: { select: CHON_KHOA_DON } },
+		});
+		if (!kr) return null;
+		return {
+			donOkr: khoaDonViDong(kr.objective),
+			cycleId: kr.objective.cycleId,
 		};
 	}
 
