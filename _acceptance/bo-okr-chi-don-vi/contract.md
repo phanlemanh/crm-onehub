@@ -5,7 +5,7 @@ slug: bo-okr-chi-don-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-28T07:18:11Z
 design_doc: docs/superpowers/specs/2026-10-28-bo-okr-chi-don-vi-design.md
@@ -108,3 +108,10 @@ Source input: hàng VK19 `docs/plan/lo-trinh-okr.json`; ô cơ hội `_acceptanc
   một dòng sổ `fix` `decided_by` chủ kho, đo hai chiều, gửi `cham-tep` theo `LUAT.md` của đợt trước khi sửa.
 - `CONTEXT.md` mục Bộ OKR thêm một dòng (chỉ thêm, luật 7 của đợt).
 - S4 chỉ chạy sau khi VK10 #569, HT5 #578, HT2 gộp `onehub`, theo lệnh giám sát.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-28:
+  - Ngoài-1: Khối chưa có trưởng và chưa có mục tiêu riêng không còn câu «chưa có trưởng» và nút sang trang gán trưởng; quản trị viên gán ở Cài đặt.
+  - Ngoài-3: Phép đo màn có thể báo đạt khi thẻ con chưa hiện nội dung, nên mục tiêu phòng con lẫn vào bộ khối có thể không bị thấy.
+  - Ngoài-4: Một chốt của bài kiểm không bắt được danh sách «Đơn vị có KR» của Họp tuần nếu nó quay lại; các chốt khác vẫn bắt.
+  - Ngoài-5: Thẻ Họp tuần, Việc, Chấm điểm chưa được bài kiểm giao diện xem ở trạng thái có dữ liệu.
+  - Ngoài-6: Phép đo màn cho ba thẻ con còn lại có thể báo đạt khi thẻ chưa tải xong.
+  - Ngoài-7: Phép đo màn có thể báo «khớp ba nguồn» khi mới so hai nguồn, nên một ô số đầu thẻ lệch có thể lọt.
