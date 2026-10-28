@@ -164,6 +164,11 @@ Hai thước đã ký đo nhiều lối, nên sửa thước chứ không thay c
 `ngan-kr-mot-cho/E1` (ma trận chín lối bỏ ô «Của tôi» — khối «KR của tôi» nay đo ở `ctlk-phu-trach` — còn tám lối).
 Ca kiểm của ô đã bị thay gỡ khỏi tệp kiểm theo tiền lệ `3d0f64e55`.
 
+Thước thứ ba sửa theo `cham-tep` V4-15 (29/10): `hop-tuan-tren-bang/E6` nhánh Của tôi → thay bởi
+cua-toi-chi-liet-kr#AC-8. Ca `htb-nguon` đo «bấm KR từ chỗ khác mở ngăn đúng thứ tự mục tiêu» qua hai lối thật; lối
+Của tôi nay là liên kết sang bộ OKR chứ không mở ngăn tại chỗ, nên bỏ khỏi `LOI_THAT`, còn lối Trang đơn vị và hai
+nhánh còn lại của ca giữ nguyên kỳ vọng. Ô E6 vẫn chạy, không khai `status: not-run`.
+
 Hai bài không thuộc hồ sơ nào sửa thẳng: `apps/app/test/viec-okr-cua-toi.dom.tsx` (href `?tu=viec-cua-toi`) và
 `messages-guard.spec.ts` (khoá chữ thôi dùng: `baPhan.capNhatN`, `baPhan.suaLanGui`, `khoiMucTieu.nhomDangTheoDoi`).
 Xoá khoá chữ ở `apps/app/lib/messages/okr.ts` là xoá dòng của tệp chữ chung → `cham-tep`.
