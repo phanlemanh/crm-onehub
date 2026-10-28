@@ -30,6 +30,7 @@ import { donThongBaoDinhKy } from "../agent/lib/thong-bao-don";
 import { ghiThongBao } from "../agent/lib/thong-bao-ghi";
 import { dungTin } from "../agent/lib/tin-nhac";
 import { ZALO } from "../agent/lib/zalo-config";
+import { theoCapChu } from "./support/cap-chu-sv6";
 import { type BanChup, CHUP, chupTin } from "./support/chup-tin-nhac";
 import { MUC_MAU } from "./support/muc-mau";
 import {
@@ -372,8 +373,8 @@ describe("htb-kenh", () => {
 	});
 
 	test("htb-kenh: 2 — tin Zalo va Slack moi loai trung tung byte ban chup truoc vong", async () => {
-		const banChup = boTenXuong(
-			JSON.parse(readFileSync(TEP_CHUP, "utf8")) as BanChup,
+		const banChup = theoCapChu(
+			boTenXuong(JSON.parse(readFileSync(TEP_CHUP, "utf8")) as BanChup),
 		);
 		const hienTai = boTenXuong(
 			await chupTin(dungTin, await duongMo(CHUP.appUrl), {

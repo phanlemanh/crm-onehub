@@ -44,6 +44,7 @@ import {
 	useState,
 } from "react";
 import { toast } from "sonner";
+import { HangCamXuc } from "@/app/(app)/[slug]/okr/cam-xuc/hang-cam-xuc";
 import { coNutCapNhat, useCapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import { giaTri } from "@/app/(app)/[slug]/okr/gia-tri-kr";
 import { CANH_KR } from "@/app/(app)/[slug]/okr/kieu";
@@ -528,7 +529,15 @@ function OSoKr({ mt, kr }: { mt: ChiTiet; kr: KrCuaMt }) {
 	);
 }
 
-function NoiDungLichSu({ d, tenKr }: { d: DienBien; tenKr: string }) {
+function NoiDungLichSu({
+	d,
+	tenKr,
+	objectiveId,
+}: {
+	d: DienBien;
+	tenKr: string;
+	objectiveId: string;
+}) {
 	const locale = useLocale();
 	const t = okrToanCanhMessages(locale).dienBien;
 	const kieu = { kind: d.kieu, unit: d.donVi };
@@ -576,6 +585,13 @@ function NoiDungLichSu({ d, tenKr }: { d: DienBien; tenKr: string }) {
 								{p.ghiChu ? (
 									<ItemDescription translate="no">{p.ghiChu}</ItemDescription>
 								) : null}
+								{p.checkInId ? (
+									<HangCamXuc
+										camXuc={p.camXuc}
+										checkInId={p.checkInId}
+										objectiveId={objectiveId}
+									/>
+								) : null}
 							</ItemContent>
 							{p.tuTin ? (
 								<ItemActions>
@@ -608,7 +624,11 @@ function LichSuKr({ kr }: { kr: KrCuaMt }) {
 					tieuDe={t.loi}
 				/>
 			) : (
-				<NoiDungLichSu d={db.data} tenKr={kr.title} />
+				<NoiDungLichSu
+					d={db.data}
+					objectiveId={kr.objectiveId}
+					tenKr={kr.title}
+				/>
 			)}
 		</DetailSheetSection>
 	);

@@ -44,11 +44,12 @@ import { moHoiYInput, suaHoiYInput, cycleIdInput, hoiYIdInput, gopYInput, suaYIn
 import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput, hoiYDoPhuOutput, congBoOutput, hieuViSaoOutput } from "../okr/okr-hoi-y.contracts";
 import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../okr/okr-khep.contracts";
 import { datHienThiInput, traLaiInput, chuyenDonViInput, moCoiInput } from "@crm/validation/okr-hien-thi";
-import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, danhSachBoOutput, viecCuaBoInput, viecCuaBoOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, quanhMucTieuInput, quanhMucTieuOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
+import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, danhSachBoOutput, soBoInput, soBoOutput, viecCuaBoInput, viecCuaBoOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, quanhMucTieuInput, quanhMucTieuOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moiKrInput, moiKrOutput } from "../okr/okr-moi-kr.contracts";
 import { capNhatGanDayInput, capNhatGanDayOutput } from "../okr/okr-cap-nhat-gan-day.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
+import { thaCamXucInput, tomTatCamXuc, nguoiThaCamXucInput, nguoiThaCamXucOutput } from "@crm/validation/okr-cam-xuc";
 import { canhKrInput, canhKrOutput, idOutput, goViecInput, goBangChungInput, goGhiNhanInput } from "../okr/okr-canh-kr.contracts";
 import { themViecInput, suaViecInput, danhDauViecInput, ganSangKienInput, themBangChungInput, guiGhiNhanInput } from "@crm/validation/okr-canh-kr";
 import { taoTuMauInput } from "@crm/validation/okr-mau";
@@ -1181,6 +1182,10 @@ const appRouter = t.router({
       .input(cycleOnlyInput)
       .output(danhSachBoOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    soBo: publicProcedure
+      .input(soBoInput)
+      .output(soBoOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     viecCuaBo: publicProcedure
       .input(viecCuaBoInput)
       .output(viecCuaBoOutput)
@@ -1250,6 +1255,14 @@ const appRouter = t.router({
       .input(addCommentInput)
       .output(addCommentOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    thaCamXuc: publicProcedure
+      .input(thaCamXucInput)
+      .output(tomTatCamXuc)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    nguoiThaCamXuc: publicProcedure
+      .input(nguoiThaCamXucInput)
+      .output(nguoiThaCamXucOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     canhKr: publicProcedure
       .input(canhKrInput)
       .output(canhKrOutput)

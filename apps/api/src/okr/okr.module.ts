@@ -7,6 +7,7 @@ import { HoiService } from "./hoi.service";
 import { OkrRouter } from "./okr.router";
 import { OkrService } from "./okr.service";
 import { OkrAccessService } from "./okr-access.service";
+import { OkrCamXucService } from "./okr-cam-xuc.service";
 import { OkrCanhKrService } from "./okr-canh-kr.service";
 import { OkrCapNhatService } from "./okr-cap-nhat.service";
 import { OkrCapNhatGanDayService } from "./okr-cap-nhat-gan-day.service";
@@ -33,6 +34,7 @@ import { TroLyOkrService } from "./tro-ly.service";
 		OkrCapNhatService,
 		OkrCapNhatGanDayService,
 		OkrTraoDoiService,
+		OkrCamXucService,
 		OkrSoService,
 		TroLyOkrService,
 		OkrKhepService,

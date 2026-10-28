@@ -46,6 +46,8 @@ const KHOA_CU = [
 	"tuTin",
 	"ghiChu",
 	"lyDo",
+	"checkInId",
+	"camXuc",
 ];
 const KHOA_MOI = ["ghiChuNgay", "donVi", "giaTriMoi", "mucDoi"];
 

@@ -88,6 +88,8 @@ function dongHop(v: DongVao) {
 				? { tu: 9, den: 12, ngayTruoc: "2026-10-13" }
 				: v.mucDoi,
 		lyDo: [{ loai: "ghi-chu", ngay: "2026-10-20" }],
+		checkInId: null,
+		camXuc: [],
 	};
 }
 

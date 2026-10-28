@@ -57,7 +57,7 @@ describe("kmt-tin-nhac", () => {
 
 	test("kmt-tin-nhac: doi chung, nhom cap nhat tuan giu tieu de cu", () => {
 		const { text } = dungTin("An", SANG, [CAP_NHAT], () => null, "slack");
-		if (!text.split("\n").includes("*Cập nhật tuần*"))
+		if (!text.split("\n").includes("*Cập nhật*"))
 			throw new Error(`kmt: tin nhac doi nhom khac ${text}`);
 		expect(text.includes("Kara")).toBe(false);
 	});

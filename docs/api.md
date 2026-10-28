@@ -800,7 +800,7 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
     the same sentence as an id that does not exist, so a 403 never confirms that a
     restricted objective is there. Mentions and recognition recipients must be able to
     see it.
-  - Aggregates (`toanCanh`, `hopTuan`, `sucKhoe`) drop restricted objectives **for
+  - Aggregates (`toanCanh`, `soBo` of a unit set, `hopTuan`, `sucKhoe`) drop restricted objectives **for
     everyone**, admins and heads included, through `boGioiHan` — never filtered per
     caller, so two people never see two different company numbers.
   - `countByUnit` is not an aggregate: it is the navigation count on the unit tree, and
@@ -966,7 +966,13 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   (the viewer is that division's or department's head; nobody leads OneHub) and `dangTheoDoi` (the
   viewer follows at least one objective of that set in the cycle). `okr.viecCuaBo` (POST
   `/okr/units/viec`) returns the `OkrViecKr` tasks of one set's KRs in a cycle, grouped by KR, KRs
-  without tasks omitted; both are pure reads built in `bo-okr.ts`. `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
+  without tasks omitted; both are pure reads built in `bo-okr.ts`. `okr.soBo` (POST `/okr/units/numbers`) returns one set's four numbers
+  (progress, expected, KR count, KRs updated this week, confidence split) for any unit, personal sets included: it reads
+  the published objectives `okr.danhSach` would list for that unit without filters (`dieuKienDonVi`) and builds them
+  with `dungHangSo`, the same row builder `toanCanh` uses, so OneHub, division and department numbers equal their
+  `toanCanh` row and a set's numbers follow its objectives when `dieuKienDonVi` changes. A personal set (`nguoi:`)
+  is read with the caller's visibility (`nguCanhXem`), like `okr.danhSach`, so its numbers count the restricted objectives
+  the table beside them shows. `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
   number of queries whatever the unit count; `apps/api/test/okr-toan-canh-hieu-nang.spec.ts`
   pins that at 50 departments × 2000 KRs. The pure roll-ups (`danh-sach.ts`, `toan-canh.ts`) take
   plain data and are tested without a database. Caps and the admin message live in
@@ -977,9 +983,21 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `phamVi` is the area scope of `PHAM_VI_BO` with the same meaning as `okr.danhSachBo`: `toi-dan` is the
   sets of the units the viewer heads (no child departments, never OneHub), `theo-doi` every check-in of
   a set in which the viewer follows at least one objective. `facetCounts.phamVi` counts each scope with
-  the same visibility. Only the latest check-in of a KR carries `traLoi` — the comments tagged to that KR
-  from its moment on — and `mentionNguoiCapNhat`; a reply is an ordinary `okr.addComment`, so it shows in
-  the Trao đổi tab too. A fixed number of queries per call (`okr-cap-nhat-gan-day.spec.ts`, `cng-trang`).
+  the same visibility. Every row carries `traLoi` — the comments whose `checkInId` is that check-in — and
+  `mentionNguoiCapNhat`; a reply is an ordinary `okr.addComment` with `checkInId`, so it shows in the Trao
+  đổi tab too. The migration that added `okrComment.checkInId` filled it for older KR comments with the
+  latest check-in of that KR not after the comment (`okr-cam-xuc-migration.spec.ts`). A fixed number of
+  queries per call (`okr-cap-nhat-gan-day.spec.ts`, `cng-trang`).
+- **Reactions live on a check-in, one row per person and kind.** `okrCamXuc` (`checkInId`, `userId`,
+  `loai` in `LOAI_CAM_XUC`, unique on the three) is written only by `okr.thaCamXuc` (POST
+  `/okr/check-ins/{checkInId}/reactions`), a toggle: whoever may see the objective adds the row or removes
+  their own, with one `tha-cam-xuc` / `go-cam-xuc` trail row; a hidden cycle refuses it, the phase does
+  not (like comments), and an unseen objective answers `khongThayMucTieu`. `capNhatGanDay`, `hopTuan`
+  (latest check-in of the KR) and `dienBien` (last check-in of each week) carry the same summary from one
+  function, `tomTatCamXucCua` (`@crm/db/okr-cam-xuc`) — kinds in fixed order, a count, whether the viewer
+  reacted, and names up to `OKR_CAM_XUC.tenToiDa`; `okr.nguoiThaCamXuc` gives every name for the picker.
+  The row cascades with its check-in: check-ins are never deleted by the app, and a reaction has no
+  history of its own.
 - **Weekly numbers are read from check-ins, never stored again.** `okr.hopTuan`
   sorts a unit's KRs by why they are worth discussing (`hop-tuan.ts`: confidence
   dropped, then silent for `OKR_NHAC.imNgay` days, then a new note since the start of

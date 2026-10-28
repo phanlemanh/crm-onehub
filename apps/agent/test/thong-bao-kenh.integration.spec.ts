@@ -43,6 +43,7 @@ import {
 import { dayThongBaoSuKien } from "../agent/lib/thong-bao-day";
 import { dungTin } from "../agent/lib/tin-nhac";
 import { ZALO } from "../agent/lib/zalo-config";
+import { theoCapChu } from "./support/cap-chu-sv6";
 import { type BanChup, CHUP, chupTin } from "./support/chup-tin-nhac";
 import { MUC_MAU_TAC_NHAN } from "./support/muc-mau-tac-nhan";
 import { MUC_MAU_TIN_HIEU } from "./support/muc-mau-tin-hieu";
@@ -251,8 +252,8 @@ describe("tbk-mac-dinh", () => {
 		const caiDat = await docCaiDatThongBao(db, nguoi.id, macDinhDayRa);
 		const dungTinSauLoc: typeof dungTin = (ten, luc, viec, ...con) =>
 			dungTin(ten, luc, locDayRa(viec, caiDat), ...con);
-		const banChup = boTenXuong(
-			JSON.parse(readFileSync(TEP_CHUP, "utf8")) as BanChup,
+		const banChup = theoCapChu(
+			boTenXuong(JSON.parse(readFileSync(TEP_CHUP, "utf8")) as BanChup),
 		);
 		const hienTai = boTenXuong(
 			await chupTin(dungTinSauLoc, await duongMo(CHUP.appUrl), {

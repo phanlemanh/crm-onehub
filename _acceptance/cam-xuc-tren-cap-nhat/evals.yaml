@@ -1,0 +1,266 @@
+schema_version: 1
+slug: cam-xuc-tren-cap-nhat
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cx_tha
+    paths:
+      - "apps/api/src/okr/okr-cam-xuc.service.ts"
+      - "apps/api/src/okr/okr.router.ts"
+      - "packages/db/src/okr-cam-xuc.ts"
+      - "packages/validation/src/okr-cam-xuc.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/okr-cam-xuc.spec.ts"
+    expected: |
+      Ca "cx-tha" ghim dong ho, nap ca mau qua dich vu that (OkrService tao/cong bo, OkrCapNhatService guiCapNhat; khong
+      chen bang): lan cap nhat L1 cua muc tieu cong khai, ba nguoi A, B, C xem duoc. A goi okr.thaCamXuc {checkInId:L1,
+      loai:"dong-y"} qua tRPC: (a) dung mot hang okrCamXuc {L1, A, dong-y} (dem truoc 0, sau 1); (b) dung mot dong
+      okrTrail action "tha-cam-xuc" after {checkInId:L1, loai:"dong-y"}; (c) dau ra qua tomTatCamXuc.parse ==
+      [{loai:"dong-y", so:1, cuaToi:true, nguoi:[A]}] (so mang viet truoc). B thả "dong-y", C thả "co-len": tom tat cua
+      A doc lai == [dong-y so 2 cuaToi true nguoi [A,B]; co-len so 1 cuaToi false nguoi [C]] theo thu tu LOAI_CAM_XUC
+      (rut tu module, khong viet tay mang loai).
+      CHIEU DO: ban sao khong ghi vet -> do "(b) thieu vet tha-cam-xuc"; ban sao xep tom tat theo so giam -> do "thu tu
+      loai lech LOAI_CAM_XUC" ghim cap [co-len, dong-y].
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cx_dao
+    paths:
+      - "apps/api/src/okr/okr-cam-xuc.service.ts"
+      - "packages/db/src/okr-cam-xuc.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/okr-cam-xuc.spec.ts"
+    expected: |
+      Ca "cx-dao": A thả "dong-y" tren L1 roi goi lai dung {L1, dong-y}: hang cua A vang (dem 1 -> 0), mot dong vet
+      "go-cam-xuc", tom tat == [] (loai ve 0 bien mat, khong phan tu so 0). A thả "dong-y" va "da-xem": hai hang, tom tat
+      hai phan tu. Dong thoi: Promise.all hai lan goi {L1, A, chuc-mung} tu trang thai chua co -> sau ca hai: so hang
+      (L1, A, chuc-mung) thuoc {0, 1}, khong lan goi nao nem loi ra (ca hai tra tomTatCamXuc hop le); lap 20 lan, khong
+      lan nao co 2 hang. Rang buoc unique: chen thang hang trung trong test -> Prisma P2002 (doi chung rang buoc ton tai).
+      CHIEU DO: ban sao bo @@unique va dao bang findFirst roi create -> do "dong thoi de 2 hang" (lap 20 lan bat duoc it
+      nhat mot); ban sao xoa moi hang cua A tren L1 khi go -> do "go dong-y xoa luon da-xem".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cx_ba_cho
+    paths:
+      - "packages/db/src/okr-cam-xuc.ts"
+      - "apps/api/src/okr/okr-cap-nhat-gan-day.service.ts"
+      - "apps/api/src/okr/okr-cap-nhat-gan-day.contracts.ts"
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/src/okr/okr-xem.contracts.ts"
+      - "apps/api/src/okr/dien-bien.ts"
+      - "apps/api/test/okr-cam-xuc.spec.ts"
+    expected: |
+      Ca "cx-ba-cho": KR k1 co ba lan: t1 (thu hai tuan 1), t2 (thu ba tuan 1), t3 (tuan 2); KR k2 chua co lan nao. Cam
+      xuc tren t2 (A dong-y, B dong-y) va t3 (C co-len). Goi ba thu tuc cung nguoi xem A:
+      capNhatGanDay -> dong t1 camXuc [], t2 == tom tat viet truoc, t3 == tom tat viet truoc;
+      hopTuan (don vi cua k1) -> dong k1 checkInId == t3 va camXuc == tom tat cua t3; dong k2 checkInId null, camXuc [];
+      dienBien(k1) -> diem tuan 1 checkInId == t2 (lan cuoi tuan) va camXuc == tom tat t2; diem tuan 2 checkInId == t3.
+      Ba tom tat cua cung mot checkInId bang nhau tung byte (JSON.stringify). Moi dau ra qua schema output cua thu tuc.
+      Dem truy van: Prisma $on("query") quanh moi thu tuc; them 30 lan cap nhat va 200 cam xuc roi goi lai -> so truy van
+      bang nhau (ghim con so lan dau).
+      CHIEU DO: ban sao hopTuan lay tom tat cua lan dau tien cua KR -> do "hopTuan khong phai lan moi nhat" ghim t1 != t3;
+      ban sao doc tom tat moi dong mot truy van -> do "so truy van tang theo so lan" ghim hai con so.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cx_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "packages/ui/src/components/thanh-cam-xuc.tsx"
+      - "apps/app/lib/trpc/cache.ts"
+      - "apps/api/scripts/okr-mau/**"
+      - "_acceptance/cam-xuc-tren-cap-nhat/rang/do-man.mjs"
+    expected: |
+      Ban do qua tien-de (phien do rieng, bo OKR mau). Dang nhap nguoi mau P (dan mot don vi, xem duoc). Chon qua API cua
+      phien do (okr.capNhatGanDay) mot checkInId X la lan moi nhat cua KR K va loai L ma P CHUA tha (khong viet cung);
+      khong co -> ma 2 "khong dung duoc Given AC-4". BUOC NAP DEM TRUOC: mo the con Hop tuan cua bo cua K (doc so chip L
+      cua dong [data-hop-kr=K] -> so0), roi bam dong K mo ngan KR (doc so chip L cua muc tuan cua X -> so0p), dong ngan.
+      Tu day KHONG goto, KHONG reload (dem tai trang day du qua su kien load == 0): sang Cap nhat gan day bang lien ket
+      thanh ben, cham nut "Tha cam xuc" cua dong X, chon L: (1) chip [data-cam-xuc=L] duoi dong X aria-pressed=true,
+      so == so0+1; (2) quay lai the con Hop tuan bang lien ket tren man: chip L cua dong K aria-pressed=true, so == so0+1
+      (doc trong 10 giay); (3) bam dong K mo ngan KR: chip L cua muc tuan cua X aria-pressed=true, so == so0p+1; (4) cham
+      chip L o ngan KR -> so == so0p; dong ngan, quay lai Cap nhat gan day bang lien ket -> chip L duoi X khong con
+      aria-pressed. Moi buoc in "DUNG AC-4 <buoc>"; lech -> "SAI AC-4 <buoc> cu=<n> moi=<n>", ma 1. Bi day ve /sign-in ->
+      ma 2. Don dep: neu buoc 4 khong chay thi go L qua API.
+      CHIEU DO: CX_PHA=khong-lam-moi-hop (ban do chan request okr.hopTuan sau thaCamXuc, giu ban dem) -> "SAI AC-4 hop-tuan
+      cu=<so0> moi=<so0>"; CX_PHA=tai-lai (ban do goi page.reload giua buoc 1 va 2) -> "SAI AC-4 co tai lai trang".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.cx_thanh
+    paths:
+      - "packages/ui/src/components/thanh-cam-xuc.tsx"
+      - "packages/ui/test/thanh-cam-xuc.dom.tsx"
+      - "packages/validation/src/okr-cam-xuc.ts"
+    expected: |
+      Ca "cx-thanh" dung ThanhCamXuc voi ma tran viet truoc 5 dong: (rong) chi nut Tha cam xuc, 0 chip; (mot loai cua
+      toi) chip aria-pressed=true, aria-label chua ten loai, "1" va chu "ban da tha" rut tu messages; (hai loai, khong cua
+      toi) hai chip theo thu tu LOAI_CAM_XUC, aria-pressed=false; (tenToiDa+2 nguoi) hover chip -> tooltip == ten dau
+      tien tenToiDa nguoi theo thu tu nhan vao + "va 2 nguoi khac" (so rut tu OKR_CAM_XUC.tenToiDa, khong viet tay);
+      (dang gui) chip bi tat; (bang) bam nut Tha cam xuc -> bang co 4 nut cam xuc va, duoi do, moi loai co nguoi tha kem
+      DU ten (khong cat theo tenToiDa), onDao KHONG duoc goi khi mo bang. Ban phim: Tab toi chip dau, Enter -> onDao(loai) dung 1 lan voi loai cua chip; Space ->
+      onDao lan 2; mo bang bang Enter tren nut, mui ten phai -> focus loai thu hai, Esc dong bang va focus ve nut.
+      CHIEU DO: ban sao cat ten khong them "va n nguoi khac" -> do dong tenToiDa+2 ghim chuoi mong cho; ban sao chip khong
+      aria-pressed -> do dong "mot loai cua toi".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cx_quyen
+    paths:
+      - "apps/api/src/okr/okr-cam-xuc.service.ts"
+      - "packages/db/src/okr-cam-xuc.ts"
+      - "apps/api/src/okr/okr.router.ts"
+      - "apps/api/test/okr-cam-xuc.spec.ts"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+      - "_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs"
+    expected: |
+      Ca "cx-quyen": muc tieu G gioi-han co lan Lg (quan tri Q va chu muc tieu da tha), muc tieu mo M co lan Lm. Nguoi
+      xem hep H (khong duoc xem G): goi thaCamXuc {Lg} -> loi NOT_FOUND voi thong diep == OKR.thongDiep.khongThayMucTieu
+      va bang chu cua id "khong-ton-tai" (doi chung cung cau); so hang okrCamXuc khong doi. capNhatGanDay cua H khong co
+      Lg; dienBien cua KR cua G -> NOT_FOUND. H tha tren Lm -> tom tat cua Lm doc boi quan tri co H (doi chung duong).
+      Chu ky da an: thaCamXuc tren lan cua chu ky ay -> loi cua may chu (assertKyChuaAn), khong hang. Vai chi OKR: nguoi
+      vai okr tha tren Lm thanh cong. Lenh con: vai-chi-okr -t ma-tran-trpc xanh voi "okr.thaCamXuc" trong tap cho phep
+      viet tay; soi-ma.mjs --ca xem thoat 0 va bang con trong cau hinh cua no co "okrCamXuc".
+      addComment cua H {objectiveId:M, checkInId:Lg} (khong keyResultId) va {objectiveId:M, keyResultId:<KR cua M>,
+      checkInId:Lg} -> ca hai NOT_FOUND voi thong diep == khongThayMucTieu, so hang okrComment khong doi; doi chung duong:
+      {objectiveId:M, checkInId:Lm} ghi duoc. hopTuan cua don vi chua G va M goi boi H: khong dong nao co checkInId == Lg,
+      khong tom tat nao co ten tren G; doi chung duong: dong cua M co checkInId == Lm va tom tat co H. Pha: chu ky dang
+      cham-diem va da-dong -> H tha tren lan cua muc tieu mo thanh cong (Hoi-4), doi chung: guiCapNhat cung KR cung ky bi
+      khoa. Bang ghi cua bai kiem chu ky an co dong okr.thaCamXuc.
+      CHIEU DO: ban sao thaCamXuc khong assertXemMucTieu -> do "H tha duoc tren Lg"; ban sao tom tat khong dieuKienXemMucTieu
+      -> soi-ma --ca xem do goi ten okr-cam-xuc.ts; ban sao addComment lay KR cua lan khong doi chieu objectiveId -> do
+      "binh luan cua H gan vao Lg".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cx_tra_loi
+    paths:
+      - "apps/api/src/okr/okr-trao-doi.service.ts"
+      - "apps/api/src/okr/okr-cap-nhat-gan-day.service.ts"
+      - "apps/api/src/okr/cap-nhat-gan-day.ts"
+      - "packages/validation/src/okr-trao-doi.ts"
+      - "apps/api/test/okr-cap-nhat-gan-day.spec.ts"
+    expected: |
+      Ca "cx-tra-loi" dong ho ghim: KR k1 co t1, t2; KR k2 co u1. addComment {keyResultId:k1, checkInId:t1} luc sau t2
+      -> capNhatGanDay: traLoi cua t1 == [binh luan ay] (du t1 khong phai moi nhat), traLoi cua t2 khong co no. addComment
+      {checkInId:t2} khong keyResultId -> hang mang keyResultId k1. addComment {keyResultId:k1, checkInId:u1} -> loi voi
+      thong diep == OKR.thongDiep.capNhatKhacKr, khong hang. okr.comments(objectiveId) co ca hai binh luan voi keyResultId
+      k1. Nhac ten: binh luan tren t1 do nguoi khac nguoi viet t1 -> mentionNguoiCapNhat cua dong t1 == nguoi viet t1.
+      Ca "cng-tra-loi" cua VK12 da sua theo D5 (moi dong co traLoi) van xanh.
+      CHIEU DO: ban sao doc traLoi theo khung thoi gian (luat VK12) -> do "binh luan tren t1 hien duoi t2"; ban sao bo kiem
+      KR cua lan -> do "u1 nhan binh luan cua k1".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.cx_tra_loi_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-gan-day/**"
+      - "apps/app/lib/messages/okr*.ts"
+      - "apps/app/test/cap-nhat-gan-day.dom.tsx"
+    expected: |
+      Ca "cx-tra-loi-man" dung dong tin voi du lieu gia hai dong cung KR (moiNhat true va false), moi dong mot traLoi
+      rieng: ca hai dong co nut "Trả lời" (rut tu messages); moi dong hien dung traLoi cua minh (id); dong cu van co cau
+      "co lan moi hon". Bam Tra loi tren dong cu, go, Gui -> addComment gia nhan input co checkInId == checkInId dong cu
+      va keyResultId cua KR; mentionUserIds == [mentionNguoiCapNhat cua dong cu].
+      CHIEU DO: ban sao chi dong moiNhat co nut -> do "dong cu thieu nut Tra loi"; ban sao gui khong checkInId -> do
+      "input thieu checkInId".
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cx_migration
+    paths:
+      - "packages/db/prisma/migrations/*cam_xuc*/migration.sql"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/okr-cam-xuc-migration.spec.ts"
+    expected: |
+      Ca "cx-migration": doc DUNG MOT thu muc migration khop *cam_xuc* (0 hay 2 -> do "khong dung mot migration");
+      migration.sql co CREATE TABLE "okrCamXuc" va ADD COLUMN "checkInId" tren "okrComment" (hai khang dinh tren cung
+      tep). Rut cau lap (UPDATE "okrComment" ... "checkInId") tu chinh tep ay (khong chep lai SQL trong test). Gieo qua
+      dich vu that (dong ho ghim): KR k1 lan t1 10:00, t2 12:00; binh luan k1 luc 09:00, 11:00, 12:00, 13:00; binh luan
+      khong KR 11:30; binh luan KR k2 (chua co lan) 11:00. Dat checkInId = NULL cho moi hang, chay cau lap rut ra: ma tran
+      viet truoc 6 dong: 09:00 -> null; 11:00 -> t1; 12:00 -> t2 (bang thoi diem tinh la khong sau); 13:00 -> t2; khong KR
+      -> null; k2 -> null. Hau qua VK12: truoc khi dat null, ghi traLoi cua dong moi nhat moi KR theo luat cu (ham traLoiTu
+      cua VK12 trong cung test); sau khi lap, traLoi theo checkInId cua cung dong == tap cu (moi binh luan VK12 dang hien
+      van hien).
+      CHIEU DO: ban sao cau lap dung "<" thay "<=" -> do dong 12:00 (t1 thay t2); ban sao lap theo createdAt cua okrCheckIn
+      thay submittedAt -> do ca phien gui khac luc tao (ca mau co mot phien submittedAt != createdAt).
+
+  - id: E10
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.cx_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, nguyen van: CX_CHEP_ANH=1 EVAL= bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/cam-xuc-tren-cap-nhat/rang/do-man.mjs\" (ban do chi chep anh sang _acceptance/cam-xuc-tren-cap-nhat/evidence/ khi co CX_CHEP_ANH=1)"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo cac anh trong _acceptance/cam-xuc-tren-cap-nhat/evidence/ (khong tinh thu muc design-pass/) va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/cam-xuc-tren-cap-nhat/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "packages/ui/src/components/thanh-cam-xuc.tsx"
+      - "_acceptance/cam-xuc-tren-cap-nhat/rang/do-man.mjs"
+    expected: |
+      Anh cng-1280, cng-375, hop-1280, hop-375, ngan-1280, ngan-375, tooltip-1280, bang-375. Cap nhat gan day: moi dong co nut
+      "Tra loi" va hang chip cam xuc duoi ghi chu; chip da tha sang khac chip chua tha; it nhat mot dong co chip so lon
+      hon 1 (ST-camxuc-co) va mot dong chi co nut tha (ST-camxuc-trong). Hop tuan: dong KR co cap nhat co hang chip; dong
+      KR chua cap nhat khong co hang chip (ST-hop-chua-cap-nhat). Ngan KR: moi muc tuan co hang chip. Tooltip: ten nguoi
+      va "va n nguoi khac" (ST-camxuc-nhieu). Bang-375: cham nut Tha cam xuc tren dien thoai mo bang co bon cam xuc va
+      danh sach ten tung loai (ST-camxuc-bang); ban do in "DUNG AC-5 375 thay ten, aria-pressed khong doi". O 375: hang chip xuong dong trong khoi dong, trang khong tran ngang; ban do
+      in "DUNG AC-9 375: tran ngang 0" cho ca ba man. Thieu anh -> khong dat.
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cx_bo_mau
+    paths:
+      - "apps/api/scripts/okr-mau/**"
+      - "apps/api/test/okr-mau.spec.ts"
+      - "_acceptance/cam-xuc-tren-cap-nhat/rang/ty-le-phan-hoi.sql"
+    expected: |
+      Ca "cam-xuc-tren-cap-nhat" cua okr-mau.spec: nap bo mau vao co so du lieu cua luot; (a) moi hang okrCamXuc co vet
+      "tha-cam-xuc" cung (checkInId, loai, nguoi) (bang chung di qua dich vu, khong chen bang); (b) moi binh luan mau tra
+      loi lan cap nhat co checkInId khac null; (c) ty le lan cap nhat cua tuan gan nhat co phan hoi tu nguoi khac > 0.5;
+      (d) co it nhat mot lan du bon loai va mot loai co hon OKR_CAM_XUC.tenToiDa nguoi; nap lai -> so hang okrCamXuc va
+      okrComment khong doi. Chay rang/ty-le-phan-hoi.sql tren cung co so du lieu (tham so chu ky Q4 mau, khoang tuan cua
+      bo mau) -> ty le == ty le viet truoc tinh tu cong-ty.json boi ham rieng cua test (doc json, khong doc bang).
+      CHIEU DO: ban sao SQL dem ca phan hoi cua chinh nguoi cap nhat -> do "ty le SQL lech ty le viet truoc" ghim hai so;
+      ban sao nap cam xuc bang createMany -> do (a) ghim mot hang thieu vet.
+
+  - id: E12
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.cx_lac_quan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-gan-day/**"
+      - "apps/app/lib/trpc/cache.ts"
+      - "apps/app/lib/messages/okr*.ts"
+      - "packages/ui/src/components/thanh-cam-xuc.tsx"
+      - "apps/app/test/cap-nhat-gan-day.dom.tsx"
+    expected: |
+      Ca "cx-lac-quan" dung dong tin voi okr.thaCamXuc gia co the giu loi hua: chip L so 2 chua tha. Cham chip L -> ngay
+      truoc khi loi hua giai: chip aria-pressed=true, so 3, chip tat (disabled). (a) Giai thanh cong voi tom tat may chu
+      (so 3) -> chip bat lai, so 3. (b) Ca rieng: giai bang loi TRPCClientError ma FORBIDDEN thong diep kyDaAn -> chip
+      ve aria-pressed=false, so 2 (dung anh chup truoc), va toast chua cau rut tu messages kem ly do cua may chu. (c)
+      Cham chip da tha (so 1) -> so 0 thi chip bien mat khoi DOM; loi ve -> chip hien lai so 1.
+      CHIEU DO: ban sao onError khong lui -> do (b) ghim "so 3 != 2"; ban sao khong toast -> do (b) "thieu toast".

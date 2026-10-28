@@ -1,4 +1,10 @@
 import {
+	nguoiThaCamXucInput,
+	nguoiThaCamXucOutput,
+	thaCamXucInput,
+	tomTatCamXuc,
+} from "@crm/validation/okr-cam-xuc";
+import {
 	danhDauViecInput,
 	ganSangKienInput,
 	guiGhiNhanInput,
@@ -162,6 +168,7 @@ import {
 	xuHuongKrOutput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
+import { OkrCamXucService } from "./okr-cam-xuc.service";
 import {
 	canhKrInput,
 	canhKrOutput,
@@ -230,6 +237,8 @@ import {
 	moHopTuanOutput,
 	quanhMucTieuInput,
 	quanhMucTieuOutput,
+	soBoInput,
+	soBoOutput,
 	soDoDonViOutput,
 	sucKhoeOutput,
 	toanCanhOutput,
@@ -250,6 +259,7 @@ export class OkrRouter {
 		@Inject(OkrXemService) private readonly xem: OkrXemService,
 		@Inject(OkrCapNhatService) private readonly capNhat: OkrCapNhatService,
 		@Inject(OkrTraoDoiService) private readonly traoDoi: OkrTraoDoiService,
+		@Inject(OkrCamXucService) private readonly camXuc: OkrCamXucService,
 		@Inject(OkrSoService) private readonly so: OkrSoService,
 		@Inject(TroLyOkrService) private readonly troLy: TroLyOkrService,
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
@@ -1329,6 +1339,18 @@ export class OkrRouter {
 	}
 
 	@Query({
+		input: soBoInput,
+		output: soBoOutput,
+		meta: restMeta("POST", "/okr/units/numbers", TAG),
+	})
+	soBo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soBoInput>,
+	) {
+		return this.xem.soBo(ctx.user.id, input);
+	}
+
+	@Query({
 		input: viecCuaBoInput,
 		output: viecCuaBoOutput,
 		meta: restMeta("POST", "/okr/units/viec", TAG),
@@ -1530,6 +1552,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof addCommentInput>,
 	) {
 		return this.traoDoi.addComment(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: thaCamXucInput,
+		output: tomTatCamXuc,
+		meta: restMeta("POST", "/okr/check-ins/{checkInId}/reactions", TAG),
+	})
+	thaCamXuc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof thaCamXucInput>,
+	) {
+		return this.camXuc.thaCamXuc(ctx.user.id, input);
+	}
+
+	@Query({
+		input: nguoiThaCamXucInput,
+		output: nguoiThaCamXucOutput,
+		meta: restMeta("GET", "/okr/check-ins/{checkInId}/reactions", TAG),
+	})
+	nguoiThaCamXuc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof nguoiThaCamXucInput>,
+	) {
+		return this.camXuc.nguoiThaCamXuc(ctx.user.id, input.checkInId);
 	}
 
 	@Query({

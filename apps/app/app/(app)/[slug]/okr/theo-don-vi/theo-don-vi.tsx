@@ -37,6 +37,7 @@ import {
 	KhungDangTaiDonVi,
 	KhungHangCongCu,
 } from "./hang-cong-cu";
+import { HangSoBo, HangSoBoDangTai } from "./hang-so-bo";
 import { TheConBo } from "./the-con";
 import { ViTriBo } from "./vi-tri-bo";
 import { ViecCuaBo } from "./viec-cua-bo";
@@ -168,11 +169,17 @@ export function TheoDonVi() {
 	if (cycles.data?.cycles.length === 0 && !access.isPending)
 		return <ChuaChuKy quanTri={quanTri} />;
 	if (cycles.isPending || access.isPending || cay.isPending)
-		return coThe(<KhungDangTaiDonVi />);
+		return coThe(
+			<>
+				{xem === "danh-sach" ? <HangSoBoDangTai /> : null}
+				<KhungDangTaiDonVi />
+			</>,
+		);
 	if (cycles.isError || cay.isError) return coThe(<Loi thuLai={thuLai} />);
 	if (currentId === null) return <ChuaChuKy quanTri={quanTri} />;
 
-	const tenKy = cycles.data.cycles.find((c) => c.id === currentId)?.name ?? "";
+	const kyDangXem = cycles.data.cycles.find((c) => c.id === currentId);
+	const tenKy = kyDangXem?.name ?? "";
 	const dv = giaiDon(don, cay.data, tenGoc);
 	const chonDon = (d: DonChonOkr) =>
 		void datUrl({
@@ -283,6 +290,14 @@ export function TheoDonVi() {
 				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={dv.ten} />
 				{theCon}
 			</div>
+			{xem === "danh-sach" ? (
+				<HangSoBo
+					chuKy={kyDangXem ?? null}
+					cycleId={currentId}
+					key={khoa}
+					unit={don}
+				/>
+			) : null}
 			{than}
 		</>
 	);

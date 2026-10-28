@@ -47,6 +47,7 @@ import {
 	OkrAccessService,
 	type Quyen,
 } from "./okr-access.service";
+import { OkrCamXucService } from "./okr-cam-xuc.service";
 import { OKR } from "./okr-config";
 import { OKR_XEM } from "./okr-xem.config";
 import type {
@@ -65,6 +66,8 @@ import type {
 	LocDanhSach,
 	NutCayDayDu,
 	QuanhMucTieuOutput,
+	SoBoInput,
+	SoBoOutput,
 	SoDoDonViOutput,
 	SucKhoeOutput,
 	ToanCanhOutput,
@@ -76,10 +79,12 @@ import { type DauVaoSoDo, gopSoDoDonVi } from "./so-do-don-vi";
 import {
 	type CayGon,
 	cong,
+	dungHangSo,
 	gopSucKhoe,
 	gopToanCanh,
 	KHONG,
 	khoaCuaMucTieu,
+	type MucTieuTinh,
 	type SoRieng,
 } from "./toan-canh";
 
@@ -161,6 +166,7 @@ export class OkrXemService {
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrService) private readonly okr: OkrService,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
+		@Inject(OkrCamXucService) private readonly camXuc: OkrCamXucService,
 	) {}
 
 	dieuKienDonVi(unit: DonViChon, q: Quyen): Prisma.OkrObjectiveWhereInput {
@@ -226,6 +232,7 @@ export class OkrXemService {
 				objective: { select: { publishedAt: true } },
 				checkIns: {
 					select: {
+						id: true,
 						weekStart: true,
 						value: true,
 						confidence: true,
@@ -244,6 +251,7 @@ export class OkrXemService {
 					khoaLuc: k.startLockedAt ?? k.objective.publishedAt,
 					lan: k.checkIns
 						.map((c) => ({
+							id: c.id,
 							tuan: c.weekStart.toISOString().slice(0, 10),
 							luc: c.session.submittedAt ?? c.createdAt,
 							tuTin: mucTuTin.parse(c.confidence),
@@ -385,34 +393,71 @@ export class OkrXemService {
 		return this.toanCanhTheo(q, userId, cycleId, homNay);
 	}
 
+	private async mucTieuTinh(
+		q: Quyen,
+		userId: string,
+		cycleId: string,
+		them: Prisma.OkrObjectiveWhereInput,
+		pham: PhamDoc = "so-gop",
+	): Promise<{ ds: MucTieuTinh[]; tuanKy: string[] }> {
+		const where = { cycleId, status: "cong-bo", AND: [them] };
+		const [congBo, lan, tuanKy] = await Promise.all([
+			this.okr.docMucTieu(this.db, where, userId, q, pham),
+			this.lanCuaKr(where, pham),
+			this.tuanCuaKy(cycleId),
+		]);
+		const so = this.krSoCua(congBo, lan);
+		const ds = congBo.map((m) => ({
+			level: m.level,
+			unitId: m.unitId,
+			progress: m.progress,
+			expected: m.expected,
+			kr: m.keyResults.flatMap((k) => {
+				const x = so.get(k.id);
+				return x ? [x] : [];
+			}),
+		}));
+		return { ds, tuanKy };
+	}
+
 	private async toanCanhTheo(
 		q: Quyen,
 		userId: string,
 		cycleId: string,
 		homNay: Date,
 	): Promise<ToanCanhOutput> {
-		const where = { cycleId, status: "cong-bo" };
-		const [congBo, lan, tuanKy] = await Promise.all([
-			this.okr.docMucTieu(this.db, where, userId, q, "so-gop"),
-			this.lanCuaKr(where, "so-gop"),
-			this.tuanCuaKy(cycleId),
-		]);
-		const so = this.krSoCua(congBo, lan);
-		return gopToanCanh(
-			cayGon(q),
-			congBo.map((m) => ({
-				level: m.level,
-				unitId: m.unitId,
-				progress: m.progress,
-				expected: m.expected,
-				kr: m.keyResults.flatMap((k) => {
-					const x = so.get(k.id);
-					return x ? [x] : [];
-				}),
-			})),
-			await readTenGoc(this.db),
+		const { ds, tuanKy } = await this.mucTieuTinh(q, userId, cycleId, {});
+		return gopToanCanh(cayGon(q), ds, await readTenGoc(this.db), {
+			tuanKy,
+			homNay,
+		});
+	}
+
+	async soBo(
+		userId: string,
+		input: SoBoInput,
+		homNay = new Date(),
+	): Promise<SoBoOutput> {
+		const q = await this.quyenOkr.quyen(userId);
+		const pham: PhamDoc =
+			input.unit.loai === "nguoi"
+				? { nguCanh: this.quyenOkr.nguCanhXem(q, userId) }
+				: "so-gop";
+		const { ds, tuanKy } = await this.mucTieuTinh(
+			q,
+			userId,
+			input.cycleId,
+			this.dieuKienDonVi(input.unit, q),
+			pham,
+		);
+		const { tienDo, kyVong, soMucTieu, soKr, tuTin, daCapNhat } = dungHangSo(
+			"",
+			"",
+			"goc",
+			ds,
 			{ tuanKy, homNay },
 		);
+		return { tienDo, kyVong, soMucTieu, soKr, tuTin, daCapNhat };
 	}
 
 	async danhSachBo(
@@ -687,6 +732,8 @@ export class OkrXemService {
 					expected: laMoc ? null : x.m.expected,
 					laMoc,
 					tuTin: moi?.tuTin ?? null,
+					checkInId: moi?.id ?? null,
+					camXuc: [],
 					ghiChu: ghi?.ghiChu ?? null,
 					ghiChuNgay: ghi?.ngay ?? null,
 					donVi: x.k.unit,
@@ -697,13 +744,27 @@ export class OkrXemService {
 			];
 		};
 		const tatCa = [...so.values()];
+		const dangBan = xep.dangBan.flatMap(dong);
+		const conLai = xep.conLai.flatMap(dong);
+		const camXuc = await this.camXuc.tomTat(
+			this.db,
+			[...dangBan, ...conLai].flatMap((d) =>
+				d.checkInId ? [d.checkInId] : [],
+			),
+			userId,
+			this.quyenOkr.nguCanhXem(q, userId),
+		);
+		const gan = (d: DongHop): DongHop => ({
+			...d,
+			camXuc: d.checkInId ? (camXuc.get(d.checkInId) ?? []) : [],
+		});
 		return {
 			tuan,
 			tuanDau: tatCa.length > 0 && tatCa.every((k) => k.lan.length === 0),
 			daCapNhat: tatCa.filter((k) => cuoiTrongTuan(k, tuan) !== null).length,
 			tongKr: tatCa.length,
-			dangBan: xep.dangBan.flatMap(dong),
-			conLai: xep.conLai.flatMap(dong),
+			dangBan: dangBan.map(gan),
+			conLai: conLai.map(gan),
 		};
 	}
 
@@ -801,6 +862,29 @@ export class OkrXemService {
 				: null;
 		const kieu = kieuKr.parse(kr.kind);
 		const so = { id: kr.id, thuTu: 0, ...(lan.get(kr.id) ?? RONG_LAN) };
+		const diem = dienBienKr(
+			{
+				...so,
+				kieu,
+				khoi: kr.startValue.toNumber(),
+				dich: kr.targetValue.toNumber(),
+			},
+			cacTuan(c.startsOn, c.endsOn),
+			homNay,
+			(tuan) =>
+				kyVongTheoNgay(
+					kr.objective.publishedAt,
+					c.endsOn,
+					new Date(`${tuan}T00:00:00+07:00`),
+					nghi,
+				),
+		);
+		const camXuc = await this.camXuc.tomTat(
+			this.db,
+			diem.flatMap((d) => (d.checkInId ? [d.checkInId] : [])),
+			userId,
+			nc,
+		);
 		return {
 			kieu,
 			tieuDe: kr.title,
@@ -809,23 +893,10 @@ export class OkrXemService {
 			donVi: kr.unit,
 			coCapNhat: so.lan.length > 0,
 			tuanDau: tuanCapNhatDau(c.startsOn, kr.objective.publishedAt, homNay),
-			diem: dienBienKr(
-				{
-					...so,
-					kieu,
-					khoi: kr.startValue.toNumber(),
-					dich: kr.targetValue.toNumber(),
-				},
-				cacTuan(c.startsOn, c.endsOn),
-				homNay,
-				(tuan) =>
-					kyVongTheoNgay(
-						kr.objective.publishedAt,
-						c.endsOn,
-						new Date(`${tuan}T00:00:00+07:00`),
-						nghi,
-					),
-			),
+			diem: diem.map((d) => ({
+				...d,
+				camXuc: d.checkInId ? (camXuc.get(d.checkInId) ?? []) : [],
+			})),
 		};
 	}
 

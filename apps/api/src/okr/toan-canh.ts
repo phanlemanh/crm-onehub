@@ -61,7 +61,7 @@ const trungBinh = (so: number[]): number | null =>
 
 export type NhipKy = { tuanKy: string[]; homNay: Date };
 
-function hang(
+export function dungHangSo(
 	key: string,
 	ten: string,
 	cap: HangToanCanh["cap"],
@@ -96,12 +96,14 @@ export function gopToanCanh(
 		theoKhoa.set(k, [...(theoKhoa.get(k) ?? []), m]);
 	}
 	const cua = (k: string) => theoKhoa.get(k) ?? [];
-	const ra: HangToanCanh[] = [hang("goc", tenGoc, "goc", cua("goc"), nhip)];
+	const ra: HangToanCanh[] = [
+		dungHangSo("goc", tenGoc, "goc", cua("goc"), nhip),
+	];
 	const donVi: { ten: string; khoa: string }[] = [];
 	for (const b of cay.divisions) {
 		const conBp = b.departments.flatMap((p) => cua(`pb:${p.id}`));
 		ra.push(
-			hang(
+			dungHangSo(
 				`bp:${b.id}`,
 				b.name,
 				"bo-phan",
@@ -111,12 +113,16 @@ export function gopToanCanh(
 		);
 		donVi.push({ ten: b.name, khoa: `bp:${b.id}` });
 		for (const p of b.departments) {
-			ra.push(hang(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`), nhip));
+			ra.push(
+				dungHangSo(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`), nhip),
+			);
 			donVi.push({ ten: p.name, khoa: `pb:${p.id}` });
 		}
 	}
 	for (const p of cay.chuaXep) {
-		ra.push(hang(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`), nhip));
+		ra.push(
+			dungHangSo(`pb:${p.id}`, p.name, "phong-ban", cua(`pb:${p.id}`), nhip),
+		);
 		donVi.push({ ten: p.name, khoa: `pb:${p.id}` });
 	}
 	const cuaDonVi = congBo.filter((m) => khoaCuaMucTieu(m) !== null);

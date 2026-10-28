@@ -465,8 +465,7 @@ async function hoiDung(t) {
 }
 
 async function moMucTieu(c, rong, idMt) {
-	const t = await moTrang(c, rong, "/okr");
-	await bamSel(t, `[data-mo-muc-tieu='${idMt}']`);
+	const t = await moTrang(c, rong, `/okr?record=objective:${idMt}`);
 	await doi(t, (s) => window.__tim(s).length > 0, NGAN);
 	await cho(800);
 	return t;
@@ -547,8 +546,7 @@ async function buoc3() {
 }
 
 async function buoc4va5() {
-	const t = await moTrang(cookie.truong, HEP, "/okr");
-	await bamSel(t, `[data-mo-muc-tieu='${K.B}']`);
+	const t = await moTrang(cookie.truong, HEP, `/okr?record=objective:${K.B}`);
 	await doi(t, () => window.__tim("[data-slot='drawer-content']").length > 0);
 	await cho(800);
 	await bamChu(

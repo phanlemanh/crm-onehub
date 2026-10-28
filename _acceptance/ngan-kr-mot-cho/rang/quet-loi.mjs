@@ -75,6 +75,21 @@ const MA_TRAN = [
 		ham: "BangMoiKr",
 	},
 	{
+		o: "kr-phu-trach",
+		tep: "apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx",
+		ham: "PhanKrPhuTrach",
+	},
+	{
+		o: "viec-gan-kr",
+		tep: "apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx",
+		ham: "DichViec",
+	},
+	{
+		o: "ten-kr-bang-kr",
+		tep: "apps/app/app/(app)/[slug]/okr/bang-kr.tsx",
+		ham: "HangKr",
+	},
+	{
 		o: "cap-nhat-gan-day",
 		tep: "apps/app/app/(app)/[slug]/okr/cap-nhat-gan-day/cap-nhat-gan-day.tsx",
 		ham: "DongTinChuKy",

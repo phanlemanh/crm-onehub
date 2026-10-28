@@ -31,6 +31,7 @@ import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { HangCamXuc } from "./cam-xuc/hang-cam-xuc";
 import { useCapNhatKr } from "./cap-nhat-kr";
 import { giaiDon } from "./don-dich";
 import { DonViCoKr, XemMoiBo } from "./don-vi-co-kr";
@@ -55,10 +56,19 @@ type HopTuanDuLieu = RouterOutputs["okr"]["hopTuan"];
 function DongBan({ dong, thuTu }: { dong: DongHop; thuTu: string }) {
 	const moDienBien = useMoDienBien();
 	return (
-		<TenDong
-			dong={dong}
-			moKr={() => moDienBien(dong.objectiveId, dong.keyResultId, thuTu)}
-		/>
+		<div className="flex flex-col gap-3">
+			<TenDong
+				dong={dong}
+				moKr={() => moDienBien(dong.objectiveId, dong.keyResultId, thuTu)}
+			/>
+			{dong.checkInId ? (
+				<HangCamXuc
+					camXuc={dong.camXuc}
+					checkInId={dong.checkInId}
+					objectiveId={dong.objectiveId}
+				/>
+			) : null}
+		</div>
 	);
 }
 

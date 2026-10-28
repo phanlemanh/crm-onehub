@@ -258,6 +258,8 @@ const HOP_TUAN: HopTuanOutput = hopTuanOutput.parse({
 			tuTin: "vua",
 			ghiChu: "Chậm hai hợp đồng lớn ở Hải Phòng",
 			lyDo: [{ loai: "ghi-chu", ngay: "2026-10-12" }],
+			checkInId: null,
+			camXuc: [],
 		},
 	],
 	conLai: [],
@@ -561,7 +563,7 @@ const CA = {
 			"chua cap nhat",
 		);
 		expect(chu(trangThai("ST-tomtat-chua-cap-nhat"))).toContain(
-			"Tuần này chưa có Cập nhật tuần nào",
+			"Tuần này chưa có lần cập nhật nào",
 		);
 		expect(khoi()?.querySelector("li[data-cau]")).toBeNull();
 	},

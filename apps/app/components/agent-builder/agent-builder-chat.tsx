@@ -37,6 +37,7 @@ import {
 	MessageScrollerProvider,
 	MessageScrollerViewport,
 } from "@crm/ui/components/message-scroller";
+import { TheDangDung } from "@crm/ui/components/the-dang-dung";
 import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { cn } from "@crm/ui/lib/utils";
@@ -62,6 +63,7 @@ import {
 	latestCompletedArtifactVersionId,
 	reviewVersionId,
 } from "@/lib/agent-builder-state";
+import { useTheDangDung } from "@/lib/agent-builder-the-dang-dung";
 import {
 	conversationTimeline,
 	eventStreamSettled,
@@ -103,7 +105,6 @@ import {
 } from "./chat-chips";
 import { DeleteChatAction } from "./delete-chat-action";
 import { ShareChatDialog } from "./share-chat-dialog";
-import { TheDangDung } from "./the-dang-dung";
 
 type Conversation = RouterOutputs["conversations"]["builderById"];
 type SharedConversation = RouterOutputs["conversations"]["shared"];
@@ -1139,16 +1140,17 @@ export function BuildingAgentCard({
 	const writingPath =
 		artifacts.find((artifact) => artifact.status === "WRITING")?.path ?? null;
 
+	const the = useTheDangDung({
+		t,
+		buocVat: BUILDER_STEP_ARTIFACTS,
+		daXong: completed,
+		dangGhi: writingPath,
+		batDauLuc: startedAt,
+	});
+
 	return (
 		<TheDangDung
-			buoc={t.man.buoc.map((nhan: string, index: number) => ({
-				nhan,
-				vat: BUILDER_STEP_ARTIFACTS[index] ?? null,
-			}))}
-			daXong={completed}
-			dangGhi={writingPath}
-			batDauLuc={startedAt}
-			t={t}
+			{...the}
 			nutDung={
 				<Button
 					variant="outline"

@@ -480,6 +480,10 @@ const GHIM = {
 	...GHIM_OKR_SOAN,
 	...GHIM_LO_TRINH,
 	"okr-cap-nhat-gan-day:chuaGui": ["Chưa gửi được: 1", "Chưa gửi được: 12"],
+	"okr-cap-nhat-gan-day:chuaTha": [
+		"Chưa thả được cảm xúc: 1",
+		"Chưa thả được cảm xúc: 12",
+	],
 	"okr-cap-nhat-gan-day:oTraLoi": [
 		"Trả lời lần cập nhật của 1",
 		"Trả lời lần cập nhật của 12",
@@ -493,6 +497,9 @@ const GHIM = {
 		"Không có bộ OKR nào trong «1»",
 		"Không có bộ OKR nào trong «12»",
 	],
+	"okr-vo-khu:boOkr.so.den": ["đến 1", "đến 12"],
+	"okr-vo-khu:boOkr.so.batDau": ["Bắt đầu 1", "Bắt đầu 12"],
+	"okr-vo-khu:boOkr.so.daKetThuc": ["Đã kết thúc 1", "Đã kết thúc 12"],
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"crm:truongKieu.trong": ["1 không được để trống.", "12 không được để trống."],

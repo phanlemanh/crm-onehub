@@ -360,6 +360,7 @@ export function BangDonVi({
 		renderSubCell: (kr, cotKr, mt) => oKr(kr, cotKr, mt, capNhat.mo),
 		onSubRowClick: (kr) => openRecord({ kind: "kr", id: kr.id }),
 		rowLabel: (mt) => mt.title,
+		moSan: true,
 	};
 	return (
 		<div data-trang-thai={rows.length > 0 ? "ST-donvi-danhsach" : undefined}>

@@ -95,10 +95,30 @@ const lapMau = (idDich) => {
 		getComputedStyle(e).visibility !== "hidden";
 	const tat = (s, goc = document) => [...goc.querySelectorAll(s)].filter(hien);
 	const cao = (e) => Math.round(e.getBoundingClientRect().height);
+	const khoangHangSo = () => {
+		const hs = tat("[data-hang-so-bo]")[0];
+		const ke = hs?.nextElementSibling;
+		const khoangSo =
+			hs && ke
+				? ke.getBoundingClientRect().top - hs.getBoundingClientRect().top
+				: 0;
+		const nutGap = tat("[data-nut-mo-gap-tat-ca]")[0];
+		const oChon = tat("[data-chon-don-vi]")[0];
+		const khoangNut =
+			nutGap &&
+			oChon &&
+			nutGap.getBoundingClientRect().bottom <= oChon.getBoundingClientRect().top
+				? oChon.getBoundingClientRect().top - nutGap.getBoundingClientRect().top
+				: 0;
+		return khoangSo + khoangNut;
+	};
 	const lay = () => {
 		const vung = tat("[data-slot=page-shell-content]")[0] ?? null;
 		const nd = vung ? Math.round(vung.getBoundingClientRect().top) : null;
-		const khung = vung ? (tat("[data-khung-xuong]", vung)[0] ?? null) : null;
+		const khung = vung
+			? (tat("[data-khung-xuong]:not([data-khung-xuong=hang-so])", vung)[0] ??
+				null)
+			: null;
 		let ky = null;
 		if (khung) {
 			const cc = tat("[data-khung-hang=thanh-cong-cu]", khung)[0];
@@ -113,7 +133,9 @@ const lapMau = (idDich) => {
 		}
 		const la = vung
 			? tat("[data-slot=skeleton], [aria-busy=true]", vung).some(
-					(e) => !(khung && (khung.contains(e) || e.contains(khung))),
+					(e) =>
+						!(khung && (khung.contains(e) || e.contains(khung))) &&
+						!e.closest("[data-khung-xuong=hang-so]"),
 				)
 			: false;
 		const oThat = tat("[data-chon-don-vi]");
@@ -139,7 +161,9 @@ const lapMau = (idDich) => {
 			oThat: oThat.length > 0,
 			cay: tat("[data-nut-cay]").length + tat("[role=tree]").length,
 			o: oThat.length + oKhung.length,
-			dinh: dau ? Math.round(dau.getBoundingClientRect().top) : null,
+			dinh: dau
+				? Math.round(dau.getBoundingClientRect().top - khoangHangSo())
+				: null,
 			quay: vung ? tat("[data-slot=spinner], .animate-spin", vung).length : 0,
 			hang: hangMt.length > 0,
 		});
@@ -204,11 +228,30 @@ const doThat = (t) =>
 			.filter(hien);
 		const dau = vung?.querySelector("thead tr");
 		const o = [...document.querySelectorAll("[data-chon-don-vi]")].find(hien);
+		const hs = [...document.querySelectorAll("[data-hang-so-bo]")].find(hien);
+		const keHangSo = hs?.nextElementSibling;
+		const khoangSo =
+			hs && keHangSo
+				? keHangSo.getBoundingClientRect().top - hs.getBoundingClientRect().top
+				: 0;
+		const nutGap = [
+			...document.querySelectorAll("[data-nut-mo-gap-tat-ca]"),
+		].find(hien);
+		const khoangNut =
+			nutGap &&
+			o &&
+			nutGap.getBoundingClientRect().bottom <= o.getBoundingClientRect().top
+				? o.getBoundingClientRect().top - nutGap.getBoundingClientRect().top
+				: 0;
 		return {
-			congCu: hop?.parentElement ? cao(hop.parentElement) : null,
+			congCu: hop?.parentElement
+				? cao(hop.parentElement) - Math.round(khoangNut)
+				: null,
 			dauBang: dau ? cao(dau) : null,
 			dong: [...new Set(tr)].map(cao),
-			dinh: o ? Math.round(o.getBoundingClientRect().top) : null,
+			dinh: o
+				? Math.round(o.getBoundingClientRect().top - khoangSo - khoangNut)
+				: null,
 			tran:
 				document.documentElement.scrollWidth >
 				document.documentElement.clientWidth + 1,

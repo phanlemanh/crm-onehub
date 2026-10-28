@@ -179,15 +179,37 @@ export class OkrTraoDoiService {
 		);
 		return this.db.$transaction(async (tx) => {
 			await this.okr.assertKyChuaAn(tx, mt.cycleId);
-			if (input.keyResultId !== undefined) {
+			const lan =
+				input.checkInId === undefined
+					? null
+					: await tx.okrCheckIn.findFirst({
+							where: {
+								id: input.checkInId,
+								keyResult: {
+									objectiveId: input.objectiveId,
+									objective: dieuKienXemMucTieu(nc),
+								},
+							},
+							select: { keyResultId: true },
+						});
+			if (input.checkInId !== undefined && !lan)
+				throw new NotFoundException(T.khongThayMucTieu);
+			if (
+				lan &&
+				input.keyResultId !== undefined &&
+				input.keyResultId !== lan.keyResultId
+			)
+				throw new BadRequestException(T.traoDoi.capNhatKhacKr);
+			const keyResultId = input.keyResultId ?? lan?.keyResultId;
+			if (keyResultId !== undefined) {
 				const kr = await tx.okrKeyResult.findFirst({
 					where: {
-						id: input.keyResultId,
+						id: keyResultId,
 						objective: dieuKienXemMucTieu(nc),
 					},
 					select: { objectiveId: true },
 				});
-				if (!kr) throw new NotFoundException(T.khongCoKr(input.keyResultId));
+				if (!kr) throw new NotFoundException(T.khongCoKr(keyResultId));
 				if (kr.objectiveId !== input.objectiveId)
 					throw new BadRequestException(T.traoDoi.krKhacMucTieu);
 			}
@@ -205,7 +227,8 @@ export class OkrTraoDoiService {
 			const c = await tx.okrComment.create({
 				data: {
 					objectiveId: input.objectiveId,
-					keyResultId: input.keyResultId ?? null,
+					keyResultId: keyResultId ?? null,
+					checkInId: input.checkInId ?? null,
 					body: input.body,
 					authorUserId: userId,
 					createdAt: now,
@@ -218,12 +241,12 @@ export class OkrTraoDoiService {
 				"binh-luan",
 				{
 					objectiveId: input.objectiveId,
-					keyResultId: input.keyResultId,
+					keyResultId,
 				},
 				null,
 				{
 					commentId: c.id,
-					keyResultId: input.keyResultId ?? null,
+					keyResultId: keyResultId ?? null,
 					mentions: nhac,
 				},
 			);

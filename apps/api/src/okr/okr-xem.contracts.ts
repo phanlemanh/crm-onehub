@@ -1,3 +1,4 @@
+import { tomTatCamXuc } from "@crm/validation/okr-cam-xuc";
 import { LOAI_VIEC_KR } from "@crm/validation/okr-canh-kr";
 import { MUC_TU_TIN } from "@crm/validation/okr-cap-nhat";
 import { MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
@@ -193,6 +194,8 @@ export const mucDoiHop = z.object({
 });
 
 export const dongHop = dongKr.extend({
+	checkInId: z.string().nullable(),
+	camXuc: tomTatCamXuc,
 	ghiChu: z.string().nullable(),
 	ghiChuNgay: z.string().nullable().default(null),
 	donVi: z.string().default(""),
@@ -225,6 +228,8 @@ export const dienBienOutput = z.object({
 	diem: z.array(
 		z.object({
 			tuan: z.string(),
+			checkInId: z.string().nullable(),
+			camXuc: tomTatCamXuc,
 			giaTri: z.number().nullable(),
 			kyVong: z.number().nullable(),
 			tuTin: tuTin.nullable(),
@@ -409,3 +414,17 @@ export type DanhSachBoOutput = z.infer<typeof danhSachBoOutput>;
 export type ViecCuaBoInput = z.infer<typeof viecCuaBoInput>;
 export type ViecCuaBoOutput = z.infer<typeof viecCuaBoOutput>;
 export type NhomViecBo = z.infer<typeof nhomViecBo>;
+
+export const soBoInput = z.object({ cycleId: ma, unit: donViChon });
+
+export const soBoOutput = hangToanCanh.pick({
+	tienDo: true,
+	kyVong: true,
+	soMucTieu: true,
+	soKr: true,
+	tuTin: true,
+	daCapNhat: true,
+});
+
+export type SoBoInput = z.infer<typeof soBoInput>;
+export type SoBoOutput = z.infer<typeof soBoOutput>;

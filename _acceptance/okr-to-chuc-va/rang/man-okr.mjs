@@ -265,10 +265,10 @@ async function phanThuGon() {
 		if (CO_DO)
 			await p.evaluate((a) => {
 				const u = new URL(location.href);
-				const giu = (u.searchParams.get("expand") ?? "")
+				const giu = (u.searchParams.get("gap") ?? "")
 					.split(",")
 					.filter((x) => x && x !== a);
-				u.searchParams.set("expand", giu.join(","));
+				u.searchParams.set("gap", giu.join(","));
 				history.replaceState(history.state, "", u.toString());
 			}, MT_A);
 		if (cach === "loc") {
@@ -283,11 +283,11 @@ async function phanThuGon() {
 		const mo = await p.$eval(nutThu(MT_A), (e) =>
 			e.getAttribute("aria-expanded"),
 		);
-		const url = new URL(p.url()).searchParams.get("expand") ?? "";
+		const url = new URL(p.url()).searchParams.get("gap") ?? "";
 		if (
 			kiem(
 				// AC-14 loi-hua-moi: trang-don-vi-mot-bang AC-3 — mac dinh moi dong thu, duong dan nho dong MO (expand) thay dong thu (thuMucTieu).
-				mo === "true" && url.includes(MT_A),
+				mo === "false" && url.includes(MT_A),
 				`mat id khuat: ${cach} (aria=${mo} url=${url})`,
 			)
 		)

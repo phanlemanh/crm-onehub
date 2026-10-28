@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3bacbd6bf1695a5b1ecf072e968d0f278836ee6b
+verified_commit: 81b1314b7c8f0e7b976c0a5cb9d1e68b9bb662d7
 human_signoff: Manh Phan 2026-10-01
 ---
 
@@ -316,3 +316,23 @@ sha: 221c98a8faee6a66a4b19b56faf0aa062807132d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 7 — 2026-10-09, do gộp onehub e86cf730 vào nhánh E1c
 run_id: repin-20261009T021828Z-69719
 sha: 3bacbd6bf1695a5b1ecf072e968d0f278836ee6b · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-26, do SV6 bam-kr-mo-chi-tiet-kr đổi bài kiểm và thước của hồ sơ đã ký; gộp onehub 344879826
+run_id: repin-20261026T184903Z-86908
+sha: 34487982603b686115969b63e6567a390991efb0 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9, E20 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-27, do ghim lại sau gộp onehub 1a151f3f7 cho #560 (chạy lại 4 hồ sơ đỏ vì CLAUDE_PLUGIN_ROOT trỏ nhầm feature-loop)
+run_id: repin-20261027T174805Z-82273
+sha: e24a8c2f895271c82fcf731b4a4cf8065b68be8e · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9, E20 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN) · dùng lại theo băm đầu vào (không gọi model): E17←repin-20261026T184903Z-86908
+
+### Re-pin lần 10 — 2026-10-27, do ghim lại sau gộp onehub 881f05825 (#576, #577) cho #560
+run_id: repin-20261027T180432Z-57103
+sha: 37519e7b095caab197e03b4f92c1195052e09342 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN) · dùng lại theo băm đầu vào (không gọi model): E17←repin-20261026T184903Z-86908
+
+### Re-pin lần 11 — 2026-10-28, do HT5 cam-xuc-tren-cap-nhat: vai-chi-okr.spec.ts chỉ thêm dòng (V3-68) sau lượt ghim 18758; ghim lại các hồ sơ có paths chạm tệp đó
+run_id: repin-20261028T002925Z-69430
+sha: c96df72880128f933d460e863918a2b5329de0ba · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9, E20 — chưa chứng lại, đi vòng S4 delta · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 12 — 2026-10-28, do HT5 81b1314b7: okr-cam-xuc*.spec.ts thêm afterAll trả đồng hồ thật (đồng hồ giả rò sang giai-doan.spec.ts trên CI); chủ kho xác nhận commit sau ký
+run_id: repin-20261028T054823Z-25946
+sha: 81b1314b7c8f0e7b976c0a5cb9d1e68b9bb662d7 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN) · dùng lại theo băm đầu vào (không gọi model): E17←repin-20261028T002925Z-69430

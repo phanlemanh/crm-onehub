@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
+import { BamKrMoChiTietKrMau } from "./_modules/bam-kr-mo-chi-tiet-kr";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
+import { BoOkrCoSoMau } from "./_modules/bo-okr-co-so";
+import { CamXucTrenCapNhatMau } from "./_modules/cam-xuc-tren-cap-nhat";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CapNhatGanDayMau } from "./_modules/cap-nhat-gan-day";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
@@ -66,6 +69,7 @@ import { PROTO_CATALOG } from "./catalog";
 export type ProtoComponent = (props: { state: string }) => ReactNode;
 
 const BANG_GHEP = {
+	"bo-okr-co-so": BoOkrCoSoMau,
 	"giai-doan-thoa-thuan": GiaiDoanThoaThuanProto,
 	"cua-toi-ba-phan": CuaToiBaPhanMau,
 	"dieu-huong-khu-muc-tieu": DieuHuongKhuMucTieuMau,
@@ -130,7 +134,9 @@ const BANG_GHEP = {
 	"hop-tuan-mo-dung-bo": HopTuanMoDungBoMau,
 	"ngan-kr-mot-cho": NganKrMotChoMau,
 	"hop-tuan-tren-bang": HopTuanTrenBangMau,
+	"bam-kr-mo-chi-tiet-kr": BamKrMoChiTietKrMau,
 	"cap-nhat-gan-day": CapNhatGanDayMau,
+	"cam-xuc-tren-cap-nhat": CamXucTrenCapNhatMau,
 } satisfies Record<string, ProtoComponent>;
 
 export const PROTO_COMPONENTS = new Map(Object.entries(BANG_GHEP));
