@@ -150,7 +150,6 @@ const vi = {
 		action: "Về cả công ty",
 	},
 	donViBang: {
-		caCongTy: "cả công ty",
 		thuoc: "Thuộc",
 		locNhanh: {
 			tatCa: "Tất cả",
@@ -928,7 +927,6 @@ const en: OkrMessages = {
 		action: "Back to the whole company",
 	},
 	donViBang: {
-		caCongTy: "whole company",
 		thuoc: "In",
 		locNhanh: {
 			tatCa: "All",
