@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9315f0aec7b0fb77cd2a3b43d91f869ca2946a1d
+verified_commit: 392f29497d28218340519359e23bad3a9f7fe4a3
 human_signoff: Phan Le Manh 2026-10-03
 ---
 
@@ -246,3 +246,7 @@ sha: beac40ab8472f735a5e7ecc79a03ae01ea1d37cf · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-08, do gộp onehub sau #303 (datatable-loc-ro)
 run_id: repin-20261008T011613Z-35007
 sha: 9315f0aec7b0fb77cd2a3b43d91f869ca2946a1d · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E14 · thay bởi hồ sơ đã ký: E3→gop-y-dung-cho#AC-5, E14→gop-y-dung-cho#AC-14 · ngoài làn máy: E10, E13 · AC không có chốt máy: AC-3, AC-9, AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-28, do HT5 cam-xuc-tren-cap-nhat đổi thước (V3-59..67) và hai trường mới checkInId, camXuc trên Họp tuần, Cập nhật gần đây, diễn biến
+run_id: repin-20261027T235917Z-18758
+sha: 392f29497d28218340519359e23bad3a9f7fe4a3 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E14 · thay bởi hồ sơ đã ký: E3→gop-y-dung-cho#AC-5, E14→gop-y-dung-cho#AC-14 · ngoài làn máy: E10, E13 · diff chạm vật đo ngoài làn máy: E10, E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-9, AC-12, AC-13 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

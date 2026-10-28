@@ -3,6 +3,7 @@ import { type MucTuTin, TUAN_MS } from "./okr-tro-ly-danh-muc";
 import { dauTuanVN, ngayVN, soNgayVN } from "./onboarding-nhac";
 
 export type LanCapNhat = {
+	id?: string;
 	tuan: string;
 	luc: Date;
 	tuTin: MucTuTin;

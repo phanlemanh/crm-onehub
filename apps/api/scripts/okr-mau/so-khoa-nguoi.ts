@@ -32,6 +32,7 @@ export const SO_KHOA_NGUOI = {
 	"OkrViecKr.taoBoi": DON,
 	"OkrBangChung.tacGia": DON,
 	"OkrGhiNhan.tacGia": DON,
+	"OkrCamXuc.nguoi": DON,
 	"OkrGhiNhanNhan.user": DON,
 	"OkrMau.taoBoi": DON,
 	"OkrNguoiXem.user": DON,

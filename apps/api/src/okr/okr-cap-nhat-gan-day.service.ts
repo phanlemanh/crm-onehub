@@ -7,10 +7,11 @@ import { PHAM_VI_BO } from "@crm/validation/okr-tham-so";
 import { Inject, Injectable } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
-import { dieuKienPhamVi, nguoiDuocNhac, traLoiTu } from "./cap-nhat-gan-day";
+import { dieuKienPhamVi, nguoiDuocNhac } from "./cap-nhat-gan-day";
 import { khoaDonViDong, tenDonVi } from "./don-vi";
 import { CAP_CONG_TY } from "./moi-kr";
 import { OkrAccessService } from "./okr-access.service";
+import { OkrCamXucService } from "./okr-cam-xuc.service";
 import type {
 	CapNhatGanDayInput,
 	CapNhatGanDayOutput,
@@ -71,6 +72,7 @@ export class OkrCapNhatGanDayService {
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
+		@Inject(OkrCamXucService) private readonly camXuc: OkrCamXucService,
 	) {}
 
 	async capNhatGanDay(
@@ -154,25 +156,26 @@ export class OkrCapNhatGanDayService {
 			},
 		});
 		const lanMoiNhat = new Map(moiNhat.map((c) => [c.keyResultId, c]));
-		const lucs = moiNhat.map((c) => lucCua(c).getTime());
-		const binhLuan =
-			lucs.length === 0
+		const lanIds = trang.map((c) => c.id);
+		const [binhLuan, camXuc] = await Promise.all([
+			lanIds.length === 0
 				? []
-				: await this.db.okrComment.findMany({
+				: this.db.okrComment.findMany({
 						where: {
-							keyResultId: { in: krIds },
+							checkInId: { in: lanIds },
 							objective: dieuKienXemMucTieu(nc),
-							createdAt: { gte: new Date(Math.min(...lucs)) },
 						},
 						orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 						select: {
 							id: true,
-							keyResultId: true,
+							checkInId: true,
 							authorUserId: true,
 							body: true,
 							createdAt: true,
 						},
-					});
+					}),
+			this.camXuc.tomTat(this.db, lanIds, userId, nc),
+		]);
 		const nguoiIds = [
 			...new Set([
 				...trang.flatMap((c) => [c.authorUserId, c.ownerUserId]),
@@ -217,21 +220,20 @@ export class OkrCapNhatGanDayService {
 				tuTin: mucTuTin.parse(c.confidence),
 				ghiChu: c.note,
 				moiNhat: laMoiNhat,
-				traLoi:
-					laMoiNhat && moi
-						? traLoiTu(
-								binhLuan.filter((b) => b.keyResultId === c.keyResultId),
-								lucCua(moi),
-							).map((b) => ({
-								id: b.id,
-								nguoi: ai(b.authorUserId),
-								noiDung: b.body,
-								luc: b.createdAt.toISOString(),
-							}))
-						: [],
-				mentionNguoiCapNhat: laMoiNhat
-					? nguoiDuocNhac(c.authorUserId, userId, conLaThanhVien)
-					: null,
+				traLoi: binhLuan
+					.filter((b) => b.checkInId === c.id)
+					.map((b) => ({
+						id: b.id,
+						nguoi: ai(b.authorUserId),
+						noiDung: b.body,
+						luc: b.createdAt.toISOString(),
+					})),
+				camXuc: camXuc.get(c.id) ?? [],
+				mentionNguoiCapNhat: nguoiDuocNhac(
+					c.authorUserId,
+					userId,
+					conLaThanhVien,
+				),
 			};
 		});
 		return {
