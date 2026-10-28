@@ -3813,6 +3813,27 @@
       "tieu_chi": 6
     },
     {
+      "ma": "HT6",
+      "slug": "ve-khung-muc-tieu-dung-kr",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-30",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.795,
+      "dung_tren": [
+        "HT2",
+        "SV7"
+      ],
+      "ten": "Về khung mục tiêu đúng KR đang xem",
+      "ten_ngan": "Về đúng mục tiêu",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị đi ‹ › trong ngăn KR mở từ bảng Họp tuần sang một KR thuộc mục tiêu khác, bấm «Về khung mục tiêu» và mở đúng mục tiêu của KR đang xem»",
+      "vi_sao": "Ngoài-4 ở Cổng Bằng chứng của HT2 hop-tuan-tren-bang (28/10): đi ‹ › theo thứ tự bảng vẫn giữ mục tiêu của KR đầu bên dưới, nên nút về mở nhầm mục tiêu (apps/app/components/crm/record-sheet/kr-sheet.tsx). Chủ kho chọn «mở hợp đồng mới», sổ _acceptance/hop-tuan-tren-bang/decisions.jsonl d-20261028T114723Z-27.",
+      "bat_khi": "Mở ngăn KR từ bảng Họp tuần, đi › sang KR của mục tiêu khác, bấm «Về khung mục tiêu»: khung mở đúng mục tiêu của KR đang xem",
+      "ly_do": "Chủ kho 28/10 nguyên văn «Thêm hàng lộ trình cho Ngoài-4 của HT2: có — một hàng HT6 «Về khung mục tiêu đúng KR đang xem», đứng sau HT2, ngay sau SV7».",
+      "ghi_chu": "Cùng ngăn KR với SV1 và SV7: mở sau khi SV1 gộp để khỏi ghim lại thêm."
+    },
+    {
       "ma": "VK14",
       "slug": "so-do-cua-bo-okr",
       "hang": "T2",
