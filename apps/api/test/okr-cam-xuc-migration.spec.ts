@@ -1,4 +1,11 @@
-import { beforeAll, describe, expect, setSystemTime, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
@@ -154,6 +161,10 @@ beforeAll(async () => {
 	san.t2 = await guiLan(san.k1, "12:00");
 	await binhLuan("c1200", "12:00", san.k1);
 	await binhLuan("c1300", "13:00", san.k1);
+	setSystemTime();
+});
+
+afterAll(() => {
 	setSystemTime();
 });
 

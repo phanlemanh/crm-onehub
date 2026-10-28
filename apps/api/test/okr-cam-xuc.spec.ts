@@ -1,4 +1,12 @@
-import { beforeAll, beforeEach, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { db, setPrismaLogSink } from "@crm/db";
 import { gomTomTat } from "@crm/db/okr-cam-xuc";
 import {
@@ -123,6 +131,10 @@ beforeAll(async () => {
 	await keoDaiPhien();
 	ok(await goi("okr.setProgram", CHUONG_TRINH_RONG), "cau hinh");
 	ky = await taoKy("cx-chinh");
+});
+
+afterAll(() => {
+	setSystemTime();
 });
 
 describe("cx-tha", () => {
