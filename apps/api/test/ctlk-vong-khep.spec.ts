@@ -107,21 +107,6 @@ describe("ctlk-vong-khep", () => {
 			);
 			setSystemTime();
 
-			const tuan = await ungDung()
-				.get(OkrCapNhatService)
-				.capNhatTuan(a, DO_LUC);
-			const daGui = new Map(
-				tuan.items.map((i) => [i.keyResultId, i.updatedThisWeek]),
-			);
-			kiem(
-				daGui.get(kr1) === true,
-				"ctlk-vong-khep: KR 1 da gui qua sheet van con trong Can cap nhat tuan nay",
-			);
-			kiem(
-				daGui.get(kr2) === false,
-				"ctlk-vong-khep: KR 2 chua gui da roi Can cap nhat tuan nay",
-			);
-
 			const nhac = (
 				(
 					await viecOkrCanNhac(db, {
@@ -141,6 +126,20 @@ describe("ctlk-vong-khep", () => {
 			);
 			expect(nhac[0]?.krIds).toEqual([kr2]);
 			expect(nhac[0]?.soKr).toBe(1);
+			const tuan = await ungDung()
+				.get(OkrCapNhatService)
+				.capNhatTuan(a, DO_LUC);
+			const daGui = new Map(
+				tuan.items.map((i) => [i.keyResultId, i.updatedThisWeek]),
+			);
+			kiem(
+				daGui.get(kr1) === true,
+				"ctlk-vong-khep: KR 1 da gui qua sheet van con trong Can cap nhat tuan nay",
+			);
+			kiem(
+				daGui.get(kr2) === false,
+				"ctlk-vong-khep: KR 2 chua gui da roi Can cap nhat tuan nay",
+			);
 		},
 		CHO_MS,
 	);

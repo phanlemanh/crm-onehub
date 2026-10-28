@@ -1,8 +1,4 @@
-import {
-	LOI_VAO,
-	MUC_TU_TIN,
-	type MucTuTin,
-} from "@crm/validation/okr-cap-nhat";
+import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";
 import type { LoaiChuKy, PhaChuKy } from "@crm/validation/okr-chu-ky";
 import {
 	LOAI_MUC_TIEU,
@@ -68,7 +64,6 @@ export const okrParsers = {
 	[SEARCH_PARAM.okr.tuTin]: parseAsArrayOf(
 		parseAsStringLiteral(MUC_TU_TIN),
 	).withDefault([]),
-	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO),
 	[SEARCH_PARAM.okr.gopY]: parseAsArrayOf(
 		parseAsStringLiteral(LOC_GOP_Y),
 	).withDefault([]),

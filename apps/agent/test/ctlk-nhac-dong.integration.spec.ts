@@ -135,17 +135,16 @@ describe("ctlk-nhac-dong", () => {
 
 		const tbA = await dongThongBao(A.id);
 		const tbB = await dongThongBao(B.id);
-		expect(tbA.length, "A nhan dung 1 dong thong bao cap nhat").toBe(1);
-		expect(tbA[0]?.duongDan).toBe(`/okr/kr/${krA}`);
-		kiem(
-			tbB[0]?.duongDan === "/okr",
-			`ctlk-nhac-dong: dong thong bao cua B mang ${tbB[0]?.duongDan ?? "(khong co)"}, mong /okr`,
-		);
 		kiem(
 			!(tbB[0]?.duongDan ?? "").includes("tu="),
 			"ctlk-nhac-dong: dong thong bao cua B mang tu=nhac",
 		);
-
+		kiem(
+			tbB[0]?.duongDan === "/okr",
+			`ctlk-nhac-dong: dong thong bao cua B mang ${tbB[0]?.duongDan ?? "(khong co)"}, mong /okr`,
+		);
+		expect(tbA.length, "A nhan dung 1 dong thong bao cap nhat").toBe(1);
+		expect(tbA[0]?.duongDan).toBe(`/okr/kr/${krA}`);
 		const tinA = z.guiToi("ZA");
 		expect(tinA.length, "A nhan dung 1 tin Zalo").toBe(1);
 		const chuA = tinA[0]?.body.text ?? "";

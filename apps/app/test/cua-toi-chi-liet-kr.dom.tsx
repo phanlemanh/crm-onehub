@@ -444,7 +444,7 @@ describe("ctlk-trang-thai", () => {
 				() => new Promise<never>(() => {}) as unknown as object,
 			);
 			await dung(<CuaToi />, "", locale);
-			await cho(() => phan("can-cap-nhat") !== null, "phan 1 hien");
+			await nhip(5);
 			const p1 = phan("can-cap-nhat");
 			const m = okrMessages(locale).baPhan;
 			kiem(

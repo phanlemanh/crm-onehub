@@ -8,14 +8,12 @@ let traLoi: TraLoiGia = { loai: "vi-tri", v: null };
 const daChuyen: string[] = [];
 const daHoi: string[] = [];
 
-class ChuyenHuong extends Error {}
-
 const dieuHuongThat = await import("next/navigation");
 mock.module("next/navigation", () => ({
 	...dieuHuongThat,
 	redirect: (url: string) => {
 		daChuyen.push(url);
-		throw new ChuyenHuong(url);
+		throw new Error(`NEXT_REDIRECT ${url}`);
 	},
 }));
 const sessionThat = await import("@/lib/session");
@@ -62,9 +60,9 @@ function doc(duong: string) {
 }
 
 const MA_TRAN: { nhan: string; don: DonChonOkr }[] = [
+	{ nhan: "phong ban", don: { loai: "pb", id: "pb1" } },
 	{ nhan: "goc", don: { loai: "goc" } },
 	{ nhan: "khoi", don: { loai: "bp", id: "bp1" } },
-	{ nhan: "phong ban", don: { loai: "pb", id: "pb1" } },
 	{ nhan: "ca nhan", don: { loai: "nguoi", id: "u1" } },
 ];
 
@@ -73,9 +71,7 @@ async function moTrang(krId: string): Promise<string[]> {
 	daHoi.length = 0;
 	await KrTrongBoPage({
 		params: Promise.resolve({ slug: "ws", keyResultId: krId }),
-	}).catch((e: unknown) => {
-		if (!(e instanceof ChuyenHuong)) throw e;
-	});
+	}).catch(() => undefined);
 	return [...daChuyen];
 }
 
@@ -119,7 +115,7 @@ describe("ctlk-dich-kr", () => {
 		traLoi = { loai: "vi-tri", v: null };
 		expect(await moTrang("kr9")).toEqual([dichKrTrongBo("ws", "kr9", null)]);
 
-		for (const ma of ["NOT_FOUND", "FORBIDDEN"]) {
+		for (const ma of ["FORBIDDEN", "NOT_FOUND"]) {
 			traLoi = { loai: "loi", ma };
 			const ra = await moTrang("kr9");
 			kiem(

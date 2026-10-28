@@ -184,6 +184,12 @@ describe("ctlk-vi-tri-kr", () => {
 			const krKin = await taoKr(mtKin, b, cookieB);
 			await congBo(mtKin, cookieB);
 
+			const v0 = await viTri(krK0, cookieA);
+			kiem(
+				v0?.cycleId === k0,
+				"ctlk-vi-tri-kr: kyOkr la chu ky dang chay, mong chu ky cua muc tieu",
+			);
+
 			const mong = [
 				[krGoc, "goc"],
 				[krKhoi, `bp:${bp}`],
@@ -196,12 +202,6 @@ describe("ctlk-vi-tri-kr", () => {
 				expect(v).toEqual({ donOkr, cycleId: k });
 			}
 			expect((await viTri(krPb, cookieA))?.donOkr).toBe(`pb:${pb}`);
-
-			const v0 = await viTri(krK0, cookieA);
-			kiem(
-				v0?.cycleId === k0,
-				"ctlk-vi-tri-kr: kyOkr la chu ky dang chay, mong chu ky cua muc tieu",
-			);
 
 			kiem(
 				(await viTri(krKin, cookieA)) === null,
