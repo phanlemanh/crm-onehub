@@ -988,6 +988,7 @@ const GHIM = {
 		"Chưa có mục tiêu nào ở 1.",
 		"Chưa có mục tiêu nào ở 12.",
 	],
+	"okr:baPhan.lanTruoc": ["lần trước 1", "lần trước 12"],
 	"okr:baPhan.dungNhip": ["1 KR đúng nhịp", "12 KR đúng nhịp"],
 	"okr:baPhan.chamNhip": ["1 KR chậm nhịp", "12 KR chậm nhịp"],
 	"okr:baPhan.truot": ["1 KR trượt", "12 KR trượt"],
