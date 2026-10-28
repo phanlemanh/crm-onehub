@@ -5,7 +5,7 @@ slug: hop-tuan-tren-bang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-27-hop-tuan-tren-bang-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-27
@@ -131,3 +131,12 @@ Quét theo trục (skill `morphological-scan`, preset entity-feature; bản qué
   sau khi gửi từ dòng) chờ chủ kho ở Cổng Phạm vi — xem `decisions.jsonl`.
 - Đường nền hạ tầng chưa chạy: phiên chưa ghi danh dãy V2 nên chưa xin được khoá `duong-nen`; dãy chạy trước S4.
 - Design-pass đã chạy không đồng bộ trên bản mẫu `/proto/hop-tuan-tren-bang` — sổ phiên `design-pass.md`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-28:
+  - Ngoài-1: Nếu máy chủ sau này bỏ sót một trường của bảng Họp tuần, màn hiện «Chưa cập nhật» hay ô đơn vị trống thay vì báo lỗi.
+  - Ngoài-2: Hàm đọc giá trị KR còn hai đường nhập, dễ lệch nhau về sau.
+  - Ngoài-3: Khu OKR có ba bản hàm đổi ngày sang dd/mm, có thể lệch nhau về sau.
+  - Ngoài-5: Nếu máy chủ sau này thiếu thông tin đơn vị của một KR, màn Họp tuần hiện trống thay vì báo lỗi rõ ràng.
+  - Ngoài-9: Một lỗi làm phần «Còn lại» luôn mở sẵn có thể lọt qua bài kiểm.
+  - Ngoài-10: Đổi cách ghi nhớ nguồn mở ngăn thì bài kiểm vẫn xanh dù ngăn có thể đi sai thứ tự.
+  - Ngoài-11: Phép đo ở khổ điện thoại không chứng minh được mỗi ghi chú chỉ hiện một lần.
+  - Ngoài-12: Nếu đầu ngăn KR không dựng được, bài kiểm vẫn có thể báo đạt.
