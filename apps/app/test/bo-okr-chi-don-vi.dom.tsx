@@ -419,6 +419,50 @@ function sauDeuRong(goc: Element, moc: Element): boolean {
 	return true;
 }
 
+function kiemOGon(o: HTMLElement, ten: string, laDanhSach: boolean): string[] {
+	const loi: string[] = [];
+	if (o.querySelector("[data-don-vi-con]"))
+		loi.push(`bcd-gon: ${ten} con luoi truc thuoc`);
+	if (o.querySelector("[data-nhom-da-bo]"))
+		loi.push(`bcd-gon: ${ten} con muc gap da bo`);
+	if (o.querySelector("[data-chon-don-vi]"))
+		loi.push(`bcd-gon: ${ten} con o chon don vi`);
+	const gap = [...o.querySelectorAll('[data-slot="collapsible"]')].filter((c) =>
+		/\(\d+\)/.test(c.textContent ?? ""),
+	);
+	if (gap.length > 0) loi.push(`bcd-gon: ${ten} con nhom gap co so dem`);
+	const viTri = o.querySelectorAll('[data-vi-tri-bo="mot-bo"]');
+	const theCon = o.querySelectorAll("[data-the-con-bo]");
+	const hang = o.querySelectorAll("[data-hang-cong-cu]");
+	if (viTri.length !== 1) loi.push(`bcd-gon: ${ten} vi tri ${viTri.length}`);
+	if (theCon.length !== 1) loi.push(`bcd-gon: ${ten} the con ${theCon.length}`);
+	if (hang.length > 1 || (laDanhSach && hang.length !== 1))
+		loi.push(`bcd-gon: ${ten} hang cong cu ${hang.length}`);
+	if (!truoc(viTri[0] ?? null, theCon[0] ?? null))
+		loi.push(`bcd-gon: ${ten} the con truoc vi tri`);
+	if (laDanhSach)
+		loi.push(...kiemThuTuBang(o, ten, theCon[0] ?? null, hang[0] ?? null));
+	return loi;
+}
+
+function kiemThuTuBang(
+	o: HTMLElement,
+	ten: string,
+	theCon: Element | null,
+	hang: Element | null,
+): string[] {
+	const loi: string[] = [];
+	const bang = o.querySelector("table");
+	const chan = o.querySelector("[data-dong-don-vi]");
+	if (!truoc(theCon, hang))
+		loi.push(`bcd-gon: ${ten} hang cong cu truoc the con`);
+	if (!truoc(hang, bang)) loi.push(`bcd-gon: ${ten} bang truoc hang cong cu`);
+	if (!truoc(bang, chan)) loi.push(`bcd-gon: ${ten} chan truoc bang`);
+	if (chan && !sauDeuRong(o, chan))
+		loi.push(`bcd-gon: ${ten} con khoi sau chan bang`);
+	return loi;
+}
+
 const hangMucTieu = (o: Element) =>
 	[...o.querySelectorAll("[data-hang-muc-tieu]")].map((e) =>
 		e.getAttribute("data-hang-muc-tieu"),
@@ -459,40 +503,7 @@ describe("bo-okr-chi-don-vi — trang một bộ", () => {
 						() => san.o.querySelector("table") !== null,
 						`bang ${nhan}`,
 					);
-				const o = san.o;
-				const ten = `${nhan} ${the}`;
-				if (o.querySelector("[data-don-vi-con]"))
-					loi.push(`bcd-gon: ${ten} con luoi truc thuoc`);
-				if (o.querySelector("[data-nhom-da-bo]"))
-					loi.push(`bcd-gon: ${ten} con muc gap da bo`);
-				if (o.querySelector("[data-chon-don-vi]"))
-					loi.push(`bcd-gon: ${ten} con o chon don vi`);
-				const gap = [...o.querySelectorAll('[data-slot="collapsible"]')].filter(
-					(c) => /\(\d+\)/.test(c.textContent ?? ""),
-				);
-				if (gap.length > 0) loi.push(`bcd-gon: ${ten} con nhom gap co so dem`);
-				const viTri = o.querySelectorAll('[data-vi-tri-bo="mot-bo"]');
-				const theCon = o.querySelectorAll("[data-the-con-bo]");
-				const hang = o.querySelectorAll("[data-hang-cong-cu]");
-				if (viTri.length !== 1)
-					loi.push(`bcd-gon: ${ten} vi tri ${viTri.length}`);
-				if (theCon.length !== 1)
-					loi.push(`bcd-gon: ${ten} the con ${theCon.length}`);
-				if (hang.length > 1 || (the === "danh-sach" && hang.length !== 1))
-					loi.push(`bcd-gon: ${ten} hang cong cu ${hang.length}`);
-				if (!truoc(viTri[0] ?? null, theCon[0] ?? null))
-					loi.push(`bcd-gon: ${ten} the con truoc vi tri`);
-				if (the === "danh-sach") {
-					const bang = o.querySelector("table");
-					const chan = o.querySelector("[data-dong-don-vi]");
-					if (!truoc(theCon[0] ?? null, hang[0] ?? null))
-						loi.push(`bcd-gon: ${ten} hang cong cu truoc the con`);
-					if (!truoc(hang[0] ?? null, bang))
-						loi.push(`bcd-gon: ${ten} bang truoc hang cong cu`);
-					if (!truoc(bang, chan)) loi.push(`bcd-gon: ${ten} chan truoc bang`);
-					if (chan && !sauDeuRong(o, chan))
-						loi.push(`bcd-gon: ${ten} con khoi sau chan bang`);
-				}
+				loi.push(...kiemOGon(san.o, `${nhan} ${the}`, the === "danh-sach"));
 				soO += 1;
 				await act(async () => san.root.unmount());
 				san.o.remove();

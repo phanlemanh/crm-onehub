@@ -392,13 +392,7 @@ export function HopTuan({
 		);
 
 	if (ly === "chua-kr-cong-bo")
-		return boc(
-			<ChuaKrCongBo
-				ky={ky}
-				tenKy={chuKy?.name ?? ""}
-				unit={unit}
-			/>,
-		);
+		return boc(<ChuaKrCongBo ky={ky} tenKy={chuKy?.name ?? ""} unit={unit} />);
 
 	const hangSo = chuKy ? <HangSoHop o={oSoHop(d, chuKy, homNay)} /> : null;
 
