@@ -83,6 +83,7 @@ import {
 	khoaCuaMucTieu,
 	type MucTieuTinh,
 	type SoRieng,
+	soRiengTheoKhoa,
 } from "./toan-canh";
 
 const chonNguoiGon = { id: true, name: true } as const;
@@ -165,22 +166,12 @@ export class OkrXemService {
 		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 	) {}
 
-	dieuKienDonVi(unit: DonViChon, q: Quyen): Prisma.OkrObjectiveWhereInput {
+	dieuKienDonVi(unit: DonViChon): Prisma.OkrObjectiveWhereInput {
 		switch (unit.loai) {
 			case "goc":
 				return { level: "onehub" };
-			case "bp": {
-				const phongBan =
-					q.cay.divisions
-						.find((b) => b.id === unit.id)
-						?.departments.map((p) => p.id) ?? [];
-				return {
-					OR: [
-						{ level: "bo-phan", divisionId: unit.id },
-						{ level: "phong-ban", departmentId: { in: phongBan } },
-					],
-				};
-			}
+			case "bp":
+				return { level: "bo-phan", divisionId: unit.id };
 			case "pb":
 				return { level: "phong-ban", departmentId: unit.id };
 			case "nguoi":
@@ -283,7 +274,7 @@ export class OkrXemService {
 	): Promise<DanhSachOutput> {
 		const q = await this.quyenOkr.quyen(userId);
 		const nc = this.quyenOkr.nguCanhXem(q, userId);
-		const donVi = this.dieuKienDonVi(input.unit, q);
+		const donVi = this.dieuKienDonVi(input.unit);
 		const goc = { AND: [{ cycleId: input.cycleId }, donVi] };
 		const lan = await this.lanCuaKr(goc, { nguCanh: nc });
 		const tuTinMoi = new Map<string, MucTuTin>();
@@ -441,7 +432,7 @@ export class OkrXemService {
 			q,
 			userId,
 			input.cycleId,
-			this.dieuKienDonVi(input.unit, q),
+			this.dieuKienDonVi(input.unit),
 			pham,
 		);
 		const { tienDo, kyVong, soMucTieu, soKr, tuTin, daCapNhat } = dungHangSo(
@@ -461,8 +452,8 @@ export class OkrXemService {
 	): Promise<DanhSachBoOutput> {
 		const q = await this.quyenOkr.quyen(userId);
 		const nc = this.quyenOkr.nguCanhXem(q, userId);
-		const [tc, soMucTieu, theoDoi, tenGoc] = await Promise.all([
-			this.toanCanhTheo(q, userId, cycleId, homNay),
+		const [tinh, soMucTieu, theoDoi, tenGoc] = await Promise.all([
+			this.mucTieuTinh(q, userId, cycleId, {}),
 			this.okr.countByUnit(userId, cycleId),
 			this.db.okrFollow.findMany({
 				where: {
@@ -486,7 +477,7 @@ export class OkrXemService {
 			cay: cayGon(q),
 			tenGoc,
 			soMucTieu,
-			toanCanh: tc.hang,
+			soRieng: soRiengTheoKhoa(tinh.ds, { tuanKy: tinh.tuanKy, homNay }),
 			dan: { boPhan: q.truongBoPhan, phongBan: q.truongPhongBan },
 			theoDoi: new Set(theoDoi.map((f) => khoaDonViDong(f.objective))),
 		});
@@ -503,7 +494,7 @@ export class OkrXemService {
 				objective: {
 					AND: [
 						{ cycleId: input.cycleId },
-						this.dieuKienDonVi(input.unit, q),
+						this.dieuKienDonVi(input.unit),
 						dieuKienXemMucTieu(nc),
 					],
 				},
@@ -695,7 +686,7 @@ export class OkrXemService {
 		const where = {
 			AND: [
 				{ cycleId: input.cycleId, status: "cong-bo" },
-				this.dieuKienDonVi(input.unit, q),
+				this.dieuKienDonVi(input.unit),
 			],
 		};
 		const [mts, lan] = await Promise.all([
