@@ -721,6 +721,8 @@ tay; khi chương trình bật OKR cá nhân thì một người cũng có bộ 
 khu, mục «Bộ OKR» (nhóm OKR) liệt mọi bộ, lọc Tất cả · Tôi dẫn · Đang theo dõi; mỗi bộ có
 trang riêng với các thẻ con là phần của nó (OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm).
 Học từ «Plan» của Tability. Chốt 2026-10-18 (Manh Phan).
+Bộ của một khối không gồm bộ của các phòng ban con; chỉ Toàn cảnh và Sức khoẻ cộng dồn khối
+với phòng con. Sang bộ khác qua menu ở tên bộ trên dòng vị trí. Chốt 2026-10-25 (Manh Phan).
 Khác **Bộ OKR mẫu**: đó là dữ liệu mẫu của đội dựng, không phải tên trên màn.
 _Avoid_: kế hoạch, plan, bảng OKR, trang đơn vị
 Vì sao: «kế hoạch» đã là chữ của Kế hoạch 30 ngày (khuôn kế hoạch, kế hoạch im); «trang
