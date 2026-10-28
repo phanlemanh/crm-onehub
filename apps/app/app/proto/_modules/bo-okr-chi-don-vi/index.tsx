@@ -283,7 +283,8 @@ function BangBo({ d, daBoSan }: { d: DonBcd; daBoSan: boolean }) {
 		);
 	return (
 		<DataTable
-			actions={nutDaBo}
+			actions={<span className="hidden sm:contents">{nutDaBo}</span>}
+			search={<span className="flex sm:hidden">{nutDaBo}</span>}
 			columns={COT}
 			empty={
 				daBo ? (

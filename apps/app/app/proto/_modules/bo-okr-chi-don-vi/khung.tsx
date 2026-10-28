@@ -89,11 +89,13 @@ function MucMenu({ d, the }: { d: DonBcd; the: TheBcd }) {
 	return (
 		<DropdownMenuItem asChild>
 			<Link data-menu-don={d.khoa} href={hrefBo(d.khoa, the)}>
-				<span className="min-w-0 flex-1 truncate" translate="no">
-					{d.ten}
-				</span>
-				<span className="text-muted-foreground text-xs tabular-nums">
-					{demRieng(d)}
+				<span className="flex min-w-0 flex-col">
+					<span className="wrap-anywhere" translate="no">
+						{d.ten}
+					</span>
+					<span className="text-muted-foreground text-xs tabular-nums">
+						{demRieng(d)}
+					</span>
 				</span>
 			</Link>
 		</DropdownMenuItem>
@@ -154,7 +156,10 @@ export function ViTriMenu({
 							<BreadcrumbPage translate="no">{don.ten}</BreadcrumbPage>
 							<Icon icon={ChevronDown} />
 						</DropdownMenuTrigger>
-						<DropdownMenuContent align="start">
+						<DropdownMenuContent
+							align="start"
+							className="w-72 max-w-[calc(100vw-2rem)]"
+						>
 							{nhom.map((n, i) => (
 								<div key={n.nhan}>
 									{i > 0 ? <DropdownMenuSeparator /> : null}
