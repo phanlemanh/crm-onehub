@@ -21,13 +21,13 @@ import { useRef, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
-import { giaTri } from "./bang-kr";
 import {
 	BangCapNhat,
 	congNgay,
 	ngayThang,
 	TUAN,
 } from "./cap-nhat-tuan/cap-nhat-tuan";
+import { giaTri } from "./gia-tri-kr";
 import { LoiPhan } from "./loi-phan";
 
 const LOI_MO_SAN = ["nhac", "viec-cua-toi"] as const satisfies LoiVao[];

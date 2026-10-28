@@ -64,7 +64,7 @@ import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
-import { giaTri } from "../bang-kr";
+import { giaTri } from "../gia-tri-kr";
 import { hienSo } from "../hop-thoai-kr";
 import type { DuLieuCapNhat, KrCapNhat } from "../kieu";
 import { KHOA_DAU } from "../nguon-so";

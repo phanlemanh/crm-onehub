@@ -25,9 +25,9 @@ import { okrCapNhatGanDayMessages } from "@/lib/messages/okr-cap-nhat-gan-day";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { giaTri } from "../bang-kr";
 import { luc } from "../bang-vet";
 import { HangCamXuc } from "../cam-xuc/hang-cam-xuc";
+import { giaTri } from "../gia-tri-kr";
 
 export type DongCapNhat = RouterOutputs["okr"]["capNhatGanDay"]["rows"][number];
 

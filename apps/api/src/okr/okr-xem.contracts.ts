@@ -187,10 +187,20 @@ const dongKr = z.object({
 	tuTin: tuTin.nullable(),
 });
 
+export const mucDoiHop = z.object({
+	tu: z.number(),
+	den: z.number(),
+	ngayTruoc: z.string(),
+});
+
 export const dongHop = dongKr.extend({
 	checkInId: z.string().nullable(),
 	camXuc: tomTatCamXuc,
 	ghiChu: z.string().nullable(),
+	ghiChuNgay: z.string().nullable().default(null),
+	donVi: z.string().default(""),
+	giaTriMoi: z.number().nullable().default(null),
+	mucDoi: mucDoiHop.nullable().default(null),
 	lyDo: z.array(lyDoHop),
 });
 

@@ -1,0 +1,84 @@
+mot-luot: da cho 21s de toi luot
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: chờ phiên khác của cây này (crm_ht2_hop_tuan_tren_bang_do) dọn xong
+phien-do: kho crm_ht2_hop_tuan_tren_bang_do · app http://localhost:4628 · api http://localhost:4585
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+ban do: http://localhost:4628
+nap bo OKR mau + ca hop-tuan: ma 0 — }
+$ bun scripts/dev-session.ts vu-thu-ha@mau.onehub.test
+gieo them qua okr.guiCapNhat (truong P): KR mau-okr-kr-q4-cham-soc-1-k1 lan thu hai tuan 2026-10-26 (4.7 → 5, tu tin cao, ghi chu 195 ky tu)
+du lieu: P vu-thu-ha@mau.onehub.test (Chăm sóc đối tác) · ky mau-okr-chu-ky-quy4 · tuan 2026-10-26 · dang ban 2 · con lai 3 · da cap nhat 4/5 · KR hai lan tuan nay 1 · ghi chu dai 1
+DUNG DUONG 1440-sang: the con Hop tuan bam · xemOkr dung · hang so co · Con lai mo
+DUNG DEM DONG 1440-sang: 5 dong hien / 5 dong API · 5 KR · ghi chu hien moi KR 1 · muc doi hien moi KR 1 · ban hien tu-lg
+DUNG DOI CHUNG DEM 1440-sang: go class an cua 1 tang thi dem ra 2 (can 2)
+DUNG NUT TRONG KHUNG 1440-sang: 5 nut Cap nhat · phai lon nhat 1403 <= 1440
+DUNG KHONG TRAN 1440-sang: scrollWidth 1440 <= 1440
+DUNG DOI CHUNG TRAN 1440-sang: khoi 4000px lam scrollWidth 4000 > 1440
+DUNG KHONG CAT CHU 1440-sang: 60 phan tu (ghi chu, muc doi, nhan, nut) doc tron
+DUNG DEM NGAN 1440-sang: bam ten dong hai mau-okr-kr-q4-cham-soc-1-k1: dem «2/5» (can 2/5) · theo thu tu bang co · nut ‹ co · nut › co
+DUNG NGAN KE 1440-sang: bam › : ngan mau-okr-kr-q4-cham-soc-1-k2 dem «3/5» (can dong ba mau-okr-kr-q4-cham-soc-1-k2, 3/5) · ngan trong DOM mau-okr-kr-q4-cham-soc-1-k2 · url ?donOkr=pb:mau-okr-pb-cham-soc&kyOkr=mau-okr-chu-ky-quy4&xemOkr=hop-tuan&record=objective:mau-okr-mt-q4-cham-soc-1,kr:mau-okr-kr-q4-cham-soc-1-k2&thuTuKr=hop~mau-okr-chu-ky-quy4~pb:mau-okr-pb-cham-soc
+DUNG DUONG 1440-toi: the con Hop tuan bam · xemOkr dung · hang so co · Con lai mo
+DUNG DEM DONG 1440-toi: 5 dong hien / 5 dong API · 5 KR · ghi chu hien moi KR 1 · muc doi hien moi KR 1 · ban hien tu-lg
+DUNG DOI CHUNG DEM 1440-toi: go class an cua 1 tang thi dem ra 2 (can 2)
+DUNG NUT TRONG KHUNG 1440-toi: 5 nut Cap nhat · phai lon nhat 1403 <= 1440
+DUNG KHONG TRAN 1440-toi: scrollWidth 1440 <= 1440
+DUNG DOI CHUNG TRAN 1440-toi: khoi 4000px lam scrollWidth 4000 > 1440
+DUNG KHONG CAT CHU 1440-toi: 60 phan tu (ghi chu, muc doi, nhan, nut) doc tron
+DUNG DEM NGAN 1440-toi: bam ten dong hai mau-okr-kr-q4-cham-soc-1-k1: dem «2/5» (can 2/5) · theo thu tu bang co · nut ‹ co · nut › co
+DUNG NGAN KE 1440-toi: bam › : ngan mau-okr-kr-q4-cham-soc-1-k2 dem «3/5» (can dong ba mau-okr-kr-q4-cham-soc-1-k2, 3/5) · ngan trong DOM mau-okr-kr-q4-cham-soc-1-k2 · url ?donOkr=pb:mau-okr-pb-cham-soc&kyOkr=mau-okr-chu-ky-quy4&xemOkr=hop-tuan&record=objective:mau-okr-mt-q4-cham-soc-1,kr:mau-okr-kr-q4-cham-soc-1-k2&thuTuKr=hop~mau-okr-chu-ky-quy4~pb:mau-okr-pb-cham-soc
+DUNG DUONG 768-sang: the con Hop tuan bam · xemOkr dung · hang so co · Con lai mo
+DUNG DEM DONG 768-sang: 5 dong hien / 5 dong API · 5 KR · ghi chu hien moi KR 1 · muc doi hien moi KR 1 · ban hien md-lg
+DUNG DOI CHUNG DEM 768-sang: go class an cua 1 tang thi dem ra 2 (can 2)
+DUNG NUT TRONG KHUNG 768-sang: 5 nut Cap nhat · phai lon nhat 731 <= 768
+DUNG KHONG TRAN 768-sang: scrollWidth 768 <= 768
+DUNG DOI CHUNG TRAN 768-sang: khoi 4000px lam scrollWidth 4000 > 768
+DUNG KHONG CAT CHU 768-sang: 66 phan tu (ghi chu, muc doi, nhan, nut) doc tron
+DUNG DEM NGAN 768-sang: bam ten dong hai mau-okr-kr-q4-cham-soc-1-k1: dem «2/5» (can 2/5) · theo thu tu bang co · nut ‹ co · nut › co
+DUNG NGAN KE 768-sang: bam › : ngan mau-okr-kr-q4-cham-soc-1-k2 dem «3/5» (can dong ba mau-okr-kr-q4-cham-soc-1-k2, 3/5) · ngan trong DOM mau-okr-kr-q4-cham-soc-1-k2 · url ?donOkr=pb:mau-okr-pb-cham-soc&kyOkr=mau-okr-chu-ky-quy4&xemOkr=hop-tuan&record=objective:mau-okr-mt-q4-cham-soc-1,kr:mau-okr-kr-q4-cham-soc-1-k2&thuTuKr=hop~mau-okr-chu-ky-quy4~pb:mau-okr-pb-cham-soc
+DUNG DUONG 768-toi: the con Hop tuan bam · xemOkr dung · hang so co · Con lai mo
+DUNG DEM DONG 768-toi: 5 dong hien / 5 dong API · 5 KR · ghi chu hien moi KR 1 · muc doi hien moi KR 1 · ban hien md-lg
+DUNG DOI CHUNG DEM 768-toi: go class an cua 1 tang thi dem ra 2 (can 2)
+DUNG NUT TRONG KHUNG 768-toi: 5 nut Cap nhat · phai lon nhat 731 <= 768
+DUNG KHONG TRAN 768-toi: scrollWidth 768 <= 768
+DUNG DOI CHUNG TRAN 768-toi: khoi 4000px lam scrollWidth 4000 > 768
+DUNG KHONG CAT CHU 768-toi: 66 phan tu (ghi chu, muc doi, nhan, nut) doc tron
+DUNG DEM NGAN 768-toi: bam ten dong hai mau-okr-kr-q4-cham-soc-1-k1: dem «2/5» (can 2/5) · theo thu tu bang co · nut ‹ co · nut › co
+DUNG NGAN KE 768-toi: bam › : ngan mau-okr-kr-q4-cham-soc-1-k2 dem «3/5» (can dong ba mau-okr-kr-q4-cham-soc-1-k2, 3/5) · ngan trong DOM mau-okr-kr-q4-cham-soc-1-k2 · url ?donOkr=pb:mau-okr-pb-cham-soc&kyOkr=mau-okr-chu-ky-quy4&xemOkr=hop-tuan&record=objective:mau-okr-mt-q4-cham-soc-1,kr:mau-okr-kr-q4-cham-soc-1-k2&thuTuKr=hop~mau-okr-chu-ky-quy4~pb:mau-okr-pb-cham-soc
+DUNG DUONG 375-sang: the con Hop tuan bam · xemOkr dung · hang so co · Con lai mo
+DUNG DEM DONG 375-sang: 5 dong hien / 5 dong API · 5 KR · ghi chu hien moi KR 1 · muc doi hien moi KR 1 · ban hien duoi-md
+DUNG DOI CHUNG DEM 375-sang: khong co ban an o kho nay, nhan ban ban dang hien thi dem ra 2 (can 2)
+DUNG NUT TRONG KHUNG 375-sang: 5 nut Cap nhat · phai lon nhat 102 <= 375
+DUNG KHONG TRAN 375-sang: scrollWidth 375 <= 375
+DUNG DOI CHUNG TRAN 375-sang: khoi 4000px lam scrollWidth 4000 > 375
+DUNG KHONG CAT CHU 375-sang: 60 phan tu (ghi chu, muc doi, nhan, nut) doc tron
+DUNG DEM NGAN 375-sang: bam ten dong hai mau-okr-kr-q4-cham-soc-1-k1: dem «2/5» (can 2/5) · theo thu tu bang co · nut ‹ co · nut › co
+DUNG NGAN KE 375-sang: bam › : ngan mau-okr-kr-q4-cham-soc-1-k2 dem «3/5» (can dong ba mau-okr-kr-q4-cham-soc-1-k2, 3/5) · ngan trong DOM mau-okr-kr-q4-cham-soc-1-k2 · url ?donOkr=pb:mau-okr-pb-cham-soc&kyOkr=mau-okr-chu-ky-quy4&xemOkr=hop-tuan&record=objective:mau-okr-mt-q4-cham-soc-1,kr:mau-okr-kr-q4-cham-soc-1-k2&thuTuKr=hop~mau-okr-chu-ky-quy4~pb:mau-okr-pb-cham-soc
+DUNG DUONG 375-toi: the con Hop tuan bam · xemOkr dung · hang so co · Con lai mo
+DUNG DEM DONG 375-toi: 5 dong hien / 5 dong API · 5 KR · ghi chu hien moi KR 1 · muc doi hien moi KR 1 · ban hien duoi-md
+DUNG DOI CHUNG DEM 375-toi: khong co ban an o kho nay, nhan ban ban dang hien thi dem ra 2 (can 2)
+DUNG NUT TRONG KHUNG 375-toi: 5 nut Cap nhat · phai lon nhat 102 <= 375
+DUNG KHONG TRAN 375-toi: scrollWidth 375 <= 375
+DUNG DOI CHUNG TRAN 375-toi: khoi 4000px lam scrollWidth 4000 > 375
+DUNG KHONG CAT CHU 375-toi: 60 phan tu (ghi chu, muc doi, nhan, nut) doc tron
+DUNG DEM NGAN 375-toi: bam ten dong hai mau-okr-kr-q4-cham-soc-1-k1: dem «2/5» (can 2/5) · theo thu tu bang co · nut ‹ co · nut › co
+DUNG NGAN KE 375-toi: bam › : ngan mau-okr-kr-q4-cham-soc-1-k2 dem «3/5» (can dong ba mau-okr-kr-q4-cham-soc-1-k2, 3/5) · ngan trong DOM mau-okr-kr-q4-cham-soc-1-k2 · url ?donOkr=pb:mau-okr-pb-cham-soc&kyOkr=mau-okr-chu-ky-quy4&xemOkr=hop-tuan&record=objective:mau-okr-mt-q4-cham-soc-1,kr:mau-okr-kr-q4-cham-soc-1-k2&thuTuKr=hop~mau-okr-chu-ky-quy4~pb:mau-okr-pb-cham-soc
+DUNG DU ANH: 12/12 anh o /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-bang-1440-sang.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-ngan-1440-sang.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-bang-1440-toi.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-ngan-1440-toi.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-bang-768-sang.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-ngan-768-sang.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-bang-768-toi.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-ngan-768-toi.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-bang-375-sang.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-ngan-375-sang.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-bang-375-toi.png
+anh: /Users/manh-macmini/dev/crm/.claude/worktrees/ht2-hop-tuan-tren-bang/_acceptance/hop-tuan-tren-bang/evidence/htb-ngan-375-toi.png
+KET LUAN htb anh: 55 DUNG, 0 SAI
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0

@@ -1,0 +1,106 @@
+{
+	"tuan": "2026-10-19",
+	"tuanDau": false,
+	"daCapNhat": 8,
+	"tongKr": 9,
+	"dangBan": [
+		{
+			"ca": "chua-lan-nao",
+			"progress": 0,
+			"expected": 30,
+			"laMoc": false,
+			"tuTin": null,
+			"ghiChu": null,
+			"lyDo": [
+				{
+					"loai": "im",
+					"soNgay": 30
+				}
+			]
+		},
+		{
+			"ca": "nhieu-tuan",
+			"progress": 30,
+			"expected": 30,
+			"laMoc": false,
+			"tuTin": "vua",
+			"ghiChu": "tuan nay tang",
+			"lyDo": [
+				{
+					"loai": "ghi-chu",
+					"ngay": "2026-10-21"
+				}
+			]
+		},
+		{
+			"ca": "ghi-chu-cu",
+			"progress": 18,
+			"expected": 30,
+			"laMoc": false,
+			"tuTin": "vua",
+			"ghiChu": "ghi chu tuan truoc",
+			"lyDo": [
+				{
+					"loai": "ghi-chu",
+					"ngay": "2026-10-14"
+				}
+			]
+		}
+	],
+	"conLai": [
+		{
+			"ca": "mot-lan",
+			"progress": 28,
+			"expected": 30,
+			"laMoc": false,
+			"tuTin": "vua",
+			"ghiChu": null,
+			"lyDo": []
+		},
+		{
+			"ca": "hai-lan-cung-tuan",
+			"progress": 35,
+			"expected": 30,
+			"laMoc": false,
+			"tuTin": "vua",
+			"ghiChu": null,
+			"lyDo": []
+		},
+		{
+			"ca": "hai-lan-tuan-dau",
+			"progress": 10,
+			"expected": 30,
+			"laMoc": false,
+			"tuTin": "vua",
+			"ghiChu": null,
+			"lyDo": []
+		},
+		{
+			"ca": "khong-doi",
+			"progress": 25,
+			"expected": 30,
+			"laMoc": false,
+			"tuTin": "vua",
+			"ghiChu": null,
+			"lyDo": []
+		},
+		{
+			"ca": "kr-moc",
+			"progress": 100,
+			"expected": null,
+			"laMoc": true,
+			"tuTin": "vua",
+			"ghiChu": null,
+			"lyDo": []
+		},
+		{
+			"ca": "chua-ghi-chu-bao-gio",
+			"progress": 8,
+			"expected": 30,
+			"laMoc": false,
+			"tuTin": "vua",
+			"ghiChu": null,
+			"lyDo": []
+		}
+	]
+}

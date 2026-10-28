@@ -186,6 +186,7 @@ export function HopThoaiCapNhatKr({
 	loiMo,
 	moLai,
 	dong,
+	onDaGui,
 }: {
 	kr: KrCapNhat;
 	lanTruoc: LanTruocKr | null;
@@ -195,6 +196,7 @@ export function HopThoaiCapNhatKr({
 	loiMo: boolean;
 	moLai: () => void;
 	dong: () => void;
+	onDaGui?: (keyResultId: string) => void;
 }) {
 	const locale = useLocale();
 	const t = okrMessages(locale);
@@ -222,6 +224,7 @@ export function HopThoaiCapNhatKr({
 						{ cancelRefetch: false },
 					),
 				]);
+				onDaGui?.(kr.keyResultId);
 				dong();
 			},
 		}),

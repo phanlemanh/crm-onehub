@@ -4,10 +4,12 @@ import {
 	cacTuan,
 	congTuan,
 	cuoiTrongTuan,
+	ghiChuMoiNhatCua,
 	type KrSo,
 	type LanCapNhat,
 	lyDoCua,
 	moiNhat,
+	mucDoiCua,
 	xepHopTuan,
 } from "@crm/db/okr-hop-tuan";
 import { kyVongTheoNgay } from "@crm/db/okr-tien-do";
@@ -718,7 +720,7 @@ export class OkrXemService {
 			if (!x || !s) return [];
 			const laMoc = x.k.kind === "moc";
 			const moi = moiNhat(s);
-			const ghi = [...s.lan].reverse().find((l) => l.ghiChu.trim() !== "");
+			const ghi = ghiChuMoiNhatCua(s);
 			return [
 				{
 					keyResultId: x.k.id,
@@ -733,6 +735,10 @@ export class OkrXemService {
 					checkInId: moi?.id ?? null,
 					camXuc: [],
 					ghiChu: ghi?.ghiChu ?? null,
+					ghiChuNgay: ghi?.ngay ?? null,
+					donVi: x.k.unit,
+					giaTriMoi: moi?.giaTri ?? null,
+					mucDoi: mucDoiCua(s),
 					lyDo: d.lyDo,
 				},
 			];
