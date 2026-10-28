@@ -44,6 +44,30 @@ Trang một bộ còn ba đường sang đơn vị khác (dòng vị trí, ô ch
 Không đổi lược đồ, không migration. Module `okr` ngoài đường T3 → T2.
 
 <!-- <<<UX-SPEC-TEMPLATE -->
+## Eval cũ thay bởi hồ sơ này
+
+Vòng này gỡ ô chọn đơn vị và lưới «Đơn vị trực thuộc» khỏi trang một bộ (AC-4); đường sang đơn vị khác chỉ còn menu
+dòng vị trí (AC-5). Các ô của hai hồ sơ đã ký đo hai thứ ấy mất vật đo, nên khai `status: not-run` kèm
+`superseded_by` trỏ về đây (lối (a), chủ kho chọn 28/10 qua phiên giám sát: «VK19 hai hồ sơ ô chọn đơn vị: a»).
+
+| Eval cũ | Đo gì | AC mới | Eval mới chứng |
+| --- | --- | --- | --- |
+| trang-don-vi-mot-bang/E1 | ô chọn đơn vị: lựa chọn, tìm không dấu, chọn ghi URL | AC-5 | E5 |
+| trang-don-vi-mot-bang/E2 | một hàng gồm ô chọn và cách xem, ảnh ô chọn mở | AC-4 | E4 |
+| trang-don-vi-mot-bang/E3 | ô chọn và cách xem đứng cùng chỗ ở mọi cách xem | AC-4 | E4 |
+| trang-don-vi-mot-bang/E4 | lúc đang tải: không cây, ô chọn đứng yên | AC-4 | E4 |
+| trang-don-vi-mot-bang/E5 | chọn đơn vị qua ô chọn, bảng khớp kho đo | AC-5 | E5 |
+| trang-don-vi-mot-bang/E7 | ô chọn rồi cách xem trong hàng công cụ đơn vị | AC-4 | E4 |
+| trang-don-vi-mot-bang/E10 | khối «Đơn vị trực thuộc» dưới chân bảng | AC-5 | E5 |
+| trang-don-vi-mot-bang/E11 | ô chọn còn bật lúc lỗi, mục gập «Đã bỏ» | AC-4 | E4 |
+| trang-don-vi-mot-bang/E14 | ô chọn ở chỗ ô tìm kiếm, như Thoả thuận | AC-4 | E4 |
+| trang-don-vi-mot-bang/E17 | số mục tiêu trên ô con của lưới trực thuộc | AC-5 | E5 |
+| khung-cho-don-vi-mot-hinh/E3 | ô chọn thật, bấm được lúc khung chờ khi đổi đơn vị | AC-4 | E4 |
+| khung-cho-don-vi-mot-hinh/E9 | ảnh khung chờ, có ảnh đổi đơn vị qua ô chọn | AC-4 | E4 |
+
+Ô khác của hai hồ sơ vẫn chạy. `khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs` bỏ đường đổi đơn vị qua ô chọn và
+đọc hàng công cụ ở `[data-hang-cong-cu]` của bảng.
+
 ## Đặc tả UX
 
 ### 1. Luồng
