@@ -254,6 +254,14 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ctlk_man
+    steps:
+      - "Chạy NGUYÊN VĂN lệnh cmd (tien-de.mjs --chay man.mjs): phiên đo riêng của cây, kho crm_<cây>_do; không gọi thẳng man.mjs"
+      - "man.mjs nạp bộ OKR mẫu, chọn người phụ trách KR ở hai đơn vị của Quý 4, xoá lần cập nhật tuần này của các KR đó"
+      - "Ở 1280 và 375: mở /<slug>/okr → (a) phần «Cần cập nhật tuần này» đủ dòng, không nút hàng loạt, không ô nhập, không tràn ngang → ảnh E14-cua-toi-<khổ>.png"
+      - "(b) bấm dòng KR thứ hai → /<slug>/okr/bo-okr, donOkr và kyOkr đúng của mục tiêu, record kết thúc bằng kr:<id>, ngăn KR mang tên KR và nút «Cập nhật» trong khung nhìn → ảnh E14-mo-kr-<khổ>.png"
+      - "(c) bấm «Cập nhật» → hộp cập nhật một KR mở với tên KR đó → ảnh E14-hop-<khổ>.png"
+      - "(d) mở /<slug>/okr/kr/<mã không có> → về /<slug>/okr, ngăn báo không thấy → ảnh E14-khong-thay-<khổ>.png"
+      - "Đọc dòng cuối «KET LUAN: dat» và mã thoát 0; xem các ảnh trong _acceptance/cua-toi-chi-liet-kr/evidence/"
     paths:
       - "apps/app/app/(app)/[slug]/okr/phan-can-cap-nhat.tsx"
       - "apps/app/app/(app)/[slug]/okr/kr/**"
