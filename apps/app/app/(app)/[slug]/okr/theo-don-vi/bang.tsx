@@ -154,15 +154,17 @@ function TenMucTieu({ mt }: { mt: MucTieu }) {
 					<span translate="no">{mt.owner.name}</span>
 				</span>
 			</span>
-			<span className="w-full pt-1 md:hidden">
-				<TienDoMucTieuGon
-					expected={mt.expected}
-					kind={mt.kind}
-					progress={mt.progress}
-					soKr={mt.keyResults.length}
-					ten={mt.title}
-				/>
-			</span>
+			{laDaBo(mt) ? null : (
+				<span className="w-full pt-1 md:hidden">
+					<TienDoMucTieuGon
+						expected={mt.expected}
+						kind={mt.kind}
+						progress={mt.progress}
+						soKr={mt.keyResults.length}
+						ten={mt.title}
+					/>
+				</span>
+			)}
 		</span>
 	);
 }

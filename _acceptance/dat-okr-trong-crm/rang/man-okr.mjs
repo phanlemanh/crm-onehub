@@ -730,11 +730,12 @@ async function byUnit(c, don) {
 	return hoi(c, "okr.byUnit", { cycleId: OKR.quy, unit: don });
 }
 
-/* trang-don-vi-mot-bang (AC-14): ô chọn đơn vị có tìm kiếm thay cây — mở ô
-   chọn rồi bấm lựa chọn theo tên đơn vị. */
-const LUA_CHON = "[cmdk-item]";
+/* bo-okr-chi-don-vi (AC-5, V5-9): đổi đơn vị qua menu ở mắt xích cuối của dòng
+   vị trí — mở menu rồi bấm mục theo tên đơn vị. */
+const MO_MENU = "[data-menu-vi-tri]";
+const LUA_CHON = "[data-menu-don]";
 async function chonDon(trang, ten) {
-	await bamSel(trang, "[data-chon-don-vi]");
+	await bamSel(trang, MO_MENU);
 	await hienSel(trang, LUA_CHON);
 	return bamChu(trang, LUA_CHON, ten);
 }
@@ -780,21 +781,26 @@ async function buocE11ChuaChuKy() {
 
 async function buocE11() {
 	const pb = (k) => `pb:${ORG[k]}`;
-	const t = await moTrang(cookie.truong, RONG, theoDonVi(), "E11");
-	await hienSel(t, "[data-chon-don-vi]");
-	await bamSel(t, "[data-chon-don-vi]");
-	await hienSel(t, LUA_CHON);
-	const nut = await t.evaluate(() =>
-		[...document.querySelectorAll("[cmdk-item]")].map((e) =>
-			(([ten, goiY]) =>
-				goiY?.textContent?.startsWith("cả công ty")
-					? "goc"
-					: (ten?.textContent?.trim() ?? ""))(
-				e.querySelectorAll(":scope > span"),
-			),
-		),
+	const t = await moTrang(
+		cookie.truong,
+		RONG,
+		theoDonVi(`bp:${ORG.bp}`),
+		"E11",
 	);
-	// Ô chọn không mang khoá đơn vị trên DOM: đổi tên lựa chọn ra khoá như nút cây cũ.
+	await hienSel(t, MO_MENU);
+	await bamSel(t, MO_MENU);
+	await hienSel(t, LUA_CHON);
+	// Menu liệt đơn vị cha, cùng cấp và trực thuộc của bộ đang mở; bộ đang mở là mắt xích cuối.
+	const nut = await t.evaluate(
+		(moMenu, luaChon) => [
+			...[...document.querySelectorAll(luaChon)].map((e) =>
+				e.getAttribute("data-menu-don"),
+			),
+			document.querySelector(moMenu)?.textContent?.trim() ?? "",
+		],
+		MO_MENU,
+		LUA_CHON,
+	);
 	const khoaTheoTen = new Map([
 		[TEN.bp, `bp:${ORG.bp}`],
 		...["pb1", "pb2", "pb3", "pb4"].map((k) => [TEN[k], pb(k)]),
@@ -815,14 +821,12 @@ async function buocE11() {
 	const dem = await hoi(cookie.truong, "okr.countByUnit", { cycleId: OKR.quy });
 	const demPb1 = dem[pb("pb1")] ?? 0;
 	const chuPb1 = await t.evaluate(
-		(ten) =>
-			[...document.querySelectorAll("[cmdk-item]")]
-				.find(
-					(e) => e.querySelector(":scope > span")?.textContent?.trim() === ten,
-				)
+		(khoa) =>
+			document
+				.querySelector(`[data-menu-don='${khoa}']`)
 				?.textContent?.replace(/\s+/g, " ")
 				.trim() ?? "",
-		TEN.pb1,
+		pb("pb1"),
 	);
 	kiem(
 		`E11 buoc 1: so dem canh ${TEN.pb1} phai «${demPb1} mục tiêu», thay «${chuPb1}»`,
@@ -1031,8 +1035,8 @@ async function buocE11() {
 		!(await coSel(h, `nav[aria-label='${CHU.donVi}']`)),
 	);
 	kiem(
-		"E11 buoc 13: o 390 thieu Select don vi",
-		await coSel(h, `button[role='combobox'][aria-label='${CHU.donVi}']`),
+		"E11 buoc 13: o 390 thieu cho doi don vi o dong vi tri",
+		await coSel(h, MO_MENU),
 	);
 	await chup(h, "E11-step13.png", true);
 	await h.close();
