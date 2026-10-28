@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6392a8ba8173ede4408e6fbcf1f52cea025f86bb
+verified_commit: 01499883e38a5c59f1383d50bc4c38040f8d8f7b
 human_signoff:
 ---
 
@@ -231,3 +231,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, determi
 
 Round 1: bản S4 vòng 1 bị trả — E10 ảnh chưa chứng đủ trạng thái AC-9; hai thước E3 và E6 thiếu đối chứng. Returned to implementation (commit 6392a8ba8: bàn đo E10 chứng đủ trạng thái, ba thước có đối chứng, bấm trong bảng không mở ngăn, loại cảm xúc parse ở biên).
 Round 2: E1–E6, E8, E10, E12 chạy lại trên 6392a8ba8, tất cả PASS; E7, E9, E11 carry-forward từ round 1 (delta không chạm paths của eval); bảy lệnh suite hồi quy xanh.
+
+### Re-pin lần 1 — 2026-10-28, do vai-chi-okr.spec.ts chỉ thêm dòng (V3-68) sau S4 vòng 2; E6 cx_quyen khai paths tệp đó
+run_id: repin-20261028T005514Z-70110
+sha: 01499883e38a5c59f1383d50bc4c38040f8d8f7b · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
