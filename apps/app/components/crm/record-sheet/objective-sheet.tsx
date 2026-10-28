@@ -539,9 +539,9 @@ function useNeoChipGopY(mt: ChiTiet) {
 	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
 	const [, setNeoKr] = useQueryState(SEARCH_PARAM.okr.neoGopYKr, parseAsString);
 	const khoKhung = useContext(CuonCaKhungContext);
-	const chip = useChipKhung(mt).hien;
+	const hienChip = useChipKhung(mt).hien;
 	useEffect(() => {
-		if (!neo || khoKhung === "chua-biet" || chip === "chua-biet") return;
+		if (!neo || khoKhung === "chua-biet" || hienChip === "chua-biet") return;
 		const giam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 		const chip = document.querySelector<HTMLElement>(
 			`[data-okr-sheet="${CSS.escape(objectiveId)}"] [data-chip-gop-y]`,
@@ -555,7 +555,7 @@ function useNeoChipGopY(mt: ChiTiet) {
 		}
 		void setNeo(null);
 		void setNeoKr(null);
-	}, [neo, khoKhung, chip, objectiveId, setNeo, setNeoKr]);
+	}, [neo, khoKhung, hienChip, objectiveId, setNeo, setNeoKr]);
 }
 
 function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
