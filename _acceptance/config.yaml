@@ -2360,7 +2360,16 @@ executors:
     tbk_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao-cai-dat.dom.tsx -t tbk-man
     tbk_doi_chieu: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-doi-chieu.integration.spec.ts -t tbk-doi-chieu"'
     otdt_dom: '(git diff --quiet $(git merge-base origin/onehub HEAD) HEAD -- packages/ui/test/nguon-keo-tha.dom.tsx packages/ui/test/nguon-canh-nhau.dom.tsx apps/app/test/truong-tep.dom.tsx apps/app/test/nguon-keo-tha-chu.dom.tsx apps/app/test/tai-lieu-nguon.dom.tsx || (echo "otdt dom: bai cu bi sua" && exit 1)) && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx ./test/nguon-canh-nhau.dom.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx ./test/nguon-keo-tha-chu.dom.tsx ./test/tai-lieu-nguon.dom.tsx'
+    bcd_bon_the: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-bon-the"'
+    bcd_so_rieng: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-so-rieng"'
+    bcd_toan_canh: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-toan-canh"'
+    bcd_gon: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-gon
+    bcd_menu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-menu
+    bcd_da_bo: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-da-bo
+    bcd_rong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-rong
+    bcd_hop_tuan_goc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-hop-tuan-goc
   script:
+    bcd_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-chi-don-vi/rang/man-bo-okr-chi-don-vi.mjs"'
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs
     bkr_khong_doi_hinh: bun _acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs
