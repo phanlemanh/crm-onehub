@@ -1,8 +1,6 @@
 "use client";
 
-import AiGenerate from "@carbon/icons-react/es/AiGenerate";
 import { Button } from "@crm/ui/components/button";
-import { Icon } from "@crm/ui/components/icon";
 import { KaraMark } from "@crm/ui/components/kara";
 import {
 	type KaraProposalEntry,
@@ -212,7 +210,6 @@ function NutDocBo({
 			type="button"
 			variant="outline"
 		>
-			<Icon data-icon="inline-start" icon={AiGenerate} />
 			{nhan}
 		</Button>
 	);
@@ -361,7 +358,7 @@ export function KhoiGopY({
 		: undefined;
 	const khoi = (
 		<section className="flex flex-col gap-3" data-khoi="gop-y-kara">
-			{th.coThe ? null : <KaraMark />}
+			{th.coThe ? null : <KaraMark scope={m.gopY.nhom} />}
 			<TrangThaiKhoi
 				th={th}
 				nhan={nhan}
@@ -392,7 +389,7 @@ export function KhoiGopY({
 		boTrong || th.nhoDuoc ? (
 			<NutDocBo
 				nhan={nhan}
-				khoa={boTrong}
+				khoa={false}
 				onClick={() => datLenh((l) => ({ ...l, nho: l.nho + 1 }))}
 			/>
 		) : null;

@@ -1,4 +1,5 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import type { LoaiChuKy } from "@crm/validation/okr-chu-ky";
 
 const vi = {
 	dauKhung: {
@@ -34,8 +35,8 @@ const vi = {
 		thaoTacMucTieu: "Thao tác với mục tiêu",
 		daLuu: "Đã lưu nháp",
 		dangLuu: "Đang lưu…",
-		boTrong:
-			"Bộ OKR này chưa có mục tiêu nào. Gõ mục tiêu đầu tiên ngay dưới đây.",
+		boTrong: (loaiKy: LoaiChuKy) =>
+			`Bộ OKR của ${loaiKy === "nam" ? "năm" : "quý"} này chưa có mục tiêu nào. Gõ mục tiêu đầu tiên ngay dưới đây.`,
 		khoaSo: "Số của mục tiêu đã công bố sửa ở ngăn KR",
 		khoaChoDuyet:
 			"Mục tiêu đang chờ duyệt nên cả dòng bị khoá. Rút duyệt ở ngăn theo dõi để sửa.",
@@ -83,7 +84,7 @@ const vi = {
 		dat: (dat: string, xet: string) => `${dat} trên ${xet} điểm đạt`,
 		denDong: "Đến dòng",
 		datHet: "Bộ đạt mọi điểm chất lượng.",
-		chuaCo: "Gõ mục tiêu đầu tiên để máy chấm",
+		chuaCo: "Gõ mục tiêu đầu tiên để máy chấm.",
 		luat: {
 			"kr-la-viec": "KR là việc, chưa đo kết quả",
 			"thieu-khoi-diem": "KR thiếu khởi điểm",
@@ -95,6 +96,7 @@ const vi = {
 		},
 	},
 	gopY: {
+		nhom: "Góp ý",
 		nhoDoc: "Nhờ Kara đọc bộ",
 		docLai: "Kara đọc lại bộ",
 		dangDoc: "Kara đang đọc bộ OKR này…",
@@ -167,8 +169,8 @@ const en: OkrSoanBoMessages = {
 		thaoTacMucTieu: "Objective actions",
 		daLuu: "Draft saved",
 		dangLuu: "Saving…",
-		boTrong:
-			"This OKR set has no objectives yet. Type the first one right below.",
+		boTrong: (loaiKy: LoaiChuKy) =>
+			`This ${loaiKy === "nam" ? "year" : "quarter"}'s OKR set has no objectives yet. Type the first one right below.`,
 		khoaSo: "Numbers of a published objective are edited in the KR panel",
 		khoaChoDuyet:
 			"This objective is awaiting approval, so the whole line is locked. Withdraw it in the tracking panel to edit.",
@@ -216,7 +218,7 @@ const en: OkrSoanBoMessages = {
 		dat: (dat: string, xet: string) => `${dat} of ${xet} checks passed`,
 		denDong: "Go to line",
 		datHet: "The set passes every quality check.",
-		chuaCo: "Type the first objective to start checking",
+		chuaCo: "Type the first objective to start checking.",
 		luat: {
 			"kr-la-viec": "KR is a task, not a measured result",
 			"thieu-khoi-diem": "KR has no start value",
@@ -228,6 +230,7 @@ const en: OkrSoanBoMessages = {
 		},
 	},
 	gopY: {
+		nhom: "Suggestions",
 		nhoDoc: "Ask Kara to read the set",
 		docLai: "Kara, read the set again",
 		dangDoc: "Kara is reading this OKR set…",

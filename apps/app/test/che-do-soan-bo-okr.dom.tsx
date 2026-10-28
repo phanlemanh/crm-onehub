@@ -2462,9 +2462,8 @@ describe("vk10-cong-bo-do", () => {
 type MayChuMoi = { status: TrangThaiMucTieu | null; kr: string[] };
 
 const { useQueryClient } = await import("@tanstack/react-query");
-const giuClient: { client: ReturnType<typeof useQueryClient> | null } = {
-	client: null,
-};
+type GiuClientThat = { client: ReturnType<typeof useQueryClient> | null };
+const giuClient: GiuClientThat = { client: null };
 
 function GiuClient() {
 	giuClient.client = useQueryClient();
@@ -2764,8 +2763,9 @@ describe("vk10-ngan-do", () => {
 	});
 });
 
-const MA_TRAN_NGAN_KHOA: readonly Pick<CaNgan, "bo" | "boSuaDuoc">[] &
-	readonly { ten: string }[] = [
+const MA_TRAN_NGAN_KHOA: readonly (Pick<CaNgan, "bo" | "boSuaDuoc"> & {
+	ten: string;
+})[] = [
 	{ ten: "bo ca nhan", bo: { don: { loai: "nguoi", id: LAN.id } } },
 	{ ten: "sua duoc muc tieu, khong sua duoc bo", boSuaDuoc: false },
 	{ ten: "chu ky da dong", bo: { pha: "da-dong" } },

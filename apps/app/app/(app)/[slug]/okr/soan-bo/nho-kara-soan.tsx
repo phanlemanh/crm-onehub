@@ -1,9 +1,8 @@
 "use client";
 
-import AiGenerate from "@carbon/icons-react/es/AiGenerate";
 import { Button } from "@crm/ui/components/button";
 import { FieldDescription } from "@crm/ui/components/field";
-import { Icon } from "@crm/ui/components/icon";
+import { KaraMark } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQuery } from "@tanstack/react-query";
 import { type ReactNode, useId } from "react";
@@ -58,7 +57,7 @@ function KhoiNhoKaraSoan({
 					type="button"
 					variant="ghost"
 				>
-					<Icon data-icon="inline-start" icon={AiGenerate} />
+					<KaraMark />
 					{m.nhoKara}
 				</Button>
 			</HangNut>

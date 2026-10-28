@@ -98,6 +98,23 @@ function ONguoi({
 	const locale = useLocale();
 	const m = okrSoanBoMessages(locale);
 	const okr = okrMessages(locale);
+	if (disabled)
+		return (
+			<Button
+				aria-label={m.taiLieu.nguoiPhuTrach}
+				disabled
+				size="sm"
+				type="button"
+				variant="outline"
+				data-o-nhap="nguoi"
+			>
+				<span translate="no">
+					{daChon?.label ??
+						nguoi.find((n) => n.value === value)?.label ??
+						okr.hopThoai.chonNguoi}
+				</span>
+			</Button>
+		);
 	return (
 		<div className="w-44">
 			<Combobox

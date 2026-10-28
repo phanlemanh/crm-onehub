@@ -9,6 +9,7 @@ import { Separator } from "@crm/ui/components/separator";
 import { Textarea } from "@crm/ui/components/textarea";
 import type { Locale } from "@crm/ui/lib/locale";
 import type { KrCham, MucTieuCham } from "@crm/validation/okr-cham-bo";
+import type { LoaiChuKy } from "@crm/validation/okr-chu-ky";
 import { docSoOkr } from "@crm/validation/okr-kr";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useEffectEvent, useRef } from "react";
@@ -450,10 +451,12 @@ function useBoiCanh(bo: BoXong, soan: SoanTaiLieu): BoiCanh {
 
 function TaiLieu({
 	mucTieu,
+	loaiKy,
 	chiXem,
 	bc,
 }: {
 	mucTieu: MucTieuSoan[];
+	loaiKy: LoaiChuKy;
 	chiXem: boolean;
 	bc: BoiCanh | null;
 }) {
@@ -466,7 +469,9 @@ function TaiLieu({
 	return (
 		<div className="flex flex-col gap-6" data-tai-lieu-bo="" ref={goc}>
 			{mucTieu.length === 0 && !chiXem ? (
-				<FieldDescription>{m.taiLieu.boTrong}</FieldDescription>
+				<p className="text-muted-foreground text-sm">
+					{m.taiLieu.boTrong(loaiKy)}
+				</p>
 			) : null}
 			{coSan.map((mt, i) => (
 				<div key={mt.id} className="flex flex-col gap-6">
@@ -509,7 +514,9 @@ function TaiLieu({
 
 function TaiLieuSoan({ bo, soan }: { bo: BoXong; soan: SoanTaiLieu }) {
 	const bc = useBoiCanh(bo, soan);
-	return <TaiLieu mucTieu={bo.mucTieu} chiXem={false} bc={bc} />;
+	return (
+		<TaiLieu mucTieu={bo.mucTieu} loaiKy={bo.loaiKy} chiXem={false} bc={bc} />
+	);
 }
 
 export function TaiLieuBo({
@@ -520,7 +527,7 @@ export function TaiLieuBo({
 	soan: SoanTaiLieu | null;
 }) {
 	if (bo.quyen.loai === "chi-xem" || soan === null)
-		return <TaiLieu mucTieu={bo.mucTieu} chiXem bc={null} />;
+		return <TaiLieu mucTieu={bo.mucTieu} loaiKy={bo.loaiKy} chiXem bc={null} />;
 	return <TaiLieuSoan bo={bo} soan={soan} />;
 }
 

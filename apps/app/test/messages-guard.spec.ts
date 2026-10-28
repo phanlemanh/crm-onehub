@@ -431,6 +431,10 @@ const GHIM_OKR_SOAN = {
 
 const GHIM_OKR_SOAN_BO = {
 	"okr-soan-bo:taiLieu.krThu": ["KR 1", "KR 12"],
+	"okr-soan-bo:taiLieu.boTrong": [
+		"Bộ OKR của quý này chưa có mục tiêu nào. Gõ mục tiêu đầu tiên ngay dưới đây.",
+		"Bộ OKR của quý này chưa có mục tiêu nào. Gõ mục tiêu đầu tiên ngay dưới đây.",
+	],
 	"okr-soan-bo:taiLieu.soNhap": [
 		"1 mục tiêu nháp · tự lưu",
 		"12 mục tiêu nháp · tự lưu",

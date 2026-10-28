@@ -1,6 +1,10 @@
 "use client";
 
-import { ghiDuocOPha, type PhaChuKy } from "@crm/validation/okr-chu-ky";
+import {
+	ghiDuocOPha,
+	type LoaiChuKy,
+	type PhaChuKy,
+} from "@crm/validation/okr-chu-ky";
 import type { DonChonOkr } from "@crm/validation/okr-tham-so";
 import { skipToken, useQueries, useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/lib/trpc/client";
@@ -29,6 +33,7 @@ export type BoSoan =
 			ten: string;
 			khoa: { cycleId: string; don: DonChonOkr };
 			pha: PhaChuKy;
+			loaiKy: LoaiChuKy;
 			quyen: QuyenSoan;
 			mucTieu: MucTieuSoan[];
 			nguoiMacDinh: string;
@@ -144,6 +149,7 @@ export function useBoSoan(khoaBo: string): BoSoan {
 		ten,
 		khoa,
 		pha: ky.phase,
+		loaiKy: ky.kind,
 		quyen,
 		mucTieu: cuaBo.map((mt) => ({
 			...mt,

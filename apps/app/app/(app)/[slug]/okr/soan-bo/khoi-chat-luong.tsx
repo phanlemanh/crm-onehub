@@ -60,7 +60,9 @@ export function KhoiChatLuong({
 		<section className="flex flex-col gap-3" data-khoi="chat-luong">
 			<SectionHeading level={4}>{m.tieuDe}</SectionHeading>
 			{bo.length === 0 ? (
-				<FieldDescription data-cham-trong="">{m.chuaCo}</FieldDescription>
+				<p className="text-muted-foreground text-sm" data-cham-trong="">
+					{m.chuaCo}
+				</p>
 			) : (
 				<>
 					<div className="flex flex-col gap-2">
