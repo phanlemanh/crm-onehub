@@ -211,7 +211,7 @@ export function DongKrDoc({
 					data-o-nhap="ten"
 				/>
 			</div>
-			<div className="flex flex-wrap items-center gap-2" data-o-so={kr.id}>
+			<div className="flex flex-wrap items-center gap-2 pl-9" data-o-so={kr.id}>
 				<InputGroup className="w-24">
 					<InputGroupInput
 						aria-label={m.khoiDiem}
