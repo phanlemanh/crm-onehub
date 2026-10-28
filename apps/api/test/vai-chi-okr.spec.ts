@@ -406,6 +406,7 @@ const THU_TUC_OKR_TRUOC_LUOT = [
 	"guiCapNhat",
 	"hopTuan",
 	"khoiCuaToi",
+	"lichSuKr",
 	"lichSuSo",
 	"mangSang",
 	"mine",
@@ -2094,6 +2095,13 @@ const THU_TU_DOC_OKR = {
 		chiQuanTri: OKR.thongDiep.taiCoCau.canQuanTri,
 	},
 	"okr.dienBien": {
+		vao: (s) => ({ keyResultId: s.krG }),
+		K: "chua-G",
+		dau: "tieuDeKr",
+		khac: 404,
+		ma: "keyResultId",
+	},
+	"okr.lichSuKr": {
 		vao: (s) => ({ keyResultId: s.krG }),
 		K: "chua-G",
 		dau: "tieuDeKr",
