@@ -1,0 +1,252 @@
+schema_version: 1
+slug: cua-toi-chi-liet-kr
+
+# Tệp kiểm DOM mới: apps/app/test/cua-toi-chi-liet-kr.dom.tsx — mỗi eval DOM chạy đúng một nhóm theo tên (`-t ctlk-...`)
+# qua bộ chạy hai chiều `_acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs <nhom>` (khuôn của DH3: đối chứng dương trên
+# vật lành, rồi mỗi đột biến thay đúng một đoạn trong một WORKTREE TẠM, chạy lại nhóm ở đó, phải đỏ với thông điệp ghim;
+# cây đang xét không bao giờ bị sửa; đoạn cần thay không có → mã 2 «KHONG DO DUOC»). Dữ liệu DOM rút từ khuôn
+# `capNhatTuanOutput` / `mineOutput` của `okr.contracts.ts` (parse qua zod), không viết tay khuôn đọc. Khoá
+# `executors.*.ctlk_*` thêm vào `_acceptance/config.yaml` ở S3 cùng commit dựng bộ chạy (chỉ thêm dòng).
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ctlk_phan_mot
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/phan-can-cap-nhat.tsx"
+      - "apps/app/app/(app)/[slug]/okr/cua-toi.tsx"
+      - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
+    expected: |
+      Ten ca "ctlk-phan-mot". Ma tran viet truoc: 3 trang thai du lieu capNhatTuan (3 KR thieu o 2 don vi / 1 thieu
+      2 du / 1 KR chua co lan nao) x 2 ngon ngu = 6 o. Moi o: section[data-phan=can-cap-nhat] co dung N dong [data-kr]
+      voi N = so item updatedThisWeek=false, thu tu nhu API; moi dong la mot <a> (hoac chua dung mot <a>) mang ten KR,
+      "unitName · objectiveTitle", so hien tai dinh dang nhu giaTri(), va chu lan truoc rut tu messages that (hoac chu
+      "chua cap nhat lan nao" khi lastAt null). Trong ca trang Cua toi: 0 phan tu input/textarea/[role=spinbutton],
+      0 [data-nut=cap-nhat-tai-cho], 0 [data-nut=sua-lan-gui], 0 [data-trang-thai^=ST-capnhat-].
+      DOI CHUNG DUONG: o 3 thieu co 3 dong, 3 lien ket.
+      CHIEU DO (CTLK_PHA=con-bang: ban sao render lai BangCapNhat trong phan 1) -> "ctlk-phan-mot: phan 1 con bang
+      cap nhat hang loat".
+      CHIEU DO (CTLK_PHA=dem-ca-da-gui: ban sao bo loc updatedThisWeek) -> "ctlk-phan-mot: phan 1 co 3 dong, mong 1".
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ctlk_khong_tu
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/phan-can-cap-nhat.tsx"
+      - "apps/app/app/(app)/[slug]/okr/okr-search-params.ts"
+      - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
+    expected: |
+      Ten ca "ctlk-khong-tu". Ma tran: tham so tu ∈ {nhac, viec-cua-toi, cua-toi, tab, sheet, (vang)} = 6 o, moi o
+      dung trang Cua toi voi trpc gia ghi moi lan goi moCapNhat; cho 3 vong render. Moi o: so lan goi moCapNhat === 0,
+      phan 1 hien danh sach nhu E1, khong [role=alert].
+      DOI CHUNG DUONG: o "nhac" render 3 dong.
+      CHIEU DO (CTLK_PHA=mo-tu-nhac: ban sao goi moCapNhat({entry:"nhac"}) khi tu=nhac) -> "ctlk-khong-tu: tu=nhac
+      mo 1 luot cap nhat, mong 0".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ctlk_dong_kr
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/phan-can-cap-nhat.tsx"
+      - "apps/app/lib/okr-duong-kr.ts"
+      - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
+    expected: |
+      Ten ca "ctlk-dong-kr". Voi fixture 3 KR thieu: moi dong [data-kr=<id>] co href === url("/okr/kr/<id>") cua
+      workspace "ws" (rut tu ham duong chung, khong viet tay chuoi), bam dong goi dieu huong mot lan toi dung href do;
+      khong goi openRecord, khong goi moCapNhat.
+      DOI CHUNG DUONG: dong 2 tro /ws/okr/kr/<id dong 2>.
+      CHIEU DO (CTLK_PHA=mo-tai-cho: ban sao doi lien ket thanh openRecord({kind:"kr"})) -> "ctlk-dong-kr: bam KR mo
+      tai cho, mong sang /ws/okr/kr/<id>".
+      CHIEU DO (CTLK_PHA=sai-kr: ban sao dung objectiveId thay keyResultId) -> "ctlk-dong-kr: href tro id sai".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ctlk_dich_kr
+    layer: backend-effect
+    paths:
+      - "apps/app/lib/okr-duong-kr.ts"
+      - "apps/app/app/(app)/[slug]/okr/kr/**"
+      - "apps/app/test/ctlk-dich-kr.spec.ts"
+    expected: |
+      Ten ca "ctlk-dich-kr". Ham thuan dichKrTrongBo(slug, krId, viTri). Ma tran viet truoc 5 o: viTri cua KR thuoc
+      goc / khoi / phong ban / ca nhan (bon loai khoa don vi cua khoaDonOkr) va viTri null. Bon o dau: duong ===
+      "/<slug>/okr/bo-okr?" + donOkr=khoaDonOkr(don) + kyOkr=cycleId + record=kr:<id> (doc lai bang URLSearchParams,
+      so tung khoa, khong so chuoi tron). O null: "/<slug>/okr?record=kr:<id>", khong chua donOkr, kyOkr hay ten.
+      Them 1 ca trang may chu /okr/kr/[keyResultId]: voi trpc may chu gia tra viTri -> redirect() goi dung mot lan
+      voi dich cua ham thuan; tra null hay nem loi NOT_FOUND/FORBIDDEN -> redirect toi dich null.
+      DOI CHUNG DUONG: o phong ban cho donOkr=pb:<id>.
+      CHIEU DO (CTLK_PHA=bo-ky: ban sao bo kyOkr) -> "ctlk-dich-kr: thieu kyOkr o phong ban".
+      CHIEU DO (CTLK_PHA=loi-thanh-trang-loi: ban sao de loi FORBIDDEN noi len) -> "ctlk-dich-kr: FORBIDDEN khong ve
+      Cua toi".
+
+  - id: E5
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ctlk_vi_tri_kr
+    layer: backend-effect
+    paths:
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "apps/api/src/okr/okr.router.ts"
+      - "apps/api/src/okr/okr.contracts.ts"
+      - "apps/api/test/ctlk-vi-tri-kr.spec.ts"
+    expected: |
+      Ten ca "ctlk-vi-tri-kr". Kho thu that (bun run test), gieo qua service ghi that (khong chen thang bang): mot
+      chu ky dang chay, bon muc tieu cong bo o goc, mot khoi, mot phong ban, mot ca nhan, moi muc tieu mot KR; mot KR
+      cua muc tieu da luu tru; mot KR cua muc tieu nguoi hoi khong duoc xem theo dieuKienXemMucTieu. okr.viTriKr
+      ({keyResultId}): bon KR xem duoc tra { donOkr: khoaDonOkr(don vi cua muc tieu), cycleId } dung voi muc tieu da
+      gieo; KR luu tru, KR khong xem duoc va id khong co deu tra null (khong nem, khong tra ten).
+      DOI CHUNG DUONG: KR phong ban tra donOkr "pb:<departmentId>".
+      CHIEU DO (pha bang ban sao: bo dieuKienXemMucTieu khoi truy van) -> "ctlk-vi-tri-kr: KR khong duoc xem tra
+      vi tri, mong null".
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ctlk_duong_nhac
+    paths:
+      - "packages/validation/src/okr-cap-nhat.ts"
+      - "packages/validation/test/ctlk-duong-cap-nhat-kr.spec.ts"
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/tin-nhac.ts"
+      - "apps/agent/test/ctlk-duong-nhac.spec.ts"
+    expected: |
+      Ten ca "ctlk-duong-nhac". Ham duongCapNhatKr(krIds): [a] -> "/okr/kr/a"; [a,b] va [a,b,c] -> "/okr"; mang rong
+      nem (khuon viecOkr doi min 1). duongTrongApp({loai:"okr-cap-nhat", krIds}) bang dung duongCapNhatKr(krIds) cho ca
+      3 o; chuoi tra ve khong chua "tu=". Nhan lien ket Slack: mot KR "mở KR", nhieu KR "mở Của tôi".
+      DOI CHUNG DUONG: [a] -> /okr/kr/a.
+      CHIEU DO (CTLK_PHA=giu-tu-nhac: ban sao tra "/okr?tu=nhac" khi nhieu KR) -> "ctlk-duong-nhac: con tu=".
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ctlk_nhac_dong
+    layer: backend-effect
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/tin-nhac.ts"
+      - "apps/agent/test/ctlk-nhac-dong.integration.spec.ts"
+    expected: |
+      Ten ca "ctlk-nhac-dong". Kho thu that, gieo qua duong ghi that (okr-gieo). Hai nguoi: A phu trach 1 KR chua cap
+      nhat tuan nay, B phu trach 3 KR chua cap nhat. Chay buoc gom nhac 08:30 nhu lich that voi kenh Zalo va Slack
+      gia theo dung hop dong gui (ghi lai noi dung). Sau khi chay: dong thong bao web cua A co duongDan
+      "/okr/kr/<id KR cua A>", cua B "/okr"; tin Zalo cua A chua `${APP_URL}/<slug>/okr/kr/<id>`, cua B chua
+      `${APP_URL}/<slug>/okr` va KHONG chua "tu="; tin Slack cung dich voi nhan "mở KR" / "mở Của tôi".
+      DOI CHUNG DUONG: A nhan dung 1 tin, 1 dong thong bao.
+      CHIEU DO (ban sao duongTrongApp tra "/okr?tu=nhac") -> "ctlk-nhac-dong: dong thong bao cua B mang tu=nhac".
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ctlk_viec
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx"
+      - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
+    expected: |
+      Ten ca "ctlk-viec". Danh sach viec OKR (noi khac Cua toi, noi="tong-quan") co viec okr-cap-nhat voi krIds [a]
+      va voi krIds [a,b,c]: nut cua viec la lien ket href url(duongCapNhatKr(krIds)) — "/ws/okr/kr/a" va "/ws/okr";
+      khong href nao chua "tu=".
+      DOI CHUNG DUONG: viec 1 KR tro /ws/okr/kr/a.
+      CHIEU DO (CTLK_PHA=viec-tu: ban sao giu ?tu=viec-cua-toi) -> "ctlk-viec: nut viec cap nhat con tu=".
+
+  - id: E9
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.ctlk_mot_duong
+    paths:
+      - "apps/app/app/**"
+      - "apps/app/components/**"
+      - "_acceptance/cua-toi-chi-liet-kr/rang/mot-duong.mjs"
+    expected: |
+      Quet ma bang parser TS (khong regex chuoi tron) moi tep .ts/.tsx duoi apps/app/app va apps/app/components tru
+      test va proto: (1) khong JSX <BangCapNhat> nao ngoai tep dinh nghia cap-nhat-tuan/cap-nhat-tuan.tsx va khong tep
+      nao ngoai do import BangCapNhat de render; (2) khong loi goi moCapNhat nao mang entry "nhac", "viec-cua-toi" hay
+      "cua-toi" (doc gia tri literal cua doi so); (3) khong tep nao doc SEARCH_PARAM.okr.tu; (4) ngan KR (kr-sheet.tsx)
+      va dong KR cua bo (bang-kr.tsx) moi noi co nut "Cập nhật" mo HopThoaiCapNhatKr voi entry "sheet". In
+      "DUNG AC-6: 4/4" ma 0. DOI CHUNG DUONG: ban sao chen <BangCapNhat/> vao cua-toi.tsx -> "SAI AC-6 (1):
+      cua-toi.tsx dung bang cap nhat hang loat" ma 1. Moi vi pham in ten tep va dong.
+
+  - id: E10
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ctlk_theo_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cua-toi.tsx"
+      - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
+    expected: |
+      Ten ca "ctlk-theo-doi". mine tra dangTheoDoi 2 muc tieu va daBo 1 muc tieu: trang Cua toi co 0
+      [data-nhom-dang-theo-doi], 0 chu messages that khoiMucTieu.nhomDangTheoDoi; co dung 1 nhom Da bo nhu cu.
+      DOI CHUNG DUONG: nhom Da bo hien 1 muc tieu.
+      CHIEU DO (CTLK_PHA=con-theo-doi: ban sao render lai NhomDangTheoDoi) -> "ctlk-theo-doi: Cua toi con nhom Dang
+      theo doi".
+
+  - id: E11
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ctlk_phu_trach
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx"
+      - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
+    expected: |
+      Ten ca "ctlk-phu-trach" (theo Hoi-2 loi may khuyen). mine tra 2 muc tieu, 3 KR nguoi xem phu trach: moi ten KR
+      trong [data-phan=kr-phu-trach] la lien ket href url("/okr/kr/<id>"); bam khong goi openRecord.
+      DOI CHUNG DUONG: KR thu 3 tro dung id.
+      CHIEU DO (CTLK_PHA=phu-trach-tai-cho: ban sao goi openRecord) -> "ctlk-phu-trach: ten KR mo tai cho".
+      Chu kho chon giu tai cho o Cong Pham vi -> eval nay viet lai thanh "bam goi openRecord({kind:'kr'}) va khong
+      dieu huong" truoc S3.
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.ctlk_trang_thai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/phan-can-cap-nhat.tsx"
+      - "apps/app/test/cua-toi-chi-liet-kr.dom.tsx"
+    expected: |
+      Ten ca "ctlk-trang-thai". Ma tran 4 o x 2 ngon ngu: dang tai (query chua xong) -> section[data-phan=can-cap-nhat]
+      co tieu de phan 1 va [data-khung-xuong]; hong -> ST-ctbp-loi-phan voi chu loiPhan va nut thu lai, bam thu lai
+      goi refetch 1 lan; items rong -> chu khongKr; 3 KR deu updatedThisWeek -> chu daDu(tuan) kem loi "sua thi mo KR"
+      va 0 nut. Chu deu rut tu messages that.
+      DOI CHUNG DUONG: o rong hien khongKr.
+      CHIEU DO (CTLK_PHA=xoay-toan-trang: ban sao tra PageShellLoading khi dang tai) -> "ctlk-trang-thai: dang tai
+      mat tieu de phan".
+
+  - id: E13
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.ctlk_thay_the
+    paths:
+      - "_acceptance/*/evals.yaml"
+      - "docs/superpowers/specs/2026-10-28-cua-toi-chi-liet-kr-design.md"
+      - "_acceptance/cua-toi-chi-liet-kr/rang/thay-the.mjs"
+    expected: |
+      Doc bang «Hồ sơ đã ký mà vòng này thay» cua design doc (cot 1 <ho so>/<o>, cot 3 cua-toi-chi-liet-kr#AC-<n>).
+      Voi moi dong: evals.yaml cua ho so do co o id do, mang status: not-run va superseded_by dung chuoi cot 3; AC-<n>
+      co trong contract.md cua ho so nay. Them chieu nguoc: moi o trong kho mang superseded_by cua-toi-chi-liet-kr#...
+      deu co dong trong bang. In "DUNG AC-10: <k>/<k> o" ma 0.
+      DOI CHUNG DUONG: ban sao bo status: not-run khoi cua-toi-ba-phan/E1 -> "SAI AC-10: cua-toi-ba-phan/E1 thieu
+      status: not-run" ma 1.
+      Ma 1 truoc khi giam sat ap cac yeu cau cham-tep la DO THAT, khong phai do gia: o S4 eval nay chi xanh khi cac o
+      da duoc khai.
+
+  - id: E14
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ctlk_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/phan-can-cap-nhat.tsx"
+      - "apps/app/app/(app)/[slug]/okr/kr/**"
+      - "apps/app/app/(app)/[slug]/okr/cua-toi.tsx"
+      - "_acceptance/cua-toi-chi-liet-kr/rang/man.mjs"
+    expected: |
+      Phien do man rieng (tien-de.mjs, kho crm_<cay>_do) tren bo OKR mau okr:mau; dang nhap la nguoi phu trach 3 KR o
+      2 bo, chua cap nhat tuan nay. O 1280 va 375: (a) /<slug>/okr hien phan «Cần cập nhật tuần này» voi 3 dong, khong
+      nut cap nhat hang loat — chup evidence/E14-cua-toi-<kho>.png; (b) bam dong KR thu 2 -> URL path
+      /<slug>/okr/bo-okr, donOkr la khoa don vi cua muc tieu KR do, kyOkr la chu ky dang chay, record=kr:<id>; ngan KR
+      hien ten KR do va nut «Cập nhật» trong khung nhin — chup E14-mo-kr-<kho>.png; (c) bam «Cập nhật» -> hop cap nhat
+      mot KR mo voi ten KR do — chup E14-hop-<kho>.png; (d) mo /<slug>/okr/kr/<id KR luu tru> -> ve /<slug>/okr, ngan KR
+      bao khong thay — chup E14-khong-thay-<kho>.png. Nguoi cham nhin anh: danh sach doc duoc, ten KR khong bi cat
+      mat nghia o 375, trang dich dung la bo cua KR.
