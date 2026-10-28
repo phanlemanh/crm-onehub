@@ -1,74 +1,96 @@
-# Review findings: che-do-soan-bo-okr (round 1)
+# Review findings: che-do-soan-bo-okr (round 2)
 
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC.
+- **Chip góp ý trong phiếu mục tiêu cá nhân mở ra một tài liệu rỗng, chỉ xem. Góp ý của Kara cho mục tiêu cá nhân không còn đường nào để xem**
+  AC: AC-7
+  file: `apps/app/components/crm/record-sheet/objective-sheet.tsx:826`
+  severity: high
+  source: bugs
+  detail: Diff này gỡ VungKara/DeXuatNeo khỏi TabKr. Đường duy nhất còn lại tới góp ý là ChipGopYKhung → useMoKhungSoan(cycleId, donCuaMucTieu(mt), mt.id). Với mục tiêu cấp ca-nhan, donCuaMucTieu trả {loai:'nguoi'} (du-lieu-bo.ts:35-36), nên chip vẫn hiện khi soGopYCho>0. Trong khung soạn, capCuaBo({loai:'nguoi'}) trả null, nên chonMucTieuBo trả [] (du-lieu-bo.ts:22-23, 41-42). quyenCua cũng trả chi-xem 'bo-ca-nhan' (use-bo-soan.ts:51). ThanKhung đi nhánh OTaiLieu và không dựng CotBen/KhoiGopY (khung-soan-bo.tsx:267-268). Kết quả: người dùng bấm chip 'N góp ý' rồi rơi vào một tài liệu rỗng, chỉ xem, không có góp ý nào; soanMt cũng bị xoá mà không cuộn tới đâu. Cùng lỗi xảy ra với mọi người chỉ xem, vì nhánh chi-xem không có cột góp ý.
+  rationale: AC-7 đòi bấm chip «Kara · N góp ý» của một mục tiêu có góp ý chờ phải mở chế độ Soạn với góp ý của nó ở cột bên; với mục tiêu cá nhân hay người chỉ xem thì không có cột góp ý nên Then không đạt.
+
+- **Xoá KR không làm mới cache: số KR đã lưu bị đếm thừa nên nút công bố mở cho mục tiêu không còn KR**
+  AC: AC-6
+  file: `apps/app/app/(app)/[slug]/okr/soan-bo/use-ghi-ban-nhap.ts:329`
+  severity: medium
+  source: bugs
+  detail: xoaKr gọi boKr.mutateAsync nhưng không gọi cache.okr(...). Các nhánh tạo và sửa thì có gọi (dòng 130, 249, 319). Với mục tiêu mới tạo trong phiên: tạo KR làm danhSach refetch, nên bo.mucTieu đã chứa KR đó. Sau khi xoá, boDi chỉ giữ khoá 'moi-N', không có id máy chủ. mucCongBoCua (tai-lieu-bo.tsx:646-651) đếm mt.keyResults lọc theo daBoDi(kr.id), nên vẫn đếm KR đã xoá. soKrDaLuu ≥ 1 làm demCongBo/laMucCongBo coi mục tiêu 0 KR là công bố được. Các màn Theo dõi cũng giữ dữ liệu cũ tới lần refetch sau. xoaMucTieu chỉ refetch danhSach qua bo.thuLai, không làm mới các khoá okr khác.
+  rationale: AC-6 đòi N đếm đúng các mục tiêu nháp có ít nhất một KR đã lưu; đếm thừa KR đã xoá làm mục tiêu 0 KR vẫn được tính là công bố được.
+
+- **Mục tiêu tạo trong phiên vẫn vẽ bằng KhoiMucTieuMoi sau khi công bố hay gửi duyệt: bỏ qua khoá số và khoá chờ duyệt**
+  AC: AC-3
+  file: `apps/app/app/(app)/[slug]/okr/soan-bo/tai-lieu-bo.tsx:161`
+  severity: medium
+  source: bugs
+  detail: mucTieuCoHien loại mọi id nằm trong luuDong.daLuu (dòng 258-263). daLuu không bao giờ được xoá (quen chỉ xoá trang/dangGo), nên mục tiêu tạo trong phiên luôn đi qua KhoiMucTieuMoi. Khối này không đọc status và không dùng khoaCua/khoaSoCongBo: ô tên, ô số của DongKrMoi và nút thêm KR vẫn mở sau khi CongBo đổi status sang cong-bo hay cho-duyet. Sửa số gửi updateKeyResult kèm currentValue=khoi (use-ghi-ban-nhap.ts:196-204). Máy chủ trả lỗi ở cho-duyet (dangChoDuyet) hoặc ở dangChay (hienTaiQuaCapNhat/lyDoDoiDich). Luật khoá số sau công bố (CauKhoa/khoaSo) không áp dụng cho các mục tiêu này.
+  rationale: AC-3 đòi mục tiêu đã công bố khoá mọi ô số kèm câu giải thích và mục tiêu chờ duyệt khoá cả dòng; mục tiêu vừa tạo trong phiên rồi công bố thì vẫn sửa được.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Save errors are classified by running a regex over the server's message text, not by reading structured error data**
-  Người dùng thấy gì: Hôm nay khi lưu sai số, người dùng vẫn thấy đúng câu «Ô này nhận số». Nhưng nếu sau này câu báo lỗi của máy chủ bị đổi chữ, người dùng sẽ thấy một câu lỗi chung chung thay vì câu chỉ rõ ô nhập sai.
-  Căn cứ: Chưa ảnh hưởng người dùng ở thời điểm này, không mất dữ liệu, chỉ có nguy cơ về sau khi ai đó đổi câu báo lỗi, và chữ người dùng đã gõ vẫn được giữ nguyên.
+- **The client sorts save errors by matching a regex against the server's error text, not structured error data**
+  Người dùng thấy gì: Hiện nay khi lưu một ô số bị sai, người soạn vẫn thấy đúng câu hướng dẫn nhập số. Nếu sau này đổi cách viết câu lỗi ở máy chủ, câu hướng dẫn có thể lặng lẽ thành câu lỗi chung chung.
+  Căn cứ: Hôm nay người dùng chưa thấy gì sai, chữ đã gõ không mất, và chỉ khi ai đó đổi câu lỗi ở máy chủ thì thông báo mới kém rõ đi.
   file: `apps/app/app/(app)/[slug]/okr/soan-bo/use-luu-dong.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **phu-thuoc.ts puts test-only switches into production code, and those switches reproduce broken behaviour**
-  Người dùng thấy gì: Người dùng không thấy gì khác biệt: chế độ Soạn vẫn chạy đúng như đã hứa. Chỉ có mã thừa đi kèm trong bản tải về của trang.
-  Căn cứ: Không gây hậu quả nào cho người dùng, không mất dữ liệu, còn sửa thì phải đụng nhiều chỗ và cả bộ bài kiểm của vòng này nên tốn hơn nhiều so với lợi ích.
-  file: `apps/app/app/(app)/[slug]/okr/soan-bo/phu-thuoc.ts`
+- **The narrow-screen tabs are hand-built with className overrides on TabsList when DetailSheetTabs already does this**
+  Người dùng thấy gì: Hai thẻ ở màn hình hẹp dùng được bình thường, nhưng khoảng cách và cách dính đầu trang có thể lệch đôi chút so với các khung bản ghi khác.
+  Căn cứ: Chỉ là khác biệt nhỏ về hình thức, người dùng vẫn đổi thẻ và đọc được bình thường, sửa sau không tốn kém.
+  file: `apps/app/app/(app)/[slug]/okr/soan-bo/khung-soan-bo.tsx`
   severity: medium
-  Đề xuất: wont-fix
+  Đề xuất: known-limits
 
-- **Backspace hard-deletes a saved KR with no ConfirmDialog, unlike the rule in docs/vong-doi.md and the KR delete in objective-sheet**
-  Người dùng thấy gì: Nhấn Backspace ở đầu dòng KR đã để trống sẽ xoá hẳn KR đã lưu mà không hỏi lại, trong khi xoá KR ở ngăn chi tiết thì có hỏi. Hai màn xử lý khác nhau.
-  Căn cứ: Muốn xoá thì người dùng đã làm nhiều bước có chủ ý (xoá hết chữ rồi nhấn Backspace), hành vi này đã được ghi trong hợp đồng, nhưng KR bị xoá nhầm thì không lấy lại được.
-  file: `apps/app/app/(app)/[slug]/okr/soan-bo/tai-lieu-bo.tsx`
+- **VatPhamDock is a near line-for-line copy of KaraArtifact's docked variant**
+  Người dùng thấy gì: Người dùng không thấy khác biệt nào; về sau nếu đổi dáng khung vật phẩm Kara thì phải sửa ở hai nơi, có thể lệch nhau.
+  Căn cứ: Không ảnh hưởng gì tới người dùng hôm nay, không mất dữ liệu, chỉ làm việc sửa giao diện sau này tốn gấp đôi.
+  file: `packages/ui/src/components/kara/vat-pham.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Kara feedback on personal objectives, and for people who can only edit some KRs, can no longer be reached**
-  Người dùng thấy gì: Với mục tiêu cá nhân, hoặc với người chỉ sửa được KR của mình, ô «Kara · N góp ý» vẫn hiện số nhưng bấm vào chỉ thấy khung trống hoặc chỉ xem, không có chỗ nào để đọc hay quyết định các góp ý đó. Trước thay đổi này họ đọc được góp ý ngay trong thẻ KR.
-  Căn cứ: Người dùng mất hẳn đường đọc và xử lý góp ý của Kara ở hai nhóm này, và không tự gỡ được; dữ liệu không mất nhưng tính năng góp ý trở nên vô dụng với họ, nên cần một hợp đồng riêng quyết định các nhóm này được xem góp ý ở đâu.
-  file: `apps/app/components/crm/record-sheet/objective-sheet.tsx`
-  severity: high
-  Đề xuất: new-contract
+- **Three new message keys have no caller and are hidden by adding them to CHUA_NOI_KHAI**
+  Người dùng thấy gì: Có ba câu chữ soạn sẵn không hiện ở đâu cả, nên người dùng không thấy gì; chỉ làm kho chữ rối thêm.
+  Căn cứ: Không có hậu quả nào với người dùng, chỉ là chữ chết nằm lại, gỡ lúc nào cũng được.
+  file: `apps/app/test/messages-guard.spec.ts`
+  severity: low
+  Đề xuất: known-limits
 
-- **Clearing the title of an already-saved new objective, or every field of a saved new KR, never reaches the server and shows no warning**
-  Người dùng thấy gì: Nếu người dùng xoá sạch tên một mục tiêu hay KR vừa tạo và đã lưu, dòng hiện trống nhưng bản lưu vẫn giữ chữ cũ, không có cảnh báo. Khi công bố, mục tiêu có thể được đăng với nội dung mà người dùng tưởng đã xoá.
-  Căn cứ: Có thể công bố nội dung người dùng nghĩ là đã bỏ, và công bố rồi thì khó rút lại; tuy nhiên chỉ xảy ra với dòng vừa tạo trong cùng phiên soạn và người dùng thấy lại chữ sau khi tải lại.
-  file: `apps/app/app/(app)/[slug]/okr/soan-bo/use-ghi-ban-nhap.ts`
-  severity: medium
-  Đề xuất: new-contract
-
-- **Deleting a KR or objective in the soan-bo frame does not refresh the OKR cache, so other views keep showing the deleted item**
-  Người dùng thấy gì: Sau khi xoá một KR hoặc mục tiêu trong khung Soạn rồi đóng khung, màn bên dưới có thể còn hiện mục vừa xoá cho đến khi tải lại. Trong khung, số mục được công bố cũng có thể đếm thừa một KR đã xoá.
-  Căn cứ: Chỉ là hiển thị cũ tạm thời, dữ liệu thật đã xoá đúng, người dùng tải lại trang là hết, nhưng có thể gây bối rối trong chốc lát.
+- **Xoá trắng tên mục tiêu hay toàn bộ dòng KR đã lưu thì không lưu, không báo, và không hỏi khi đóng**
+  Người dùng thấy gì: Nếu người soạn xoá trắng tên một mục tiêu hay một KR đã lưu, ô hiện trống nhưng dữ liệu cũ vẫn còn trên hệ thống, và khi đóng khung không có lời hỏi nào. Tải lại thì tên cũ quay về.
+  Căn cứ: Không mất dữ liệu (tên cũ vẫn còn) và người dùng tự khôi phục bằng cách tải lại, nhưng có thể gây hiểu nhầm là đã xoá.
   file: `apps/app/app/(app)/[slug]/okr/soan-bo/use-ghi-ban-nhap.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **A new KR whose save failed because its objective was not saved yet is never retried after the objective saves**
-  Người dùng thấy gì: Nếu mục tiêu lưu lỗi và người dùng sửa cho lưu được, các KR đã gõ trước đó vẫn ở trạng thái lỗi cho đến khi người dùng bấm vào dòng đó rồi rời ra lần nữa.
-  Căn cứ: Không mất chữ đã gõ, dòng vẫn báo lỗi nên người dùng thấy và tự gỡ được bằng cách bấm lại vào dòng, chỉ gặp khi hai lỗi liên tiếp xảy ra.
-  file: `apps/app/app/(app)/[slug]/okr/soan-bo/tai-lieu-bo.tsx`
+- **Lối 'thêm KR' từ góp ý Kara cho mục tiêu tạo trong phiên thêm một dòng không hiện ở đâu**
+  Người dùng thấy gì: Với mục tiêu vừa gõ trong phiên, bấm «thêm KR» từ góp ý của Kara thì không thấy dòng nào hiện ra và không có phản hồi, người dùng tưởng nút hỏng.
+  Căn cứ: Chỉ gặp ở mục tiêu mới tạo cùng phiên và người dùng vẫn tự thêm KR bằng tay được, không mất dữ liệu.
+  file: `apps/app/app/(app)/[slug]/okr/soan-bo/khung-soan-bo.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Công bố khi quyền chi tiết chưa tải xong hoặc tải lỗi thì rơi về publishObjective thay cho guiDuyet**
+  Người dùng thấy gì: Nếu thông tin quyền chưa tải kịp hoặc bị lỗi, nút vẫn đọc «Công bố» thay cho «Gửi duyệt» và người dùng chỉ thấy lỗi từ máy chủ mà không rõ lý do.
+  Căn cứ: Hiếm gặp, hệ thống từ chối nên không có dữ liệu nào bị công bố sai, và người dùng thử lại sau khi tải lại là được.
+  file: `apps/app/app/(app)/[slug]/okr/soan-bo/cong-bo.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình): «không vùng Kara / không thẻ neo» của E12 và E13 chỉ có đối chứng dương tự cấy, không dựng lại thành phần thật**
-  Người dùng thấy gì: Người dùng hôm nay không bị ảnh hưởng. Nhưng nếu sau này vùng góp ý Kara bị gắn lại vào thẻ KR, bài kiểm tự động có thể vẫn báo xanh nên lỗi lọt qua.
-  Căn cứ: Không có hậu quả trực tiếp cho người dùng lúc này, chỉ làm lưới an toàn về sau yếu hơn ở một vế, các vế khác vẫn canh được.
+- **Hình dạng 4 + 2 (âm tính đứng một mình, fixture viết tay đúng khuôn bên đọc): ca vk10-ngan khẳng định vắng hai selector mà không component nào render, rồi đỏ hoá bằng một div tự chế**
+  Người dùng thấy gì: Sản phẩm hiện đúng, nhưng bài kiểm tự động khó phát hiện nếu sau này vùng Kara cũ lại bị chèn vào khung chi tiết mục tiêu.
+  Căn cứ: Người dùng hôm nay không bị ảnh hưởng, rủi ro chỉ xuất hiện nếu có thay đổi sau này mà không ai để ý.
   file: `apps/app/test/che-do-soan-bo-okr.dom.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (khẳng định không thể đỏ): «ANH 10/10» của E16 chỉ kiểm tệp có mặt và khác rỗng, trong khi mười ảnh đã commit sẵn ở chính thư mục đích**
-  Người dùng thấy gì: Người dùng không bị ảnh hưởng. Chỉ có điều bộ ảnh bằng chứng có thể là ảnh cũ mà vẫn được tính là đủ mười.
-  Căn cứ: Không ảnh hưởng sản phẩm hay dữ liệu, người ký vẫn tự nhìn ảnh ở Cổng 2 nên rủi ro thấp, sửa chỉ để chặt thêm một phép đếm phụ.
-  file: `_acceptance/che-do-soan-bo-okr/rang/man-soan-do.mjs`
+- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): chieu-do-ngan của E13 chèn `<section data-vung-kara="" />` thay vì giữ VungKara**
+  Người dùng thấy gì: Sản phẩm hiện đúng, nhưng phép đo kiểm tra «không còn vùng Kara» chưa chứng minh được nó sẽ bắt được lỗi nếu vùng này quay lại.
+  Căn cứ: Không ảnh hưởng người dùng hiện tại; lỗi quay lại vẫn bị bắt gián tiếp bằng phép đo góp ý neo.
+  file: `_acceptance/che-do-soan-bo-okr/rang/man-soan-chieu-do.mjs`
   severity: low
-  Đề xuất: wont-fix
+  Đề xuất: known-limits
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
