@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 01499883e38a5c59f1383d50bc4c38040f8d8f7b
+verified_commit: 81b1314b7c8f0e7b976c0a5cb9d1e68b9bb662d7
 human_signoff: Phan Le Manh 2026-10-28 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 12/12 eval; vòng 1 REJECT đã sửa). Ngoài-1 đến Ngoài-5 ghi Known limits; đồng ý cắt; Treo phê hết.
 ---
 
@@ -235,3 +235,7 @@ Round 2: E1–E6, E8, E10, E12 chạy lại trên 6392a8ba8, tất cả PASS; E7
 ### Re-pin lần 1 — 2026-10-28, do vai-chi-okr.spec.ts chỉ thêm dòng (V3-68) sau S4 vòng 2; E6 cx_quyen khai paths tệp đó
 run_id: repin-20261028T005514Z-70110
 sha: 01499883e38a5c59f1383d50bc4c38040f8d8f7b · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-28, do HT5 81b1314b7: okr-cam-xuc*.spec.ts thêm afterAll trả đồng hồ thật (đồng hồ giả rò sang giai-doan.spec.ts trên CI); chủ kho xác nhận commit sau ký
+run_id: repin-20261028T054823Z-25946
+sha: 81b1314b7c8f0e7b976c0a5cb9d1e68b9bb662d7 · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
