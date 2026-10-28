@@ -2269,6 +2269,31 @@ const GHI_VAO_KY_AN = {
 			);
 		},
 	},
+	thaCamXuc: {
+		gieo: async (b) => {
+			const { krIds } = await gieoMucTieuCongBo(await b.kyChay(), [{}]);
+			const keyResultId = krIds[0] ?? "";
+			const { sessionId } = ok<{ sessionId: string }>(
+				await goi("okr.moCapNhat", { entry: "tab" }),
+				"mo phien",
+			);
+			ok(
+				await goi("okr.guiCapNhat", {
+					sessionId,
+					items: [{ keyResultId, value: 10, confidence: "vua", note: "" }],
+				}),
+				"gui lan",
+			);
+			const lan = await db.okrCheckIn.findFirstOrThrow({
+				where: { sessionId },
+				select: { id: true },
+			});
+			return lenh(
+				() => goi("okr.thaCamXuc", { checkInId: lan.id, loai: "dong-y" }),
+				() => db.okrCamXuc.findMany({ where: { checkInId: lan.id } }),
+			);
+		},
+	},
 	addComment: {
 		gieo: async (b) => {
 			const objectiveId = await gieoCoMucTieu(await b.kyChay());

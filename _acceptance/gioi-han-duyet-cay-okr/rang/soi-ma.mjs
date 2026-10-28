@@ -60,6 +60,7 @@ const BANG = [
 	"okrCheckIn",
 	"okrTrail",
 	"okrSoChup",
+	"okrCamXuc",
 	"okrAlignment",
 	"okrBangChung",
 	"okrDiemKr",

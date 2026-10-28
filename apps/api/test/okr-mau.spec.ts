@@ -6,12 +6,13 @@ import {
 	setSystemTime,
 	test,
 } from "bun:test";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { OKR_NHAC } from "@crm/db/okr-nhac";
 import { dauTuanVN, ngayVN } from "@crm/db/onboarding-nhac";
+import { LOAI_CAM_XUC, OKR_CAM_XUC } from "@crm/validation/okr-cam-xuc";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { CHI_SO_OKR } from "@crm/validation/okr-chi-so";
 import { OKR_PROGRAM_MAC_DINH } from "@crm/validation/okr-chuong-trinh";
@@ -2600,6 +2601,157 @@ describe("cap-nhat-gan-day", () => {
 			);
 			await napMau(MOC_THU_NAM);
 			expect(await demTraoDoi()).toEqual(khai);
+		},
+		CHO,
+	);
+});
+
+describe("cam-xuc-tren-cap-nhat", () => {
+	const KY_QUY4 = idMau("chu-ky", "quy4");
+	const SQL = join(
+		import.meta.dir,
+		"../../../_acceptance/cam-xuc-tren-cap-nhat/rang/ty-le-phan-hoi.sql",
+	);
+	const TUAN_MS = 7 * OKR_MAU.thoiGian.ngayMs;
+
+	const dem = async () => ({
+		camXuc: await db.okrCamXuc.count({
+			where: { checkIn: { keyResult: { objective: { cycleId: KY_QUY4 } } } },
+		}),
+		binhLuan: await db.okrComment.count({
+			where: { objective: { cycleId: KY_QUY4 } },
+		}),
+	});
+
+	async function lanQuy4() {
+		return db.okrCheckIn.findMany({
+			where: {
+				keyResult: { objective: { cycleId: KY_QUY4, status: "cong-bo" } },
+			},
+			select: {
+				id: true,
+				authorUserId: true,
+				weekStart: true,
+				createdAt: true,
+				session: { select: { submittedAt: true } },
+				camXuc: { select: { userId: true } },
+				traLoi: { select: { authorUserId: true } },
+			},
+		});
+	}
+
+	function tyLeTuan(lan: Awaited<ReturnType<typeof lanQuy4>>) {
+		const moi = Math.max(...lan.map((l) => l.weekStart.getTime()));
+		const tu = new Date(moi - OKR_MAU.tuan.lechVN * OKR_MAU.thoiGian.gioMs);
+		const den = new Date(tu.getTime() + TUAN_MS);
+		const trong = lan.filter((l) => {
+			const luc = (l.session.submittedAt ?? l.createdAt).getTime();
+			return luc >= tu.getTime() && luc < den.getTime();
+		});
+		const coPhanHoi = trong.filter(
+			(l) =>
+				l.camXuc.some((x) => x.userId !== l.authorUserId) ||
+				l.traLoi.some((c) => c.authorUserId !== l.authorUserId),
+		).length;
+		return { tu, den, soLan: trong.length, coPhanHoi };
+	}
+
+	test(
+		"bộ mẫu có cảm xúc và trả lời mang lần cập nhật qua đường ghi thật; hơn nửa tuần gần nhất có phản hồi; đủ bốn loại; nạp lại không nhân đôi; lệnh đếm tỷ lệ khớp",
+		async () => {
+			await lamSachOkr();
+			await napMau(MOC_THU_NAM);
+			const truoc = await dem();
+			const hang = await db.okrCamXuc.findMany({
+				where: {
+					checkIn: { keyResult: { objective: { cycleId: KY_QUY4 } } },
+				},
+				select: { checkInId: true, userId: true, loai: true },
+			});
+			expect(hang.length).toBeGreaterThan(0);
+			const vet = await db.okrTrail.findMany({
+				where: { action: "tha-cam-xuc" },
+				select: { actorUserId: true, after: true },
+			});
+			const sauVet = z.object({ checkInId: z.string(), loai: z.string() });
+			const khoaVet = new Set(
+				vet.flatMap((v) => {
+					const sau = sauVet.safeParse(v.after);
+					return sau.success
+						? [`${v.actorUserId}|${sau.data.checkInId}|${sau.data.loai}`]
+						: [];
+				}),
+			);
+			const thieuVet = hang.filter(
+				(h) => !khoaVet.has(`${h.userId}|${h.checkInId}|${h.loai}`),
+			);
+			expect(thieuVet, "hang cam xuc khong qua dich vu").toEqual([]);
+			const traLoi = await db.okrComment.findMany({
+				where: {
+					keyResultId: { not: null },
+					objective: { cycleId: KY_QUY4 },
+				},
+				select: { checkInId: true },
+			});
+			expect(traLoi.length).toBe(bo.traoDoi.traLoi.length);
+			expect(traLoi.every((b) => b.checkInId !== null)).toBe(true);
+			const goc = tyLeTuan(await lanQuy4());
+			expect(goc.soLan).toBeGreaterThan(0);
+			expect(goc.coPhanHoi / goc.soLan).toBeGreaterThan(0.5);
+			const chuaPhanHoi = (await lanQuy4()).find(
+				(l) =>
+					l.weekStart.getTime() ===
+						goc.tu.getTime() + OKR_MAU.tuan.lechVN * OKR_MAU.thoiGian.gioMs &&
+					l.camXuc.length === 0 &&
+					l.traLoi.length === 0,
+			);
+			expect(
+				chuaPhanHoi,
+				"khong co lan chua phan hoi de dat tu tha",
+			).toBeDefined();
+			await db.okrCamXuc.create({
+				data: {
+					checkInId: chuaPhanHoi?.id ?? "",
+					userId: chuaPhanHoi?.authorUserId ?? "",
+					loai: "dong-y",
+				},
+			});
+			const tuan = tyLeTuan(await lanQuy4());
+			expect(tuan.coPhanHoi).toBe(goc.coPhanHoi);
+			const theoLan = new Map<string, Map<string, number>>();
+			for (const h of hang) {
+				const m = theoLan.get(h.checkInId) ?? new Map<string, number>();
+				m.set(h.loai, (m.get(h.loai) ?? 0) + 1);
+				theoLan.set(h.checkInId, m);
+			}
+			expect(
+				[...theoLan.values()].some(
+					(m) =>
+						LOAI_CAM_XUC.every((l) => (m.get(l) ?? 0) > 0) &&
+						[...m.values()].some((n) => n > OKR_CAM_XUC.tenToiDa),
+				),
+			).toBe(true);
+			const cauLenh = readFileSync(SQL, "utf8")
+				.replace(":'cycle_id'", "$1")
+				.replace(":'tu'::timestamptz", "$2::timestamptz")
+				.replace(":'den'::timestamptz", "$3::timestamptz");
+			const [ra] = await db.$queryRawUnsafe<
+				{ so_lan: bigint; co_phan_hoi: bigint; ty_le: string }[]
+			>(cauLenh, KY_QUY4, tuan.tu.toISOString(), tuan.den.toISOString());
+			expect(
+				{
+					soLan: Number(ra?.so_lan),
+					coPhanHoi: Number(ra?.co_phan_hoi),
+					tyLe: Number(ra?.ty_le),
+				},
+				"ty le SQL lech ty le viet truoc",
+			).toEqual({
+				soLan: tuan.soLan,
+				coPhanHoi: tuan.coPhanHoi,
+				tyLe: Math.round((tuan.coPhanHoi / tuan.soLan) * 10_000) / 10_000,
+			});
+			await napMau(MOC_THU_NAM);
+			expect(await dem()).toEqual(truoc);
 		},
 		CHO,
 	);

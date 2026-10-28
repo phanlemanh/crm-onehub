@@ -49,6 +49,7 @@ import { moiKrInput, moiKrOutput } from "../okr/okr-moi-kr.contracts";
 import { capNhatGanDayInput, capNhatGanDayOutput } from "../okr/okr-cap-nhat-gan-day.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
+import { thaCamXucInput, tomTatCamXuc, nguoiThaCamXucInput, nguoiThaCamXucOutput } from "@crm/validation/okr-cam-xuc";
 import { canhKrInput, canhKrOutput, idOutput, goViecInput, goBangChungInput, goGhiNhanInput } from "../okr/okr-canh-kr.contracts";
 import { themViecInput, suaViecInput, danhDauViecInput, ganSangKienInput, themBangChungInput, guiGhiNhanInput } from "@crm/validation/okr-canh-kr";
 import { taoTuMauInput } from "@crm/validation/okr-mau";
@@ -1258,6 +1259,14 @@ const appRouter = t.router({
       .input(addCommentInput)
       .output(addCommentOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    thaCamXuc: publicProcedure
+      .input(thaCamXucInput)
+      .output(tomTatCamXuc)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    nguoiThaCamXuc: publicProcedure
+      .input(nguoiThaCamXucInput)
+      .output(nguoiThaCamXucOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     canhKr: publicProcedure
       .input(canhKrInput)
       .output(canhKrOutput)

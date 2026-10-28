@@ -487,6 +487,9 @@ const THU_TUC_OKR_LUOT_VI_TRI_KR = ["viTriKr"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_CAP_NHAT_GAN_DAY = ["capNhatGanDay"].map(
 	(t) => `okr.${t}`,
 );
+const THU_TUC_OKR_LUOT_CAM_XUC = ["thaCamXuc", "nguoiThaCamXuc"].map(
+	(t) => `okr.${t}`,
+);
 const THU_TUC_SUA_AN_CHU_KY = {
 	"okr.suaChuKy": suaChuKyInput,
 	"okr.goChuKy": goChuKyInput,
@@ -1637,6 +1640,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_MOI_KR,
 				...THU_TUC_OKR_LUOT_CAP_NHAT_GAN_DAY,
 				...THU_TUC_OKR_LUOT_VI_TRI_KR,
+				...THU_TUC_OKR_LUOT_CAM_XUC,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 				...Object.keys(THU_TUC_DON_OKR),
 			].sort(),
@@ -1979,6 +1983,7 @@ type SanDoc = SanAn & {
 	hoiY: string;
 	cuocSoan: string;
 	cuocHoi: string;
+	lanG: string;
 };
 type DongDoc = {
 	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
@@ -1986,6 +1991,7 @@ type DongDoc = {
 	dau?: ChuoiAn;
 	khac: 200 | 404;
 	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId" | "cuocHoiId";
+	maThem?: "checkInId";
 	pha?: "da-dong";
 	chiQuanTri?: string;
 	chiQuanTriTheoMa?: true;
@@ -2196,6 +2202,12 @@ const THU_TU_DOC_OKR = {
 		K: "chua-G",
 		dau: "tieuDeKr",
 		khac: 200,
+	},
+	"okr.nguoiThaCamXuc": {
+		vao: (s: SanDoc) => ({ checkInId: s.lanG }),
+		K: "vang",
+		khac: 404,
+		maThem: "checkInId",
 	},
 	"okr.transferPreview": {
 		vao: (_s, k) => ({ fromUserId: k }),
@@ -2420,6 +2432,19 @@ async function oDocAn(
 	const dau = d.dau ?? "tieuDeG";
 	if (ai === "K" && d.K === "chua-G" && !d.chiQuanTri && so[dau] < 1)
 		kq.thieu.push(`${o} | thieu ${dau}`);
+	if (d.maThem && vao && !(ai === "K" && !d.chiQuanTriTheoMa)) {
+		const r1 = await goiDocAn(
+			bc,
+			ten,
+			{ ...vao, [d.maThem]: `khong-co-${suffix}` },
+			duong,
+			ai,
+		);
+		if (r1.status !== 404 || r1.message !== r.message)
+			kq.cauKhac.push(
+				`${o}: G ${r.status} «${r.message}» / ma khong co ${r1.status} «${r1.message}»`,
+			);
+	}
 	if ((ai === "K" && !d.chiQuanTriTheoMa) || !d.ma || !vao) return;
 	const r0 = await goiDocAn(
 		bc,
@@ -2712,6 +2737,13 @@ describe("hien-thi-an", () => {
 				hoiY: hoiY.id,
 				cuocSoan: cuocSoan.id,
 				cuocHoi: cuocHoi.id,
+				lanG:
+					(
+						await db.okrCheckIn.findFirst({
+							where: { keyResultId: gieo.krG },
+							select: { id: true },
+						})
+					)?.id ?? "",
 			};
 			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
 			try {

@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 36b82f280fbb650650e90c1c0ed06037f90efce7
+verified_commit: 392f29497d28218340519359e23bad3a9f7fe4a3
 human_signoff: Phan Le Manh 2026-10-23 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 7 eval, 7 suite xanh; vòng 1 PASS nhưng sửa ba thước trong hợp đồng AC-1, AC-4, AC-7); 6 mục ngoài hợp đồng ghi Known limits
 ---
 
@@ -153,3 +153,7 @@ none — moi eval chay mot lan, deterministic, khong co pass_rate hon hop.
 Round 1: E3 chay va dat (run_id minted-hop-cap-nhat-lan-truoc-E3-r1); S4 vong 1 chi ra ba cho yeu cua thuoc E7, sua o commit 67ebfce94. Returned to implementation.
 Round 2: E1, E2, E4, E5, E6, E7 chay lai tren verified_commit, tat ca dat; E3 mang sang tu round 1 (delta khong cham paths cua eval); bay lenh suite xanh. Moc verified_at cua cac eval chay round 2 la gio tong hop bao cao (xap xi); gio chinh xac nam trong run-log.jsonl.
 
+
+### Re-pin lần 1 — 2026-10-28, do HT5 cam-xuc-tren-cap-nhat đổi thước (V3-59..67) và hai trường mới checkInId, camXuc trên Họp tuần, Cập nhật gần đây, diễn biến
+run_id: repin-20261027T235917Z-18758
+sha: 392f29497d28218340519359e23bad3a9f7fe4a3 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

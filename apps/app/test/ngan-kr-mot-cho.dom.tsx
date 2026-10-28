@@ -278,6 +278,8 @@ function dienBienCua(ca: CaKieu) {
 		tuanDau: tuan[0] ?? null,
 		diem: tuan.map((t, i) => ({
 			tuan: t,
+			checkInId: null,
+			camXuc: [],
 			giaTri: ca.lichSu[i] ?? null,
 			kyVong: null,
 			tuTin: i < ca.lichSu.length ? "vua" : null,
@@ -1512,6 +1514,8 @@ const MA_TRAN_LOI: OLoi[] = [
 					dangBan: [
 						{
 							...dongKrTu(m, k),
+							checkInId: null,
+							camXuc: [],
 							ghiChu: null,
 							lyDo: [{ loai: "ghi-chu", ngay: "2026-10-12" }],
 						},

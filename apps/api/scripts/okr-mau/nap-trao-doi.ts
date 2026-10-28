@@ -43,6 +43,7 @@ export async function napTraoDoiMau(
 				{ id: "desc" },
 			],
 			select: {
+				id: true,
 				authorUserId: true,
 				createdAt: true,
 				session: { select: { submittedAt: true } },
@@ -56,6 +57,7 @@ export async function napTraoDoiMau(
 			{
 				objectiveId: idMau("mt", krTheoMa.get(t.kr) ?? ""),
 				keyResultId,
+				checkInId: lan.id,
 				body: t.noiDung,
 				mentionUserIds: lan.authorUserId === nguoi ? [] : [lan.authorUserId],
 			},

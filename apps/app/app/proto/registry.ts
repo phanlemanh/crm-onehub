@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { BamKrMoChiTietKrMau } from "./_modules/bam-kr-mo-chi-tiet-kr";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
 import { BoOkrCoSoMau } from "./_modules/bo-okr-co-so";
+import { CamXucTrenCapNhatMau } from "./_modules/cam-xuc-tren-cap-nhat";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CapNhatGanDayMau } from "./_modules/cap-nhat-gan-day";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
@@ -135,6 +136,7 @@ const BANG_GHEP = {
 	"bam-kr-mo-chi-tiet-kr": BamKrMoChiTietKrMau,
 	"cap-nhat-gan-day": CapNhatGanDayMau,
 	"cua-toi-chi-liet-kr": CuaToiChiLietKrMau,
+	"cam-xuc-tren-cap-nhat": CamXucTrenCapNhatMau,
 } satisfies Record<string, ProtoComponent>;
 
 export const PROTO_COMPONENTS = new Map(Object.entries(BANG_GHEP));

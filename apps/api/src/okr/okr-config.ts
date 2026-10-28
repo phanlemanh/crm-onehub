@@ -99,6 +99,7 @@ export const OKR = {
 		},
 		traoDoi: {
 			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
+			capNhatKhacKr: "Lần cập nhật này thuộc KR khác với KR của bình luận.",
 			nguoiKhongCon: "Người không còn trong OneHub Center",
 			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
 			nhacKhongXemDuoc: (ten: string) =>
