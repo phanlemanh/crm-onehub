@@ -5,7 +5,7 @@ slug: cam-xuc-tren-cap-nhat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api, db]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-27T09:42:57Z
 design_doc: docs/superpowers/specs/2026-10-27-cam-xuc-tren-cap-nhat-design.md
@@ -80,3 +80,9 @@ Quét bằng `morphological-scan` (preset entity-feature, `_acceptance/cam-xuc-t
 - Hỏi-1, Hỏi-2, Hỏi-3, Hỏi-4 soạn theo khuyến nghị; xem `decisions.jsonl`.
 - Phản biện context sạch: `gap-probe.md` (1 P0, 4 P1 — đã sửa vào bộ này).
 - `kr-sheet.tsx` thuộc vùng làn M5 (luật 19 của đợt) — sửa qua `cham-tep`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-28:
+  - Ngoài-1: Ca kiểm loại cảm xúc lạ tự dựng bộ đọc loại thay vì đi qua đường của dịch vụ, nên lưới bắt dữ liệu hỏng mỏng hơn vẻ ngoài.
+  - Ngoài-2: Loại cảm xúc đọc từ cơ sở dữ liệu đã được kiểm ở vòng 2; đổi hay bỏ một loại sau này phải chuyển dữ liệu cũ, không thì màn báo lỗi thay vì đếm.
+  - Ngoài-3: Chạm trong bảng tên người thả cảm xúc ở Cập nhật gần đây từng mở nhầm ngăn KR; đã sửa ở vòng 2, có bài kiểm giữ.
+  - Ngoài-4: Bài kiểm thứ tự cảm xúc từng không phân biệt thứ tự cố định với thứ tự theo số người; đã thêm ca phân biệt ở vòng 2.
+  - Ngoài-5: Lệnh nghiệm thu quyền thả cảm xúc của vai chỉ OKR từng không chạy danh sách viết tay; từ vòng 2 lệnh chạy cả bài đó.
