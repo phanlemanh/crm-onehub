@@ -165,6 +165,18 @@ async function lanSql(keyResultId: string): Promise<LanSql[]> {
 		ORDER BY coalesce(s."submittedAt", c."createdAt") ASC, c.id ASC`;
 }
 
+async function tuanKySql(keyResultId: string): Promise<string[]> {
+	const r = await db.$queryRaw<{ tuan: string }[]>`
+		SELECT to_char(g, 'YYYY-MM-DD') AS tuan
+		FROM "okrKeyResult" k
+		JOIN "okrObjective" o ON o.id = k."objectiveId"
+		JOIN "okrCycle" c ON c.id = o."cycleId",
+		generate_series(date_trunc('week', c."startsOn"), date_trunc('week', c."endsOn"), interval '7 days') g
+		WHERE k.id = ${keyResultId}
+		ORDER BY g`;
+	return r.map((x) => x.tuan);
+}
+
 async function gieoBo(ten: string) {
 	ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
 	setSystemTime(GIO_GIEO);
@@ -239,6 +251,48 @@ function lechLan(ca: Ca, ls: LichSuKrOutput, sql: LanSql[]): string[] {
 	return loi;
 }
 
+const TUAN_DO = "2026-10-19";
+
+function lechChuoi(
+	ca: Ca,
+	ls: LichSuKrOutput,
+	sql: LanSql[],
+	tuanKy: string[],
+	kyVongCuaTuan: Map<string, number | null>,
+): string[] {
+	const mong = tuanKy.flatMap((tuan) => {
+		const kyVong = kyVongCuaTuan.get(tuan) ?? null;
+		const lanTuan = tuan > TUAN_DO ? [] : sql.filter((s) => s.tuan === tuan);
+		if (lanTuan.length === 0)
+			return [{ ngay: tuan, checkInId: null, giaTri: null, kyVong }];
+		return lanTuan.map((s) => ({
+			ngay: s.ngay,
+			checkInId: s.id,
+			giaTri: ca.kieu === "moc" ? null : s.giaTri,
+			kyVong,
+		}));
+	});
+	const thuc = ls.chuoi.map((p) => ({
+		ngay: p.ngay,
+		checkInId: p.checkInId,
+		giaTri: p.giaTri,
+		kyVong: p.kyVong,
+	}));
+	const loi: string[] = [];
+	if (JSON.stringify(thuc) !== JSON.stringify(mong))
+		loi.push(
+			`lsml-lan: ${ca.ten} chuoi ${JSON.stringify(thuc)} can ${JSON.stringify(mong)}`,
+		);
+	const kyVongKhac = new Set(
+		[...kyVongCuaTuan.values()].filter((k) => k !== null),
+	);
+	if (ca.kieu === "tang-toi" && kyVongKhac.size < 2)
+		loi.push(
+			`lsml-lan: ${ca.ten} doi chung ky vong cua tuan chi co ${kyVongKhac.size} gia tri`,
+		);
+	return loi;
+}
+
 describe("lsml-lan", () => {
 	test(
 		"lsml-lan: tam ca, moi OkrCheckIn mot phan tu, thu tu gio gui roi id",
@@ -256,13 +310,22 @@ describe("lsml-lan", () => {
 							`lsml-lan: ${ca.ten} SQL ${sql.length} can ${ca.lan.length}`,
 						);
 					loi.push(...lechLan(ca, ls, sql));
+					const db_ = dienBienOutput.parse(
+						ok(
+							await goiQuery("okr.dienBien", "quan", { keyResultId: id }),
+							"dien bien",
+						),
+					);
+					loi.push(
+						...lechChuoi(
+							ca,
+							ls,
+							sql,
+							await tuanKySql(id),
+							new Map(db_.diem.map((p) => [p.tuan, p.kyVong])),
+						),
+					);
 					if (ca.ten === "hai-lan-cung-tuan") {
-						const db_ = dienBienOutput.parse(
-							ok(
-								await goiQuery("okr.dienBien", "quan", { keyResultId: id }),
-								"dien bien",
-							),
-						);
 						const tuan = sql.at(-1)?.tuan;
 						const diemTuan = db_.diem.filter(
 							(d) => d.tuan === tuan && d.giaTri !== null,
@@ -610,7 +673,16 @@ describe("lsml-dien-bien-giu", () => {
 						),
 					);
 					const sql = await lanSql(id);
-					const tuanDo = "2026-10-19";
+					const tuanDo = TUAN_DO;
+					const tuanKy = await tuanKySql(id);
+					const tuanDiem = d.diem.map((p) => p.tuan);
+					if (
+						tuanKy.length < 2 ||
+						JSON.stringify(tuanDiem) !== JSON.stringify(tuanKy)
+					)
+						loi.push(
+							`lsml-dien-bien-giu: ${ca.ten} tuan ${JSON.stringify(tuanDiem)} can tuan cua ky ${JSON.stringify(tuanKy)}`,
+						);
 					for (const p of d.diem) {
 						const cuoi =
 							p.tuan > tuanDo
