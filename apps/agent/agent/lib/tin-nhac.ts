@@ -166,6 +166,11 @@ function dongAi(
 	return `• ${thoat(noiDungAi(v))}${mo}`;
 }
 
+const NHAN_CAP_NHAT = {
+	motKr: "mở KR",
+	nhieuKr: "mở Của tôi",
+} as const;
+
 const NHAN_LIEN_KET_OKR = {
 	"okr-cap-nhat": "mở cập nhật",
 	"okr-kr-im": "mở mục tiêu",
@@ -189,7 +194,12 @@ function dongOkr(
 		const mo = url ? ` — ${url}` : "";
 		return `${so}. ${noiDungOkr(v, (s) => s)}${mo}`;
 	}
-	const nhan = NHAN_LIEN_KET_OKR[v.loai];
+	const nhan =
+		v.loai === "okr-cap-nhat"
+			? v.krIds.length === 1
+				? NHAN_CAP_NHAT.motKr
+				: NHAN_CAP_NHAT.nhieuKr
+			: NHAN_LIEN_KET_OKR[v.loai];
 	const mo = url ? ` — <${url}|${nhan}>` : "";
 	return `• ${noiDungOkr(v, thoat)}${mo}`;
 }

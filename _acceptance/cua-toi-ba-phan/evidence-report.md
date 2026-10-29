@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 51e94386d358c3074f3c3bf05f74653c77ee0ab9
+verified_commit: d273749a9d2394457de1957423de0755c819aa09
 human_signoff: manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 vòng 2, wf_6a944dda-fd4, engine feature-loop 2.30.0). E17 Đạt; Ngoài-1, 3, 5, 10–17, 19, 20 ghi Known limits; Ngoài-2, 4, 6, 7, 8, 18 chấp nhận, không sửa (4, 7, 8 đã sửa qua AC-14); Ngoài-9 mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -338,3 +338,7 @@ sha: be571a245ff6d0b130a5dc5e7e47ce553faf9623 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 10 — 2026-10-27, do ghim lại sau gộp onehub f14f591eb (#575)
 run_id: repin-20261027T083411Z-32432
 sha: 51e94386d358c3074f3c3bf05f74653c77ee0ab9 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15, E17 · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 11 — 2026-10-29, do ghim lại sau khi gộp onehub e539693c7 và vá thước VK2 (cham-tep V4-23)
+run_id: repin-20261029T225600Z-68476
+sha: d273749a9d2394457de1957423de0755c819aa09 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E2, E3, E4, E6, E8, E18, E19, E20 · thay bởi hồ sơ đã ký: E1→cua-toi-chi-liet-kr#AC-1, E2→cua-toi-chi-liet-kr#AC-6, E3→cua-toi-chi-liet-kr#AC-6, E4→cua-toi-chi-liet-kr#AC-1, E6→cua-toi-chi-liet-kr#AC-4, E8→cua-toi-chi-liet-kr#AC-7, E18→cua-toi-chi-liet-kr#AC-1, E19→cua-toi-chi-liet-kr#AC-6, E20→cua-toi-chi-liet-kr#AC-9 · ngoài làn máy: E15, E17 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3, AC-6, AC-13, AC-14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

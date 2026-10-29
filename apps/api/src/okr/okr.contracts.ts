@@ -558,6 +558,8 @@ export const capNhatTuanOutput = z.object({
 			objectiveId: z.string(),
 			objectiveTitle: z.string(),
 			unitName: z.string(),
+			donOkr: z.string(),
+			cycleId: z.string(),
 			kind: z.enum(KIEU_KR),
 			unit: z.string(),
 			targetValue: z.number(),
@@ -579,6 +581,10 @@ export const capNhatTuanOutput = z.object({
 	weekStart: ngay,
 	dueWeekday: z.number().nullable(),
 });
+export const viTriKrInput = z.object({ keyResultId: ma });
+export const viTriKrOutput = z
+	.object({ donOkr: z.string(), cycleId: z.string() })
+	.nullable();
 export const moCapNhatOutput = z.object({ sessionId: z.string() });
 export const guiCapNhatOutput = z.object({
 	written: z.number(),
@@ -914,6 +920,7 @@ export type MucMoCoi = z.infer<typeof mucMoCoi>;
 export type CreateKrInput = z.infer<typeof createKrInput>;
 export type UpdateKrInput = z.infer<typeof updateKrInput>;
 export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;
+export type ViTriKrOutput = z.infer<typeof viTriKrOutput>;
 export type CommentsOutput = z.infer<typeof commentsOutput>;
 export type DongTraoDoi = z.infer<typeof dongTraoDoi>;
 export type FollowOutput = z.infer<typeof followOutput>;

@@ -20,6 +20,7 @@ import {
 	mucNhac,
 	parseNhacPayload,
 } from "@crm/validation/nhac-ke-hoach";
+import { duongCapNhatKr } from "@crm/validation/okr-cap-nhat";
 import {
 	type CachXemOkr,
 	khoaDonOkr,
@@ -190,7 +191,7 @@ export function duongTrongApp(v: ViecNhac): string {
 		return `/tai-lieu?${DUONG_CHO_DUYET}`;
 	}
 	if (v.loai === "okr-cap-nhat") {
-		return "/okr?tu=nhac";
+		return duongCapNhatKr(v.krIds);
 	}
 	if (v.loai === "okr-hoi-y-gop" || v.loai === "okr-hoi-y-cong-bo") {
 		const thamSo = new URLSearchParams({ [THAM_SO_OKR.ky]: v.cycleId });

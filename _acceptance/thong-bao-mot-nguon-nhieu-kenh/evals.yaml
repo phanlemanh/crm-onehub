@@ -32,6 +32,8 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.tbk_mac_dinh
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-4
     paths:
       - "apps/agent/agent/lib/nhac-ke-hoach.ts"
       - "apps/agent/agent/lib/thong-bao-day.ts"

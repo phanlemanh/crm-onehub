@@ -22,7 +22,6 @@ import {
 import {
 	dienBienOutput,
 	hopTuanOutput,
-	khoiCuaToiOutput,
 	quanhMucTieuOutput,
 } from "../../api/src/okr/okr-xem.contracts";
 import {
@@ -1233,7 +1232,6 @@ const { TheQuanh } = await import(
 	"@/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh"
 );
 const { KhoiTomTat } = await import("@/app/(app)/[slug]/okr/khoi-tom-tat");
-const { KhoiKrCuaToi } = await import("@/app/(app)/[slug]/okr/khoi-kr-cua-toi");
 const { HopTuan } = await import("@/app/(app)/[slug]/okr/hop-tuan");
 const { BangMoiKr } = await import("@/app/(app)/[slug]/okr/moi-kr/moi-kr");
 
@@ -1504,21 +1502,6 @@ const MA_TRAN_LOI: OLoi[] = [
 		tab: null,
 	},
 	{
-		o: "cua-toi",
-		dung: () => {
-			const { m, k } = krLoi();
-			kho.rieng.set("okr.khoiCuaToi", () =>
-				khoiCuaToiOutput.parse({
-					kr: [{ ...dongKrTu(m, k), nhip: "dung-nhip" }],
-					tong: 1,
-				}),
-			);
-			return dung(<KhoiKrCuaToi cycleId="q4" />);
-		},
-		bam: () => qs(`[data-kr-cua-toi] [data-mo-kr="${krLoi().k.id}"]`),
-		tab: null,
-	},
-	{
 		o: "hop-tuan",
 		dung: () => {
 			const { m, k } = krLoi();
@@ -1594,8 +1577,8 @@ const MA_TRAN_LOI: OLoi[] = [
 ];
 
 describe("vk7-moi-loi", () => {
-	test("vk7-moi-loi: ma tran chin loi viet truoc — moi loi goi dung mot lan mo {kind: kr, id: K}, khong so-kr, khong tab dien-bien; loi con so mang tab so-nguon", async () => {
-		expect(MA_TRAN_LOI.length).toBe(9);
+	test("vk7-moi-loi: ma tran tam loi viet truoc — moi loi goi dung mot lan mo {kind: kr, id: K}, khong so-kr, khong tab dien-bien; loi con so mang tab so-nguon", async () => {
+		expect(MA_TRAN_LOI.length).toBe(8);
 		const thucTe: Record<string, Json> = {};
 		for (const o of MA_TRAN_LOI) {
 			datLai();

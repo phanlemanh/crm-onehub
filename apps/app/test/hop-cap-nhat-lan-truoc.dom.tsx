@@ -499,7 +499,9 @@ describe("hct-goi-y", () => {
 		await dung(
 			<BangCapNhat
 				duLieu={{
-					items: [krCapNhatTuSheet(mt, k)],
+					items: [
+						{ ...krCapNhatTuSheet(mt, k), donOkr: "pb:pb-1", cycleId: "q4" },
+					],
 					weekStart: TUAN,
 					dueWeekday: 5,
 				}}

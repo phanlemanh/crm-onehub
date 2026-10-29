@@ -164,6 +164,8 @@ import {
 	updateKrInput,
 	updateObjectiveInput,
 	viecCuaToiOutput,
+	viTriKrInput,
+	viTriKrOutput,
 	xuHuongKrInput,
 	xuHuongKrOutput,
 } from "./okr.contracts";
@@ -1488,6 +1490,18 @@ export class OkrRouter {
 	})
 	capNhatTuan(@Ctx() ctx: AuthedTrpcContext) {
 		return this.capNhat.capNhatTuan(ctx.user.id);
+	}
+
+	@Query({
+		input: viTriKrInput,
+		output: viTriKrOutput,
+		meta: restMeta("GET", "/okr/key-results/{keyResultId}/location", TAG),
+	})
+	viTriKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof viTriKrInput>,
+	) {
+		return this.capNhat.viTriKr(ctx.user.id, input.keyResultId);
 	}
 
 	@Mutation({

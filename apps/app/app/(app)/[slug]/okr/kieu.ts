@@ -6,7 +6,10 @@ export type MucTieu = RouterOutputs["okr"]["byUnit"]["objectives"][number];
 export type KetQua = MucTieu["keyResults"][number];
 export type NutCay = RouterOutputs["okr"]["alignmentTree"]["roots"][number];
 export type DuLieuCapNhat = RouterOutputs["okr"]["capNhatTuan"];
-export type KrCapNhat = DuLieuCapNhat["items"][number];
+export type KrCapNhat = Omit<
+	DuLieuCapNhat["items"][number],
+	"donOkr" | "cycleId"
+>;
 export type ViecOkr = RouterOutputs["okr"]["viecCuaToi"]["viec"][number];
 
 export const CELL = "px-3 py-2.5 align-middle";

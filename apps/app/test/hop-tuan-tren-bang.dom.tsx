@@ -53,9 +53,6 @@ mock.module("@/components/crm/fields/fields-sheet", () => ({
 }));
 
 const { HopTuan } = await import("@/app/(app)/[slug]/okr/hop-tuan");
-const { PhanKrPhuTrach } = await import(
-	"@/app/(app)/[slug]/okr/phan-kr-phu-trach"
-);
 const { BangDonVi } = await import("@/app/(app)/[slug]/okr/theo-don-vi/bang");
 const { useRouter } = await import("next/navigation");
 const { RecordSheetHost } = await import(
@@ -799,11 +796,6 @@ function mtMot() {
 }
 
 const LOI_THAT = {
-	"cua-toi": {
-		ve: () => <PhanKrPhuTrach ds={[mtMot()]} tenKy="Quý 4/2026" />,
-		nut: () =>
-			qsa("button").find((b) => b.textContent?.trim() === "KR C") ?? null,
-	},
 	"trang-don-vi": {
 		ve: () => (
 			<BangDonVi

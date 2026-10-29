@@ -12,6 +12,19 @@ export const LOI_VAO = [
 	"cua-toi",
 ] as const;
 export type LoiVao = (typeof LOI_VAO)[number];
+export const DUONG_KR_TRONG_BO = "/okr/kr";
+export const DUONG_CUA_TOI = "/okr";
+
+export function duongCapNhatKr(krIds: readonly string[]): string {
+	const [dau, ...con] = krIds;
+	if (dau === undefined)
+		throw new Error(
+			"duongCapNhatKr: krIds rỗng, mục nhắc cập nhật cần ít nhất một KR.",
+		);
+	return con.length === 0
+		? `${DUONG_KR_TRONG_BO}/${encodeURIComponent(dau)}`
+		: DUONG_CUA_TOI;
+}
 export const KENH_CAP_NHAT = ["web"] as const;
 export const GHI_CHU_TOI_DA = 200;
 const ma = z.string().trim().min(1).max(120);

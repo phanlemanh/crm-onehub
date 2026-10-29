@@ -48,12 +48,6 @@
 		"nguon": "muc-tieu"
 	},
 	{
-		"tep": "phan-kr-phu-trach.tsx",
-		"kind": "kr",
-		"id": "k.id",
-		"nguon": "kr"
-	},
-	{
 		"tep": "quanh-muc-tieu/the-quanh.tsx",
 		"kind": "kr",
 		"id": "nut.id",

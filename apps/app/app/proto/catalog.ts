@@ -1759,6 +1759,34 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "cua-toi-chi-liet-kr",
+		ten: "Của tôi chỉ liệt KR, cập nhật qua bộ — bấm KR mở trong bộ OKR, một hộp cập nhật",
+		states: [
+			{
+				id: "ST-ctlk-cua-toi",
+				nhan: "Của tôi — 7 KR cần cập nhật ở 3 bộ, không bảng hàng loạt",
+			},
+			{
+				id: "ST-ctlk-mo-kr",
+				nhan: "Bấm một KR — trang bộ OKR của nó, ngăn KR mở sẵn",
+			},
+			{
+				id: "ST-ctlk-dong-ngan",
+				nhan: "Đóng ngăn KR — đứng ở bộ OKR của KR đó",
+			},
+			{ id: "ST-ctlk-hop-cap-nhat", nhan: "Ngăn KR › Cập nhật — hộp một KR" },
+			{ id: "ST-ctlk-tin-nhac", nhan: "Tin nhắc 08:30 dẫn tới đâu (Hỏi-1)" },
+			{
+				id: "ST-ctlk-kr-khong-thay",
+				nhan: "Mở KR đã xoá hay hết quyền — ngăn KR nói rõ",
+			},
+			{ id: "ST-ctlk-da-du", nhan: "Đã cập nhật đủ tuần này" },
+			{ id: "ST-ctlk-khong-kr", nhan: "Không phụ trách KR nào" },
+			{ id: "ST-ctlk-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-ctlk-loi", nhan: "Tải hỏng — thử lại" },
+		],
+	},
+	{
 		slug: "cam-xuc-tren-cap-nhat",
 		ten: "Cảm xúc và trả lời trên từng lần cập nhật — Cập nhật gần đây, Họp tuần, ngăn KR",
 		states: [

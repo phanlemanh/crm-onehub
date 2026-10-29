@@ -1979,6 +1979,18 @@ executors:
     ctbp_do_nguong: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-do-nguong
     ctbp_loi_mo: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-mo
     ctbp_tai_lai_nen: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-lai-nen
+    ctlk_phan_mot: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-phan-mot
+    ctlk_khong_tu: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-khong-tu
+    ctlk_dong_kr: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-dong-kr
+    ctlk_dich_kr: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-dich-kr
+    ctlk_vi_tri_kr: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-vi-tri-kr
+    ctlk_duong_nhac: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-duong-nhac
+    ctlk_nhac_dong: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-nhac-dong
+    ctlk_viec: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-viec
+    ctlk_theo_doi: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-theo-doi
+    ctlk_phu_trach: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-phu-trach
+    ctlk_trang_thai: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-trang-thai
+    ctlk_vong_khep: bun _acceptance/cua-toi-chi-liet-kr/rang/hai-chieu.mjs ctlk-vong-khep
     thk_mac_dinh: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-mac-dinh"'
     thk_haiku: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-haiku"'
     thk_gia_tri_la: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-gia-tri-la"'
@@ -3501,6 +3513,9 @@ executors:
     ctbp_lien_ket_cu: bun _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs
     ctbp_ho_so_da_ky: bun _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs
     ctbp_proto: bun _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs
+    ctlk_mot_duong: bun _acceptance/cua-toi-chi-liet-kr/rang/mot-duong.mjs
+    ctlk_thay_the: bun _acceptance/cua-toi-chi-liet-kr/rang/thay-the.mjs
+    ctlk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cua-toi-chi-liet-kr/rang/man.mjs"'
     dh4_giu_ho_so: bun _acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs
     dh4_ranh_gioi: node _acceptance/so-do-can-chinh-don-vi/rang/ranh-gioi.mjs
     dh4_dot_bien: bun _acceptance/so-do-can-chinh-don-vi/rang/dot-bien.mjs

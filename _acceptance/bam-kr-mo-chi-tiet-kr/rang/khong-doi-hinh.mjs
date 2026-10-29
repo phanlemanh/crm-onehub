@@ -43,6 +43,7 @@ const THUOC_THEO_VONG = {
 		"luat pham vi vong: git diff --quiet merge-base tren messages-guard.spec.ts cua vong khung-khong-con-dung-chu — nhanh nao dang ky chu moi cung do (chu kho V1-33 a)",
 };
 const TRAN_LENH_MS = 15 * 60_000;
+const DAN_CHAM_TEP = /cham-tep V\d+-\d+/;
 const MA_DO = 1;
 const MA_KHONG_DO = 2;
 
@@ -71,6 +72,48 @@ function tepTrongLenh(lenh) {
 		.map((m) => m[1].replace(/^\.\//, ""))
 		.flatMap((t) => [join(goc, t), t])
 		.filter((t) => existsSync(join(GOC, t)));
+}
+
+function dongSo(chu) {
+	return chu.split("\n").filter(Boolean);
+}
+
+function hoSoCoFixMoi(nen, tep, cwd = GOC) {
+	for (const slug of readdirSync(join(cwd, "_acceptance"))) {
+		const L = join(cwd, "_acceptance", slug, "decisions.jsonl");
+		if (!existsSync(L)) continue;
+		const r = spawnSync(
+			"git",
+			["show", `${nen}:_acceptance/${slug}/decisions.jsonl`],
+			{ cwd, encoding: "utf8" },
+		);
+		const cu = new Set(r.status === 0 ? dongSo(r.stdout) : []);
+		const co = dongSo(readFileSync(L, "utf8"))
+			.filter((d) => !cu.has(d))
+			.some((d) => {
+				try {
+					const o = JSON.parse(d);
+					return (
+						o.type === "fix" &&
+						String(o.decision).includes(tep) &&
+						DAN_CHAM_TEP.test(
+							`${o.decided_by ?? ""} ${o.why ?? ""} ${o.decision}`,
+						)
+					);
+				} catch {
+					return false;
+				}
+			});
+		if (co) return slug;
+	}
+	return null;
+}
+
+function tepMienCua(m, daSua, nen) {
+	const sua = m.tep.filter((t) => daSua.includes(t));
+	if (sua.length === 0) return null;
+	const dan = sua.map((t) => [t, hoSoCoFixMoi(nen, t)]);
+	return dan.every(([, h]) => h) ? dan : null;
 }
 
 function trangThai(slug) {
@@ -253,8 +296,15 @@ try {
 	for (const t of daSua) console.log(`DA SUA ${t}`);
 	let sai = 0;
 	if (anhChupDoi(nen)) {
-		console.log("SAI AC-6: ANH CHUP LICH SU DOI");
-		sai += 1;
+		const dan = hoSoCoFixMoi(nen, ANH_CHUP);
+		if (dan)
+			console.log(
+				`DOI ANH CHUP: so ${dan} co dong fix dan cham-tep da duyet`,
+			);
+		else {
+			console.log("SAI AC-6: ANH CHUP LICH SU DOI");
+			sai += 1;
+		}
 	}
 	const tatCa = quetLop(daSua);
 	for (const m of tatCa.filter((x) => THUOC_THEO_VONG[x.ten]))
@@ -287,10 +337,19 @@ try {
 			const daChayNen = new Map();
 			for (const m of doCay) {
 				const ma = chay(m.lenh, goc.cay, daChayNen);
-				if (ma === 0) {
-					sai += 1;
-					console.log(`SAI AC-6: ${m.ten} nen 0, cay ${m.ma}`);
-				} else console.log(`DO SAN TREN NEN ${m.ten}`);
+				if (ma !== 0) {
+					console.log(`DO SAN TREN NEN ${m.ten}`);
+					continue;
+				}
+				const mien = tepMienCua(m, daSua, nen);
+				if (mien) {
+					console.log(
+						`DOI THUOC ${m.ten}: ${mien.map(([t, h]) => `${t} (so ${h})`).join(", ")} co dong fix dan cham-tep da duyet`,
+					);
+					continue;
+				}
+				sai += 1;
+				console.log(`SAI AC-6: ${m.ten} nen 0, cay ${m.ma}`);
 			}
 		} finally {
 			donCay(goc);

@@ -21,6 +21,8 @@ const KIND_CAM = "so-kr";
 const TAB_CAM = "dien-bien";
 const TAB_SO_NGUON = "so-nguon";
 const THU_MUC_BO = new Set(["node_modules", ".next"]);
+const HAM_DUONG_KR = "duongCapNhatKr";
+const TEP_DUONG_KR = /okr-cap-nhat(\.d)?\.ts$/;
 const TRONG_NGAN = [
 	{
 		tep: "apps/app/components/crm/record-sheet/kr-sheet.tsx",
@@ -425,6 +427,48 @@ for (const sf of ct.getSourceFiles()) {
 			else loi.push(l);
 		}
 	}
+}
+
+function laGoiDuongKr(n) {
+	if (!ts.isCallExpression(n)) return false;
+	const d = khaiBao(boBoc(n.expression));
+	return (
+		tenHam(d) === HAM_DUONG_KR &&
+		TEP_DUONG_KR.test(d.getSourceFile().fileName)
+	);
+}
+
+function coGoiDuongKr(goc) {
+	let co = false;
+	const di = (n) => {
+		if (co) return;
+		if (laGoiDuongKr(n)) co = true;
+		else ts.forEachChild(n, di);
+	};
+	di(goc);
+	return co;
+}
+
+for (const sf of ct.getSourceFiles()) {
+	if (!tepQuetSet.has(resolve(sf.fileName))) continue;
+	const di = (n) => {
+		if (
+			ts.isJsxAttribute(n) &&
+			n.name.getText() === "href" &&
+			n.initializer &&
+			coGoiDuongKr(n.initializer)
+		)
+			loi.push(
+				loiCuaGoi({
+					call: n,
+					kind: { gia: new Set(["kr"]), ro: true },
+					dienBien: false,
+					soNguon: false,
+				}),
+			);
+		ts.forEachChild(n, di);
+	};
+	di(sf);
 }
 
 const loiKr = loi.filter((l) => l.mangKr);

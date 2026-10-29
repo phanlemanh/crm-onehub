@@ -58,6 +58,8 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.ctt_dom
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-7
     paths: ["apps/app/app/(app)/[slug]/okr/cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/nhom-da-bo.tsx", apps/app/lib/messages/okr.ts, apps/app/test/okr-cua-toi-theo-doi.dom.tsx]
     expected: "exit 0; dựng CuaToi với okr.mine giả parse qua mineOutput thật, bốn ca viết trước theo (objectives có/rỗng × dangTheoDoi có/rỗng): (a) có/có → bảng chính chỉ id của objectives; [data-nhom-dang-theo-doi] có nút chữ «Đang theo dõi (2)» aria-expanded=false, đứng trước [data-nhom-da-bo] theo thứ tự DOM; bấm → aria-expanded=true, bảng trong nhóm có đúng hai id; (b) rỗng/có → [data-trang-thai=ST-cuatoi-rong] và nhóm đứng sau nó; (c) có/rỗng và (d) rỗng/rỗng → không có [data-nhom-dang-theo-doi]; (e) locale en với (a) → «Following (2)». Các test DOM cũ còn đọc [data-nhom-da-bo] vẫn xanh. CHIỀU ĐỎ: bản sao cua-toi.tsx bỏ nhóm ở nhánh rỗng → ca (b) đỏ, bài in «ST-cuatoi-rong khong co nhom theo doi»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -66,6 +68,8 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.ctt_dom
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-7
     paths: ["apps/app/app/(app)/[slug]/okr/cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/nhom-da-bo.tsx", apps/app/test/okr-cua-toi-theo-doi.dom.tsx]
     expected: "Cùng lệnh E7 — ca (b): trạng thái rỗng ST-cuatoi-rong có mặt, nhóm «Đang theo dõi (1)» là anh em kế sau Empty."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -82,6 +86,8 @@ evals:
     criterion: AC-8
     executor: test
     cmd: config:executors.test.ctt_dom
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-7
     paths: ["apps/app/app/(app)/[slug]/okr/cua-toi.tsx", apps/app/lib/messages/okr.ts, apps/app/test/okr-cua-toi-theo-doi.dom.tsx]
     expected: "Cùng lệnh E7 — ca (e): nút nhóm có chữ đúng «Following (2)»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -91,6 +97,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ctt_man
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-7
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", apps/api/src/okr/**, _acceptance/okr-cua-toi-tach-theo-doi/rang/**]
     steps:
       - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
@@ -109,6 +117,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ctt_man
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-7
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", apps/app/lib/trpc/cache.ts, apps/api/src/okr/**, _acceptance/okr-cua-toi-tach-theo-doi/rang/**]
     steps:
       - "Cùng lệnh và cùng phiên gieo với E11"
@@ -122,6 +132,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ctt_man
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-7
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/okr-cua-toi-tach-theo-doi/rang/**]
     steps:
       - "Cùng lệnh và cùng phiên gieo với E11"
@@ -141,6 +153,8 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.ctt_dot_bien
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-7
     paths: [apps/api/src/okr/**, "apps/app/app/(app)/[slug]/okr/cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/nhom-da-bo.tsx", apps/api/test/okr-cua-toi-chia.spec.ts, apps/api/test/okr-cua-toi-theo-doi.spec.ts, apps/app/test/okr-cua-toi-theo-doi.dom.tsx, _acceptance/okr-cua-toi-tach-theo-doi/rang/**]
     expected: "exit 0; rang/dot-bien.mjs dựng bản sao cây NGOÀI mọi gói (không ở thư mục ẩn trong gói), áp lần lượt bảy đột biến đã khai ở E1–E7 và chạy theo BẢNG ÁNH XẠ viết trước đột biến → các lệnh eval nó phải làm đỏ, 8 cặp: (a) chia lọt chỉ-theo-dõi-đã-bỏ → ctt_chia «chi-theo-doi-da-bo lot vao dangTheoDoi» VÀ ctt_da_bo «D5 o dangTheoDoi» · (b) status === cong-bo → ctt_chia «nhap cua toi roi khoi objectives» · (c) idsCuaToi năm vai → ctt_mine «M5 o objectives» · (d) dangTheoDoi từ okrFollow không trừ idsCuaToi → ctt_trung_vai «T1 o dangTheoDoi» · (e) bỏ nguCanhXem phần theo dõi → ctt_hien_thi «H lo du bi gioi han» · (f) follow bỏ deleteMany → ctt_bo_theo_doi «F con o dangTheoDoi sau khi tat» · (g) nhánh rỗng mất nhóm → ctt_dom «ST-cuatoi-rong khong co nhom theo doi». Mỗi cặp khẳng định: exit ≠ 0 VÀ stdout chứa đúng thông điệp ghim của cặp; script khẳng định số cặp đã chạy = 8. Trước mọi đột biến chạy cùng sáu lệnh trên bản sao lành → exit 0 (đối chứng dương). Cặp nào cho xanh, hay đỏ mà thiếu thông điệp ghim → script exit 1 gọi tên đột biến và lệnh. Dọn bản sao kể cả khi đỏ. Hồ sơ có đột biến nên làn S4 chạy tuần tự."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

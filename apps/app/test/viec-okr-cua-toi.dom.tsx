@@ -160,7 +160,7 @@ afterEach(() => {
 });
 
 describe("the viec OKR", () => {
-	test("moi loai mot dong, dong cap nhat dan toi man cap nhat voi loi vao viec-cua-toi", async () => {
+	test("moi loai mot dong, dong cap nhat hai KR dan toi Cua toi", async () => {
 		await mo("khi-lien-quan", true);
 		await cho(() => dong().length === 6, "sau dong");
 		expect(dong().map((d) => d.dataset.viecOkr)).toEqual([
@@ -173,9 +173,7 @@ describe("the viec OKR", () => {
 		]);
 		const [capNhat, im, giao, nhac, ghiNhan, theo] = dong();
 		expect(capNhat?.textContent).toContain("2 KR chờ cập nhật tuần này");
-		expect(capNhat?.querySelector("a")?.getAttribute("href")).toBe(
-			"/ws/okr?tu=viec-cua-toi",
-		);
+		expect(capNhat?.querySelector("a")?.getAttribute("href")).toBe("/ws/okr");
 		expect(im?.textContent).toContain("KR im 15 ngày");
 		expect(giao?.textContent).toContain(m.cau.giaoKr);
 		expect(nhac?.textContent).toContain("Võ Phương Thảo nhắc tên bạn");
