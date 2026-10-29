@@ -10,7 +10,7 @@ slug: man-cai-dat-noi-tieng-viet
 verdict: PASS
 round: 3
 run_id: s4r3d-20260904T130156Z-16359
-verified_commit: c88b1658eaa07946eeb8f6b8c1d30e0daa464971
+verified_commit: d052e660743bc6fbb391bb74a842d4268445ae7e
 verified_at: 2026-09-04T13:04:00Z
 human_signoff: Manh Phan 2026-09-04
 ---
@@ -392,3 +392,7 @@ sha: 91b4e246850c022b600b63901a2666a3aac8428e · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 11 — 2026-10-17, do ve-sinh-do-san-onehub: ghim lại bảy hồ sơ sau gỡ chú thích JSDoc c88b1658e (luật kho khong-chu-thich)
 run_id: repin-20261017T134627Z-69983
 sha: c88b1658eaa07946eeb8f6b8c1d30e0daa464971 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2 · ngoài làn máy: E12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 12 — 2026-10-29, do VK19 bo-okr-chi-don-vi: ghim lượt B1b — bốn hồ sơ ve-sinh E18 đòi ghim tại đỉnh nhánh
+run_id: repin-20261029T031340Z-42075
+sha: d052e660743bc6fbb391bb74a842d4268445ae7e · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2 · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
