@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 5332277f5b1cbc6c235002510fa1131ea6a3a022
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-29
 ---
 
 # Evidence Report: lich-su-moi-lan-cap-nhat
