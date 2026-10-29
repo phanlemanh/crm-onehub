@@ -359,8 +359,8 @@ describe("lsml-danh-sach", () => {
 				loi.push(`lsml-danh-sach: ${l.id} gia tri «${so}»`);
 			if (l.ghiChu && !chu.includes(l.ghiChu))
 				loi.push(`lsml-danh-sach: ${l.id} thieu ghi chu`);
-			const tuTin = [...(d?.querySelectorAll("[data-tu-tin]") ?? [])].map(
-				(e) => e.getAttribute("data-tu-tin"),
+			const tuTin = [...(d?.querySelectorAll("[data-tu-tin]") ?? [])].map((e) =>
+				e.getAttribute("data-tu-tin"),
 			);
 			if (JSON.stringify(tuTin) !== JSON.stringify([l.tuTin ?? "vua"]))
 				loi.push(
@@ -442,9 +442,7 @@ describe("lsml-bieu-do", () => {
 					(p.getAttribute("d") ?? "").length > 0,
 			);
 			if (duongKyVong.length !== 1)
-				loi.push(
-					`lsml-bieu-do: ${duongKyVong.length} duong ky vong can 1`,
-				);
+				loi.push(`lsml-bieu-do: ${duongKyVong.length} duong ky vong can 1`);
 			dem += 1;
 			const nhan =
 				qs(`${LICH_SU} [data-slot="chart"]`)?.getAttribute("aria-label") ?? "";

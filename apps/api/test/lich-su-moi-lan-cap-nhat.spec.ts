@@ -260,7 +260,7 @@ function lechChuoi(
 	tuanKy: string[],
 	kyVongCuaTuan: Map<string, number | null>,
 ): string[] {
-	const mong = tuanKy.flatMap((tuan) => {
+	const mong = tuanKy.flatMap((tuan): DiemMoiLan[] => {
 		const kyVong = kyVongCuaTuan.get(tuan) ?? null;
 		const lanTuan = tuan > TUAN_DO ? [] : sql.filter((s) => s.tuan === tuan);
 		if (lanTuan.length === 0)
