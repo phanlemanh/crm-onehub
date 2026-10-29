@@ -564,6 +564,20 @@ const GHIM = {
 	"okr-vo-khu:boOkr.so.den": ["đến 1", "đến 12"],
 	"okr-vo-khu:boOkr.so.batDau": ["Bắt đầu 1", "Bắt đầu 12"],
 	"okr-vo-khu:boOkr.so.daKetThuc": ["Đã kết thúc 1", "Đã kết thúc 12"],
+	"okr-vo-khu:boOkr.menu.doiBo": [
+		"1 — đổi sang bộ khác",
+		"12 — đổi sang bộ khác",
+	],
+	"okr-vo-khu:boOkr.menu.demMucTieu": ["1 mục tiêu", "12 mục tiêu"],
+	"okr-vo-khu:boOkr.rongBoPhan.tieuDe": [
+		"1 chưa có mục tiêu riêng trong A",
+		"12 chưa có mục tiêu riêng trong A",
+	],
+	"okr-vo-khu:boOkr.rongBoPhan.chiSangMenu": [
+		"Mục tiêu của các phòng ban nằm ở bộ của từng phòng — bấm 1 trên dòng vị trí để sang.",
+		"Mục tiêu của các phòng ban nằm ở bộ của từng phòng — bấm 12 trên dòng vị trí để sang.",
+	],
+	"okr-vo-khu:boOkr.daBo": ["Đã bỏ (1)", "Đã bỏ (12)"],
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"crm:truongKieu.trong": ["1 không được để trống.", "12 không được để trống."],
@@ -1196,9 +1210,9 @@ const GHIM = {
 		"1 chưa có KR công bố trong A.",
 		"12 chưa có KR công bố trong A.",
 	],
-	"okr-hop-tuan-bo:donViCoKr.dong": [
-		"1 KR · đã cập nhật A",
-		"12 KR · đã cập nhật A",
+	"okr-hop-tuan-bo:rong.chiSangMenu": [
+		"KR của từng khối và phòng ban nằm ở Họp tuần của bộ ấy — bấm 1 trên dòng vị trí để sang.",
+		"KR của từng khối và phòng ban nằm ở Họp tuần của bộ ấy — bấm 12 trên dòng vị trí để sang.",
 	],
 	"okr-toan-canh:soDo.soMucTieu": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
 	"okr-toan-canh:soDo.tienDo": ["1% tiến độ", "12% tiến độ"],

@@ -19,7 +19,9 @@ import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { ghep } from "./hoi-y/chu";
 
 const KHUNG_TAI = ["mot", "hai", "ba"] as const;
 
@@ -126,6 +128,35 @@ export function Rong({
 					) : null}
 				</EmptyContent>
 			) : null}
+		</Empty>
+	);
+}
+
+export function RongBoPhan({
+	tenDon,
+	tenKy,
+}: {
+	tenDon: string;
+	tenKy: string;
+}) {
+	const m = okrVoKhuMessages(useLocale()).boOkr.rongBoPhan;
+	const ten = <span translate="no">{tenDon}</span>;
+	return (
+		<Empty data-rong-bo-phan="" data-trang-thai="ST-bcd-khoi-rong">
+			<EmptyHeader>
+				<EmptyMedia variant="icon">
+					<Icon icon={Target} />
+				</EmptyMedia>
+				<EmptyTitle>
+					{ghep(m.tieuDe("{bo}", "{chuKy}"), {
+						bo: ten,
+						chuKy: <span translate="no">{tenKy}</span>,
+					})}
+				</EmptyTitle>
+				<EmptyDescription>
+					{ghep(m.chiSangMenu("{bo}"), { bo: ten })}
+				</EmptyDescription>
+			</EmptyHeader>
 		</Empty>
 	);
 }

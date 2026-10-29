@@ -19,7 +19,6 @@ import { KhoiKrCuaToi } from "../khoi-kr-cua-toi";
 import type { CayDuLieu } from "../kieu";
 import type { LocOkrGiaTri } from "../loc-okr";
 import { BoKhoaUrl, NganTaoMucTieu } from "../ngan-okr-url";
-import { NhomDaBo } from "../nhom-da-bo";
 import {
 	type CachXem,
 	type DonChonOkr,
@@ -30,19 +29,20 @@ import {
 import { useChuyenLinkCuSoan } from "../soan/chuyen-link-cu";
 import { soanBoDuoc, useMoSoanBo } from "../soan-bo/mo-soan-bo";
 import { useTenGoc } from "../ten-goc";
-import { ChuaChuKy, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
-import { BangDonVi } from "./bang";
-import { conTrucTiep, duongCha } from "./bang-don-vi";
-import { ChanBang } from "./chan-bang";
-import { ChonDonVi } from "./chon-don-vi";
-import { DonViCon } from "./don-vi-con";
-import { giuKhiChiDoiLoc } from "./giu-bang";
 import {
-	HangCongCuDonVi,
-	KhungDangTaiDonVi,
-	KhungHangCongCu,
-} from "./hang-cong-cu";
+	ChuaChuKy,
+	DonKhongThay,
+	Loi,
+	Rong,
+	RongBoPhan,
+} from "../trang-thai-okr";
+import { BangDonVi } from "./bang";
+import { duongCha } from "./bang-don-vi";
+import { ChanBang } from "./chan-bang";
+import { giuKhiChiDoiLoc } from "./giu-bang";
+import { KhungDangTaiDonVi } from "./hang-cong-cu";
 import { HangSoBo, HangSoBoDangTai } from "./hang-so-bo";
+import { NutDaBo } from "./nut-da-bo";
 import { TheConBo } from "./the-con";
 import { ViTriBo } from "./vi-tri-bo";
 import { ViecCuaBo } from "./viec-cua-bo";
@@ -93,21 +93,6 @@ function viTriNguoi(cay: CayDuLieu, id: string) {
 		...cay.chuaXep,
 	].find((x) => x.id === p?.primaryDepartmentId);
 	return { phongBan: pb?.name ?? null, quanLy: p?.manager?.name ?? null };
-}
-
-function KhungCachXem({
-	hang,
-	children,
-}: {
-	hang: ReactNode;
-	children: ReactNode;
-}) {
-	return (
-		<div className="flex flex-col gap-3">
-			<KhungHangCongCu>{hang}</KhungHangCongCu>
-			{children}
-		</div>
-	);
 }
 
 export function TheoDonVi() {
@@ -197,62 +182,47 @@ export function TheoDonVi() {
 	const kyDangXem = cycles.data.cycles.find((c) => c.id === currentId);
 	const tenKy = kyDangXem?.name ?? "";
 	const dv = giaiDon(don, cay.data, tenGoc);
-	const chonDon = (d: DonChonOkr) =>
+	const veGoc = () =>
 		void datUrl({
-			[SEARCH_PARAM.okr.don]: d,
+			[SEARCH_PARAM.okr.don]: GOC,
 		});
-	const hang = (
-		<HangCongCuDonVi
-			chon={
-				<ChonDonVi
-					cay={cay.data}
-					chonDon={chonDon}
-					dem={dem.data}
-					don={don}
-					tenGoc={tenGoc}
-				/>
-			}
-		/>
-	);
 
-	if (dv === null)
-		return coThe(
-			<KhungCachXem hang={hang}>
-				<DonKhongThay veGoc={() => chonDon(GOC)} />
-			</KhungCachXem>,
-		);
+	if (dv === null) return coThe(<DonKhongThay veGoc={veGoc} />);
 
-	const objectives = byUnit.data?.rows ?? [];
+	const dangLocTrangThai = loc.trangThai.length > 0;
+	const daBo = dangLocTrangThai ? [] : (byUnit.data?.daBo ?? []);
+	const xemDaBo = url[SEARCH_PARAM.okr.daBo] && daBo.length > 0;
+	const objectives = xemDaBo ? daBo : (byUnit.data?.rows ?? []);
 	const soKr = objectives.reduce((t, mt) => t + mt.keyResults.length, 0);
 	const khoa = `${currentId}:${khoaDon(don)}`;
+	const rong =
+		don.loai === "bp" ? (
+			<RongBoPhan tenDon={dv.ten} tenKy={tenKy} />
+		) : (
+			<Rong
+				chuaTruong={dv.coTruong === false}
+				quanTri={quanTri}
+				tenDon={dv.ten}
+				tenKy={tenKy}
+				soan={
+					quyenKhu.kieu === "xong" && soanBoDuoc(quyenKhu) ? (
+						<NutSoanBo q={quyenKhu} />
+					) : undefined
+				}
+			/>
+		);
 
 	let than: ReactNode;
 	if (xem === "viec") {
-		than = (
-			<KhungCachXem hang={hang}>
-				<ViecCuaBo cycleId={currentId} key={khoa} unit={don} />
-			</KhungCachXem>
-		);
+		than = <ViecCuaBo cycleId={currentId} key={khoa} unit={don} />;
 	} else if (xem === "cham") {
-		than = (
-			<KhungCachXem hang={hang}>
-				<ChamDiem cycleId={currentId} key={khoa} unit={don} />
-			</KhungCachXem>
-		);
+		than = <ChamDiem cycleId={currentId} key={khoa} unit={don} />;
 	} else if (xem === "hop-tuan") {
-		than = (
-			<KhungCachXem hang={hang}>
-				<HopTuan cycleId={currentId} key={khoa} unit={don} />
-			</KhungCachXem>
-		);
+		than = <HopTuan cycleId={currentId} key={khoa} unit={don} />;
 	} else if (byUnit.isError) {
-		than = (
-			<KhungCachXem hang={hang}>
-				<Loi thuLai={thuLai} />
-			</KhungCachXem>
-		);
+		than = <Loi thuLai={thuLai} />;
 	} else if (byUnit.isPending) {
-		than = <KhungDangTaiDonVi hang={hang} />;
+		than = <KhungDangTaiDonVi />;
 	} else {
 		than = (
 			<>
@@ -270,37 +240,25 @@ export function TheoDonVi() {
 					}
 					dem={byUnit.data?.facetCounts}
 					doiLoc={doiLoc}
-					hangCongCu={hang}
 					loc={loc}
-					rong={
-						<Rong
-							chuaTruong={dv.coTruong === false}
-							quanTri={quanTri}
-							tenDon={dv.ten}
-							tenKy={tenKy}
-							soan={
-								quyenKhu.kieu === "xong" && soanBoDuoc(quyenKhu) ? (
-									<NutSoanBo q={quyenKhu} />
-								) : undefined
-							}
-						/>
-					}
+					rong={rong}
 					rows={objectives}
 					tenNguoi={new Map(cay.data.people.map((p) => [p.id, p.name]))}
+					toggles={
+						daBo.length > 0 ? (
+							<NutDaBo
+								bat={xemDaBo}
+								doi={(bat) =>
+									void datUrl({ [SEARCH_PARAM.okr.daBo]: bat ? true : null })
+								}
+								n={daBo.length}
+							/>
+						) : null
+					}
 				/>
 				{don.loai === "nguoi" ? (
 					<KhoiKrCuaToi cycleId={currentId} userId={don.id} />
 				) : null}
-				<NhomDaBo
-					danhDauCuaToi={false}
-					ds={byUnit.data?.daBo ?? []}
-					hienDonVi={false}
-				/>
-				<DonViCon
-					con={conTrucTiep(cay.data, don)}
-					dem={dem.data}
-					ky={url[SEARCH_PARAM.okr.ky]}
-				/>
 			</>
 		);
 	}
@@ -308,7 +266,11 @@ export function TheoDonVi() {
 	than = (
 		<>
 			<div className="flex flex-col gap-3 pb-1">
-				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={dv.ten} />
+				<ViTriBo
+					ky={url[SEARCH_PARAM.okr.ky]}
+					menu={{ cay: cay.data, dem: dem.data, don, tenGoc, the: xem }}
+					tenBo={dv.ten}
+				/>
 				{theCon}
 			</div>
 			{xem === "danh-sach" ? (

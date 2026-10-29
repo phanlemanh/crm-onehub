@@ -127,7 +127,7 @@ const theoGiaTri = (ds: { value: string; count: number }[]) =>
 	Object.fromEntries(ds.map((d) => [d.value, d.count]));
 
 describe("danh-sach", () => {
-	test("danh-sach: bo phan gom phong ban con, loc o may chu, dem mat loc tru mat cua chinh no", async () => {
+	test("danh-sach: bo phan chi cua chinh no, loc o may chu, dem mat loc tru mat cua chinh no", async () => {
 		await caiChuongTrinh();
 		const quy = await kyDangChay("tco-ds");
 		const B = await bpMoi("tco-B");
@@ -195,36 +195,41 @@ describe("danh-sach", () => {
 				loc: { ...LOC_RONG, ...loc },
 			});
 		const bp = { loai: "bp", id: B };
+		const pb1 = { loai: "pb", id: P1 };
 		const tap = (r: DanhSachOutput) => new Set(r.rows.map((m) => m.id));
 
-		const tatCa = await hoi(bp);
-		const loc1 = await hoi(bp, { phuTrach: [k] });
+		const caBo = await hoi(bp);
+		const tatCa = await hoi(pb1);
+		const loc1 = await hoi(pb1, { phuTrach: [k] });
 		const ketQua = [
-			["bp gồm con", tap(tatCa)],
+			["bp chỉ của chính nó", tap(caBo)],
 			["người phụ trách k", tap(loc1)],
-			["loại tham vọng", tap(await hoi(bp, { loai: ["tham-vong"] }))],
-			["đã công bố", tap(await hoi(bp, { trangThai: ["cong-bo"] }))],
+			["loại tham vọng", tap(await hoi(pb1, { loai: ["tham-vong"] }))],
+			["đã công bố", tap(await hoi(pb1, { trangThai: ["cong-bo"] }))],
 			["phòng ban P3", tap(await hoi({ loai: "pb", id: P3 }))],
 			["trang một người k", tap(await hoi({ loai: "nguoi", id: k }))],
 			[
 				"k và cam kết",
-				tap(await hoi(bp, { phuTrach: [k], loai: ["cam-ket"] })),
+				tap(await hoi(pb1, { phuTrach: [k], loai: ["cam-ket"] })),
 			],
 			["bộ phận không có phòng ban", tap(await hoi({ loai: "bp", id: Crong }))],
 		];
 		expect(ketQua).toEqual([
-			["bp gồm con", new Set([B1, P1a, P1b])],
+			["bp chỉ của chính nó", new Set([B1])],
 			["người phụ trách k", new Set([P1a])],
 			["loại tham vọng", new Set([P1a])],
-			["đã công bố", new Set([B1, P1a])],
+			["đã công bố", new Set([P1a])],
 			["phòng ban P3", new Set([P3a])],
 			["trang một người k", new Set([P1a, P3a])],
 			["k và cam kết", new Set()],
 			["bộ phận không có phòng ban", new Set()],
 		]);
-		expect(tatCa.rows.some((m) => m.id === P3a)).toBe(false);
-		expect(tatCa.daBo.map((m) => m.id)).toEqual([P2a]);
-		expect(tatCa.total).toBe(3);
+		expect(caBo.rows.some((m) => m.id === P3a || m.id === P1a)).toBe(false);
+		expect(caBo.daBo).toEqual([]);
+		expect((await hoi({ loai: "pb", id: P2 })).daBo.map((m) => m.id)).toEqual([
+			P2a,
+		]);
+		expect(tatCa.total).toBe(2);
 		expect(loc1.rows.find((m) => m.id === P1a)?.krKhop).toEqual([krK]);
 
 		const nguoiDem = (r: DanhSachOutput) =>
@@ -235,13 +240,13 @@ describe("danh-sach", () => {
 			trangThai: theoGiaTri(r.facetCounts.trangThai),
 		});
 		expect(mat(tatCa)).toEqual({
-			phuTrach: { [b.nguoi]: 1, [p1.nguoi]: 2, [p2.nguoi]: 1, [k]: 1 },
-			loai: { "cam-ket": 3, "tham-vong": 1 },
-			trangThai: { "cong-bo": 2, nhap: 1, "da-bo": 1 },
+			phuTrach: { [p1.nguoi]: 2, [k]: 1 },
+			loai: { "cam-ket": 1, "tham-vong": 1 },
+			trangThai: { "cong-bo": 1, nhap: 1 },
 		});
 		expect({ "facet phuTrach phải trừ mặt của chính nó": mat(loc1) }).toEqual({
 			"facet phuTrach phải trừ mặt của chính nó": {
-				phuTrach: { [b.nguoi]: 1, [p1.nguoi]: 2, [p2.nguoi]: 1, [k]: 1 },
+				phuTrach: { [p1.nguoi]: 2, [k]: 1 },
 				loai: { "tham-vong": 1 },
 				trangThai: { "cong-bo": 1 },
 			},
@@ -249,17 +254,18 @@ describe("danh-sach", () => {
 
 		await capNhat(k, krK, truocNgay(7), "cao");
 		await capNhat(k, krK, new Date(), "thap");
-		const thap = await hoi(bp, { tuTin: ["thap"] });
+		const thap = await hoi(pb1, { tuTin: ["thap"] });
 		const tuTinTheoMuc = [
 			["tự tin thấp", tap(thap)],
-			["tự tin cao", tap(await hoi(bp, { tuTin: ["cao"] }))],
+			["tự tin cao", tap(await hoi(pb1, { tuTin: ["cao"] }))],
 		];
 		expect(tuTinTheoMuc).toEqual([
 			["tự tin thấp", new Set([P1a])],
 			["tự tin cao", new Set()],
 		]);
 		expect(thap.rows.find((m) => m.id === P1a)?.krKhop).toEqual([krK]);
-		expect(theoGiaTri((await hoi(bp)).facetCounts.tuTin)).toEqual({ thap: 1 });
+		expect(theoGiaTri((await hoi(pb1)).facetCounts.tuTin)).toEqual({ thap: 1 });
+		expect(theoGiaTri((await hoi(bp)).facetCounts.tuTin)).toEqual({});
 	});
 });
 

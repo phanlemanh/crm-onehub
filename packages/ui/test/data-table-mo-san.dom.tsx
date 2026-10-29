@@ -258,10 +258,14 @@ const CO_EXPANDABLE = [
 	"app/(app)/[slug]/okr/khoi-muc-tieu.tsx",
 	"app/(app)/[slug]/okr/theo-don-vi/bang.tsx",
 	"app/proto/_modules/bo-okr-co-so/index.tsx",
+	"app/proto/_modules/bo-okr-chi-don-vi/index.tsx",
 	"app/proto/_modules/trang-don-vi-mot-bang/index.tsx",
 ];
 
-const CO_MO_SAN = ["app/(app)/[slug]/okr/theo-don-vi/bang.tsx"];
+const CO_MO_SAN = [
+	"app/(app)/[slug]/okr/theo-don-vi/bang.tsx",
+	"app/proto/_modules/bo-okr-chi-don-vi/index.tsx",
+];
 
 function quetTsx(thu: string): string[] {
 	return readdirSync(thu).flatMap((ten) => {

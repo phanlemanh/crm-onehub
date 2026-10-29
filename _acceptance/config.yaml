@@ -7,6 +7,7 @@ feature_loop:
   suite_keys: [executors.test.suite_api, executors.test.suite_app_ui, executors.test.suite_agent_db, executors.test.suite_okr_goi, executors.script.lint_khong_cache, executors.script.lint_slop, executors.script.build_khong_cache]
   repin_parallel_suites: true
   do_san_tren_nen: true
+  ngoai_n_tu_dinh_tuyen: true
   repin_retry: 1
   repin_budget_min: 80
   repin_cost_cmd: node scripts/lan-do/chi-phi-gateway.mjs
@@ -2388,7 +2389,16 @@ executors:
     vk10_dom_ngan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-ngan
     vk10_dom_quyen: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-quyen
     vk10_dom_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-tai
+    bcd_bon_the: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-bon-the"'
+    bcd_so_rieng: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-so-rieng"'
+    bcd_toan_canh: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-toan-canh"'
+    bcd_gon: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-gon
+    bcd_menu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-menu
+    bcd_da_bo: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-da-bo
+    bcd_rong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-rong
+    bcd_hop_tuan_goc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-hop-tuan-goc
   script:
+    bcd_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-chi-don-vi/rang/man-bo-okr-chi-don-vi.mjs"'
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs
     bkr_khong_doi_hinh: bun _acceptance/bam-kr-mo-chi-tiet-kr/rang/khong-doi-hinh.mjs

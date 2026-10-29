@@ -1,6 +1,6 @@
 import { type TinhTrang, tinhTrang } from "@crm/validation/okr-muc-tieu";
 import type { CayDuLieu, MucTieu } from "../kieu";
-import { type DonChonOkr, khoaDon } from "../okr-search-params";
+import type { DonChonOkr } from "../okr-search-params";
 import { nhipCua } from "../tien-do-kr";
 
 export const LOC_NHANH = ["can-ban", "chua-gop"] as const;
@@ -74,99 +74,7 @@ export function sapXep(
 		.map((x) => x.mt);
 }
 
-export function gapDau(s: string): string {
-	return s
-		.normalize("NFD")
-		.replace(/\p{M}/gu, "")
-		.toLowerCase()
-		.replace(/đ/g, "d");
-}
-
-export type LuaChonDonVi = {
-	khoa: string;
-	ten: string;
-	goiY: string;
-	tuKhoa: string[];
-};
-
-type ChuLuaChon = {
-	caCongTy: string;
-	thuoc: (duong: string) => string;
-	demMucTieu: (n: number) => string;
-};
-
 const NOI_DUONG = " › ";
-
-function voiDem(
-	goiY: string,
-	khoa: string,
-	dem: Record<string, number> | undefined,
-	m: ChuLuaChon,
-): string {
-	return dem ? `${goiY} · ${m.demMucTieu(dem[khoa] ?? 0)}` : goiY;
-}
-
-export function luaChonDonVi(
-	cay: CayDuLieu,
-	tenGoc: string,
-	dem: Record<string, number> | undefined,
-	nguoi: { id: string; ten: string } | null,
-	m: ChuLuaChon,
-): LuaChonDonVi[] {
-	const goc: LuaChonDonVi = {
-		khoa: "goc",
-		ten: tenGoc,
-		goiY: voiDem(m.caCongTy, "goc", dem, m),
-		tuKhoa: [],
-	};
-	const theoBoPhan = cay.divisions.flatMap((bp) => [
-		{
-			khoa: `bp:${bp.id}`,
-			ten: bp.name,
-			goiY: voiDem(m.thuoc(tenGoc), `bp:${bp.id}`, dem, m),
-			tuKhoa: [],
-		},
-		...bp.departments.map((pb) => ({
-			khoa: `pb:${pb.id}`,
-			ten: pb.name,
-			goiY: voiDem(m.thuoc(bp.name), `pb:${pb.id}`, dem, m),
-			tuKhoa: [bp.name],
-		})),
-	]);
-	const chuaXep = cay.chuaXep.map((pb) => ({
-		khoa: `pb:${pb.id}`,
-		ten: pb.name,
-		goiY: voiDem(m.thuoc(tenGoc), `pb:${pb.id}`, dem, m),
-		tuKhoa: [],
-	}));
-	const conNguoi = nguoi ? [luaChonNguoi(cay, tenGoc, nguoi, m)] : [];
-	return [...conNguoi, goc, ...theoBoPhan, ...chuaXep];
-}
-
-function luaChonNguoi(
-	cay: CayDuLieu,
-	tenGoc: string,
-	nguoi: { id: string; ten: string },
-	m: ChuLuaChon,
-): LuaChonDonVi {
-	const pbId = cay.people.find((p) => p.id === nguoi.id)?.primaryDepartmentId;
-	const pb = [
-		...cay.divisions.flatMap((bp) => bp.departments),
-		...cay.chuaXep,
-	].find((x) => x.id === pbId);
-	return {
-		khoa: `nguoi:${nguoi.id}`,
-		ten: nguoi.ten,
-		goiY: m.thuoc(pb?.name ?? tenGoc),
-		tuKhoa: pb ? [pb.name] : [],
-	};
-}
-
-export function khopTim(lc: LuaChonDonVi, chuoi: string): boolean {
-	const q = gapDau(chuoi.trim());
-	if (q === "") return true;
-	return [lc.ten, ...lc.tuKhoa].some((t) => gapDau(t).includes(q));
-}
 
 export function duongCha(
 	cay: CayDuLieu,
@@ -179,33 +87,4 @@ export function duongCha(
 		x.departments.some((pb) => pb.id === don.id),
 	);
 	return bp ? [tenGoc, bp.name].join(NOI_DUONG) : tenGoc;
-}
-
-export type DonViCon = { khoa: string; ten: string; coTruong: boolean };
-
-export function conTrucTiep(cay: CayDuLieu, don: DonChonOkr): DonViCon[] {
-	const thanh = (
-		loai: "bp" | "pb",
-		x: { id: string; name: string; head: { name: string } | null },
-	): DonViCon => ({
-		khoa: khoaDon({ loai, id: x.id }),
-		ten: x.name,
-		coTruong: x.head !== null,
-	});
-	switch (don.loai) {
-		case "goc":
-			return [
-				...cay.divisions.map((bp) => thanh("bp", bp)),
-				...cay.chuaXep.map((pb) => thanh("pb", pb)),
-			];
-		case "bp":
-			return (
-				cay.divisions
-					.find((bp) => bp.id === don.id)
-					?.departments.map((pb) => thanh("pb", pb)) ?? []
-			);
-		case "pb":
-		case "nguoi":
-			return [];
-	}
 }

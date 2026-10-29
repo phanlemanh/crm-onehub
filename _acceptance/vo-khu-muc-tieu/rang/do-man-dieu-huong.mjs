@@ -174,12 +174,15 @@ function soTruyVan(url, mong) {
 
 async function dauHopTuan(n, t) {
 	const r = await t.trang.evaluate(() => {
-		const hang = document.querySelector("[data-hang-cong-cu-don-vi]");
+		const noi = [
+			document.querySelector("[data-hang-cong-cu-don-vi]"),
+			document.querySelector("[data-vi-tri-bo]"),
+		];
 		return {
 			bat: [
 				...document.querySelectorAll("[data-the-con-bo] [aria-current='page']"),
 			].map((e) => e.textContent.trim()),
-			chu: hang?.innerText ?? "",
+			chu: noi.map((e) => e?.innerText ?? "").join("\n"),
 		};
 	});
 	const coDon = r.chu.includes(n.donVi.name);

@@ -68,8 +68,12 @@ const VET = {
 	},
 	E20: {
 		tep: `${OKR_MAN}/theo-don-vi/theo-don-vi.tsx`,
-		mo: "ban sao trang Theo don vi dem dong gap bang rows thay vi daBo",
-		cam: (s) => s.replace(/(<NhomDaBo[^>]*?)ds=\{daBo\}/s, "$1ds={objectives}"),
+		mo: "ban sao trang Theo don vi dem nut Da bo bang objectives thay vi daBo",
+		cam: (s) =>
+			s.replace(
+				/(<NutDaBo[\s\S]*?)n=\{daBo\.length\}/s,
+				"$1n={objectives.length}",
+			),
 		ghim: /so trong dong gap \d+ khac so muc tieu da bo doc DB \d+/,
 	},
 	E21: {
@@ -560,17 +564,21 @@ async function chup(trang, ten) {
 const anhDanhSach = (t) =>
 	t.evaluate(() => {
 		const hang = window.__tim("[data-hang-muc-tieu]");
-		const nhom = window.__tim("[data-nhom-da-bo]")[0] ?? null;
-		const nut = nhom?.querySelector("button") ?? null;
+		const nutBat = window.__tim("[data-nut-da-bo]")[0] ?? null;
+		const nhom = nutBat ? null : (window.__tim("[data-nhom-da-bo]")[0] ?? null);
+		const nut = nutBat ?? nhom?.querySelector("button") ?? null;
+		const bat = nutBat?.getAttribute("aria-pressed") === "true";
+		const trongDaBo = (h) =>
+			nutBat ? bat : h.closest("[data-nhom-da-bo]") !== null;
 		return {
 			chinh: hang
-				.filter((h) => h.closest("[data-nhom-da-bo]") === null)
+				.filter((h) => !trongDaBo(h))
 				.map((h) => ({
 					id: h.getAttribute("data-hang-muc-tieu"),
 					daBo: h.hasAttribute("data-da-bo"),
 				})),
 			daBo: hang
-				.filter((h) => h.closest("[data-nhom-da-bo]") !== null)
+				.filter((h) => trongDaBo(h))
 				.map((h) => ({
 					id: h.getAttribute("data-hang-muc-tieu"),
 					daBo: h.hasAttribute("data-da-bo"),
@@ -578,7 +586,8 @@ const anhDanhSach = (t) =>
 					chu: h.innerText,
 				})),
 			chuNhom: nut?.innerText.replace(/\s+/g, " ").trim() ?? null,
-			moNhom: nut?.getAttribute("aria-expanded") ?? null,
+			moNhom:
+				nut?.getAttribute(nutBat ? "aria-pressed" : "aria-expanded") ?? null,
 		};
 	});
 
@@ -604,7 +613,7 @@ const duongDonVi = () => `/okr/theo-don-vi?donOkr=pb:${K.P}&kyOkr=${K.quy}`;
 
 async function buocDanhSach() {
 	const t = await moTrang(cookie.truong, DO.rong, duongDonVi());
-	await thayNgay(t, () => window.__tim("[data-nhom-da-bo]").length > 0);
+	await thayNgay(t, () => window.__tim("[data-nut-da-bo]").length > 0);
 	const a = await anhDanhSach(t);
 	const dbBo = await daBoCuaDonVi();
 	kiem(
@@ -629,10 +638,12 @@ async function buocDanhSach() {
 		dauThe.includes(M.demDonVi(2, 2)),
 	);
 	await chup(t, "E12-danh-sach");
-	await bam(t, "[data-nhom-da-bo] button");
+	await bam(t, "[data-nut-da-bo]");
 	await thayNgay(
 		t,
-		() => window.__tim("[data-nhom-da-bo] [data-hang-muc-tieu]").length === 2,
+		() =>
+			window.__tim("[data-nut-da-bo][aria-pressed='true']").length > 0 &&
+			window.__tim("[data-hang-muc-tieu]").length === 2,
 	);
 	const mo = await anhDanhSach(t);
 	kiem(
@@ -651,10 +662,19 @@ async function buocDanhSach() {
 
 async function moNgan(t, mt) {
 	await bam(t, `[data-mo-muc-tieu='${mt}']`);
-	return thayNgay(
+	const coTab = await thayNgay(
 		t,
 		() => window.__tim("[data-okr-sheet] [role='tab']").length > 0,
 	);
+	const yen = await thayNgay(t, () => {
+		const khung = document
+			.querySelector("[data-okr-sheet] [role='tab']")
+			?.closest("[role='dialog']");
+		return (
+			khung?.getAnimations().every((a) => a.playState !== "running") ?? false
+		);
+	});
+	return coTab && yen;
 }
 
 async function mucMenu(t) {
@@ -733,8 +753,8 @@ async function buocXoa() {
 
 async function buocDungLai() {
 	const t = await moTrang(cookie.truong, DO.rong, duongDonVi());
-	await thayNgay(t, () => window.__tim("[data-nhom-da-bo]").length > 0);
-	await bam(t, "[data-nhom-da-bo] button");
+	await thayNgay(t, () => window.__tim("[data-nut-da-bo]").length > 0);
+	await bam(t, "[data-nut-da-bo]");
 	await thayNgay(
 		t,
 		(m) => window.__tim(`[data-mo-muc-tieu='${m}']`).length > 0,
@@ -781,7 +801,7 @@ async function buocDungLai() {
 	await t
 		.waitForNetworkIdle({ idleTime: 500, timeout: DO.choMs })
 		.catch(() => null);
-	await thayNgay(t, () => window.__tim("[data-nhom-da-bo]").length > 0);
+	await thayNgay(t, () => window.__tim("[data-nut-da-bo]").length > 0);
 	const a = await anhDanhSach(t);
 	const dbBo = await daBoCuaDonVi();
 	kiem(
@@ -801,12 +821,14 @@ async function buocDungLai() {
 
 async function buocHep() {
 	const t = await moTrang(cookie.truong, DO.hep, duongDonVi());
-	await thayNgay(t, () => window.__tim("[data-nhom-da-bo]").length > 0);
+	await thayNgay(t, () => window.__tim("[data-nut-da-bo]").length > 0);
 	await chup(t, "E12-danh-sach-390");
-	await bam(t, "[data-nhom-da-bo] button");
+	await bam(t, "[data-nut-da-bo]");
 	await thayNgay(
 		t,
-		() => window.__tim("[data-nhom-da-bo] [data-hang-muc-tieu]").length > 0,
+		() =>
+			window.__tim("[data-nut-da-bo][aria-pressed='true']").length > 0 &&
+			window.__tim("[data-hang-muc-tieu]").length > 0,
 	);
 	await chup(t, "E12-da-bo-mo-390");
 	await t.close();
