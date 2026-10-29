@@ -48,6 +48,21 @@ const vi = {
 			moTa: "Máy chủ không trả danh sách. Thử lại sau giây lát.",
 		},
 		viTri: "Bộ OKR",
+		menu: {
+			thuoc: "Thuộc",
+			cungCap: "Cùng cấp",
+			trucThuoc: "Trực thuộc",
+			doiBo: (ten: string) => `${ten} — đổi sang bộ khác`,
+			demMucTieu: (n: number) => `${n} mục tiêu`,
+			chuaCoRieng: "chưa có mục tiêu riêng",
+		},
+		rongBoPhan: {
+			tieuDe: (bo: string, chuKy: string) =>
+				`${bo} chưa có mục tiêu riêng trong ${chuKy}`,
+			chiSangMenu: (bo: string) =>
+				`Mục tiêu của các phòng ban nằm ở bộ của từng phòng — bấm ${bo} trên dòng vị trí để sang.`,
+		},
+		daBo: (n: number) => `Đã bỏ (${n})`,
 		the: {
 			nhan: "Phần của bộ OKR",
 			"danh-sach": "OKR",
@@ -135,6 +150,21 @@ const en: OkrVoKhuMessages = {
 			moTa: "The server didn't return the list. Try again in a moment.",
 		},
 		viTri: "OKR sets",
+		menu: {
+			thuoc: "Belongs to",
+			cungCap: "Same level",
+			trucThuoc: "Under it",
+			doiBo: (ten: string) => `${ten} — switch to another set`,
+			demMucTieu: (n: number) => `${n} objective${n === 1 ? "" : "s"}`,
+			chuaCoRieng: "no objectives of its own",
+		},
+		rongBoPhan: {
+			tieuDe: (bo: string, chuKy: string) =>
+				`${bo} has no objectives of its own in ${chuKy}`,
+			chiSangMenu: (bo: string) =>
+				`Department objectives live in each department's set — click ${bo} in the breadcrumb to go there.`,
+		},
+		daBo: (n: number) => `Dropped (${n})`,
 		the: {
 			nhan: "Parts of the OKR set",
 			"danh-sach": "OKRs",

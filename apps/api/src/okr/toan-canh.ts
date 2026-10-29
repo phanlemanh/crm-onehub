@@ -83,6 +83,32 @@ export function dungHangSo(
 	};
 }
 
+const CAP_THEO_LEVEL = {
+	onehub: "goc",
+	"bo-phan": "bo-phan",
+	"phong-ban": "phong-ban",
+} as const satisfies Partial<Record<CapMucTieu, HangToanCanh["cap"]>>;
+
+export function soRiengTheoKhoa(
+	ds: MucTieuTinh[],
+	nhip: NhipKy,
+): HangToanCanh[] {
+	const theoKhoa = new Map<
+		string,
+		{ cap: HangToanCanh["cap"]; ds: MucTieuTinh[] }
+	>();
+	for (const m of ds) {
+		const k = khoaCuaMucTieu(m);
+		if (k === null || m.level === "ca-nhan") continue;
+		const nhom = theoKhoa.get(k);
+		theoKhoa.set(k, {
+			cap: CAP_THEO_LEVEL[m.level],
+			ds: [...(nhom?.ds ?? []), m],
+		});
+	}
+	return [...theoKhoa].map(([k, n]) => dungHangSo(k, "", n.cap, n.ds, nhip));
+}
+
 export function gopToanCanh(
 	cay: CayGon,
 	congBo: MucTieuTinh[],

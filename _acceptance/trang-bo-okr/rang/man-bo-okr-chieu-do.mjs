@@ -39,6 +39,13 @@ const VET = {
 		moi: "\tconst laDanhSach = false;",
 		ghim: /SAI AC-1: DANH SACH/,
 	},
+	"bo-so-gop": {
+		eval: "E2",
+		tep: "apps/api/src/okr/okr-xem.service.ts",
+		cu: "\t\t\tsoRieng: soRiengTheoKhoa(tinh.ds, { tuanKy: tinh.tuanKy, homNay }),",
+		moi: "\t\t\tsoRieng: gopToanCanh(cayGon(q), tinh.ds, tenGoc, { tuanKy: tinh.tuanKy, homNay }).hang,",
+		ghim: /SAI AC-1: DANH SACH SO: .* lech /,
+	},
 	"loc-khong-url": {
 		eval: "E4",
 		tep: TEP.danhSach,

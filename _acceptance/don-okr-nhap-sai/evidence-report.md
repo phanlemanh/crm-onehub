@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a34053a8285784720db15c2a9ae3c4c6b80f6202
+verified_commit: 417078650196346c9138d452dcf0e93577e17193
 human_signoff: Manh Phan 2026-10-07 — ký Cổng 2 trên verdict PASS 21/21 eval (S4 round 2, wf_f7ec3801-de5). Ngoài-1, 2, 3, 4 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -295,3 +295,7 @@ none — every multi-run eval is uniform
 
 Round 1: REJECT — hai lệnh suite (api, app và ui) đỏ vì ba hồi quy ở bài cũ theo danh sách tách nhóm đã bỏ; hai phát hiện trong hợp đồng (AC-12: chân REST của purge chưa ghim thông điệp; AC-15: canGuiDuyet chỉ được thấy là false từ máy chủ). Returned to implementation.
 Round 2: PASS — bài cũ sửa theo danh sách tách nhóm đã bỏ, ghim câu REST của purge, thêm ca máy chủ trả canGuiDuyet true, E18 đọc nhom-da-bo.tsx; các eval cũ không chạm paths được carry-forward từ round 1 (E8, E9, E10, E12, E13, E16, E17, E20, E21).
+
+### Re-pin lần 1 — 2026-10-28, do VK19 bo-okr-chi-don-vi: ghim cuối sau sửa thước V5-15 (Q1–Q6)
+run_id: repin-20261028T211742Z-84176
+sha: 417078650196346c9138d452dcf0e93577e17193 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E12, E18 (E18 không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

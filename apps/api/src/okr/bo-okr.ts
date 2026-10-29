@@ -26,7 +26,7 @@ export type DauVaoDanhSachBo = {
 	cay: CayGon;
 	tenGoc: string;
 	soMucTieu: Readonly<Record<string, number>>;
-	toanCanh: readonly HangToanCanh[];
+	soRieng: readonly HangToanCanh[];
 	dan: DanDonVi;
 	theoDoi: ReadonlySet<string>;
 };
@@ -37,7 +37,7 @@ type KhungHang = Pick<
 >;
 
 export function gopDanhSachBo(v: DauVaoDanhSachBo): DanhSachBoOutput {
-	const so = new Map(v.toanCanh.map((h) => [h.key, h]));
+	const so = new Map(v.soRieng.map((h) => [h.key, h]));
 	const hang = (k: KhungHang): HangBo => {
 		const tc = so.get(k.don);
 		return {

@@ -210,11 +210,11 @@ async function mongDoi(n, khoa, tc, dsBo) {
 	const b = dsBo.hang.find((x) => x.don === khoa);
 	if (!h) return null;
 	return {
-		tienDo: h.tienDo,
-		kyVong: h.kyVong,
-		soKr: h.soKr,
-		daCapNhat: h.daCapNhat,
-		thap: h.tuTin.thap,
+		tienDo: so.tienDo,
+		kyVong: so.kyVong,
+		soKr: so.soKr,
+		daCapNhat: so.daCapNhat,
+		thap: so.tuTin.thap,
 		bo: b ? { tienDo: b.tienDo, thap: b.tuTinThap } : null,
 	};
 }

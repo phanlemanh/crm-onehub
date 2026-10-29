@@ -30,10 +30,7 @@ const THUOC_THEO_VONG = {};
 const LA_THUOC = /^_acceptance\/|\/test\//;
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx)$/;
 const TEP_TRONG_LENH = /[\w@./()[\]-]+\.(?:tsx|ts|mjs|cjs|js)\b/g;
-const DOI_CHUNG_DUONG = [
-	"_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs",
-	"apps/app/test/okr-trang-don-vi.dom.tsx",
-];
+const DOI_CHUNG_DUONG = ["apps/app/test/okr-trang-don-vi.dom.tsx"];
 const TEP_TAY = {
 	"apps/app/test/okr-trang-don-vi.dom.tsx": "trang-don-vi-mot-bang",
 	"apps/app/test/okr-theo-don-vi.dom.tsx": "ux-lai-thu-8c-okr",
@@ -398,6 +395,36 @@ function khoiDiff(diff) {
 const chiDoiChuoi = (k) =>
 	chuanHoa(k.bo.join("\n")) === chuanHoa(k.them.join("\n"));
 
+const DAN_CHAM_TEP = /cham-tep V\d+-\d+/;
+
+function coDongFixChamTep(cwd, slug, tep) {
+	const L = join(cwd, "_acceptance", slug, "decisions.jsonl");
+	if (!existsSync(L)) return false;
+	return readFileSync(L, "utf8")
+		.split("\n")
+		.filter(Boolean)
+		.some((d) => {
+			try {
+				const o = JSON.parse(d);
+				return (
+					o.type === "fix" &&
+					String(o.decision).includes(tep) &&
+					DAN_CHAM_TEP.test(
+						`${o.decided_by ?? ""} ${o.why ?? ""} ${o.decision}`,
+					)
+				);
+			} catch {
+				return false;
+			}
+		});
+}
+
+function coTaiCoSo(cwd, coSo, tep) {
+	return (
+		spawnSync("git", ["cat-file", "-e", `${coSo}:${tep}`], { cwd }).status === 0
+	);
+}
+
 function soatDoiThuoc(cwd) {
 	const coSo = git(["merge-base", "HEAD", NHANH_GOC], cwd);
 	const sai = [];
@@ -409,10 +436,20 @@ function soatDoiThuoc(cwd) {
 		)
 			sai.push(`SAI AC-9 quet: thieu ${t}`);
 	const thuocDoi = [];
+	const chamTep = new Set();
 	for (const [tep, cacHoSo] of lop.tepCua) {
 		if (!LA_THUOC.test(tep)) continue;
 		const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", tep], cwd);
 		if (diff === "") continue;
+		if (!coTaiCoSo(cwd, coSo, tep)) continue;
+		const slugChamTep = cacHoSo.find((h) => coDongFixChamTep(cwd, h, tep));
+		if (slugChamTep) {
+			chamTep.add(tep);
+			console.log(
+				`DOI THUOC ${tep}: so ${slugChamTep} co dong fix dan cham-tep da duyet`,
+			);
+			continue;
+		}
 		const tatCa = khoiDiff(diff);
 		if (
 			cacHoSo.length >= NGUONG_TEP_CHUNG &&
@@ -443,7 +480,19 @@ function soatDoiThuoc(cwd) {
 			`DOI THUOC ${tep}: ${tatCa.length} khoi dung ban duyet (${duyet.lop}), so ${slug} co dong fix`,
 		);
 	}
-	sai.push(...soTay(thuocDoi, Object.keys(TEP_TAY)));
+	const doiTrongVong = new Set(
+		git(["diff", "--name-only", `${coSo}...HEAD`], cwd)
+			.split("\n")
+			.filter(Boolean),
+	);
+	sai.push(
+		...soTay(
+			thuocDoi,
+			Object.keys(TEP_TAY).filter(
+				(t) => doiTrongVong.has(t) && !chamTep.has(t),
+			),
+		),
+	);
 	return sai;
 }
 
@@ -518,6 +567,17 @@ function chieuDo(kieu) {
 		);
 		writeFileSync(duong, doi.moi);
 		git(["add", "--", tep], sao);
+		for (const slug of readdirSync(join(sao, "_acceptance"))) {
+			const L = join(sao, "_acceptance", slug, "decisions.jsonl");
+			if (!existsSync(L)) continue;
+			const dong = readFileSync(L, "utf8").split("\n");
+			const giu = dong.filter(
+				(d) => !(d.includes(tep) && DAN_CHAM_TEP.test(d)),
+			);
+			if (giu.length === dong.length) continue;
+			writeFileSync(L, giu.join("\n"));
+			git(["add", "--", L], sao);
+		}
 		git(
 			[
 				"-c",

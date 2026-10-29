@@ -324,31 +324,30 @@ mock.module("next/link", () => ({
 	}: ComponentProps<"a"> & { children?: ReactNode }) => h("a", props, children),
 }));
 
-const {
-	canBan,
-	chuaGop,
-	conTrucTiep,
-	demLocNhanh,
-	gapDau,
-	khopTim,
-	locNhanh,
-	luaChonDonVi,
-	sapXep,
-	tinhTrangMucTieu,
-} = await import("@/app/(app)/[slug]/okr/theo-don-vi/bang-don-vi");
+const { canBan, chuaGop, demLocNhanh, locNhanh, sapXep, tinhTrangMucTieu } =
+	await import("@/app/(app)/[slug]/okr/theo-don-vi/bang-don-vi");
 const { khoaDon } = await import("@/app/(app)/[slug]/okr/okr-search-params");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
-const { DataTable } = await import("@crm/ui/components/data-table");
 const { okrMessages } = await import("@/lib/messages/okr");
 const { messages: uiMessages } = await import("@crm/ui/lib/messages");
-const { ChonDonVi } = await import(
-	"@/app/(app)/[slug]/okr/theo-don-vi/chon-don-vi"
-);
+const { lanCan } = await import("@/app/(app)/[slug]/okr/theo-don-vi/lan-can");
+
+async function docTrucThuoc(o: HTMLElement): Promise<Element[]> {
+	const nut = o.querySelector("[data-menu-vi-tri]");
+	if (!nut) throw new Error("dvb-chan-bang: khong co menu dong vi tri");
+	await bamCon(nut);
+	await cho(
+		() => document.querySelector("[data-menu-don]") !== null,
+		"menu dong vi tri mo",
+	);
+	return [
+		...document.querySelectorAll(
+			`[data-nhom-menu="${menuVi.trucThuoc}"] [data-menu-don]`,
+		),
+	];
+}
 const { TheConBo } = await import("@/app/(app)/[slug]/okr/theo-don-vi/the-con");
-const { HangCongCuDonVi, KhungHangCongCu, LOP_HANG_CONG_CU } = await import(
-	"@/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu"
-);
 
 const { TheoDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
@@ -363,6 +362,7 @@ const b = m.donViBang;
 const thuoc = (duong: string) => `${b.thuoc} ${duong}`;
 const mtc = okrToanCanhMessages("vi");
 const theBo = okrVoKhuMessages("vi").boOkr.the;
+const menuVi = okrVoKhuMessages("vi").boOkr.menu;
 
 type San = { o: HTMLElement; root: Root; url: () => URLSearchParams };
 let dangMo: San[] = [];
@@ -436,38 +436,6 @@ async function bamCon(el: Element) {
 				}),
 			);
 		}
-	});
-}
-
-async function moOChon(o: ParentNode) {
-	const nut = o.querySelector("[data-chon-don-vi]");
-	if (!nut) throw new Error("dvb-chon-don-vi: khong co [data-chon-don-vi]");
-	await bamCon(nut);
-	await cho(
-		() => document.querySelector("[cmdk-input]") !== null,
-		"o chon don vi mo",
-	);
-}
-
-async function goTim(chuoi: string) {
-	const o = document.querySelector<HTMLInputElement>("[cmdk-input]");
-	if (!o) throw new Error("dvb-chon-don-vi: o chon chua mo");
-	await act(async () => {
-		const dat = Object.getOwnPropertyDescriptor(
-			window.HTMLInputElement.prototype,
-			"value",
-		)?.set;
-		dat?.call(o, chuoi);
-		o.dispatchEvent(new Event("input", { bubbles: true }));
-	});
-}
-
-type LuaChonHien = { ten: string; goiY: string };
-
-function luaChonDangHien(): LuaChonHien[] {
-	return [...document.querySelectorAll('[role="option"]')].map((x) => {
-		const [ten, goiY] = [...x.querySelectorAll("span")];
-		return { ten: ten?.textContent ?? "", goiY: goiY?.textContent ?? "" };
 	});
 }
 
@@ -659,158 +627,6 @@ describe("dvb-sap-xep", () => {
 	});
 });
 
-const CHU_LUA_CHON = {
-	caCongTy: "cả công ty",
-	thuoc: (duong: string) => `Thuộc ${duong}`,
-	demMucTieu: (n: number) => (n === 0 ? "chưa đặt" : `${n} mục tiêu`),
-};
-
-describe("dvb-chon-don-vi", () => {
-	test("gap dau: hoa thuong, dau, đ", () => {
-		expect(
-			["Phòng Kế toán", "ĐỊCH VỤ", "Dịch vụ khách hàng"].map(gapDau),
-		).toEqual(["phong ke toan", "dich vu", "dich vu khach hang"]);
-	});
-	test("ma tran tim tren ten co dau (phan thuan)", () => {
-		const ds = luaChonDonVi(cayMau(), "OneHub", undefined, null, CHU_LUA_CHON);
-		const tim = (q: string) =>
-			ds.filter((lc) => khopTim(lc, q)).map((lc) => lc.ten);
-		const MA_TRAN = [
-			["phong ke toan", [CAY.P1.name]],
-			["dich", [CAY.P2.name]],
-			["KINH", [CAY.P3.name]],
-			[gapDau(CAY.B1.name), [CAY.B1.name, CAY.P1.name, CAY.P2.name]],
-			["zzz", []],
-		] as const;
-		for (const [q, mong] of MA_TRAN) {
-			const nhan = tim(q);
-			phai(
-				nhan.join("|") === mong.join("|"),
-				`dvb-chon-don-vi: "${q}" ra ${nhan.length === 0 ? "rong" : `{${nhan.join(", ")}}`}, mong {${mong.join(", ")}}`,
-			);
-		}
-		expect(tim("").length).toBe(8);
-	});
-
-	test("o chon: ma tran 8 lua chon — nhan, goi y Thuộc, so muc tieu tu countByUnit", async () => {
-		const cay = cayMau();
-		const so = demGiaLap(cay);
-		const s = await ve(
-			<ChonDonVi
-				cay={cay}
-				chonDon={() => {}}
-				dem={so}
-				don={{ loai: "goc" }}
-				tenGoc="OneHub"
-			/>,
-		);
-		await moOChon(s.o);
-		const bpCua = new Map(
-			cay.divisions.flatMap((bp) => bp.departments.map((pb) => [pb.id, bp])),
-		);
-		const tenCua = new Map([
-			["goc", "OneHub"],
-			...cay.divisions.map((x) => [`bp:${x.id}`, x.name] as const),
-			...[...cay.divisions.flatMap((x) => x.departments), ...cay.chuaXep].map(
-				(x) => [`pb:${x.id}`, x.name] as const,
-			),
-		]);
-		const thuocCua = (k: string) => {
-			if (k === "goc") return b.caCongTy;
-			const bp = bpCua.get(k.split(":")[1] ?? "");
-			return thuoc(k.startsWith("pb:") && bp ? bp.name : "OneHub");
-		};
-		const mong = khoaCuaCay(cay).map((k) => ({
-			ten: tenCua.get(k) ?? "?",
-			goiY: `${thuocCua(k)} · ${m.demMucTieu(so[k] ?? 0)}`,
-		}));
-		const nhan = luaChonDangHien();
-		phai(nhan.length === 8, `dvb-chon-don-vi: ${nhan.length} lua chon, mong 8`);
-		for (const [i, x] of mong.entries()) {
-			phai(
-				nhan[i]?.ten === x.ten && nhan[i]?.goiY === x.goiY,
-				`dvb-chon-don-vi: lua chon ${i} «${nhan[i]?.ten} / ${nhan[i]?.goiY}», mong «${x.ten} / ${x.goiY}»`,
-			);
-		}
-	});
-
-	test("o chon: ma tran 6 chuoi tim tren ten co dau", async () => {
-		const cay = cayMau();
-		const s = await ve(
-			<ChonDonVi
-				cay={cay}
-				chonDon={() => {}}
-				dem={demGiaLap(cay)}
-				don={{ loai: "goc" }}
-				tenGoc="OneHub"
-			/>,
-		);
-		await moOChon(s.o);
-		const MA_TRAN = [
-			["phong ke toan", [CAY.P1.name]],
-			["dich", [CAY.P2.name]],
-			["KINH", [CAY.P3.name]],
-			[gapDau(CAY.B1.name), [CAY.B1.name, CAY.P1.name, CAY.P2.name]],
-			["zzz", []],
-		] as const;
-		for (const [q, mong] of MA_TRAN) {
-			await goTim(q);
-			const nhan = luaChonDangHien().map((x) => x.ten);
-			phai(
-				nhan.join("|") === mong.join("|"),
-				`dvb-chon-don-vi: "${q}" ra ${nhan.length === 0 ? "rong" : `{${nhan.join(", ")}}`}, mong {${mong.join(", ")}}`,
-			);
-			if (mong.length === 0)
-				phai(
-					document.body.textContent?.includes(b.khongKhopDonVi) === true,
-					`dvb-chon-don-vi: "${q}" khong hien «${b.khongKhopDonVi}»`,
-				);
-		}
-		await goTim("");
-		expect(luaChonDangHien().length).toBe(8);
-	});
-
-	test("o chon: chon P2 goi chonDon {pb, P2}; don nguoi:U1 hien ten U1", async () => {
-		const cay = cayMau();
-		const chon: string[] = [];
-		const s = await ve(
-			<ChonDonVi
-				cay={cay}
-				chonDon={(d) => chon.push(khoaDon(d))}
-				dem={undefined}
-				don={{ loai: "goc" }}
-				tenGoc="OneHub"
-			/>,
-		);
-		await moOChon(s.o);
-		const p2 = [...document.querySelectorAll('[role="option"]')].find((x) =>
-			x.textContent?.startsWith(CAY.P2.name),
-		);
-		if (!p2) throw new Error("dvb-chon-don-vi: khong thay lua chon P2");
-		await act(async () => {
-			(p2 as HTMLElement).click();
-		});
-		phai(
-			chon.join(",") === "pb:P2",
-			`dvb-chon-don-vi: chon P2 goi ${chon.join(",") || "khong gi"}, mong pb:P2`,
-		);
-		const s2 = await ve(
-			<ChonDonVi
-				cay={cay}
-				chonDon={() => {}}
-				dem={undefined}
-				don={{ loai: "nguoi", id: LAN.id }}
-				tenGoc="OneHub"
-			/>,
-		);
-		const nut = s2.o.querySelector("[data-chon-don-vi]");
-		phai(
-			nut?.textContent?.includes(LAN.name) === true,
-			`dvb-chon-don-vi: don nguoi:U1 hien «${nut?.textContent}», mong ${LAN.name}`,
-		);
-	});
-});
-
 const MO_TA_CON = new Map([
 	["goc", "chi bo phan va chua xep"],
 	["bp", "chi phong ban cua no"],
@@ -829,7 +645,9 @@ describe("dvb-chan-bang", () => {
 		] as const;
 		for (const [don, mong] of MA_TRAN) {
 			const unit = donVaoChon(don);
-			const nhan = conTrucTiep(cay, unit).map((c) => c.khoa);
+			const nhan = (lanCan(cay, unit, "OneHub")?.trucThuoc ?? []).map(
+				(c) => c.khoa,
+			);
 			const sai = nhan.find((k) => !mong.some((x) => x === k));
 			const thieu = mong.find((k) => !nhan.includes(k));
 			phai(
@@ -848,72 +666,7 @@ function donVaoChon(k: string): DonChonOkr {
 }
 
 describe("dvb-hang-cong-cu", () => {
-	const TRUY_VAN = {
-		sort: "",
-		dir: "asc" as const,
-		page: 1,
-		pageSize: 50,
-		tab: "all",
-		filters: {},
-		toggleSort: () => {},
-		setSort: () => {},
-		setDir: () => {},
-		setPage: async () => {},
-		setTab: () => {},
-		setFilter: () => {},
-	};
-	const hang = () => (
-		<HangCongCuDonVi
-			chon={
-				<ChonDonVi
-					cay={cayMau()}
-					chonDon={() => {}}
-					dem={undefined}
-					don={{ loai: "goc" }}
-					tenGoc="OneHub"
-				/>
-			}
-		/>
-	);
-
-	test("khung cua cach xem khac cung lop voi hang cong cu cua DataTable; o chon trong hang cong cu; the con 4 hay 5", async () => {
-		const bang = await ve(
-			<DataTable
-				columns={[{ id: "ten", header: "Tên", cell: () => null }]}
-				getRowId={() => "x"}
-				layout="content"
-				query={TRUY_VAN}
-				rows={[]}
-				search={hang()}
-				total={0}
-			/>,
-		);
-		const khac = await ve(<KhungHangCongCu>{hang()}</KhungHangCongCu>);
-		for (const [xem, san] of [
-			["danh-sach", bang],
-			["hop-tuan", khac],
-		] as const) {
-			const khoi = san.o.querySelectorAll("[data-hang-cong-cu-don-vi]");
-			phai(
-				khoi.length === 1,
-				`dvb-hang-cong-cu: ${xem}: ${khoi.length} hang cong cu, mong 1`,
-			);
-			const chon = khoi[0]?.querySelector("[data-chon-don-vi]");
-			phai(
-				chon !== null && chon !== undefined,
-				`dvb-hang-cong-cu: ${xem}: [data-chon-don-vi] khong nam trong [data-hang-cong-cu-don-vi]`,
-			);
-		}
-		const lopBang =
-			bang.o.querySelector("[data-hang-cong-cu-don-vi]")?.parentElement
-				?.className ?? "";
-		const lopKhac =
-			khac.o.querySelector("[data-hang-cong-cu-don-vi]")?.parentElement
-				?.className ?? "";
-		phai(
-			lopKhac === lopBang && lopBang === LOP_HANG_CONG_CU,
-			`dvb-hang-cong-cu: khung «${lopKhac}» khac hang cong cu DataTable «${lopBang}»`,
-		);
+	test("the con 4 hay 5 theo pha cham", async () => {
 		const theCon = async (coCham: boolean) =>
 			(
 				await ve(
@@ -941,7 +694,7 @@ async function moTrang(
 	await cho(
 		() =>
 			s.o.querySelector(
-				"[data-chon-don-vi], [data-nut-cay], [data-vung-tai-loi], [data-hang-muc-tieu], [data-trang-thai=ST-donvi-chuakychay], [data-trang-thai=ST-donvi-khongthay], [data-trang-thai=ST-donvi-rong]",
+				'[data-vi-tri-bo="mot-bo"] [aria-current="page"], [data-nut-cay], [data-vung-tai-loi], [data-hang-muc-tieu], [data-trang-thai=ST-donvi-chuakychay], [data-trang-thai=ST-donvi-khongthay], [data-trang-thai=ST-donvi-rong]',
 			) !== null,
 		"trang don vi dung xong",
 	);
@@ -971,13 +724,8 @@ const idDong = (o: ParentNode) =>
 		x.getAttribute("data-hang-muc-tieu"),
 	);
 
-const donCuoi = () => {
-	const vao = goiDanhSach.at(-1);
-	return JSON.stringify(vao?.unit ?? null);
-};
-
 describe("dvb-chon-don-vi", () => {
-	test("trang: khong con cay, dung 1 o chon trong hang cong cu cua bang", async () => {
+	test("trang: khong con cay, khong o chon don vi, mat xich cuoi dong vi tri mo menu", async () => {
 		datDon("pb:P1", [mucTieu("M1", 1)]);
 		const s = await moTrang("pb:P1");
 		await choBang(s);
@@ -987,44 +735,40 @@ describe("dvb-chon-don-vi", () => {
 			`dvb-chon-don-vi: con ${nutCay} nut cay [data-nut-cay], mong 0`,
 		);
 		expect(s.o.querySelectorAll("[role=tree]").length).toBe(0);
-		const oChon = s.o.querySelectorAll("[data-chon-don-vi]");
-		phai(oChon.length === 1, `dvb-chon-don-vi: ${oChon.length} o chon, mong 1`);
-		const khung = oChon[0]?.closest(
-			"[data-hang-cong-cu-don-vi]",
-		)?.parentElement;
+		expect(s.o.querySelectorAll("[data-chon-don-vi]").length).toBe(0);
+		const menu = s.o.querySelectorAll("[data-menu-vi-tri]");
+		phai(menu.length === 1, `dvb-chon-don-vi: ${menu.length} menu, mong 1`);
 		phai(
-			khung?.className === LOP_HANG_CONG_CU &&
-				khung.parentElement?.querySelector("table") !== null,
-			"dvb-chon-don-vi: o chon khong nam trong hang cong cu cua bang",
+			menu[0]?.closest('[data-vi-tri-bo="mot-bo"]') !== null,
+			"dvb-chon-don-vi: menu khong nam o dong vi tri",
 		);
 	});
 
-	test("trang: chon P2 -> URL donOkr=pb:P2 va okr.danhSach ke tiep hoi {pb, P2}", async () => {
+	test("trang: menu co P2 cung cap, lien ket donOkr=pb:P2", async () => {
 		datDon("pb:P1", [mucTieu("M1", 1)]);
 		const s = await moTrang("pb:P1");
 		await choBang(s);
-		await moOChon(s.o);
-		const p2 = [...document.querySelectorAll('[role="option"]')].find((x) =>
-			x.textContent?.startsWith(CAY.P2.name),
+		const nut = s.o.querySelector("[data-menu-vi-tri]");
+		if (!nut) throw new Error("dvb-chon-don-vi: khong co menu");
+		await bamCon(nut);
+		await cho(
+			() => document.querySelector('[data-menu-don="pb:P2"]') !== null,
+			"menu mo co P2",
 		);
-		if (!p2) throw new Error("dvb-chon-don-vi: khong thay lua chon P2");
-		await act(async () => {
-			(p2 as HTMLElement).click();
-		});
-		await cho(() => donCuoi().includes('"P2"'), "danhSach hoi P2");
-		await cho(() => s.url().get("donOkr") === "pb:P2", "url donOkr=pb:P2");
-		expect({
-			url: s.url().get("donOkr"),
-			don: goiDanhSach.at(-1)?.unit,
-		}).toEqual({ url: "pb:P2", don: { loai: "pb", id: "P2" } });
+		const href =
+			document.querySelector('[data-menu-don="pb:P2"]')?.getAttribute("href") ??
+			"";
+		expect(new URL(href, "http://x").searchParams.get("donOkr")).toBe("pb:P2");
 	});
 
-	test("trang: donOkr=nguoi:U1 -> o chon hien ten U1", async () => {
+	test("trang: donOkr=nguoi:U1 -> dong vi tri hien ten U1", async () => {
 		const s = await moTrang("nguoi:U1");
-		const nut = s.o.querySelector("[data-chon-don-vi]");
+		const ten = s.o.querySelector(
+			'[data-vi-tri-bo="mot-bo"] [aria-current="page"]',
+		);
 		phai(
-			nut?.textContent?.includes(LAN.name) === true,
-			`dvb-chon-don-vi: don nguoi:U1 hien «${nut?.textContent}», mong ${LAN.name}`,
+			ten?.textContent?.includes(LAN.name) === true,
+			`dvb-chon-don-vi: don nguoi:U1 hien «${ten?.textContent}», mong ${LAN.name}`,
 		);
 	});
 });
@@ -1033,58 +777,36 @@ describe("dvb-hang-cong-cu", () => {
 	const PHA = ["dang-chay", "cham-diem"] as const;
 	const XEM = ["danh-sach", "hop-tuan", "cham"] as const;
 	for (const pha of PHA) {
-		test(`trang ${pha}: 3 cach xem cung mot hang cong cu, cung lop khung, khong nut tao/nhap/soan`, async () => {
+		test(`trang ${pha}: 3 cach xem cung mot hang the con, khong nut tao/nhap/soan`, async () => {
 			cycles = { cycles: [{ ...QUY, phase: pha }], currentId: QUY.id };
 			datDon("pb:P1", [mucTieu("M1", 1)]);
-			let lopDanhSach = "";
 			for (const xem of XEM) {
 				const s = await moTrang(
 					"pb:P1",
 					xem === "danh-sach" ? {} : { xemOkr: xem },
 				);
-				const khoi = s.o.querySelectorAll("[data-hang-cong-cu-don-vi]");
-				phai(
-					khoi.length === 1,
-					`dvb-hang-cong-cu: ${xem}: ${khoi.length} hang cong cu, mong 1`,
-				);
 				const the = s.o.querySelectorAll("[data-the-con-bo]");
 				phai(
-					the.length === 1 && khoi[0]?.contains(the[0] ?? null) === false,
-					`dvb-hang-cong-cu: ${xem}: ${the.length} hang the con ngoai [data-hang-cong-cu-don-vi], mong 1`,
+					the.length === 1,
+					`dvb-hang-cong-cu: ${xem}: ${the.length} hang the con, mong 1`,
 				);
+				const hang = s.o.querySelectorAll("[data-hang-cong-cu]");
 				phai(
-					khoi[0] !== undefined &&
-						the[0] !== undefined &&
-						(the[0].compareDocumentPosition(khoi[0]) &
-							Node.DOCUMENT_POSITION_FOLLOWING) !==
-							0,
-					`dvb-hang-cong-cu: ${xem}: hang the con khong dung tren hang cong cu`,
+					hang.length <= 1,
+					`dvb-hang-cong-cu: ${xem}: ${hang.length} hang cong cu, mong toi da 1`,
 				);
 				const soThe = the[0]?.querySelectorAll("a[href]").length;
 				phai(
 					soThe === (pha === "cham-diem" ? 5 : 4),
 					`dvb-hang-cong-cu: ${xem}: ${soThe} the con o pha ${pha}`,
 				);
-				const chon = khoi[0]?.querySelector("[data-chon-don-vi]");
-				phai(
-					chon !== null && chon !== undefined,
-					`dvb-hang-cong-cu: ${xem}: [data-chon-don-vi] khong nam trong [data-hang-cong-cu-don-vi]`,
-				);
-				const lop = khoi[0]?.parentElement?.className ?? "";
 				if (xem === "danh-sach") {
 					await choBang(s);
-					lopDanhSach =
-						s.o.querySelector("[data-hang-cong-cu-don-vi]")?.parentElement
-							?.className ?? "";
 					phai(
 						s.o.querySelector("table") !== null,
 						"dvb-hang-cong-cu: danh-sach khong dung bang",
 					);
 				}
-				phai(
-					lop === lopDanhSach,
-					`dvb-hang-cong-cu: ${xem}: khung «${lop}» khac danh-sach «${lopDanhSach}»`,
-				);
 				const nutThan = s.o.querySelectorAll(
 					"[data-nut=them-muc-tieu], [data-nut=nhap-bang-tinh], [data-nhom-soan]",
 				).length;
@@ -1560,7 +1282,7 @@ describe("dvb-chan-bang", () => {
 		);
 	const O = ["goc", "bp:B1", "bp:B2", "pb:P1", "pb:X1", "nguoi:U1"] as const;
 	for (const don of O) {
-		test(`${don}: chan bang truong/so/thuoc va khoi Đơn vị trực thuộc`, async () => {
+		test(`${don}: chan bang truong/so/thuoc va nhom Trực thuộc cua menu dong vi tri`, async () => {
 			const cay = cayMau();
 			dem = demGiaLap(cay);
 			const rows = dongCuaDon(don);
@@ -1626,7 +1348,7 @@ describe("dvb-chan-bang", () => {
 							ten: x.name,
 							truong: x.head,
 						})) ?? []);
-			const o = [...s.o.querySelectorAll("[data-don-vi-con] a")];
+			const o = conMong.length === 0 ? [] : await docTrucThuoc(s.o);
 			const conNhan = o.map((a) =>
 				new URLSearchParams(a.getAttribute("href")?.split("?")[1] ?? "").get(
 					"donOkr",
@@ -1649,8 +1371,7 @@ describe("dvb-chan-bang", () => {
 				phai(
 					href.get("kyOkr") === QUY.id &&
 						chuO.includes(x.ten) &&
-						chuO.includes(n === 0 ? b.chuaDatOkr : m.demMucTieu(n)) &&
-						chuO.includes(m.chuaCoTruong) === (x.truong === null),
+						chuO.includes(n === 0 ? menuVi.chuaCoRieng : menuVi.demMucTieu(n)),
 					`dvb-chan-bang: ${don}: o con ${x.k} «${chuO}» href ${href}`,
 				);
 			}
@@ -1676,21 +1397,21 @@ describe("dvb-trang-thai", () => {
 		);
 	});
 
-	test("loi-danh-sach: khoi loi co Thử lại, hang cong cu van dung", async () => {
+	test("loi-danh-sach: khoi loi co Thử lại, menu dong vi tri van dung", async () => {
 		loiDanhSach.add(JSON.stringify(donVaoChon("pb:P1")));
 		const s = await moTrang("pb:P1");
 		await cho(
 			() => s.o.querySelector("[data-vung-tai-loi]") !== null,
 			"khoi loi",
 		);
-		const oChon = s.o.querySelector<HTMLButtonElement>("[data-chon-don-vi]");
+		const menu = s.o.querySelector<HTMLButtonElement>("[data-menu-vi-tri]");
 		phai(
-			oChon !== null,
-			"dvb-trang-thai: loi-danh-sach: khong co [data-chon-don-vi]",
+			menu !== null,
+			"dvb-trang-thai: loi-danh-sach: khong co [data-menu-vi-tri]",
 		);
 		phai(
-			oChon?.disabled === false,
-			"dvb-trang-thai: loi-danh-sach: o chon bi tat",
+			menu?.disabled === false,
+			"dvb-trang-thai: loi-danh-sach: menu dong vi tri bi tat",
 		);
 		const loi = s.o.querySelector("[data-vung-tai-loi]");
 		expect(loi?.getAttribute("data-trang-thai")).toBe("ST-donvi-loi");
@@ -1701,11 +1422,11 @@ describe("dvb-trang-thai", () => {
 		).toBe(true);
 	});
 
-	test("don-khong-thay: DonKhongThay + loi ve cong ty, o chon khong vo", async () => {
+	test("don-khong-thay: DonKhongThay + loi ve cong ty, dong vi tri khong vo", async () => {
 		const s = await moTrang("pb:KHONG-CON");
 		const kt = s.o.querySelector("[data-trang-thai=ST-donvi-khongthay]");
 		phai(kt !== null, "dvb-trang-thai: don-khong-thay: khong co DonKhongThay");
-		expect(s.o.querySelectorAll("[data-chon-don-vi]").length).toBe(1);
+		expect(s.o.querySelectorAll('[data-vi-tri-bo="mot-bo"]').length).toBe(1);
 		const ve = [...(kt?.querySelectorAll("button") ?? [])].find(
 			(x) => x.textContent === m.khongThay.action,
 		);
@@ -1723,7 +1444,7 @@ describe("dvb-trang-thai", () => {
 		);
 	});
 
-	test("co-da-bo: nhom Đã bỏ duoi bang", async () => {
+	test("co-da-bo: nut Đã bỏ (1) tren hang cong cu cua bang", async () => {
 		datDon(
 			"pb:P1",
 			[mucTieu("M1", 1)],
@@ -1731,16 +1452,19 @@ describe("dvb-trang-thai", () => {
 		);
 		const s = await moTrang("pb:P1");
 		await choBang(s);
-		const nhom = s.o.querySelector("[data-nhom-da-bo]");
+		const nut = s.o.querySelector("[data-nut-da-bo]");
 		const bang = s.o.querySelector("table");
 		phai(
-			nhom !== null &&
+			nut !== null &&
+				nut.textContent === okrVoKhuMessages("vi").boOkr.daBo(1) &&
+				nut.closest("[data-hang-cong-cu]") !== null &&
 				bang !== null &&
-				(bang.compareDocumentPosition(nhom) &
+				(nut.compareDocumentPosition(bang) &
 					Node.DOCUMENT_POSITION_FOLLOWING) !==
 					0,
-			"dvb-trang-thai: co-da-bo: nhom Đã bỏ khong nam duoi bang",
+			"dvb-trang-thai: co-da-bo: nut Đã bỏ (1) khong nam tren hang cong cu cua bang",
 		);
+		expect(s.o.querySelector("[data-nhom-da-bo]")).toBeNull();
 	});
 
 	test("nguoi: khoi KR cua nguoi duoi bang", async () => {
@@ -1764,9 +1488,7 @@ describe("dvb-trang-thai", () => {
 		const s = await moTrang("pb:P1");
 		const khung = s.o.querySelector("[data-trang-thai=ST-donvi-dangtai]");
 		phai(khung !== null, "dvb-trang-thai: dang-tai: khong co khung dang tai");
-		const hang = khung?.querySelector(
-			"[data-hang-cong-cu-don-vi]",
-		)?.parentElement;
+		const hang = khung?.querySelector('[data-khung-hang="thanh-cong-cu"]');
 		expect({
 			xuongHang: hang?.querySelectorAll("[data-slot=skeleton]").length ?? 0,
 			xuongDong:
@@ -1778,7 +1500,7 @@ describe("dvb-trang-thai", () => {
 			xuongHang: expect.any(Number),
 			xuongDong: expect.any(Number),
 			cay: 0,
-			oChon: 1,
+			oChon: 0,
 		});
 		expect(
 			(hang?.querySelectorAll("[data-slot=skeleton]").length ?? 0) > 0,
@@ -1864,11 +1586,12 @@ describe("dvb-giu-xem", () => {
 			`dvb-giu-xem: di-ve ve Theo don vi voi «${tham}», mat xemOkr=hop-tuan`,
 		);
 		const s = await ve(<TheoDonVi />, cuoi);
-		await cho(() => s.o.querySelector("[data-chon-don-vi]") !== null, "trang");
+		const tenBo = '[data-vi-tri-bo="mot-bo"] [aria-current="page"]';
+		await cho(() => s.o.querySelector(tenBo) !== null, "trang");
 		expect({
 			xem: s.o.querySelector('[data-the-con-bo] [aria-current="page"]')
 				?.textContent,
-			don: s.o.querySelector("[data-chon-don-vi]")?.textContent,
+			don: s.o.querySelector(tenBo)?.textContent,
 		}).toEqual({ xem: mtc.hopTuan.cachXem, don: CAY.P2.name });
 	});
 

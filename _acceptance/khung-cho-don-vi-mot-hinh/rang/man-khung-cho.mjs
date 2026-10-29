@@ -8,8 +8,8 @@
  * (khuôn E4 của trang-don-vi-mot-bang). Chữ ký khung của một mẫu: chiều cao hàng công cụ · khoảng từ đỉnh vùng nội
  * dung tới đỉnh đầu bảng · chiều cao đầu bảng · số dòng · chiều cao từng dòng. Mẫu lạ: vạch hay aria-busy trong vùng
  * nội dung ngoài khung [data-khung-xuong=bang-hai-dong].
- * Ba đường, mỗi khổ 1440 và 390: tải cứng (AC-1, AC-4), điều hướng mềm từ Toàn cảnh (AC-2), đổi đơn vị với
- * okr.danhSach của trình duyệt bị giữ (AC-3). Ảnh E9 vào evidence/.
+ * Hai đường, mỗi khổ 1440 và 390: tải cứng (AC-1, AC-4), điều hướng mềm từ Toàn cảnh (AC-2). Đường đổi đơn vị qua
+ * ô chọn (AC-3) thay bởi bo-okr-chi-don-vi AC-4: trang một bộ không còn ô chọn. Ảnh khung và bảng vào evidence/.
  * Mã thoát: 0 đạt · 1 có dòng SAI · 2 không đo được.
  */
 import { execFileSync, spawnSync } from "node:child_process";
@@ -220,9 +220,9 @@ const doThat = (t) =>
 		const hien = (e) => e && e.getClientRects().length > 0;
 		const cao = (e) => Math.round(e.getBoundingClientRect().height);
 		const vung = document.querySelector("[data-slot=page-shell-content]");
-		const hop = [
-			...document.querySelectorAll("[data-hang-cong-cu-don-vi]"),
-		].find(hien);
+		const hop = [...(vung?.querySelectorAll("[data-hang-cong-cu]") ?? [])].find(
+			hien,
+		);
 		const tr = [...document.querySelectorAll("[data-hang-muc-tieu]")]
 			.map((e) => e.closest("tr"))
 			.filter(hien);
@@ -244,9 +244,7 @@ const doThat = (t) =>
 				? o.getBoundingClientRect().top - nutGap.getBoundingClientRect().top
 				: 0;
 		return {
-			congCu: hop?.parentElement
-				? cao(hop.parentElement) - Math.round(khoangNut)
-				: null,
+			congCu: hop ? cao(hop) - Math.round(khoangNut) : null,
 			dauBang: dau ? cao(dau) : null,
 			dong: [...new Set(tr)].map(cao),
 			dinh: o
@@ -303,8 +301,6 @@ const lechDauBang = (khung) => {
 		.map((x) => Number(/dau bang (-?\d+)\//.exec(x.ky)?.[1] ?? Number.NaN));
 	return dau.length > 1 ? Math.max(...dau) - Math.min(...dau) : 0;
 };
-
-const boCongCu = (ky) => ky?.replace(/^[^·]+· cong cu [^·]+· /, "") ?? null;
 
 try {
 	await napBoMau();
@@ -486,104 +482,6 @@ try {
 		if (la) dong(false, `AC-2: mau khung la o ${w}`);
 		else if (khac.length > 0)
 			dong(false, `AC-2: chu ky ${khac[0]} khac tai cung ${kyCung[w]} o ${w}`);
-	}
-
-	for (const w of KHO) {
-		console.log(`== doi don vi ${w}`);
-		const t = await d.moTrang(QT, w, duongDon(DON_DS));
-		await choBang(t);
-		const chan = await datChan(t);
-		await d.bamSel(t, "[data-chon-don-vi]");
-		await d.doi(t, () => document.querySelector("[cmdk-input]") !== null);
-		await t.click("[cmdk-input]");
-		await t.keyboard.type("mien bac");
-		await choMs(500);
-		await t.evaluate(lapMau, idDich);
-		const chon = await t.evaluateHandle(
-			(ten) =>
-				[...document.querySelectorAll("[cmdk-item]")].find(
-					(e) =>
-						(e.querySelector(":scope > span")?.textContent ?? "").trim() ===
-						ten,
-				) ?? null,
-			P_MEM.ten,
-		);
-		if (!(await chon.evaluate((e) => e !== null)))
-			await khongDo(`o chon khong co «${P_MEM.ten}» o ${w}`);
-		await chon.click();
-		let bam = { nhan: false, mo: false };
-		const han = Date.now() + 15_000;
-		while (Date.now() < han && !(await coKhung(t))) await choMs(25);
-		if (await coKhung(t)) {
-			if (w === 1440)
-				await t.screenshot({ path: join(BANG_CHUNG, "E9-doi-don-1440.png") });
-			const tam = await t.evaluate(() => {
-				const o = [...document.querySelectorAll("[data-chon-don-vi]")].find(
-					(e) => e.getClientRects().length > 0,
-				);
-				if (!o) return null;
-				const r = o.getBoundingClientRect();
-				const x = r.left + r.width / 2;
-				const y = r.top + r.height / 2;
-				const e = document.elementFromPoint(x, y);
-				return { x, y, nhan: Boolean(e && (e === o || o.contains(e))) };
-			});
-			if (tam) {
-				await t.mouse.click(tam.x, tam.y);
-				const mo = await t
-					.waitForFunction(
-						() =>
-							document.querySelector("[cmdk-list], [role=listbox]") !== null,
-						{ timeout: 3000 },
-					)
-					.then(() => true)
-					.catch(() => false);
-				bam = { nhan: tam.nhan, mo };
-				await t.keyboard.press("Escape");
-			}
-		}
-		const so = chan.so;
-		chan.thaRa();
-		const coBang = await choToiHang(t, Date.now() + 30_000);
-		await t
-			.waitForNetworkIdle({ idleTime: 500, timeout: 30_000 })
-			.catch(() => null);
-		await choMs(800);
-		const mau = await docMau(t);
-		const that = await doThat(t);
-		await t.close();
-		if (so === 0 || !coBang || that.dinh === null)
-			await khongDo(
-				`doi don vi ${w}: ${so === 0 ? "trinh duyet khong goi okr.danhSach" : "khong thay bang cua don vi moi"}`,
-			);
-		const s = tomTat(mau);
-		for (const x of s.khung)
-			console.log(
-				`  ${x.luc}ms: ${x.la ? "LA · " : ""}${x.oThat ? "o that · " : ""}${x.ky ?? "-"}`,
-			);
-		if (s.khung.length === 0)
-			await khongDo(`doi don vi ${w}: khong bat duoc mau khung`);
-		const oThat = s.khung.every((x) => x.oThat);
-		const kyThan = new Set(s.khung.map((x) => (x.la ? "la" : boCongCu(x.ky))));
-		const kyThanCung = boCongCu(kyCung[w]);
-		const trung = kyThan.size === 1 && kyThan.has(kyThanCung);
-		const dinh = s.khung.filter((x) => x.dinh !== null).map((x) => x.dinh);
-		const lech =
-			dinh.length > 0
-				? Math.max(...dinh.map((x) => Math.abs(x - that.dinh)))
-				: null;
-		dong(
-			oThat && bam.nhan && bam.mo && trung && lech !== null && lech <= 1,
-			`AC-3 ${w}: ${s.khung.length} mau khung · o chon that ${oThat ? "co" : "khong"} · nhan bam ${bam.nhan ? "co" : "khong"} · mo danh sach ${bam.mo ? "co" : "khong"} · chu ky ${[...kyThan].join(" | ")} · dinh o chon lech ${lech ?? "?"}`,
-		);
-		if (!oThat) dong(false, `AC-3: khong co o chon that luc dang tai o ${w}`);
-		else if (!bam.nhan || !bam.mo)
-			dong(false, `AC-3: o chon khong nhan bam o ${w}`);
-		if (!trung)
-			dong(
-				false,
-				`AC-3: chu ky than bang ${[...kyThan].join(" | ")} khac tai cung ${kyThanCung} o ${w}`,
-			);
 	}
 } catch (e) {
 	await d.khongDoDuoc(e);

@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d2f57b85255f7c5e114a136631f617bed40386d7
+verified_commit: 229fcd7fb931373cdd6bf6f293874aa8b6b99686
 human_signoff: Phan Le Manh 2026-10-28
 ---
 
@@ -204,3 +204,7 @@ none — every multi-run eval is uniform (moi eval chay mot lan, khong eval nao 
 
 Round 1: ban chay dau E10 do (thuoc quet lop) va nhieu phat hien trong hop dong ve do (AC-3, AC-4, AC-6, AC-7, AC-9); tra ve cho vong sua. Chay lai (r1b) PASS, con mot phat hien AC-4 (dong KR vua gui mat khi Con lai gap va mat focus), da sua o f5bcf73dd.
 Round 2: moi eval chay lai tren d2f57b85 deu PASS; E1 carry-forward tu round 1 vi delta khong cham paths cua eval.
+
+### Re-pin lần 1 — 2026-10-29, do VK19 bo-okr-chi-don-vi: ghim lượt A sau sửa thước V5-17 (Q7)
+run_id: repin-20261029T002846Z-11740
+sha: 229fcd7fb931373cdd6bf6f293874aa8b6b99686 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

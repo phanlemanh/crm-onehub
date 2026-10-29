@@ -545,7 +545,13 @@ describe("htmb-toan-canh", () => {
 						`htmb-toan-canh: bp:B toanCanh ${JSON.stringify(soB)}, SQL ${JSON.stringify(sql)}`,
 					);
 
-				for (const khoa of [`bp:${B}`, `pb:${P}`, `pb:${X}`]) {
+				const htB = await hopTuan("thuong", `bp:${B}`);
+				dem += 1;
+				if (htB.tongKr !== 0 || htB.daCapNhat !== 0)
+					loi.push(
+						`htmb-toan-canh: bp:B hopTuan gom phong ban con (tongKr ${htB.tongKr}, daCapNhat ${htB.daCapNhat})`,
+					);
+				for (const khoa of [`pb:${P}`, `pb:${X}`]) {
 					const h = tc.hang.find((x) => x.key === khoa);
 					const ht = await hopTuan("thuong", khoa);
 					dem += 1;

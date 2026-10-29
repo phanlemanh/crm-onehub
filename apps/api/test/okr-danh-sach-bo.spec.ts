@@ -9,6 +9,7 @@ import {
 import type {
 	DanhSachBoOutput,
 	HangBo,
+	SoBoOutput,
 	ToanCanhOutput,
 	ViecCuaBoOutput,
 } from "../src/okr/okr-xem.contracts";
@@ -231,7 +232,7 @@ const maTranHang = (s: SanCay): DongMaTran[] => [
 		cha: "goc",
 		truong: s.truongX.nguoi,
 		soMucTieu: 1,
-		tuTinThap: 1,
+		tuTinThap: 0,
 		coTienDo: true,
 	},
 	{
@@ -259,7 +260,7 @@ const maTranHang = (s: SanCay): DongMaTran[] => [
 		truong: s.truongY.nguoi,
 		soMucTieu: 0,
 		tuTinThap: 0,
-		coTienDo: true,
+		coTienDo: false,
 	},
 	{
 		khoa: `pb:${s.B}`,
@@ -275,8 +276,28 @@ const maTranHang = (s: SanCay): DongMaTran[] => [
 type DoiChieu = {
 	dem: Record<string, number>;
 	toanCanh: ToanCanhOutput;
+	soBo: Map<string, SoBoOutput>;
 	truongDb: Map<string, string | null>;
 };
+
+const donCuaKhoa = (khoa: string): Json => {
+	if (khoa === "goc") return { loai: "goc" };
+	const [loai, id] = khoa.split(":");
+	return { loai: loai ?? "", id: id ?? "" };
+};
+
+async function docSoBo(
+	s: SanCay,
+	ai: AiHoacCookie,
+): Promise<Map<string, SoBoOutput>> {
+	const khoa = maTranHang(s).map((d) => d.khoa);
+	const so = await Promise.all(
+		khoa.map((k) =>
+			doc<SoBoOutput>("okr.soBo", ai, { cycleId: s.ky, unit: donCuaKhoa(k) }),
+		),
+	);
+	return new Map(khoa.map((k, i) => [k, so[i] as SoBoOutput]));
+}
 
 async function truongTheoDb(s: SanCay): Promise<Map<string, string | null>> {
 	const [bp, pb] = await Promise.all([
@@ -297,12 +318,13 @@ async function truongTheoDb(s: SanCay): Promise<Map<string, string | null>> {
 }
 
 async function docDoiChieu(s: SanCay, ai: AiHoacCookie): Promise<DoiChieu> {
-	const [dem, toanCanh, truongDb] = await Promise.all([
+	const [dem, toanCanh, soBo, truongDb] = await Promise.all([
 		doc<Record<string, number>>("okr.countByUnit", ai, { cycleId: s.ky }),
 		doc<ToanCanhOutput>("okr.toanCanh", ai, { cycleId: s.ky }),
+		docSoBo(s, ai),
 		truongTheoDb(s),
 	]);
-	return { dem, toanCanh, truongDb };
+	return { dem, toanCanh, soBo, truongDb };
 }
 
 function lechHang(
@@ -323,7 +345,7 @@ function lechHang(
 		if (cua.length > 1) loi.push(`tbo-hang: ${d.khoa} lech so-hang`);
 		const [h] = cua;
 		if (h === undefined) continue;
-		const tc = dc.toanCanh.hang.find((x) => x.key === d.khoa);
+		const so = dc.soBo.get(d.khoa);
 		const cot: [string, boolean][] = [
 			["cap", h.cap === d.cap],
 			["cha", h.cha === d.cha],
@@ -331,13 +353,10 @@ function lechHang(
 			["truong-db", (h.truong?.id ?? null) === dc.truongDb.get(d.khoa)],
 			["so-muc-tieu", h.soMucTieu === d.soMucTieu],
 			["so-muc-tieu-count-by-unit", h.soMucTieu === (dc.dem[d.khoa] ?? 0)],
-			["tien-do-toan-canh", tc !== undefined && h.tienDo === tc.tienDo],
+			["tien-do-so-bo", so !== undefined && h.tienDo === so.tienDo],
 			["co-tien-do", (h.tienDo !== null) === d.coTienDo],
 			["tu-tin-thap", h.tuTinThap === d.tuTinThap],
-			[
-				"tu-tin-thap-toan-canh",
-				tc !== undefined && h.tuTinThap === tc.tuTin.thap,
-			],
+			["tu-tin-thap-so-bo", so !== undefined && h.tuTinThap === so.tuTin.thap],
 		];
 		for (const [ten, dung] of cot)
 			if (!dung) loi.push(`tbo-hang: ${d.khoa} lech ${ten}`);
@@ -345,13 +364,23 @@ function lechHang(
 	return loi;
 }
 
+const maTranCap = (khoa: string): HangBo["cap"] =>
+	khoa === "goc" ? "goc" : khoa.startsWith("bp:") ? "bo-phan" : "phong-ban";
+
 async function dauVaoDung(dc: DoiChieu, dan: DanDonVi) {
 	const cay = await doc<TreeOutput>("org.tree");
 	return {
 		cay,
 		tenGoc: dc.toanCanh.hang.find((h) => h.key === "goc")?.ten ?? "",
 		soMucTieu: dc.dem,
-		toanCanh: dc.toanCanh.hang,
+		soRieng: [...dc.soBo].map(([key, so]) => ({
+			...so,
+			key,
+			ten: "",
+			cap: maTranCap(key),
+			dangBan: null,
+			theoTuan: [],
+		})),
 		dan,
 		theoDoi: new Set<string>(),
 	};
@@ -362,7 +391,7 @@ describe("tbo-hang", () => {
 		await sanCay();
 	}, GIEO_MS);
 
-	test("tbo-hang: moi don vi cua cay mot hang, so muc tieu bang countByUnit, tien do bang toanCanh, truong bang headUserId", async () => {
+	test("tbo-hang: moi don vi cua cay mot hang, so muc tieu bang countByUnit, tien do va tu tin thap bang soBo cua chinh bo, truong bang headUserId", async () => {
 		const s = await sanCay();
 		const ra = await doc<DanhSachBoOutput>("okr.danhSachBo", s.quanTri.cookie, {
 			cycleId: s.ky,

@@ -44,11 +44,6 @@ const muc = (khaiNiem: MucKiemKeDnk["khai_niem"], nn: NgonNgu) =>
 const GIU_PHAM_VI: readonly { tep: string; khoa: string; vi: string }[] = [
 	{
 		tep: "apps/app/lib/messages/okr.ts",
-		khoa: "donViBang.caCongTy",
-		vi: "cả công ty",
-	},
-	{
-		tep: "apps/app/lib/messages/okr.ts",
 		khoa: "moTa.toan-canh",
 		vi: "Cả công ty trong một màn.",
 	},
