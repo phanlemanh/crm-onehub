@@ -31,6 +31,37 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "bo-okr-chi-don-vi",
+		ten: "Bộ OKR chỉ của một đơn vị — bảng chỉ mục tiêu của khối, menu ở dòng vị trí, nút Đã bỏ",
+		states: [
+			{
+				id: "ST-bcd-khoi",
+				nhan: "Khối Kinh doanh — chỉ mục tiêu của khối, số riêng",
+			},
+			{
+				id: "ST-bcd-menu",
+				nhan: "Menu dòng vị trí của khối — Thuộc · Cùng cấp · Trực thuộc",
+			},
+			{ id: "ST-bcd-da-bo", nhan: "Nút Đã bỏ (1) đang bật" },
+			{ id: "ST-bcd-khoi-rong", nhan: "Khối Hỗ trợ — chưa có mục tiêu riêng" },
+			{
+				id: "ST-bcd-phong",
+				nhan: "Bộ một phòng ban — menu Thuộc khối, Cùng cấp",
+			},
+			{ id: "ST-bcd-goc", nhan: "Bộ OneHub — menu Trực thuộc" },
+			{ id: "ST-bcd-danh-sach", nhan: "Danh sách Bộ OKR — số riêng mỗi hàng" },
+			{
+				id: "ST-bcd-hop-tuan-goc",
+				nhan: "Họp tuần OneHub chưa có KR — chỉ sang menu",
+			},
+			{ id: "ST-bcd-hop-tuan", nhan: "Họp tuần của một bộ (?don=)" },
+			{
+				id: "ST-bcd-mot-bo",
+				nhan: "Một bộ bất kỳ (?don=) — bấm menu đi khắp cây",
+			},
+		],
+	},
+	{
 		slug: "hop-tuan-tren-bang",
 		ten: "Họp tuần trên bảng — ghi chú mới nhất và mức đổi ở mọi khổ, Cập nhật từ dòng, ‹ › theo thứ tự đáng bàn",
 		states: [

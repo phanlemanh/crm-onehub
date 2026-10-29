@@ -218,6 +218,19 @@ function mongDoiNguoi(ds: DanhSachOutput): MongDoi {
 	};
 }
 
+function mongDoiBoPhan(ds: DanhSachOutput): MongDoi {
+	const congBo = ds.rows.filter((m) => m.status !== "nhap");
+	return {
+		tienDo: trungBinh(congBo.map((m) => m.progress)),
+		kyVong: trungBinh(
+			congBo.flatMap((m) => (m.expected === null ? [] : [m.expected])),
+		),
+		soKr: 1,
+		daCapNhat: 0,
+		thap: 0,
+	};
+}
+
 function mongDoiDonVi(tc: ToanCanhOutput, k: string): MongDoi | null {
 	const h = tc.hang.find((x) => x.key === k);
 	if (!h) return null;
@@ -255,11 +268,16 @@ async function docMaTran(s: San) {
 		{ loai: "pb", id: s.A },
 		{ loai: "nguoi", id: s.U.nguoi },
 	];
-	const [tc, dsNguoi, ...so] = await Promise.all([
+	const [tc, dsNguoi, dsBoPhan, ...so] = await Promise.all([
 		doc<ToanCanhOutput>("okr.toanCanh", s.quanTri.cookie, { cycleId: s.ky }),
 		doc<DanhSachOutput>("okr.danhSach", s.quanTri.cookie, {
 			cycleId: s.ky,
 			unit: { loai: "nguoi", id: s.U.nguoi },
+			loc: { phuTrach: [], loai: [], trangThai: [] },
+		}),
+		doc<DanhSachOutput>("okr.danhSach", s.quanTri.cookie, {
+			cycleId: s.ky,
+			unit: { loai: "bp", id: s.X },
 			loc: { phuTrach: [], loai: [], trangThai: [] },
 		}),
 		...units.map((unit) =>
@@ -272,7 +290,9 @@ async function docMaTran(s: San) {
 		mong:
 			unit.loai === "nguoi"
 				? mongDoiNguoi(dsNguoi)
-				: mongDoiDonVi(tc, khoa(unit)),
+				: unit.loai === "bp"
+					? mongDoiBoPhan(dsBoPhan)
+					: mongDoiDonVi(tc, khoa(unit)),
 	}));
 	return { tc, maTran, soTheo };
 }
@@ -282,7 +302,7 @@ describe("bco-so-bo", () => {
 		await san();
 	}, GIEO_MS);
 
-	test("bco-so-bo: so cua goc, bp, pb bang hang toanCanh; nguoi tinh tren muc tieu cong bo cua bo ca nhan", async () => {
+	test("bco-so-bo: so cua goc, pb bang hang toanCanh; bp va nguoi tinh tren muc tieu cong bo cua chinh bo", async () => {
 		const { maTran, soTheo } = await docMaTran(await san());
 		expect(lech(maTran, (u) => soTheo.get(khoa(u)) ?? null)).toEqual([]);
 	});
@@ -303,10 +323,12 @@ describe("bco-so-bo", () => {
 				: null;
 		};
 		const loi = lech(maTran, traHang);
-		expect(loi).toContain(
-			`bco-so-bo: nguoi:${(await san()).U.nguoi}/soKr lech`,
-		);
-		expect(loi.every((l) => l.includes("nguoi:"))).toBe(true);
+		const s = await san();
+		expect(loi).toContain(`bco-so-bo: nguoi:${s.U.nguoi}/soKr lech`);
+		expect(loi).toContain(`bco-so-bo: bp:${s.X}/soKr lech`);
+		expect(
+			loi.every((l) => l.includes("nguoi:") || l.includes(`bp:${s.X}`)),
+		).toBe(true);
 	});
 
 	test("bco-so-bo-do: dem bo ca nhan tren tap cong khai (so-gop) thi bo sot muc tieu gioi han va soKr lech", async () => {

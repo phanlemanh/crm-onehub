@@ -12,23 +12,6 @@ import { HangSoBoDangTai } from "./hang-so-bo";
 import { TheConBo } from "./the-con";
 import { ViTriBo } from "./vi-tri-bo";
 
-export const LOP_HANG_CONG_CU =
-	"flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between";
-
-const LOP_KHOI = "flex flex-col gap-2 sm:flex-row sm:items-center";
-
-export function HangCongCuDonVi({ chon }: { chon: ReactNode }) {
-	return (
-		<div className={LOP_KHOI} data-hang-cong-cu-don-vi>
-			{chon}
-		</div>
-	);
-}
-
-export function KhungHangCongCu({ children }: { children: ReactNode }) {
-	return <div className={LOP_HANG_CONG_CU}>{children}</div>;
-}
-
 function KhungTheoUrl({ children }: { children: ReactNode }) {
 	const url = loadOkrSearchParams(new URLSearchParams(useSearchParams()));
 	const ky = url[SEARCH_PARAM.okr.ky];

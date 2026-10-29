@@ -4,6 +4,7 @@ import {
 	QueryClientProvider,
 	skipToken,
 } from "@tanstack/react-query";
+import { useQueryState } from "nuqs";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
 	act,
@@ -272,6 +273,9 @@ mock.module("@/components/page-shell", () => ({
 const { TheoDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
 );
+const { parseAsDonOkr } = await import(
+	"@/app/(app)/[slug]/okr/okr-search-params"
+);
 const { DauTrangOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
@@ -330,6 +334,7 @@ async function mo(
 					<LocaleProvider locale="vi">
 						<TooltipProvider>
 							<TheoDonVi />
+							<DoiDon den="pb:pb-kho" />
 						</TooltipProvider>
 					</LocaleProvider>
 				</QueryClientProvider>
@@ -354,9 +359,21 @@ async function cho(xong: () => boolean, moTa: string): Promise<void> {
 	);
 }
 
-async function moOChon(o: HTMLElement) {
-	const nut = o.querySelector("[data-chon-don-vi]");
-	if (!nut) throw new Error("khong co o chon don vi");
+function DoiDon({ den }: { den: string }) {
+	const [, dat] = useQueryState("donOkr", parseAsDonOkr);
+	return (
+		<button
+			data-doi-don={den}
+			hidden
+			onClick={() => void dat(parseAsDonOkr.parse(den))}
+			type="button"
+		/>
+	);
+}
+
+async function moMenu(o: HTMLElement): Promise<Map<string, string>> {
+	const nut = o.querySelector("[data-menu-vi-tri]");
+	if (!nut) throw new Error("khong co menu dong vi tri");
 	await act(async () => {
 		for (const loai of ["pointerdown", "mousedown", "pointerup", "click"]) {
 			nut.dispatchEvent(
@@ -370,34 +387,15 @@ async function moOChon(o: HTMLElement) {
 		}
 	});
 	await cho(
-		() => document.querySelectorAll('[role="option"]').length > 0,
-		"o chon don vi mo",
+		() => document.querySelectorAll("[data-menu-don]").length > 0,
+		"menu dong vi tri mo",
 	);
-}
-
-async function luaChon(o: HTMLElement, ten: string): Promise<HTMLElement> {
-	await moOChon(o);
-	const lc = [
-		...document.querySelectorAll<HTMLElement>('[role="option"]'),
-	].find((x) => x.querySelector("span")?.textContent === ten);
-	if (!lc) throw new Error(`khong thay don vi ${ten}`);
-	return lc;
-}
-
-async function goiYOChon(o: HTMLElement): Promise<Map<string, string>> {
-	await moOChon(o);
-	const ra = new Map(
-		[...document.querySelectorAll('[role="option"]')].map((x) => {
-			const [ten, goiY] = [...x.querySelectorAll("span")];
-			return [ten?.textContent ?? "", goiY?.textContent ?? ""] as const;
+	return new Map(
+		[...document.querySelectorAll("[data-menu-don]")].map((x) => {
+			const [ten, dem] = [...x.querySelectorAll("span span")];
+			return [ten?.textContent ?? "", dem?.textContent ?? ""] as const;
 		}),
 	);
-	await act(async () => {
-		document.activeElement?.dispatchEvent(
-			new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
-		);
-	});
-	return ra;
 }
 
 function soDongKrDuoi(o: Element): number {
@@ -411,7 +409,7 @@ function soDongKrDuoi(o: Element): number {
 }
 
 const KHUNG_BANG = '[aria-busy="true"]:not([data-khung-xuong="hang-so"])';
-const SO_NUT_HANG_CONG_CU = 9;
+const SO_NUT_HANG_CONG_CU = 8;
 
 const nutCo = (o: ParentNode, chu: string) =>
 	[...o.querySelectorAll("button")].some((b) => b.textContent?.trim() === chu);
@@ -436,7 +434,7 @@ afterEach(async () => {
 });
 
 describe("theo-don-vi", () => {
-	test("theo-don-vi-danh-sach: ba khoi muc tieu, moi bang KR bon cot, cay don vi co so dem", async () => {
+	test("theo-don-vi-danh-sach: ba khoi muc tieu, moi bang KR bon cot, menu dong vi tri co so dem", async () => {
 		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
 			objectives: [mucTieu("a", 2), mucTieu("b", 1), mucTieu("c", 3)],
 			canEdit: false,
@@ -444,17 +442,16 @@ describe("theo-don-vi", () => {
 		dem = { "pb:pb-1": 3, goc: 1 };
 		const s = await mo("pb:pb-1", null, true, { expand: "a,b,c" });
 		const khoi = [...s.o.querySelectorAll("[data-muc-tieu]")];
-		const goiY = await goiYOChon(s.o);
+		const menu = await moMenu(s.o);
 		expect({
 			khoi: khoi.map((k) => k.getAttribute("data-muc-tieu")),
 			cot: khoi.map((k) => k.closest("tr")?.querySelectorAll("td").length),
 			dongKr: khoi.map((k) => soDongKrDuoi(k)),
 			nutCay: s.o.querySelectorAll("[data-chon-don-vi]").length,
-			demPb1: goiY.get("Kinh doanh vùng 1"),
-			demKho: goiY.get("Kho vận"),
-			dangChon: s.o
-				.querySelector("[data-chon-don-vi]")
-				?.getAttribute("data-don-chon"),
+			demThuoc: menu.get("Kinh doanh"),
+			dangChon: s.o.querySelector(
+				'[data-vi-tri-bo="mot-bo"] [aria-current="page"]',
+			)?.textContent,
 			trangThai: s.o
 				.querySelector("[data-trang-thai]")
 				?.getAttribute("data-trang-thai"),
@@ -465,10 +462,9 @@ describe("theo-don-vi", () => {
 			khoi: ["a", "b", "c"],
 			cot: [5, 5, 5],
 			dongKr: [2, 1, 3],
-			nutCay: 1,
-			demPb1: "Thuộc Kinh doanh · 3 mục tiêu",
-			demKho: "Thuộc Vận hành · chưa đặt",
-			dangChon: "pb:pb-1",
+			nutCay: 0,
+			demThuoc: "chưa có mục tiêu riêng",
+			dangChon: "Kinh doanh vùng 1",
 			trangThai: "ST-donvi-danhsach",
 			tinhTrang: "cham-nhip",
 		});
@@ -559,7 +555,7 @@ describe("theo-don-vi-bien", () => {
 			khongThay:
 				s.o.querySelector('[data-trang-thai="ST-donvi-khongthay"]') !== null,
 			theDonVi: s.o.querySelector("[data-don-vi]"),
-			cay: s.o.querySelectorAll("[data-chon-don-vi]").length,
+			viTri: s.o.querySelectorAll('[data-vi-tri-bo="mot-bo"]').length,
 		};
 		const nutVe = [...s.o.querySelectorAll("button")].find(
 			(b) => b.textContent?.trim() === m.khongThay.action,
@@ -567,21 +563,13 @@ describe("theo-don-vi-bien", () => {
 		await act(async () => {
 			nutVe?.click();
 		});
-		await cho(
-			() =>
-				s.o
-					.querySelector("[data-chon-don-vi]")
-					?.getAttribute("data-don-chon") === "goc",
-			"ve goc",
-		);
-		expect({
-			truoc,
-			sau: s.o
-				.querySelector("[data-chon-don-vi]")
-				?.getAttribute("data-don-chon"),
-		}).toEqual({
-			truoc: { khongThay: true, theDonVi: null, cay: 1 },
-			sau: "goc",
+		const tenBo = () =>
+			s.o.querySelector('[data-vi-tri-bo="mot-bo"] [aria-current="page"]')
+				?.textContent;
+		await cho(() => tenBo() === "OneHub", "ve goc");
+		expect({ truoc, sau: tenBo() }).toEqual({
+			truoc: { khongThay: true, theDonVi: null, viTri: 1 },
+			sau: "OneHub",
 		});
 	});
 
@@ -591,7 +579,7 @@ describe("theo-don-vi-bien", () => {
 			canEdit: true,
 		});
 		const s = await mo("pb:pb-1");
-		const hang = s.o.querySelector("[data-hang-cong-cu-don-vi]")?.parentElement;
+		const hang = s.o.querySelector("[data-hang-cong-cu]");
 		expect({
 			wrap: hang?.classList.contains("lg:flex-wrap"),
 			trongDau: hang?.closest('[data-slot="card-header"]') !== null,
@@ -707,7 +695,8 @@ describe("khung-xuong", () => {
 		),
 	});
 	const sangKho = async (o: HTMLElement) => {
-		const nut = await luaChon(o, "Kho vận");
+		const nut = o.querySelector<HTMLElement>('[data-doi-don="pb:pb-kho"]');
+		if (!nut) throw new Error("khong co nut doi don");
 		await act(async () => {
 			nut.click();
 		});

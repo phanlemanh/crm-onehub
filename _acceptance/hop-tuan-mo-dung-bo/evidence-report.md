@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 81b1314b7c8f0e7b976c0a5cb9d1e68b9bb662d7
+verified_commit: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15
 human_signoff: Phan Le Manh 2026-10-26
 ---
 
@@ -241,3 +241,7 @@ sha: c96df72880128f933d460e863918a2b5329de0ba · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-28, do HT5 81b1314b7: okr-cam-xuc*.spec.ts thêm afterAll trả đồng hồ thật (đồng hồ giả rò sang giai-doan.spec.ts trên CI); chủ kho xác nhận commit sau ký
 run_id: repin-20261028T054823Z-25946
 sha: 81b1314b7c8f0e7b976c0a5cb9d1e68b9bb662d7 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E11 · AC không có chốt máy: AC-9, AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-28, do VK19 bo-okr-chi-don-vi: ghim lại các hồ sơ xanh ở làn trước (vượt trần), sau V5-9/V5-10
+run_id: repin-20261028T183615Z-69491
+sha: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E12 · thay bởi hồ sơ đã ký: E12→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E11 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9, AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
