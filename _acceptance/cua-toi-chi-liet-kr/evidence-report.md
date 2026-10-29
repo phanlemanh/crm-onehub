@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a6b1907a839340eb72dac2996ba89fd869986784
+verified_commit: d273749a9d2394457de1957423de0755c819aa09
 human_signoff: Phan Le Manh 2026-10-29
 ---
 
@@ -252,3 +252,7 @@ none — every multi-run eval is uniform
 Round 1: không eval nào đỏ; lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở `test/hop-tuan-tren-bang.dom.tsx` (1 trên 8 ca), không gắn eval nào, nguyên nhân gốc chưa rõ. Verdict REJECT, trả về cho bước dựng để xem lại ca đỏ.
 
 Round 2: cả 15 eval và cả 7 lệnh suite xanh, trong đó lệnh suite đỏ ở round 1 nay xanh. Sau round 1 htb-nguon của HT2 được bỏ lối Của tôi và thay bằng AC-8 (commit a6b1907a8). Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-29, do ghim lại sau khi gộp onehub e539693c7 và vá thước VK2 (cham-tep V4-23)
+run_id: repin-20261029T225600Z-68476
+sha: d273749a9d2394457de1957423de0755c819aa09 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

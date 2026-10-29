@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 229fcd7fb931373cdd6bf6f293874aa8b6b99686
+verified_commit: d273749a9d2394457de1957423de0755c819aa09
 human_signoff: Phan Le Manh 2026-10-20
 ---
 
@@ -262,3 +262,7 @@ sha: d781e14c762cc3a507b015ad043adac3a6e34d7b · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-29, do VK19 bo-okr-chi-don-vi: ghim lượt A sau sửa thước V5-17 (Q7)
 run_id: repin-20261029T002846Z-11740
 sha: 229fcd7fb931373cdd6bf6f293874aa8b6b99686 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-29, do ghim lại sau khi gộp onehub e539693c7 và vá thước VK2 (cham-tep V4-23)
+run_id: repin-20261029T225600Z-68476
+sha: d273749a9d2394457de1957423de0755c819aa09 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E6, E10, E11 · thay bởi hồ sơ đã ký: E6→cua-toi-chi-liet-kr#AC-2, E10→cua-toi-chi-liet-kr#AC-1, E11→cua-toi-chi-liet-kr#AC-1 · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-6, AC-9, AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
