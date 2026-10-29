@@ -5,7 +5,7 @@ slug: cua-toi-chi-liet-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-28-cua-toi-chi-liet-kr-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-28T07:18:46Z
@@ -98,3 +98,8 @@ Quét bằng `morphological-scan` (preset entity-feature, gọn) trên không gi
 - Bản chụp `apps/agent/test/fixtures/tin-nhac-truoc-tb1.json` đụng `bam-kr-mo-chi-tiet-kr` E6 — xử qua `cham-tep` ở
   S3 (design doc).
 - Xoá khoá chữ thôi dùng ở `apps/app/lib/messages/okr.ts` cần `cham-tep` (tệp chữ chung, luật 7 của đợt).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-29:
+  - Ngoài-1: Mở một KR không còn hay không xem được trả về rỗng thay vì lỗi «không thấy», và tài liệu API chưa ghi trường hợp này.
+  - Ngoài-2: Đường dẫn tới Của tôi và tới bộ OKR được khai ở hơn một chỗ, nên đổi đường sau này phải sửa đủ mọi chỗ.
+  - Ngoài-3: Khi hệ thống trục trặc tạm thời, bấm một KR có thể đưa về Của tôi kèm báo không thấy KR dù KR vẫn còn.
+  - Ngoài-5: Lần trục trặc ấy không để lại dòng log nào cho đội kỹ thuật lần theo.
