@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3eedb86d6513ff947845c5a7dac3c59afc47dc37
+verified_commit: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15
 human_signoff: Phan Le Manh 2026-10-04
 ---
 
@@ -384,3 +384,7 @@ Round 3: E1 đến E25 xanh — 16 eval chạy lại ở HEAD b9cf90a2 (14 eval 
 ### Re-pin lần 1 — 2026-10-10, do K3b sửa rang/san-gop-y.mjs của hồ sơ; E25 neo mốc chấm (P1-61 ngả A); ghim lại ở đỉnh sau gộp onehub 5042d0ce
 run_id: repin-20261010T222919Z-97844
 sha: 3eedb86d6513ff947845c5a7dac3c59afc47dc37 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E22, E23, E26 · diff chạm vật đo ngoài làn máy: E2, E22, E23, E26 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-16 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-28, do VK19 bo-okr-chi-don-vi: ghim lại các hồ sơ xanh ở làn trước (vượt trần), sau V5-9/V5-10
+run_id: repin-20261028T183615Z-69491
+sha: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E22, E23, E26 · diff chạm vật đo ngoài làn máy: E2, E22, E23, E26 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-16 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

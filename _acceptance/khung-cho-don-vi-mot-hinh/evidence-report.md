@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2bd4770799820a3cd867a64b45ba80f357354e3e
+verified_commit: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15
 human_signoff: Phan Le Manh 2026-10-21 — ký lại Cổng Bằng chứng trên vòng chấm 4 (delta sau chữ ký, PASS, 9/9 eval, 7/7 suite; khung khớp hàng công cụ sau thanh bên khu theo V2-16 a; rang nhận /okr/bo-okr theo V2-15 i). Ngoài-1, 2, 6–9, 12–15 ghi Known limits; Ngoài-3, 4, 11 mở hợp đồng mới; Ngoài-5, 10 chấp nhận, không sửa; đồng ý cắt; Treo phê hết.
 ---
 
@@ -210,3 +210,7 @@ sha: 11629978b324374e5522438772741cf73f3885eb · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-27, do gộp onehub 5084ffe74 (#566, #567 VK6, #575) vào VK8; sửa hydrat khung xương, khung chờ có hàng số và thước bco-the (V4-8); xếp import cho lint
 run_id: repin-20261027T120842Z-80884
 sha: 2bd4770799820a3cd867a64b45ba80f357354e3e · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-4 · chập chờn (đỏ lần đầu, đạt khi chạy lại): muc-tieu-va-kr E14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-28, do VK19 bo-okr-chi-don-vi: ghim lại các hồ sơ xanh ở làn trước (vượt trần), sau V5-9/V5-10
+run_id: repin-20261028T183615Z-69491
+sha: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3 · thay bởi hồ sơ đã ký: E3→bo-okr-chi-don-vi#AC-4 · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-1, AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

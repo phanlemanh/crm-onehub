@@ -627,7 +627,7 @@ export class OkrKhepService {
 		const where: Prisma.OkrObjectiveWhereInput = {
 			AND: [
 				{ cycleId: input.cycleId, status: "cong-bo" },
-				input.donVi ? this.xem.dieuKienDonVi(input.donVi, q) : {},
+				input.donVi ? this.xem.dieuKienDonVi(input.donVi) : {},
 			],
 		};
 		const [mts, dauDong, dongKy, hocTap] = await Promise.all([

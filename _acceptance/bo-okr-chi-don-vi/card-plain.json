@@ -1,0 +1,128 @@
+{
+  "feature_plain": "Trưởng khối mở bộ OKR của khối mình chỉ thấy mục tiêu riêng của khối; muốn xem bộ của một phòng thì bấm tên khối trên dòng vị trí để mở menu và sang thẳng bộ đó.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ cho bộ của một khối, ở cả bốn thẻ OKR · Họp tuần · Việc · Chấm điểm và bốn ô số, chỉ gồm mục tiêu của chính khối — không mục tiêu, KR hay việc nào của phòng con."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ cho mỗi hàng ở danh sách Bộ OKR đọc số riêng của bộ đó: Mục tiêu, Tiến độ và KR tự tin thấp khớp bốn ô số khi mở bộ ấy."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ giữ Toàn cảnh và Sức khoẻ cộng dồn khối với các phòng con — đó là chỗ duy nhất còn cộng dồn."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ bỏ ô chọn đơn vị, lưới «Đơn vị trực thuộc» và mục gập «Đã bỏ» khỏi trang một bộ, giữ đúng thứ tự màn: dòng vị trí, thẻ con, một hàng công cụ, bảng, chân."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ mở một menu khi bấm tên bộ trên dòng vị trí: Thuộc · Cùng cấp · Trực thuộc, mỗi đơn vị kèm số mục tiêu riêng; chọn một đơn vị là sang bộ của nó, giữ chu kỳ và thẻ đang mở."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ đặt nút «Đã bỏ (n)» ở cuối hàng công cụ; bật lên thì bảng chỉ còn mục tiêu đã bỏ, tải lại trang vẫn giữ."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ nói «<Khối> chưa có mục tiêu riêng trong <chu kỳ>» khi khối không có mục tiêu của chính nó, và chỉ sang menu để tới bộ của các phòng."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ thay danh sách «Đơn vị có KR» ở Họp tuần OneHub rỗng bằng một câu chỉ sang menu dòng vị trí và liên kết «Xem mọi bộ OKR»."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ đạt ngưỡng anh giữ trên bộ OKR mẫu: Khối Kinh doanh 1 mục tiêu, Khối Vận hành 1, Khối Hỗ trợ 0 kèm câu rỗng; danh sách khớp số trong bộ; menu gọn trong màn điện thoại."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG làm menu sang người cùng phòng cho bộ cá nhân — chưa hàng nào gánh."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG làm cột phải «Góp vào» của trang bộ — việc của VK15."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG đổi Toàn cảnh và Sức khoẻ — vẫn cộng dồn khối với phòng con."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG đổi thẻ «Sơ đồ góp vào» — nó dẫn sang Báo cáo › Sơ đồ của cả khu, không phải tập mục tiêu của bộ."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG đổi Của tôi (nhóm gập Đã bỏ, Đang theo dõi) — việc của SV1."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG đổi dữ liệu: không chuyển mục tiêu của phòng lên khối, không đổi cấu trúc lưu."
+    },
+    {
+      "id": "OOS-7",
+      "p": "KHÔNG thêm sự kiện đo lượt bấm menu — xem Hỏi-3."
+    }
+  ],
+  "scope_plain": "Những gì vòng này cố ý để ngoài:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đủ mọi loại bộ: OneHub, khối có và không có mục tiêu riêng, khối không phòng con, phòng trong khối, phòng chưa xếp, bộ cá nhân (AC-1 bộ chỉ của mình, AC-5 menu, AC-7 câu rỗng)."
+    },
+    {
+      "i": 1,
+      "p": "Đủ mọi chỗ đọc tập mục tiêu của bộ: bốn thẻ, bốn ô số, danh sách Bộ OKR, và Toàn cảnh, Sức khoẻ vẫn cộng dồn (AC-1, AC-2, AC-3)."
+    },
+    {
+      "i": 2,
+      "p": "Đủ mọi đường sang đơn vị khác: còn đúng một đường là menu dòng vị trí, ba đường cũ gỡ (AC-4, AC-5, AC-8)."
+    },
+    {
+      "i": 3,
+      "p": "Tập con của bảng: đang chạy và đã bỏ qua nút (AC-6 nút Đã bỏ)."
+    },
+    {
+      "i": 4,
+      "p": "Màn 1440 và 375, nền sáng và tối, đo trên bộ mẫu (AC-9 ngưỡng anh giữ)."
+    },
+    {
+      "i": 5,
+      "p": "Có và không có lọc trạng thái: đang lọc thì không có nút Đã bỏ (AC-6)."
+    },
+    {
+      "i": 6,
+      "p": "Để sau: menu cho bộ cá nhân, cột phải Góp vào, màn Của tôi — mỗi mục có dòng lý do trong sổ."
+    },
+    {
+      "i": 7,
+      "p": "Không chạy bộ quét độ phủ tự động: phạm vi đã chốt qua tám câu anh trả lời ngày 25/10; các trục trên dựng tay từ các chỗ đọc thật."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Máy đã tự bỏ thước «bao nhiêu lần trưởng khối sang bộ phòng qua menu» trong khi anh vừa giữ ngưỡng có ô ấy. Đã chuyển thành câu hỏi cho anh (Hỏi-3)."
+    },
+    {
+      "i": 1,
+      "p": "Lo thẻ «Sơ đồ góp vào» vẫn gom phòng con. Đo lại thì thẻ ấy chỉ dẫn sang Báo cáo › Sơ đồ của cả khu, không phải tập mục tiêu của bộ; đã ghi rõ trong phần để ngoài."
+    },
+    {
+      "i": 2,
+      "p": "Thiếu đo tập mục tiêu đã bỏ theo từng đơn vị — mục tiêu đã bỏ của phòng con có thể lọt vào nút Đã bỏ của khối. Đã thêm vào phép đo, và nói rõ nút ẩn khi đang lọc trạng thái."
+    },
+    {
+      "i": 3,
+      "p": "Thiếu phép đo trên màn rằng số ở danh sách bằng số trong bộ. Đã thêm phép so ba khối × ba cột giữa danh sách, ô số và máy chủ."
+    },
+    {
+      "i": 4,
+      "p": "Phép đo «trang gọn» chưa đủ chặt: chưa đo một hàng công cụ và thứ tự tới chân, chưa có đối chứng trên bản cũ. Đã bổ sung cả ba."
+    }
+  ]
+}

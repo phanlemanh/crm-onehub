@@ -249,15 +249,14 @@ export async function e2(n) {
 		dat,
 		`DANH SACH: tieu de ${d.viTriChu === CHU.viTri && d.coDanhSach ? "Bo OKR" : `«${d.viTriChu ?? "-"}» (${d.viTri ?? "khong co"})`} · trang «${d.tieuDe ?? "-"}» · ${d.cot.length} cot · ${d.hang.length} hang = ${mong.size} don vi cua cay${tapBang(thay, mong) ? "" : ` · thieu ${tapChu(new Set([...mong].filter((k) => !thay.has(k))))} · thua ${tapChu(new Set([...thay].filter((k) => !mong.has(k))))}`}${tenLech.length ? ` · ten lech ${tenLech.map((h) => h.don).join(",")}` : ""}`,
 	);
-	const tcTheo = new Map(n.tc.hang.map((h) => [h.key, h]));
 	const lech = [];
 	for (const h of d.hang) {
-		const tc = tcTheo.get(h.don);
+		const so = n.so.get(h.don);
 		const c = cay.find((x) => x.don === h.don);
 		const mongO = {
 			mucTieu: String(n.dem[h.don] ?? 0),
-			tienDo: tc?.tienDo == null ? CHU.trong : `${tc.tienDo}%`,
-			tuTin: String(tc?.tuTin.thap ?? 0),
+			tienDo: so?.tienDo == null ? CHU.trong : `${so.tienDo}%`,
+			tuTin: String(so?.tuTin.thap ?? 0),
 			truong: c?.truong ?? CHU.trong,
 		};
 		for (const [k, v] of Object.entries(mongO))
@@ -266,7 +265,7 @@ export async function e2(n) {
 	kd(
 		"AC-1",
 		d.hang.length > 0 && lech.length === 0,
-		`DANH SACH SO: ${d.hang.length} hang · muc tieu = countByUnit · tien do = toanCanh · tu tin thap = toanCanh · truong = org.tree${lech.length ? ` · lech ${lech.slice(0, DO.toiDaLech).join("; ")}` : ""}`,
+		`DANH SACH SO: ${d.hang.length} hang · muc tieu = countByUnit · tien do = soBo · tu tin thap = soBo · truong = org.tree${lech.length ? ` · lech ${lech.slice(0, DO.toiDaLech).join("; ")}` : ""}`,
 	);
 }
 

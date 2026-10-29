@@ -804,7 +804,6 @@ const LOI_THAT = {
 				dangTaiLai={false}
 				dem={undefined}
 				doiLoc={() => {}}
-				hangCongCu={null}
 				loc={LOC_RONG}
 				rong={null}
 				rows={[mtMot()]}
