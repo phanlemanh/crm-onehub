@@ -359,6 +359,13 @@ describe("lsml-danh-sach", () => {
 				loi.push(`lsml-danh-sach: ${l.id} gia tri «${so}»`);
 			if (l.ghiChu && !chu.includes(l.ghiChu))
 				loi.push(`lsml-danh-sach: ${l.id} thieu ghi chu`);
+			const tuTin = [...(d?.querySelectorAll("[data-tu-tin]") ?? [])].map(
+				(e) => e.getAttribute("data-tu-tin"),
+			);
+			if (JSON.stringify(tuTin) !== JSON.stringify([l.tuTin ?? "vua"]))
+				loi.push(
+					`lsml-danh-sach: ${l.id} muc tu tin ${JSON.stringify(tuTin)} can ${l.tuTin ?? "vua"}`,
+				);
 			if (d?.querySelector(`[data-hang-cam-xuc="${l.id}"]`) === null)
 				loi.push(`lsml-danh-sach: ${l.id} thieu hang cam xuc`);
 			dem += 1;
@@ -412,6 +419,32 @@ describe("lsml-bieu-do", () => {
 				qs(`${LICH_SU} .recharts-reference-line`) === null
 			)
 				loi.push("lsml-bieu-do: thieu vach dich");
+			const tuanCuoi = "2026-10-19";
+			const leRaMong = TUAN_KY.flatMap((t) => {
+				const k = Math.round((10 + (40 * kyVongTuan(t)) / 100) * 100) / 100;
+				const soLan =
+					t > tuanCuoi ? 0 : CHIN_LAN.filter((l) => l.tuan === t).length;
+				return Array.from({ length: Math.max(soLan, 1) }, () => k);
+			});
+			const leRa = qsa(`${LICH_SU} table.sr-only tbody tr`).map((r) => {
+				const o = r.querySelectorAll("td")[1]?.textContent ?? "";
+				return o === "—" ? null : Number(o);
+			});
+			if (JSON.stringify(leRa) !== JSON.stringify(leRaMong))
+				loi.push(
+					`lsml-bieu-do: cot le ra ${JSON.stringify(leRa)} can ${JSON.stringify(leRaMong)}`,
+				);
+			const duongKyVong = qsa(
+				`${LICH_SU} .recharts-line path.recharts-curve`,
+			).filter(
+				(p) =>
+					p.getAttribute("stroke") === "var(--color-expected)" &&
+					(p.getAttribute("d") ?? "").length > 0,
+			);
+			if (duongKyVong.length !== 1)
+				loi.push(
+					`lsml-bieu-do: ${duongKyVong.length} duong ky vong can 1`,
+				);
 			dem += 1;
 			const nhan =
 				qs(`${LICH_SU} [data-slot="chart"]`)?.getAttribute("aria-label") ?? "";
@@ -611,6 +644,29 @@ describe("lsml-trang-thai", () => {
 			!mucSo()
 		)
 			loi.push("lsml-trang-thai: kr moc");
+		const dongMoc = dongLan().map((d) => ({
+			id: d.getAttribute("data-lan-cap-nhat"),
+			tuTin: [...d.querySelectorAll("[data-tu-tin]")].map((e) =>
+				e.getAttribute("data-tu-tin"),
+			),
+			ghiChu: d.textContent ?? "",
+		}));
+		const mongMoc = [
+			{ id: "M2", tuTin: ["cao"], ghiChu: "xong roi" },
+			{ id: "M1", tuTin: ["thap"], ghiChu: "chua xong" },
+		];
+		if (
+			dongMoc.length !== 2 ||
+			mongMoc.some(
+				(m, i) =>
+					dongMoc[i]?.id !== m.id ||
+					JSON.stringify(dongMoc[i]?.tuTin) !== JSON.stringify(m.tuTin) ||
+					!dongMoc[i]?.ghiChu.includes(m.ghiChu),
+			)
+		)
+			loi.push(
+				`lsml-trang-thai: kr moc dong ${JSON.stringify(dongMoc.map(({ id, tuTin }) => ({ id, tuTin })))} can M2 cao, M1 thap kem ghi chu`,
+			);
 		dem += 1;
 		await thaoHet();
 
