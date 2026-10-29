@@ -137,6 +137,7 @@ yêu cầu `cham-tep` cho giám sát, không tự sửa. Ô nào còn đo đư�
 | cua-toi-ba-phan/E18 | màn: `?tu=nhac` thêm một phiên | cua-toi-chi-liet-kr#AC-1 |
 | cua-toi-ba-phan/E19 | lỗi mở phiên từ nút và từ `?tu=` | cua-toi-chi-liet-kr#AC-6 |
 | cua-toi-ba-phan/E20 | bảng đang điền còn khi tải lại lỗi | cua-toi-chi-liet-kr#AC-9 |
+| cap-nhat-tuan-okr/E7 | mở phiên cập nhật từ màn Cập nhật tuần (đã thay bởi cua-toi-ba-phan#AC-2, ô đó nay thay bởi AC-6) | cua-toi-chi-liet-kr#AC-6 |
 | cap-nhat-tuan-okr/E10 | một tin gom việc, liên kết `/okr?tu=nhac` | cua-toi-chi-liet-kr#AC-4 |
 | cap-nhat-tuan-okr/E13 | màn: liên kết `/okr?tu=viec-cua-toi` | cua-toi-chi-liet-kr#AC-5 |
 | cap-nhat-tuan-okr/E16 | màn: dòng `[data-kr]` của bảng phần 1 | cua-toi-chi-liet-kr#AC-1 |
