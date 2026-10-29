@@ -3834,6 +3834,27 @@
       "ghi_chu": "Cùng ngăn KR với SV1 và SV7: mở sau khi SV1 gộp để khỏi ghim lại thêm."
     },
     {
+      "ma": "VK20",
+      "slug": "kara-viet-lai-khong-de-chu",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-31",
+      "dot": "okr-vo-khu-1810",
+      "thu_tu": 104.8,
+      "dung_tren": [
+        "VK10",
+        "HT6"
+      ],
+      "ten": "Kara viết lại không đè chữ người vừa sửa",
+      "ten_ngan": "Không đè chữ người",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị nhận lần lượt nhiều góp ý viết lại của Kara trong cùng một mục tiêu ở chế độ Soạn, tự sửa chữ xen giữa, và chữ vừa sửa vẫn giữ nguyên trên tài liệu lẫn trên máy chủ»",
+      "vi_sao": "Ngoài-4 ở Cổng Bằng chứng của VK10 che-do-soan-bo-okr (28/10): nhận hay hoàn tác một góp ý viết lại áp lại mọi góp ý đã nhận trước đó trong cùng mục tiêu, nên chữ người soạn sửa sau khi nhận bị trả về chữ Kara cũ, và lần rời ô kế tiếp lưu đè lên máy chủ không cảnh báo (apps/app/app/(app)/[slug]/okr/soan-bo/khoi-gop-y.tsx). Chủ kho chọn «mở hợp đồng mới», sổ _acceptance/che-do-soan-bo-okr/decisions.jsonl d-20261028T202712Z-55.",
+      "bat_khi": "Ở chế độ Soạn, nhận góp ý viết lại tên mục tiêu X, sửa tiếp tên đó, rồi nhận một góp ý viết lại KR của X: tên mục tiêu vẫn là chữ vừa sửa, đọc lại máy chủ cũng vậy",
+      "ly_do": "Chủ kho 28/10 nguyên văn «Thêm hàng lộ trình cho Ngoài-4 của VK10: có — một hàng «Kara viết lại không đè chữ người vừa sửa», sau HT6».",
+      "ghi_chu": "Cùng khối góp ý của chế độ Soạn với VK10: mở sau khi VK10 gộp."
+    },
+    {
       "ma": "VK14",
       "slug": "so-do-cua-bo-okr",
       "hang": "T2",
