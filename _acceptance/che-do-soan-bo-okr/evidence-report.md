@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8f863fac00fcf46b46854f4011aae6e1dc71520d
+verified_commit: 0babed1afede17b73c5c5dca4a447a5d88833816
 human_signoff: Phan Le Manh 2026-10-28
 ---
 
@@ -301,3 +301,7 @@ none — every multi-run eval is uniform
 Rounds 1-4: dữ liệu vòng này không kèm lịch sử; run-log ghi E1 và E17 đỏ ở vòng 1, E17 đỏ ở vòng 2, E17 xanh ở vòng 3; xem sổ quyết định S4 vòng 4 (commit cac923dbf).
 Round 5: E17 failed — chỗ lệch thứ tám ngoài bảy chỗ của Notes (lề ô số KR sát nhãn "KR n", bản mẫu thụt thẳng hàng dưới tiêu đề KR, chênh khoảng 36 px); phụ: chữ nút "Nhờ Kara soạn nháp" ở bộ trống nhạt kiểu vô hiệu. Returned to implementation.
 Round 6: mọi eval xanh trên cây 8f863fac0; E17 không còn chỗ lệch ngoài bảy chỗ cho phép của Notes.
+
+### Re-pin lần 1 — 2026-10-29, do hoá cũ do gộp onehub c16e13c9c (VK19)
+run_id: repin-20261029T090134Z-10596
+sha: 0babed1afede17b73c5c5dca4a447a5d88833816 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E17 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
