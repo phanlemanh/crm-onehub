@@ -2391,6 +2391,16 @@ executors:
     tbk_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao-cai-dat.dom.tsx -t tbk-man
     tbk_doi_chieu: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-doi-chieu.integration.spec.ts -t tbk-doi-chieu"'
     otdt_dom: '(git diff --quiet $(git merge-base origin/onehub HEAD) HEAD -- packages/ui/test/nguon-keo-tha.dom.tsx packages/ui/test/nguon-canh-nhau.dom.tsx apps/app/test/truong-tep.dom.tsx apps/app/test/nguon-keo-tha-chu.dom.tsx apps/app/test/tai-lieu-nguon.dom.tsx || (echo "otdt dom: bai cu bi sua" && exit 1)) && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/nguon-keo-tha.dom.tsx ./test/nguon-canh-nhau.dom.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx ./test/nguon-keo-tha-chu.dom.tsx ./test/tai-lieu-nguon.dom.tsx'
+    vk10_dom_mo: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-mo
+    vk10_dom_viet: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-viet
+    vk10_dom_sua: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-sua
+    vk10_cham_bo: cd packages/validation && bun test test/okr-cham-bo.spec.ts -t vk10-cham
+    vk10_dom_chat_luong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-chat-luong
+    vk10_dom_gop_y: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-gop-y
+    vk10_dom_cong_bo: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-cong-bo
+    vk10_dom_ngan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-ngan
+    vk10_dom_quyen: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-quyen
+    vk10_dom_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/che-do-soan-bo-okr.dom.tsx -t vk10-tai
     bcd_bon_the: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-bon-the"'
     bcd_so_rieng: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-so-rieng"'
     bcd_toan_canh: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/bo-okr-chi-don-vi.spec.ts -t bcd-toan-canh"'
@@ -3636,6 +3646,9 @@ executors:
     otdt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/o-tep-dien-thoai/rang/do-man.mjs"'
     ctc_man: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chi-tiet-cong-ty-hai-cot/rang/do-bo-cuc.mjs"
     ctc_man_do: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chi-tiet-cong-ty-hai-cot/rang/do-bo-cuc.mjs --chi-do"
+    vk10_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/che-do-soan-bo-okr/rang/man-soan.mjs"'
+    vk10_san_thiet_ke: bun _acceptance/che-do-soan-bo-okr/rang/san-thiet-ke.mjs
+    vk10_khong_doi_hinh: bun _acceptance/che-do-soan-bo-okr/rang/khong-doi-hinh.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

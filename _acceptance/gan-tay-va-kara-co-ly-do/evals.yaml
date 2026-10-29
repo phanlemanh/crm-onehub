@@ -81,6 +81,8 @@ evals:
     criterion: AC-10
     executor: test
     cmd: config:executors.test.l4_de_xuat
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; cùng tệp, -t l4-de-xuat: dựng DeXuatNeo thật với hai dòng can-chinh (có canCu, không canCu) qua useGopYMucTieu giả theo cache.ts: dòng đầu nhãn [data-muc-tin] === mucTin['co-so-lieu'], data-tone theo NGHIA_MUC_TIN, [data-de-xuat-ly-do] textContent chứa đúng lyDo, [data-de-xuat-can-cu] chứa đúng canCu, cả hai translate='no'; ba nút [data-hanh-dong] theo thứ tự can-chinh, sua-ly-do, bo-qua với nhãn m.dong.canChinh («Căn chỉnh kèm lý do»), m.dong.suaLyDo, m.de.boQua. Dòng sau: số [data-de-xuat-can-cu] === 0, nhãn 'dat-cuoc'. Bấm «Sửa lý do» → [data-hop-thoai-can-chinh] data-che-do=nhan mở với hai ô điền sẵn chữ Kara; sửa lý do, bấm gửi → troLyQuyet {deXuatId, cach: 'sua', giaTri, canCu}. Chiều đỏ ghim ở E14 (h): bỏ dòng căn cứ → 'thieu dong can cu'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/test/gan-ly-do.dom.tsx]

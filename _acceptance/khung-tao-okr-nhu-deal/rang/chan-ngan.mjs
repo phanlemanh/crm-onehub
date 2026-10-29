@@ -11,7 +11,7 @@ const DANH_SACH = [
 	"apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx",
 	"apps/app/app/(app)/[slug]/companies/create-company-sheet.tsx",
 	"apps/app/app/(app)/[slug]/campaigns/create-campaign-sheet.tsx",
-	"apps/app/app/(app)/[slug]/settings/api-keys/create-api-key-sheet.tsx",
+	"apps/app/app/(app)/[slug]/settings/api-keys/to-tao-khoa.tsx",
 	"apps/app/app/(app)/[slug]/settings/sso/add-sso-provider-sheet.tsx",
 	"apps/app/components/onboarding/khung-tao.tsx",
 	"apps/app/app/(app)/[slug]/settings/okr/sheet-mo-chu-ky.tsx",

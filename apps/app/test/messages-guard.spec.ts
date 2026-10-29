@@ -127,6 +127,8 @@ const KHONG_DAU = new Set([
 	"header.otherLocale",
 	"datMatKhau.xong.title",
 	"sheet.tabKr",
+	"taiLieu.krThu",
+	"taiLieu.phimThemKr",
 	"sheet.quaKr",
 	"khoiMucTieu.soKr",
 	"cot.kr",
@@ -218,6 +220,16 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"record-sheet.contact.firstName",
 	"record-sheet.contact.lastName",
 	"record-sheet.deal.noDate",
+	"okr-soan-bo.dauKhung.dong",
+	"okr-soan-bo.theSoan.bo",
+	"okr-soan-bo.theSoan.cotBen",
+	"okr-soan-bo.taiLieu.daLuu",
+	"okr-soan-bo.chiXem.khong-sua",
+	"okr-soan-bo.chiXem.ky-dong",
+	"okr-soan-bo.chiXem.bo-ca-nhan",
+	"okr-soan-bo.taiLoi.tieuDe",
+	"okr-soan-bo.taiLoi.moTa",
+	"okr-soan-bo.taiLoi.thuLai",
 	"okr-toan-canh.hopTuan.tuan",
 	"okr-toan-canh.hopTuan.daCapNhat",
 ];
@@ -417,6 +429,57 @@ const GHIM_OKR_SOAN = {
 	],
 } satisfies Record<string, [string, string]>;
 
+const GHIM_OKR_SOAN_BO = {
+	"okr-soan-bo:taiLieu.krThu": ["KR 1", "KR 12"],
+	"okr-soan-bo:taiLieu.boTrong": [
+		"Bộ OKR của quý này chưa có mục tiêu nào. Gõ mục tiêu đầu tiên ngay dưới đây.",
+		"Bộ OKR của quý này chưa có mục tiêu nào. Gõ mục tiêu đầu tiên ngay dưới đây.",
+	],
+	"okr-soan-bo:taiLieu.soNhap": [
+		"1 mục tiêu nháp · tự lưu",
+		"12 mục tiêu nháp · tự lưu",
+	],
+	"okr-soan-bo:taiLieu.hoiXoa.tieuDe": [
+		"Xoá mục tiêu «1»?",
+		"Xoá mục tiêu «12»?",
+	],
+	"okr-soan-bo:chatLuong.dat": ["1 trên A điểm đạt", "12 trên A điểm đạt"],
+	"okr-soan-bo:gopY.chip": ["1 góp ý", "12 góp ý"],
+	"okr-soan-bo:gopY.chipAria": [
+		"Kara có 1 góp ý chờ, mở chế độ Soạn ở mục tiêu này",
+		"Kara có 12 góp ý chờ, mở chế độ Soạn ở mục tiêu này",
+	],
+	"okr-soan-bo:gopY.viSao": [
+		"Kara đọc tên, «vì sao lúc này» và các KR của 1 mục tiêu trong bộ này. Kara chỉ đọc dữ liệu OKR.",
+		"Kara đọc tên, «vì sao lúc này» và các KR của 12 mục tiêu trong bộ này. Kara chỉ đọc dữ liệu OKR.",
+	],
+	"okr-soan-bo:congBo.nut": ["Công bố 1 mục tiêu", "Công bố 12 mục tiêu"],
+	"okr-soan-bo:congBo.nutGuiDuyet": [
+		"Gửi duyệt 1 mục tiêu",
+		"Gửi duyệt 12 mục tiêu",
+	],
+	"okr-soan-bo:congBo.hoi.tieuDe": [
+		"Công bố 1 mục tiêu?",
+		"Công bố 12 mục tiêu?",
+	],
+	"okr-soan-bo:congBo.hoi.tieuDeGuiDuyet": [
+		"Gửi duyệt 1 mục tiêu?",
+		"Gửi duyệt 12 mục tiêu?",
+	],
+	"okr-soan-bo:congBo.daCongBo": [
+		"Đã công bố 1 mục tiêu",
+		"Đã công bố 12 mục tiêu",
+	],
+	"okr-soan-bo:congBo.daGuiDuyet": [
+		"Đã gửi duyệt 1 mục tiêu",
+		"Đã gửi duyệt 12 mục tiêu",
+	],
+	"okr-soan-bo:congBo.loiMuc": [
+		"Chưa công bố được «1»",
+		"Chưa công bố được «12»",
+	],
+} satisfies Record<string, [string, string]>;
+
 const GHIM_LO_TRINH = {
 	"lo-trinh:meta": [
 		"1 việc · A/B đã giao trong phạm vi lọc",
@@ -479,6 +542,7 @@ const GHIM = {
 	...GHIM_OKR_GOP_Y,
 	...GHIM_OKR_SOAN,
 	...GHIM_LO_TRINH,
+	...GHIM_OKR_SOAN_BO,
 	"okr-cap-nhat-gan-day:chuaGui": ["Chưa gửi được: 1", "Chưa gửi được: 12"],
 	"okr-cap-nhat-gan-day:chuaTha": [
 		"Chưa thả được cảm xúc: 1",

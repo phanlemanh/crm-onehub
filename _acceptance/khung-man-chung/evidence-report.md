@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 55dedb02b97ee54a5a28571132aefd26d3407fd8
+verified_commit: 0babed1afede17b73c5c5dca4a447a5d88833816
 human_signoff: Phan Le Manh 2026-10-13
 ---
 
@@ -343,3 +343,7 @@ sha: 703904f55ccdc2ce02cbc8357aca1a5905b01746 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 7 — 2026-10-21, do gộp onehub #516, #517, #522 và khung DH12 khớp hàng công cụ sau thanh bên khu
 run_id: repin-20261021T050835Z-86941
 sha: 55dedb02b97ee54a5a28571132aefd26d3407fd8 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E12j (E12j không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-29, do hoá cũ do gộp onehub c16e13c9c (VK19)
+run_id: repin-20261029T090134Z-10596
+sha: 0babed1afede17b73c5c5dca4a447a5d88833816 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E12j · diff chạm vật đo ngoài làn máy: E12, E12j — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

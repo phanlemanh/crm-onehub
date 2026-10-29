@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 11629978b324374e5522438772741cf73f3885eb
+verified_commit: 0babed1afede17b73c5c5dca4a447a5d88833816
 human_signoff: Phan Le Manh 2026-10-23 — ký lại Cổng Bằng chứng trên vòng chấm 3 (PASS, 16 eval, 7 suite xanh) sau bản sửa lỗi Của tôi không chuyển trang tìm thấy sau lượt ký 22/10; Ngoài-3 và Ngoài-9 mở hợp đồng mới, 11 mục ghi Known limits
 ---
 
@@ -271,3 +271,7 @@ sha: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-27, do hoá cũ do gộp origin/onehub dd53c3870 (#574 VK12) vào VK6; bài đường cũ tự lấy origin/onehub (lượt 1/2)
 run_id: repin-20261027T015606Z-77455
 sha: 11629978b324374e5522438772741cf73f3885eb · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E5, E16 · diff chạm vật đo ngoài làn máy: E5, E16 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-29, do hoá cũ do gộp onehub c16e13c9c (VK19)
+run_id: repin-20261029T090134Z-10596
+sha: 0babed1afede17b73c5c5dca4a447a5d88833816 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · thay bởi hồ sơ đã ký: E13→che-do-soan-bo-okr#AC-1 · ngoài làn máy: E5, E16 · diff chạm vật đo ngoài làn máy: E5, E16 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

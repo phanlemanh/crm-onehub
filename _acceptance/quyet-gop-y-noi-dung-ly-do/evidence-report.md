@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9e42d42f1f25dac8e1ad376b03640f1ce33bb9ed
+verified_commit: 56f45c7d29aaf29ec98a1e0e9e5d7216f41c8651
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -148,3 +148,7 @@ none — every multi-run eval is uniform
 
 Round 1: không eval nào của tính năng đỏ; lệnh suite hồi quy `bun run test -- --filter=app --filter=@crm/ui` đỏ ở `apps/app/test/lo-trinh.dom.tsx` (LO-TRINH.html chưa mang khối, thông báo đòi kit từ 2.26), không gắn eval nào. Returned to implementation.
 Round 2: vẽ lại bản đồ sản phẩm bằng kit 2.26 và siết `mot-nguon.mjs` kiểm theo dải dòng của khối khoá; E3, E4, E6 chạy lại xanh, E1, E2, E5, E7, E8 mang từ round 1, toàn bộ lệnh suite xanh. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-29, do hoá cũ do gộp onehub c16e13c9c (VK19); thước sửa theo V1-65
+run_id: repin-20261029T140608Z-86679
+sha: 56f45c7d29aaf29ec98a1e0e9e5d7216f41c8651 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E4, E5, E8 · thay bởi hồ sơ đã ký: E3→che-do-soan-bo-okr#AC-7, E4→che-do-soan-bo-okr#AC-7, E5→che-do-soan-bo-okr#AC-7, E8→che-do-soan-bo-okr#AC-7 · AC không có chốt máy: AC-3, AC-4, AC-5, AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -8,6 +8,7 @@ const GOC = resolve(HERE, "..", "..", "..");
 const SLUG = "quyet-gop-y-noi-dung-ly-do";
 const MA_HANG = "K3c";
 const NHANH_CHINH = "origin/onehub";
+const MERGE_LEN = "d5078b8e33acc9f3a9dd9b2dc3ce1b064fd2acd5";
 const NGUON_HANG = [
 	"docs/plan/dot-sau-14-10/hang-viec.json",
 	".acceptance-runs/dieu-phoi-sau-14-10/hang-viec.json",
@@ -82,9 +83,13 @@ function chonNeo() {
 		daLen = false;
 	}
 	if (!daLen) return { kieu: "nhanh-mo", tu: git("merge-base", "HEAD", NHANH_CHINH).trim(), toi: "HEAD" };
-	const chuoi = git("rev-list", "--first-parent", "--ancestry-path", `${dau}..${NHANH_CHINH}`).trim().split("\n").filter(Boolean);
-	const m = chuoi.at(-1);
-	if (!m) boCuoc("khong tim thay merge dua ho so len onehub");
+	const m = MERGE_LEN;
+	try {
+		git("merge-base", "--is-ancestor", `${m}^2`, NHANH_CHINH);
+		git("merge-base", "--is-ancestor", dau, `${m}^2`);
+	} catch {
+		boCuoc(`merge ${m.slice(0, 9)} khong dua ho so len ${NHANH_CHINH}`);
+	}
 	const toi = git("rev-parse", `${m}^2`).trim();
 	return { kieu: `merge ${m.slice(0, 9)}`, tu: git("merge-base", `${m}^1`, toi).trim(), toi };
 }

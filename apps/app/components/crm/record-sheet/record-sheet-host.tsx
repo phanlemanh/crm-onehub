@@ -15,6 +15,7 @@ import { PlanSheet } from "./plan-sheet";
 import { type RecordRef, recordKey, useRecordStack } from "./record-stack";
 import { useSauKhiTaiXong } from "./sau-khi-tai-xong";
 import { SoKrSheet } from "./so-kr-sheet";
+import { SoanBoSheet } from "./soan-bo-sheet";
 import { SoanSheet } from "./soan-sheet";
 
 export function RecordSheetHost({
@@ -35,7 +36,9 @@ export function RecordSheetHost({
 			<DetailSheet
 				open={daTaiXong && stack.length > 0}
 				size={
-					shown?.kind === "soan" || shown?.kind === "hoi-okr"
+					shown?.kind === "soan" ||
+					shown?.kind === "hoi-okr" ||
+					shown?.kind === "soan-bo"
 						? "kara"
 						: undefined
 				}
@@ -79,6 +82,13 @@ export function RecordSheetHost({
 					/>
 				) : null}
 
+				{shown?.kind === "soan-bo" ? (
+					<SoanBoSheet
+						key={recordKey(shown)}
+						khoaBo={shown.id}
+						cauNoi={cauNoiOkr}
+					/>
+				) : null}
 				{shown?.kind === "hoi-okr" ? (
 					<CotHoiKara key={recordKey(shown)} cuocHoiId={shown.id} />
 				) : null}

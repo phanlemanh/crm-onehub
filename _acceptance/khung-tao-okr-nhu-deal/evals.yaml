@@ -104,7 +104,7 @@ evals:
 
   - id: E11
     status: not-run
-    superseded_by: gop-y-dung-cho#AC-5
+    superseded_by: che-do-soan-bo-okr#AC-7
     criterion: AC-7
     executor: test
     cmd: config:executors.test.kto_mo_kr_url

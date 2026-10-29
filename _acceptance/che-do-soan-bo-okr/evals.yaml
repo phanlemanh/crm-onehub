@@ -1,0 +1,388 @@
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.vk10_dom_mo
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/components/crm/record-sheet/record-stack.ts"
+      - "apps/app/components/crm/record-sheet/record-sheet-host.tsx"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      apps/app/test/che-do-soan-bo-okr.dom.tsx ca «vk10-mo»: ma trận viết trước 2 lối vào {dòng «Soạn cả bộ» của hộp
+      Thêm mục tiêu, nút «Soạn bộ OKR» trong câu rỗng của bộ trống} × {mở, tải lại với URL đang có} = 4 ô. Mỗi ô: khung
+      `[data-slot=sheet-content]` có tiêu đề «Soạn bộ OKR» và tên bộ (đơn vị · chu kỳ); tham số `record` của URL mang khoá
+      của đúng bộ; tài liệu `[data-tai-lieu-bo]` liệt các mục tiêu chưa bỏ của dữ liệu giả theo thứ tự màn theo dõi
+      (ma trận 3 mục tiêu nháp/công bố/chờ duyệt + 1 đã bỏ — đã bỏ vắng), mỗi mục tiêu đủ KR; cột bên có
+      `[data-khoi=chat-luong]` và `[data-khoi=gop-y-kara]`. Thông điệp ghim «vk10-mo: <lối>/<bước> <gì> lech».
+      CHIEU DO (cùng tệp, ca «vk10-mo-do»): dựng khung với khoá bộ của đơn vị khác → khẳng định tập mục tiêu đỏ với
+      «vk10-mo: tap muc tieu lech»; và dữ liệu có mục tiêu đã bỏ mà bộ lọc bị tắt (tham số thử của hàm chọn mục tiêu) →
+      «vk10-mo: da-bo hien».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.vk10_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "_acceptance/che-do-soan-bo-okr/rang/man-soan*.mjs"
+    expected: |
+      man-soan.mjs trên phiên đo riêng (tien-de.mjs), bộ OKR mẫu, người xem là trưởng một phòng ban mẫu, 1280×800. Mở
+      trang một bộ của phòng ban ấy, mở hộp Thêm mục tiêu, chọn «Soạn cả bộ». Đọc qua API trong cùng phiên danh sách mục
+      tiêu của đơn vị và chu kỳ (bỏ mục đã bỏ) rồi so với tên các khối `[data-dong-mt]` trong tài liệu theo thứ tự. Tải
+      lại trang: khung còn mở, cùng tập. Khẳng định «MO: <n> muc tieu = API · tai lai giu». In «SAI AC-1: …», mã 1.
+      CHIEU DO (EVAL=chieu-do-mo, bản sao): tài liệu đọc mục tiêu của chu kỳ hiện tại thay vì chu kỳ của khoá bộ (bàn đo
+      mở bộ ở chu kỳ khác) → «SAI AC-1: MO: tap lech» (ghim /SAI AC-1: MO/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.vk10_dom_viet
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      Ca «vk10-viet»: bộ trống, chỉ bàn phím (userEvent.keyboard). Gõ tên mục tiêu, Enter; ba KR theo ma trận viết trước
+      {(2 → 3,5 tỷ ₫), (10 → 4 ngày), (mốc, không số)}: gõ tên, Tab, khởi điểm, Tab, đích, Tab, đơn vị, Enter. Khẳng định
+      lời gọi tRPC ghi lại: createObjective đúng 1 lần với unit và cycleId của bộ, kind «cam-ket», ownerUserId là trưởng
+      đơn vị của bộ; createKeyResult đúng 3 lần, cùng ownerUserId, kind theo ma trận {tang-toi, giam-xuong, moc}; giá trị
+      «3,5» gửi đi là số 3.5. Rồi gõ KR thứ tư bỏ trống đích, rời ô → dòng có «Chưa lưu — thiếu đích» và số lần gọi
+      createKeyResult vẫn 3. Ma trận người phụ trách viết trước 3 ô {trưởng phòng ban tự soạn → chính họ; quản trị chương
+      trình soạn bộ của phòng ban → trưởng phòng ban; bộ không có trưởng → người soạn}, khẳng định ownerUserId của
+      createObjective ở từng ô. Thông điệp ghim «vk10-viet: <buoc> <gi> lech».
+      CHIEU DO (ca «vk10-viet-do»): cùng chuỗi phím nhưng hàm suy kiểu bị thay bằng hằng «tang-toi» (tham số thử) →
+      khẳng định kiểu KR 2 đỏ «vk10-viet: kr-2 kind lech»; và bỏ chặn «thiếu đích» → «vk10-viet: kr-4 goi khi thieu dich».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.vk10_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "_acceptance/che-do-soan-bo-okr/rang/man-soan*.mjs"
+    expected: |
+      Cùng lần chạy E2, ở một phòng ban mẫu chưa có mục tiêu trong chu kỳ: gõ bằng bàn phím một mục tiêu và ba KR như E3.
+      Tải lại trang rồi đọc qua API: đơn vị có đúng một mục tiêu mới, trạng thái nhap, ba KR với tên, khởi điểm, đích,
+      đơn vị và người phụ trách khớp chữ đã gõ. Khẳng định «VIET: 1 muc tieu nhap · 3 KR khop · tai lai giu». In «SAI
+      AC-2: …», mã 1.
+      CHIEU DO (EVAL=chieu-do-viet, bản sao): tự lưu bị tắt (bản sao bỏ lời gọi createKeyResult) → «SAI AC-2: VIET: 0
+      KR» (ghim /SAI AC-2: VIET/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.vk10_dom_sua
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      Ca «vk10-sua»: tài liệu dữ liệu giả có mục tiêu nháp (2 KR), công bố (1 KR), chờ duyệt (1 KR), đã bỏ. Ma trận viết
+      trước 7 ô: (1) sửa tên mục tiêu nháp, rời ô → updateObjective đúng 1 lần với id và title mới; (2) sửa tên KR nháp →
+      updateKeyResult đúng 1 lần; (3) Backspace ở đầu một dòng KR trống → removeKeyResult với id ấy, focus lên dòng trên;
+      (4) «Xoá» mục tiêu nháp → ConfirmDialog mở, xác nhận → xoaMucTieu với id ấy; (5) mục tiêu công bố: ô tên bật, mọi ô
+      số `disabled`, có câu «Số của mục tiêu đã công bố sửa ở ngăn KR»; (6) mục tiêu chờ duyệt: mọi ô `disabled`; (7) mục
+      tiêu đã bỏ không có `[data-dong-mt]`. Thông điệp ghim «vk10-sua: o<n> lech».
+      CHIEU DO (ca «vk10-sua-do»): bỏ chặn khoá số cho mục tiêu công bố (tham số thử) → «vk10-sua: o5 lech»; sửa tên hai
+      lần trước khi rời ô mà gọi update mỗi phím (tham số thử «lưu theo phím») → «vk10-sua: o1 lech» (đếm ≠ 1).
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.vk10_cham_bo
+    paths:
+      - "packages/validation/src/okr-cham-bo.ts"
+      - "packages/validation/src/okr-kiem.ts"
+      - "packages/validation/test/okr-cham-bo.spec.ts"
+    expected: |
+      packages/validation/test/okr-cham-bo.spec.ts ca «vk10-cham»: ma trận viết trước, mỗi luật một bộ giả đúng một lỗi —
+      {kr-la-viec, thieu-khoi-diem, dich-bang-khoi-diem, thieu-doi-trong, it-hon-2-kr, nhieu-hon-5-kr, kr-thieu-nguoi} —
+      cộng một bộ sạch và một bộ hai mục tiêu: hàm chấm trả (N, M) bằng đúng các hằng ghim ở đây theo công thức của AC-4 —
+      bộ sạch (một mục tiêu: 2 KR tăng tới + 1 KR giữ trên, có người) «12/12»; kr-la-viec trên bộ sạch «11/12»;
+      thieu-khoi-diem «11/12»; dich-bang-khoi-diem trên KR giữ trên «11/12»; thieu-doi-trong (3 KR tăng tới) «10/11»;
+      it-hon-2-kr (1 KR tăng tới) «3/4»; nhieu-hon-5-kr (6 KR tăng tới + 0 giữ) «18/20»; kr-thieu-nguoi «11/12»; bộ hai mục
+      tiêu (bộ sạch × 2) «24/24» — và mỗi lỗi mang đúng mã luật, chỉ số mục tiêu và chỉ số KR. Kết quả của bốn luật đầu bằng đúng `kiemOkr` gọi trên
+      cùng mục tiêu (rút từ hàm thật, không chép tay). Thông điệp ghim «vk10-cham: <bo> <ma> lech».
+      CHIEU DO (ca «vk10-cham-do»): bộ sạch thêm một KR tăng tới «Gọi 50 cuộc» → «14/15» (M tăng 3, N tăng 2) và lỗi mang
+      mã kr-la-viec (đối chứng dương); và hàm chấm được gọi với luật «2–5 KR» bị tắt (tham số thử) → «vk10-cham: it-hon-2-kr it-hon-2-kr
+      lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.vk10_dom_chat_luong
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "packages/validation/src/okr-cham-bo.ts"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      Ca «vk10-chat-luong»: tài liệu một mục tiêu ba KR (một KR «Gọi 300 cuộc», khởi điểm 0). Khẳng định chữ «N trên M
+      điểm đạt» bằng kết quả hàm chấm gọi trên nội dung đang hiện (gọi hàm thật trong bài); gõ sửa tên KR thành một kết
+      quả → chữ đổi ngay trong cùng lượt dựng, không có lời gọi tRPC nào sinh ra từ lần chấm; mỗi điểm chưa đạt một dòng
+      `[data-diem-con]` nêu luật và tên dòng; bấm «Đến dòng» → document.activeElement là ô tên của đúng KR; khối không chứa
+      dấu Kara (`[data-slot=kara-mark]`); nút «Công bố 1 mục tiêu» bật dù N < M. Thông điệp ghim «vk10-chat-luong: <gi>
+      lech».
+      CHIEU DO (ca «vk10-chat-luong-do»): khối đọc điểm từ một hằng thay vì hàm chấm (tham số thử) → sau lần gõ sửa, chữ
+      không đổi → «vk10-chat-luong: khong cap nhat»; và «Đến dòng» trỏ ô đầu tiên → «vk10-chat-luong: den dong sai o».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.vk10_dom_gop_y
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      Ca «vk10-gop-y»: bộ hai mục tiêu, Kara bật. Bấm «Nhờ Kara đọc bộ» → troLyDeXuat gọi đúng 2 lần với hai objectiveId;
+      trong lúc chờ có «Kara đang đọc bộ OKR này…»; trả về hai đề xuất → cột bên có một `KaraProposalGroup` với đúng một
+      nhãn Kara và hai thẻ; bấm nút nhận của thẻ (data-hanh-dong=nhan, chữ theo hậu quả — «Đổi tên KR» với đề xuất viết lại tên KR) → troLyQuyet với quyết «nhan»; dòng KR trong tài liệu đổi sang chữ mới và có
+      dấu «đổi theo Kara»; thẻ thành biên nhận có «Hoàn tác»; bấm Hoàn tác → lời gọi trả chữ cũ (updateKeyResult với title
+      cũ, như gop-y-kara.ts) và dòng về chữ cũ. Ma trận viết trước 3 trạng thái Kara {tắt, hết lượt, lỗi} → `KaraState`
+      đúng loại và khối Chất lượng vẫn có «N trên M». Thông điệp ghim «vk10-gop-y: <buoc> lech».
+      CHIEU DO (ca «vk10-gop-y-do»): nhận mà tài liệu không đọc lại đề xuất đã nhận (tham số thử) → «vk10-gop-y: dong khong
+      doi»; và Kara tắt mà khối Chất lượng bị ẩn → «vk10-gop-y: tat an chat luong».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.vk10_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "_acceptance/che-do-soan-bo-okr/rang/man-soan*.mjs"
+    expected: |
+      Cùng lần chạy E2: gieo một đề xuất viết lại chờ cho một KR của bộ qua đường ghi thật của dịch vụ góp ý (cách bộ OKR
+      mẫu gieo đề xuất). Trong chế độ Soạn bấm «Nhờ Kara đọc bộ» nếu cần, nhận đề xuất ở cột bên → đọc KR qua API: tên bằng
+      chữ mới; bấm «Hoàn tác» → đọc lại: tên bằng chữ cũ. Khẳng định «GOP Y: nhan → moi · hoan tac → cu». In «SAI AC-5: …»,
+      mã 1.
+      CHIEU DO (EVAL=chieu-do-hoan-tac, bản sao): Hoàn tác chỉ đổi chữ trên màn, không gọi thủ tục ghi → «SAI AC-5: GOP Y:
+      hoan tac khong ve» (ghim /SAI AC-5: GOP Y/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.vk10_dom_cong_bo
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      Ca «vk10-cong-bo»: bộ có hai mục tiêu nháp đủ KR (một do người soạn vừa gõ trong lượt, một có sẵn trong dữ liệu
+      giả với người tạo khác), một mục tiêu nháp chưa có KR, một mục tiêu công bố. Ma trận viết trước 5 ô: (1) nút đọc
+      «Công bố 2 mục tiêu»; hộp hỏi lại liệt đúng hai tên, mỗi tên một ô tích đã tích, câu khoá khởi điểm; xác nhận →
+      publishObjective đúng 2 lần với hai id ấy, không lần nào cho mục tiêu chưa có KR, và tên mục tiêu ấy hiện cạnh câu ở
+      lại Nháp; (1b) mở lại với dữ liệu gốc, bỏ tích mục tiêu có sẵn → nút xác nhận đọc «Công bố 1 mục tiêu», xác nhận →
+      publishObjective đúng 1 lần với id của mục vừa gõ, mục bỏ tích còn nhap; (2) chương trình bật «Công bố cần duyệt», người bấm không duyệt được → nút «Gửi duyệt 2 mục tiêu», guiDuyet
+      2 lần, publishObjective 0 lần; (3) lần publish thứ hai trả lỗi → mục tiêu thứ nhất hiện công bố, tên mục tiêu thứ hai
+      hiện kèm «Thử lại»; bấm Thử lại → chỉ gọi lại id thứ hai; (4) xong → biên nhận «Đã công bố 2 mục tiêu» và «Về màn theo
+      dõi». Thông điệp ghim «vk10-cong-bo: o<n> lech».
+      CHIEU DO (ca «vk10-cong-bo-do»): đếm N gồm cả mục tiêu chưa có KR (tham số thử) → «vk10-cong-bo: o1 lech»; bỏ qua ô
+      tích khi gọi (tham số thử «công bố tất cả») → «vk10-cong-bo: o1b lech»; và lỗi lần hai làm hoàn tác lần một trên màn
+      → «vk10-cong-bo: o3 lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.vk10_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "_acceptance/che-do-soan-bo-okr/rang/man-soan*.mjs"
+    expected: |
+      Cùng lần chạy E2 — đường đo của ngưỡng: từ trang một bộ trống của một phòng ban mẫu, đếm mọi lần bấm chuột (lắng nghe
+      `pointerdown` ở cửa sổ) qua «Soạn bộ OKR» → gõ bằng bàn phím một mục tiêu ba KR → «Công bố 1 mục tiêu» → xác nhận.
+      Đọc qua API: mục tiêu ở trạng thái cong-bo, ba KR có khoá khởi điểm. In «BAM <n>» và khẳng định n ≤ 3 cùng «CONG BO:
+      cong-bo · 3 KR». In «SAI AC-6: …», mã 1.
+      CHIEU DO (EVAL=chieu-do-bam, bản sao): ô tích của hộp công bố mặc định bỏ trống (phải tích từng mục, thêm một bấm mỗi
+      mục) → «SAI AC-6: BAM 4» (ghim /SAI AC-6: BAM \d+/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.vk10_dom_ngan
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx"
+      - "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      Ca «vk10-ngan»: dựng khung chi tiết mục tiêu (objective-sheet, thẻ KR) với ma trận viết trước số góp ý chờ {0, 1, 3}.
+      Mỗi ô: không có `[data-vung-kara]`, không có thẻ đề xuất neo dưới KR nào (`[data-de-xuat-neo]`); số chip
+      `[data-chip-gop-y]` bằng 0 khi N = 0, bằng 1 khi N > 0, chữ chip chứa N. Bấm chip → hàm mở khung bản ghi được gọi với
+      loại chế độ Soạn, khoá của bộ chứa mục tiêu và mục tiêu cần cuộn tới. Thông điệp ghim «vk10-ngan: n=<N> <gi> lech».
+      CHIEU DO (ca «vk10-ngan-do»): dựng lại khung với VungKara còn bật (tham số thử của khung) → «vk10-ngan: n=3 vung
+      con»; và chip hiện khi N = 0 → «vk10-ngan: n=0 chip».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.vk10_man
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "_acceptance/che-do-soan-bo-okr/rang/man-soan*.mjs"
+    expected: |
+      Cùng lần chạy E2 — đường đo của ngưỡng: mở khung chi tiết của mục tiêu có đề xuất chờ (gieo như E9), thẻ KR. In «NGAN
+      vung <a> neo <b> chip <c>» và khẳng định 0 · 0 · 1; bấm chip → khung chế độ Soạn mở với mục tiêu ấy trong tầm nhìn và
+      thẻ đề xuất ở cột bên. In «SAI AC-7: …», mã 1.
+      CHIEU DO (EVAL=chieu-do-ngan, bản sao): objective-sheet giữ VungKara → «SAI AC-7: NGAN vung 1» (ghim /SAI AC-7:
+      NGAN/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.vk10_dom_quyen
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      Ca «vk10-quyen»: ma trận viết trước 3 ô — (1) thành viên thường ở trang một bộ: không có dòng «Soạn cả bộ» khả dụng,
+      không nút «Soạn bộ OKR»; (2) thành viên mở thẳng URL chế độ Soạn: mọi ô `disabled`, không nút công bố, không
+      `[data-o=cot-ben]`, có câu lý do; sau khi bấm và gõ vào tài liệu, số lời gọi tRPC ghi = 0; (3) người soạn ở chu kỳ đã
+      đóng: như ô 2. Thêm: người soạn có một dòng chưa lưu → bấm lớp phủ ngoài khung: khung còn mở; Esc → ConfirmDialog «Bỏ
+      dòng chưa lưu?»; Huỷ → khung còn và dòng còn chữ. Thông điệp ghim «vk10-quyen: o<n> lech».
+      CHIEU DO (ca «vk10-quyen-do»): bỏ cờ chỉ xem cho URL thẳng (tham số thử) → «vk10-quyen: o2 lech»; và đóng thẳng khi
+      còn dòng chưa lưu → «vk10-quyen: dong khong hoi».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.vk10_dom_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/test/che-do-soan-bo-okr.dom.tsx"
+    expected: |
+      Ca «vk10-tai»: ba ô — (1) thủ tục đọc bộ treo: có khung xương `[data-khung-xuong]` (`KhungXuong` chung của `@crm/ui`), tiêu đề «Soạn bộ OKR» và tên bộ hiện;
+      (2) thủ tục đọc trả lỗi: có «Chưa mở được bộ OKR», một câu, nút Thử lại; bấm → thủ tục đọc gọi thêm đúng 1 lần; (3)
+      createKeyResult trả lỗi sai kiểu số: dòng còn nguyên chữ đã gõ, câu «Ô này nhận số, ví dụ 1.234,5» (chữ từ
+      lib/messages), rời ô lần nữa → gọi lại đúng 1 lần. Thông điệp ghim «vk10-tai: o<n> lech».
+      CHIEU DO (ca «vk10-tai-do»): lỗi lưu xoá chữ dòng (tham số thử) → «vk10-tai: o3 lech»; lúc tải giấu tiêu đề →
+      «vk10-tai: o1 lech».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.vk10_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "_acceptance/che-do-soan-bo-okr/rang/man-soan*.mjs"
+    expected: |
+      Cùng lần chạy E2 — vế đo được của AC-10: ở 1280×800 hai ô `[data-o=tai-lieu]` và `[data-o=cot-ben]` cùng hiện, cột bên
+      rộng bằng `--container-assist-rail`, giữa hai ô đúng một đường kẻ; ở 375×812 khung phủ toàn màn, có đúng hai thẻ «Bộ
+      OKR» và «Chất lượng và Kara», và `document.documentElement.scrollWidth` ≤ `innerWidth` ở cả hai thẻ. Lưu mười ảnh vào
+      `_acceptance/che-do-soan-bo-okr/evidence/`, danh sách viết trước: soan-1280-sang, soan-1280-toi, soan-375-sang,
+      soan-375-toi, the-chat-luong-375-sang, trong-1280-sang, hoi-cong-bo-1280-sang, hoi-cong-bo-1280-toi, ngan-1280-sang,
+      ngan-1280-toi; khẳng định đủ mười tệp có mặt và khác rỗng («ANH 10/10»). Khẳng định «KHO 1280: hai o · KHO 375: hai the
+      · khong tran». In «SAI AC-10:
+      …», mã 1.
+      CHIEU DO (EVAL=chieu-do-tran, bản sao): dòng số của dòng KR mới không xuống hàng và giữ bề rộng ô ở 375 (bỏ flex-wrap, thêm *:shrink-0 ở DongKrMoi) → «SAI AC-10: KHO
+      375: tran» (ghim /SAI AC-10: KHO 375/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vk10_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+    steps:
+      - "Chạy đúng lệnh của eval (tien-de.mjs + man-soan.mjs); không gọi thẳng script con"
+      - "Mở ảnh _acceptance/che-do-soan-bo-okr/evidence/soan-1280-sang.png, soan-1280-toi.png, soan-375-sang.png, soan-375-toi.png, the-chat-luong-375-sang.png"
+      - "Mở ảnh _acceptance/che-do-soan-bo-okr/evidence/trong-1280-sang.png, hoi-cong-bo-1280-sang.png, hoi-cong-bo-1280-toi.png, ngan-1280-sang.png, ngan-1280-toi.png"
+      - "Đặt cạnh ảnh bản mẫu cùng trạng thái ở _acceptance/che-do-soan-bo-okr/evidence/design-pass/"
+      - "Đọc mục «Notes» của _acceptance/che-do-soan-bo-okr/contract.md, gạch đầu dòng «Chỗ lệch bản mẫu» (danh sách đóng bảy chỗ)"
+    expected: "Chế độ Soạn: tài liệu bên trái đọc như một văn bản — tên mục tiêu lớn hơn dòng KR, các dòng KR thụt dưới mục tiêu với ô số xếp gọn — và cột bên phải có khối Chất lượng trên, nhóm góp ý Kara dưới với nhãn Kara một lần; nút chính duy nhất là Công bố ở chân tài liệu. Bộ trống có con trỏ ở dòng mục tiêu đầu và lối Nhờ Kara soạn nháp. Hộp hỏi công bố liệt tên mục tiêu. Ngăn theo dõi chỉ có một chip Kara ở đầu, không khối Kara. Chỗ lệch bản mẫu được phép chỉ gồm bảy chỗ đánh số trong gạch đầu dòng «Chỗ lệch bản mẫu» của Notes hợp đồng (bước 4) — mọi chỗ lệch khác là FAIL. Ở cả sáng và tối, chữ và viền không chìm vào nền."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E18
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.vk10_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+    expected: |
+      san-thiet-ke.mjs dựng lại HTML của chế độ Soạn mỗi lượt (bàn đo màn EVAL=E16 trong phiên đo riêng; 8 tệp: có góp ý,
+      bộ trống, hỏi công bố, chỉ xem × 1280|375; mỗi phần tử mang màu, nền, cỡ chữ trình duyệt đã tính, dấu
+      data-kieu-da-tinh) rồi chấm từng tệp bằng design-gate.mjs --mode dom: 0 lỗi P0 (low-contrast, gray-on-color,
+      text-overflow, broken-image, body-text-viewport-edge), «KET LUAN vk10 san thiet ke: 8/8 HTML, 0 P0», mã 0. Thiếu tệp,
+      tệp cũ hơn lượt, thiếu dấu data-kieu-da-tinh, hay design-gate trả do_duoc=false (ví dụ tệp .tsx) → «KHONG DO DUOC:
+      <tep>», mã 2, không bao giờ tính là đạt. Màu ngoài bảng, góc lạ, className đè component @crm/ui không có luật P0 của
+      design-gate — phần ấy do E17 (judgment, ảnh) đo.
+      CHIEU DO (--chieu-do, bản sao): thêm text-[#e5e5e5] vào dòng điểm của khối Chất lượng, dựng lại HTML → design-gate báo
+      «P0 low-contrast» kèm mã màu đã chèn, mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.vk10_khong_doi_hinh
+    long_running: 200
+    paths:
+      - "_acceptance/*/rang/**"
+      - "_acceptance/*/evals.yaml"
+      - "apps/app/test/**"
+    expected: |
+      khong-doi-hinh.mjs (khuôn `rang/giu-ho-so.mjs` của VK7): danh sách viết trước 17 hồ sơ — gop-y-dung-cho,
+      kara-gop-y-luot-2, gan-tay-va-kara-co-ly-do, nen-kara, muc-tieu-va-kr, okr-to-chuc-va, soan-okr-cung-tro-ly,
+      soan-okr-song-lai, soan-okr-trong-khung, khung-soan-chan-lien-ket, mot-nut-tao-muc-tieu, trang-bo-okr,
+      dieu-huong-khu-muc-tieu, khung-okr-truoc-r1, okr-soat-anh-luot-3, trang-don-vi-mot-bang, quyet-gop-y-noi-dung-ly-do.
+      (0) Lệnh quét
+      các tệp thước và bài kiểm của mọi hồ sơ đã ký theo mẫu {data-vung-kara, VungKara, DeXuatNeo, data-de-xuat-neo,
+      data-nhom-soan, NutSoan, «Soạn cùng Kara», «Thêm mục tiêu», câu rỗng của bộ (data-cau-rong-bo)} → khẳng định «QUET <n>
+      khop, deu trong DANH SACH 17»; hồ sơ khớp mẫu mà vắng khỏi danh sách in «SAI AC-11: lot <ho so>». Tệp quét: `rang/**`
+      của hồ sơ, tệp `test/` nêu trong lệnh của eval còn chạy và các tệp test chúng nhập tương đối. (1) Chạy mọi eval
+      test/script không not-run của từng hồ sơ trên cây vòng và trên worktree origin/onehub, trừ eval thước theo vòng kê
+      trong bảng `THUOC_THEO_VONG` có lý do (in «THUOC THEO VONG <ho so>#<E>: <ly do>»; lớp 5 của V1-41); SAI khi nền 0 mà
+      cây khác 0, «DO SAN TREN NEN» khi nền đỏ. (2) Ô nào khai not-run trong vòng này phải mang superseded_by
+      che-do-soan-bo-okr#AC-7 — riêng mot-nut-tao-muc-tieu#E13 trỏ che-do-soan-bo-okr#AC-1 — và có trong bảng
+      `rang/anh-xa-nghi.json` trỏ một eval có thật của hồ sơ này. (3) `git diff` merge-base các tệp thước của những hồ sơ ấy:
+      mỗi khối chỉ đổi chuỗi (giống nhau sau khi thay mọi chuỗi bằng «S»), `evals.yaml` chỉ thêm dòng `status: not-run` /
+      `superseded_by:`, hoặc khối khớp một mục của bảng `LOP_DUOC_PHEP` theo bốn lớp V1-41 — xoá trọn ca có tên kê sẵn mà
+      mọi eval kê kèm đã nghỉ trong vòng (lớp 1), gỡ dòng mục đột biến kê sẵn (lớp 2), đổi dữ liệu mẫu kê đúng dòng (lớp
+      3), lật khẳng định và đổi đối chứng dương kê đúng dòng của mot-nut-tao-muc-tieu (lớp 4); và mỗi hồ sơ bị đổi có một
+      dòng sổ fix mới trong vòng, decided_by chủ kho, nêu tệp. In «GIU <ho so>» hay «SAI AC-11: <ho so>#<E> …», mã 1 khi
+      có SAI.
+      CHIEU DO (cùng tệp, --chieu-do): bản sao một eval của gop-y-dung-cho khai not-run không superseded_by → «SAI AC-11:
+      gop-y-dung-cho#<E> nghi khong co chu» (ghim), mã 1; và danh sách bỏ mot-nut-tao-muc-tieu → «SAI AC-11: lot
+      mot-nut-tao-muc-tieu» (ghim), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.vk10_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan-bo/**"
+      - "_acceptance/che-do-soan-bo-okr/rang/man-soan*.mjs"
+    expected: |
+      Cùng lần chạy E2, trên phiên đo (máy chủ thật, không tRPC giả). Ma trận viết trước 3 ô: (1) gõ một mục tiêu mới,
+      sửa tên hai lần (rời ô sau mỗi lần), chọn «Xoá», xác nhận → đọc API: mục tiêu vắng khỏi đơn vị — tức các lần tự lưu
+      không làm nó thôi «chưa có lịch sử»; (2) sửa tên một KR của mục tiêu đã công bố trong bộ mẫu, rời ô → đọc API: tên
+      mới, khởi điểm và đích không đổi; (3) Backspace ở đầu một dòng KR trống của mục tiêu nháp → đọc API: KR vắng. Khẳng
+      định «XOA MT: vang · SUA KR CONG BO: ten moi, so giu · XOA KR: vang». In «SAI AC-3: …», mã 1.
+      CHIEU DO (EVAL=chieu-do-xoa, bản sao): hộp xác nhận xoá không gọi okr.xoaMucTieu → «SAI AC-3: XOA MT: con» (ghim /SAI
+      AC-3: XOA/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

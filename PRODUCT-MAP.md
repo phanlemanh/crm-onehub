@@ -69,6 +69,7 @@ flowchart TD
 - Cây căn chỉnh hiện lý do và mức tin của từng chỗ nối, lọc được các nhánh «Chưa có lý do» và «Đặt cược» (`cay-can-chinh-co-ly-do`)
 - «Thành viên thường không nhờ chat sửa trường của cả đội; model bị gỡ thì chat lùi về mặc định và báo quản trị» (`chat-an-toan-truoc-r1`)
 - Chỉ onehub đẩy được bản chụp lộ trình lên CRM; đường REST khác giữ trần thân 100 KB (`chat-duong-day-ban-chup`)
+- Trưởng đơn vị bấm Soạn OKR và viết cả bộ như một tài liệu — mục tiêu, KR liền mạch — với góp ý của Kara và điểm chất lượng ở cột bên, rồi công bố (`che-do-soan-bo-okr`)
 - Việc cần làm cũ trên dòng thời gian thành Việc; Tác nhân giao việc bằng Việc (`chep-viec-can-lam-cu`)
 - Chỉ quản trị và chủ đổi được định nghĩa trường của cả đội — thành viên thường vẫn xem được, nhưng mọi đường đổi đều khoá, cả trên màn lẫn khi gọi thẳng máy chủ (`chi-quan-tri-sua-duoc-truong`)
 - Chờ Tác nhân lâu: thẻ «Đang dựng» có thời gian đã trôi, lời hứa thật và dòng quá ngưỡng; Kara báo trong hộp thông báo khi bộ dựng xong, cần trả lời hay hỏng (`cho-tac-nhan-lau`)
