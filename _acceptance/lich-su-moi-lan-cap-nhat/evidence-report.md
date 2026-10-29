@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5332277f5b1cbc6c235002510fa1131ea6a3a022
+verified_commit: 03cc64cfd8b9317b9da944cd03eb2a79519b58f4
 human_signoff: Phan Le Manh 2026-10-29
 ---
 
@@ -230,3 +230,7 @@ none — every multi-run eval is uniform
 
 Round 1: PASS với bốn phát hiện trong hợp đồng (mức trung bình và thấp) về độ phủ của bài đo; đã bổ sung bài đo cho chuoi của okr.lichSuKr, số tuần của okr.dienBien, mức tự tin từng dòng và đường kỳ vọng của biểu đồ.
 Round 2: chạy lại các eval chạm paths đã đổi (E1–E9, E11, E12) và bảy lệnh suite, tất cả PASS; E10 và E13 mang sang từ round 1 vì delta không chạm paths của chúng. Giờ verified_at của round 2 ghi theo mốc làm tròn trong ngày 2026-10-29.
+
+### Re-pin lần 1 — 2026-10-29, do gộp onehub 0e97ed210 (#580 SV1, #569 VK10) vào nhánh SV7
+run_id: repin-20261029T234817Z-45141
+sha: 03cc64cfd8b9317b9da944cd03eb2a79519b58f4 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
