@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 94591aeb3c304274b6b62b12554be9a175bedbe7
+verified_commit: 5332277f5b1cbc6c235002510fa1131ea6a3a022
 human_signoff:
 ---
 
@@ -32,123 +32,102 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-lich-su-moi-lan-cap-nhat-E1-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_api
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-lan"
-    test-run: dropped crm_mvss4hu71hk8_test
+    test-run: dropped crm_mvsxlejod1a3_test
 
 - eval: E2
-  run_id: minted-lich-su-moi-lan-cap-nhat-E2-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_chuoi
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-chuoi"
-    test-run: dropped crm_mvss4fo5fmjt_test
+    test-run: dropped crm_mvsxlge9wow9_test
 
 - eval: E3
-  run_id: minted-lich-su-moi-lan-cap-nhat-E3-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_quyen
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-quyen"
-    test-run: dropped crm_mvss4ha201rn_test
+    test-run: dropped crm_mvsxlg8nplgk_test
 
 - eval: E4
-  run_id: minted-lich-su-moi-lan-cap-nhat-E4-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_danh_sach
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-danh-sach
-    Ran 1 test across 1 file. [1357.00ms]
+    Ran 1 test across 1 file. [3.71s]
 
 - eval: E5
-  run_id: minted-lich-su-moi-lan-cap-nhat-E5-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_bieu_do
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-bieu-do
-    Ran 1 test across 1 file. [1.51s]
+    Ran 1 test across 1 file. [3.07s]
 
 - eval: E6
-  run_id: minted-lich-su-moi-lan-cap-nhat-E6-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_sau_gui
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-sau-gui
-    Ran 1 test across 1 file. [1.94s]
+    Ran 1 test across 1 file. [1.91s]
 
 - eval: E7
-  run_id: minted-lich-su-moi-lan-cap-nhat-E7-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_trang_thai
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-trang-thai
-    (cong cu khong in dong tom tat; ma thoat 0)
+    (phần đuôi đầu ra không có dòng tóm tắt nào ngoài mã thoát 0)
 
 - eval: E8
-  run_id: minted-lich-su-moi-lan-cap-nhat-E8-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_cam_xuc
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-cam-xuc
-    Ran 1 test across 1 file. [1.84s]
+    Ran 1 test across 1 file. [3.63s]
 
 - eval: E12
-  run_id: minted-lich-su-moi-lan-cap-nhat-E12-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E12-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_cam_xuc_api
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-cam-xuc-api"
-    test-run: dropped crm_mvss4idzieqq_test
+    test-run: dropped crm_mvsxlgj5vqh1_test
 
 - eval: E9
-  run_id: minted-lich-su-moi-lan-cap-nhat-E9-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lsml_dien_bien_giu
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-dien-bien-giu"
-    test-run: dropped crm_mvss4h8rhkd9_test
-
-- eval: E13
-  run_id: minted-lich-su-moi-lan-cap-nhat-E13-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.lsml_ky_xanh
-  verified_at: 2026-10-29T00:01:44Z
-  output: |
-    cmd: node _acceptance/lich-su-moi-lan-cap-nhat/rang/ky-xanh.mjs
-    KET LUAN ky-xanh: dat
+    test-run: dropped crm_mvsxlh69gviv_test
 
 - eval: E11
-  run_id: minted-lich-su-moi-lan-cap-nhat-E11-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.lsml_pham_vi
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
   output: |
-    cmd: node _acceptance/lich-su-moi-lan-cap-nhat/rang/pham-vi.mjs
     KET LUAN pham-vi: dat
 
 - eval: E10
@@ -157,6 +136,8 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.script.lsml_man
   verified_at: 2026-10-29T00:01:44Z
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
   screenshot: evidence/lsml-truoc-1440-sang.png
   observed: |
     Da mo bang Read ca 8 anh.
@@ -171,42 +152,51 @@ human_signoff:
     Tat ca khop Expected: hai dong moi o dau co nhan ngay gio gui, gia tri lan hai tren lan mot; bieu do them hai cham; 375 la drawer; sang/toi chu, cham, vien khong chim nen. Luu y nho khong lam fail: nhan «Dich 25 nguoi» de len vach dich o 1440 va bi cat nhe o truoc-375-sang.
   network_observed: n-a (driver)
 
+- eval: E13
+  run_id: minted-lich-su-moi-lan-cap-nhat-E13-r1
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.lsml_ky_xanh
+  verified_at: 2026-10-29T00:01:44Z
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
+
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
 
 - cmd: bun run lint:slop
-  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_lint_slop-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-lich-su-moi-lan-cap-nhat-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-29T00:01:44Z
+  verified_at: 2026-10-29T02:35:13Z
 
 ## Known limits
 
@@ -216,9 +206,7 @@ human_signoff:
 
 baseline: BLOCKED ha tang — lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
-none — moi eval feature deu red tren baseline (co phan biet)
-
-Luu y: baseline khong do duoc o round nay (moi field baseline la n-a), nen danh sach eval khong-phan-biet khong do duoc bang A/B.
+Danh sach eval khong-phan-biet khong do duoc o round nay (baseline khong chay).
 
 ### Baseline khong do
 
@@ -232,7 +220,6 @@ Luu y: baseline khong do duoc o round nay (moi field baseline la n-a), nen danh 
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-cam-xuc: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-cam-xuc-api": BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - bun run test -- "cd apps/api && bun test test/lich-su-moi-lan-cap-nhat.spec.ts -t lsml-dien-bien-giu": BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
-- node _acceptance/lich-su-moi-lan-cap-nhat/rang/ky-xanh.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - node _acceptance/lich-su-moi-lan-cap-nhat/rang/pham-vi.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
 ## Variance
@@ -241,4 +228,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: 13/13 eval deu dat, 7/7 lenh suite dat, khong eval hong, khong phat hien ngoai hop dong. Bon phat hien trong hop dong (muc do thap den vua) nam o review-findings.md de nguoi xem o Cong 2.
+Round 1: PASS với bốn phát hiện trong hợp đồng (mức trung bình và thấp) về độ phủ của bài đo; đã bổ sung bài đo cho chuoi của okr.lichSuKr, số tuần của okr.dienBien, mức tự tin từng dòng và đường kỳ vọng của biểu đồ.
+Round 2: chạy lại các eval chạm paths đã đổi (E1–E9, E11, E12) và bảy lệnh suite, tất cả PASS; E10 và E13 mang sang từ round 1 vì delta không chạm paths của chúng. Giờ verified_at của round 2 ghi theo mốc làm tròn trong ngày 2026-10-29.
