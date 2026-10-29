@@ -13,6 +13,8 @@ function kr(vao: Partial<Kr> & { keyResultId: string }): Kr {
 		objectiveId: "mt-1",
 		objectiveTitle: "Tăng trưởng quý 4",
 		unitName: "Kinh doanh",
+		donOkr: "pb:pb-1",
+		cycleId: "q4",
 		kind: "tang-toi",
 		unit: "khách",
 		targetValue: 50,

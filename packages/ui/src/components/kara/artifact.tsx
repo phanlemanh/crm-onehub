@@ -28,8 +28,28 @@ export type KaraArtifactProps = {
 	footer?: ReactNode;
 	busy?: { label?: string; reasonShown?: boolean } | null;
 	variant?: "card" | "docked";
+	metaStyle?: "kara" | "muted";
 	children: ReactNode;
 };
+
+function MetaArtifact({
+	meta,
+	metaStyle,
+}: {
+	meta: ReactNode;
+	metaStyle: "kara" | "muted";
+}) {
+	if (metaStyle === "kara") return <KaraMark scope={meta} />;
+	if (!meta) return null;
+	return (
+		<span
+			data-slot="kara-artifact-meta"
+			className="truncate text-muted-foreground text-xs"
+		>
+			{meta}
+		</span>
+	);
+}
 
 export function KaraArtifact({
 	title,
@@ -38,6 +58,7 @@ export function KaraArtifact({
 	footer,
 	busy,
 	variant = "card",
+	metaStyle = "kara",
 	children,
 }: KaraArtifactProps) {
 	const msg = useMessages();
@@ -61,7 +82,7 @@ export function KaraArtifact({
 						>
 							<div className="flex min-w-0 items-baseline gap-2 truncate">
 								<ArtifactTitle>{title}</ArtifactTitle>
-								<KaraMark scope={meta} />
+								<MetaArtifact meta={meta} metaStyle={metaStyle} />
 								{chuBan ? <KaraState kind="working" label={chuBan} /> : null}
 							</div>
 							{actions ? <ArtifactActions>{actions}</ArtifactActions> : null}
@@ -91,7 +112,7 @@ export function KaraArtifact({
 					<div className="flex min-w-0 flex-col gap-1">
 						<ArtifactTitle>{title}</ArtifactTitle>
 						<div className="flex flex-wrap items-center gap-2">
-							<KaraMark scope={meta} />
+							<MetaArtifact meta={meta} metaStyle={metaStyle} />
 							{chuBan ? <KaraState kind="working" label={chuBan} /> : null}
 						</div>
 					</div>

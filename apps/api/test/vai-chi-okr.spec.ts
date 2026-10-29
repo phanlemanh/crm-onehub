@@ -484,6 +484,7 @@ const THU_TUC_OKR_LUOT_HOI_DAP = [
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const THU_TUC_OKR_LUOT_MOI_KR = ["moiKr"].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_VI_TRI_KR = ["viTriKr"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_CAP_NHAT_GAN_DAY = ["capNhatGanDay"].map(
 	(t) => `okr.${t}`,
 );
@@ -1639,6 +1640,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_HOI_Y,
 				...THU_TUC_OKR_LUOT_MOI_KR,
 				...THU_TUC_OKR_LUOT_CAP_NHAT_GAN_DAY,
+				...THU_TUC_OKR_LUOT_VI_TRI_KR,
 				...THU_TUC_OKR_LUOT_CAM_XUC,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 				...Object.keys(THU_TUC_DON_OKR),
@@ -2043,6 +2045,11 @@ const THU_TU_DOC_OKR = {
 		dau: "tieuDeKr",
 		khac: 404,
 		ma: "keyResultId",
+	},
+	"okr.viTriKr": {
+		vao: (s) => ({ keyResultId: s.krG }),
+		K: "vang",
+		khac: 200,
 	},
 	"okr.capNhatTuan": {
 		vao: () => undefined,

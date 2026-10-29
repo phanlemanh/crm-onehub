@@ -58,6 +58,8 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.htb_kenh
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-4
     paths:
       - "apps/agent/agent/lib/nhac-ke-hoach.ts"
       - "apps/agent/agent/lib/thong-bao-ghi.ts"
@@ -226,6 +228,8 @@ evals:
     criterion: AC-10
     executor: test
     cmd: config:executors.test.htb_duong
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-4
     paths:
       - "apps/agent/agent/lib/nhac-ke-hoach.ts"
       - "apps/agent/agent/lib/thong-bao-ghi.ts"

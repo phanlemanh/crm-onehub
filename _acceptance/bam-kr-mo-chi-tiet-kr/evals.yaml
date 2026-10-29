@@ -6,6 +6,8 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.bkr_kr_phu_trach
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-8
     paths:
       - "apps/app/app/(app)/[slug]/okr/phan-kr-phu-trach.tsx"
       - "apps/app/test/bam-kr-mo-chi-tiet-kr.dom.tsx"

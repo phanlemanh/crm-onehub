@@ -60,10 +60,6 @@ const vi = {
 				ten: "Từ bảng tính",
 				moTa: "Dán nhiều mục tiêu và KR từ một bảng tính, xem trước rồi ghi.",
 			},
-			soan: {
-				ten: "Soạn cùng Kara",
-				moTa: "Trò chuyện với Kara để soạn mục tiêu và KR, rồi đưa vào bộ OKR.",
-			},
 		},
 		tiep: "Tiếp cuộc đang soạn",
 		khoa: {
@@ -171,15 +167,11 @@ const vi = {
 		phan1: "Cần cập nhật tuần này",
 		conThieu: (n: number, tuan: string, han: string) =>
 			`${n} KR chưa có số của tuần ${tuan}, hạn ${han}.`,
-		capNhatN: (n: number) => `Cập nhật ${n} KR`,
 		daDu: (tuan: string) => `Bạn đã cập nhật đủ cho tuần ${tuan}.`,
-		suaLanGui: "Sửa lần gửi tuần này",
 		khongKr: "Bạn không phụ trách KR nào ở chu kỳ đang chạy.",
 		loiPhan: "Chưa tải được phần này.",
-		loiMo: "Không mở được lượt cập nhật.",
 		thuLai: "Thử lại",
 		cotKr: "Tên KR",
-		cotHienTai: "Hiện tại",
 		cotTienDo: "Tiến độ",
 		cotTinhTrang: "Tình trạng",
 		phan2: "Đơn vị bạn dẫn",
@@ -193,6 +185,10 @@ const vi = {
 		phan3: "KR bạn phụ trách",
 		krTrong: (n: number, ky: string) => `${n} KR ở mọi đơn vị trong ${ky}.`,
 		thamGia: "Mục tiêu bạn tham gia",
+		goiYMoKr: "Bấm một KR để mở nó trong bộ OKR rồi cập nhật.",
+		suaThiMoKr: "Sửa một lần đã gửi thì mở KR đó.",
+		lanTruoc: (ngay: string) => `lần trước ${ngay}`,
+		chuaCapNhatLanNao: "chưa cập nhật lần nào",
 	},
 	cuaToiRong: {
 		title: "Bạn chưa phụ trách mục tiêu hay KR nào",
@@ -836,10 +832,6 @@ const en: OkrMessages = {
 				ten: "From a spreadsheet",
 				moTa: "Paste several objectives and KRs from a spreadsheet, preview, then save.",
 			},
-			soan: {
-				ten: "Draft with Kara",
-				moTa: "Talk with Kara to draft objectives and KRs, then add them to the OKR set.",
-			},
 		},
 		tiep: "Continue the open draft",
 		khoa: {
@@ -948,15 +940,11 @@ const en: OkrMessages = {
 		phan1: "Needs updating this week",
 		conThieu: (n: number, tuan: string, han: string) =>
 			`${n} key result${n === 1 ? "" : "s"} without a number for the week of ${tuan}, due ${han}.`,
-		capNhatN: (n: number) => `Update ${n} key result${n === 1 ? "" : "s"}`,
 		daDu: (tuan: string) => `You are up to date for the week of ${tuan}.`,
-		suaLanGui: "Edit this week's update",
 		khongKr: "You own no key results in the running cycle.",
 		loiPhan: "This part could not be loaded.",
-		loiMo: "Couldn't open the update.",
 		thuLai: "Try again",
 		cotKr: "Key result",
-		cotHienTai: "Current",
 		cotTienDo: "Progress",
 		cotTinhTrang: "Status",
 		phan2: "Units you lead",
@@ -971,6 +959,10 @@ const en: OkrMessages = {
 		krTrong: (n: number, ky: string) =>
 			`${n} key result${n === 1 ? "" : "s"} across all units in ${ky}.`,
 		thamGia: "Objectives you take part in",
+		goiYMoKr: "Select a key result to open it in its OKR set, then update it.",
+		suaThiMoKr: "To change an update you sent, open that key result.",
+		lanTruoc: (ngay: string) => `last ${ngay}`,
+		chuaCapNhatLanNao: "never updated",
 	},
 	cuaToiRong: {
 		title: "You don't own any objectives or KRs",

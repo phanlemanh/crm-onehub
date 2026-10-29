@@ -48,12 +48,6 @@
 		"nguon": "muc-tieu"
 	},
 	{
-		"tep": "phan-kr-phu-trach.tsx",
-		"kind": "kr",
-		"id": "k.id",
-		"nguon": "kr"
-	},
-	{
 		"tep": "quanh-muc-tieu/the-quanh.tsx",
 		"kind": "kr",
 		"id": "nut.id",
@@ -64,6 +58,12 @@
 		"kind": "objective",
 		"id": "nut.id",
 		"nguon": "muc-tieu"
+	},
+	{
+		"tep": "soan-bo/mo-soan-bo.ts",
+		"kind": "soan-bo",
+		"id": "taoKhoaBo(cycleId, don)",
+		"nguon": "soan-bo"
 	},
 	{
 		"tep": "soan/duong-soan.ts",

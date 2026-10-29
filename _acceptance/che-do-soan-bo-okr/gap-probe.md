@@ -1,0 +1,17 @@
+---
+slug: che-do-soan-bo-okr
+at: 2026-10-22T02:40:00Z
+verdict: findings
+p0: 1
+p1: 4
+p2: 0
+---
+## Findings
+
+| Sev | Artifact | Thiếu gì | Kịch bản fail | Thước đo | Xử lý |
+|---|---|---|---|---|---|
+| P0 | design | (a) «Công bố N mục tiêu» công bố mọi mục tiêu nháp có KR, không chọn được — đánh đổi giá trị không đảo được (khoá khởi điểm) mà sổ không ghi; (b) d-3 «ghi thẳng nháp thật» nguồn mot-loi nhưng lối giữ dòng ở trình duyệt vẫn sống; d-4 «người phụ trách là người soạn» nguồn mot-loi nhưng lối «trưởng đơn vị của bộ» cũng 0 bấm | Mục tiêu nháp dở có sẵn (do cuộc soạn cũ hay quản trị gõ) bị công bố cùng mục tiêu mới, khởi điểm khoá, không gỡ được; quản trị soạn hộ phòng Kinh doanh thì mọi KR thuộc quản trị, trưởng phòng không thấy ở «Của tôi» | Thêm Hỏi về công bố tất cả hay chọn; thay d-3, d-4 bằng dòng Hỏi; thêm ô ma trận «mục tiêu nháp không do người bấm tạo» và «quản trị soạn bộ đơn vị khác» | human-gate1: hai câu mới Hỏi-7 (d-…-18, tự lưu nháp thật + hộp công bố có ô tích mặc định tích hết, thay d-3) và Hỏi-8 (d-…-19, người phụ trách mặc định là trưởng đơn vị của bộ, thay d-4); AC-2, AC-6, E3, E10, E11 viết theo khuyến nghị, có ô ma trận mục tiêu nháp có sẵn và ô quản trị soạn hộ |
+| P1 | evals | AC-3 gắn cross-layer nhưng chỉ có E5 (tRPC giả) đo | Tự lưu nhiều lần làm mục tiêu thôi «chưa có lịch sử», xoaMucTieu bị máy chủ từ chối; E5 vẫn xanh | Eval script backend-effect trên phiên đo: xoá sau nhiều lần sửa, sửa tên KR đã công bố, Backspace xoá KR, đọc API; chiều đỏ ghim «SAI AC-3: XOA» | fixed: thêm E20 (backend-effect, ba ô, chiều đỏ EVAL=chieu-do-xoa ghim /SAI AC-3: XOA/) |
+| P1 | contract | AC-4 không định nghĩa M; E6 so với «công thức viết trong tệp», E7 so với chính hàm chấm — tự quy chiếu | Người dựng chọn M tuỳ ý (6 luật × số mục tiêu), hai bài cùng xanh, người ký duyệt con số không ai khai nghĩa | AC-4 khai công thức M kèm ví dụ số; E6 ghim N và M hằng cho từng bộ giả | fixed: AC-4 khai công thức (luật mức mục tiêu mỗi mục tiêu, luật mức KR theo kiểu, ví dụ «12 trên 12»); E6 ghim hằng N/M cho chín bộ giả và chiều đỏ «14/15» |
+| P1 | evals | E19 lập danh sách hồ sơ lúc S3, mẫu quét thiếu nhãn «Soạn cùng Kara» và câu rỗng của bộ; AC-11 không liệt mot-nut-tao-muc-tieu, trang-bo-okr; không assert số quét = số danh sách | Thước VK9 khẳng định dòng «Soạn cùng Kara», thước VK3 khẳng định câu rỗng; vòng này đổi nhãn và thêm nút làm đỏ, danh sách S3 không chứa hai hồ sơ nên E19 in GIU | Danh sách viết trước trong evals.yaml, thêm hai hồ sơ, mẫu quét thêm chuỗi, khẳng định «QUET n = DANH SACH n», chiều đỏ «lot <ho so>» | fixed: AC-11 và E19 liệt 12 hồ sơ viết trước (gồm mot-nut-tao-muc-tieu, trang-bo-okr, khung-soan-chan-lien-ket), mẫu quét thêm «Soạn cùng Kara», «Thêm mục tiêu», data-cau-rong-bo, data-nhom-soan, NutSoan; khẳng định «QUET <n> = DANH SACH 12»; chiều đỏ bỏ mot-nut-tao-muc-tieu |
+| P1 | evals | AC-10 đòi 1280/375 × sáng/tối nhưng E16 chỉ một ảnh tối; E17 phán theo Notes của hợp đồng mà hợp đồng không nằm trong đầu vào; Notes có chỗ lệch mơ hồ [trang-bo-okr#F2] | Ở 375 tối viền dòng KR chìm vào nền, không ảnh nào cho thấy, E17 PASS; người chấm không có danh sách chỗ lệch thì FAIL oan hay để lọt | E16 chụp thêm ảnh tối và thẻ Chất lượng 375; E17 thêm contract.md (Notes) vào đầu vào; Notes liệt từng chỗ lệch bằng tên vật | fixed: E16 mười ảnh viết trước (thêm soan-375-toi, the-chat-luong-375-sang, hoi-cong-bo-1280-toi, ngan-1280-toi) và «ANH 10/10»; E17 thêm bước đọc Notes; Notes thành danh sách đóng năm chỗ lệch đánh số |

@@ -9,8 +9,10 @@ import {
 	type SimpleTableColumn,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
-import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { duongCapNhatKr } from "@crm/validation/okr-cap-nhat";
+import Link from "next/link";
 import { okrMessages } from "@/lib/messages/okr";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { ChipGopY, DIEM_CAM_GOP_Y } from "./chip-gop-y";
 import { giaTri } from "./gia-tri-kr";
 import type { MucTieu } from "./kieu";
@@ -45,7 +47,7 @@ export function PhanKrPhuTrach({
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).baPhan;
-	const openRecord = useOpenRecord();
+	const url = useWorkspaceUrl();
 	const { kr, thamGia } = chiaPhanBa(ds);
 	const cot: SimpleTableColumn[] = [
 		{ id: "kr", header: m.cotKr },
@@ -79,14 +81,14 @@ export function PhanKrPhuTrach({
 							<SimpleTableRow data-kr={k.id} key={k.id}>
 								<SimpleTableCell>
 									<span className="flex flex-col items-start gap-0.5">
-										<Button
-											data-mo-kr={k.id}
-											data-mo-muc-tieu={mucTieu.id}
-											onClick={() => openRecord({ kind: "kr", id: k.id })}
-											size="xs-wrap"
-											variant="link"
-										>
-											<span translate="no">{k.title}</span>
+										<Button asChild size="xs-wrap" variant="link">
+											<Link
+												data-mo-kr={k.id}
+												data-mo-muc-tieu={mucTieu.id}
+												href={url(duongCapNhatKr([k.id]))}
+											>
+												<span translate="no">{k.title}</span>
+											</Link>
 										</Button>
 										<span
 											className="text-muted-foreground text-xs"

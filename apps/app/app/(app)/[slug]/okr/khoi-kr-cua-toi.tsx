@@ -24,9 +24,9 @@ import {
 } from "@crm/ui/components/simple-table";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { TableCell } from "@crm/ui/components/table";
+import { duongCapNhatKr } from "@crm/validation/okr-cap-nhat";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useMoDienBien } from "@/components/crm/record-sheet/dien-bien-kr";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -37,19 +37,18 @@ import { LoiXem } from "./toan-canh/toan-canh";
 type DongKr = RouterOutputs["okr"]["khoiCuaToi"]["kr"][number];
 
 function Dong({ d }: { d: DongKr }) {
-	const moDienBien = useMoDienBien();
+	const url = useWorkspaceUrl();
 	return (
 		<SimpleTableRow data-kr-cua-toi={d.keyResultId} data-nhip={d.nhip}>
 			<TableCell className="px-3 py-2.5 align-top whitespace-normal">
-				<button
+				<Link
 					className="block text-start text-sm underline-offset-2 hover:underline focus-visible:underline"
 					data-mo-kr={d.keyResultId}
-					onClick={() => moDienBien(d.objectiveId, d.keyResultId)}
+					href={url(duongCapNhatKr([d.keyResultId]))}
 					translate="no"
-					type="button"
 				>
 					{d.tieuDe}
-				</button>
+				</Link>
 				<span className="block text-muted-foreground text-xs" translate="no">
 					{d.mucTieu}
 				</span>

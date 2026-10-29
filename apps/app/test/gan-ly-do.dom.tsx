@@ -6,17 +6,12 @@ import {
 	bamChuot,
 	chiTietTu,
 	cho,
-	D_CAN,
 	datLai,
-	deXuat,
-	dong,
 	dung,
 	dungSheet,
-	dungSheetCoGopY,
 	goiCua,
 	kho,
 	MT_ID,
-	m,
 	mo,
 	mtSheet,
 	nut,
@@ -188,82 +183,6 @@ describe("l4-hop-thoai", () => {
 			id: "al-1",
 			lyDo: LY_DO,
 			canCu: null,
-		});
-	});
-});
-
-const D_CO_CAN_CU = dong("d-can-co", {
-	loai: "can-chinh",
-	targetKeyResultId: "kr-goc",
-	tenDich: "KR OneHub · Thoả thuận mới cả năm",
-	lyDo: LY_DO,
-	canCu: CAN_CU,
-});
-
-describe("l4-de-xuat", () => {
-	test("l4-de-xuat: đề xuất căn chỉnh hiện mức tin, vì sao, căn cứ và ba nút", async () => {
-		await dungSheetCoGopY([D_CO_CAN_CU, D_CAN]);
-		const co = deXuat(D_CO_CAN_CU.id);
-		const khong = deXuat(D_CAN.id);
-		if (!co || !khong) throw new Error("khong co de xuat can chinh");
-		const doc = (o: Element) => ({
-			muc: o.querySelector("[data-muc-tin]")?.getAttribute("data-muc-tin"),
-			nhan: o.querySelector("[data-muc-tin]")?.textContent,
-			tone: o
-				.querySelector("[data-muc-tin] [data-slot=indicator-dot]")
-				?.getAttribute("data-tone"),
-			lyDo: o.querySelector("[data-de-xuat-ly-do] [translate=no]")?.textContent,
-			canCu:
-				o.querySelector("[data-de-xuat-can-cu] [translate=no]")?.textContent ??
-				null,
-			soCanCu: o.querySelectorAll("[data-de-xuat-can-cu]").length,
-			nut: [...o.querySelectorAll("[data-hanh-dong]")].map((b) => [
-				b.getAttribute("data-hanh-dong"),
-				b.textContent?.trim(),
-			]),
-		});
-		const a = doc(co);
-		if (a.soCanCu !== 1) throw new Error("thieu dong can cu");
-		expect(a).toEqual({
-			muc: "co-so-lieu",
-			nhan: mo.sheet.mucTin["co-so-lieu"],
-			tone: toneTheoNghia(NGHIA_MUC_TIN["co-so-lieu"]),
-			lyDo: LY_DO,
-			canCu: CAN_CU,
-			soCanCu: 1,
-			nut: [
-				["can-chinh", m.dong.canChinh],
-				["sua-ly-do", m.dong.suaLyDo],
-				["bo-qua", m.de.boQua],
-			],
-		});
-		const b = doc(khong);
-		expect([b.muc, b.soCanCu, b.canCu]).toEqual(["dat-cuoc", 0, null]);
-	});
-
-	test("l4-de-xuat: Sửa lý do mở hộp thoại điền sẵn chữ Kara, gửi troLyQuyet cách sua", async () => {
-		await dungSheetCoGopY([D_CO_CAN_CU]);
-		const co = deXuat(D_CO_CAN_CU.id);
-		if (!co) throw new Error("khong co de xuat");
-		await bamChuot(nut(m.dong.suaLyDo, co));
-		await cho(
-			() =>
-				qs("[data-hop-thoai-can-chinh]")?.getAttribute("data-che-do") ===
-				"nhan",
-			"hop thoai nhan",
-		);
-		expect((oLyDo() as HTMLTextAreaElement).value).toBe(LY_DO);
-		expect((oCanCu() as HTMLTextAreaElement).value).toBe(CAN_CU);
-		await datGiaTri(oLyDo(), "Lý do người duyệt");
-		const gui = nutGui();
-		if (!gui) throw new Error("khong thay nut gui");
-		await bamChuot(gui);
-		await cho(() => goiCua("okr.troLyQuyet").length === 1, "gui quyet");
-		expect(goiCua("okr.troLyQuyet")[0]?.vao).toEqual({
-			deXuatId: D_CO_CAN_CU.id,
-			cach: "sua",
-			giaTri: "Lý do người duyệt",
-			canCu: CAN_CU,
 		});
 	});
 });

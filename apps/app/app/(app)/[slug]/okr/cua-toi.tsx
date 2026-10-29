@@ -20,7 +20,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { useChuKy } from "./chon-chu-ky";
-import { NhomDaBo, NhomDangTheoDoi } from "./nhom-da-bo";
+import { NhomDaBo } from "./nhom-da-bo";
 import { PhanCanCapNhat } from "./phan-can-cap-nhat";
 import { PhanDonViDan } from "./phan-don-vi-dan";
 import { PhanKrPhuTrach } from "./phan-kr-phu-trach";
@@ -60,10 +60,7 @@ function TheoKy() {
 	const tenKy = cycles.data.cycles.find((c) => c.id === currentId)?.name ?? "";
 
 	const nhomSau = mine.data ? (
-		<>
-			<NhomDangTheoDoi ds={mine.data.dangTheoDoi} />
-			<NhomDaBo danhDauCuaToi ds={mine.data.daBo} hienDonVi />
-		</>
+		<NhomDaBo danhDauCuaToi ds={mine.data.daBo} hienDonVi />
 	) : null;
 	const phanBa = mine.isPending ? (
 		<VoPhanBa>

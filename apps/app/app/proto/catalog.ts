@@ -1650,6 +1650,45 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "che-do-soan-bo-okr",
+		ten: "Chế độ Soạn bộ OKR — viết cả bộ như tài liệu, chất lượng và góp ý Kara ở cột bên",
+		states: [
+			{
+				id: "ST-soan-co-gop-y",
+				nhan: "Đang soạn — Kara đã đặt hai góp ý ở cột bên",
+			},
+			{ id: "ST-soan-trong", nhan: "Bộ trống — gõ mục tiêu đầu tiên" },
+			{
+				id: "ST-soan-dang-go",
+				nhan: "Đang gõ — một KR chưa có đích, chưa lưu",
+			},
+			{ id: "ST-soan-kara-dang-doc", nhan: "Kara đang đọc bộ" },
+			{
+				id: "ST-soan-da-nhan-gop-y",
+				nhan: "Đã nhận một góp ý — có Hoàn tác",
+			},
+			{
+				id: "ST-soan-co-muc-da-cong-bo",
+				nhan: "Bộ có mục tiêu đã công bố — số khoá",
+			},
+			{
+				id: "ST-soan-kara-tat",
+				nhan: "Kara chưa bật — điểm chất lượng vẫn chấm",
+			},
+			{ id: "ST-soan-hoi-cong-bo", nhan: "Bấm Công bố — hỏi lại một lần" },
+			{ id: "ST-soan-da-cong-bo", nhan: "Đã công bố" },
+			{ id: "ST-soan-chi-xem", nhan: "Người không sửa được bộ — chỉ xem" },
+			{ id: "ST-soan-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-soan-loi-tai", nhan: "Lỗi tải" },
+			{ id: "ST-soan-dien-thoai", nhan: "Điện thoại — thẻ Chất lượng và Kara" },
+			{ id: "ST-ngan-mot-chip", nhan: "Ngăn theo dõi — một chip góp ý" },
+			{
+				id: "ST-ngan-chip-mo-tai-cho",
+				nhan: "Ngăn theo dõi — góp ý mở tại chỗ",
+			},
+		],
+	},
+	{
 		slug: "bam-kr-mo-chi-tiet-kr",
 		ten: "Bấm KR mở chi tiết KR — bốn chỗ bấm, Cập nhật từ chi tiết KR, chữ «Cập nhật»",
 		states: [
@@ -1737,6 +1776,34 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-cng-rong", nhan: "Chu kỳ chưa có lần cập nhật nào" },
 			{ id: "ST-cng-dang-tai", nhan: "Đang tải" },
 			{ id: "ST-cng-loi", nhan: "Tải hỏng — thử lại" },
+		],
+	},
+	{
+		slug: "cua-toi-chi-liet-kr",
+		ten: "Của tôi chỉ liệt KR, cập nhật qua bộ — bấm KR mở trong bộ OKR, một hộp cập nhật",
+		states: [
+			{
+				id: "ST-ctlk-cua-toi",
+				nhan: "Của tôi — 7 KR cần cập nhật ở 3 bộ, không bảng hàng loạt",
+			},
+			{
+				id: "ST-ctlk-mo-kr",
+				nhan: "Bấm một KR — trang bộ OKR của nó, ngăn KR mở sẵn",
+			},
+			{
+				id: "ST-ctlk-dong-ngan",
+				nhan: "Đóng ngăn KR — đứng ở bộ OKR của KR đó",
+			},
+			{ id: "ST-ctlk-hop-cap-nhat", nhan: "Ngăn KR › Cập nhật — hộp một KR" },
+			{ id: "ST-ctlk-tin-nhac", nhan: "Tin nhắc 08:30 dẫn tới đâu (Hỏi-1)" },
+			{
+				id: "ST-ctlk-kr-khong-thay",
+				nhan: "Mở KR đã xoá hay hết quyền — ngăn KR nói rõ",
+			},
+			{ id: "ST-ctlk-da-du", nhan: "Đã cập nhật đủ tuần này" },
+			{ id: "ST-ctlk-khong-kr", nhan: "Không phụ trách KR nào" },
+			{ id: "ST-ctlk-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-ctlk-loi", nhan: "Tải hỏng — thử lại" },
 		],
 	},
 	{

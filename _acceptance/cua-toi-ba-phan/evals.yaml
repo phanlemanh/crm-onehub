@@ -14,6 +14,8 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.ctbp_phan_mot
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-1
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/lib/messages/okr.ts"
@@ -39,6 +41,8 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.ctbp_cap_nhat_tai_cho
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-6
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
@@ -60,6 +64,8 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.ctbp_phien_cua_toi
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-6
     paths:
       - "packages/validation/src/okr-cap-nhat.ts"
       - "apps/api/src/okr/okr-cap-nhat.service.ts"
@@ -78,6 +84,8 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.ctbp_loi_vao_tu
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-1
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
@@ -114,6 +122,8 @@ evals:
     criterion: AC-4
     executor: script
     cmd: config:executors.script.ctbp_lien_ket_cu
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-4
     paths:
       - "apps/app/**"
       - "apps/agent/agent/**"
@@ -154,6 +164,8 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.ctbp_kr_phu_trach
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-7
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
@@ -286,6 +298,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ctbp_man
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-2
     steps:
       - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, NGUYEN VAN: EVAL=E15 bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs\" — script tu canh cay, tu dung phien do (kho do rieng, bo OKR mau co truong don vi va thanh vien, may chu api+app cua CAY DANG XET), dang nhap dev:session tung vai va chup vao evidence/; khong goi thang trinh duyet ngoai script"
       - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc (goi ten cho hong); ma 1 = co dong SAI"
@@ -325,6 +339,8 @@ evals:
       CHIEU DO: dung CTBP_PHA=dem-tron cua E7 tren may chu that -> "SAI AC-5: so KR 3 / 5".
 
   - id: E17
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-2
     criterion: AC-13
     executor: judgment
     paths:
@@ -353,6 +369,8 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.ctbp_man
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-1
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/next.config.ts"
@@ -376,6 +394,8 @@ evals:
     criterion: AC-14
     executor: test
     cmd: config:executors.test.ctbp_loi_mo
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-6
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/lib/messages/okr.ts"
@@ -399,6 +419,8 @@ evals:
     criterion: AC-14
     executor: test
     cmd: config:executors.test.ctbp_tai_lai_nen
+    status: not-run
+    superseded_by: cua-toi-chi-liet-kr#AC-9
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"

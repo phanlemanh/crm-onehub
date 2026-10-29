@@ -12,6 +12,7 @@
  */
 import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -92,7 +93,21 @@ const CHON = new Set(
 		.map((s) => s.trim().toUpperCase())
 		.filter(Boolean),
 );
-const chay = (e) => CHON.size === 0 || CHON.has(e);
+const KHONG_CHAY = new Set(
+	createRequire(import.meta.url)(join(GOC, "lib", "eval-yaml.cjs"))
+		.parseEvals(
+			readFileSync(join(GOC, "_acceptance", HO_SO, "evals.yaml"), "utf8"),
+			["status"],
+		)
+		.filter((e) => String(e.status ?? "").trim() === "not-run")
+		.map((e) => e.id),
+);
+const chay = (e) => {
+	if (CHON.size > 0) return CHON.has(e);
+	if (!KHONG_CHAY.has(e)) return true;
+	console.log(`BO QUA ${e}: khai not-run trong evals.yaml`);
+	return false;
+};
 
 const { chiaCookie } = await import(
 	"../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs"

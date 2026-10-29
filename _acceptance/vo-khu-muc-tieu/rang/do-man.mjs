@@ -1,3 +1,7 @@
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { db } from "../../../packages/db/src/index.ts";
 import { isMeasureDatabase } from "../../../packages/db/src/measure-database.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
@@ -40,7 +44,30 @@ if (laMa.length > 0) {
 	);
 	process.exit(2);
 }
-const chay = (...e) => CHON.size === 0 || e.some((x) => CHON.has(x));
+const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const KHONG_CHAY = new Set(
+	createRequire(import.meta.url)(join(GOC, "lib", "eval-yaml.cjs"))
+		.parseEvals(
+			readFileSync(
+				join(GOC, "_acceptance", "vo-khu-muc-tieu", "evals.yaml"),
+				"utf8",
+			),
+			["status"],
+		)
+		.filter((e) => String(e.status ?? "").trim() === "not-run")
+		.map((e) => e.id),
+);
+const DA_BAO = new Set();
+const chayMot = (x) => {
+	if (CHON.size > 0) return CHON.has(x);
+	if (!KHONG_CHAY.has(x)) return true;
+	if (!DA_BAO.has(x)) {
+		DA_BAO.add(x);
+		console.log(`BO QUA ${x}: khai not-run trong evals.yaml`);
+	}
+	return false;
+};
+const chay = (...e) => e.map(chayMot).some(Boolean);
 
 const tenKho = (() => {
 	try {

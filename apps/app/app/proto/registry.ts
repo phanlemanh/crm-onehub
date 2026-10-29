@@ -7,8 +7,10 @@ import { CamXucTrenCapNhatMau } from "./_modules/cam-xuc-tren-cap-nhat";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CapNhatGanDayMau } from "./_modules/cap-nhat-gan-day";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
+import { CheDoSoanBoOkrMau } from "./_modules/che-do-soan-bo-okr";
 import { ChoTacNhanLauMau } from "./_modules/cho-tac-nhan-lau";
 import { CuaToiBaPhanMau } from "./_modules/cua-toi-ba-phan";
+import { CuaToiChiLietKrMau } from "./_modules/cua-toi-chi-liet-kr";
 import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
 import { CuaVaoVaMau } from "./_modules/cua-vao-va";
 import { DieuHuongKhuMucTieuMau } from "./_modules/dieu-huong-khu-muc-tieu";
@@ -134,12 +136,14 @@ const BANG_GHEP = {
 	"du-an-gantt": DuAnGanttMau,
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
+	"che-do-soan-bo-okr": CheDoSoanBoOkrMau,
 	"cho-tac-nhan-lau": ChoTacNhanLauMau,
 	"hop-tuan-mo-dung-bo": HopTuanMoDungBoMau,
 	"ngan-kr-mot-cho": NganKrMotChoMau,
 	"hop-tuan-tren-bang": HopTuanTrenBangMau,
 	"bam-kr-mo-chi-tiet-kr": BamKrMoChiTietKrMau,
 	"cap-nhat-gan-day": CapNhatGanDayMau,
+	"cua-toi-chi-liet-kr": CuaToiChiLietKrMau,
 	"cam-xuc-tren-cap-nhat": CamXucTrenCapNhatMau,
 } satisfies Record<string, ProtoComponent>;
 

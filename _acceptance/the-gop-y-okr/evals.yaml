@@ -34,7 +34,7 @@ evals:
 
   - id: E4
     status: not-run
-    superseded_by: gop-y-dung-cho#AC-5
+    superseded_by: che-do-soan-bo-okr#AC-7
     criterion: AC-4
     executor: test
     cmd: config:executors.test.tgy_cot_mo_kr
@@ -43,7 +43,7 @@ evals:
 
   - id: E5
     status: not-run
-    superseded_by: gop-y-dung-cho#AC-5
+    superseded_by: che-do-soan-bo-okr#AC-7
     criterion: AC-5
     executor: test
     cmd: config:executors.test.tgy_cot_can_chinh
