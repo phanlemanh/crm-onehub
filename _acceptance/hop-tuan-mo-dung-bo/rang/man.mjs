@@ -316,24 +316,18 @@ const DO_O = (lech) => {
 	return { so: o.length, hang: [...hang.values()], cat };
 };
 
-const DO_DS = (lech) => {
-	const muc = [
-		...document.querySelectorAll("[data-don-vi-co-kr] [data-don-vi]"),
-	];
-	const cat = muc.flatMap((m) =>
-		[
-			m.querySelector("[data-slot='item-title']"),
-			m.querySelector("[data-slot='item-description']"),
-		]
-			.filter((x) => x && x.scrollWidth > x.clientWidth + lech)
-			.map(
-				(x) => `«${x.textContent.trim()}» ${x.scrollWidth}>${x.clientWidth}`,
-			),
-	);
-	const lienKet = muc.filter(
-		(m) => m.getAttribute("href") && m.getClientRects().length > 0,
-	).length;
-	return { so: muc.length, lienKet, cat };
+const DO_GOC_RONG = (lech) => {
+	const cau = document.querySelector("[data-chi-sang-menu]");
+	const nut = document.querySelector("[data-nut='xem-moi-bo']");
+	const cat = [cau, nut]
+		.filter((x) => x && x.scrollWidth > x.clientWidth + lech)
+		.map((x) => `«${x.textContent.trim()}» ${x.scrollWidth}>${x.clientWidth}`);
+	return {
+		danhSach: document.querySelectorAll("[data-don-vi-co-kr]").length,
+		cau: cau !== null && cau.getClientRects().length > 0,
+		nut: nut !== null && nut.getClientRects().length > 0,
+		cat,
+	};
 };
 
 const DO_RONG_BO = () => {
@@ -430,7 +424,7 @@ async function anhChuaKr(n, kho, theme, anh) {
 	await dongTrang(t);
 }
 
-async function anhDsDonVi(n, kho, theme, anh) {
+async function anhGocRong(n, kho, theme, anh) {
 	const nhan = `${kho.ten}-${theme.ten}`;
 	const q = new URLSearchParams({
 		[THAM.don]: "goc",
@@ -438,15 +432,15 @@ async function anhDsDonVi(n, kho, theme, anh) {
 		[THAM.ky]: n.ca.chuKyCon,
 	});
 	const t = await moTrang(n.ck.p, `/${n.slug}/okr/bo-okr?${q}`, kho, theme.toi);
-	await cho(t, "[data-don-vi-co-kr] [data-don-vi]");
-	anh.push(await chup(t, `htmb-ds-don-vi-${nhan}`));
-	const d = await t.evaluate(DO_DS, DO.lechPx);
+	await cho(t, "[data-nut='xem-moi-bo']");
+	anh.push(await chup(t, `htmb-goc-rong-${nhan}`));
+	const d = await t.evaluate(DO_GOC_RONG, DO.lechPx);
 	dongDo(
-		d.so >= DO.soMucToiThieu && d.lienKet === d.so && d.cat.length === 0,
-		`DANH SACH ${nhan}`,
-		`${d.so} muc · ${d.lienKet} lien ket${d.cat.length ? ` · cat ${d.cat.join(" · ")}` : " · ten va dong so doc tron"}`,
+		d.danhSach === 0 && d.cau && d.nut && d.cat.length === 0,
+		`ONEHUB RONG ${nhan}`,
+		`${d.danhSach} danh sach don vi · cau chi sang menu ${d.cau ? "thay" : "KHONG thay"} · Xem moi bo OKR ${d.nut ? "thay" : "KHONG thay"}${d.cat.length ? ` · cat ${d.cat.join(" · ")}` : " · doc tron"}`,
 	);
-	await tran(t, `ds-don-vi ${nhan}`, false);
+	await tran(t, `goc-rong ${nhan}`, false);
 	await dongTrang(t);
 }
 
@@ -457,7 +451,7 @@ async function phanAnh(n) {
 		for (const theme of DO.theme) {
 			await anhCoDuLieu(n, kho, theme, anh);
 			await anhChuaKr(n, kho, theme, anh);
-			await anhDsDonVi(n, kho, theme, anh);
+			await anhGocRong(n, kho, theme, anh);
 		}
 	const co = anh.filter((a) => existsSync(a));
 	dongDo(

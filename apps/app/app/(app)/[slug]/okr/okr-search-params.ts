@@ -54,6 +54,11 @@ export const parseAsDonOkr = createParser<DonChonOkr>({
 	eq: (a, b) => khoaDon(a) === khoaDon(b),
 });
 
+export const parseAsBat = createParser<boolean>({
+	parse: (v) => (v === "1" ? true : null),
+	serialize: () => "1",
+});
+
 export const okrParsers = {
 	[SEARCH_PARAM.okr.ky]: parseAsString,
 	[SEARCH_PARAM.okr.don]: parseAsDonOkr,
@@ -72,6 +77,7 @@ export const okrParsers = {
 	[SEARCH_PARAM.okr.gopY]: parseAsArrayOf(
 		parseAsStringLiteral(LOC_GOP_Y),
 	).withDefault([]),
+	[SEARCH_PARAM.okr.daBo]: parseAsBat.withDefault(false),
 };
 
 export const parseAsNeoGopY = parseAsBoolean;

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d781e14c762cc3a507b015ad043adac3a6e34d7b
+verified_commit: 229fcd7fb931373cdd6bf6f293874aa8b6b99686
 human_signoff: Phan Le Manh 2026-10-20
 ---
 
@@ -258,3 +258,7 @@ sha: 58e62de63995b2944d6c11840587d478c758e122 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-27, do bài đường cũ VK6 lấy nền dần từ độ sâu 20, hạn ca 50 giây (CI #567 quá hạn 5 s)
 run_id: repin-20261027T031312Z-87766
 sha: d781e14c762cc3a507b015ad043adac3a6e34d7b · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-29, do VK19 bo-okr-chi-don-vi: ghim lượt A sau sửa thước V5-17 (Q7)
+run_id: repin-20261029T002846Z-11740
+sha: 229fcd7fb931373cdd6bf6f293874aa8b6b99686 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

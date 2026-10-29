@@ -81,8 +81,9 @@ const DOT_BIEN = [
 		ma: "g",
 		ten: "nhanh rong mat nhom theo doi",
 		tep: TEP.man,
-		tu: "</Empty>\n\t\t\t\t{nhomTheoDoi}",
-		thanh: "</Empty>",
+		tu: "<RongCuaToi ky={ky} nhomSau={nhomSau} url={url} />",
+		thanh:
+			"<RongCuaToi ky={ky} nhomSau={<NhomDaBo danhDauCuaToi ds={mine.data.daBo} hienDonVi />} url={url} />",
 		phai: [{ khoa: "ctt_dom", ghim: "ST-cuatoi-rong khong co nhom theo doi" }],
 	},
 ];

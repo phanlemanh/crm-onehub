@@ -15,9 +15,17 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const TRA_VE_GOC = [
-	"apps/app/app/(app)/[slug]/layout.tsx",
-	"apps/app/components/crm/record-sheet/record-sheet-host.tsx",
+const GO_NAP_SAN = [
+	{
+		tep: "apps/app/app/(app)/[slug]/layout.tsx",
+		cu: "<NganBanGhi />",
+		moi: "<RecordSheetHost cauNoiOkr={okrBridgeConfigured()} />",
+	},
+	{
+		tep: "apps/app/components/crm/record-sheet/record-sheet-host.tsx",
+		cu: "open={daTaiXong && stack.length > 0}",
+		moi: "open={stack.length > 0}",
+	},
 ];
 const DUOI_LOG = 20;
 
@@ -48,9 +56,8 @@ const CA = {
 	hydrat: {
 		caiDayDu: true,
 		ap: (sao) => {
-			const mb = git(GOC, "merge-base", "HEAD", "origin/onehub").trim();
-			for (const tep of TRA_VE_GOC)
-				writeFileSync(join(sao, tep), git(GOC, "show", `${mb}:${tep}`));
+			for (const { tep, cu, moi } of GO_NAP_SAN)
+				suaTep(sao, tep, (s) => thayMotLan(s, cu, moi, "hydrat"));
 		},
 		lenh: [
 			"bash",

@@ -1194,15 +1194,24 @@ async function loiGoiQuaCua() {
 const ky = () => `kyOkr=${OKR.quy}`;
 const theoDonVi = (them) => `/okr/theo-don-vi?${ky()}${them ? `&${them}` : ""}`;
 
-/* Mục tiêu đã bỏ nằm trong nhóm «Đã bỏ» thu gọn dưới bảng (CollapsibleTrigger trong
-   [data-nhom-da-bo]); mở nhóm để mọi mục tiêu máy chủ trả cho đơn vị cùng hiện. */
-async function moNhomDaBo(t) {
-	await hienSel(t, "[data-nhom-da-bo]", "nhom «Da bo» hien");
-	await t.evaluate(() => {
-		const nut = window.__tim("[data-nhom-da-bo] button[aria-expanded='false']")[0];
-		if (nut instanceof HTMLElement) nut.click();
-	});
+const NUT_DA_BO = "[data-nut-da-bo]";
+const tenOkr = (ma) =>
+	Object.entries(OKR).find(([, v]) => v?.id === ma)?.[0] ?? ma;
+const nutDaBo = (bat) =>
+	window.__tim("[data-nut-da-bo]")[0]?.getAttribute("aria-pressed") ===
+	String(bat);
+
+async function moiMucTieu(t) {
+	const tat = await thuocTinh(t, "[data-muc-tieu]", "data-muc-tieu");
+	if (!(await coSel(t, NUT_DA_BO))) return tat;
+	await bamSel(t, `${NUT_DA_BO}[aria-pressed='false']`);
+	await doi(t, "nut «Da bo» bat", nutDaBo, true);
 	await cho(400);
+	const bat = await thuocTinh(t, "[data-muc-tieu]", "data-muc-tieu");
+	await bamSel(t, `${NUT_DA_BO}[aria-pressed='true']`);
+	await doi(t, "nut «Da bo» tat", nutDaBo, false);
+	await cho(400);
+	return [...new Set([...tat, ...bat])];
 }
 
 async function buocLoc() {
@@ -1212,18 +1221,15 @@ async function buocLoc() {
 		theoDonVi(`donOkr=bp:${ORG.B}`),
 	);
 	await hienSel(t, "[data-muc-tieu]");
-	// ve-sinh-do-san-onehub cach-toi: muc tieu da bo (P2a) nay o nhom «Da bo» thu gon duoi bang — mo nhom roi dem nhu danh sach cu.
-	await moNhomDaBo(t);
-	const bon = await thuocTinh(t, "[data-muc-tieu]", "data-muc-tieu");
+	const motBp = await moiMucTieu(t);
 	kiem(
-		`E2 buoc 3: bo phan B hien dung 4 muc tieu B1, P1a, P1b, P2a, khong P3a (thay ${bon.length})`,
-		giongNhau(
-			[...bon].sort(),
-			[OKR.B1.id, OKR.P1a.id, OKR.P1b.id, OKR.P2a.id].sort(),
-		),
+		`E2 buoc 3: bo phan B hien dung B1, khong P1a, P1b, P2a, P3a (thay ${motBp.length}: ${motBp.map((m) => tenOkr(m))})`,
+		giongNhau([...motBp].sort(), [OKR.B1.id]),
 	);
 	await chup(t, "E2-buoc-loc-1.png");
 
+	await toi(t, theoDonVi(`donOkr=pb:${ORG.P1}`));
+	await hienSel(t, "[data-muc-tieu]");
 	trpc.length = 0;
 	// AC-14 cach-toi: «Loc» (nam mat loc may chu) nay o hang cong cu cua bang don vi (trang-don-vi-mot-bang AC-5).
 	await bamChu(t, "button[aria-haspopup='menu']", "Lọc");
@@ -1257,7 +1263,7 @@ async function buocLoc() {
 	const idManHinh = await thuocTinh(t, "[data-muc-tieu]", "data-muc-tieu");
 	const tuApi = await hoi(cookie.truongB, "okr.danhSach", {
 		cycleId: OKR.quy,
-		unit: { loai: "bp", id: ORG.B },
+		unit: { loai: "pb", id: ORG.P1 },
 		loc: { phuTrach: [id.k], loai: [], trangThai: [], tuTin: [] },
 	});
 	kiem(
@@ -1274,7 +1280,7 @@ async function buocLoc() {
 
 	await toi(
 		t,
-		theoDonVi(`donOkr=bp:${ORG.B}&phuTrachOkr=${id.k}&loaiOkr=cam-ket`),
+		theoDonVi(`donOkr=pb:${ORG.P1}&phuTrachOkr=${id.k}&loaiOkr=cam-ket`),
 	);
 	kiem(
 		"E2 buoc 5: loc khong khop hien cau rong",
@@ -1288,12 +1294,15 @@ async function buocLoc() {
 		"[data-trang-thai='ST-donvi-loc-khongkhop'] button",
 		CHU.boLoc,
 	);
-	// ve-sinh-do-san-onehub cach-toi: bo loc thi danh sach nap lai, nhom «Da bo» dung lai o trang thai thu — mo lai roi dem.
-	await moNhomDaBo(t);
 	await doi(
 		t,
-		"E2 buoc 5: bo loc tra lai 4 muc tieu",
-		() => window.__tim("[data-muc-tieu]").length === 4,
+		"E2 buoc 5: bo loc tra lai 2 muc tieu cua P1",
+		() => window.__tim("[data-muc-tieu]").length === 2,
+	);
+	const caP1 = await moiMucTieu(t);
+	kiem(
+		`E2 buoc 5: bo loc tra lai dung P1a, P1b (thay ${caP1.map((m) => tenOkr(m))})`,
+		giongNhau([...caP1].sort(), [OKR.P1a.id, OKR.P1b.id].sort()),
 	);
 	kiem(
 		"E2 buoc 5: URL khong con tham so loc",
@@ -1311,7 +1320,7 @@ async function buocLoc() {
 			theoDonVi(`donOkr=nguoi:${id.k}`),
 		);
 		await hienSel(n, "[data-dong-don-vi]", "E2 buoc 6: dau trang mot nguoi");
-		const dau = `${await chuSel(n, "[data-chon-don-vi]")} ${await chuSel(n, "[data-dong-don-vi]")}`;
+		const dau = `${await chuSel(n, "[data-vi-tri-bo]")} ${await chuSel(n, "[data-dong-don-vi]")}`;
 		kiem(
 			`E2 buoc 6: dau trang co ten k, phong ban chinh, quan ly truc tiep (thay: ${dau.slice(0, 160)})`,
 			dau.includes(NGUOI.k.ten) &&

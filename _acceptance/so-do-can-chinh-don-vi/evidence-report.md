@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 11629978b324374e5522438772741cf73f3885eb
+verified_commit: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15
 human_signoff: manh 2026-10-15
 ---
 
@@ -279,3 +279,7 @@ sha: 51d3fbe3a65ba4ce2e06ea831b75d09361ae993c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 10 — 2026-10-27, do hoá cũ do gộp origin/onehub dd53c3870 (#574 VK12) vào VK6; bài đường cũ tự lấy origin/onehub (lượt 1/2)
 run_id: repin-20261027T015606Z-77455
 sha: 11629978b324374e5522438772741cf73f3885eb · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 11 — 2026-10-28, do VK19 bo-okr-chi-don-vi: ghim lại các hồ sơ xanh ở làn trước (vượt trần), sau V5-9/V5-10
+run_id: repin-20261028T183615Z-69491
+sha: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

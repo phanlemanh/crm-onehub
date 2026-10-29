@@ -264,17 +264,8 @@ const { TheoDonVi } = await import(
 const { TheConBo, hrefThe } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/the-con"
 );
-const { HangCongCuDonVi } = await import(
-	"@/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu"
-);
-const { ChonDonVi } = await import(
-	"@/app/(app)/[slug]/okr/theo-don-vi/chon-don-vi"
-);
 const { DanhSachBo } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/danh-sach-bo"
-);
-const { DonViCon } = await import(
-	"@/app/(app)/[slug]/okr/theo-don-vi/don-vi-con"
 );
 const { PhanDonViDan } = await import("@/app/(app)/[slug]/okr/phan-don-vi-dan");
 const { ToanCanh } = await import("@/app/(app)/[slug]/okr/toan-canh/toan-canh");
@@ -463,7 +454,9 @@ async function moBo(cot: CotPha, xem: CachXemOkr): Promise<San> {
 	await cho(
 		() =>
 			s.o.querySelector(
-				cot === "dang-tai" ? "[data-the-con-bo]" : "[data-chon-don-vi]",
+				cot === "dang-tai"
+					? "[data-the-con-bo]"
+					: '[data-vi-tri-bo="mot-bo"] [aria-current="page"]',
 			) !== null,
 		`tbo-the: ${cot}/${xem} trang mot bo dung xong`,
 	);
@@ -496,29 +489,18 @@ describe("tbo-the-do", () => {
 					ky="q4"
 					xem="danh-sach"
 				/>
-				<HangCongCuDonVi
-					chon={
-						<>
-							<ChonDonVi
-								cay={cayMau()}
-								chonDon={() => {}}
-								dem={undefined}
-								don={{ loai: "pb", id: "P1" }}
-								tenGoc="OneHub"
-							/>
-							<ViewSwitch
-								items={[
-									{ value: "danh-sach", label: "Danh sách" },
-									{ value: "cay", label: "Cây căn chỉnh" },
-									{ value: "hop-tuan", label: "Họp tuần" },
-								]}
-								label="Cách xem"
-								onValueChange={() => {}}
-								value="danh-sach"
-							/>
-						</>
-					}
-				/>
+				<div>
+					<ViewSwitch
+						items={[
+							{ value: "danh-sach", label: "Danh sách" },
+							{ value: "cay", label: "Cây căn chỉnh" },
+							{ value: "hop-tuan", label: "Họp tuần" },
+						]}
+						label="Cách xem"
+						onValueChange={() => {}}
+						value="danh-sach"
+					/>
+				</div>
 			</>,
 		);
 		expect(demViewSwitch(s.o)).toBeGreaterThan(0);
@@ -546,7 +528,6 @@ const CHO_LIEN_KET = {
 	"(app)/[slug]/okr/thanh-ben-muc-tieu.tsx": "danh-sach",
 	"(app)/[slug]/okr/thanh-tab.tsx": "danh-sach",
 	"(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx": "co-don",
-	"(app)/[slug]/okr/theo-don-vi/don-vi-con.tsx": "co-don",
 	"(app)/[slug]/okr/theo-don-vi/the-con.tsx": "co-don",
 	"(app)/[slug]/okr/theo-don-vi/vi-tri-bo.tsx": "danh-sach",
 	"(app)/[slug]/okr/toan-canh/toan-canh.tsx": "co-don",
@@ -615,23 +596,6 @@ async function hrefDanhSachBo(): Promise<HrefTheoDon> {
 		goc: hrefTrong(s.o, '[data-bo="goc"]'),
 		"pb:P1": hrefTrong(s.o, '[data-bo="pb:P1"]'),
 	};
-}
-
-async function hrefDonViCon(): Promise<HrefTheoDon> {
-	const s = await ve(
-		<DonViCon
-			con={[
-				{ khoa: "goc", ten: "OneHub", coTruong: true },
-				{ khoa: "pb:P1", ten: "Phòng Kế toán", coTruong: true },
-			]}
-			dem={undefined}
-			ky="q4"
-		/>,
-	);
-	const a = [...s.o.querySelectorAll("[data-don-vi-con] a[href]")].map(
-		(x) => x.getAttribute("href") ?? "",
-	);
-	return { goc: a.slice(0, 1), "pb:P1": a.slice(1, 2) };
 }
 
 async function hrefPhanDonViDan(): Promise<HrefTheoDon> {
@@ -734,7 +698,6 @@ const DUNG_LIEN_KET = {
 	"(app)/[slug]/okr/phan-don-vi-dan.tsx": hrefPhanDonViDan,
 	"(app)/[slug]/okr/soan/luat-ban-nhap.ts": hrefBanNhap,
 	"(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx": hrefDanhSachBo,
-	"(app)/[slug]/okr/theo-don-vi/don-vi-con.tsx": hrefDonViCon,
 	"(app)/[slug]/okr/theo-don-vi/the-con.tsx": hrefTheCon,
 	"(app)/[slug]/okr/toan-canh/toan-canh.tsx": hrefToanCanh,
 } satisfies Record<string, () => HrefTheoDon | Promise<HrefTheoDon>>;

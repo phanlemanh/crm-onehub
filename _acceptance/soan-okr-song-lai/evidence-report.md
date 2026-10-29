@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f28f4ba412ec6e954970c6eccbf75eb5e909a72e
+verified_commit: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15
 human_signoff: Phan Le Manh 2026-10-04
 ---
 
@@ -238,3 +238,7 @@ sha: cdc762c63018535345b2e142f23e81aa94dc9943 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-22, do VK9 mot-nut-tao-muc-tieu: khai superseded_by cho eval DOM gãy, bàn đo màn qua hộp Thêm mục tiêu (V2-20 b2)
 run_id: repin-20261022T224734Z-81705
 sha: f28f4ba412ec6e954970c6eccbf75eb5e909a72e · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E7 · thay bởi hồ sơ đã ký: E1→mot-nut-tao-muc-tieu#AC-7, E7→mot-nut-tao-muc-tieu#AC-7 · ngoài làn máy: E11, E13 · diff chạm vật đo ngoài làn máy: E11, E13 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-28, do VK19 bo-okr-chi-don-vi: ghim lại các hồ sơ xanh ở làn trước (vượt trần), sau V5-9/V5-10
+run_id: repin-20261028T183615Z-69491
+sha: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E7 · thay bởi hồ sơ đã ký: E1→mot-nut-tao-muc-tieu#AC-7, E7→mot-nut-tao-muc-tieu#AC-7 · ngoài làn máy: E11, E13 · diff chạm vật đo ngoài làn máy: E11, E13 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
