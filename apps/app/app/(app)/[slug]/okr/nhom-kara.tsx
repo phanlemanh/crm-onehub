@@ -17,6 +17,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import type {
 	ProposedChangeAction,
 	ProposedChangeDecided,
+	ProposedChangeDensity,
 	ProposedChangeKind,
 } from "@crm/ui/components/proposed-change";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
@@ -133,10 +134,14 @@ export function DeXuatNeo({
 	d,
 	gopY,
 	moKr,
+	density,
+	label,
 }: {
 	d: DongHien;
 	gopY: GopYMucTieu;
 	moKr: (di: LoiDiKr) => void;
+	density?: ProposedChangeDensity;
+	label?: ReactNode;
 }) {
 	const m = okrGopYMessages(useLocale());
 	const [sua, setSua] = useState<string | null>(null);
@@ -257,6 +262,7 @@ export function DeXuatNeo({
 				data-kara-proposal-kr={d.keyResultId ?? undefined}
 				data-trang-thai={gopY.trangThai(d.id)}
 				decided={decided}
+				density={density}
 				editing={
 					sua === null
 						? undefined
@@ -265,6 +271,7 @@ export function DeXuatNeo({
 				error={gopY.loiDong[d.id]}
 				highlighted={gopY.noi === d.id}
 				kind={kind}
+				label={label}
 				lockedReason={gopY.ghiDuoc ? undefined : m.de.khoaSua}
 				media={false}
 				pending={gopY.dangQuyet === d.id}

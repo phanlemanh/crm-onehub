@@ -38,6 +38,10 @@ const TEP_CUA_VONG = /(bam-kr-mo-chi-tiet-kr|\/bkr-|bam-kr-quet)/;
 const ANH_CHUP = "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json";
 const LOP_TEP =
 	/^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|_acceptance\/[^/]+\/rang\/)/;
+const THUOC_THEO_VONG = {
+	"khung-khong-con-dung-chu#E5":
+		"luat pham vi vong: git diff --quiet merge-base tren messages-guard.spec.ts cua vong khung-khong-con-dung-chu — nhanh nao dang ky chu moi cung do (chu kho V1-33 a)",
+};
 const TRAN_LENH_MS = 15 * 60_000;
 const MA_DO = 1;
 const MA_KHONG_DO = 2;
@@ -252,7 +256,10 @@ try {
 		console.log("SAI AC-6: ANH CHUP LICH SU DOI");
 		sai += 1;
 	}
-	const lop = quetLop(daSua);
+	const tatCa = quetLop(daSua);
+	for (const m of tatCa.filter((x) => THUOC_THEO_VONG[x.ten]))
+		console.log(`THUOC THEO VONG ${m.ten}: ${THUOC_THEO_VONG[m.ten]}`);
+	const lop = tatCa.filter((x) => !THUOC_THEO_VONG[x.ten]);
 	console.log(
 		`quet lop: ${new Set(lop.map((m) => m.slug)).size} ho so, ${lop.length} eval`,
 	);

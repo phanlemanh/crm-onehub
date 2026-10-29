@@ -1168,6 +1168,28 @@ _Avoid_: bản đề xuất, draft, OKR gợi ý, OKR máy viết
 Vì sao: «Bản đề xuất» đã là một thay đổi chờ duyệt của trang tài liệu; «OKR máy viết»
 gợi máy đã ghi vào bộ OKR, trong khi máy không ghi gì — người đưa vào.
 
+**Chế độ Soạn**: khung bản ghi cỡ rộng mở trên một bộ OKR để người soạn viết cả bộ như một
+tài liệu — mục tiêu và KR gõ liền mạch bằng bàn phím, mỗi dòng đủ chữ tự lưu thành mục tiêu
+hay KR nháp thật; cột bên có khối Chất lượng và góp ý của Kara; nút chính «Công bố N mục
+tiêu» công bố ngay từ khung. Mở từ dòng «Soạn cả bộ» của hộp Thêm mục tiêu, nút «Soạn bộ
+OKR» khi bộ trống, hay chip góp ý ở ngăn theo dõi. Người không sửa được bộ, hay chu kỳ đã
+đóng, chỉ xem. Chốt 2026-10-22 tại Cổng Phạm vi của `che-do-soan-bo-okr`.
+Khác **Cuộc soạn**: cuộc soạn là Kara đề nghị bản nháp để người nhận hay bác; chế độ Soạn
+là người tự gõ, Kara chỉ góp ý. Cuộc soạn vẫn mở được từ lối «Nhờ Kara soạn nháp» khi bộ
+trống.
+_Avoid_: trình soạn, editor, chế độ sửa, soạn nhanh
+Vì sao: «sửa» đã là thao tác trên một dòng của ngăn theo dõi; «editor» là chữ kỹ thuật.
+
+**Điểm chất lượng**: số «N trên M điểm đạt» ở khối Chất lượng của chế độ Soạn — máy chấm
+đúng nội dung đang hiện, ngay khi gõ, không gọi Kara. M là tổng điểm xét: mỗi mục tiêu xét
+«có 2–5 KR» và, khi có từ 2 KR, «có KR đối trọng»; mỗi KR xét các luật mức KR áp cho kiểu
+của nó («không là việc», «có khởi điểm», «đích khác khởi điểm») cộng «có người phụ trách».
+N là M trừ số điểm vi phạm. Điểm thấp không chặn công bố. Chốt 2026-10-22 tại Cổng Phạm vi
+của `che-do-soan-bo-okr`.
+_Avoid_: điểm Kara, điểm AI, sức khoẻ OKR
+Vì sao: điểm do luật cố định chấm, không mang dấu Kara; «Sức khoẻ» đã là một mục của khu
+Mục tiêu.
+
 **Trang chiến lược**: trang tài liệu loại «chiến lược» trong kho tài liệu — định
 hướng, ưu tiên năm, nguyên tắc vận hành — mà Trợ lý OKR đọc bản đang dùng làm nền khi
 soạn. Chỉ bản đang dùng vào gói: trang chưa duyệt không vào; trang quá hạn xác minh vẫn vào,

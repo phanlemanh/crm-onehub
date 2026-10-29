@@ -229,6 +229,8 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.mnt_soan
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-1
     paths:
       - "apps/app/app/(app)/[slug]/okr/hop-chon-duong*.tsx"
       - "apps/app/app/(app)/[slug]/okr/soan/**"

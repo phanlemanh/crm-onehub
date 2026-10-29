@@ -100,6 +100,7 @@ export const SEARCH_PARAM = {
 		moDonVi: "moDonVi",
 		daBo: "daBoOkr",
 		moNhanh: "moNhanh",
+		soanMt: "soanMt",
 	},
 	sanPham: {
 		sua: "suaSanPham",
