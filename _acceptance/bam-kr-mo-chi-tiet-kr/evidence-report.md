@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3cd6a7ca1b32c96a4001ae7d996b0fa9c1a97466
+verified_commit: 6aa544f652534dbb44d2566f8e2336ced3be28da
 human_signoff: Phan Le Manh 2026-10-26 — ký Cổng Bằng chứng trên S4 vòng 5 PASS (7/7 tiêu chí; AC-6 chạy lại 244 eval của 53 hồ sơ đã ký, 236 xanh, 8 đỏ sẵn trên onehub, 0 SAI). Ngoài-1 đến Ngoài-15 theo đề xuất máy — mười ba mục ghi Known limits, Ngoài-6 chấp nhận không sửa, Ngoài-10 mở hợp đồng mới cho chữ «Cập nhật tuần» còn ở okr-config.ts và packages/ui/src/lib/messages.ts:573. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -182,3 +182,7 @@ sha: d15fd9bb723879dde5fe625542c4f44bc6203a50 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-29, do hoá cũ do gộp onehub c16e13c9c (VK19); thước E6 sửa theo V1-63
 run_id: repin-20261029T120933Z-99644
 sha: 3cd6a7ca1b32c96a4001ae7d996b0fa9c1a97466 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E2 · thay bởi hồ sơ đã ký: E2→so-do-toan-vung#AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-29, do hoá cũ sau khi gộp onehub e539693c7 (#569) vào #580
+run_id: repin-20261029T150946Z-45906
+sha: 6aa544f652534dbb44d2566f8e2336ced3be28da · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E2 · thay bởi hồ sơ đã ký: E1→cua-toi-chi-liet-kr#AC-8, E2→so-do-toan-vung#AC-6 · AC không có chốt máy: AC-1 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
