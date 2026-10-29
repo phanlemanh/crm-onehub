@@ -5,7 +5,7 @@ slug: lich-su-moi-lan-cap-nhat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-10-28-lich-su-moi-lan-cap-nhat-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-28
@@ -93,3 +93,5 @@ Quét theo trục (skill `morphological-scan`, preset entity-feature; bản qué
   vi gom tuần phải đổi qua `yeu-cau cham-tep`, kèm dòng sổ `decided_by` ở hồ sơ `ngan-kr-mot-cho`.
 - Lớp quét «không đổi hình» toàn kho như HT2 E10 không chạy trong vòng này: bài kiểm của hồ sơ đã ký do `ci.yml` chạy khi
   PR sẵn sàng, lượt kiểm chéo 01:00 sau gộp bắt phần còn lại.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-29:
+  - Treo-2: ở khổ 375, thông báo «Đã gửi cập nhật» che nút Gửi của hộp cập nhật vài giây, nên lần gửi thứ hai liền tay có thể bấm trượt; không mất dữ liệu.
