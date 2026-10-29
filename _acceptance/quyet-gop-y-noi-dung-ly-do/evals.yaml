@@ -68,6 +68,8 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.k3c_dot_bien
+    status: not-run
+    superseded_by: che-do-soan-bo-okr#AC-7
     expected: "exit 0; _acceptance/quyet-gop-y-noi-dung-ly-do/rang/dot-bien.mjs: chiều xanh trước (k3c_api, k3c_vi, k3c_mot_nguon mã 0, không thì thoát 2 'KHONG DO DUOC'); ba vết trên tệp thật, chuỗi neo đúng một lần, trả lại trong finally, so băm sau mỗi vết (lệch → thoát 3): (a) bỏ dòng ánh xạ của can-chinh-chua-cong-bo → k3c_mot_nguon đỏ 'thieu anh xa: can-chinh-chua-cong-bo' (E6 vế 2); (b) dời try/catch vào trong callback của $transaction → k3c_api đỏ ': gop y khong con cho' (E1); (c) nhánh !kq.ok của app luôn dùng loiDong['chua-san-sang'] → k3c_vi đỏ 'cau sai cho' (E3). Mỗi vết chỉ dò chuỗi đã ghim ở chính eval nguồn. In 'dot-bien: 3/3 vet bi bat, tep tra lai nguyen'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/tro-ly.service.ts, "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", _acceptance/quyet-gop-y-noi-dung-ly-do/rang/dot-bien.mjs]
