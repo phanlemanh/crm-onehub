@@ -32,7 +32,7 @@ evals:
     executor: test
     layer: unit
     cmd: config:executors.test.dnk_goc
-    expected: "exit 0; -t dnk-goc của doi-nhan-khu-muc-tieu.spec.ts: bảng NHAN_GHIM phần gốc ghim cap.goc, hopThoai.capMucTieu.onehub, goc (okr.ts, okr-hoi-y.ts doPhu.goc, to-chuc.ts) đúng «Công ty» / «Company»; okr-so.ts phamVi.toan-cong-ty và tro-ly-okr.ts troLy.phamVi.toan-cong-ty đúng «Công ty» / «Company»; khongThay.action vi đúng «Về cả công ty». Sai thì ném 'dnk: goc <tệp>#<khoá> <ngôn ngữ> <giá trị>'. Đối chứng phạm vi giữ: donViBang.caCongTy vi «cả công ty», moTa.toan-canh vi «Cả công ty trong một màn.» và okr-hoi-y.ts trong.quanTriMoTa vi bằng giá trị ở git show 1fce5d49c, không thì ném 'dnk: pham vi bi doi <khoá>'."
+    expected: "exit 0; -t dnk-goc của doi-nhan-khu-muc-tieu.spec.ts: bảng NHAN_GHIM phần gốc ghim cap.goc, hopThoai.capMucTieu.onehub, goc (okr.ts, okr-hoi-y.ts doPhu.goc, to-chuc.ts) đúng «Công ty» / «Company»; okr-so.ts phamVi.toan-cong-ty và tro-ly-okr.ts troLy.phamVi.toan-cong-ty đúng «Công ty» / «Company»; khongThay.action vi đúng «Về cả công ty». Sai thì ném 'dnk: goc <tệp>#<khoá> <ngôn ngữ> <giá trị>'. Đối chứng phạm vi giữ: moTa.toan-canh vi «Cả công ty trong một màn.» và okr-hoi-y.ts trong.quanTriMoTa vi bằng giá trị ở git show 1fce5d49c, không thì ném 'dnk: pham vi bi doi <khoá>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-hoi-y.ts, apps/app/lib/messages/okr-so.ts, apps/app/lib/messages/tro-ly-okr.ts, apps/app/lib/messages/to-chuc.ts, apps/app/test/doi-nhan-khu-muc-tieu.spec.ts, apps/app/test/doi-nhan-khu-muc-tieu-luat.ts]
 

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cdc762c63018535345b2e142f23e81aa94dc9943
+verified_commit: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -345,3 +345,7 @@ sha: a0124b2dba7fd0f324ebb62c0a560e6b83425141 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 14 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
 run_id: repin-20261020T141937Z-90923
 sha: cdc762c63018535345b2e142f23e81aa94dc9943 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2b, E3, E4, E6, E7b, E8, E11, E12 (E12 không khai paths), E14 · diff chạm vật đo ngoài làn máy: E1b, E2b, E3, E4, E6, E7b, E8, E11, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4, AC-6, AC-8, AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 15 — 2026-10-28, do VK19 bo-okr-chi-don-vi: ghim lại các hồ sơ xanh ở làn trước (vượt trần), sau V5-9/V5-10
+run_id: repin-20261028T183615Z-69491
+sha: bc2aa4c9e87e1be24d4ad64f772ad4fdde799d15 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2b, E3, E4, E6, E7b, E8, E11, E12 (E12 không khai paths), E14 · diff chạm vật đo ngoài làn máy: E1b, E2b, E3, E4, E6, E7b, E8, E11, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4, AC-6, AC-8, AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

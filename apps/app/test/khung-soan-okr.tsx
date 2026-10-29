@@ -735,7 +735,10 @@ export async function moKhung(
 		`?${tham}`,
 	);
 	await cho(
-		() => document.querySelector("[data-chon-don-vi]") !== null,
+		() =>
+			document.querySelector(
+				'[data-vi-tri-bo="mot-bo"] [aria-current="page"]',
+			) !== null,
 		"khung don vi",
 	);
 	await nhip(10);

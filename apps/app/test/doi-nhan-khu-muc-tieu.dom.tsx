@@ -8,8 +8,8 @@ import { workspaceOutput } from "../../api/src/workspace/workspace.contracts";
 import { cho, dung, kho } from "./okr-don-san";
 
 const { BangDoPhu } = await import("@/app/(app)/[slug]/okr/hoi-y/khoi-do-phu");
-const { ChonDonVi } = await import(
-	"@/app/(app)/[slug]/okr/theo-don-vi/chon-don-vi"
+const { ViTriBo } = await import(
+	"@/app/(app)/[slug]/okr/theo-don-vi/vi-tri-bo"
 );
 const { useTenGoc } = await import("@/app/(app)/[slug]/okr/ten-goc");
 const { useTRPC } = await import("@/lib/trpc/client");
@@ -81,14 +81,19 @@ const choDaTai = (o: HTMLElement) =>
 		"dnk: cho workspace.get tra ve",
 	);
 
-function GocChon() {
+function GocViTri() {
+	const tenGoc = useTenGoc();
 	return (
-		<ChonDonVi
-			cay={CAY}
-			chonDon={() => {}}
-			dem={{}}
-			don={{ loai: "goc" }}
-			tenGoc={useTenGoc()}
+		<ViTriBo
+			ky={null}
+			menu={{
+				cay: CAY,
+				dem: {},
+				don: { loai: "goc" },
+				tenGoc,
+				the: "danh-sach",
+			}}
+			tenBo={tenGoc}
 		/>
 	);
 }
@@ -138,9 +143,9 @@ describe("dnk-goc-man", () => {
 			);
 		});
 
-	test("dnk-goc-man: o chon don vi lay ten goc tu useTenGoc", async () => {
+	test("dnk-goc-man: dong vi tri lay ten goc tu useTenGoc", async () => {
 		datTen(TEN);
-		const s = await dung(<GocChon />);
+		const s = await dung(<GocViTri />);
 		await choCo(s.o, TEN);
 		const o = s.o.querySelector('[translate="no"]');
 		if (!o?.textContent?.includes(TEN))
@@ -149,7 +154,7 @@ describe("dnk-goc-man", () => {
 		const r = await dung(
 			<>
 				<DauDo />
-				<GocChon />
+				<GocViTri />
 			</>,
 		);
 		await choDaTai(r.o);

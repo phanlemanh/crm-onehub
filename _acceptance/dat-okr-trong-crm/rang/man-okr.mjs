@@ -47,6 +47,8 @@ const CHU = {
 	daKhoa: "Đã khoá khi công bố",
 	vet: "Vết",
 	thuLai: "Thử lại",
+	boLoc: "Lọc",
+	phuTrach: "Người phụ trách",
 	kieuLa:
 		"Cột kiểu chỉ nhận: tăng tới, giảm xuống, giữ trên, giữ dưới, mốc, phần trăm",
 	emailLa: "Email này chưa là thành viên OneHub Center",
@@ -730,11 +732,10 @@ async function byUnit(c, don) {
 	return hoi(c, "okr.byUnit", { cycleId: OKR.quy, unit: don });
 }
 
-/* trang-don-vi-mot-bang (AC-14): ô chọn đơn vị có tìm kiếm thay cây — mở ô
-   chọn rồi bấm lựa chọn theo tên đơn vị. */
-const LUA_CHON = "[cmdk-item]";
+const MO_MENU = "[data-menu-vi-tri]";
+const LUA_CHON = "[data-menu-don]";
 async function chonDon(trang, ten) {
-	await bamSel(trang, "[data-chon-don-vi]");
+	await bamSel(trang, MO_MENU);
 	await hienSel(trang, LUA_CHON);
 	return bamChu(trang, LUA_CHON, ten);
 }
@@ -780,21 +781,25 @@ async function buocE11ChuaChuKy() {
 
 async function buocE11() {
 	const pb = (k) => `pb:${ORG[k]}`;
-	const t = await moTrang(cookie.truong, RONG, theoDonVi(), "E11");
-	await hienSel(t, "[data-chon-don-vi]");
-	await bamSel(t, "[data-chon-don-vi]");
-	await hienSel(t, LUA_CHON);
-	const nut = await t.evaluate(() =>
-		[...document.querySelectorAll("[cmdk-item]")].map((e) =>
-			(([ten, goiY]) =>
-				goiY?.textContent?.startsWith("cả công ty")
-					? "goc"
-					: (ten?.textContent?.trim() ?? ""))(
-				e.querySelectorAll(":scope > span"),
-			),
-		),
+	const t = await moTrang(
+		cookie.truong,
+		RONG,
+		theoDonVi(`bp:${ORG.bp}`),
+		"E11",
 	);
-	// Ô chọn không mang khoá đơn vị trên DOM: đổi tên lựa chọn ra khoá như nút cây cũ.
+	await hienSel(t, MO_MENU);
+	await bamSel(t, MO_MENU);
+	await hienSel(t, LUA_CHON);
+	const nut = await t.evaluate(
+		(moMenu, luaChon) => [
+			...[...document.querySelectorAll(luaChon)].map((e) =>
+				e.getAttribute("data-menu-don"),
+			),
+			document.querySelector(moMenu)?.textContent?.trim() ?? "",
+		],
+		MO_MENU,
+		LUA_CHON,
+	);
 	const khoaTheoTen = new Map([
 		[TEN.bp, `bp:${ORG.bp}`],
 		...["pb1", "pb2", "pb3", "pb4"].map((k) => [TEN[k], pb(k)]),
@@ -815,14 +820,12 @@ async function buocE11() {
 	const dem = await hoi(cookie.truong, "okr.countByUnit", { cycleId: OKR.quy });
 	const demPb1 = dem[pb("pb1")] ?? 0;
 	const chuPb1 = await t.evaluate(
-		(ten) =>
-			[...document.querySelectorAll("[cmdk-item]")]
-				.find(
-					(e) => e.querySelector(":scope > span")?.textContent?.trim() === ten,
-				)
+		(khoa) =>
+			document
+				.querySelector(`[data-menu-don='${khoa}']`)
 				?.textContent?.replace(/\s+/g, " ")
 				.trim() ?? "",
-		TEN.pb1,
+		pb("pb1"),
 	);
 	kiem(
 		`E11 buoc 1: so dem canh ${TEN.pb1} phai «${demPb1} mục tiêu», thay «${chuPb1}»`,
@@ -935,6 +938,8 @@ async function buocE11() {
 	);
 	await chup(t, "E11-step7.png", true);
 
+	await chonDon(t, TEN.pb2);
+	await hienSel(t, `[data-muc-tieu='${OKR.o5.id}']`);
 	let chan = true;
 	await t.setRequestInterception(true);
 	const chanByUnit = (r) => {
@@ -948,7 +953,15 @@ async function buocE11() {
 		else void r.continue();
 	};
 	t.on("request", chanByUnit);
-	await chonDon(t, TEN.pb2);
+	await bamChu(t, "button[aria-haspopup='menu']", CHU.boLoc);
+	await cho(400);
+	await bamChu(t, "[role='menuitem']", CHU.phuTrach);
+	await cho(400);
+	await bamChu(t, "[role='menuitemcheckbox']", NGUOI.truong2.ten);
+	for (let i = 0; i < 3 && (await coSel(t, "[role='menu']")); i += 1) {
+		await t.keyboard.press("Escape");
+		await cho(200);
+	}
 	if (await hienSel(t, "[data-trang-thai='ST-donvi-loi']")) {
 		kiem(
 			"E11 buoc 8: Empty loi thieu nut Thu lai",
@@ -1031,8 +1044,8 @@ async function buocE11() {
 		!(await coSel(h, `nav[aria-label='${CHU.donVi}']`)),
 	);
 	kiem(
-		"E11 buoc 13: o 390 thieu Select don vi",
-		await coSel(h, `button[role='combobox'][aria-label='${CHU.donVi}']`),
+		"E11 buoc 13: o 390 thieu cho doi don vi o dong vi tri",
+		await coSel(h, MO_MENU),
 	);
 	await chup(h, "E11-step13.png", true);
 	await h.close();

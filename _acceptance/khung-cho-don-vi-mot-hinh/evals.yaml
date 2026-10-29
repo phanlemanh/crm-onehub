@@ -58,6 +58,8 @@ evals:
     executor: script
     layer: ui-observed
     cmd: config:executors.script.kcd_man
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-4
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
       - packages/ui/src/components/khung-xuong.tsx
@@ -167,6 +169,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.kcd_man
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-4
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
       - packages/ui/src/components/khung-xuong.tsx

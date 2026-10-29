@@ -20,7 +20,8 @@ const { resolveConfigKey } = require(join(GOC, "lib", "evidence-core.cjs"));
 
 const NHANH_GOC = "origin/onehub";
 const MAU_DUONG = /hop-tuan|kr-sheet|okr-xem|theo-don-vi\/bang|cap-nhat-dong/;
-const MAU_HEP = /hop-tuan|hopTuan|Họp tuần|xem=hop|nut-cap-nhat|cap-nhat-dong|thuTuKr/;
+const MAU_HEP =
+	/hop-tuan|hopTuan|Họp tuần|xem=hop|nut-cap-nhat|cap-nhat-dong|thuTuKr/;
 const LA_BAI_KIEM_CI = /^(?:apps|packages)\/[^/]+\/test\//;
 const TRANG_THAI_DA_KY = new Set(["signed-off", "machine-cleared"]);
 const HO_SO_NAY = "hop-tuan-tren-bang";
@@ -146,7 +147,9 @@ function quetLop() {
 			return {
 				ten: `${e.slug}#${e.id}`,
 				ciPhu: e.tep.length > 0 && e.tep.every((t) => LA_BAI_KIEM_CI.test(t)),
-				hep: e.tep.some((t) => MAU_HEP.test(readFileSync(join(GOC, t), "utf8"))),
+				hep: e.tep.some((t) =>
+					MAU_HEP.test(readFileSync(join(GOC, t), "utf8")),
+				),
 				lenh: e.lenh,
 				evalRieng,
 				kyVong: e.kyVong,
@@ -212,18 +215,53 @@ function tepThuocDaKy(hoSo) {
 	return { daKy, ra };
 }
 
+const DAN_CHAM_TEP = /cham-tep V\d+-\d+/;
+
+function coDongFixChamTep(cwd, slug, tep) {
+	const L = join(cwd, "_acceptance", slug, "decisions.jsonl");
+	if (!existsSync(L)) return false;
+	return readFileSync(L, "utf8")
+		.split("\n")
+		.filter(Boolean)
+		.some((d) => {
+			try {
+				const o = JSON.parse(d);
+				return (
+					o.type === "fix" &&
+					String(o.decision).includes(tep) &&
+					DAN_CHAM_TEP.test(
+						`${o.decided_by ?? ""} ${o.why ?? ""} ${o.decision}`,
+					)
+				);
+			} catch {
+				return false;
+			}
+		});
+}
+
+function coTaiCoSo(cwd, coSo, tep) {
+	return (
+		spawnSync("git", ["cat-file", "-e", `${coSo}:${tep}`], { cwd }).status === 0
+	);
+}
+
 function soatSuaThuoc(cwd) {
 	const lop = quetLop();
 	const { daKy, ra } = tepThuocDaKy(lop.hoSo);
+	const coSo = git(["merge-base", "HEAD", NHANH_GOC], cwd);
 	return [...tepVongSua(cwd)]
 		.filter((t) => {
-			if (ra.has(t)) return true;
 			const m = /^_acceptance\/([^/]+)\/(.+)$/.exec(t);
-			return (
-				m !== null &&
-				daKy.has(m[1]) &&
-				(m[2].startsWith("rang/") || DUOI_MA.test(m[2]))
-			);
+			const laThuoc =
+				ra.has(t) ||
+				(m !== null &&
+					daKy.has(m[1]) &&
+					(m[2].startsWith("rang/") || DUOI_MA.test(m[2])));
+			if (!laThuoc || !coTaiCoSo(cwd, coSo, t)) return false;
+			const chu = [
+				...new Set([...(lop.tepCua.get(t) ?? []), ...(m ? [m[1]] : [])]),
+			];
+			return !chu.some((slug) => coDongFixChamTep(cwd, slug, t));
 		})
 		.sort()
 		.map((t) => `SAI AC-10: SUA THUOC DA KY ${t}`);

@@ -144,6 +144,7 @@ export type DataTableProps<TRow, TSub> = {
 	selection?: DataTableSelection<TRow>;
 	actions?: ReactNode;
 	leadingActions?: ReactNode;
+	toggles?: ReactNode;
 	search?: ReactNode;
 	meta?: ReactNode;
 	empty?: ReactNode;
@@ -584,6 +585,7 @@ export function DataTable<TRow, TSub = unknown>({
 	selection,
 	actions,
 	leadingActions,
+	toggles,
 	search,
 	meta,
 	empty,
@@ -720,6 +722,7 @@ export function DataTable<TRow, TSub = unknown>({
 					"flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between",
 					selecting && "hidden",
 				)}
+				data-hang-cong-cu=""
 			>
 				{search}
 				{hasFilterControls && (
@@ -897,6 +900,11 @@ export function DataTable<TRow, TSub = unknown>({
 						{actions}
 					</div>
 				</div>
+				{toggles ? (
+					<div className="flex flex-wrap items-center gap-2" data-slot="data-table-toggles">
+						{toggles}
+					</div>
+				) : null}
 				{nutMoGap}
 			</div>
 

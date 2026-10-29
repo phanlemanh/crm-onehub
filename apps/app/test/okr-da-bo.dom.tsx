@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { mineOutput } from "../../api/src/okr/okr.contracts";
 import {
 	bamChuot,
@@ -17,7 +18,6 @@ import {
 } from "./okr-don-san";
 
 const m = okrMessages("vi");
-const en = okrMessages("en");
 
 const nhom = () =>
 	document.body.querySelector<HTMLElement>("[data-nhom-da-bo]");
@@ -44,6 +44,19 @@ function anhNhom() {
 	};
 }
 
+const nutDaBo = () =>
+	document.body.querySelector<HTMLButtonElement>("[data-nut-da-bo]");
+
+function anhNut() {
+	return {
+		chinh: hangChinh().map((h) => h.getAttribute("data-hang-muc-tieu")),
+		chinhCoDaBo: hangChinh().filter((h) => h.hasAttribute("data-da-bo")).length,
+		coNut: nutDaBo() !== null,
+		chuNut: nutDaBo()?.textContent?.trim() ?? null,
+		bat: nutDaBo()?.getAttribute("aria-pressed") ?? null,
+	};
+}
+
 async function dungDonVi(thamSo = "", locale: "vi" | "en" = "vi") {
 	datDuong("/ws/okr/theo-don-vi");
 	await dung(<TheoDonVi />, thamSo, locale);
@@ -53,58 +66,58 @@ async function dungDonVi(thamSo = "", locale: "vi" | "en" = "vi") {
 const HAI = () => [mucTieu("a1"), mucTieu("a2")];
 
 describe("theo-don-vi", () => {
-	test("theo-don-vi (a): 2 dang dung + 3 da bo — danh sach chinh 2, dong gap dong dem 3, dem dau the 2, mo ra thay 3", async () => {
+	test("theo-don-vi (a): 2 dang dung + 3 da bo — danh sach chinh 2, nut Da bo (3) tat, dem dau the 2, bat len thay 3", async () => {
 		kho.danhSach = danhSachTu(HAI(), [
 			daBoTu("d1"),
 			daBoTu("d2"),
 			daBoTu("d3"),
 		]);
 		await dungDonVi();
-		const truoc = anhNhom();
-		expect(truoc.moNhom, "dong gap phai dong mac dinh").toBe("false");
+		const truoc = anhNut();
 		const dauThe =
 			document.body.textContent?.includes(m.demDonVi(2, 4)) ?? false;
-		const nut = nutNhom();
-		if (!nut) throw new Error("khong thay dong gap");
+		const nut = nutDaBo();
+		if (!nut) throw new Error("khong thay nut Da bo");
 		await bamChuot(nut);
-		await cho(() => hangDaBo().length === 3, "mo dong gap");
-		expect({ truoc, dauThe, sau: anhNhom() }).toEqual({
+		await cho(() => anhNut().chinhCoDaBo === 3, "bat nut Da bo");
+		expect({ truoc, dauThe, sau: anhNut() }).toEqual({
 			truoc: {
 				chinh: ["a1", "a2"],
 				chinhCoDaBo: 0,
-				coNhom: true,
-				chuNhom: "Đã bỏ (3)",
-				moNhom: "false",
-				daBoHien: 0,
+				coNut: true,
+				chuNut: "Đã bỏ (3)",
+				bat: "false",
 			},
 			dauThe: true,
 			sau: {
-				chinh: ["a1", "a2"],
-				chinhCoDaBo: 0,
-				coNhom: true,
-				chuNhom: "Đã bỏ (3)",
-				moNhom: "true",
-				daBoHien: 3,
+				chinh: ["d1", "d2", "d3"],
+				chinhCoDaBo: 3,
+				coNut: true,
+				chuNut: "Đã bỏ (3)",
+				bat: "true",
 			},
 		});
 	});
 
-	test("theo-don-vi (b): 2 dang dung + 0 da bo — khong co dong gap", async () => {
+	test("theo-don-vi (b): 2 dang dung + 0 da bo — khong co nut Da bo", async () => {
 		kho.danhSach = danhSachTu(HAI(), []);
 		await dungDonVi();
-		expect(anhNhom().coNhom).toBe(false);
+		expect({ coNut: anhNut().coNut, coNhom: anhNhom().coNhom }).toEqual({
+			coNut: false,
+			coNhom: false,
+		});
 	});
 
-	test("theo-don-vi (b'): loc phu trach dang bat, khong muc tieu da bo nao khop — khong co dong gap", async () => {
+	test("theo-don-vi (b'): loc phu trach dang bat, khong muc tieu da bo nao khop — khong co nut Da bo", async () => {
 		kho.danhSach = danhSachTu([mucTieu("a1")], []);
 		await dungDonVi("?phuTrachOkr=hung");
-		expect({ coNhom: anhNhom().coNhom, chinh: anhNhom().chinh }).toEqual({
-			coNhom: false,
+		expect({ coNut: anhNut().coNut, chinh: anhNut().chinh }).toEqual({
+			coNut: false,
 			chinh: ["a1"],
 		});
 	});
 
-	test("theo-don-vi (c): 0 dang dung + 2 da bo — trang thai rong cua don vi va dong gap Da bo (2)", async () => {
+	test("theo-don-vi (c): 0 dang dung + 2 da bo — trang thai rong cua don vi va nut Da bo (2)", async () => {
 		kho.danhSach = danhSachTu([], [daBoTu("d1"), daBoTu("d2")]);
 		await dungDonVi();
 		expect({
@@ -114,31 +127,33 @@ describe("theo-don-vi", () => {
 			danhSach:
 				document.body.querySelector("[data-trang-thai='ST-donvi-danhsach']") !==
 				null,
-			chuNhom: anhNhom().chuNhom,
-		}).toEqual({ rong: true, danhSach: false, chuNhom: "Đã bỏ (2)" });
+			chuNut: anhNut().chuNut,
+		}).toEqual({ rong: true, danhSach: false, chuNut: "Đã bỏ (2)" });
 	});
 
-	test("theo-don-vi (d): loc trang thai Da bo — khong dong gap, danh sach chinh la muc tieu da bo", async () => {
+	test("theo-don-vi (d): loc trang thai Da bo — khong nut Da bo, danh sach chinh la muc tieu da bo", async () => {
 		kho.danhSach = danhSachTu([daBoTu("d1"), daBoTu("d2")], []);
 		await dungDonVi("?trangThaiOkr=da-bo");
 		expect({
-			coNhom: anhNhom().coNhom,
-			chinh: anhNhom().chinh,
-			chinhCoDaBo: anhNhom().chinhCoDaBo,
-		}).toEqual({ coNhom: false, chinh: ["d1", "d2"], chinhCoDaBo: 2 });
+			coNut: anhNut().coNut,
+			chinh: anhNut().chinh,
+			chinhCoDaBo: anhNut().chinhCoDaBo,
+		}).toEqual({ coNut: false, chinh: ["d1", "d2"], chinhCoDaBo: 2 });
 	});
 
-	test("theo-don-vi (en): chu dong gap tieng Anh khac tieng Viet", async () => {
+	test("theo-don-vi (en): chu nut Da bo tieng Anh khac tieng Viet", async () => {
 		kho.danhSach = danhSachTu(HAI(), [
 			daBoTu("d1"),
 			daBoTu("d2"),
 			daBoTu("d3"),
 		]);
 		await dungDonVi("", "en");
+		const enBo = okrVoKhuMessages("en").boOkr;
+		const viBo = okrVoKhuMessages("vi").boOkr;
 		expect({
-			chu: anhNhom().chuNhom,
-			khac: en.khoiMucTieu.nhomDaBo(3) !== m.khoiMucTieu.nhomDaBo(3),
-		}).toEqual({ chu: en.khoiMucTieu.nhomDaBo(3), khac: true });
+			chu: anhNut().chuNut,
+			khac: enBo.daBo(3) !== viBo.daBo(3),
+		}).toEqual({ chu: enBo.daBo(3), khac: true });
 	});
 });
 

@@ -11,6 +11,8 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.dvb_chon_don_vi
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-5
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/lib/messages/okr.ts"
@@ -34,6 +36,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.dvb_man
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-4
     steps:
       - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, NGUYEN VAN: EVAL=E2 bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs\" — script tu canh cay, tu dung phien do (kho do rieng, bo OKR mau, may chu api+app cua CAY DANG XET), dang nhap dev:session va chup vao evidence/; khong goi thang trinh duyet ngoai script"
       - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc (goi ten cho hong); ma 1 = co dong SAI"
@@ -61,6 +65,8 @@ evals:
     executor: script
     layer: ui-observed
     cmd: config:executors.script.dvb_man_may
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-4
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
@@ -78,6 +84,8 @@ evals:
     executor: script
     layer: ui-observed
     cmd: config:executors.script.dvb_man_may
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-4
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
@@ -95,6 +103,8 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.dvb_man_may
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-5
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
@@ -130,6 +140,8 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.dvb_hang_cong_cu
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-4
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-trang-don-vi.dom.tsx"
@@ -178,6 +190,8 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.dvb_chan_bang
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-5
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-trang-don-vi.dom.tsx"
@@ -196,6 +210,8 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.dvb_trang_thai
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-4
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/okr-trang-don-vi.dom.tsx"
@@ -247,6 +263,8 @@ evals:
   - id: E14
     criterion: AC-12
     executor: judgment
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-4
     inputs:
       - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-danh-sach-1440.png
       - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-mo-kr-1440.png
@@ -333,6 +351,8 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.dvb_man_may
+    status: not-run
+    superseded_by: bo-okr-chi-don-vi#AC-5
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"

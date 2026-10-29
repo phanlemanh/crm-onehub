@@ -1,7 +1,13 @@
 "use client";
 
+import ChevronDown from "@carbon/icons-react/es/ChevronDown";
 import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
@@ -114,12 +120,50 @@ function BreadcrumbEllipsis({
 	);
 }
 
+function BreadcrumbMenu({
+	label,
+	children,
+	className,
+	...props
+}: React.ComponentProps<typeof DropdownMenuTrigger> & {
+	label: React.ReactNode;
+}) {
+	return (
+		<DropdownMenu modal={false}>
+			<DropdownMenuTrigger
+				data-slot="breadcrumb-menu"
+				className={cn(
+					"inline-flex min-w-0 items-center gap-1 rounded-sm text-foreground outline-none transition-colors hover:text-foreground/80 focus-visible:ring-2 focus-visible:ring-ring/50 data-[state=open]:text-foreground/80 [&>svg]:size-3.5 [&>svg]:shrink-0",
+					className,
+				)}
+				{...props}
+			>
+				<span
+					data-slot="breadcrumb-page"
+					aria-current="page"
+					className="wrap-anywhere text-start"
+				>
+					{label}
+				</span>
+				<Icon icon={ChevronDown} />
+			</DropdownMenuTrigger>
+			<DropdownMenuContent
+				align="start"
+				className="w-72 max-w-[calc(100vw-2rem)]"
+			>
+				{children}
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
+}
+
 export {
 	Breadcrumb,
 	BreadcrumbEllipsis,
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
+	BreadcrumbMenu,
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 };

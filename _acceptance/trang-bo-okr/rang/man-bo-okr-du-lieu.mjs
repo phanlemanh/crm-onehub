@@ -265,6 +265,16 @@ async function timBoRong(api, ky, hang) {
 	);
 }
 
+async function soBoTheoDon(api, ky, cay) {
+	const cap = await Promise.all(
+		donViCuaCay(cay).map(async (c) => [
+			c.don,
+			await api.hoi("okr.soBo", { cycleId: ky, unit: donTuKhoa(c.don) }),
+		]),
+	);
+	return new Map(cap);
+}
+
 async function theoDoiTrongDb(userId, ky) {
 	const f = await db.okrFollow.findMany({
 		where: { userId, objective: { cycleId: ky } },
@@ -321,11 +331,11 @@ export async function dungDuLieu() {
 	const ky = await chonKy(api.truong, pb.id);
 	await gieoTheoDoi(api.truong, ky.cur, bp);
 	const viec = await gieoViec(api.truong, ky.cur, pb, nguoiLam.id);
-	const [ds, dsTv, dem, tc, theoDoi] = await Promise.all([
+	const [ds, dsTv, dem, so, theoDoi] = await Promise.all([
 		api.truong.hoi("okr.danhSachBo", { cycleId: ky.cur }),
 		api.thanhVien.hoi("okr.danhSachBo", { cycleId: ky.cur }),
 		api.truong.hoi("okr.countByUnit", { cycleId: ky.cur }),
-		api.truong.hoi("okr.toanCanh", { cycleId: ky.cur }),
+		soBoTheoDon(api.truong, ky.cur, cay),
 		theoDoiTrongDb(nguoiXem.id, ky.cur),
 	]);
 	if (dsTv.hang.some((h) => h.toiDan))
@@ -351,7 +361,7 @@ export async function dungDuLieu() {
 		ds,
 		dsTv,
 		dem,
-		tc,
+		so,
 		theoDoi,
 		rong,
 		nguoiXem: nguoiXem.id,
