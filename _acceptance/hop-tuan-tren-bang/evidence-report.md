@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 229fcd7fb931373cdd6bf6f293874aa8b6b99686
+verified_commit: 7afd6ddb4c0fefc206a8c191c10c8ff3e33796b0
 human_signoff: Phan Le Manh 2026-10-28
 ---
 
@@ -208,3 +208,7 @@ Round 2: moi eval chay lai tren d2f57b85 deu PASS; E1 carry-forward tu round 1 v
 ### Re-pin lần 1 — 2026-10-29, do VK19 bo-okr-chi-don-vi: ghim lượt A sau sửa thước V5-17 (Q7)
 run_id: repin-20261029T002846Z-11740
 sha: 229fcd7fb931373cdd6bf6f293874aa8b6b99686 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-30, do SV8 cap-nhat-trong-ngan-kr: chuyển chỗ đo sang khối trong ngăn (V1-7, V1-10), sửa lỗi gửi từ lối ngoài và ba thước đã ký (V1-11)
+run_id: repin-20261030T151528Z-63369
+sha: 7afd6ddb4c0fefc206a8c191c10c8ff3e33796b0 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

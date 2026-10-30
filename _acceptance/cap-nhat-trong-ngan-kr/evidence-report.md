@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 39a3dc49cdffbf4757f6e2431aeab7f0b0148df2
+verified_commit: 7afd6ddb4c0fefc206a8c191c10c8ff3e33796b0
 human_signoff: Phan Le Manh 2026-10-30
 ---
 
@@ -223,3 +223,7 @@ none — every multi-run eval is uniform (moi eval chay 1 lan, deterministic)
 
 Round 1: S4-r1 sua rang thuoc-da-ky (so tung khang dinh thay cho dem) va bai chu hien thi; E7 dat o round nay (run_id minted-cap-nhat-trong-ngan-kr-E7-r1).
 Round 2: moi eval E1-E10c PASS tren commit 39a3dc49cdffbf4757f6e2431aeab7f0b0148df2; E7 carry-forward tu round 1 (delta khong cham paths cua eval); baseline BLOCKED ha tang nen khong do duoc A/B.
+
+### Re-pin lần 1 — 2026-10-30, do SV8 cap-nhat-trong-ngan-kr: chuyển chỗ đo sang khối trong ngăn (V1-7, V1-10), sửa lỗi gửi từ lối ngoài và ba thước đã ký (V1-11)
+run_id: repin-20261030T151528Z-63369
+sha: 7afd6ddb4c0fefc206a8c191c10c8ff3e33796b0 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
