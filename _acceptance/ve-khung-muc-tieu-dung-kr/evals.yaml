@@ -1,0 +1,110 @@
+schema_version: 1
+slug: ve-khung-muc-tieu-dung-kr
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.vkm_qua_muc_tieu
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/record-stack.ts"
+      - "apps/app/components/crm/record-sheet/thu-tu-hop-tuan.ts"
+      - "apps/app/test/ve-khung-muc-tieu-dung-kr.dom.tsx"
+    expected: |
+      Ca «vkm-qua-muc-tieu»: dựng HopTuan + RecordSheetHost thật, dữ liệu okr.hopTuan parse bằng hopTuanOutput (Đang bàn
+      A·mt-1, B·mt-2, C·mt-1; Còn lại D·mt-1, E·mt-1), okr.canhKr parse bằng canhKrOutput với objectiveId đúng mục tiêu
+      của KR, okr.objective dựng mt-1 {A,C,D,E}, mt-2 {B}. Bấm tên A trên bảng; đối chứng dương trước khi bấm ›: đường
+      dẫn record = «objective:mt-1,kr:A» và [data-dem-kr] = «1/5». Bấm ›: chờ ngăn B; assert record = «objective:mt-2,kr:B»,
+      thuTuKr bằng giá trị trước khi bấm, [data-dem-kr] = «2/5». Bấm nút quay lại ở đầu ngăn (nút ghost có nhãn
+      sheet.back): chờ [data-okr-sheet]; assert [data-okr-sheet="mt-2"] có mặt, [data-okr-sheet="mt-1"] vắng, record =
+      «objective:mt-2». 3 bước, in «vkm-qua-muc-tieu: 3/3».
+      CHIEU DO (bản sao): sang() gọi thayDinh một đối số như trước → đỏ «vkm-qua-muc-tieu: record sau › objective:mt-1,kr:B
+      can objective:mt-2,kr:B».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.vkm_lui
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/record-stack.ts"
+      - "apps/app/components/crm/record-sheet/thu-tu-hop-tuan.ts"
+      - "apps/app/test/ve-khung-muc-tieu-dung-kr.dom.tsx"
+    expected: |
+      Ca «vkm-lui»: cùng dữ liệu E1. Mở A từ bảng, › tới B (assert record «objective:mt-2,kr:B» làm đối chứng dương), ‹:
+      assert record = «objective:mt-1,kr:A». Rồi › › (chờ B rồi C): assert record = «objective:mt-1,kr:C»; nút quay lại:
+      assert [data-okr-sheet="mt-1"] có mặt, record = «objective:mt-1». 3 bước, in «vkm-lui: 3/3».
+      CHIEU DO (bản sao): chỉ nhánh ‹ của sang() gọi thayDinh một đối số → đỏ «vkm-lui: record sau ‹ objective:mt-2,kr:A
+      can objective:mt-1,kr:A».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.vkm_lien_ket
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/record-stack.ts"
+      - "apps/app/components/crm/record-sheet/thu-tu-hop-tuan.ts"
+      - "apps/app/test/ve-khung-muc-tieu-dung-kr.dom.tsx"
+    expected: |
+      Ca «vkm-lien-ket», hai ô, cùng dữ liệu E1. Ô 1: mở A từ bảng, › tới B. Assert phụ đề có
+      [data-lien-ket-muc-tieu="mt-2"]. Bấm liên kết: chờ [data-okr-sheet]; assert [data-okr-sheet="mt-2"] có mặt và record =
+      «objective:mt-2» đúng một mục. Ô 2: okr.canhKr của B ném LoiTrpc NOT_FOUND; mở A từ bảng, › : chờ
+      [data-nut="ve-muc-tieu"]; đối chứng dương: chữ nút = khung.khongCo.veMucTieu («Về khung mục tiêu»). Bấm nó: assert
+      [data-okr-sheet="mt-2"] có mặt, record = «objective:mt-2». 3 bước, in «vkm-lien-ket: 3/3».
+      CHIEU DO (bản sao): sang() gọi thayDinh một đối số → đỏ «vkm-lien-ket: record sau lien ket
+      objective:mt-1,kr:B,objective:mt-2 can objective:mt-2» và «vkm-lien-ket: ve muc tieu khi khong tai mo mt-1».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.vkm_cung_muc_tieu
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/record-stack.ts"
+      - "apps/app/components/crm/record-sheet/thu-tu-hop-tuan.ts"
+      - "apps/app/test/ve-khung-muc-tieu-dung-kr.dom.tsx"
+    expected: |
+      Ca «vkm-cung-muc-tieu»: cùng dữ liệu E1, Còn lại mở. Mở C từ bảng (đối chứng dương: record «objective:mt-1,kr:C»),
+      › tới D: assert record = «objective:mt-1,kr:D»; nút quay lại: assert [data-okr-sheet="mt-1"], record =
+      «objective:mt-1». 2 bước, in «vkm-cung-muc-tieu: 2/2».
+      CHIEU DO (bản sao): thayDinh(ref, duoi) bỏ phần tử ngay dưới mà không đặt duoi vào → đỏ «vkm-cung-muc-tieu: record
+      sau › kr:D can objective:mt-1,kr:D».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.vkm_ngu_canh
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/record-stack.ts"
+      - "apps/app/components/crm/record-sheet/thu-tu-hop-tuan.ts"
+      - "apps/app/test/ve-khung-muc-tieu-dung-kr.dom.tsx"
+    expected: |
+      Ca «vkm-ngu-canh», hai ô. Ô 1: dựng HopTuan + RecordSheetHost với đường dẫn
+      «record=objective:mt-2,kr:C&thuTuKr=<khoaThuTuHop(q4, bp-1)>»; đối chứng dương: [data-thu-tu-kr="bang"] có mặt, đếm
+      «3/5», record ban đầu «objective:mt-2,kr:C». › tới D: assert record = «objective:mt-1,kr:D». Ô 2: dựng
+      RecordSheetHost một mình với «record=objective:mt-1,kr:A» (không thuTuKr); đối chứng dương: [data-thu-tu-kr] vắng,
+      đếm «1/4». › tới C: assert record = «objective:mt-1,kr:C»; nút quay lại: assert [data-okr-sheet="mt-1"]. 3 bước, in
+      «vkm-ngu-canh: 3/3». Dữ liệu okr.objective parse bằng objectiveOutput thật (chiTietTu của khung thử).
+      CHIEU DO (bản sao): kr-sheet chỉ truyền duoi khi tầng dưới bằng mục tiêu của KR trước → đỏ «vkm-ngu-canh: record sau ›
+      toi D objective:mt-2,kr:D can objective:mt-1,kr:D».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.suite_app_ui
+    paths:
+      - "apps/app/**"
+      - "packages/ui/**"
+    expected: |
+      Bộ bài kiểm của app và @crm/ui thoát 0, gồm hop-tuan-tren-bang.dom.tsx và ngan-kr-mot-cho.dom.tsx (đọc tên tệp trong
+      đầu ra). check-types, lint, build chạy ở suite_keys của làn.
+      CHIEU DO: hồi quy ở bất kỳ bài nào trong hai tệp trên → suite thoát ≠ 0 và dòng «(fail)» mang tên ca.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
