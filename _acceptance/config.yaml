@@ -1674,6 +1674,8 @@ executors:
     emtdl_vung_xam: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t vung-xam"
     emtdl_gop: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t gop"
     emtdl_do_model: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t do-model"
+    cbd_tran_loi: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t tran-loi"
+    cbd_du_ma: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t du-ma"
     kekt_ghi_tron: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t ghi-tron"
     kekt_hai_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t hai-luot"
     kekt_mot_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t mot-luot"
@@ -3341,6 +3343,9 @@ executors:
     emtdl_giu_nguong: bun _acceptance/eval-model-that-dung-luc/rang/giu-nguong.mjs
     emtdl_dot_bien: bun _acceptance/eval-model-that-dung-luc/rang/dot-bien.mjs
     emtdl_cham_lai: bun _acceptance/eval-model-that-dung-luc/rang/cham-lai.mjs
+    cbd_cham_lai_mau: bun _acceptance/cham-bo-do-chiu-cau-loi/rang/cham-lai-mau.mjs
+    cbd_f12_xanh: bun _acceptance/cham-bo-do-chiu-cau-loi/rang/f12-xanh.mjs
+    cbd_dot_bien: bun _acceptance/cham-bo-do-chiu-cau-loi/rang/dot-bien.mjs
     zhok_c33: bun _acceptance/zalo-hoi-okr-khong-chet/rang/c33.mjs
     zhok_pham_vi: bun _acceptance/zalo-hoi-okr-khong-chet/rang/pham-vi.mjs
     zhok_dot_bien: bun _acceptance/zalo-hoi-okr-khong-chet/rang/dot-bien.mjs

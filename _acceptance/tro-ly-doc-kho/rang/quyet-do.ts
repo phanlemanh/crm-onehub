@@ -39,6 +39,7 @@ export const CHAM_BO_DO = {
 		chuyenNhamToiDa: 0.1,
 		traLoiKhongQuaKiem: 0,
 	},
+	tranLoi: { phanTram: 5, toiThieu: 1 },
 	lenhGhi: "bun _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts --ghi-ban-ghi",
 	buocModel: /^\[agent\] · step \d+ /gm,
 } as const;
@@ -125,6 +126,29 @@ function nguongCua(c: ChiSo, nguong: Nguong): number {
 	return c === "chuyenNham" ? nguong.chuyenNhamToiDa : nguong[c];
 }
 
+export function tranCauLoi(soCau: number): number {
+	const { phanTram, toiThieu } = CHAM_BO_DO.tranLoi;
+	return Math.max(toiThieu, Math.floor((soCau * phanTram) / 100));
+}
+
+const NHAN_DEM = {
+	dungTrang: "dung-trang",
+	tuChoiDung: "tu-choi-dung",
+	chuyenQuyDinh: "chuyen",
+	chuyenNham: "chuyen",
+} as const satisfies Record<ChiSo, string>;
+
+function dongCauLoi(
+	loi: readonly string[],
+	soCau: number,
+	tran: number,
+	loiCua: Record<ChiSo, number>,
+): string {
+	const ids = loi.length > 0 ? ` (${loi.join(", ")})` : "";
+	const theo = CAC_CHI_SO.map((c) => `${c} ${loiCua[c]}`).join(" · ");
+	return `cau loi model: ${loi.length}/${soCau}${ids} · tran ${tran} · ${theo}`;
+}
+
 export function ketLuan(
 	mot: readonly CauMot[],
 	hai: readonly CauHai[],
@@ -135,36 +159,40 @@ export function ketLuan(
 		...mot.filter((c) => c.nhan === "loi").map((c) => c.id),
 		...hai.filter((c) => c.nhan === "loi").map((c) => c.id),
 	];
+	const soCau = mot.length + hai.length;
+	const tran = tranCauLoi(soCau);
+	const nhomCua = {
+		dungTrang: mot.filter((c) => c.nhom !== "khong-co"),
+		tuChoiDung: mot.filter((c) => c.nhom === "khong-co"),
+		chuyenQuyDinh: hai.filter((c) => c.quyDinh),
+		chuyenNham: hai.filter((c) => !c.quyDinh),
+	} satisfies Record<ChiSo, readonly { nhan: string }[]>;
 	const dem = (ds: readonly { nhan: string }[], nhan: string): Dem => {
 		const sach = ds.filter((c) => c.nhan !== "loi");
 		return { k: sach.filter((c) => c.nhan === nhan).length, n: sach.length };
 	};
 	const so = {
-		dungTrang: dem(
-			mot.filter((c) => c.nhom !== "khong-co"),
-			"dung-trang",
-		),
-		tuChoiDung: dem(
-			mot.filter((c) => c.nhom === "khong-co"),
-			"tu-choi-dung",
-		),
-		chuyenQuyDinh: dem(
-			hai.filter((c) => c.quyDinh),
-			"chuyen",
-		),
-		chuyenNham: dem(
-			hai.filter((c) => !c.quyDinh),
-			"chuyen",
-		),
+		dungTrang: dem(nhomCua.dungTrang, NHAN_DEM.dungTrang),
+		tuChoiDung: dem(nhomCua.tuChoiDung, NHAN_DEM.tuChoiDung),
+		chuyenQuyDinh: dem(nhomCua.chuyenQuyDinh, NHAN_DEM.chuyenQuyDinh),
+		chuyenNham: dem(nhomCua.chuyenNham, NHAN_DEM.chuyenNham),
 	} satisfies DemTheoChiSo;
-	if (loi.length > 0)
+	if (loi.length > tran)
 		return {
 			ma: 2,
-			dong: [`KHONG DO DUOC: ${loi.length} cau loi (${loi.join(", ")})`],
+			dong: [
+				`KHONG DO DUOC: ${loi.length} cau loi vuot tran ${tran} (${loi.join(", ")})`,
+			],
 			so,
 			traLoiKhongQuaKiem,
 			xam: [],
 		};
+	const loiCua = {
+		dungTrang: nhomCua.dungTrang.filter((c) => c.nhan === "loi").length,
+		tuChoiDung: nhomCua.tuChoiDung.filter((c) => c.nhan === "loi").length,
+		chuyenQuyDinh: nhomCua.chuyenQuyDinh.filter((c) => c.nhan === "loi").length,
+		chuyenNham: nhomCua.chuyenNham.filter((c) => c.nhan === "loi").length,
+	} satisfies Record<ChiSo, number>;
 	const chiSo = CAC_CHI_SO;
 	const nhan = new Map(
 		chiSo.map((c) => [
@@ -176,6 +204,7 @@ export function ketLuan(
 		const r = tiLe(so[c]);
 		return `${c}: ${r === null ? "—" : phanTram(r)} (${so[c].k}/${so[c].n}, nguong ${CHIEU[c]} ${phanTram(nguongCua(c, nguong))}) ${nhan.get(c)}`;
 	});
+	dong.push(dongCauLoi(loi, soCau, tran, loiCua));
 	const kiemDat = traLoiKhongQuaKiem === nguong.traLoiKhongQuaKiem;
 	dong.push(`tra loi co trich khong qua kiem: ${traLoiKhongQuaKiem}`);
 	const xam = chiSo.filter((c) => nhan.get(c) === "xam");
@@ -323,7 +352,39 @@ function nhanTuKetCuc(d: DongTungCau): string {
 	return nhanMotCau(d.nhom, d.ketCuc as KetCucMot);
 }
 
-export function chamTungCau(ds: readonly DongTungCau[], nguong: Nguong) {
+export type CauDaHoi = { mot: readonly string[]; hai: readonly string[] };
+
+export function kiemDuMa(
+	ds: readonly DongTungCau[],
+	mong?: CauDaHoi,
+): string | null {
+	const thay = new Set<string>();
+	for (const d of ds) {
+		const khoa = `${d.luot}:${d.id}`;
+		if (thay.has(khoa)) return `KHONG DO DUOC: trung ma ${khoa}`;
+		thay.add(khoa);
+	}
+	if (!mong) return null;
+	const thieu = [
+		...mong.mot.map((id) => `1:${id}`),
+		...mong.hai.map((id) => `2:${id}`),
+	].find((khoa) => !thay.has(khoa));
+	return thieu ? `KHONG DO DUOC: thieu ma ${thieu}` : null;
+}
+
+export function chamLuotDu(
+	ds: readonly DongTungCau[],
+	cauDaHoi: CauDaHoi,
+	nguong: Nguong,
+) {
+	return chamTungCau(ds, nguong, cauDaHoi);
+}
+
+export function chamTungCau(
+	ds: readonly DongTungCau[],
+	nguong: Nguong,
+	mong?: CauDaHoi,
+) {
 	const mot: CauMot[] = ds
 		.filter((d) => d.luot === 1)
 		.map((d) => ({ id: d.id, nhom: d.nhom, nhan: nhanTuKetCuc(d) }));
@@ -335,7 +396,10 @@ export function chamTungCau(ds: readonly DongTungCau[], nguong: Nguong) {
 			nhan: nhanTuKetCuc(d),
 		}));
 	const kiem = ds.filter((d) => d.luot === 1 && d.khongQuaKiem).length;
-	return { mot, hai, kl: ketLuan(mot, hai, nguong, kiem) };
+	const kl = ketLuan(mot, hai, nguong, kiem);
+	const hong = kiemDuMa(ds, mong);
+	if (!hong) return { mot, hai, kl };
+	return { mot, hai, kl: { ...kl, ma: 2 as const, dong: [hong], xam: [] } };
 }
 
 export function cauLuotMot<T extends { nhom: NhomCau }>(
