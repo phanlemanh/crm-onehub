@@ -72,8 +72,9 @@ evals:
       Ca «vkm-cung-muc-tieu»: cùng dữ liệu E1, Còn lại mở. Mở C từ bảng (đối chứng dương: record «objective:mt-1,kr:C»),
       › tới D: assert record = «objective:mt-1,kr:D»; nút quay lại: assert [data-okr-sheet="mt-1"], record =
       «objective:mt-1». 2 bước, in «vkm-cung-muc-tieu: 2/2».
-      CHIEU DO (bản sao): thayDinh(ref, duoi) bỏ phần tử ngay dưới mà không đặt duoi vào → đỏ «vkm-cung-muc-tieu: record
-      sau › kr:D can objective:mt-1,kr:D».
+      CHIEU DO (bản sao): thayDinh(ref, duoi) ghi đảo thứ tự [ref, duoi] → đỏ «khong toi: ngan D» (khung mục tiêu nằm
+      trên, ngăn D không bao giờ dựng). Bản hỏng «bỏ duoi» KHÔNG đỏ được ở ca này: lotDuoi của KrSheet lót lại mục tiêu
+      khi KR nằm một mình — đã phá-thử 30/10, xem sổ.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
