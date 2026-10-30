@@ -20,6 +20,10 @@
 // thêm: kho khai `tri_thuc` → khoá `nguon` của bản phạm vi phải là đường trỏ băm tới trang tri thức (`kiemNguonPhamVi` của
 // scripts/tri-thuc.mjs, nạp lười); kho không khai → răng không đổi một byte.
 //
+// Hồ sơ _acceptance/vung-giao-viec-tu-cat-luot/ (design docs/superpowers/specs/2026-10-28-vung-giao-viec-tu-cat-luot-design.md)
+// thêm: trường lượt cắt `vung` (vùng mã dự kiến theo màn) và năm cờ vùng chỉ ở hàng trong đợt — glob không thư mục tĩnh,
+// sai kiểu, thiếu, chỉ thư mục hồ sơ, và từ ba hàng mà mọi cặp chồng. Phép so chồng là bản chép của gói dieu-phoi.
+//
 //   node scripts/cat-luot.mjs --root . --pham-vi <tệp> --lo-trinh <tệp>   0 xanh · 1 đỏ · 2 không chạy được
 //   node scripts/cat-luot.mjs --root . --nhip                              JSON nhịp theo hạng
 //   node scripts/cat-luot.mjs --root . --co [--tu YYYY-MM-DD] [--lo-trinh <tệp>]   JSON đồng hồ cỡ
@@ -52,6 +56,50 @@ const nhanMoc = m => chuoi(m.ma) || chuoi(m.ten) || chuoi(m.ngay) || '?';
 // Mục `dung_tren` x trỏ một mốc ngoài (bất kỳ đợt) khi khớp `ma`, hoặc `ten` sau NFC — một bộ khớp cho răng phủ và cờ.
 const mocNgoaiCua = (moc, x) => moc.find(m => laNgoai(m) && (chuoi(m.ma) === x || nfc(m.ten) === nfc(x)));
 const MA_DONG = /^- `([^`]*)` — (\S.*)$/;
+
+// <<<VUNG-GIAO-CHEP — bản chép NGUYÊN VĂN `khop` (dieu-phoi/scripts/glob.mjs) và `coDaiDien` · `tienToTinh` · `mauGiao`
+// (dieu-phoi/scripts/trung-tep.mjs): răng nói «chồng» đúng như lịch biết tệp nói. Gói dieu-phoi không nạp mã kit và
+// ngược lại; ca CV-4 so hai bản trên cùng ma trận cặp glob và so thân hàm.
+export function khop(mau, duongDan) {
+  let re = '';
+  for (let i = 0; i < mau.length; i++) {
+    const c = mau[i];
+    if (c === '*') {
+      if (mau[i + 1] === '*') {
+        i++;
+        if (mau[i + 1] === '/') {
+          i++;
+          re += '(?:.*/)?';
+        } else {
+          re += '.*';
+        }
+      } else {
+        re += '[^/]*';
+      }
+    } else if (c === '?') {
+      re += '[^/]';
+    } else {
+      re += c.replace(/[.+^${}()|[\]\\]/g, '\\$&');
+    }
+  }
+  return new RegExp(`^${re}$`).test(duongDan);
+}
+const coDaiDien = (m) => /[*?]/.test(m);
+const tienToTinh = (m) => {
+  const i = m.search(/[*?]/);
+  return i < 0 ? m : m.slice(0, i);
+};
+export function mauGiao(a, b) {
+  if (!coDaiDien(a)) return coDaiDien(b) ? khop(b, a) : a === b;
+  if (!coDaiDien(b)) return khop(a, b);
+  const pa = tienToTinh(a);
+  const pb = tienToTinh(b);
+  return pa.startsWith(pb) || pb.startsWith(pa);
+}
+// VUNG-GIAO-CHEP>>>
+// Glob đủ hẹp để làm vùng: không ký tự đại diện (một tệp), hoặc đoạn tĩnh trước ký tự đại diện đầu có ít nhất một thư mục.
+export const coThuMucTinh = g => !coDaiDien(g) || tienToTinh(g).includes('/');
+const HO_SO = '_acceptance/';
 
 // ── Bản phạm vi ───────────────────────────────────────────────────────────────
 // Ba khoá đầu tệp (dot · dang · nguon), mỗi dòng `- \`<mã>\` — <mô tả>` một mã. Dòng mở bằng «- `»
@@ -156,7 +204,8 @@ export const { KHOA_CO, TEP_SKILL, docKhoang, napKhoang } = CHD;
 // trình cắt trước luật 10/10 vẫn đọc được); khai sai thì đỏ ở hàng trong đợt.
 // Bốn cờ cuối của hàng S3b: vận hành và dữ liệu giả.
 export const CO_TEN = ['can-tach', 'tren-muc-tieu', 'duoi-muc-tieu', 'tieu-chi-sai-kieu', 'chua-uoc-tieu-chi', 'vai-khong-mo-cau', 'nen-thieu-bat-khi', 'chua-khai-dang-giao',
-  'cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia', CO_MOC_NGOAI, 'gan-moc-dang-chay'];
+  'cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia', CO_MOC_NGOAI, 'gan-moc-dang-chay',
+  'chua-khai-vung', 'vung-sai-kieu', 'vung-qua-rong', 'vung-chi-ho-so', 'vung-trung-moi-hang'];
 const CO_LOI = new Set(['can-tach', 'tieu-chi-sai-kieu', 'vai-khong-mo-cau', 'nen-thieu-bat-khi']);
 // Cờ hàng của S3b: lỗi ở hàng trong đợt, một dòng gom ở hàng ngoài đợt (như mọi cờ hàng).
 const CO_LOI_S3B = new Set(['cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia']);
@@ -181,6 +230,16 @@ function coCuaHang(r, k) {
   else if (!chuanCau(r.cau_giao).startsWith(chuanCau(vai))) ra.push(['vai-khong-mo-cau', `câu giao không mở bằng vai «${vai}»`]);
   return ra;
 }
+// Cờ vùng của một hàng TRONG ĐỢT (hồ sơ vung-giao-viec-tu-cat-luot), chỉ khi lộ trình đã dùng `vung` — hàng ngoài đợt không mang
+// cờ vùng nào, để lộ trình cắt trước trường `vung` in y như cũ. Trả [cờ, câu, mức] — mức 'loi' hay 'vang'.
+function coVungHang(r) {
+  if (r.vung === undefined) return [['chua-khai-vung', 'chưa ghi vung (vùng mã dự kiến theo màn) — lịch biết tệp sẽ không thấy hàng này chồng với hàng nào', 'vang']];
+  if (!Array.isArray(r.vung) || !r.vung.length || r.vung.some(g => typeof g !== 'string' || !g.trim())) return [['vung-sai-kieu', `vung ${JSON.stringify(r.vung)} phải là mảng glob (chuỗi khác rỗng, tương đối gốc kho)`, 'loi']];
+  const rong = r.vung.filter(g => !coThuMucTinh(g));
+  if (rong.length) return [['vung-qua-rong', `${rong.map(g => `«${g}»`).join(', ')} không có thư mục tĩnh trước ký tự đại diện — chồng mọi hàng; ghi thư mục của màn`, 'loi']];
+  if (r.vung.every(g => g.startsWith(HO_SO))) return [['vung-chi-ho-so', `vung chỉ trỏ ${HO_SO} — thư mục hồ sơ mỗi hàng một tên, lịch không thấy chồng nào; ghi thư mục mã của màn`, 'vang']];
+  return [];
+}
 // `homNay` (YYYY-MM-DD, hồ sơ ra-soat-lo-trinh): bật cờ `gan-moc-dang-chay`; vắng thì cờ đó im (bên gọi đời trước không đổi).
 export function kiemCo(pv, data, k, homNay = null) {
   const loi = []; const canhBao = [];
@@ -199,6 +258,9 @@ export function kiemCo(pv, data, k, homNay = null) {
     else if (r.du_lieu === DL_GIA && !coHangSinh(dt)) ra.push(['thieu-hang-sinh-gia', 'đo trên dữ liệu giả (du_lieu: gia) mà không đứng trực tiếp trên hàng sinh dữ liệu giả nào (du_lieu: sinh-gia)']);
     return ra;
   };
+  // Cờ vùng chỉ bật khi lộ trình đã dùng `vung` ở ít nhất một hàng: kho chưa dùng vùng nhận răng y như trước (lộ trình đời
+  // trước, cắt không vùng — ca LT-168, ON-6-im của hai hồ sơ đã ký).
+  const dungVung = hang.some(({ r }) => r.vung !== undefined);
   // Gộp: hàng cùng đợt, cùng nhom (khác rỗng), cùng dưới mục tiêu, tổng không quá cho phép.
   const duoi = trongDot.filter(({ r }) => laTieuChi(r.tieu_chi) && r.tieu_chi < k.muc_tieu[0]);
   for (const { r, nhan } of trongDot) {
@@ -210,6 +272,13 @@ export function kiemCo(pv, data, k, homNay = null) {
       }
       (CO_LOI.has(co) || CO_LOI_S3B.has(co) ? loi : canhBao).push(`hàng ${nhan} [${co}]: ${cau}${them}`);
     }
+    if (dungVung) for (const [co, cau, muc] of coVungHang(r)) (muc === 'loi' ? loi : canhBao).push(`hàng ${nhan} [${co}]: ${cau}`);
+  }
+  // Mọi cặp chồng: từ ba hàng khai vùng hợp lệ mà cặp nào cũng chồng thì lịch sẽ xếp cả đợt thành một hàng dọc.
+  const coVung = trongDot.filter(({ r }) => !coVungHang(r).some(([, , muc]) => muc === 'loi') && Array.isArray(r.vung) && r.vung.length);
+  const chong = (a, b) => a.r.vung.some(x => b.r.vung.some(y => mauGiao(x, y)));
+  if (coVung.length >= 3 && coVung.every((a, i) => coVung.slice(i + 1).every(b => chong(a, b)))) {
+    loi.push(`đợt ${pv.dot} [vung-trung-moi-hang]: ${coVung.length} hàng khai vùng (${coVung.map(x => x.nhan).join(', ')}) mà mọi cặp đều chồng — lịch sẽ xếp cả đợt thành một hàng dọc; cắt vùng theo màn`);
   }
   // Hàng ngoài đợt: mỗi cờ đúng MỘT dòng vàng — lộ trình cắt tay đời trước có hàng trăm hàng.
   const gom = new Map();
