@@ -19,6 +19,7 @@ chạy đúng ca, rồi `git checkout` trả lại (bộ chạy ở scratchpad `
 | E7 | phục hồi `HopThoaiCapNhatKr` và `NutCapNhatDong` cũ | 1 | `cnk-loi-vao: hop-tuan mo dialog` |
 | E8 | trạng thái khối giữ qua KR (biến mô-đun) | 1 | `cnk-dau-ngan: K2 mang nhap cua K` |
 | E8 | giữ `tab=cap-nhat` qua › | 1 | `cnk-dau-ngan: K2 mo do tab=cap-nhat` |
+| E9 | trả bốn tệp lối cập nhật, `kr-sheet.tsx`, `objective-sheet.tsx`, `theo-don-vi/bang.tsx` về bản trước vòng (hộp thoại) | 2 | `SAI 1280 buoc 1: … khoi mo false` |
 | E10a | thêm lại import vào kr-sheet.tsx | 1 | `khong-hop-thoai: kr-sheet.tsx con dung HopThoaiCapNhatKr` |
 | E10c | xoá lặng một `expect` của hop-cap-nhat-lan-truoc.dom.tsx | 1 | `thuoc-da-ky: hop-cap-nhat-lan-truoc.dom.tsx: mat 1 assertion khong co dong so` |
 
