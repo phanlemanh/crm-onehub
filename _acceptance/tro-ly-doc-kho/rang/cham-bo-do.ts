@@ -17,6 +17,7 @@ import {
 	type ChiSo,
 	cauHoiLai,
 	cauLuotMot,
+	chamLuotDu,
 	chamTungCau,
 	type DongTungCau,
 	demBuocModel,
@@ -588,7 +589,11 @@ try {
 
 	const tu = new Date();
 	const l1 = await chayLuot("luot-1", cauMot, bo.cau);
-	const c1 = chamTungCau(l1.tungCau, NGUONG);
+	const c1 = chamLuotDu(
+		l1.tungCau,
+		{ mot: cauMot.map((c) => c.id), hai: bo.cau.map((c) => c.id) },
+		NGUONG,
+	);
 	const tong = [...c1.kl.dong];
 	let maThoat = c1.kl.ma;
 	const hoiLai = keHoachHoiLai(c1.kl, c1.mot, c1.hai);
@@ -596,7 +601,11 @@ try {
 	if (hoiLai.length > 0) {
 		const chon = cauHoiLai(hoiLai, cauMot, bo.cau);
 		const l2 = await chayLuot("hoi-lai", chon.mot, chon.hai);
-		const c2 = chamTungCau(l2.tungCau, NGUONG);
+		const c2 = chamLuotDu(
+			l2.tungCau,
+			{ mot: chon.mot.map((c) => c.id), hai: chon.hai.map((c) => c.id) },
+			NGUONG,
+		);
 		const k = ketHoiLai(c1.kl, c2.kl, hoiLai, NGUONG);
 		maThoat = k.ma;
 		tong.push(...k.dong);
@@ -619,7 +628,7 @@ try {
 		"",
 		`Bộ: \`${isAbsolute(tepBo) ? relative(GOC, tepBo) : tepBo}\` (nhãn \`${bo.nhan}\`). ${bo.nguon}`,
 		"",
-		`Cả hai lượt chạy bằng \`eve eval ${BAI_EVAL}\`: máy chủ eve thật của \`apps/agent\`, chỉ dẫn và tool đúng như eve gửi, phiên con thật. Lượt một: mỗi câu là một hàng TaiLieuHoi kênh CRM, \`/internal/crm/dispatch\` mở phiên purpose kho; model \`${quyet.modelIds.kho}\` (Gateway trả), khoá ${nhanKhoaTaiLieu("hoi")}. Lượt hai: mỗi câu là một tin Zalo qua \`/zalo/webhook\` (Zalo giả nhận câu trả lời) của một người đã nối Zalo; model agent gốc \`${quyet.modelIds.goc}\` (Gateway trả); «chuyển» = có hàng TaiLieuHoi kênh ZALO gắn với hàng ZaloHoi của tin đó. Câu không có kết quả, hàng không kết thúc ở TRA_LOI/TU_CHOI, hay câu Zalo có lỗi eval mang nhãn \`loi\` và không vào tử số hay mẫu số. Thư mục lượt: \`${relative(GOC, thuMucLuot)}\`.`,
+		`Cả hai lượt chạy bằng \`eve eval ${BAI_EVAL}\`: máy chủ eve thật của \`apps/agent\`, chỉ dẫn và tool đúng như eve gửi, phiên con thật. Lượt một: mỗi câu là một hàng TaiLieuHoi kênh CRM, \`/internal/crm/dispatch\` mở phiên purpose kho; model \`${quyet.modelIds.kho}\` (Gateway trả), khoá ${nhanKhoaTaiLieu("hoi")}. Lượt hai: mỗi câu là một tin Zalo qua \`/zalo/webhook\` (Zalo giả nhận câu trả lời) của một người đã nối Zalo; model agent gốc \`${quyet.modelIds.goc}\` (Gateway trả); «chuyển» = có hàng TaiLieuHoi kênh ZALO gắn với hàng ZaloHoi của tin đó. Câu không có kết quả, hàng không kết thúc ở TRA_LOI/TU_CHOI, hay câu Zalo có lỗi eval mang nhãn \`loi\` và không vào tử số hay mẫu số. Số câu \`loi\` vượt trần (${CHAM_BO_DO.tranLoi.phanTram}% số câu của lượt, tối thiểu ${CHAM_BO_DO.tranLoi.toiThieu}) thì lượt không đo được; dưới trần thì lượt vẫn chấm trên các câu còn lại, dòng «cau loi model» ghi số câu lỗi theo từng chỉ số. Thư mục lượt: \`${relative(GOC, thuMucLuot)}\`.`,
 		"",
 		"## Tổng",
 		"",
