@@ -19,6 +19,8 @@ một vòng riêng. Lời chủ kho nguyên văn: «Tôi đồng ý với cách 
 định sau đó mới thực hiện vòng thử ở CRM. Để khi thực hiện chúng ta không mất bối cảnh?». Nghiên cứu, hình, kiến trúc
 và trích phiên nằm ở kho tri thức (dòng `nguon`).
 
+Chủ kho duyệt bản phạm vi này ngày 30/10: «Duyệt và đẩy».
+
 <!-- <<<PHAM-VI-MA -->
 ```
 dot: ban-do-khuon-3010
