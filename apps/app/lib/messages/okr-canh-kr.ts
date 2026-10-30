@@ -297,9 +297,8 @@ const vi = {
 		chuaCo: "Chưa có lần cập nhật nào",
 		conNhap: "còn nháp chưa gửi",
 		thu: "Thu khối cập nhật",
-		phim: "Ctrl/⌘ + Enter",
+		phim: "Gửi nhanh: Ctrl/⌘ + Enter",
 		chonTuTin: "Chọn mức tự tin để gửi",
-		mucDoi: "{cu} → {moi} ({doi})",
 		xemTruoc: "Lần này",
 		hoiBo: {
 			tieuDe: "Bỏ cập nhật đang soạn?",
@@ -611,9 +610,8 @@ const en: OkrCanhKrMessages = {
 		chuaCo: "No updates yet",
 		conNhap: "unsent draft",
 		thu: "Collapse the update form",
-		phim: "Ctrl/⌘ + Enter",
+		phim: "Quick send: Ctrl/⌘ + Enter",
 		chonTuTin: "Pick a confidence level to send",
-		mucDoi: "{cu} → {moi} ({doi})",
 		xemTruoc: "This update",
 		hoiBo: {
 			tieuDe: "Discard this update?",

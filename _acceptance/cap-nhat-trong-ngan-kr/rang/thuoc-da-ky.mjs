@@ -21,10 +21,16 @@ const BO_QUA = [
 	new RegExp(`^_acceptance/${HO_SO}/`),
 	/^_acceptance\/[^/]+\/(?!rang\/)/,
 ];
-const KHANG_DINH = /\b(?:expect|dong|bao|kiem|ghi|sai\.push|loi\.push|sai)\(/g;
+const MAU_CAU = [
+	/loi\.push\(\s*(["'`])((?:\\.|(?!\1).)*?)(?:\$\{|\1)/gs,
+	/\|\|\s*(["'`])((?:\\.|(?!\1).)*?)(?:\$\{|\1)/gs,
+	/throw new Error\(\s*(["'`])((?:\\.|(?!\1).)*?)(?:\$\{|\1)/gs,
+	/sai\.push\(\s*(["'`])((?:\\.|(?!\1).)*?)(?:\$\{|\1)/gs,
+	/\bdong\(\s*[^,]+,\s*[^,]+,\s*(["'`])((?:\\.|(?!\1).)*?)(?:\$\{|\1)/gs,
+];
+const CAU_TOI_THIEU = 6;
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx)$/;
 const HOI_2 = "d-20261030T064203Z-9";
-const DAU_GO = "[gỡ]";
 
 const git = (...a) =>
 	execFileSync("git", ["-C", GOC, ...a], {
@@ -53,7 +59,19 @@ export function docMaTran(chu) {
 		}));
 }
 
-const demKhangDinh = (chu) => (chu.match(KHANG_DINH) ?? []).length;
+export function rutKhangDinh(chu) {
+	const ra = new Set();
+	for (const m of MAU_CAU)
+		for (const x of chu.matchAll(m)) {
+			const cau = x[2].trim();
+			if (cau.length >= CAU_TOI_THIEU) ra.add(cau);
+		}
+	for (const d of chu.split("\n"))
+		if (/\bexpect\(/.test(d)) ra.add(d.trim().replace(/\s+/g, " "));
+	return ra;
+}
+
+const trich = (o) => [...o.khangDinh.matchAll(/«([^»]+)»/g)].map((m) => m[1]);
 
 function tepCoDauHop(goc) {
 	const ra = git(
@@ -72,17 +90,17 @@ function tepCoDauHop(goc) {
 }
 
 export function soKhangDinh(tep, chuGoc, chuNay, maTran) {
-	const truoc = demKhangDinh(chuGoc);
-	const sau = demKhangDinh(chuNay);
-	const thay = maTran.filter(
-		(o) =>
-			o.tep === tep &&
-			o.nhan === "thay-loi-hua" &&
-			o.khangDinh.includes(DAU_GO),
-	).length;
-	const mat = truoc - sau - thay;
-	return mat > 0
-		? `${tep.split("/").pop()}: mat ${mat} assertion khong co dong so`
+	const nay = rutKhangDinh(chuNay);
+	const daTrich = maTran
+		.filter((o) => o.tep === tep && o.nhan !== "giu")
+		.flatMap(trich);
+	const mat = [...rutKhangDinh(chuGoc)].filter(
+		(k) => !nay.has(k) && !daTrich.some((t) => k.includes(t)),
+	);
+	return mat.length > 0
+		? `${tep.split("/").pop()}: mat ${mat.length} assertion khong co dong so (${mat
+				.map((k) => k.slice(0, 60))
+				.join(" | ")})`
 		: null;
 }
 
@@ -119,7 +137,8 @@ function doiChungDuong(maTran) {
 	);
 	if (!o) return "khong co dong hop-cap-nhat-lan-truoc.dom.tsx trong ma tran";
 	const chu = readFileSync(join(GOC, o.tep), "utf8");
-	const bot = chu.replace(/\bexpect\(/, "void (");
+	const dongExpect = chu.split("\n").find((d) => /\bexpect\(/.test(d));
+	const bot = dongExpect ? chu.replace(dongExpect, "") : chu;
 	return soKhangDinh(o.tep, chu, bot, []) === null
 		? "doi chung duong: xoa mot expect ma rang khong bat"
 		: null;

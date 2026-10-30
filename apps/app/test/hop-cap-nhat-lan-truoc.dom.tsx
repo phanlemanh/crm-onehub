@@ -498,7 +498,6 @@ describe("hct-khoi", () => {
 					Number(ca.so),
 					ca.soGo,
 					"vi",
-					mk.khoiCapNhat.mucDoi,
 				);
 				if (mucDoiKhoi() !== doiMong)
 					loi.push(
@@ -875,13 +874,7 @@ describe("hct-sau-gui", () => {
 			lamMoi: { lichSu: true, mucTieu: true },
 			so: giaTri(k, 60, "vi"),
 			tuTin: NHAN_TU_TIN.thap,
-			mucDoi: mucDoi(
-				{ kind: ca.kind, unit: ca.unit },
-				60,
-				70,
-				"vi",
-				mk.khoiCapNhat.mucDoi,
-			),
+			mucDoi: mucDoi({ kind: ca.kind, unit: ca.unit }, 60, 70, "vi"),
 		});
 	});
 });

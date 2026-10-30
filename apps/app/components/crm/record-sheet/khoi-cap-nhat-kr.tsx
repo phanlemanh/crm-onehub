@@ -208,7 +208,6 @@ export function mucDoi(
 	cu: number,
 	moi: number,
 	locale: Parameters<typeof giaTri>[2],
-	mau: string,
 ): string | null {
 	if (moi === cu) return null;
 	const chu = (so: number) => giaTri(kr, so, locale);
@@ -216,11 +215,7 @@ export function mucDoi(
 	const so = (n: number) => giaTri({ kind: kr.kind, unit: "" }, n, locale);
 	const doi = Number((moi - cu).toFixed(SO_LE_DOI));
 	const dau = doi > 0 ? "+" : "−";
-	return dien(mau, {
-		cu: so(cu),
-		moi: so(moi),
-		doi: `${dau}${chu(Math.abs(doi))}`,
-	});
+	return `${so(cu)} → ${so(moi)} (${dau}${chu(Math.abs(doi))})`;
 }
 
 function DongThu({ moTa, onMo }: { moTa: string; onMo: () => void }) {
@@ -335,7 +330,16 @@ function KhoiDaTai({
 	const [cho, setCho] = useState(false);
 	const daMo = useRef(false);
 	const khoi = useRef<HTMLDivElement>(null);
-	const khai = useKhaiThayDoi(k.hoiBo satisfies LoiHoi);
+	const hoiBo = useMemo<LoiHoi>(
+		() => ({
+			tieuDe: k.hoiBo.tieuDe,
+			than: k.hoiBo.than,
+			nut: k.hoiBo.nut,
+			thoi: k.hoiBo.thoi,
+		}),
+		[k],
+	);
+	const khai = useKhaiThayDoi(hoiBo);
 	const moPhien = useMutation(trpc.okr.moCapNhat.mutationOptions());
 	const goiMo = moPhien.mutate;
 
@@ -441,7 +445,7 @@ function KhoiDaTai({
 	const doi =
 		!coNhap || so === null || loi !== null
 			? null
-			: mucDoi(krCn, giaTriCuoi, so, locale, k.mucDoi);
+			: mucDoi(krCn, giaTriCuoi, so, locale);
 	const tienDo =
 		so === null || loi !== null
 			? null
@@ -616,7 +620,11 @@ function KhoiDaTai({
 							{khoa || (cho && dangMo) ? (
 								<Spinner data-icon="inline-start" />
 							) : null}
-							{khoa ? t.capNhat.dangGui : t.hopCapNhat.gui}
+							{khoa
+								? t.capNhat.dangGui
+								: cho && dangMo
+									? t.hopCapNhat.dangMo
+									: t.hopCapNhat.gui}
 						</Button>
 					</div>
 				</form>

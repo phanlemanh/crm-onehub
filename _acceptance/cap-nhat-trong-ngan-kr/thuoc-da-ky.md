@@ -4,7 +4,7 @@ Vòng SV8 gỡ hộp `HopThoaiCapNhatKr`; mọi thước đã ký từng đo h�
 `cham-tep` V1-7 (đổi chỗ đo, giữ kỳ vọng), Hỏi-2 ở Cổng Phạm vi (lời hứa 1: nút «Cập nhật» đầu ngăn; lời hứa 2: khối «lần
 trước» trong hộp), V1-10 (A–F). Ma trận dựng từ `git grep` các dấu hộp (`data-hop-cap-nhat-kr`, `HopThoaiCapNhatKr`,
 `useCapNhatKr`, `cap-nhat-ngan-kr`, `hop-thoai-cap-nhat-kr`) trên merge-base, cộng hai tệp cùng thư mục phải sửa theo.
-Răng `rang/thuoc-da-ky.mjs` đối chiếu.
+Răng `rang/thuoc-da-ky.mjs` đối chiếu từng khẳng định (câu báo trượt và dòng `expect(`) giữa merge-base và HEAD: khẳng định nào mất phải có một ô trích nguyên văn nó trong «…».
 
 Nhãn: `giu` không đổi · `chuyen-cho-do` đổi selector hay đường tới form, giữ kỳ vọng · `thay-loi-hua` lời hứa đã duyệt thay
 (1, 2 của Hỏi-2; A–F của V1-10).
@@ -56,6 +56,15 @@ Nhãn: `giu` không đổi · `chuyen-cho-do` đổi selector hay đường tớ
 | `_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs` | E18 b5 | 1637–1704 | menu mở ngăn KR; ghi hộ; tự tin; hộp đóng → khối thu (A) | thay-loi-hua | cap-nhat-tuan-okr |
 | `_acceptance/canh-kr-okr/rang/man-canh-kr.mjs` | E11 b9 | 1483–1542 | form trong ngăn K4; gửi → khối thu (A); về ngăn mục tiêu xem dấu | thay-loi-hua | canh-kr-okr |
 | `_acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs` | huy | ~244 | DANH_SACH bỏ hop-thoai-cap-nhat-kr.tsx (tệp đã gỡ) | chuyen-cho-do | hop-thoai-giu-cho-dang-nhap |
+| `apps/app/test/ngan-kr-mot-cho.dom.tsx` | (hàm dựng moHopCua) | — | bỏ «thieu KR» — hàm dựng viết lại theo khối, chặn dữ liệu giả bằng câu khác | chuyen-cho-do | ngan-kr-mot-cho |
+| `apps/app/test/ngan-kr-mot-cho.dom.tsx` | vk7-cap-nhat-ngan (từ đầu ngăn) | — | bỏ «thieu nut Cap nhat o dau ngan» — nút đầu ngăn không còn (1) | thay-loi-hua | ngan-kr-mot-cho |
+| `apps/app/test/ngan-kr-mot-cho.dom.tsx` | vk7-tren-dong (menu ngăn M) | 1811 | «expect(hop()?.getAttribute("data-hop-cap-nhat-kr")).toBe("k1");» → `krCuaKhoi() === "k1"` | chuyen-cho-do | ngan-kr-mot-cho |
+| `apps/app/test/hop-tuan-tren-bang.dom.tsx` | htb-cap-nhat | 605–607 | «htb-cap-nhat: hop khong phai cua K» → khối của K mở | chuyen-cho-do | hop-tuan-tren-bang |
+| `apps/app/test/hop-tuan-tren-bang.dom.tsx` | htb-cap-nhat | 619–626 | «htb-cap-nhat: bam dong mo ngan, khong mo hop (» → mở ngăn K có khối (A) | thay-loi-hua | hop-tuan-tren-bang |
+| `apps/app/test/hop-tuan-tren-bang.dom.tsx` | (helper) | 259–281 | «khong co hop cap nhat» → câu của helper gửi từ khối | chuyen-cho-do | hop-tuan-tren-bang |
+| `apps/app/test/hop-cap-nhat-lan-truoc.dom.tsx` | hct-khoi | 444–447 | «hct-khoi: khoi khong dung truoc o gia tri (» → dòng đầu Lịch sử đứng sau khối (2) | thay-loi-hua | hop-cap-nhat-lan-truoc |
+| `apps/app/test/hop-cap-nhat-lan-truoc.dom.tsx` | hct-tai | (gỡ, sau 620) | «hct-tai: thieu ngay so tu tin khi dang tai ghi chu» — lúc tải theo Lịch sử (F) | thay-loi-hua | hop-cap-nhat-lan-truoc |
+| `apps/app/test/lich-su-moi-lan-cap-nhat.dom.tsx` | lsml-sau-gui | 574–576 | «khong co hop cap nhat» → chờ khối mở | chuyen-cho-do | lich-su-moi-lan-cap-nhat |
 
 ## Đường `paths:` chết trong hồ sơ đã ký
 
