@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>160 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>200 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>201 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -43,7 +43,6 @@ flowchart TD
 
 ## Đang làm
 
-- Người phụ trách KR mở chi tiết KR, ghi giá trị mới, mức tự tin và ghi chú ngay trong ngăn, thấy điểm mới trên Lịch sử và sang KR kế mà không mở hộp thoại nào (`cap-nhat-trong-ngan-kr`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -64,6 +63,7 @@ flowchart TD
 - Thành viên thả cảm xúc lên một lần cập nhật tuần ở Cập nhật gần đây, thẻ con Họp tuần của bộ OKR và ngăn KR, và người cập nhật thấy ai đã thả (`cam-xuc-tren-cap-nhat`)
 - Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR — việc tự gõ và sáng kiến (chiến dịch hay kế hoạch 30 ngày có sẵn) gắn vào KR, bằng chứng cho KR mốc, ghi nhận đồng nghiệp trên mục tiêu, mẫu OKR theo cấp và đơn vị (lượt 8a — SK-01, SK-02, CI-05, CI-06, MT-07) (`canh-kr-okr`)
 - Trưởng đơn vị mở Cập nhật gần đây trước buổi họp tuần, đọc mọi lần cập nhật của bộ OKR mình dẫn, mới nhất trước, và trả lời ngay dưới từng lần (`cap-nhat-gan-day`)
+- Người phụ trách KR mở chi tiết KR, ghi giá trị mới, mức tự tin và ghi chú ngay trong ngăn, thấy điểm mới trên Lịch sử và sang KR kế mà không mở hộp thoại nào (`cap-nhat-trong-ngan-kr`)
 - Cập nhật tuần OKR — màn «Cập nhật tuần của tôi» gom mọi KR tôi phụ trách, điền sẵn số tuần trước, ghi giá trị · mức tự tin · một dòng ghi chú; nhắc buổi sáng và thẻ «việc của tôi» dẫn thẳng vào màn; bình luận và nhắc tên trên mục tiêu và KR; chuyển KR khi người nghỉ (`cap-nhat-tuan-okr`)
 - Cây tổ chức hai cấp dưới gốc OneHub — bộ phận chứa phòng ban — có người, có trưởng, dựng và nhập hàng loạt ở Cài đặt › Tổ chức (`cau-truc-to-chuc`)
 - Cây căn chỉnh hiện lý do và mức tin của từng chỗ nối, lọc được các nhánh «Chưa có lý do» và «Đặt cược» (`cay-can-chinh-co-ly-do`)

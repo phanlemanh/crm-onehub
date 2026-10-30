@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 39a3dc49cdffbf4757f6e2431aeab7f0b0148df2
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-30
 ---
 
 # Evidence Report: cap-nhat-trong-ngan-kr
