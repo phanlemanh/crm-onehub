@@ -1,0 +1,112 @@
+{
+  "feature_plain": "Người phụ trách KR mở chi tiết KR thấy trong Lịch sử mọi lần cập nhật — kể cả nhiều lần trong một tuần — và biểu đồ có một điểm cho mỗi lần.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ trả về mọi lần cập nhật của KR, cũ trước, kèm giờ gửi, giá trị, mức tự tin, ghi chú và cảm xúc của chính lần đó."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ dựng chuỗi biểu đồ mỗi lần một điểm, giữ đường kỳ vọng theo tuần cho cả tuần chưa có lần nào."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ hiện mỗi lần một dòng trong Lịch sử, mới nhất trên cùng, nhãn ngày giờ gửi như dòng tin «Cập nhật gần đây»."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ vẽ biểu đồ mỗi lần một điểm; chú giải và nhãn đọc màn hình nói «lần cập nhật» thay cho «tuần»."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ thêm ngay một dòng và một điểm sau mỗi lần gửi, không tải lại trang — kể cả trên máy chủ thật."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ xử đủ KR mốc, KR chưa có lần nào, lúc đang tải, lúc lỗi tải và KR có 30 lần."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ giữ nguyên dữ liệu theo tuần cho hộp cập nhật, khối «lần trước», dải tự tin và mức đổi Họp tuần."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG cho người ngoài quyền xem mục tiêu đọc được lần cập nhật nào."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ KHÔNG gắn cảm xúc nhầm sang lần khác cùng tuần."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ KHÔNG sửa thước hồ sơ đã ký nào, trừ hai phép đo của VK7 nếu anh chọn lật ở Hỏi-1."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG làm màn xem riêng một lần cũ (SV-C1, mở lại sau)."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG đổi dữ liệu theo tuần của bốn nơi khác."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG cho sửa hay xoá một lần đã gửi."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG thêm lớp phủ gom theo tuần trên biểu đồ."
+    }
+  ],
+  "scope_plain": "Phần cắt giữ đúng bản phạm vi §8: màn xem riêng một lần cũ để sau.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Mọi dạng lịch sử của một KR — chưa lần nào tới 30 lần, cùng tuần, cùng ngày, cùng phút, KR mốc — đều có tiêu chí (AC-1, AC-2, AC-4, AC-7)."
+    },
+    {
+      "i": 1,
+      "p": "Cả bốn phần của mục Lịch sử — danh sách, biểu đồ, cảm xúc, lúc tải — đều được đo (AC-4, AC-5, AC-7, AC-8)."
+    },
+    {
+      "i": 2,
+      "p": "Đo lúc mở, ngay sau khi gửi và trên máy chủ thật đúng ngưỡng hai lần trong tuần (AC-4, AC-6)."
+    },
+    {
+      "i": 3,
+      "p": "Bốn nơi khác đang đọc theo tuần được giữ nguyên và có phép đo riêng (AC-9)."
+    },
+    {
+      "i": 4,
+      "p": "Quyền xem (AC-3) và thước của hồ sơ đã ký (AC-10) có tiêu chí riêng."
+    },
+    {
+      "i": 5,
+      "p": "Đối chiếu với Tability: Timeline của ngăn KR hiện từng lần cập nhật."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Lo đổi nguồn Lịch sử làm đỏ bài kiểm đã ký ngoài VK7 — đã đếm: chỉ hai tệp của VK7 đo Lịch sử; năm tệp khác được chạy hẹp để chắc vẫn xanh."
+    },
+    {
+      "i": 1,
+      "p": "Bộ đo chưa so giờ gửi và cảm xúc với dữ liệu thật — đã thêm so giờ gửi và một phép đo thả cảm xúc thật qua máy chủ."
+    },
+    {
+      "i": 2,
+      "p": "Hai lần trong cùng một phút trùng nhãn giờ — đã chốt thứ tự có khoá phụ, phân biệt dòng bằng mã lần, nhãn theo đúng dòng tin «Cập nhật gần đây»."
+    },
+    {
+      "i": 3,
+      "p": "Phép đo «giữ nguyên dữ liệu theo tuần» dựa vào bản chụp tự ghi — đã đổi sang tính kỳ vọng độc lập từ dữ liệu thật."
+    },
+    {
+      "i": 4,
+      "p": "Ca 30 lần chưa có tiêu chí — đã thêm vào AC-7 và có ảnh bản mẫu ở khổ điện thoại."
+    }
+  ]
+}

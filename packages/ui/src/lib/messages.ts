@@ -255,6 +255,9 @@ const en = {
 		tuan: "Week",
 		chuGiai:
 			"Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
+		lan: "Update",
+		chuGiaiLan:
+			"Solid line: value at each update. Dashed line: expected by that week. Horizontal line: target.",
 	},
 	gantt: {
 		today: "Today",
@@ -588,6 +591,9 @@ const vi = {
 		tuan: "Tuần",
 		chuGiai:
 			"Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
+		lan: "Lần cập nhật",
+		chuGiaiLan:
+			"Đường liền: giá trị ở mỗi lần cập nhật. Đường đứt: lẽ ra đã tới trong tuần ấy. Vạch ngang: đích.",
 	},
 	gantt: {
 		today: "Hôm nay",

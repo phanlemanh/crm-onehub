@@ -315,6 +315,7 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.capNhatGanDay.queryKey(),
 					trpc.okr.hopTuan.queryKey(),
 					trpc.okr.dienBien.queryKey(),
+					trpc.okr.lichSuKr.queryKey(),
 					trpc.okr.nguoiThaCamXuc.queryKey(),
 					trpc.okr.khoiCuaToi.queryKey(),
 					trpc.okr.transferPreview.queryKey(),

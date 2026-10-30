@@ -236,6 +236,7 @@ import {
 	hopTuanOutput,
 	khoiCuaToiInput,
 	khoiCuaToiOutput,
+	lichSuKrOutput,
 	moHopTuanOutput,
 	quanhMucTieuInput,
 	quanhMucTieuOutput,
@@ -1470,6 +1471,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof dienBienInput>,
 	) {
 		return this.xem.dienBien(ctx.user.id, input.keyResultId);
+	}
+
+	@Query({
+		input: dienBienInput,
+		output: lichSuKrOutput,
+		meta: restMeta("GET", "/okr/key-results/{keyResultId}/check-ins", TAG),
+	})
+	lichSuKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof dienBienInput>,
+	) {
+		return this.xem.lichSuKr(ctx.user.id, input.keyResultId);
 	}
 
 	@Query({

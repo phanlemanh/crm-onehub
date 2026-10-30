@@ -58,6 +58,7 @@ function TargetLineChart({
 	height,
 	className,
 	previewPoint,
+	nhip = "tuan",
 }: {
 	label: string;
 	data: TargetLinePoint[];
@@ -68,6 +69,7 @@ function TargetLineChart({
 	height?: number;
 	className?: string;
 	previewPoint?: TargetLinePreviewPoint;
+	nhip?: "tuan" | "lan";
 }) {
 	const msg = useMessages();
 	const dinh = formatValue ?? ((v: number) => String(v));
@@ -171,20 +173,22 @@ function TargetLineChart({
 				</LineChart>
 			</ChartContainer>
 			<figcaption className="text-muted-foreground text-xs">
-				{msg.bieuDo.chuGiai}
+				{nhip === "lan" ? msg.bieuDo.chuGiaiLan : msg.bieuDo.chuGiai}
 			</figcaption>
 			<table className="sr-only">
 				<caption>{label}</caption>
 				<thead>
 					<tr>
-						<th scope="col">{msg.bieuDo.tuan}</th>
+						<th scope="col">
+							{nhip === "lan" ? msg.bieuDo.lan : msg.bieuDo.tuan}
+						</th>
 						<th scope="col">{msg.bieuDo.giaTri}</th>
 						<th scope="col">{msg.bieuDo.leRa}</th>
 					</tr>
 				</thead>
 				<tbody>
-					{data.map((d) => (
-						<tr key={d.x}>
+					{data.map((d, i) => (
+						<tr key={`${i}-${d.x}`}>
 							<th scope="row">{d.x}</th>
 							<td>{d.value === null ? "—" : dinh(d.value)}</td>
 							<td>{d.expected === null ? "—" : dinh(d.expected)}</td>

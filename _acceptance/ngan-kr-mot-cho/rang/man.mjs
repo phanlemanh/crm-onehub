@@ -375,8 +375,8 @@ async function doKho(tenKho, ca) {
 				hienSau !== hienTruoc,
 			);
 			kiem(
-				`ngan 1440: lich su moi nhat «${chuMoiNhat}» hien ${ca.cu + 2} (dong ${lichTruoc} -> ${lichSau}, gom theo tuan)`,
-				coSoMoi(chuMoiNhat, ca.cu + 2) && lichSau >= lichTruoc,
+				`ngan 1440: lich su moi nhat «${chuMoiNhat}» hien ${ca.cu + 2} (dong ${lichTruoc} -> ${lichSau}, moi lan mot dong)`,
+				coSoMoi(chuMoiNhat, ca.cu + 2) && lichSau === lichTruoc + 1,
 			);
 			const lai = await docLai();
 			kiem(
