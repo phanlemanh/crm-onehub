@@ -17,7 +17,6 @@ import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { giaTri, TienDoKrCoSo } from "../bang-kr";
-import { type CapNhatKr, useCapNhatKr } from "../cap-nhat-kr";
 import { ChipGopY } from "../chip-gop-y";
 import { type KetQua, type MucTieu, nhanKr } from "../kieu";
 import {
@@ -242,15 +241,7 @@ function useCot(): DataTableColumn<MucTieu>[] {
 	];
 }
 
-function TenKr({
-	kr,
-	mt,
-	mo,
-}: {
-	kr: KetQua;
-	mt: MucTieu;
-	mo: CapNhatKr["mo"];
-}) {
+function TenKr({ kr, mt }: { kr: KetQua; mt: MucTieu }) {
 	const locale = useLocale();
 	const laMoc = kr.kind === "moc";
 	return (
@@ -280,7 +271,7 @@ function TenKr({
 			<span className="shrink-0 self-start">
 				<NutCapNhatDong
 					keyResultId={kr.id}
-					mo={mo}
+					loiVao="bang-don-vi"
 					objectiveId={mt.id}
 					ten={kr.title}
 				/>
@@ -289,16 +280,11 @@ function TenKr({
 	);
 }
 
-function oKr(
-	kr: KetQua,
-	cot: string,
-	mt: MucTieu,
-	mo: CapNhatKr["mo"],
-): ReactNode {
+function oKr(kr: KetQua, cot: string, mt: MucTieu): ReactNode {
 	const laMoc = kr.kind === "moc";
 	switch (cot) {
 		case "ten":
-			return <TenKr kr={kr} mo={mo} mt={mt} />;
+			return <TenKr kr={kr} mt={mt} />;
 		case "tien-do":
 			return <TienDoKrCoSo expected={mt.expected} kind={mt.kind} kr={kr} />;
 		case "tinh-trang":
@@ -346,7 +332,6 @@ export function BangDonVi({
 }) {
 	const b = okrMessages(useLocale()).donViBang;
 	const openRecord = useOpenRecord();
-	const capNhat = useCapNhatKr();
 	const { query, tab, cot, chieu } = useTruyVanBang(loc, doiLoc);
 	const facets = useMatLocOkr(dem, loc, tenNguoi);
 	const cotBang = useCot();
@@ -359,7 +344,7 @@ export function BangDonVi({
 		isExpandable: (mt) => mt.keyResults.length > 0 && !laDaBo(mt),
 		getSubRows: (mt) => mt.keyResults,
 		getSubRowId: (kr) => kr.id,
-		renderSubCell: (kr, cotKr, mt) => oKr(kr, cotKr, mt, capNhat.mo),
+		renderSubCell: (kr, cotKr, mt) => oKr(kr, cotKr, mt),
 		onSubRowClick: (kr) => openRecord({ kind: "kr", id: kr.id }),
 		rowLabel: (mt) => mt.title,
 		moSan: true,
@@ -392,7 +377,6 @@ export function BangDonVi({
 				}}
 				total={hien.length}
 			/>
-			{capNhat.hop}
 		</div>
 	);
 }

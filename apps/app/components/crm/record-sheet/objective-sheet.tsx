@@ -45,7 +45,7 @@ import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
-import { coTheCapNhat, useCapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
+import { coNutCapNhat } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import { ChipGopYKhung } from "@/app/(app)/[slug]/okr/chip-gop-y";
 import type { DiemCam } from "@/app/(app)/[slug]/okr/diem-cam";
 import { useGopYMucTieu } from "@/app/(app)/[slug]/okr/gop-y-kara";
@@ -86,6 +86,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { useMoCapNhatKr } from "./khoi-cap-nhat-kr";
 import { LyDoNoiGop } from "./ly-do-noi-gop";
 import { TabDienBien } from "./objective-dien-bien";
 import {
@@ -382,7 +383,7 @@ function MenuKr({
 	xoa: () => void;
 }) {
 	const m = okrMessages(useLocale()).sheet;
-	const capNhatDuoc = coTheCapNhat(mt, kr);
+	const capNhatDuoc = coNutCapNhat(mt, kr);
 	const suaDuoc =
 		mt.status !== "da-bo" &&
 		mt.choDuyet === null &&
@@ -561,7 +562,7 @@ function useNeoChipGopY(mt: ChiTiet) {
 function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
-	const capNhat = useCapNhatKr();
+	const moCapNhat = useMoCapNhatKr();
 	const [, datHopOkr] = useHopOkr();
 	const [xoa, setXoa] = useState<KetQua | null>(null);
 	const go = useMutation(
@@ -605,7 +606,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 									<MenuKr
 										mt={mt}
 										kr={kr}
-										capNhat={() => capNhat.mo(mt, kr)}
+										capNhat={() => moCapNhat(kr.id, "muc-tieu")}
 										sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
 										xoa={() => setXoa(kr)}
 									/>
@@ -633,7 +634,6 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 					</Button>
 				</div>
 			) : null}
-			{capNhat.hop}
 			<ConfirmDialog
 				tone="destructive"
 				nut={m.hoiXoaKr.action}

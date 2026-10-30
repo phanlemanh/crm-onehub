@@ -25,6 +25,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { type ReactNode, useEffect, useState } from "react";
 import { useMoDienBien } from "@/components/crm/record-sheet/dien-bien-kr";
+import { ngheDaGui } from "@/components/crm/record-sheet/khoi-cap-nhat-kr";
 import { khoaThuTuHop } from "@/components/crm/record-sheet/thu-tu-hop-tuan";
 import { okrHopTuanBoMessages } from "@/lib/messages/okr-hop-tuan-bo";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
@@ -32,7 +33,6 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { HangCamXuc } from "./cam-xuc/hang-cam-xuc";
-import { useCapNhatKr } from "./cap-nhat-kr";
 import { giaiDon } from "./don-dich";
 import { XemMoiBo } from "./don-vi-co-kr";
 import { ghep } from "./hoi-y/chu";
@@ -74,7 +74,6 @@ function DongBan({ dong, thuTu }: { dong: DongHop; thuTu: string }) {
 
 type BangHopTuan = {
 	hanhDong: HanhDongDong;
-	hop: ReactNode;
 	vuaGui: string | null;
 	xongGui: () => void;
 };
@@ -83,26 +82,28 @@ function useBangHop(thuTu: string): BangHopTuan {
 	const trpc = useTRPC();
 	const qc = useQueryClient();
 	const [vuaGui, setVuaGui] = useState<string | null>(null);
-	const capNhat = useCapNhatKr({
-		onDaGui: (keyResultId) => {
-			void qc
-				.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() })
-				.then(() => setVuaGui(keyResultId));
-		},
-	});
+	useEffect(
+		() =>
+			ngheDaGui((keyResultId) => {
+				void qc
+					.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() })
+					.then(() => setVuaGui(keyResultId));
+			}),
+		[qc, trpc],
+	);
 	return {
 		hanhDong: {
 			tenKr: (d) => <DongBan dong={d} thuTu={thuTu} />,
 			nutCapNhat: (d) => (
 				<NutCapNhatDong
 					keyResultId={d.keyResultId}
-					mo={capNhat.mo}
+					loiVao="hop-tuan"
 					objectiveId={d.objectiveId}
 					ten={d.tieuDe}
+					thuTu={thuTu}
 				/>
 			),
 		},
-		hop: capNhat.hop,
 		vuaGui,
 		xongGui: () => setVuaGui(null),
 	};
@@ -347,7 +348,6 @@ export function HopTuan({
 			) : (
 				than
 			)}
-			{bang.hop}
 		</>
 	);
 
