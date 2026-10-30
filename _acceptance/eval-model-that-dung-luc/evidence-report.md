@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 911e63150c9c40263ac3fa8d8feac9cb816ebc35
+verified_commit: f5c07c32e152822a3069e46fdb1ba69b0b68789e
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -212,3 +212,7 @@ Round 2: E8 không đạt — lượt 1 của phép đo kép đo đầy đủ nh
 Round 3: E8 không đạt — lượt 1 đo đầy đủ nhưng có một câu lỗi (c02), script dừng với «KHONG DO DUOC: 1 cau loi (c02)» nên lượt 2 chưa chạy. Mười hai eval máy còn lại và bảy lệnh suite đạt. Review còn ba phát hiện nằm trong hợp đồng: «SO LOI GOI MODEL» là hằng chữ in sẵn ở nhánh dùng lại (AC-8, hai phát hiện cùng gốc) và lượt hỏi lại bỏ qua ngưỡng 0 cho câu trích dẫn không kiểm được (AC-6). Trả lại cho bước cài đặt.
 
 Round 4: cả mười ba eval máy và bảy lệnh suite đạt, kể cả E8 (lượt 2 dùng lại, hai lời dò). Review không còn phát hiện nằm trong hợp đồng; mười bảy phát hiện ngoài hợp đồng chuyển cho người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-30, do F34 cham-bo-do-chiu-cau-loi đổi lời AC-1, AC-6, AC-7, AC-12 sang luật trần câu lỗi
+run_id: repin-20261030T051413Z-82983
+sha: f5c07c32e152822a3069e46fdb1ba69b0b68789e · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

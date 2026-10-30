@@ -17,6 +17,10 @@ const CHAY = join(GOC, ".acceptance-runs", "tro-ly-doc-kho", "cham-bo-do");
 const TEP = "cham-tung-cau.jsonl";
 const NGUONG = 0.8;
 
+const { tranCauLoi } = await import(
+	join(GOC, "_acceptance/tro-ly-doc-kho/rang/quyet-do.ts")
+);
+
 function luotMoiNhat() {
 	if (process.env.E15_THU_MUC_LUOT) return process.env.E15_THU_MUC_LUOT;
 	if (!existsSync(CHAY)) return null;
@@ -30,12 +34,19 @@ function luotMoiNhat() {
 function chamLai(thuMuc) {
 	const env = { ...process.env };
 	delete env.E15_QUYET;
-	const r = spawnSync("bun", [CHAM, "--cham-lai", thuMuc], { cwd: GOC, encoding: "utf8", env });
+	const r = spawnSync("bun", [CHAM, "--cham-lai", thuMuc], {
+		cwd: GOC,
+		encoding: "utf8",
+		env,
+	});
 	return { ma: r.status, ra: `${r.stdout}\n${r.stderr}` };
 }
 
 function docDong(tep) {
-	return readFileSync(tep, "utf8").split("\n").filter(Boolean).map((d) => JSON.parse(d));
+	return readFileSync(tep, "utf8")
+		.split("\n")
+		.filter(Boolean)
+		.map((d) => JSON.parse(d));
 }
 
 function ghiDong(tep, ds) {
@@ -57,18 +68,35 @@ try {
 
 	const r1 = chamLai(banSao);
 	const tongThat = readFileSync(join(luot, "cham-bo-do.md"), "utf8");
-	const dongTong = r1.ra.split("\n").filter((d) => /^(dungTrang|tuChoiDung|chuyenQuyDinh|chuyenNham): |^KHONG DO DUOC: /.test(d));
+	const dongTong = r1.ra
+		.split("\n")
+		.filter((d) =>
+			/^(dungTrang|tuChoiDung|chuyenQuyDinh|chuyenNham): |^cau loi model: |^KHONG DO DUOC: /.test(
+				d,
+			),
+		);
 	const lech = dongTong.filter((d) => !tongThat.includes(`- ${d}`));
-	const duDong = r1.ma === 2 ? dongTong.length === 1 : dongTong.length === 4;
+	const duDong = r1.ma === 2 ? dongTong.length === 1 : dongTong.length === 5;
 	if (!duDong || lech.length > 0) {
-		console.error(`cham lai khong khop luot that (${dongTong.length} dong, ma ${r1.ma}, lech: ${lech.join(" | ")})`);
+		console.error(
+			`cham lai khong khop luot that (${dongTong.length} dong, ma ${r1.ma}, lech: ${lech.join(" | ")})`,
+		);
 		loi = 1;
-	} else console.log(`ROUND-TRIP: ${dongTong.length} dong tong khop luot that, ma ${r1.ma}`);
+	} else
+		console.log(
+			`ROUND-TRIP: ${dongTong.length} dong tong khop luot that, ma ${r1.ma}`,
+		);
 
 	const sach = goc.map((d) => {
-		const ketCuc = d.ketCuc === "LOI" || d.ketCuc === "khong-co-ket-qua" ? "TRA_LOI-sai" : d.ketCuc === "loi" ? "khong-hang" : d.ketCuc;
+		const ketCuc =
+			d.ketCuc === "LOI" || d.ketCuc === "khong-co-ket-qua"
+				? "TRA_LOI-sai"
+				: d.ketCuc === "loi"
+					? "khong-hang"
+					: d.ketCuc;
 		const moi = { ...d, khongQuaKiem: false, ketCuc };
-		if (d.zalo && d.ketCuc === "loi") moi.zalo = { ketQua: "da-tra-loi", loi: null, coHang: false };
+		if (d.zalo && d.ketCuc === "loi")
+			moi.zalo = { ketQua: "da-tra-loi", loi: null, coHang: false };
 		return moi;
 	});
 
@@ -77,10 +105,33 @@ try {
 	dau.ketCuc = "LOI";
 	ghiDong(tep, motLoi);
 	const r2 = chamLai(banSao);
-	if (r2.ma !== 2 || !r2.ra.includes(`KHONG DO DUOC: 1 cau loi (${dau.id})`)) {
-		console.error(`cham-bo-do khong dung ham nhan (ma ${r2.ma})\n${r2.ra.slice(-600)}`);
+	const dongLoi =
+		r2.ra.split("\n").find((d) => d.startsWith("cau loi model: 1/")) ?? "";
+	if (r2.ma === 2 || !dongLoi.includes(`(${dau.id})`)) {
+		console.error(
+			`cham-bo-do khong dung ham nhan (ma ${r2.ma})\n${r2.ra.slice(-600)}`,
+		);
 		loi = 1;
-	} else console.log(`LOI: ma 2, KHONG DO DUOC: 1 cau loi (${dau.id})`);
+	} else console.log(`LOI DUOI TRAN: ma ${r2.ma}, ${dongLoi}`);
+
+	const tran = tranCauLoi(sach.length);
+	let conDoi = tran + 1;
+	const vuotTran = sach.map((d) => {
+		if (conDoi > 0 && d.luot === 1) {
+			conDoi--;
+			return { ...d, ketCuc: "LOI" };
+		}
+		return d;
+	});
+	ghiDong(tep, vuotTran);
+	const r2b = chamLai(banSao);
+	const mongVuot = `KHONG DO DUOC: ${tran + 1} cau loi vuot tran ${tran}`;
+	if (conDoi !== 0 || r2b.ma !== 2 || !r2b.ra.includes(mongVuot)) {
+		console.error(
+			`loi vuot tran khong ra ma 2 (ma ${r2b.ma})\n${r2b.ra.slice(-600)}`,
+		);
+		loi = 1;
+	} else console.log(`LOI VUOT TRAN: ma 2, ${mongVuot}`);
 
 	const coTrang = sach.filter((d) => d.luot === 1 && d.nhom !== "khong-co");
 	const n = coTrang.length;

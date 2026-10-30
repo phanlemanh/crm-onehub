@@ -18,6 +18,7 @@ import {
 	type ChiSo,
 	cauHoiLai,
 	cauLuotMot,
+	chamLuotDu,
 	chamTungCau,
 	chonHoiLai,
 	type DongTungCau,
@@ -38,12 +39,14 @@ import {
 	ketHoiLai,
 	ketLuan,
 	khuonBo,
+	kiemDuMa,
 	moThuMucLuot,
 	type NhomCau,
 	nhanHaiCau,
 	nhanMotCau,
 	phamViBam,
 	quyetDungLai,
+	tranCauLoi,
 	vungXam,
 } from "./quyet-do";
 
@@ -122,7 +125,7 @@ describe("nhan-loi", () => {
 		expect(nhanHaiCau("khong-hang")).toBe("khong-chuyen");
 	});
 
-	test("có câu loi thì kết luận mã 2, câu loi không vào tử hay mẫu số", () => {
+	test("câu loi vượt trần thì kết luận mã 2, câu loi không vào tử hay mẫu số", () => {
 		const mot = [
 			cauMot("c1", "co-trang", "dung-trang"),
 			cauMot("c2", "co-trang", "loi"),
@@ -132,7 +135,7 @@ describe("nhan-loi", () => {
 		];
 		const kl = ketLuan(mot, [], CHAM_BO_DO.nguong);
 		expect(kl.ma).toBe(2);
-		expect(kl.dong[0]).toBe("KHONG DO DUOC: 2 cau loi (c2, k2)");
+		expect(kl.dong[0]).toBe("KHONG DO DUOC: 2 cau loi vuot tran 1 (c2, k2)");
 		expect(kl.so.dungTrang).toEqual({ k: 2, n: 2 });
 		expect(kl.so.tuChoiDung).toEqual({ k: 1, n: 1 });
 	});
@@ -409,7 +412,24 @@ describe("vung-xam", () => {
 		expect(vungXam(0, 0, 0.8, ">=")).toBe("dat");
 	});
 
-	test("lượt một có câu loi thì không hỏi lại", () => {
+	test("lượt một có câu loi vượt trần thì không hỏi lại", () => {
+		const mot = [
+			...Array.from({ length: 14 }, (_, i) =>
+				cauMot(`c${i}`, "co-trang", "dung-trang"),
+			),
+			...Array.from({ length: 4 }, (_, i) =>
+				cauMot(`s${i}`, "co-trang", "sai"),
+			),
+			cauMot("l0", "co-trang", "loi"),
+			cauMot("l1", "co-trang", "loi"),
+		];
+		const kl = ketLuan(mot, [], CHAM_BO_DO.nguong);
+		if (kl.xam.length > 0) throw new Error("hoi lai khi luot 1 loi vuot tran");
+		expect(kl.ma).toBe(2);
+		expect(keHoachHoiLai(kl, mot, [])).toEqual([]);
+	});
+
+	test("lượt một có câu loi dưới trần, dung trang xám: vẫn hỏi lại đủ bộ câu của chỉ số đó", () => {
 		const mot = [
 			...Array.from({ length: 15 }, (_, i) =>
 				cauMot(`c${i}`, "co-trang", "dung-trang"),
@@ -420,9 +440,42 @@ describe("vung-xam", () => {
 			cauMot("l0", "co-trang", "loi"),
 		];
 		const kl = ketLuan(mot, [], CHAM_BO_DO.nguong);
-		if (kl.xam.length > 0) throw new Error("hoi lai khi luot 1 co loi");
-		expect(kl.ma).toBe(2);
-		expect(keHoachHoiLai(kl, mot, [])).toEqual([]);
+		expect(kl.ma).toBe(1);
+		const hoi = keHoachHoiLai(kl, mot, []);
+		expect(hoi.map((h) => h.chiSo)).toEqual(["dungTrang"]);
+		expect(new Set(hoi[0]?.ids)).toEqual(
+			new Set([
+				...Array.from({ length: 15 }, (_, i) => `c${i}`),
+				...Array.from({ length: 4 }, (_, i) => `s${i}`),
+				"l0",
+			]),
+		);
+	});
+
+	test("lượt hỏi lại có câu loi vượt trần của chính nó thì kết luận gộp mã 2", () => {
+		const mot = [
+			...Array.from({ length: 15 }, (_, i) =>
+				cauMot(`c${i}`, "co-trang", "dung-trang"),
+			),
+			...Array.from({ length: 5 }, (_, i) =>
+				cauMot(`s${i}`, "co-trang", "sai"),
+			),
+		];
+		const c1 = ketLuan(mot, [], CHAM_BO_DO.nguong);
+		const hoi = keHoachHoiLai(c1, mot, []);
+		const lai = [
+			...Array.from({ length: 18 }, (_, i) =>
+				cauMot(`c${i}`, "co-trang", "dung-trang"),
+			),
+			cauMot("s0", "co-trang", "loi"),
+			cauMot("s1", "co-trang", "loi"),
+		];
+		const c2 = ketLuan(lai, [], CHAM_BO_DO.nguong);
+		const k = ketHoiLai(c1, c2, hoi, CHAM_BO_DO.nguong);
+		expect(k.ma).toBe(2);
+		expect(k.dong[0]).toBe(
+			"hoi lai: KHONG DO DUOC: 2 cau loi vuot tran 1 (s0, s1)",
+		);
 	});
 
 	test("lượt một không loi, dung trang xám: hỏi lại đúng bộ câu của chỉ số đó, một lần", () => {
@@ -567,17 +620,20 @@ describe("nhan-loi zalo", () => {
 				{ ketQua: k.ketQua, loi: k.loi, coHang },
 			);
 		});
-		const { kl } = chamTungCau(quaTep(ds), CHAM_BO_DO.nguong);
-		if (kl.ma !== 2)
+		const dongLoi = (ra: ReturnType<typeof chamTungCau>) =>
+			ra.kl.dong.find((d) => d.startsWith("cau loi model: ")) ?? "";
+		const ra = chamTungCau(quaTep(ds), CHAM_BO_DO.nguong);
+		if (!dongLoi(ra).includes(" (c33) "))
 			throw new Error("ZaloHoi loi that bi tinh la khong-chuyen");
-		expect(kl.dong[0]).toBe("KHONG DO DUOC: 1 cau loi (c33)");
+		expect(ra.kl.ma).not.toBe(2);
+		expect(dongLoi(ra)).toStartWith(`cau loi model: 1/${ds.length} (c33) · `);
 		const sua = ds.map((d) =>
 			d.id === "c33" && d.luot === 2
 				? { ...d, ketCuc: "khong-hang" as const }
 				: d,
 		);
-		expect(chamTungCau(quaTep(sua), CHAM_BO_DO.nguong).kl.dong[0]).toBe(
-			"KHONG DO DUOC: 1 cau loi (c33)",
+		expect(dongLoi(chamTungCau(quaTep(sua), CHAM_BO_DO.nguong))).toStartWith(
+			`cau loi model: 1/${ds.length} (c33) · `,
 		);
 	});
 });
@@ -646,5 +702,207 @@ describe("do-model", () => {
 			ma: 2,
 			dong: "KHONG DO DUOC: do model kho khong co modelId",
 		});
+	});
+});
+
+const LUOT_96 = () => ({
+	mot: [
+		...Array.from({ length: 36 }, (_, i) =>
+			cauMot(`a${String(i + 1).padStart(2, "0")}`, "co-trang", "dung-trang"),
+		),
+		...Array.from({ length: 10 }, (_, i) =>
+			cauMot(`k${String(i + 1).padStart(2, "0")}`, "khong-co", "tu-choi-dung"),
+		),
+	],
+	hai: [
+		...Array.from({ length: 46 }, (_, i) =>
+			cauHai(`q${String(i + 1).padStart(2, "0")}`, true, "chuyen"),
+		),
+		...Array.from({ length: 4 }, (_, i) =>
+			cauHai(`n${String(i + 1).padStart(2, "0")}`, false, "khong-chuyen"),
+		),
+	],
+});
+
+function voiLoi(ids: readonly string[], sai: readonly string[] = []) {
+	const l = LUOT_96();
+	const doi = <T extends { id: string; nhan: string }>(c: T): T =>
+		ids.includes(c.id)
+			? { ...c, nhan: "loi" }
+			: sai.includes(c.id)
+				? { ...c, nhan: "sai" }
+				: c;
+	return { mot: l.mot.map(doi), hai: l.hai.map(doi) };
+}
+
+const dongLoiCua = (dong: readonly string[]) => {
+	const ds = dong.filter((d) => d.startsWith("cau loi model:"));
+	if (ds.length !== 1) throw new Error("thieu dong cau loi model");
+	return ds[0];
+};
+
+const MA_TRAN_TRAN = [
+	[96, 4],
+	[60, 3],
+	[40, 2],
+	[20, 1],
+	[10, 1],
+	[1, 1],
+] as const;
+
+describe("tran-loi", () => {
+	test("trần là 5% số câu của lượt, làm tròn xuống, tối thiểu 1; ngưỡng giữ nguyên", () => {
+		if (tranCauLoi(96) !== 4) throw new Error("tran 96 cau phai la 4");
+		let chay = 0;
+		for (const [n, t] of MA_TRAN_TRAN) {
+			expect(`${n}:${tranCauLoi(n)}`).toBe(`${n}:${t}`);
+			chay++;
+		}
+		expect(chay).toBe(6);
+		expect(CHAM_BO_DO.tranLoi).toEqual({ phanTram: 5, toiThieu: 1 });
+		expect(CHAM_BO_DO.nguong).toEqual({
+			dungTrang: 0.8,
+			tuChoiDung: 0.8,
+			chuyenQuyDinh: 0.9,
+			chuyenNhamToiDa: 0.1,
+			traLoiKhongQuaKiem: 0,
+		});
+	});
+
+	test("câu loi dưới trần: chấm trên câu còn lại, một dòng câu lỗi theo từng chỉ số", () => {
+		const ca = [
+			{
+				loi: [],
+				dong: "cau loi model: 0/96 · tran 4 · dungTrang 0 · tuChoiDung 0 · chuyenQuyDinh 0 · chuyenNham 0",
+				dungTrang: { k: 36, n: 36 },
+			},
+			{
+				loi: ["a01"],
+				dong: "cau loi model: 1/96 (a01) · tran 4 · dungTrang 1 · tuChoiDung 0 · chuyenQuyDinh 0 · chuyenNham 0",
+				dungTrang: { k: 35, n: 35 },
+			},
+			{
+				loi: ["a01", "k01", "q01", "q02"],
+				dong: "cau loi model: 4/96 (a01, k01, q01, q02) · tran 4 · dungTrang 1 · tuChoiDung 1 · chuyenQuyDinh 2 · chuyenNham 0",
+				dungTrang: { k: 35, n: 35 },
+			},
+		];
+		for (const c of ca) {
+			const { mot, hai } = voiLoi(c.loi);
+			const kl = ketLuan(mot, hai, CHAM_BO_DO.nguong);
+			expect(dongLoiCua(kl.dong)).toBe(c.dong);
+			expect(kl.ma).toBe(0);
+			expect(kl.so.dungTrang).toEqual(c.dungTrang);
+		}
+		const bon = voiLoi(["a01", "k01", "q01", "q02"]);
+		const kl4 = ketLuan(bon.mot, bon.hai, CHAM_BO_DO.nguong);
+		expect(kl4.so.tuChoiDung).toEqual({ k: 9, n: 9 });
+		expect(kl4.so.chuyenQuyDinh).toEqual({ k: 44, n: 44 });
+		expect(kl4.so.chuyenNham).toEqual({ k: 0, n: 4 });
+	});
+
+	test("câu loi dưới trần mà một chỉ số dưới ngưỡng thì mã 1", () => {
+		const sai = Array.from(
+			{ length: 15 },
+			(_, i) => `a${String(i + 2).padStart(2, "0")}`,
+		);
+		const { mot, hai } = voiLoi(["a01", "k01", "q01", "q02"], sai);
+		const kl = ketLuan(mot, hai, CHAM_BO_DO.nguong);
+		expect(kl.ma).toBe(1);
+		expect(kl.so.dungTrang).toEqual({ k: 20, n: 35 });
+	});
+
+	test("trần tính trên cả lượt, không theo phần kho hay phần Zalo", () => {
+		const ca = [
+			{
+				loi: ["a01", "a02", "a03"],
+				dau: "cau loi model: 3/96 (a01, a02, a03) · tran 4 · ",
+			},
+			{
+				loi: ["q01", "q02", "q03", "q04"],
+				dau: "cau loi model: 4/96 (q01, q02, q03, q04) · tran 4 · ",
+			},
+		];
+		for (const c of ca) {
+			const { mot, hai } = voiLoi(c.loi);
+			const kl = ketLuan(mot, hai, CHAM_BO_DO.nguong);
+			if (kl.ma === 2)
+				throw new Error("tran tinh tren ca luot, khong theo luot con");
+			expect(dongLoiCua(kl.dong)).toStartWith(c.dau);
+		}
+	});
+
+	test("câu loi vượt trần thì mã 2, không hỏi lại; đúng trần thì không", () => {
+		const vuot = voiLoi(["a01", "a02", "k01", "q01", "n01"]);
+		const kl = ketLuan(vuot.mot, vuot.hai, CHAM_BO_DO.nguong);
+		if (kl.ma !== 2) throw new Error("loi vuot tran van do");
+		expect(kl.dong).toEqual([
+			"KHONG DO DUOC: 5 cau loi vuot tran 4 (a01, a02, k01, q01, n01)",
+		]);
+		expect(keHoachHoiLai(kl, vuot.mot, vuot.hai)).toEqual([]);
+		const dung = voiLoi(["a01", "a02", "k01", "q01"]);
+		expect(ketLuan(dung.mot, dung.hai, CHAM_BO_DO.nguong).ma).not.toBe(2);
+	});
+});
+
+describe("du-ma", () => {
+	const dong = (luot: 1 | 2, id: string) =>
+		luot === 1
+			? dongTungCau({ id, nhom: "co-trang", ketCuc: "TRA_LOI-du" }, 1)
+			: dongTungCau({ id, nhom: "co-trang", ketCuc: "co-hang" }, 2);
+	const du = () => [dong(1, "a"), dong(1, "b"), dong(1, "c"), dong(2, "m01")];
+
+	test("trùng mã hay thiếu mã thì không đo được, đủ mã thì chấm", () => {
+		expect(kiemDuMa(quaTep(du()))).toBeNull();
+		const trung = quaTep([...du(), dong(2, "m01")]);
+		const hong = kiemDuMa(trung);
+		if (hong === null) throw new Error("trung ma khong bi bat");
+		expect(hong).toBe("KHONG DO DUOC: trung ma 2:m01");
+		expect(
+			kiemDuMa(quaTep([dong(1, "a"), dong(1, "c")]), {
+				mot: ["a", "b", "c"],
+				hai: [],
+			}),
+		).toBe("KHONG DO DUOC: thieu ma 1:b");
+		const kl = chamTungCau(trung, CHAM_BO_DO.nguong).kl;
+		expect(kl.ma).toBe(2);
+		expect(kl.dong).toEqual(["KHONG DO DUOC: trung ma 2:m01"]);
+		expect(chamTungCau(quaTep(du()), CHAM_BO_DO.nguong).kl.ma).not.toBe(2);
+	});
+
+	test("đường đo đầy đủ trên bộ thật: thiếu một câu đã hỏi thì không đo được", () => {
+		const mot = cauLuotMot(BO_THAT.cau);
+		const ds = [
+			...mot.map((c) =>
+				dongTungCau(
+					{
+						id: c.id,
+						nhom: c.nhom,
+						ketCuc: c.nhom === "khong-co" ? "TU_CHOI" : "TRA_LOI-du",
+					},
+					1,
+				),
+			),
+			...BO_THAT.cau.map((c) =>
+				dongTungCau(
+					{
+						id: c.id,
+						nhom: c.nhom,
+						ketCuc: c.nhom === "khong-phai-quy-dinh" ? "khong-hang" : "co-hang",
+					},
+					2,
+				),
+			),
+		];
+		const hoi = {
+			mot: mot.map((c) => c.id),
+			hai: BO_THAT.cau.map((c) => c.id),
+		};
+		expect(chamLuotDu(quaTep(ds), hoi, CHAM_BO_DO.nguong).kl.ma).not.toBe(2);
+		const bo = mot[0]?.id ?? "";
+		const thieu = ds.filter((d) => !(d.luot === 1 && d.id === bo));
+		const kl = chamLuotDu(quaTep(thieu), hoi, CHAM_BO_DO.nguong).kl;
+		if (kl.ma !== 2) throw new Error("thieu ma khong bi bat");
+		expect(kl.dong).toEqual([`KHONG DO DUOC: thieu ma 1:${bo}`]);
 	});
 });

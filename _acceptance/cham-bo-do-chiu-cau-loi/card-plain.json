@@ -1,0 +1,31 @@
+{
+  "feature_plain": "Bộ chấm trợ lý đọc kho thôi bỏ cả lượt đo chỉ vì vài câu model lỗi ngẫu nhiên: lượt đủ câu là đã đo, câu lỗi được đếm riêng, chỉ khi lỗi vượt 5% mới coi là không đo được.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho mỗi lượt một trần câu lỗi bằng 5% số câu, tối thiểu 1 (bộ tạm 70 câu được 3, bộ mẫu 96 câu được 4), ngưỡng đạt giữ nguyên."},
+    {"id": "AC-2", "p": "Sẽ chấm lượt có câu lỗi dưới trần trên các câu còn lại, ra đạt hay không đạt, kèm một dòng ghi số câu lỗi theo từng chỉ số."},
+    {"id": "AC-3", "p": "Sẽ báo «không đo được» và không hỏi lại khi số câu lỗi vượt trần, kèm danh sách câu lỗi."},
+    {"id": "AC-5", "p": "Sẽ báo «không đo được» khi lượt thiếu câu đã hỏi hay có câu bị ghi hai lần — lượt đủ câu mới là lượt đã đo."},
+    {"id": "AC-7", "p": "Sẽ đổi lời bốn tiêu chí đã ký của bộ đo E15 (hồ sơ F12) sang luật trần, và giữ nguyên kết quả của 20 phép đo không gọi model ở sáu hồ sơ dùng chung bộ chấm."},
+    {"id": "AC-8", "p": "Sẽ chứng mỗi phép đo mới bằng một lần phá thử: phá đúng chỗ thì bài tương ứng đỏ với câu báo riêng."}
+  ],
+  "wont_do": [
+    {"id": "AC-4", "p": "Sẽ KHÔNG bỏ bước hỏi lại chỉ vì lượt đầu có vài câu lỗi dưới trần; lượt hỏi lại vượt trần của chính nó thì vẫn không đo được."},
+    {"id": "AC-6", "p": "Chặn lượt hụt câu hay vượt trần cả khi chấm lại từ tệp đã ghi, không cần gọi model."},
+    {"id": "OOS-1", "p": "Sẽ KHÔNG hỏi lại câu lỗi ngay trong lượt — tốn thêm lời gọi model và che sự cố thật."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG đổi ngưỡng đạt, bộ câu, luật dùng lại kết quả 7 ngày, hay hợp đồng của trợ lý đọc kho."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG sửa ba hồ sơ khác dùng bộ chấm; chúng chỉ được đo lại để chắc vẫn giữ kết quả."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Số câu lỗi so với trần: không lỗi, dưới trần, vừa chạm trần, vượt một câu, và trần tối thiểu khi lượt ít câu — AC-1 (trần), AC-2 (dưới trần), AC-3 (vượt trần), AC-6 (chấm lại)."},
+    {"i": 1, "p": "Mọi đường chấm dùng chung luật: lượt đo đầy đủ, lượt hỏi lại, chấm lại từ tệp, và bộ đo của hồ sơ khác — AC-2, AC-3, AC-4 (hỏi lại), AC-5, AC-6, AC-7 (hồ sơ khác)."},
+    {"i": 2, "p": "Tệp chấm đủ câu, trùng câu, thiếu câu — AC-5 (đủ mã), AC-6."},
+    {"i": 3, "p": "Ngưỡng đạt không đổi, lời tiêu chí đã ký của F12 đổi theo, và mỗi phép đo mới đều đã thấy đỏ — AC-1, AC-7, AC-8 (phá thử)."},
+    {"i": 4, "p": "Giả định: model vẫn lỗi khoảng 2% mỗi lượt như đo ngày 13/10; trần 5% chừa hơn gấp đôi."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Lời mới của F12 chưa có phép đo nào chạy thước chấm lại, cặp phá thử e và phép giữ ngưỡng của F12 — đã thêm cả ba vào bộ đo, và ghi rõ ba phần chỉ đo được lúc ghim lại."},
+    {"i": 1, "p": "Hợp đồng hứa các hồ sơ khác «chỉ được đo lại» mà không phép đo nào làm việc đó — đã thêm danh sách viết trước 20 phép đo kèm kết quả trước vòng, vòng này phải giữ nguyên từng kết quả."},
+    {"i": 2, "p": "Kiểm thiếu câu chỉ đo ở mức hàm, đường đo thật có thể quên truyền danh sách câu — đã buộc hàm chấm lượt nhận danh sách câu bắt buộc, thêm bài trên bộ thật và một cặp phá thử."},
+    {"i": 3, "p": "Chưa chốt trần tính trên cả lượt hay riêng phần kho, phần Zalo — đã thêm hai ca dồn lỗi về một phía và ghi rõ vào tiêu chí."}
+  ]
+}
