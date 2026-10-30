@@ -24,6 +24,7 @@ const BO_QUA = [
 const KHANG_DINH = /\b(?:expect|dong|bao|kiem|ghi|sai\.push|loi\.push|sai)\(/g;
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx)$/;
 const HOI_2 = "d-20261030T064203Z-9";
+const DAU_GO = "[gỡ]";
 
 const git = (...a) =>
 	execFileSync("git", ["-C", GOC, ...a], {
@@ -35,7 +36,12 @@ export function docMaTran(chu) {
 	return chu
 		.split("\n")
 		.filter((d) => /^\|\s*`?[\w./()[\]-]+`?\s*\|/.test(d) && !/^\|\s*-/.test(d))
-		.map((d) => d.split("|").slice(1, -1).map((o) => o.trim().replace(/`/g, "")))
+		.map((d) =>
+			d
+				.split("|")
+				.slice(1, -1)
+				.map((o) => o.trim().replace(/`/g, "")),
+		)
 		.filter((o) => o.length >= 6 && o[0] !== "tệp")
 		.map(([tep, ca, dong, khangDinh, nhan, hoSo]) => ({
 			tep,
@@ -69,15 +75,22 @@ export function soKhangDinh(tep, chuGoc, chuNay, maTran) {
 	const truoc = demKhangDinh(chuGoc);
 	const sau = demKhangDinh(chuNay);
 	const thay = maTran.filter(
-		(o) => o.tep === tep && o.nhan === "thay-loi-hua",
+		(o) =>
+			o.tep === tep &&
+			o.nhan === "thay-loi-hua" &&
+			o.khangDinh.includes(DAU_GO),
 	).length;
 	const mat = truoc - sau - thay;
-	return mat > 0 ? `${tep.split("/").pop()}: mat ${mat} assertion khong co dong so` : null;
+	return mat > 0
+		? `${tep.split("/").pop()}: mat ${mat} assertion khong co dong so`
+		: null;
 }
 
 function hoi2DaTraLoi() {
 	const dong = readFileSync(SO_VONG, "utf8").split("\n").filter(Boolean);
-	const coHoi = dong.some((d) => d.includes(`"id":"${HOI_2}"`) || d.includes(`"id": "${HOI_2}"`));
+	const coHoi = dong.some(
+		(d) => d.includes(`"id":"${HOI_2}"`) || d.includes(`"id": "${HOI_2}"`),
+	);
 	const traLoi = dong.some(
 		(d) => d.includes('"stage":"gate1"') && d.includes("Hỏi-2"),
 	);
@@ -101,8 +114,8 @@ function coDongFix(hoSo) {
 }
 
 function doiChungDuong(maTran) {
-	const o = maTran.find(
-		(x) => x.tep.endsWith("hop-cap-nhat-lan-truoc.dom.tsx"),
+	const o = maTran.find((x) =>
+		x.tep.endsWith("hop-cap-nhat-lan-truoc.dom.tsx"),
 	);
 	if (!o) return "khong co dong hop-cap-nhat-lan-truoc.dom.tsx trong ma tran";
 	const chu = readFileSync(join(GOC, o.tep), "utf8");
@@ -131,7 +144,8 @@ const mb = git("merge-base", "HEAD", NHANH_GOC).trim();
 const tepGoc = tepCoDauHop(mb);
 const trongMaTran = new Set(maTran.map((o) => o.tep));
 for (const t of tepGoc)
-	if (!trongMaTran.has(t)) loi.push(`${t}: co dau hop o merge-base ma thieu dong ma tran`);
+	if (!trongMaTran.has(t))
+		loi.push(`${t}: co dau hop o merge-base ma thieu dong ma tran`);
 
 for (const tep of trongMaTran) {
 	let chuGoc = "";

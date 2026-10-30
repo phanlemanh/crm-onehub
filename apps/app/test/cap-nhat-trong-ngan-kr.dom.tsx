@@ -981,7 +981,11 @@ describe("cnk-loi-vao", () => {
 				datKho();
 				daCuon.length = 0;
 				const san = await dungLoi(loiVao);
-				await bamLoi(loiVao);
+				try {
+					await bamLoi(loiVao);
+				} catch (e) {
+					loi.push(`cnk-loi-vao: ${loiVao} vap ${String(e).slice(0, 120)}`);
+				}
 				await cho(() => nganCua("A"), `${loiVao} ngan A`).catch(() => {});
 				await cho(() => trangThaiKhoi() === "mo", `${loiVao} khoi mo`).catch(
 					() => {},
