@@ -3834,6 +3834,25 @@
       "ghi_chu": "Cùng ngăn KR với SV1 và SV7: mở sau khi SV1 gộp để khỏi ghim lại thêm."
     },
     {
+      "ma": "SV8",
+      "slug": "cap-nhat-trong-ngan-kr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.796,
+      "dung_tren": [
+        "HT6"
+      ],
+      "ten": "Cập nhật KR ngay trong ngăn KR",
+      "ten_ngan": "Cập nhật trong ngăn",
+      "ngay": "2026-11-03",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR mở chi tiết KR, ghi giá trị mới, mức tự tin và ghi chú ngay trong ngăn, thấy điểm mới trên Lịch sử và sang KR kế mà không mở hộp thoại nào»",
+      "vi_sao": "Production 30/10: bấm «Cập nhật» ở đầu ngăn KR mở hộp thoại giữa màn (HopThoaiCapNhatKr, apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx) che mất ngăn; hộp lặp biểu đồ (gom theo tuần, okr.dienBien) trong khi Lịch sử của ngăn vẽ từng lần (okr.lichSuKr); mọi ngăn bản ghi khác ghi tại chỗ (ActivityComposer của Deal, Trao đổi của mục tiêu). Soát ở phiên giám sát vk 30/10; luật mới ở docs/design.md mục «Ghi vào bản ghi: ngay trong ngăn».",
+      "bat_khi": "Mở một KR đến hạn chưa cập nhật: khối cập nhật mở sẵn trong ngăn, gửi xong ngăn vẫn mở, Lịch sử thêm một dòng ở đầu và biểu đồ thêm một điểm; bấm «Cập nhật» trên dòng Họp tuần mở ngăn KR và cuộn tới khối; không Dialog nào mở trong cả luồng",
+      "ly_do": "Chủ kho 30/10 nguyên văn «Duyệt hướng, thêm hàng và mở đợt mới, và viết thành quy định để tham chiếu sau này tránh tự vẽ?» — duyệt đề xuất: một khối cập nhật trong ngăn KR thay hộp thoại; khối mở sẵn khi đến hạn; khổ 375 vẫn trong ngăn; giữ nút trên dòng Họp tuần, bấm thì mở ngăn và cuộn tới khối.",
+      "ghi_chu": "Chạm kr-sheet.tsx (vùng record-sheet của làn M5, luật 19 đợt vo-khu-muc-tieu) — báo M5 trên #375. Thước đã ký đo hộp thoại (SV1, SV6, SV7, HT2, VK7, ngan-kr-mot-cho) sửa qua cham-tep. Cần /proto đặt hộp cũ cạnh khối mới trước Cổng 1. Ngoài phạm vi: Sheet sửa mục tiêu/KR chồng lên ngăn, ghim bằng chứng thành ô trong ngăn, chip người phụ trách đè tên KR ở bảng KR của ngăn mục tiêu (khổ 1280)."
+    },
+    {
       "ma": "VK20",
       "slug": "kara-viet-lai-khong-de-chu",
       "hang": "T2",
