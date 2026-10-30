@@ -6,7 +6,7 @@ evals:
     executor: test
     cmd: config:executors.test.emtdl_nhan_loi
     paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts, _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts]
-    expected: "exit 0; BẢNG VIẾT TRƯỚC cho hàm nhãn của quyet-do.ts (cham-bo-do.ts gọi đúng hàm này, không tự dán nhãn): nhóm câu (co-trang, khong-co, quy-dinh, khong-phai-quy-dinh) × kết cục (không có kết quả eval, hàng trạng thái LOI, TRA_LOI đủ trang, TRA_LOI sai trang, TU_CHOI) — mỗi dòng gõ tay nhãn mong đợi; mọi dòng «không có kết quả» và «LOI» ra `loi`, «TRA_LOI sai trang» ra `sai`, «khong-co × TRA_LOI» ra `sai`. Hàm kết luận: tập kết quả có 2 câu `loi` → {ma: 2, dong: «KHONG DO DUOC: 2 cau loi (<id1>, <id2>)»} và tử/mẫu số của mọi chỉ số không đếm hai câu đó. CHIỀU ĐỎ (rang/dot-bien.mjs cặp a): bản sao trả `sai` cho hàng LOI → bài đỏ với thông điệp ghim «loi bi tinh la sai»."
+    expected: "exit 0; BẢNG VIẾT TRƯỚC cho hàm nhãn của quyet-do.ts (cham-bo-do.ts gọi đúng hàm này, không tự dán nhãn): nhóm câu (co-trang, khong-co, quy-dinh, khong-phai-quy-dinh) × kết cục (không có kết quả eval, hàng trạng thái LOI, TRA_LOI đủ trang, TRA_LOI sai trang, TU_CHOI) — mỗi dòng gõ tay nhãn mong đợi; mọi dòng «không có kết quả» và «LOI» ra `loi`, «TRA_LOI sai trang» ra `sai`, «khong-co × TRA_LOI» ra `sai`. Hàm kết luận: tập năm câu có 2 câu `loi` (vượt trần 1) → {ma: 2, dong: «KHONG DO DUOC: 2 cau loi vuot tran 1 (<id1>, <id2>)»} và tử/mẫu số của mọi chỉ số không đếm hai câu đó; câu loi dưới trần đo ở E1 của hồ sơ cham-bo-do-chiu-cau-loi. CHIỀU ĐỎ (rang/dot-bien.mjs cặp a): bản sao trả `sai` cho hàng LOI → bài đỏ với thông điệp ghim «loi bi tinh la sai»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -46,7 +46,7 @@ evals:
     executor: test
     cmd: config:executors.test.emtdl_vung_xam
     paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
-    expected: "exit 0; MA TRẬN VIẾT TRƯỚC cho hàm vùng xám, mỗi dòng (k, n, ngưỡng, chiều) và nhãn gõ tay: (16,20,0.8,≥) dat; (15,20,0.8,≥) xam [0,75 ≥ 0,8−0,0894]; (14,20,0.8,≥) khong-dat [0,70 < 0,7106]; (19,24,0.8,≥) xam; (5,6,0.8,≥) dat; (4,6,0.8,≥) xam; (3,6,0.8,≥) khong-dat; (18,20,0.9,≥) dat; (17,20,0.9,≥) xam; (16,20,0.9,≥) khong-dat; (2,20,0.1,≤) dat; (3,20,0.1,≤) xam; (4,20,0.1,≤) khong-dat; bài khẳng định 13 dòng đã chạy. Hàm kế hoạch hỏi lại: lượt 1 có một câu loi → không hỏi lại, kết luận ma 2; lượt 1 không loi và một chỉ số xam → hỏi lại đúng bộ câu của chỉ số đó (so tập id với tập viết tay), đúng một lần. CHIỀU ĐỎ (cặp e): bản sao bỏ điều kiện «không có câu loi» → ca loi đỏ «hoi lai khi luot 1 co loi»."
+    expected: "exit 0; MA TRẬN VIẾT TRƯỚC cho hàm vùng xám, mỗi dòng (k, n, ngưỡng, chiều) và nhãn gõ tay: (16,20,0.8,≥) dat; (15,20,0.8,≥) xam [0,75 ≥ 0,8−0,0894]; (14,20,0.8,≥) khong-dat [0,70 < 0,7106]; (19,24,0.8,≥) xam; (5,6,0.8,≥) dat; (4,6,0.8,≥) xam; (3,6,0.8,≥) khong-dat; (18,20,0.9,≥) dat; (17,20,0.9,≥) xam; (16,20,0.9,≥) khong-dat; (2,20,0.1,≤) dat; (3,20,0.1,≤) xam; (4,20,0.1,≤) khong-dat; bài khẳng định 13 dòng đã chạy. Hàm kế hoạch hỏi lại: lượt 1 hai mươi câu có hai câu loi (vượt trần 1) → không hỏi lại, kết luận ma 2; lượt 1 có một câu loi (dưới trần) và dung trang xám → vẫn hỏi lại đủ bộ câu của chỉ số đó; lượt 1 không loi và một chỉ số xam → hỏi lại đúng bộ câu của chỉ số đó (so tập id với tập viết tay), đúng một lần. CHIỀU ĐỎ (cặp e): bản sao bỏ điều kiện «câu loi vượt trần» → ca loi đỏ «hoi lai khi luot 1 loi vuot tran»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -54,7 +54,7 @@ evals:
     executor: test
     cmd: config:executors.test.emtdl_gop
     paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
-    expected: "exit 0; hàm kết luận gộp: (15/20 lượt 1, 17/20 lượt 2, ngưỡng 0,8) → gộp 32/40 = 0,8 đạt, dòng bằng chứng chứa đủ «luot 1 75.0%», «luot 2 85.0%», «gop 80.0%»; (15/20, 15/20) → gộp 0,75 không đạt, ma 1, và hàm không trả yêu cầu hỏi lần ba; lượt 2 có câu loi → ma 2. CHIỀU ĐỎ (cặp f): bản sao kết luận theo lượt 2 thay vì gộp → ca (15/20, 17/20) vẫn đạt nhưng ca (17/20, 15/20) đổi kết luận, bài đỏ «ket luan khong tren ti le gop»."
+    expected: "exit 0; hàm kết luận gộp: (15/20 lượt 1, 17/20 lượt 2, ngưỡng 0,8) → gộp 32/40 = 0,8 đạt, dòng bằng chứng chứa đủ «luot 1 75.0%», «luot 2 85.0%», «gop 80.0%»; (15/20, 15/20) → gộp 0,75 không đạt, ma 1, và hàm không trả yêu cầu hỏi lần ba; lượt 2 có câu loi vượt trần của chính nó → ma 2. CHIỀU ĐỎ (cặp f): bản sao kết luận theo lượt 2 thay vì gộp → ca (15/20, 17/20) vẫn đạt nhưng ca (17/20, 15/20) đổi kết luận, bài đỏ «ket luan khong tren ti le gop»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -86,7 +86,7 @@ evals:
     executor: script
     cmd: config:executors.script.emtdl_cham_lai
     paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts, _acceptance/eval-model-that-dung-luc/rang/cham-lai.mjs]
-    expected: "exit 0; không gọi model, không cần kho đo. Nguồn: thư mục lượt mới nhất mà một lượt E15 THẬT đã ghi (tệp cham-tung-cau.jsonl do cham-bo-do.ts viết lúc đo, có trạng thái hàng của từng câu); không có lượt thật nào → exit 2 «chua co luot that de cham lai». Trên bản sao của thư mục đó: (1) `cham-bo-do.ts --cham-lai <thư mục>` nguyên vẹn → mã thoát và dòng tổng bằng mã và dòng tổng lượt thật đã in (round-trip); (2) đổi trạng thái một câu thành LOI → exit 2, dòng «KHONG DO DUOC: 1 cau loi (<id>)»; (3) đổi nhãn đủ câu để dung trang rơi vào vùng xám → in «CAN HOI LAI: dungTrang (<n> cau)». CHIỀU ĐỎ (cặp h): bản sao cham-bo-do.ts dán nhãn theo nhánh cũ (không gọi hàm nhãn của quyet-do.ts) → ca (2) đỏ «cham-bo-do khong dung ham nhan»."
+    expected: "exit 0; không gọi model, không cần kho đo. Nguồn: thư mục lượt mới nhất mà một lượt E15 THẬT đã ghi (tệp cham-tung-cau.jsonl do cham-bo-do.ts viết lúc đo, có trạng thái hàng của từng câu); không có lượt thật nào → exit 2 «chua co luot that de cham lai». Trên bản sao của thư mục đó: (1) `cham-bo-do.ts --cham-lai <thư mục>` nguyên vẹn → mã thoát và dòng tổng bằng mã và dòng tổng lượt thật đã in (round-trip); (2) đổi trạng thái một câu thành LOI (dưới trần) → không exit 2, dòng «cau loi model: …» chứa id câu đó; (2b) đổi đủ câu thành LOI để vượt trần (trần tính bằng tranCauLoi của quyet-do.ts) → exit 2, dòng «KHONG DO DUOC: <n> cau loi vuot tran <t>»; round-trip của (1) đếm thêm dòng «cau loi model»; (3) đổi nhãn đủ câu để dung trang rơi vào vùng xám → in «CAN HOI LAI: dungTrang (<n> cau)». CHIỀU ĐỎ (cặp h): bản sao cham-bo-do.ts dán nhãn theo nhánh cũ (không gọi hàm nhãn của quyet-do.ts) → ca (2) đỏ «cham-bo-do khong dung ham nhan»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9

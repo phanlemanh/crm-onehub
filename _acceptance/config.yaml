@@ -1674,6 +1674,8 @@ executors:
     emtdl_vung_xam: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t vung-xam"
     emtdl_gop: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t gop"
     emtdl_do_model: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t do-model"
+    cbd_tran_loi: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t tran-loi"
+    cbd_du_ma: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t du-ma"
     kekt_ghi_tron: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t ghi-tron"
     kekt_hai_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t hai-luot"
     kekt_mot_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t mot-luot"
@@ -2371,6 +2373,11 @@ executors:
     lsml_sau_gui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-sau-gui"
     lsml_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-trang-thai"
     lsml_cam_xuc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-cam-xuc"
+    vkm_qua_muc_tieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-qua-muc-tieu"
+    vkm_lui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-lui"
+    vkm_lien_ket: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-lien-ket"
+    vkm_cung_muc_tieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-cung-muc-tieu"
+    vkm_ngu_canh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-ngu-canh"
     ttts_doc_ban_chup: 'bun run test -- "cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-doc-ban-chup"'
     ttts_khong_lui: cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-khong-lui
     ttts_bao: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-bao"'
@@ -3336,6 +3343,9 @@ executors:
     emtdl_giu_nguong: bun _acceptance/eval-model-that-dung-luc/rang/giu-nguong.mjs
     emtdl_dot_bien: bun _acceptance/eval-model-that-dung-luc/rang/dot-bien.mjs
     emtdl_cham_lai: bun _acceptance/eval-model-that-dung-luc/rang/cham-lai.mjs
+    cbd_cham_lai_mau: bun _acceptance/cham-bo-do-chiu-cau-loi/rang/cham-lai-mau.mjs
+    cbd_f12_xanh: bun _acceptance/cham-bo-do-chiu-cau-loi/rang/f12-xanh.mjs
+    cbd_dot_bien: bun _acceptance/cham-bo-do-chiu-cau-loi/rang/dot-bien.mjs
     zhok_c33: bun _acceptance/zalo-hoi-okr-khong-chet/rang/c33.mjs
     zhok_pham_vi: bun _acceptance/zalo-hoi-okr-khong-chet/rang/pham-vi.mjs
     zhok_dot_bien: bun _acceptance/zalo-hoi-okr-khong-chet/rang/dot-bien.mjs
