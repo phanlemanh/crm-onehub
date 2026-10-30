@@ -3853,6 +3853,71 @@
       "ghi_chu": "Chạm kr-sheet.tsx (vùng record-sheet của làn M5, luật 19 đợt vo-khu-muc-tieu) — báo M5 trên #375. Thước đã ký đo hộp thoại (SV1, SV6, SV7, HT2, VK7, ngan-kr-mot-cho) sửa qua cham-tep. Cần /proto đặt hộp cũ cạnh khối mới trước Cổng 1. Ngoài phạm vi: Sheet sửa mục tiêu/KR chồng lên ngăn, ghim bằng chứng thành ô trong ngăn, chip người phụ trách đè tên KR ở bảng KR của ngăn mục tiêu (khổ 1280)."
     },
     {
+      "ma": "SV9",
+      "slug": "sua-tai-cho-muc-tieu-va-kr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.797,
+      "dung_tren": [],
+      "ten": "Sửa mục tiêu và KR ngay trong ngăn",
+      "ten_ngan": "Sửa tại chỗ",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị sửa tên, mô tả hay người phụ trách của một mục tiêu hoặc KR ngay trong ngăn đang xem, không mở ngăn sửa nào chồng lên»",
+      "vi_sao": "Bản soát 30/10 (tri thức chu-de/ghi-trong-ngan): Deal, Liên hệ, Công ty sửa trường tại chỗ bằng InlineField (apps/app/components/crm/inline-field.tsx); mục tiêu và KR mở HopThoaiMucTieu, HopThoaiKr thành Sheet chồng lên ngăn qua NganOkr (apps/app/components/crm/record-sheet/objective-sheet.tsx:443-484). docs/design.md mục «Ghi vào bản ghi: ngay trong ngăn» ghi chỗ này là nợ.",
+      "bat_khi": "Mở ngăn mục tiêu và ngăn KR, sửa tên, mô tả, người phụ trách: lưu khi rời ô hay Enter, Esc huỷ, không Sheet hay Dialog nào mở chồng lên ngăn",
+      "dot": "okr-ghi-trong-ngan-3010",
+      "phu": [
+        "N1"
+      ],
+      "tieu_chi": 9,
+      "ly_do": "Chủ kho 30/10 nguyên văn «Cắt lượt và đưa vào tri thức», sau khi duyệt luật ghi trong ngăn (PR #586).",
+      "ghi_chu": "Chạm objective-sheet.tsx và kr-sheet.tsx (vùng record-sheet của M5) — báo M5 trên #375. Mở sau SV8 để khỏi ghim chồng, dù không cần dữ liệu của SV8."
+    },
+    {
+      "ma": "SV10",
+      "slug": "bang-chung-kr-mot-loi",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.798,
+      "dung_tren": [
+        "SV8"
+      ],
+      "ten": "Ghim bằng chứng KR một lối trong ngăn",
+      "ten_ngan": "Bằng chứng một lối",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR ghim một đường dẫn bằng chứng ngay trong ngăn KR, ở một chỗ duy nhất, và thấy nó trong danh sách bằng chứng của KR»",
+      "vi_sao": "Bản soát 30/10: bằng chứng của KR vào bằng hai lối — Dialog ở apps/app/components/crm/record-sheet/kr-bang-chung.tsx:105 và ô URL trong hộp cập nhật (okr/hop-thoai-cap-nhat-kr.tsx:318-346) cho KR mốc. Luật mới: một việc một chỗ ghi, không Dialog để ghi một dòng.",
+      "bat_khi": "Ghim một đường dẫn từ ngăn KR: không Dialog nào mở, bằng chứng hiện ngay trong danh sách; khối cập nhật của KR mốc dùng cùng ô đó",
+      "dot": "okr-ghi-trong-ngan-3010",
+      "phu": [
+        "N2"
+      ],
+      "tieu_chi": 8,
+      "ly_do": "Chủ kho 30/10 nguyên văn «Cắt lượt và đưa vào tri thức», sau khi duyệt luật ghi trong ngăn (PR #586).",
+      "ghi_chu": "Đứng trên SV8: ô URL của KR mốc nằm trong khối cập nhật SV8 dựng."
+    },
+    {
+      "ma": "SV11",
+      "slug": "chip-phu-trach-khong-de-ten-kr",
+      "hang": "T1",
+      "nhom": "okr",
+      "thu_tu": 104.799,
+      "dung_tren": [],
+      "ten": "Chip người phụ trách không đè tên KR",
+      "ten_ngan": "Chip không đè tên",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở ngăn mục tiêu ở khổ 1280 và đọc trọn tên từng KR trong bảng KR, chip người phụ trách nằm riêng cột của nó»",
+      "vi_sao": "Production 30/10, ngăn mục tiêu «Xây giỏ hàng tốt, giá đúng và mở cho mọi môi giới» ở khổ 1280: chip «TH thuong.trinh» của cột Owner đè lên tên KR1–KR3 trong bảng KR.",
+      "bat_khi": "Ngăn mục tiêu có ba KR tên dài, khổ 1280 và 375: không chữ nào của tên KR bị chip che, đo bằng hộp bao của hai phần tử không giao nhau",
+      "dot": "okr-ghi-trong-ngan-3010",
+      "phu": [
+        "N3"
+      ],
+      "tieu_chi": 4,
+      "ly_do": "Chủ kho 30/10 nguyên văn «Cắt lượt và đưa vào tri thức».",
+      "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: một lỗi bố cục rời, không gộp được với SV9 mà giữ nghĩa «một màn, một câu»."
+    },
+    {
       "ma": "VK20",
       "slug": "kara-viet-lai-khong-de-chu",
       "hang": "T2",
