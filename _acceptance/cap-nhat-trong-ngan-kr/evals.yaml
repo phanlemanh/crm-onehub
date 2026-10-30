@@ -1,0 +1,227 @@
+schema_version: 1
+slug: cap-nhat-trong-ngan-kr
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.cnk_mo_thu
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+    expected: |
+      Ca «cnk-mo-thu»: RecordSheetHost thật, dữ liệu okr.objective / okr.canhKr / okr.lichSuKr parse bằng schema thật,
+      Ma trận viết trước 5 ô: (a) đồng hồ thứ Năm 30/10/2026 giờ VN, K sửa được, lần cuối thứ Hai tuần trước; (b) có lần
+      thứ Ba tuần này; (c) biên tuần: lần cuối thứ Hai 27/10 00:30 giờ VN (Chủ nhật theo UTC) → "thu"; (d) đồng hồ thứ Hai
+      27/10 10:00, chưa cập nhật tuần này, thứ cập nhật của chu kỳ là thứ Năm → mong đợi theo phương án Hỏi-1 đã chọn (ghi
+      vào bài khi Hỏi-1 có trả lời); (e) trưởng đơn vị ghi hộ → [data-ghi-ho] chứa tên người phụ trách, đối chứng dương ở
+      ô (a) (chính người phụ trách) không có [data-ghi-ho]. Ô (a): [data-khoi-cap-nhat-kr="mo"] có mặt, nằm sau [data-muc-ngan="so"] và
+      trước [data-lich-su-kr] theo thứ tự DOM; trong khối có ô giá trị, ba nút mức tự tin, ô ghi chú, và đúng một nút
+      variant mặc định là [data-nut="gui-cap-nhat-kr"]. Ô (b): [data-khoi-cap-nhat-kr="thu"], dòng thu chứa giá trị và
+      dd/mm của lần mới nhất; bấm dòng → khối "mo" và document.activeElement là ô giá trị. In «cnk-mo-thu: 5/5».
+      CHIEU DO (bản sao): khối luôn "thu" → đỏ «cnk-mo-thu: (a) khoi thu can mo»; tính tuần theo UTC → đỏ «cnk-mo-thu:
+      (c) bien tuan VN khoi mo».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.cnk_chi_doc
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+    expected: |
+      Ca «cnk-chi-doc»: ma trận viết trước 4 ô — sửa được (đối chứng dương: khối có mặt) · không trong canEditKr · kỳ
+      chấm điểm (kyGhiDuoc sai) · mục tiêu da-bo. Ba ô sau: [data-khoi-cap-nhat-kr] vắng và [data-than-ngan-kr]
+      data-trang-thai="ST-ngan-kr-chi-doc". In «cnk-chi-doc: 4/4».
+      CHIEU DO (bản sao): khối dựng theo coTheCapNhat thay vì coNutCapNhat → đỏ «cnk-chi-doc: ky-cham-diem con khoi».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.cnk_xem_truoc
+    paths:
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/components/crm/record-sheet/lich-su-kr.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+    expected: |
+      Ca «cnk-xem-truoc»: ma trận 3 kiểu KR (tăng tới «đại lý» lần mới nhất 12; giảm tới «tỷ đồng» 1,17; mốc Chưa xong).
+      Đối chứng dương trước khi gõ: [data-xem-truoc-cap-nhat] vắng, số chấm [data-diem-xem-truoc] trong biểu đồ Lịch sử = 0.
+      Gõ 14 / 1,08 / chọn Xong: đúng 1 [data-diem-xem-truoc] (KR mốc: 0 — mốc không biểu đồ) và dòng mức đổi bằng chuỗi
+      viết sẵn «12 → 14 (+2 đại lý)» / «1,17 → 1,08 (−0,09 tỷ đồng)» / «Chưa xong → Xong». Khối không chứa svg biểu đồ
+      nào và không có [data-khoi-lan-truoc]. Xoá giá trị: chấm và dòng biến mất. In «cnk-xem-truoc: 3/3».
+      CHIEU DO (bản sao): mức đổi tính trên progress thay vì giá trị → đỏ «cnk-xem-truoc: ty-dong muc doi <x> can
+      1,17 → 1,08 (−0,09 tỷ đồng)».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4a
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.cnk_gui
+    paths:
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+    expected: |
+      Ca «cnk-gui», ba ô: KR số gửi bằng nút · KR số gửi bằng Ctrl+Enter trong ô ghi chú · KR mốc chọn Xong kèm liên kết
+      bằng chứng (items[0] mang value Xong và đúng liên kết). Mỗi ô KR số: trước gửi đếm điểm liền N trong biểu đồ của
+      [data-lich-su-kr]; sau gửi N+1 điểm liền và 0 [data-diem-xem-truoc]. Mỗi ô: goiCua("okr.guiCapNhat") đúng 1 lời
+      gọi, items[0] mang keyResultId K, value 14, confidence đã chọn, note đã gõ, sessionId bằng kết quả okr.moCapNhat;
+      sau khi kho trả lần mới: [data-kr-sheet=K] vẫn có mặt, dòng đầu [data-lich-su-kr] mang giá trị 14 và ghi chú, ô
+      [data-o-so="hien-tai"] = «14», [data-khoi-cap-nhat-kr="thu"]. In «cnk-gui: 3/3».
+      CHIEU DO (bản sao): sau gửi gọi close() của ngăn → đỏ «cnk-gui: ngan K dong sau gui»; không làm mới lichSuKr sau gửi →
+      đỏ «cnk-gui: bieu do N diem can N+1»; bỏ ô liên kết bằng chứng → đỏ «cnk-gui: moc thieu bang chung».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cnk_api
+    paths:
+      - "packages/validation/src/okr-cap-nhat.ts"
+      - "apps/api/test/cap-nhat-trong-ngan-kr.spec.ts"
+    expected: |
+      Ca «cnk-api» trên CSDL thử qua router caller thật: với mỗi entry trong ma trận viết trước {sheet, hop-tuan,
+      bang-don-vi, muc-tieu}: okr.moCapNhat({entry}) trả sessionId; phiên lưu đúng entry (đọc bằng Prisma); okr.guiCapNhat
+      một mục thêm ĐÚNG một OkrCheckIn với value, confidence, note khớp đầu vào (đếm trước/sau). Thêm một ô KR mốc: gửi
+      Xong kèm liên kết bằng chứng → OkrCheckIn lưu Xong và đúng liên kết. Đối chứng âm: entry «khong-co» bị từ chối
+      BAD_REQUEST. In «cnk-api: 6/6».
+      CHIEU DO (bản sao): bỏ «hop-tuan» khỏi LOI_VAO → đỏ «cnk-api: hop-tuan bi tu choi».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.cnk_loi
+    paths:
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+    expected: |
+      Ca «cnk-loi»: okr.guiCapNhat ném LoiTrpc BAD_REQUEST «Ghi chú quá dài». Sau gửi: Alert trong [data-khoi-cap-nhat-kr]
+      chứa câu người đọc được (không chứa «TRPCClientError», «BAD_REQUEST»); ô giá trị và ghi chú giữ nguyên chữ đã gõ;
+      khối vẫn "mo"; [data-kr-sheet=K] còn; Lịch sử không thêm dòng. In «cnk-loi: 1/1».
+      CHIEU DO (bản sao): onError xoá nháp → đỏ «cnk-loi: nhap mat sau loi».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.cnk_giu_nhap
+    paths:
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+    expected: |
+      Ca «cnk-giu-nhap», ma trận 3 hành động {Esc đóng ngăn, ›, ‹} × {có nháp, không nháp}. Không nháp (đối chứng dương):
+      hành động thực thi ngay, không hộp hỏi. Có nháp: hộp hỏi giữ thay đổi hiện; chọn ở lại → ngăn K còn và ô giá trị giữ
+      chữ; làm lại, chọn bỏ → hành động thực thi (ngăn đóng hay sang KR kế). In «cnk-giu-nhap: 6/6».
+      CHIEU DO (bản sao): bỏ lời khai useKhaiThayDoi → đỏ «cnk-giu-nhap: › co nhap khong hoi».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.cnk_loi_vao
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/nut-cap-nhat-dong.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/bang.tsx"
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+    expected: |
+      Ca «cnk-loi-vao», ma trận viết trước 3 lối {dòng Họp tuần, dòng bảng theo đơn vị, menu «…» ngăn mục tiêu} dựng màn
+      thật + RecordSheetHost. Mỗi lối, bấm «Cập nhật» của K: không [role=dialog] nào ngoài ngăn bản ghi; [data-kr-sheet=K]
+      mở; [data-khoi-cap-nhat-kr="mo"]; document.activeElement là ô giá trị trong khối; scrollIntoView được gọi trên khối;
+      lời gọi okr.moCapNhat mang entry đúng lối (hop-tuan / bang-don-vi / muc-tieu). Lối Họp tuần: thuTuKr có trên đường dẫn
+      và đếm mang «theo thứ tự bảng». In «cnk-loi-vao: 3/3».
+      CHIEU DO (bản sao): NutCapNhatDong mở lại HopThoaiCapNhatKr → đỏ «cnk-loi-vao: hop-tuan mo dialog».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.cnk_dau_ngan
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+    expected: |
+      Ca «cnk-dau-ngan»: [data-dau-ngan-kr] không chứa nút variant mặc định nào và không [data-nut="cap-nhat-ngan-kr"];
+      ‹ › và [data-dem-kr] có mặt. Gửi trên K (đang đến hạn) rồi ›: ngăn K2 mở, khối của K2 theo trạng thái của K2 (ma trận:
+      K2 đến hạn → "mo" và ô giá trị rỗng, không [data-xem-truoc-cap-nhat]; K2 đã cập nhật → "thu"). Ô thứ tư: vào từ lối Họp
+      tuần (tab=cap-nhat, thuTuKr), gửi trên K, › tới K2 đã cập nhật → [data-khoi-cap-nhat-kr="thu"], tab=cap-nhat không còn
+      trên đường dẫn, thuTuKr giữ nguyên. In «cnk-dau-ngan: 4/4».
+      CHIEU DO (bản sao): khối giữ state qua key KR → đỏ «cnk-dau-ngan: K2 mang nhap cua K»; giữ tab=cap-nhat qua › → đỏ
+      «cnk-dau-ngan: K2 mo do tab=cap-nhat».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.cnk_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/cap-nhat-trong-ngan-kr/rang/**"
+    expected: |
+      Phiên đo màn riêng của cây (bun run do:man) trên bộ OKR mẫu, khổ 1280×800 và 375×812, sáng. Mỗi khổ: (1) mở KR đến
+      hạn từ Của tôi → [data-khoi-cap-nhat-kr="mo"] trong khung nhìn của ngăn; (2) gõ giá trị, mức tự tin, ghi chú, gửi →
+      SQL đếm OkrCheckIn của KR tăng 1, ngăn vẫn mở, dòng đầu Lịch sử bằng giá trị vừa gửi; (3) Họp tuần › bấm «Cập nhật»
+      trên một dòng → ngăn KR mở, khối trong khung nhìn, tiêu điểm ở ô giá trị. Mọi bước: số [role=dialog] khác ngăn = 0,
+      và ở 375 không ngăn kéo thứ hai. Ảnh mỗi bước ghi vào _acceptance/cap-nhat-trong-ngan-kr/evidence/. In
+      «cnk-man: 6/6».
+      CHIEU DO (bản sao): phục hồi nút đầu ngăn mở HopThoaiCapNhatKr và đi bước 2 bằng nút ấy → đỏ «cnk-man: 1280 buoc 2
+      dialog=1».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E10a
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.cnk_khong_hop_thoai
+    paths:
+      - "apps/app/**"
+    expected: |
+      Răng «khong-hop-thoai» quét apps/app (bỏ test/ và app/proto/): không tệp nào import HopThoaiCapNhatKr hay
+      useCapNhatKr, và tệp hop-thoai-cap-nhat-kr.tsx không còn. Đối chứng dương trong cùng lần chạy: bản sao tạm có một
+      import ấy → răng bắt được. In «khong-hop-thoai: 0 cho dung».
+      CHIEU DO: thêm lại một import vào kr-sheet.tsx → đỏ «khong-hop-thoai: kr-sheet.tsx con dung HopThoaiCapNhatKr».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10b
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.suite_app_ui
+    paths:
+      - "apps/app/**"
+      - "packages/ui/**"
+    expected: |
+      Bộ bài kiểm của app và @crm/ui thoát 0, gồm các tệp đã ký đo cập nhật KR (ngan-kr-mot-cho.dom.tsx,
+      hop-tuan-tren-bang.dom.tsx, hop-cap-nhat-lan-truoc.dom.tsx, lich-su-moi-lan-cap-nhat.dom.tsx, okr-sheet.dom.tsx,
+      sheet-quyen-cap-nhat.dom.tsx) đã chuyển chỗ đo sang khối qua cham-tep.
+      CHIEU DO: hồi quy ở bất kỳ ca nào → suite thoát ≠ 0 và dòng «(fail)» mang tên ca.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10c
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.cnk_thuoc_da_ky
+    paths:
+      - "apps/app/test/**"
+      - "_acceptance/*/rang/**"
+      - "_acceptance/cap-nhat-trong-ngan-kr/thuoc-da-ky.md"
+    expected: |
+      Răng «thuoc-da-ky»: đọc ma trận _acceptance/cap-nhat-trong-ngan-kr/thuoc-da-ky.md (mỗi dòng: tệp · assertion · nhãn
+      giu|chuyen-cho-do|thay-loi-hua · dòng sổ fix của hồ sơ). Với mỗi tệp đã ký trong ma trận, so số expect()/khẳng định và
+      selector giữa merge-base và HEAD: assertion mất mà ô không mang nhãn thay-loi-hua → đỏ; ô thay-loi-hua mà Hỏi-2 trong
+      decisions.jsonl chưa có trả lời của chủ kho → đỏ; hồ sơ bị chạm thiếu dòng sổ fix → đỏ. Ma trận phải bằng kết quả grep
+      viết trong răng (selector hộp, HopThoaiCapNhatKr, cap-nhat-ngan-kr) trên merge-base — thiếu dòng → đỏ. In
+      «thuoc-da-ky: <n> o, 0 mat lang».
+      CHIEU DO (bản sao): xoá lặng một expect «lần trước» trong hop-cap-nhat-lan-truoc.dom.tsx → đỏ
+      «thuoc-da-ky: hop-cap-nhat-lan-truoc.dom.tsx: mat 1 assertion khong co dong so».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
