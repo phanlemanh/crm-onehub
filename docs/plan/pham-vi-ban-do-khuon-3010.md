@@ -25,7 +25,7 @@ Chủ kho duyệt bản phạm vi này ngày 30/10: «Duyệt và đẩy».
 ```
 dot: ban-do-khuon-3010
 dang: chuoi
-nguon: crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md#4b9711d888228cd93bfe12c5036e963f40d6a585
+nguon: crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md#c9d74eaf0b846ddf5f3c2d50c9bf729045eec214
 
 - `BK1` — mọi ngăn bản ghi (deal, liên hệ, công ty, kế hoạch, mục tiêu, KR, số KR) mở trong cùng một khung: cùng đầu ngăn, chờ tải bằng khung xương, lỗi nói đúng lý do
 - `BK2` — ngăn bản ghi mới tự đi vào khung chung: dựng ngăn ngoài khung thì bài kiểm của kho đỏ và gọi đúng tên tệp
