@@ -12,10 +12,17 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const GOC_THUOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const GOC_THUOC = join(
+	dirname(fileURLToPath(import.meta.url)),
+	"..",
+	"..",
+	"..",
+);
 const require = createRequire(import.meta.url);
 const { parseEvals } = require(join(GOC_THUOC, "lib", "eval-yaml.cjs"));
-const { resolveConfigKey } = require(join(GOC_THUOC, "lib", "evidence-core.cjs"));
+const { resolveConfigKey } = require(
+	join(GOC_THUOC, "lib", "evidence-core.cjs"),
+);
 
 const NHANH_GOC = "origin/onehub";
 const HO_SO_NAY = "lich-su-moi-lan-cap-nhat";
@@ -40,6 +47,8 @@ const DONG_KHAI_DUOC = [
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx|sh)$/;
 const TEP_TRONG_LENH = /[\w@./()[\]-]+\.(?:tsx|ts|mjs|cjs|js|sh)\b/g;
 const TEP_CHIEU_DO = "_acceptance/hop-tuan-tren-bang/rang/man.mjs";
+const DAN_CHAM_TEP = /cham-tep V\d+-\d+/;
+const LA_THUOC = /^_acceptance\/|\/test\//;
 const MA_DO = 1;
 const MA_KHONG_DO = 2;
 
@@ -82,9 +91,10 @@ function tepCuaLenh(goc, lenh) {
 
 function tapThuoc(goc) {
 	const cauHinh = readFileSync(join(goc, "_acceptance", "config.yaml"), "utf8");
-	const tap = new Set();
+	const tap = new Map();
+	const them = (t, slug) => tap.set(t, new Set([...(tap.get(t) ?? []), slug]));
 	for (const slug of hoSoDaKy(goc)) {
-		for (const t of tepRang(goc, slug)) tap.add(t);
+		for (const t of tepRang(goc, slug)) them(t, slug);
 		const tepEval = join(goc, "_acceptance", slug, "evals.yaml");
 		if (!existsSync(tepEval)) continue;
 		const evals = parseEvals(readFileSync(tepEval, "utf8"), [
@@ -99,10 +109,39 @@ function tapThuoc(goc) {
 			const lenh = cmd.startsWith("config:")
 				? String(resolveConfigKey(cauHinh, cmd.slice(7)) ?? "")
 				: cmd;
-			for (const t of tepCuaLenh(goc, lenh)) tap.add(t);
+			for (const t of tepCuaLenh(goc, lenh)) them(t, slug);
 		}
 	}
 	return tap;
+}
+
+function coTaiCoSo(goc, coSo, tep) {
+	return (
+		spawnSync("git", ["cat-file", "-e", `${coSo}:${tep}`], { cwd: goc })
+			.status === 0
+	);
+}
+
+function coDongFixChamTep(goc, slug, tep) {
+	const p = join(goc, "_acceptance", slug, "decisions.jsonl");
+	if (!existsSync(p)) return false;
+	return readFileSync(p, "utf8")
+		.split("\n")
+		.filter(Boolean)
+		.some((dong) => {
+			try {
+				const d = JSON.parse(dong);
+				return (
+					d.type === "fix" &&
+					String(d.decision).includes(tep) &&
+					DAN_CHAM_TEP.test(
+						`${d.decided_by ?? ""} ${d.why ?? ""} ${d.decision}`,
+					)
+				);
+			} catch {
+				return false;
+			}
+		});
 }
 
 function coDongSoVk7(goc) {
@@ -145,7 +184,9 @@ function soat(goc) {
 		.split("\n")
 		.filter(Boolean);
 	const thuoc = tapThuoc(goc);
-	const sua = doi.filter((t) => thuoc.has(t));
+	const sua = doi.filter(
+		(t) => thuoc.has(t) && LA_THUOC.test(t) && coTaiCoSo(goc, coSo, t),
+	);
 	const sai = [];
 	for (const t of sua) {
 		if (t === TEP_KHAI) {
@@ -154,7 +195,10 @@ function soat(goc) {
 			else console.log(`CHO PHEP THEO AC-10 ${t}: chi them dong khai`);
 			continue;
 		}
-		if (!CHO_PHEP.has(t)) sai.push(`SAI AC-10: SUA THUOC DA KY ${t}`);
+		if (CHO_PHEP.has(t)) continue;
+		if ([...thuoc.get(t)].some((slug) => coDongFixChamTep(goc, slug, t)))
+			console.log(`CHO PHEP THEO DONG SO ${t}`);
+		else sai.push(`SAI AC-10: SUA THUOC DA KY ${t}`);
 	}
 	if (sua.some((t) => CHO_PHEP.has(t)) && !coDongSoVk7(goc))
 		sai.push("SAI AC-10: THIEU DONG SO NGAN-KR-MOT-CHO");
@@ -174,7 +218,18 @@ function chieuDo() {
 			duong,
 			`${readFileSync(duong, "utf8").replace(/\n$/, "")}\nexport const suaThu = 1 + 1;\n`,
 		);
-		git(["add", "--", TEP_CHIEU_DO], sao);
+		const coSo = git(["merge-base", "HEAD", NHANH_GOC], sao);
+		for (const so of git(["ls-files", "_acceptance/*/decisions.jsonl"], sao)
+			.split("\n")
+			.filter(Boolean)) {
+			const cu = spawnSync("git", ["show", `${coSo}:${so}`], {
+				cwd: sao,
+				encoding: "utf8",
+				maxBuffer: 64 * 1024 * 1024,
+			});
+			if (cu.status === 0) writeFileSync(join(sao, so), cu.stdout);
+		}
+		git(["add", "--", TEP_CHIEU_DO, "_acceptance"], sao);
 		git(
 			[
 				"-c",
