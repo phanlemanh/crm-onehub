@@ -27,7 +27,9 @@ export function docThuTuHop(raw: string | null): NguonHop | null {
 	return unit ? { cycleId, unit } : null;
 }
 
-export function useThuTuHopTuan(keyResultId: string): string[] | null {
+export type DongThuTu = { keyResultId: string; objectiveId: string };
+
+export function useThuTuHopTuan(keyResultId: string): DongThuTu[] | null {
 	const trpc = useTRPC();
 	const [raw] = useQueryState(SEARCH_PARAM.record.thuTu, parseAsString);
 	const nguon = docThuTuHop(raw);
@@ -38,6 +40,9 @@ export function useThuTuHopTuan(keyResultId: string): string[] | null {
 		enabled: nguon !== null,
 	});
 	if (!nguon || !q.data) return null;
-	const ds = [...q.data.dangBan, ...q.data.conLai].map((d) => d.keyResultId);
-	return ds.includes(keyResultId) ? ds : null;
+	const ds = [...q.data.dangBan, ...q.data.conLai].map((d) => ({
+		keyResultId: d.keyResultId,
+		objectiveId: d.objectiveId,
+	}));
+	return ds.some((d) => d.keyResultId === keyResultId) ? ds : null;
 }
