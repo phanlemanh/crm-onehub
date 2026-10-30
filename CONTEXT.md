@@ -676,7 +676,8 @@ người dùng tự viết phép tính, mà kiểu KR là một lựa chọn tro
 
 **Cập nhật**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và một
 dòng ghi chú. Ghi lúc nào cũng được, mỗi lần thành một dòng; lần cập nhật chỉ thêm,
-không sửa lần cũ. Ghi bằng hộp cập nhật một KR, mở từ chi tiết KR. Nhịp hằng tuần là
+không sửa lần cũ. Ghi bằng khối cập nhật trong chi tiết KR (từ 30/10; trước đó là hộp
+cập nhật một KR); mọi lối vào khác mở chi tiết KR tới khối đó. Nhịp hằng tuần là
 khuyến nghị vận hành, đến qua tin nhắc 08:30 và Họp tuần, không phải luật của dữ
 liệu. Cụm «cập nhật tuần này» vẫn đúng khi nói một khoảng thời gian. Là chữ chốt
 cho «check-in». Chốt 2026-09-24; bỏ chữ «tuần» khỏi tên 2026-10-24.

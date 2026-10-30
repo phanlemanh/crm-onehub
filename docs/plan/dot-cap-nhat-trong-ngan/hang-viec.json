@@ -1,0 +1,95 @@
+{
+  "dot": "cap-nhat-trong-ngan",
+  "day": [
+    {
+      "id": "V1",
+      "worktree": "/CHUA-CO-WORKTREE/V1",
+      "link": ""
+    },
+    {
+      "id": "V2",
+      "worktree": "/CHUA-CO-WORKTREE/V2",
+      "link": ""
+    },
+    {
+      "id": "V3",
+      "worktree": "/CHUA-CO-WORKTREE/V3",
+      "link": ""
+    }
+  ],
+  "hang": [
+    {
+      "ma": "HT6",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "ve-khung-muc-tieu-dung-kr",
+      "day": "V1",
+      "uu_tien": 0,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/ve-khung-muc-tieu-dung-kr/**",
+        "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      ],
+      "moc": "2026-11-03"
+    },
+    {
+      "ma": "SV8",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "cap-nhat-trong-ngan-kr",
+      "day": "V1",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/cap-nhat-trong-ngan-kr/**",
+        "apps/app/components/crm/record-sheet/kr-sheet.tsx",
+        "apps/app/components/crm/record-sheet/lich-su-kr.tsx",
+        "apps/app/components/crm/record-sheet/objective-sheet.tsx",
+        "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx",
+        "apps/app/app/(app)/[slug]/okr/cap-nhat-kr.tsx",
+        "apps/app/app/(app)/[slug]/okr/nut-cap-nhat-dong.tsx",
+        "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx",
+        "apps/app/app/(app)/[slug]/okr/theo-don-vi/bang.tsx",
+        "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**",
+        "apps/app/components/crm/timeline/activity-composer.tsx",
+        "apps/app/app/proto/_modules/cap-nhat-trong-ngan-kr/**"
+      ],
+      "moc": "2026-11-03"
+    },
+    {
+      "ma": "DH11",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "cua-toi-don-vi-dan-khi-cay-loi",
+      "day": "V2",
+      "uu_tien": 0,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/cua-toi-don-vi-dan-khi-cay-loi/**"
+      ],
+      "moc": "2026-11-01"
+    },
+    {
+      "ma": "F36",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "chu-thich-glob-md",
+      "day": "V3",
+      "uu_tien": 0,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/chu-thich-glob-md/**"
+      ],
+      "moc": "2026-10-31"
+    },
+    {
+      "ma": "F34",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "cham-bo-do-chiu-cau-loi",
+      "day": "V3",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/cham-bo-do-chiu-cau-loi/**"
+      ],
+      "moc": "2026-10-31"
+    }
+  ],
+  "ngoai_hang_merge": []
+}

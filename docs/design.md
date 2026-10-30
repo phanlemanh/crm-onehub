@@ -78,6 +78,8 @@ Trong `apps/app`, mỗi mẫu dưới đây đã có thứ thay, và bị trả 
 | hàng chip trong `CardContent` | hàng công cụ trên bề mặt |
 | mục gập «Đang theo dõi (n)», «Đã bỏ (n)» dưới bảng | chip hay nút bật tắt trên hàng công cụ |
 | ô chọn đơn vị trên hàng công cụ, lưới thẻ «đơn vị trực thuộc» dưới bảng | menu ở mắt xích cuối của dòng vị trí |
+| `Dialog` mở từ trong ngăn để ghi một dòng vào bản ghi (cập nhật KR, ghi chú, bình luận) | khối soạn trong ngăn, mục «Ghi vào bản ghi: ngay trong ngăn» |
+| `Dialog` hay `Sheet` mở chồng lên ngăn để sửa một trường | sửa tại chỗ (`InlineField`, `InlineSelectField`) |
 
 Bảng này sẽ thành một luật `anti-slop` trong `tools/oxlint`. Tới lúc đó, nó được
 kiểm bằng mắt ở review.
@@ -213,9 +215,41 @@ Chỗ còn lệch theo dõi ở các hàng SV1, SV6, SV7 của `docs/plan/lo-tri
 - **Bấm một mục tiêu ở bất kỳ đâu thì mở chi tiết mục tiêu.**
 - **Bấm một KR ở bất kỳ đâu thì mở chi tiết KR** (`openRecord({ kind: "kr" })`). Luật này áp cả trong chi tiết mục
   tiêu, ở Sơ đồ, Của tôi và Việc. Không mở mục tiêu chứa KR thay cho chính KR.
-- **Chỉ có một form cập nhật: hộp cập nhật một KR.** Đường chính là chi tiết KR › «Cập nhật». Nút tắt «Cập nhật»
-  trên dòng KR được giữ, nhưng phải mở đúng hộp đó. Không đặt ô nhập trên dòng, và không gửi nhiều KR một lần.
+- **Chỉ có một form cập nhật: khối cập nhật trong chi tiết KR** (chủ kho chốt 30/10, thay «hộp cập nhật một KR»
+  của 24/10). Khối nằm giữa ô số và Lịch sử, theo mục «Ghi vào bản ghi: ngay trong ngăn». Nút tắt «Cập nhật» trên
+  dòng KR được giữ, nhưng mở chi tiết KR và cuộn tới khối đó. Không đặt ô nhập trên dòng, và không gửi nhiều KR một
+  lần.
 - **Họp tuần là thẻ con của bộ OKR**, không phải mục trên thanh bên khu.
+
+### Ghi vào bản ghi: ngay trong ngăn
+
+Chủ kho chốt 30/10/2026 sau khi soát các ngăn bản ghi (Deal, Liên hệ, Công ty, Kế hoạch, Mục tiêu, KR). Mọi ngăn đã
+ghi tại chỗ, chỉ cập nhật KR mở hộp thoại che ngăn. Luật dưới là nếp chung để màn mới không tự vẽ lại.
+
+| Việc trong một ngăn | Dùng | Mẫu đang chạy |
+| --- | --- | --- |
+| Ghi thêm một dòng vào bản ghi — cập nhật KR, ghi chú, cuộc gọi, bình luận, ghi nhận, trả lời | khối soạn trong ngăn, đặt ngay trên dòng thời gian hay Lịch sử mà nó thêm vào | `ActivityComposer` của Deal, ô soạn Trao đổi của mục tiêu |
+| Sửa một trường | sửa tại chỗ, lưu khi rời ô hay Enter, Esc để huỷ | `InlineField`, `InlineSelectField` |
+| Thêm một mục con (bước, việc, KR) | dòng nhập tại chỗ cuối danh sách | `DongNhap` của việc KR, bước kế hoạch |
+| Hỏi lại trước việc không hoàn tác được | `ConfirmDialog` | xoá, rút duyệt |
+| Chọn từ một danh sách dài, hay một lý do bắt buộc | `Dialog` nhỏ, tối đa ba ô, không phần xem trước | `CloseReasonDialog`, `PickListDialog` |
+| Tạo một bản ghi mới nhiều trường | `Sheet` riêng | tạo deal, tạo mục tiêu |
+
+Khối soạn trong ngăn:
+
+- **Một chỗ ghi cho một việc.** Lối vào khác (nút trên dòng, tin nhắc, Của tôi) mở ngăn của bản ghi và cuộn tới khối
+  soạn, không mở form thứ hai. Mỗi lối ghi `entry` riêng để đo được.
+- **Không lặp thứ ngăn đã có.** Biểu đồ, lần trước, giá trị hiện tại đọc từ phần của ngăn; khối soạn chỉ thêm xem
+  trước (một chấm nét đứt, một dòng mức đổi).
+- **Gửi xong ngăn vẫn mở**: dòng mới lên đầu dòng thời gian, số trên ngăn đổi theo, ‹ › đi bản ghi kế không đóng gì.
+- **Thu và mở.** Khối thu thành một dòng khi chưa đến lượt ghi; mở sẵn khi bản ghi đang chờ (KR đến hạn chưa cập
+  nhật). Khổ dưới `md` vẫn nằm trong ngăn, không đẩy thành ngăn kéo.
+- **Nút gửi là nút chính duy nhất của khối**; ngăn không mang thêm nút chính ở đầu cho cùng việc. Gửi bằng
+  Ctrl/⌘+Enter như ô soạn Deal. Bản nháp chưa gửi đi qua bộ giữ thay đổi (`useKhaiThayDoi`) khi đóng ngăn hay ‹ ›.
+- **Một thành phần.** Ô soạn dùng ở hai khu trở lên thì nằm trong `packages/ui`, theo «Vẽ tay là bậc cuối».
+
+Hộp thoại không mở chồng lên ngăn để ghi hay sửa. `Sheet` chồng lên ngăn chỉ dành cho tạo bản ghi mới; chỗ đang sửa
+mục tiêu và KR bằng `Sheet` chồng lên ngăn là nợ, theo dõi ở lộ trình OKR.
 
 ### Màu trạng thái
 
