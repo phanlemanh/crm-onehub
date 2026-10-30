@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ffb9846c1e30cf9579528ac389b72f3ebea82277
+verified_commit: ee9ec13940940eb01b3d419bf02a2f2dcd7b19c9
 human_signoff:
 ---
 
@@ -179,3 +179,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, không 
 ## Iterations
 
 Round 1: tất cả eval máy đạt (E1-E8), E7j đề xuất đạt; không eval nào đỏ, chưa cần quay lại implementation.
+
+### Re-pin lần 1 — 2026-10-30, do gộp onehub 59697fa4e (#589) sau F34
+run_id: repin-20261030T060554Z-13119
+sha: ee9ec13940940eb01b3d419bf02a2f2dcd7b19c9 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7j (E7j không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
