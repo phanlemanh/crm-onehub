@@ -26,7 +26,7 @@ const TEN_CAY_SAO = "htb-sao";
 const VET = {
 	"roi-bang": {
 		tep: "apps/app/app/(app)/[slug]/okr/nut-cap-nhat-dong.tsx",
-		cu: "\t\t\t\tmo(mt, krMt);\n",
+		cu: "\t\t\t\tmo(krMt.id, loiVao, thuTu);\n",
 		moi: '\t\t\t\twindow.location.assign(window.location.pathname.replace(/\\/okr\\/.*$/, "/okr/theo-don-vi"));\n',
 		ghim: /SAI AC-4: roi bang/,
 	},

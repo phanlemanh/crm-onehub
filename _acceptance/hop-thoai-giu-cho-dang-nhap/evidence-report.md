@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 37519e7b095caab197e03b4f92c1195052e09342
+verified_commit: 7afd6ddb4c0fefc206a8c191c10c8ff3e33796b0
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -278,3 +278,7 @@ sha: e24a8c2f895271c82fcf731b4a4cf8065b68be8e · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-27, do ghim lại sau gộp onehub 881f05825 (#576, #577) cho #560
 run_id: repin-20261027T180432Z-57103
 sha: 37519e7b095caab197e03b4f92c1195052e09342 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E9 · thay bởi hồ sơ đã ký: E9→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E10, E15 · AC không có chốt máy: AC-9, AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-30, do SV8 cap-nhat-trong-ngan-kr: chuyển chỗ đo sang khối trong ngăn (V1-7, V1-10), sửa lỗi gửi từ lối ngoài và ba thước đã ký (V1-11)
+run_id: repin-20261030T151528Z-63369
+sha: 7afd6ddb4c0fefc206a8c191c10c8ff3e33796b0 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E9 · thay bởi hồ sơ đã ký: E9→kiem-cheo-sau-gop#AC-6 · ngoài làn máy: E10, E15 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9, AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

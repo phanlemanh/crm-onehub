@@ -25,6 +25,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { type ReactNode, useEffect, useState } from "react";
 import { useMoDienBien } from "@/components/crm/record-sheet/dien-bien-kr";
+import { ngheDaGui } from "@/components/crm/record-sheet/khoi-cap-nhat-kr";
+import { useRecordStack } from "@/components/crm/record-sheet/record-stack";
 import { khoaThuTuHop } from "@/components/crm/record-sheet/thu-tu-hop-tuan";
 import { okrHopTuanBoMessages } from "@/lib/messages/okr-hop-tuan-bo";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
@@ -32,7 +34,6 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { HangCamXuc } from "./cam-xuc/hang-cam-xuc";
-import { useCapNhatKr } from "./cap-nhat-kr";
 import { giaiDon } from "./don-dich";
 import { XemMoiBo } from "./don-vi-co-kr";
 import { ghep } from "./hoi-y/chu";
@@ -74,7 +75,6 @@ function DongBan({ dong, thuTu }: { dong: DongHop; thuTu: string }) {
 
 type BangHopTuan = {
 	hanhDong: HanhDongDong;
-	hop: ReactNode;
 	vuaGui: string | null;
 	xongGui: () => void;
 };
@@ -83,26 +83,28 @@ function useBangHop(thuTu: string): BangHopTuan {
 	const trpc = useTRPC();
 	const qc = useQueryClient();
 	const [vuaGui, setVuaGui] = useState<string | null>(null);
-	const capNhat = useCapNhatKr({
-		onDaGui: (keyResultId) => {
-			void qc
-				.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() })
-				.then(() => setVuaGui(keyResultId));
-		},
-	});
+	useEffect(
+		() =>
+			ngheDaGui((keyResultId) => {
+				void qc
+					.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() })
+					.then(() => setVuaGui(keyResultId));
+			}),
+		[qc, trpc],
+	);
 	return {
 		hanhDong: {
 			tenKr: (d) => <DongBan dong={d} thuTu={thuTu} />,
 			nutCapNhat: (d) => (
 				<NutCapNhatDong
 					keyResultId={d.keyResultId}
-					mo={capNhat.mo}
+					loiVao="hop-tuan"
 					objectiveId={d.objectiveId}
 					ten={d.tieuDe}
+					thuTu={thuTu}
 				/>
 			),
 		},
-		hop: capNhat.hop,
 		vuaGui,
 		xongGui: () => setVuaGui(null),
 	};
@@ -151,6 +153,7 @@ function BangCoDuLieu({
 }) {
 	const [moConLai, setMoConLai] = useState(false);
 	const { vuaGui, xongGui } = bang;
+	const nganMo = useRecordStack().top !== null;
 	const trongConLai =
 		vuaGui !== null && d.conLai.some((x) => x.keyResultId === vuaGui);
 	const coDong =
@@ -162,13 +165,13 @@ function BangCoDuLieu({
 			setMoConLai(true);
 			return;
 		}
-		if (!coDong || vuaGui === null) return;
+		if (!coDong || vuaGui === null || nganMo) return;
 		const nut = document.querySelector<HTMLElement>(
 			`[data-kr-hop="${vuaGui}"] [data-nut="cap-nhat-dong-kr"]`,
 		);
 		nut?.focus();
 		xongGui();
-	}, [canMo, coDong, vuaGui, xongGui]);
+	}, [canMo, coDong, vuaGui, xongGui, nganMo]);
 	return (
 		<>
 			{dau}
@@ -347,7 +350,6 @@ export function HopTuan({
 			) : (
 				than
 			)}
-			{bang.hop}
 		</>
 	);
 

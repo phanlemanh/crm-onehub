@@ -12,6 +12,9 @@ const DAU_VAO = [
 	["gui hop le", guiCapNhatInput, { sessionId: "s", items: [muc] }, true],
 	["mo tu cua toi", moCapNhatInput, { entry: "cua-toi" }, true],
 	["mo loi vao la", moCapNhatInput, { entry: "la" }, false],
+	["mo tu hop tuan", moCapNhatInput, { entry: "hop-tuan" }, true],
+	["mo tu bang don vi", moCapNhatInput, { entry: "bang-don-vi" }, true],
+	["mo tu ngan muc tieu", moCapNhatInput, { entry: "muc-tieu" }, true],
 	[
 		"gui ghi chu 200",
 		guiCapNhatInput,

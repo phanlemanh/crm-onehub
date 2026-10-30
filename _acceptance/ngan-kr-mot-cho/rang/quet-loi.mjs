@@ -96,6 +96,16 @@ const MA_TRAN = [
 		tep: "apps/app/app/(app)/[slug]/okr/cap-nhat-gan-day/cap-nhat-gan-day.tsx",
 		ham: "DongTinChuKy",
 	},
+	{
+		o: "nut-cap-nhat-dong",
+		tep: "apps/app/app/(app)/[slug]/okr/nut-cap-nhat-dong.tsx",
+		ham: "NutCapNhatDong",
+	},
+	{
+		o: "menu-kr-muc-tieu",
+		tep: "apps/app/components/crm/record-sheet/objective-sheet.tsx",
+		ham: "TabKr",
+	},
 ];
 
 function docThamSo(argv) {

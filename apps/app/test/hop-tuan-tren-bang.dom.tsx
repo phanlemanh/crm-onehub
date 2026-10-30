@@ -5,6 +5,7 @@ import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
 import {
 	dienBienOutput,
 	hopTuanOutput,
+	lichSuKrOutput,
 } from "../../api/src/okr/okr-xem.contracts";
 import {
 	chiTietTu,
@@ -168,6 +169,17 @@ function datKho(lay: () => HopTuanOutput, khongQuyen: string[] = []): void {
 			diem: [],
 		}),
 	);
+	kho.rieng.set("okr.lichSuKr", (vao) =>
+		lichSuKrOutput.parse({
+			kieu: "tang-toi",
+			tieuDe: `KR ${String(vao?.keyResultId ?? "")}`,
+			dich: 50,
+			donVi: "đại lý",
+			coCapNhat: false,
+			lan: [],
+			chuoi: [],
+		}),
+	);
 }
 
 function datKho375(rong: number): void {
@@ -219,22 +231,63 @@ async function moNganTuBang(id: string): Promise<void> {
 	await cho(() => nganCua(id) && demKr() !== null, `ngan ${id}`);
 }
 
-async function guiTuHop(giaTri: string, ghiChu: string): Promise<void> {
-	const h = qs("[data-hop-cap-nhat-kr]");
-	if (!h) throw new Error("khong co hop cap nhat");
-	const o = h.querySelector<HTMLInputElement>('[id$="-gia-tri"]');
+const khoiCua = (id: string) =>
+	qs(`[data-kr-sheet="${id}"] [data-khoi-cap-nhat-kr]`);
+const trangThaiKhoi = (id: string) =>
+	khoiCua(id)?.getAttribute("data-khoi-cap-nhat-kr") ?? null;
+
+async function moKhoi(id: string): Promise<void> {
+	await cho(() => khoiCua(id) !== null, `khoi ${id}`);
+	if (trangThaiKhoi(id) === "thu")
+		await bam(
+			qs(`[data-kr-sheet="${id}"] [data-nut="mo-khoi-cap-nhat-kr"]`),
+			`dong thu ${id}`,
+		);
+	await cho(() => trangThaiKhoi(id) === "mo", `khoi ${id} mo`);
+}
+
+async function escDongNgan(id: string): Promise<void> {
+	await act(async () => {
+		await nguoiDung().keyboard("{Escape}");
+	});
+	await cho(() => !nganCua(id), `ngan ${id} dong`);
+}
+
+const tieuDiemTrongNgan = (id: string) =>
+	document.activeElement
+		?.closest('[data-slot="sheet-content"]')
+		?.querySelector(`[data-kr-sheet="${id}"]`) != null;
+
+function dauKhoi(id: string): string | null {
+	const k = khoiCua(id);
+	if (!k) return null;
+	const o = [...k.querySelectorAll("[data-o]")].map((x) =>
+		x.getAttribute("data-o"),
+	);
+	const gui = k.querySelector('[data-nut="gui-cap-nhat-kr"]') !== null;
+	return `${k.tagName}|${o.join(",")}|${gui}`;
+}
+
+async function guiTuKhoi(
+	id: string,
+	giaTri: string,
+	ghiChu: string,
+): Promise<void> {
+	const h = qs(`[data-kr-sheet="${id}"] [data-khoi-cap-nhat-kr="mo"]`);
+	if (!h) throw new Error("khong co khoi cap nhat");
+	const o = h.querySelector<HTMLInputElement>('[data-o="gia-tri"] input');
 	if (!o) throw new Error("khong co o gia tri");
 	const u = nguoiDung();
 	await act(async () => {
 		await u.clear(o);
 		await u.type(o, giaTri);
 	});
-	const ghi = h.querySelector<HTMLTextAreaElement>("textarea");
-	if (ghi)
+	const ghi = h.querySelector<HTMLInputElement>('[data-o="ghi-chu"] input');
+	if (ghi && ghiChu !== "")
 		await act(async () => {
 			await u.type(ghi, ghiChu);
 		});
-	const muc = [...h.querySelectorAll("button")].find(
+	const muc = [...h.querySelectorAll('[data-o="tu-tin"] button')].find(
 		(b) => b.textContent?.trim() === mo.capNhat.mucTuTin.vua,
 	);
 	if (muc) await bam(muc, "muc tu tin");
@@ -561,14 +614,15 @@ describe("htb-cap-nhat", () => {
 		dem += 1;
 
 		await bam(nutK(), "nut K");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") !== null, "hop K");
+		await cho(() => qs("[data-khoi-cap-nhat-kr]") !== null, "khoi K");
+		if (trangThaiKhoi("K") !== "mo")
+			loi.push("htb-cap-nhat: khoi khong phai cua K");
 		if (
-			qs("[data-hop-cap-nhat-kr]")?.getAttribute("data-hop-cap-nhat-kr") !== "K"
+			!(san.url().get("record") ?? "").endsWith("kr:K") ||
+			qs('[data-kr-sheet="K"] [data-khoi-cap-nhat-kr="mo"]') === null
 		)
-			loi.push("htb-cap-nhat: hop khong phai cua K");
-		if (san.url().get("record") !== null)
 			loi.push(
-				`htb-cap-nhat: bam dong mo ngan, khong mo hop (${san.url().get("record")})`,
+				`htb-cap-nhat: bam dong khong mo ngan K co khoi mo (${san.url().get("record")})`,
 			);
 		dem += 1;
 
@@ -578,8 +632,8 @@ describe("htb-cap-nhat", () => {
 		const duongTruoc = window.location.pathname;
 		const docTruoc = docCua("okr.hopTuan").length;
 		daGui = true;
-		await guiTuHop("15", "vua gui");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") === null, "hop dong");
+		await guiTuKhoi("K", "15", "vua gui");
+		await cho(() => trangThaiKhoi("K") === "thu", "khoi thu");
 		const gui = goiCua("okr.guiCapNhat");
 		const items = JSON.stringify(gui[0]?.vao ?? {});
 		if (gui.length !== 1 || !items.includes('"keyResultId":"K"'))
@@ -597,6 +651,12 @@ describe("htb-cap-nhat", () => {
 			() => qs("[data-con-lai]")?.getAttribute("data-con-lai") === "mo",
 			"Con lai tu mo",
 		);
+		await nhip(3);
+		if (!tieuDiemTrongNgan("K"))
+			loi.push(
+				`htb-cap-nhat: sau gui tieu diem roi ngan, o ${document.activeElement?.outerHTML.slice(0, 80)}`,
+			);
+		await escDongNgan("K");
 		await cho(() => document.activeElement === nutK(), "tieu diem ve nut K");
 		if (conLaiTruoc !== null)
 			loi.push(
@@ -619,13 +679,8 @@ describe("htb-cap-nhat", () => {
 			</>,
 			"?record=objective:mt-1,kr:A",
 		);
-		await cho(
-			() => qs('[data-nut="cap-nhat-ngan-kr"]') !== null,
-			"nut cap nhat dau ngan",
-		);
-		await bam(qs('[data-nut="cap-nhat-ngan-kr"]'), "nut dau ngan");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") !== null, "hop tu ngan");
-		const slotNgan = qs("[data-hop-cap-nhat-kr]")?.getAttribute("data-slot");
+		await moKhoi("A");
+		const slotNgan = dauKhoi("A");
 		await thaoHet();
 		datLai();
 		datKho(() => hop([{ id: "A" }], []));
@@ -634,8 +689,8 @@ describe("htb-cap-nhat", () => {
 			qs('[data-kr-hop="A"] [data-nut="cap-nhat-dong-kr"]'),
 			"nut dong A",
 		);
-		await cho(() => qs("[data-hop-cap-nhat-kr]") !== null, "hop tu dong");
-		const slotDong = qs("[data-hop-cap-nhat-kr]")?.getAttribute("data-slot");
+		await cho(() => trangThaiKhoi("A") === "mo", "khoi tu dong");
+		const slotDong = dauKhoi("A");
 		if (!slotNgan || slotNgan !== slotDong)
 			loi.push(`htb-cap-nhat: hai nut mo hai hop ${slotNgan} / ${slotDong}`);
 		dem += 1;
@@ -691,10 +746,10 @@ describe("htb-cap-nhat-cham", () => {
 		if (qs("[data-con-lai]")?.getAttribute("data-con-lai") !== "dong")
 			loi.push("htb-cap-nhat: doi chung — truoc khi gui Con lai khong gap");
 		await bam(nutK(), "nut K");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") !== null, "hop K");
+		await cho(() => trangThaiKhoi("K") === "mo", "khoi K");
 		daGui = true;
-		await guiTuHop("15", "vua gui");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") === null, "hop dong");
+		await guiTuKhoi("K", "15", "vua gui");
+		await cho(() => trangThaiKhoi("K") === "thu", "khoi thu");
 		await cho(
 			() => qs('[data-con-lai] [data-kr-hop="K"]') !== null,
 			"K sang Con lai",
@@ -702,6 +757,12 @@ describe("htb-cap-nhat-cham", () => {
 		await nhip(3);
 		if (qs("[data-con-lai]")?.getAttribute("data-con-lai") !== "mo")
 			loi.push("htb-cap-nhat: hopTuan cham — Con lai khong tu mo");
+		if (!tieuDiemTrongNgan("K"))
+			loi.push(
+				`htb-cap-nhat: hopTuan cham — sau gui tieu diem roi ngan, o ${document.activeElement?.outerHTML.slice(0, 80)}`,
+			);
+		await escDongNgan("K");
+		await nhip(3);
 		if (document.activeElement !== nutK())
 			loi.push(
 				`htb-cap-nhat: hopTuan cham — tieu diem o ${document.activeElement?.outerHTML.slice(0, 80)}`,
@@ -940,10 +1001,9 @@ describe("htb-sau-gui", () => {
 		if (demKr() !== "2/4")
 			loi.push(`htb-sau-gui: doi chung truoc gui dem ${demKr()}`);
 		dem += 1;
-		await bam(qs('[data-nut="cap-nhat-ngan-kr"]'), "cap nhat dau ngan");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") !== null, "hop B");
+		await moKhoi("B");
 		daGui = true;
-		await guiTuHop("20", "");
+		await guiTuKhoi("B", "20", "");
 		await cho(() => demKr() === "3/4", "dem sau gui");
 		if (!nganCua("B")) loi.push("htb-sau-gui: ngan khong con la B");
 		if (demKr() !== "3/4") loi.push(`htb-sau-gui: dem ${demKr()} can 3/4`);
@@ -1044,12 +1104,8 @@ describe("htb-chu", () => {
 			"nut A",
 		);
 		await bam(qs('[data-kr-hop="A"] [data-nut="cap-nhat-dong-kr"]'), "nut A");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") !== null, "hop A");
-		const huy = [
-			...(qs("[data-hop-cap-nhat-kr]")?.querySelectorAll("button") ?? []),
-		].find((b) => b.textContent?.trim() === mo.hopCapNhat.huy);
-		await bam(huy ?? null, "nut Huy");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") === null, "hop dong");
+		await cho(() => trangThaiKhoi("A") === "mo", "khoi A");
+		await escDongNgan("A");
 		await nhip(3);
 		const nutSau = qs('[data-kr-hop="A"] [data-nut="cap-nhat-dong-kr"]');
 		if (document.activeElement !== nutSau)
