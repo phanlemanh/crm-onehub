@@ -1015,9 +1015,11 @@ describe("cnk-loi-vao", () => {
 							qs("[data-dau-ngan-kr] [data-thu-tu-kr]") !== null) ||
 						"hop tuan mat thu tu bang",
 				].filter((x) => x !== true);
-				if (sai.length > 0)
-					loi.push(`cnk-loi-vao: ${loiVao} ${sai.join(", ")}`);
-				else dem += 1;
+				if (sai.length > 0) {
+					const dong = `cnk-loi-vao: ${loiVao} ${sai.join(", ")}`;
+					console.log(dong);
+					loi.push(dong);
+				} else dem += 1;
 				await thaoHet();
 			}
 		} finally {
