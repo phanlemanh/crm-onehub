@@ -3918,6 +3918,90 @@
       "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: một lỗi bố cục rời, không gộp được với SV9 mà giữ nghĩa «một màn, một câu»."
     },
     {
+      "ma": "BK1",
+      "slug": "khung-chung-ngan-ban-ghi",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 104.7991,
+      "dung_tren": [
+        "SV9",
+        "SV10"
+      ],
+      "ten": "Mọi ngăn bản ghi mở trong cùng một khung",
+      "ten_ngan": "Khung ngăn chung",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR mở ngăn KR hay ngăn Số KR và gặp đúng khung của ngăn deal: cùng đầu ngăn, chờ tải bằng khung xương, lỗi tải nói đúng lý do và có nút thử lại»",
+      "vi_sao": "Đo trên onehub 16604ce3f (30/10): ngăn deal, liên hệ, công ty, kế hoạch, mục tiêu dựng RecordSheetFrame (apps/app/components/crm/record-sheet/record-parts.tsx:102); kr-sheet.tsx và so-kr-sheet.tsx đi vòng qua nó, tự dựng đầu ngăn, chờ tải, báo lỗi và «không thấy». Khung có từ 31/07, ngăn KR dựng 28/09 vẫn thoát khung: có mẫu chưa đủ, phải có thứ buộc ngăn dùng mẫu. Tri thức: crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md.",
+      "bat_khi": "Mở bảy loại ngăn (deal, liên hệ, công ty, kế hoạch, mục tiêu, KR, Số KR) ở ba trạng thái — đang tải, lỗi tải, đủ dữ liệu: cùng đầu ngăn, cùng khung xương, cùng một thành phần lỗi; bỏ khe chờ tải hay lỗi khỏi một ngăn thì check-types đỏ",
+      "dot": "ban-do-khuon-3010",
+      "phu": [
+        "BK1"
+      ],
+      "tieu_chi": 10,
+      "vung": [
+        "apps/app/components/crm/record-sheet/**",
+        "design/patterns/**",
+        "docs/design.md"
+      ],
+      "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591).",
+      "ghi_chu": "Gồm: design/patterns/ngan-ban-ghi.md khoá theo đối tượng (deal, lien-he, cong-ty, ke-hoach, muc-tieu, kr, so-kr) theo §11.3 finding; mở RecordSheetFrame thêm khe ngăn KR và Số KR cần (hành động riêng ở đầu, thân nhận thẻ con, lỗi «không thấy») — sửa khung, không thoát khung; khe chờ tải và lỗi bắt buộc qua kiểu (răng lớp 1); chờ tải trong ngăn bằng khung xương (QĐ-6, máy quyết, cửa veto mở); một thành phần lỗi tải cho ngăn, ghi vào docs/design.md. Đứng sau SV9 (N1) và SV10 (N2) của đợt okr-ghi-trong-ngan-3010: cùng sửa kr-sheet.tsx và objective-sheet.tsx, khung mở khe theo hình dạng mới của ngăn sau hai hàng đó. SV10 đứng trên SV8 nên BK1 cũng mở sau SV8."
+    },
+    {
+      "ma": "BK2",
+      "slug": "rang-giu-khung-ngan",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 104.7992,
+      "dung_tren": [
+        "BK1"
+      ],
+      "ten": "Ngăn bản ghi mới tự đi vào khung chung",
+      "ten_ngan": "Răng khung ngăn",
+      "vai": "nen",
+      "cau_giao": "«Một ngăn bản ghi dựng ngoài khung chung làm bài kiểm của kho đỏ và gọi đúng tên tệp, còn vòng chạm ngăn bản ghi có ảnh ngăn mới đặt cạnh ngăn deal»",
+      "vi_sao": "Luật «Nếp màn trong app» của docs/design.md có và AGENTS.md nạp nó, nhưng răng máy chỉ có ở màu trạng thái và khung trang; ngăn KR thoát khung mà không bài nào đỏ. Không có răng thì mỗi lần dọn xong, ngăn OKR kế tiếp lại đẻ hàng nợ mới.",
+      "bat_khi": "Tiêm một ngăn gọi thẳng DetailSheetHeader thì lint và bài quét đỏ, thông điệp nêu tệp và khối cấm; chỉ sửa docs/ hay _acceptance/ thì im; mọi ngăn hiện có xanh sau BK1 (đối chứng dương); docs/proto.md có dòng màn mẫu ngăn deal mà design-pass đọc",
+      "dot": "ban-do-khuon-3010",
+      "phu": [
+        "BK2",
+        "BK4"
+      ],
+      "tieu_chi": 10,
+      "vung": [
+        "tools/oxlint/**",
+        ".oxlintrc.json",
+        "apps/app/test/lib/**",
+        "docs/proto.md"
+      ],
+      "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591).",
+      "ghi_chu": "Răng lớp 2 và 3 của bản đồ khuôn: luật oxlint (tools/oxlint/onehub, ghi đè theo glob của .oxlintrc.json) cấm nhập DetailSheetHeader, Skeleton, Spinner, VungTaiLoi trong components/crm/record-sheet/ trừ tệp khung; bài quét trên apps/app/test/lib/quet-jsx.ts — mọi loại bản ghi record-sheet-host.tsx đăng ký dựng khung ở gốc, đọc danh sách đối tượng từ design/patterns/ngan-ban-ghi.md, ngoại lệ thiếu lý do thì đỏ. Gộp BK4 (một dòng màn mẫu trong docs/proto.md, ~2 tiêu chí) vì cùng kết quả «ngăn mới không lệch» và BK4 đứng riêng dưới mục tiêu cỡ. Đứng trên BK1: đối chứng dương cần mọi ngăn đã trong khung."
+    },
+    {
+      "ma": "BK3",
+      "slug": "rang-khung-trang-mo",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 104.7993,
+      "dung_tren": [],
+      "ten": "Trang sinh sau cũng bị soát khung trang",
+      "ten_ngan": "Răng khung trang mở",
+      "vai": "nen",
+      "cau_giao": "«Mọi page.tsx của ứng dụng, kể cả trang sinh sau ngày dựng bài kiểm, đều bị soát hình theo màn; trang lệch không có trong bảng ngoại lệ kèm lý do thì bài kiểm đỏ»",
+      "vi_sao": "Phần «hình theo màn» của apps/app/test/khung-man-chung.spec.ts neo vào bảng 39 tệp (apps/app/test/fixtures/khung-man-chung-hinh.json) ở một commit gốc: trang sinh sau 13/10 không bị soát.",
+      "bat_khi": "Thêm một page.tsx mới dựng đầu trang ngoài PageShellHeader thì bài kiểm đỏ và nêu tệp; trang lệch hiện có nằm trong bảng ngoại lệ có lý do; chỉ sửa docs/ thì im",
+      "dot": "ban-do-khuon-3010",
+      "phu": [
+        "BK3"
+      ],
+      "tieu_chi": 7,
+      "vung": [
+        "apps/app/test/khung-man-chung.spec.ts",
+        "apps/app/test/fixtures/**"
+      ],
+      "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591).",
+      "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: gộp với BK2 thành 17 tiêu chí, quá ngưỡng tách; khác bề mặt (trang, không phải ngăn) nên không gộp với BK1. Không gộp vào NM1 «Khung màn chung» (chưa mở): NM1 là dọn nợ (39 tệp PageShellLoading, bốn khung lỗi), BK3 là răng chặn tái sinh — bảng ngoại lệ của BK3 liệt chính nợ NM1, NM1 mở sau làm bảng ngắn lại. Không đụng tệp với BK1, BK2 nên chạy song song được."
+    },
+    {
       "ma": "VK20",
       "slug": "kara-viet-lai-khong-de-chu",
       "hang": "T2",
