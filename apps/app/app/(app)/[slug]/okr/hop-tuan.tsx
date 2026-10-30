@@ -26,6 +26,7 @@ import { useQueryStates } from "nuqs";
 import { type ReactNode, useEffect, useState } from "react";
 import { useMoDienBien } from "@/components/crm/record-sheet/dien-bien-kr";
 import { ngheDaGui } from "@/components/crm/record-sheet/khoi-cap-nhat-kr";
+import { useRecordStack } from "@/components/crm/record-sheet/record-stack";
 import { khoaThuTuHop } from "@/components/crm/record-sheet/thu-tu-hop-tuan";
 import { okrHopTuanBoMessages } from "@/lib/messages/okr-hop-tuan-bo";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
@@ -152,6 +153,7 @@ function BangCoDuLieu({
 }) {
 	const [moConLai, setMoConLai] = useState(false);
 	const { vuaGui, xongGui } = bang;
+	const nganMo = useRecordStack().top !== null;
 	const trongConLai =
 		vuaGui !== null && d.conLai.some((x) => x.keyResultId === vuaGui);
 	const coDong =
@@ -163,13 +165,13 @@ function BangCoDuLieu({
 			setMoConLai(true);
 			return;
 		}
-		if (!coDong || vuaGui === null) return;
+		if (!coDong || vuaGui === null || nganMo) return;
 		const nut = document.querySelector<HTMLElement>(
 			`[data-kr-hop="${vuaGui}"] [data-nut="cap-nhat-dong-kr"]`,
 		);
 		nut?.focus();
 		xongGui();
-	}, [canMo, coDong, vuaGui, xongGui]);
+	}, [canMo, coDong, vuaGui, xongGui, nganMo]);
 	return (
 		<>
 			{dau}

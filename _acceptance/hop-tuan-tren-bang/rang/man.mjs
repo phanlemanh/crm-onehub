@@ -479,12 +479,20 @@ async function phanGui(n, run) {
 		await dongTrang(t);
 		return true;
 	}
-	const ngan = await t.$$eval("[data-kr-sheet]", (e) => e.length);
+	const ngan = await t.evaluate(
+		(id) => ({
+			nganK: document.querySelectorAll(`[data-kr-sheet='${id}']`).length,
+			khoiMo: document.querySelectorAll(
+				`[data-kr-sheet='${id}'] [data-khoi-cap-nhat-kr='mo']`,
+			).length,
+		}),
+		k.keyResultId,
+	);
 	dong(
 		"AC-4",
-		ngan === 0,
+		ngan.nganK === 1 && ngan.khoiMo === 1,
 		"mo hop",
-		`bam nut tren dong K mo hop cua K · ngan KR mo ${ngan}`,
+		`bam nut tren dong K mo ngan KR cua K · ngan K ${ngan.nganK} · khoi cap nhat mo ${ngan.khoiMo}`,
 	);
 	await go(t, `${hop} [data-o='gia-tri'] input`, String(giaMoi));
 	await bamChu(

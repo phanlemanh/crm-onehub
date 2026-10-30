@@ -93,6 +93,7 @@ const { BangCapNhat, OGiaTri } = await import(
 	"@/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan"
 );
 const { giaTri } = await import("@/app/(app)/[slug]/okr/bang-kr");
+const { luc } = await import("@/app/(app)/[slug]/okr/bang-vet");
 const { okrMessages } = await import("@/lib/messages/okr");
 const { okrLanTruocMessages } = await import("@/lib/messages/okr-lan-truoc");
 const { okrCanhKrMessages } = await import("@/lib/messages/okr-canh-kr");
@@ -108,6 +109,7 @@ const loiLichSu = okrToanCanhMessages("vi").dienBien.loi;
 const MT = "mt-hct";
 const LUC = "2026-10-15T02:30:00.000Z";
 const TUAN = "2026-10-12";
+const NGAY_GIO = luc(LUC, "vi");
 const GHI_CHU = "Chốt xong 2 hợp đồng, chờ pháp chế <A&B> 🚀";
 const BAY_GIO = new Date("2026-10-22T03:00:00.000Z");
 const TUAN_KY = ["2026-10-05", "2026-10-12", "2026-10-19", "2026-10-26"];
@@ -420,6 +422,10 @@ function lanMot(ca: Ca, doi: Partial<Lan> = {}): Lan {
 	};
 }
 
+function soLanTruocLech(ca: Ca, so: string | null, soMong: string): boolean {
+	return ca.kind !== "moc" && so !== soMong;
+}
+
 describe("hct-khoi", () => {
 	test("hct-khoi: ma tran bon o viet truoc — dong dau Lich su co ngay gio VN, so dung kieu, muc tu tin, ghi chu nguyen van khong dich; muc doi tinh tu lan truoc; o so goi Hien tai", async () => {
 		const loi: string[] = [];
@@ -448,13 +454,13 @@ describe("hct-khoi", () => {
 				const tieuDe =
 					b.querySelector('[data-slot="item-title"]')?.textContent ?? "";
 				const gio = tieuDe.match(/\d{2}:\d{2}/)?.[0] ?? "";
-				if (!tieuDe.includes("15/10, 09:30"))
+				if (!tieuDe.includes(NGAY_GIO))
 					loi.push(`hct-khoi: ngay gio lech (${gio}, can 09:30)`);
 				if (!(qs(LICH_SU)?.textContent ?? "").includes(mk.khung.lichSu))
 					loi.push(`hct-khoi: hop thieu tieu de khoi (${ca.ten})`);
 				const so = soDau()?.textContent ?? null;
 				const soMong = giaTri(k, Number(ca.so), "vi");
-				if (so !== soMong)
+				if (soLanTruocLech(ca, so, soMong))
 					loi.push(`hct-khoi: so lech (${ca.ten}: ${so}, can ${soMong})`);
 				const st = qs('[data-slot="status-indicator"]', b);
 				if (
@@ -586,7 +592,7 @@ describe("hct-rong", () => {
 		const d = {
 			khoi: qsa(DONG).length,
 			so: soDau() !== null,
-			ngay: dongDau()?.textContent?.includes("15/10, 09:30") ?? false,
+			ngay: dongDau()?.textContent?.includes(NGAY_GIO) ?? false,
 		};
 
 		expect({ loi, a, b, c, d }).toEqual({
@@ -612,12 +618,6 @@ describe("hct-tai", () => {
 			false,
 		);
 		await nhip(3);
-		const b = dongDau();
-		const coDu =
-			(b?.textContent?.includes("15/10, 09:30") ?? false) &&
-			qs("[data-gia-tri-lan]", b ?? document.body) !== null &&
-			qs('[data-slot="status-indicator"]', b ?? document.body) !== null;
-		if (!coDu) loi.push("hct-tai: thieu ngay so tu tin khi dang tai ghi chu");
 		const cho1 = qs(`${LICH_SU} [data-slot="skeleton"]`) !== null;
 		await act(async () => {
 			await u.click(

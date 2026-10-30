@@ -246,6 +246,18 @@ async function moKhoi(id: string): Promise<void> {
 	await cho(() => trangThaiKhoi(id) === "mo", `khoi ${id} mo`);
 }
 
+async function escDongNgan(id: string): Promise<void> {
+	await act(async () => {
+		await nguoiDung().keyboard("{Escape}");
+	});
+	await cho(() => !nganCua(id), `ngan ${id} dong`);
+}
+
+const tieuDiemTrongNgan = (id: string) =>
+	document.activeElement
+		?.closest('[data-slot="sheet-content"]')
+		?.querySelector(`[data-kr-sheet="${id}"]`) != null;
+
 function dauKhoi(id: string): string | null {
 	const k = khoiCua(id);
 	if (!k) return null;
@@ -605,9 +617,12 @@ describe("htb-cap-nhat", () => {
 		await cho(() => qs("[data-khoi-cap-nhat-kr]") !== null, "khoi K");
 		if (trangThaiKhoi("K") !== "mo")
 			loi.push("htb-cap-nhat: khoi khong phai cua K");
-		if (san.url().get("record") !== null)
+		if (
+			!(san.url().get("record") ?? "").endsWith("kr:K") ||
+			qs('[data-kr-sheet="K"] [data-khoi-cap-nhat-kr="mo"]') === null
+		)
 			loi.push(
-				`htb-cap-nhat: bam dong mo ngan, khong mo hop (${san.url().get("record")})`,
+				`htb-cap-nhat: bam dong khong mo ngan K co khoi mo (${san.url().get("record")})`,
 			);
 		dem += 1;
 
@@ -636,6 +651,12 @@ describe("htb-cap-nhat", () => {
 			() => qs("[data-con-lai]")?.getAttribute("data-con-lai") === "mo",
 			"Con lai tu mo",
 		);
+		await nhip(3);
+		if (!tieuDiemTrongNgan("K"))
+			loi.push(
+				`htb-cap-nhat: sau gui tieu diem roi ngan, o ${document.activeElement?.outerHTML.slice(0, 80)}`,
+			);
+		await escDongNgan("K");
 		await cho(() => document.activeElement === nutK(), "tieu diem ve nut K");
 		if (conLaiTruoc !== null)
 			loi.push(
@@ -736,6 +757,12 @@ describe("htb-cap-nhat-cham", () => {
 		await nhip(3);
 		if (qs("[data-con-lai]")?.getAttribute("data-con-lai") !== "mo")
 			loi.push("htb-cap-nhat: hopTuan cham — Con lai khong tu mo");
+		if (!tieuDiemTrongNgan("K"))
+			loi.push(
+				`htb-cap-nhat: hopTuan cham — sau gui tieu diem roi ngan, o ${document.activeElement?.outerHTML.slice(0, 80)}`,
+			);
+		await escDongNgan("K");
+		await nhip(3);
 		if (document.activeElement !== nutK())
 			loi.push(
 				`htb-cap-nhat: hopTuan cham — tieu diem o ${document.activeElement?.outerHTML.slice(0, 80)}`,
@@ -1078,11 +1105,7 @@ describe("htb-chu", () => {
 		);
 		await bam(qs('[data-kr-hop="A"] [data-nut="cap-nhat-dong-kr"]'), "nut A");
 		await cho(() => trangThaiKhoi("A") === "mo", "khoi A");
-		const huy = [
-			...(qs("[data-hop-cap-nhat-kr]")?.querySelectorAll("button") ?? []),
-		].find((b) => b.textContent?.trim() === mo.hopCapNhat.huy);
-		await bam(huy ?? null, "nut Huy");
-		await cho(() => qs("[data-hop-cap-nhat-kr]") === null, "hop dong");
+		await escDongNgan("A");
 		await nhip(3);
 		const nutSau = qs('[data-kr-hop="A"] [data-nut="cap-nhat-dong-kr"]');
 		if (document.activeElement !== nutSau)

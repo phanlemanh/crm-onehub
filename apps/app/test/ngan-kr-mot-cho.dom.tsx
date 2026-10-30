@@ -1777,8 +1777,8 @@ describe("vk7-tren-dong", () => {
 		}).toEqual({
 			hop: k3.id,
 			tieuDe: k3.title,
-			moNgan: [],
-			phien: [{ entry: "sheet" }],
+			moNgan: [{ cach: "open", kind: "kr", id: k3.id }],
+			phien: [{ entry: "bang-don-vi" }],
 		});
 		await thaoHet();
 

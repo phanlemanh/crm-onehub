@@ -14,7 +14,8 @@
  *  (3) không tệp nào đọc SEARCH_PARAM.okr.tu;
  *  (4) ngăn KR (kr-sheet.tsx) dựng khối cập nhật một KR (KhoiCapNhatKr) và bảng của bộ
  *      (theo-don-vi/bang.tsx — nơi dòng KR của bộ nhận nút «Cập nhật») dựng NutCapNhatDong; và
- *      cap-nhat-kr.tsx mở lượt với entry đúng "sheet".
+ *      khoi-cap-nhat-kr.tsx mở lượt với entry thuộc bốn lối của khối (sheet, hop-tuan, bang-don-vi,
+ *      muc-tieu), không bao giờ nhac, viec-cua-toi hay cua-toi.
  * Rồi mỗi luật một đối chứng: cài một bản phá vào bộ nhớ (CompilerHost đọc nội dung thay thế, cây thật
  * không bị ghi), quét lại, phải ra đúng vi phạm có thông điệp ghim.
  * Mã thoát: 0 «DUNG AC-6: 4/4» và 4 đối chứng đỏ đúng · 1 có vi phạm hay đối chứng sai · 2 không đo được.
@@ -28,7 +29,13 @@ const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const APP = join(GOC, "apps", "app");
 const OKR = join(APP, "app", "(app)", "[slug]", "okr");
 const TEP_BANG = join(OKR, "cap-nhat-tuan", "cap-nhat-tuan.tsx");
-const TEP_MO = join(OKR, "cap-nhat-kr.tsx");
+const TEP_MO = join(
+	APP,
+	"components",
+	"crm",
+	"record-sheet",
+	"khoi-cap-nhat-kr.tsx",
+);
 const TEP_DUNG_HOP = [
 	join(APP, "components", "crm", "record-sheet", "kr-sheet.tsx"),
 	join(OKR, "theo-don-vi", "bang.tsx"),
@@ -49,6 +56,7 @@ const LOI_VAO = [
 	"muc-tieu",
 ];
 const CAM = new Set(["nhac", "viec-cua-toi", "cua-toi"]);
+const LOI_VAO_KHOI = new Set(["sheet", "hop-tuan", "bang-don-vi", "muc-tieu"]);
 
 function khongDo(ly) {
 	console.log(`KHONG DO DUOC: ${ly}`);
@@ -199,9 +207,16 @@ function quet(thay = new Map(), them = []) {
 	const moSheet = entryMo.filter((e) => e.tep === TEP_MO);
 	if (
 		moSheet.length === 0 ||
-		!moSheet.every((e) => e.giaTri?.length === 1 && e.giaTri[0] === "sheet")
+		!moSheet.every(
+			(e) =>
+				e.giaTri !== null &&
+				e.giaTri.length > 0 &&
+				e.giaTri.every((v) => LOI_VAO_KHOI.has(v) && !CAM.has(v)),
+		)
 	)
-		viPham.push("SAI AC-6 (4): cap-nhat-kr.tsx khong mo luot voi entry sheet");
+		viPham.push(
+			"SAI AC-6 (4): khoi-cap-nhat-kr.tsx khong mo luot voi entry thuoc bon loi cua khoi",
+		);
 	return viPham;
 }
 
