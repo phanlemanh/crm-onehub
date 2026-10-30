@@ -54,6 +54,7 @@ Nhãn: `giu` không đổi · `chuyen-cho-do` đổi selector hay đường tớ
 | `_acceptance/cua-toi-chi-liet-kr/rang/man.mjs` | (b), (c) | 250–309 | lối cập nhật trong ngăn (1); tên KR ở đầu ngăn thay tên hộp (A) | thay-loi-hua | cua-toi-chi-liet-kr |
 | `_acceptance/cua-toi-chi-liet-kr/rang/mot-duong.mjs` | AC-6 (2), (4) | 32–219, 273 | tập LOI_VAO; khối mở lượt với entry thuộc bốn lối của khối (A); bản phá | thay-loi-hua | cua-toi-chi-liet-kr |
 | `_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs` | E18 b5 | 1637–1704 | menu mở ngăn KR; ghi hộ; tự tin; hộp đóng → khối thu (A) | thay-loi-hua | cap-nhat-tuan-okr |
+| `_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs`, `_acceptance/cap-nhat-tuan-okr/evals.yaml` | E19 | 1754–1757, E19 expected | entry «sheet» → «muc-tieu» của lối menu ngăn mục tiêu (A, AC-7) | thay-loi-hua | cap-nhat-tuan-okr |
 | `_acceptance/canh-kr-okr/rang/man-canh-kr.mjs` | E11 b9 | 1483–1542 | form trong ngăn K4; gửi → khối thu (A); về ngăn mục tiêu xem dấu | thay-loi-hua | canh-kr-okr |
 | `_acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs` | huy | ~244 | DANH_SACH bỏ hop-thoai-cap-nhat-kr.tsx (tệp đã gỡ) | chuyen-cho-do | hop-thoai-giu-cho-dang-nhap |
 | `apps/app/test/ngan-kr-mot-cho.dom.tsx` | (hàm dựng moHopCua) | — | bỏ «thieu KR» — hàm dựng viết lại theo khối, chặn dữ liệu giả bằng câu khác | chuyen-cho-do | ngan-kr-mot-cho |

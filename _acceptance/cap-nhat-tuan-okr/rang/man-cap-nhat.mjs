@@ -1751,10 +1751,10 @@ async function buocE18E19() {
 		include: { session: true },
 	});
 	kiem(
-		"E19: checkIn moi cua KR1 co authorUserId TP, onBehalf true, entry sheet",
+		"E19: checkIn moi cua KR1 co authorUserId TP, onBehalf true, entry muc-tieu",
 		checkInMoi !== null &&
 			checkInMoi.onBehalf === true &&
-			checkInMoi.session.entry === "sheet",
+			checkInMoi.session.entry === "muc-tieu",
 	);
 }
 
