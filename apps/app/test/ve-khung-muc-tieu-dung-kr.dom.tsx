@@ -117,7 +117,8 @@ function datKho(khongThay: string[] = []): void {
 	kho.rieng.set("okr.objective", (vao) => chiTietCua(String(vao?.id ?? "")));
 	kho.rieng.set("okr.canhKr", (vao) => {
 		const id = String(vao?.keyResultId ?? "");
-		if (khongThay.includes(id)) throw new LoiTrpc("NOT_FOUND", `khong co ${id}`);
+		if (khongThay.includes(id))
+			throw new LoiTrpc("NOT_FOUND", `khong co ${id}`);
 		return canhKrOutput.parse({
 			kr: {
 				id,
@@ -167,7 +168,7 @@ const khungMo = () => qs("[data-okr-sheet]")?.getAttribute("data-okr-sheet");
 const nutNgan = (nut: "kr-truoc" | "kr-ke") =>
 	qs<HTMLButtonElement>(`[data-dau-ngan-kr] [data-nut="${nut}"]`);
 const nutQuayLai = () =>
-	qsa<HTMLButtonElement>("[data-kr-sheet] button").find(
+	qsa("[data-kr-sheet] button").find(
 		(b) => b.textContent?.trim() === QUAY_LAI,
 	) ?? null;
 
@@ -224,9 +225,7 @@ describe("vkm-qua-muc-tieu", () => {
 			);
 		const sau = await sang(san, "kr-ke", "B");
 		if (sau !== "objective:mt-2,kr:B")
-			loi.push(
-				`vkm-qua-muc-tieu: record sau › ${sau} can objective:mt-2,kr:B`,
-			);
+			loi.push(`vkm-qua-muc-tieu: record sau › ${sau} can objective:mt-2,kr:B`);
 		dem += 1;
 		if (san.url().get("thuTuKr") !== thuTu || demKr() !== "2/5")
 			loi.push(
@@ -339,9 +338,7 @@ describe("vkm-cung-muc-tieu", () => {
 		dem += 1;
 		const khung = await quayLai();
 		if (khung !== "mt-1" || record(san) !== "objective:mt-1")
-			loi.push(
-				`vkm-cung-muc-tieu: quay lai mo ${khung} record ${record(san)}`,
-			);
+			loi.push(`vkm-cung-muc-tieu: quay lai mo ${khung} record ${record(san)}`);
 		dem += 1;
 		console.log(`vkm-cung-muc-tieu: ${dem}/2`);
 		expect(loi.join("\n")).toBe("");
@@ -377,10 +374,7 @@ describe("vkm-ngu-canh", () => {
 		datKho();
 		const san2 = await dung(<RecordSheetHost />, "?record=objective:mt-1,kr:A");
 		await cho(() => nganCua("A") && demKr() !== null, "ngan A ngoai bang");
-		if (
-			qs("[data-dau-ngan-kr] [data-thu-tu-kr]") !== null ||
-			demKr() !== "1/4"
-		)
+		if (qs("[data-dau-ngan-kr] [data-thu-tu-kr]") !== null || demKr() !== "1/4")
 			loi.push(`vkm-ngu-canh: doi chung ngoai bang dem ${demKr()}`);
 		const toiC = await sang(san2, "kr-ke", "C");
 		if (toiC !== "objective:mt-1,kr:C")
