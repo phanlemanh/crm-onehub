@@ -14,8 +14,8 @@ evals:
       Ca «cnk-mo-thu»: RecordSheetHost thật, dữ liệu okr.objective / okr.canhKr / okr.lichSuKr parse bằng schema thật,
       Ma trận viết trước 5 ô: (a) đồng hồ thứ Năm 30/10/2026 giờ VN, K sửa được, lần cuối thứ Hai tuần trước; (b) có lần
       thứ Ba tuần này; (c) biên tuần: lần cuối thứ Hai 27/10 00:30 giờ VN (Chủ nhật theo UTC) → "thu"; (d) đồng hồ thứ Hai
-      27/10 10:00, chưa cập nhật tuần này, thứ cập nhật của chu kỳ là thứ Năm → mong đợi theo phương án Hỏi-1 đã chọn (ghi
-      vào bài khi Hỏi-1 có trả lời); (e) trưởng đơn vị ghi hộ → [data-ghi-ho] chứa tên người phụ trách, đối chứng dương ở
+      27/10 10:00, chưa cập nhật tuần này, thứ cập nhật của chu kỳ là thứ Năm → "mo" (Hỏi-1 chốt ở Cổng Phạm vi: chưa
+      cập nhật trong tuần này, không chờ thứ cập nhật); (e) trưởng đơn vị ghi hộ → [data-ghi-ho] chứa tên người phụ trách, đối chứng dương ở
       ô (a) (chính người phụ trách) không có [data-ghi-ho]. Ô (a): [data-khoi-cap-nhat-kr="mo"] có mặt, nằm sau [data-muc-ngan="so"] và
       trước [data-lich-su-kr] theo thứ tự DOM; trong khối có ô giá trị, ba nút mức tự tin, ô ghi chú, và đúng một nút
       variant mặc định là [data-nut="gui-cap-nhat-kr"]. Ô (b): [data-khoi-cap-nhat-kr="thu"], dòng thu chứa giá trị và
