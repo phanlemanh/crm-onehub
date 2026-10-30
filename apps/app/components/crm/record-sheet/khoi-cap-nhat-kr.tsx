@@ -74,7 +74,7 @@ export const TAB_CAP_NHAT = "cap-nhat";
 type ChiTiet = RouterOutputs["okr"]["objective"];
 type KrCuaMt = ChiTiet["keyResults"][number];
 type LanCapNhat = RouterOutputs["okr"]["lichSuKr"]["lan"][number];
-type LanCuoi = Pick<LanCapNhat, "ngay" | "giaTri">;
+type LanCuoi = Pick<LanCapNhat, "ngay" | "giaTri" | "luc" | "tuTin">;
 export type LoiVaoKhoi = Extract<
 	LoiVao,
 	"sheet" | "hop-tuan" | "bang-don-vi" | "muc-tieu"
@@ -262,14 +262,18 @@ export function KhoiCapNhatKr({
 }) {
 	const trpc = useTRPC();
 	const ls = useQuery(trpc.okr.lichSuKr.queryOptions({ keyResultId: kr.id }));
-	const lastAt = krCapNhatTuSheet(mt, kr).lastAt;
+	const { lastAt, lastConfidence } = krCapNhatTuSheet(mt, kr);
 	const lan = ls.data?.lan ?? null;
-	const lanCuoi: LanCuoi | null =
-		lan !== null
-			? (lan.at(-1) ?? null)
-			: lastAt === null
-				? null
-				: { ngay: homNayVN(new Date(lastAt)), giaTri: kr.currentValue };
+	const theoVet: LanCuoi | null =
+		lastAt === null || lastConfidence === null
+			? null
+			: {
+					ngay: homNayVN(new Date(lastAt)),
+					giaTri: kr.currentValue,
+					luc: lastAt,
+					tuTin: lastConfidence,
+				};
+	const lanCuoi = lan?.at(-1) ?? theoVet;
 	return (
 		<KhoiDaTai
 			denHan={
@@ -312,7 +316,14 @@ function KhoiDaTai({
 	const cache = useCrmCache();
 	const qc = useQueryClient();
 	const ma = useId();
-	const krCn = useMemo(() => krCapNhatTuSheet(mt, kr), [mt, kr]);
+	const krCn = useMemo(
+		() => ({
+			...krCapNhatTuSheet(mt, kr),
+			lastConfidence: lanCuoi?.tuTin ?? null,
+			lastAt: lanCuoi?.luc ?? null,
+		}),
+		[mt, kr, lanCuoi],
+	);
 	const banDau = useMemo(() => oBanDau(krCn, locale), [krCn, locale]);
 	const [moNguoi, setMo] = useState<boolean | null>(tuLoiVao ? true : null);
 	const mo = moNguoi ?? denHan;
