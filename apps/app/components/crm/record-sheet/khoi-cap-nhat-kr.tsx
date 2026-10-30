@@ -38,14 +38,7 @@ import {
 import { SO_KR_MOC, tienDoKr } from "@crm/validation/okr-kr";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
-import {
-	useCallback,
-	useEffect,
-	useId,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { useCallback, useId, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
 	ChonTuTin,
@@ -320,15 +313,18 @@ function KhoiDaTai({
 		[mt, kr, lanCuoi],
 	);
 	const banDau = useMemo(() => oBanDau(krCn, locale), [krCn, locale]);
-	const [moNguoi, setMo] = useState<boolean | null>(tuLoiVao ? true : null);
+	const [moNguoi, setMoNguoi] = useState<boolean | null>(
+		tuLoiVao ? true : null,
+	);
 	const mo = moNguoi ?? denHan;
 	const [tieuDiem, setTieuDiem] = useState(tuLoiVao);
-	const [oNhap, setO] = useState<O | null>(null);
+	const [oNhap, setONhap] = useState<O | null>(null);
 	const o = oNhap ?? banDau;
-	const [bangChung, setBangChung] = useState("");
+	const [bangChung, setBangChungNhap] = useState("");
 	const [sessionId, setSessionId] = useState<string | null>(null);
+	const [loiMo, setLoiMo] = useState(false);
 	const [cho, setCho] = useState(false);
-	const daMo = useRef(false);
+	const phien = useRef<Promise<string | null> | null>(null);
 	const khoi = useRef<HTMLDivElement>(null);
 	const hoiBo = useMemo<LoiHoi>(
 		() => ({
@@ -341,38 +337,62 @@ function KhoiDaTai({
 	);
 	const khai = useKhaiThayDoi(hoiBo);
 	const moPhien = useMutation(trpc.okr.moCapNhat.mutationOptions());
-	const goiMo = moPhien.mutate;
+	const moAsync = moPhien.mutateAsync;
 
-	const coNhap =
-		(oNhap !== null &&
-			(oNhap.giaTri !== banDau.giaTri ||
-				oNhap.tuTin !== null ||
-				oNhap.ghiChu.trim() !== "")) ||
-		bangChung !== "";
+	const coNhapCua = (oX: O | null, bc: string) =>
+		(oX !== null &&
+			(oX.giaTri !== banDau.giaTri ||
+				oX.tuTin !== null ||
+				oX.ghiChu.trim() !== "")) ||
+		bc !== "";
+	const soXemCua = (oX: O | null, bc: string) => {
+		const soX = docGiaTri(krCn, (oX ?? banDau).giaTri);
+		return coNhapCua(oX, bc) && soX !== null && loiSo(krCn, soX) === null
+			? soX
+			: null;
+	};
+	const bao = (oX: O | null, bc: string, moX: boolean) => {
+		khai(coNhapCua(oX, bc));
+		onXemTruoc(moX && krCn.kind !== "moc" ? soXemCua(oX, bc) : null);
+	};
+	const setO = (oX: O) => {
+		setONhap(oX);
+		bao(oX, bangChung, mo);
+	};
+	const setBangChung = (bc: string) => {
+		setBangChungNhap(bc);
+		bao(oNhap, bc, mo);
+	};
+	const setMo = (moX: boolean) => {
+		setMoNguoi(moX);
+		bao(oNhap, bangChung, moX);
+	};
+
+	const coNhap = coNhapCua(oNhap, bangChung);
 	const so = docGiaTri(krCn, o.giaTri);
 	const loi = loiSo(krCn, so);
-	const soXem = coNhap && loi === null && so !== null ? so : null;
 
-	useEffect(() => {
-		khai(coNhap);
-	}, [khai, coNhap]);
-	useEffect(() => {
-		onXemTruoc(mo && krCn.kind !== "moc" ? soXem : null);
-	}, [mo, krCn.kind, soXem, onXemTruoc]);
-	useEffect(() => {
-		if (tuLoiVao) khoi.current?.scrollIntoView?.({ block: "start" });
-	}, [tuLoiVao]);
-
-	const batDau = () => {
-		if (daMo.current) return;
-		daMo.current = true;
-		goiMo(
-			{ entry: layLoiVao(kr.id) },
-			{ onSuccess: ({ sessionId: id }) => setSessionId(id) },
+	const batDau = (): Promise<string | null> => {
+		if (phien.current) return phien.current;
+		setLoiMo(false);
+		const p = moAsync({ entry: layLoiVao(kr.id) }).then(
+			({ sessionId: id }) => {
+				setSessionId(id);
+				return id;
+			},
+			() => {
+				phien.current = null;
+				setLoiMo(true);
+				return null;
+			},
 		);
+		phien.current = p;
+		return p;
 	};
 	useMountEffect(() => {
-		if (tuLoiVao) batDau();
+		if (!tuLoiVao) return;
+		khoi.current?.scrollIntoView?.({ block: "start" });
+		void batDau();
 	});
 
 	const gui = useMutation(
@@ -391,12 +411,12 @@ function KhoiDaTai({
 						{ cancelRefetch: false },
 					),
 				]);
-				khai(false);
-				setO(null);
-				setBangChung("");
+				setONhap(null);
+				setBangChungNhap("");
 				setSessionId(null);
-				daMo.current = false;
-				setMo(false);
+				phien.current = null;
+				setMoNguoi(false);
+				bao(null, "", false);
 				baoDaGui(kr.id);
 				onDaGui();
 			},
@@ -404,12 +424,6 @@ function KhoiDaTai({
 	);
 
 	const muc = mucGui(krCn, o, bangChung);
-	const guiMuc = gui.mutate;
-	useEffect(() => {
-		if (!cho || sessionId === null) return;
-		setCho(false);
-		if (muc) guiMuc({ sessionId, items: [muc] });
-	}, [cho, sessionId, muc, guiMuc]);
 
 	const ngayCuoi = lanCuoi ? formatDayShort(lanCuoi.ngay, locale) : null;
 	const giaTriCuoi = lanCuoi?.giaTri ?? kr.currentValue;
@@ -432,13 +446,13 @@ function KhoiDaTai({
 				onMo={() => {
 					setTieuDiem(true);
 					setMo(true);
-					batDau();
+					void batDau();
 				}}
 			/>
 		);
 
 	const khoa = gui.isPending;
-	const dangMo = sessionId === null && !moPhien.isError;
+	const dangMo = sessionId === null && !loiMo;
 	const duoc = muc !== null;
 	const hienBangChung = krCn.kind === "moc" && so === 1;
 	const saiBangChung = hienBangChung && loiDuongDan(bangChung);
@@ -459,12 +473,15 @@ function KhoiDaTai({
 
 	const guiDi = () => {
 		if (khoa || muc === null) return;
-		if (sessionId === null) {
-			batDau();
-			setCho(true);
+		if (sessionId !== null) {
+			gui.mutate({ sessionId, items: [muc] });
 			return;
 		}
-		gui.mutate({ sessionId, items: [muc] });
+		setCho(true);
+		void batDau().then((id) => {
+			setCho(false);
+			if (id !== null) gui.mutate({ sessionId: id, items: [muc] });
+		});
 	};
 
 	return (
@@ -486,7 +503,7 @@ function KhoiDaTai({
 				<form
 					className="flex flex-col gap-4"
 					id={`${ma}-form`}
-					onFocus={batDau}
+					onFocus={() => void batDau()}
 					onKeyDown={(e) => {
 						if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
 							e.preventDefault();
@@ -507,16 +524,13 @@ function KhoiDaTai({
 							<AlertDescription>{t.hopCapNhat.ghiHoMoTa}</AlertDescription>
 						</Alert>
 					)}
-					{moPhien.isError ? (
+					{loiMo ? (
 						<Alert variant="destructive">
 							<Icon icon={WarningAlt} />
 							<AlertTitle>{t.hopCapNhat.loiMo}</AlertTitle>
 							<AlertDescription>
 								<Button
-									onClick={() => {
-										daMo.current = false;
-										batDau();
-									}}
+									onClick={() => void batDau()}
 									size="sm"
 									type="button"
 									variant="outline"
@@ -614,7 +628,7 @@ function KhoiDaTai({
 						<Button
 							aria-keyshortcuts="Control+Enter Meta+Enter"
 							data-nut="gui-cap-nhat-kr"
-							disabled={!duoc || khoa || moPhien.isError}
+							disabled={!duoc || khoa || loiMo}
 							type="submit"
 						>
 							{khoa || (cho && dangMo) ? (

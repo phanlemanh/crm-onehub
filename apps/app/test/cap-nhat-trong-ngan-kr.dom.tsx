@@ -10,6 +10,7 @@ import {
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { useQueryClient } from "@tanstack/react-query";
+import { type ReactElement, StrictMode } from "react";
 import { chuoiMoiLan } from "../../api/src/okr/dien-bien";
 import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
 import {
@@ -906,7 +907,10 @@ function dongHop(id: string) {
 
 type Loi = "hop-tuan" | "bang-don-vi" | "muc-tieu";
 
-async function dungLoi(loiVao: Loi): Promise<San> {
+const boc = (strict: boolean, man: ReactElement): ReactElement =>
+	strict ? <StrictMode>{man}</StrictMode> : man;
+
+async function dungLoi(loiVao: Loi, strict = false): Promise<San> {
 	if (loiVao === "hop-tuan") {
 		kho.rieng.set("okr.hopTuan", () =>
 			hopTuanOutput.parse({
@@ -919,10 +923,13 @@ async function dungLoi(loiVao: Loi): Promise<San> {
 			}),
 		);
 		const san = await dung(
-			<>
-				<HopTuan cycleId="q4" unit={{ loai: "bp", id: "bp-1" }} />
-				<RecordSheetHost />
-			</>,
+			boc(
+				strict,
+				<>
+					<HopTuan cycleId="q4" unit={{ loai: "bp", id: "bp-1" }} />
+					<RecordSheetHost />
+				</>,
+			),
 		);
 		await cho(() => qs('[data-kr-hop="A"]') !== null, "bang hop tuan");
 		return san;
@@ -932,15 +939,21 @@ async function dungLoi(loiVao: Loi): Promise<San> {
 		kho.danhSach = () =>
 			danhSachTu([mucTieu("mt-1", ct.keyResults, { canEdit: true })]);
 		const san = await dung(
-			<>
-				<TheoDonVi />
-				<RecordSheetHost />
-			</>,
+			boc(
+				strict,
+				<>
+					<TheoDonVi />
+					<RecordSheetHost />
+				</>,
+			),
 		);
 		await cho(() => qs('[data-kr="A"]') !== null, "bang theo don vi");
 		return san;
 	}
-	const san = await dung(<RecordSheetHost />, "?record=objective:mt-1");
+	const san = await dung(
+		boc(strict, <RecordSheetHost />),
+		"?record=objective:mt-1",
+	);
 	await cho(() => qs("[data-okr-sheet]") !== null, "ngan muc tieu");
 	return san;
 }
@@ -1035,6 +1048,55 @@ describe("cnk-loi-vao", () => {
 			HTMLElement.prototype.scrollIntoView = cuonCu;
 		}
 		console.log(`cnk-loi-vao: ${dem}/3`);
+		expect(loi.join("\n")).toBe("");
+		expect(dem).toBe(3);
+	});
+});
+
+describe("cnk-loi-vao-gui", () => {
+	test("cnk-loi-vao-gui: mo tu ba loi ngoai trong StrictMode van gui duoc", async () => {
+		const loi: string[] = [];
+		let dem = 0;
+		for (const loiVao of ["hop-tuan", "bang-don-vi", "muc-tieu"] as const) {
+			datLai();
+			trang.kr = krMacDinh();
+			datKho();
+			try {
+				await dungLoi(loiVao, true);
+				await bamLoi(loiVao);
+				await cho(() => trangThaiKhoi() === "mo", `${loiVao} khoi mo`);
+				await cho(
+					() => goiCua("okr.moCapNhat").length > 0,
+					`${loiVao} mo phien`,
+				);
+				await dienVaGui("nut", `gui tu ${loiVao}`);
+			} catch (e) {
+				loi.push(`cnk-loi-vao-gui: ${loiVao} vap ${String(e).slice(0, 120)}`);
+			}
+			await cho(
+				() => goiCua("okr.guiCapNhat").length > 0,
+				`${loiVao} goi gui`,
+			).catch(() => {});
+			await cho(() => trangThaiKhoi() === "thu", `${loiVao} khoi thu`).catch(
+				() => {},
+			);
+			const g = goiCua("okr.guiCapNhat");
+			const sai = [
+				goiCua("okr.moCapNhat").length === 1 ||
+					`mo phien ${goiCua("okr.moCapNhat").length} lan`,
+				g.length === 1 || `goi gui ${g.length}`,
+				g[0]?.vao?.sessionId === "phien-1" ||
+					`sessionId ${g[0]?.vao?.sessionId}`,
+				trangThaiKhoi() === "thu" || `khoi ${trangThaiKhoi()}`,
+			].filter((x) => x !== true);
+			if (sai.length > 0) {
+				const dong = `cnk-loi-vao-gui: ${loiVao} ${sai.join(", ")}`;
+				console.log(dong);
+				loi.push(dong);
+			} else dem += 1;
+			await thaoHet();
+		}
+		console.log(`cnk-loi-vao-gui: ${dem}/3`);
 		expect(loi.join("\n")).toBe("");
 		expect(dem).toBe(3);
 	});
