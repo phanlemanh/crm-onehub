@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { idMau, OKR_MAU } from "../../../apps/api/scripts/okr-mau/cau-hinh.ts";
 import { SEARCH_PARAM } from "../../../apps/app/lib/search-param-keys.ts";
 import { db } from "../../../packages/db/src/index.ts";
+import { napCa } from "../../hop-tuan-tren-bang/rang/man-lib.mjs";
 import {
 	khongDo,
 	suySlug,
@@ -12,7 +13,6 @@ import {
 	phienCua,
 	trpcCua,
 } from "../../vo-khu-muc-tieu/rang/do-man-lib.mjs";
-import { napCa } from "../../hop-tuan-tren-bang/rang/man-lib.mjs";
 
 const HO_SO = "lich-su-moi-lan-cap-nhat";
 const GIAY_MS = 1000;
@@ -46,8 +46,10 @@ export const CHON = {
 	muc: "[data-muc-ngan='lich-su']",
 	dong: "[data-muc-ngan='lich-su'] [data-lan-cap-nhat]",
 	cham: "[data-muc-ngan='lich-su'] .recharts-line-dots circle",
-	nutCapNhat: (kr) => `[data-kr-sheet='${kr}'] [data-nut='cap-nhat-ngan-kr']`,
-	hop: (kr) => `[data-hop-cap-nhat-kr='${kr}']`,
+	nutCapNhat: (kr) =>
+		`[data-kr-sheet='${kr}'] [data-nut='mo-khoi-cap-nhat-kr']`,
+	khoi: (kr) => `[data-kr-sheet='${kr}'] [data-khoi-cap-nhat-kr]`,
+	hop: (kr) => `[data-kr-sheet='${kr}'] [data-khoi-cap-nhat-kr='mo']`,
 	ngan: "[data-slot='sheet-content'], [data-slot='drawer-content']",
 };
 

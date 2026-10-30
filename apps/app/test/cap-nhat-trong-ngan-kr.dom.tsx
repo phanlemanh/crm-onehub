@@ -365,6 +365,11 @@ async function moNgan(id: string, thamSo = ""): Promise<San> {
 	await cho(() => nganCua(id), `ngan ${id}`);
 	await cho(
 		() =>
+			qs(LICH_SU) !== null && qs(`${LICH_SU} [data-slot="skeleton"]`) === null,
+		`lich su ${id}`,
+	);
+	await cho(
+		() =>
 			qs(KHOI) !== null ||
 			qs("[data-than-ngan-kr]")?.getAttribute("data-trang-thai") ===
 				"ST-ngan-kr-chi-doc",

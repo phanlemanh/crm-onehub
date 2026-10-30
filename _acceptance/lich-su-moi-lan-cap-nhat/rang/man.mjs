@@ -2,12 +2,6 @@ import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "../../../packages/db/src/index.ts";
 import { isMeasureDatabase } from "../../../packages/db/src/measure-database.ts";
-import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
-import {
-	APP,
-	ket,
-	khongDo,
-} from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
 import {
 	bam,
 	bamChu,
@@ -22,6 +16,12 @@ import {
 	moTrinhDuyet,
 	nghi,
 } from "../../hop-tuan-tren-bang/rang/man-lib.mjs";
+import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
+import {
+	APP,
+	ket,
+	khongDo,
+} from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
 import {
 	BANG_CHUNG,
 	CHON,
@@ -131,7 +131,10 @@ async function choKhongBiChe(t, chon) {
 
 async function guiMotLan(t, n, giaTri, tuTin, ghiChu) {
 	const hop = CHON.hop(n.kr.id);
-	const bamNut = await bam(t, CHON.nutCapNhat(n.kr.id));
+	const coKhoi = await cho(t, CHON.khoi(n.kr.id));
+	const dangThu = coKhoi && (await t.$(CHON.nutCapNhat(n.kr.id))) !== null;
+	const bamNut =
+		coKhoi && (dangThu ? await bam(t, CHON.nutCapNhat(n.kr.id)) : true);
 	const moHop = await t
 		.waitForSelector(hop, { visible: true, timeout: DO.cho.dieuHuongMs })
 		.then(() => true)

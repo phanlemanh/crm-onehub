@@ -1480,7 +1480,7 @@ async function buocCapNhatMoc() {
 		"E11 buoc 9: menu KR co «Cập nhật»",
 	);
 	await bam(t, "[data-muc='cap-nhat-kr']");
-	const hop = `[data-hop-cap-nhat-kr='${K.K4}']`;
+	const hop = `${KHUNG(K.K4)} [data-khoi-cap-nhat-kr='mo']`;
 	if (!(await coMat(t, hop, "E11 buoc 9: hop thoai cap nhat K4"))) {
 		await t.close();
 		return;
@@ -1539,6 +1539,7 @@ async function buocCapNhatMoc() {
 		(h) => window.__tim(h).length === 0,
 		hop,
 	);
+	await diToi(t, `${APP}/${slug}/okr?record=objective:${K.M}`);
 	await doi(
 		t,
 		"E11 buoc 9: K4 mang dau Co bang chung sau gui",
@@ -1619,7 +1620,10 @@ async function buocTrangThai() {
 		"E11 buoc 10: chan canhKr -> ngan KR loi tai",
 		() => window.__tim("[data-trang-thai='ST-ngan-kr-loi']").length > 0,
 	);
-	const thuLai = await chuSel(tc, "[data-vung-tai-loi] [data-slot='kara-retry']");
+	const thuLai = await chuSel(
+		tc,
+		"[data-vung-tai-loi] [data-slot='kara-retry']",
+	);
 	kiem(
 		`E11 buoc 10: loi co nut «${CHU.khung.loi.thuLai}» (thay «${thuLai}»)`,
 		thuLai === CHU.khung.loi.thuLai,

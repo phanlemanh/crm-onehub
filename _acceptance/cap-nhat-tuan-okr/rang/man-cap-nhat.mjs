@@ -1634,7 +1634,26 @@ async function buocE18E19() {
 		await coSel(tp, `button[aria-label='Thao tác với KR trao đổi ${MA}']`),
 	);
 
+	const khoiKr1 = `[data-kr-sheet='${KR.ot1}'] [data-khoi-cap-nhat-kr='mo']`;
+	async function veSheetMucTieu() {
+		if (await coSel(tp, `button[aria-label='Thao tác với KR trao đổi ${MA}']`))
+			return;
+		await tp.goto(
+			`${APP}/${slug}/deals?record=deal:${deal.id},objective:${OKR.ot}`,
+			{ waitUntil: "load", timeout: CHO_TAI },
+		);
+		await tp
+			.waitForFunction(
+				(id) => document.querySelector(`[data-okr-sheet='${id}']`) !== null,
+				{ timeout: CHO, polling: 200 },
+				OKR.ot,
+			)
+			.catch(() => {});
+		await cho(CHO_HYDRATE_MS);
+	}
+
 	async function moHopCapNhatKr() {
+		await veSheetMucTieu();
 		await bamSel(tp, `button[aria-label='Thao tác với KR trao đổi ${MA}']`);
 		await doi(
 			tp,
@@ -1645,8 +1664,8 @@ async function buocE18E19() {
 		await doi(
 			tp,
 			"E18 buoc 5: hop cap nhat KR mo",
-			(id) => document.querySelector(`[data-hop-cap-nhat-kr='${id}']`) !== null,
-			KR.ot1,
+			(s) => document.querySelector(s) !== null,
+			khoiKr1,
 		);
 	}
 
@@ -1665,7 +1684,7 @@ async function buocE18E19() {
 
 	await bamChu(
 		tp,
-		`[data-hop-cap-nhat-kr='${KR.ot1}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`,
+		`${khoiKr1} [data-o='tu-tin'] [data-slot='toggle-group-item']`,
 		CHU.cao,
 	);
 	await doi(
@@ -1679,8 +1698,10 @@ async function buocE18E19() {
 	await doi(
 		tp,
 		"E18 buoc 5: hop dong sau khi gui",
-		() => document.querySelector("[data-hop-cap-nhat-kr]") === null,
+		(s) => document.querySelector(s) === null,
+		khoiKr1,
 	);
+	await veSheetMucTieu();
 
 	await bamChu(tp, `[data-okr-sheet='${OKR.ot}'] [role='tab']`, CHU.traoDoi);
 	await doi(

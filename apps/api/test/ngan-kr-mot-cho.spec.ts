@@ -35,7 +35,7 @@ type HopCapNhatKr = {
 	) => Json;
 };
 
-const DUONG_HOP = `${import.meta.dir}/../../app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx`;
+const DUONG_HOP = `${import.meta.dir}/../../app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx`;
 const hopCapNhatKr: HopCapNhatKr = await import(DUONG_HOP);
 
 const CHO_MS = 60_000;

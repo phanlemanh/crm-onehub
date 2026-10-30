@@ -268,7 +268,45 @@ mock.module("@/lib/trpc/client", () => ({
 				() => null,
 				() => ({ written: 1, seconds: 12 }),
 			),
-			canhKr: thuTuc("okr.canhKr"),
+			canhKr: thuTuc("okr.canhKr", (vao) => {
+				const k = chiTiet.keyResults.find((x) => x.id === vao?.keyResultId);
+				return k
+					? {
+							kr: {
+								id: k.id,
+								title: k.title,
+								kind: k.kind,
+								objectiveId: chiTiet.id,
+								ownerName: k.owner.name,
+								xong: false,
+							},
+							dong: [],
+							bangChung: [],
+							quyen: { suaDuoc: false, ganDuoc: false },
+							khoa: false,
+							choDuyet: false,
+						}
+					: null;
+			}),
+			lichSuKr: thuTuc("okr.lichSuKr", (vao) => ({
+				kieu: "tang-toi",
+				tieuDe: `KR ${String(vao?.keyResultId)}`,
+				dich: 50,
+				donVi: "khách",
+				coCapNhat: false,
+				lan: [],
+				chuoi: [],
+			})),
+			hopTuan: thuTuc("okr.hopTuan"),
+			themViec: thuTuc("okr.themViec"),
+			suaViec: thuTuc("okr.suaViec"),
+			danhDauViec: thuTuc("okr.danhDauViec"),
+			goViec: thuTuc("okr.goViec"),
+			themBangChung: thuTuc("okr.themBangChung"),
+			goBangChung: thuTuc("okr.goBangChung"),
+			ganSangKien: thuTuc("okr.ganSangKien"),
+			banGhiChiSo: thuTuc("okr.banGhiChiSo"),
+			lichSuSo: thuTuc("okr.lichSuSo"),
 			dienBien: thuTuc("okr.dienBien", () => ({
 				kieu: "tang-toi",
 				tieuDe: "KR kr-1",
@@ -302,6 +340,12 @@ mock.module("@/lib/trpc/client", () => ({
 		workspace: {
 			get: thuTuc("workspace.get", () => ({ viewerRole: "member" })),
 		},
+		onboarding: {
+			listPlans: thuTuc("onboarding.listPlans", () => []),
+		},
+		campaigns: {
+			list: thuTuc("campaigns.list", () => []),
+		},
 		org: {
 			tree: thuTuc("org.tree", () => ({
 				divisions: [],
@@ -330,6 +374,14 @@ mock.module("@/lib/trpc/cache", () => ({
 	}),
 }));
 
+mock.module("@/components/crm/stage-change", () => ({
+	CloseReasonDialog: () => null,
+	DealStageMenu: () => null,
+}));
+mock.module("@/components/crm/fields/fields-sheet", () => ({
+	FieldsSheetHost: () => null,
+}));
+
 mock.module("next/navigation", () => ({
 	useRouter: () => ({ push: () => {}, replace: () => {}, prefetch: () => {} }),
 	useParams: () => ({ slug: "ws" }),
@@ -341,6 +393,9 @@ const { ObjectiveSheet } = await import(
 	"@/components/crm/record-sheet/objective-sheet"
 );
 const { DetailSheet } = await import("@/components/detail-sheet");
+const { RecordSheetHost } = await import(
+	"@/components/crm/record-sheet/record-sheet-host"
+);
 const { ApiOriginProvider } = await import("@/components/api-origin");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
@@ -361,6 +416,37 @@ function SheetDongDuoc({ children }: { children: ReactElement }) {
 		</DetailSheet>
 	);
 }
+
+async function moQuaHost(): Promise<San> {
+	const o = document.createElement("div");
+	document.body.appendChild(o);
+	const root = createRoot(o);
+	const client = new QueryClient({
+		defaultOptions: { queries: { retry: false } },
+	});
+	await act(async () => {
+		root.render(
+			<NuqsTestingAdapter hasMemory searchParams="?record=objective:mt-1">
+				<QueryClientProvider client={client}>
+					<LocaleProvider locale="vi">
+						<TooltipProvider>
+							<RecordSheetHost />
+						</TooltipProvider>
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
+		);
+	});
+	const san = { o, root };
+	dangMo.push(san);
+	await cho(
+		() => document.body.querySelector("[data-okr-sheet] [role=tab]") !== null,
+		"sheet tai xong",
+	);
+	return san;
+}
+
+const KHOI_MO = '[data-kr-sheet="kr-1"] [data-khoi-cap-nhat-kr="mo"]';
 
 async function mo(
 	duong = "?record=objective:mt-1",
@@ -985,15 +1071,14 @@ describe("sheet-cap-nhat-mot-kr", () => {
 				],
 			},
 		);
-		await mo();
+		await moQuaHost();
 		const muc = await moMenuKr();
 		const capNhat = [
 			...document.body.querySelectorAll('[role="menuitem"]'),
 		].find((o) => o.textContent === m.sheet.capNhatKr);
 		if (!capNhat) throw new Error(`khong co muc Cap nhat: ${muc.join(" | ")}`);
 		await bam(capNhat);
-		const hopCapNhat = () =>
-			document.body.querySelector("[data-hop-cap-nhat-kr]");
+		const hopCapNhat = () => document.body.querySelector(KHOI_MO);
 		const guiNut = () =>
 			hopCapNhat()?.querySelector<HTMLButtonElement>(
 				'[data-nut="gui-cap-nhat-kr"]',
@@ -1012,7 +1097,7 @@ describe("sheet-cap-nhat-mot-kr", () => {
 			),
 			tatKhiChuaChon: guiNut()?.disabled,
 		};
-		await go(h.querySelector('[id="kr-1-gia-tri"]'), "25");
+		await go(h.querySelector('[data-o="gia-tri"] input'), "25");
 		await bam(nut(m.capNhat.mucTuTin.cao, h));
 		await cho(() => guiNut()?.disabled === false, "nut gui bat");
 		const btn = guiNut();
@@ -1028,7 +1113,7 @@ describe("sheet-cap-nhat-mot-kr", () => {
 				tatKhiChuaChon: true,
 			},
 			goi: [
-				{ duong: "okr.moCapNhat", dauVao: { entry: "sheet" } },
+				{ duong: "okr.moCapNhat", dauVao: { entry: "muc-tieu" } },
 				{
 					duong: "okr.guiCapNhat",
 					dauVao: {
@@ -1045,7 +1130,7 @@ describe("sheet-cap-nhat-mot-kr", () => {
 
 	test("sheet-cap-nhat-mot-kr: doi chung — nguoi phu trach khong thay dong ghi ho; nguoi khac va KR nhap khong co muc Cap nhat", async () => {
 		chiTiet = dangChay({ laCuaToi: true }, { canEdit: false });
-		await mo();
+		await moQuaHost();
 		const chu = await moMenuKr();
 		const capNhat = [
 			...document.body.querySelectorAll('[role="menuitem"]'),
@@ -1053,8 +1138,8 @@ describe("sheet-cap-nhat-mot-kr", () => {
 		if (!capNhat) throw new Error("khong co muc Cap nhat cho chu KR");
 		await bam(capNhat);
 		await cho(
-			() => document.body.querySelector("[data-hop-cap-nhat-kr]") !== null,
-			"hop cap nhat",
+			() => document.body.querySelector(KHOI_MO) !== null,
+			"khoi cap nhat",
 		);
 		const ghiHoCuaChu = document.body.querySelectorAll("[data-ghi-ho]").length;
 		for (const san of dangMo) await act(async () => san.root.unmount());

@@ -434,7 +434,7 @@ async function phanGui(n, run) {
 
 	const nut = `[data-kr-hop='${k.keyResultId}'] [data-nut='cap-nhat-dong-kr']`;
 	const bamNut = await bam(t, nut);
-	const hop = `[data-hop-cap-nhat-kr='${k.keyResultId}']`;
+	const hop = `[data-kr-sheet='${k.keyResultId}'] [data-khoi-cap-nhat-kr='mo']`;
 	const moHop = await t
 		.waitForSelector(hop, { visible: true, timeout: DO.cho.dieuHuongMs })
 		.then(() => true)

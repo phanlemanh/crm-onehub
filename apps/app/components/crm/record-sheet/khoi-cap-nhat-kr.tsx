@@ -25,7 +25,6 @@ import {
 	ItemTitle,
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { formatDayShort } from "@crm/ui/lib/format";
@@ -36,6 +35,7 @@ import {
 	type LoiVao,
 	mucCapNhat,
 } from "@crm/validation/okr-cap-nhat";
+import { SO_KR_MOC, tienDoKr } from "@crm/validation/okr-kr";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { parseAsString, useQueryStates } from "nuqs";
 import {
@@ -74,6 +74,11 @@ export const TAB_CAP_NHAT = "cap-nhat";
 type ChiTiet = RouterOutputs["okr"]["objective"];
 type KrCuaMt = ChiTiet["keyResults"][number];
 type LanCapNhat = RouterOutputs["okr"]["lichSuKr"]["lan"][number];
+type LanCuoi = Pick<LanCapNhat, "ngay" | "giaTri">;
+export type LoiVaoKhoi = Extract<
+	LoiVao,
+	"sheet" | "hop-tuan" | "bang-don-vi" | "muc-tieu"
+>;
 type O = ReturnType<typeof oBanDau>;
 type MucGui = GuiCapNhatInput["items"][number];
 
@@ -81,14 +86,14 @@ const NGAY_MS = 86_400_000;
 const SO_NGAY_TUAN = 7;
 const SO_LE_DOI = 6;
 
-let loiVaoCho: { keyResultId: string; entry: LoiVao } | null = null;
+let loiVaoCho: { keyResultId: string; entry: LoiVaoKhoi } | null = null;
 const nguoiNghe = new Set<(keyResultId: string) => void>();
 
-export function datLoiVao(keyResultId: string, entry: LoiVao): void {
+export function datLoiVao(keyResultId: string, entry: LoiVaoKhoi): void {
 	loiVaoCho = { keyResultId, entry };
 }
 
-function layLoiVao(keyResultId: string): LoiVao {
+function layLoiVao(keyResultId: string): LoiVaoKhoi {
 	const cho = loiVaoCho;
 	loiVaoCho = null;
 	return cho?.keyResultId === keyResultId ? cho.entry : "sheet";
@@ -101,7 +106,7 @@ const thamSoMo = {
 
 export type MoCapNhatKr = (
 	keyResultId: string,
-	entry: LoiVao,
+	entry: LoiVaoKhoi,
 	thuTu?: string | null,
 ) => void;
 
@@ -141,6 +146,11 @@ export function dauTuanVN(ngay: string): string {
 export function denHanCapNhat(lan: readonly LanCapNhat[], now: Date): boolean {
 	const tuanNay = dauTuanVN(homNayVN(now));
 	return !lan.some((l) => l.tuan >= tuanNay);
+}
+
+export function denHanTheoVet(lastAt: string | null, now: Date): boolean {
+	if (lastAt === null) return true;
+	return dauTuanVN(homNayVN(new Date(lastAt))) < dauTuanVN(homNayVN(now));
 }
 
 export function krCapNhatTuSheet(mt: ChiTiet, kr: KrCuaMt): KrCapNhat {
@@ -248,13 +258,23 @@ export function KhoiCapNhatKr({
 }) {
 	const trpc = useTRPC();
 	const ls = useQuery(trpc.okr.lichSuKr.queryOptions({ keyResultId: kr.id }));
-	if (ls.isPending) return <Skeleton className="mx-5 my-3 h-14" />;
-	if (!ls.data) return null;
+	const lastAt = krCapNhatTuSheet(mt, kr).lastAt;
+	const lan = ls.data?.lan ?? null;
+	const lanCuoi: LanCuoi | null =
+		lan !== null
+			? (lan.at(-1) ?? null)
+			: lastAt === null
+				? null
+				: { ngay: homNayVN(new Date(lastAt)), giaTri: kr.currentValue };
 	return (
 		<KhoiDaTai
-			denHan={denHanCapNhat(ls.data.lan, new Date())}
+			denHan={
+				lan === null
+					? denHanTheoVet(lastAt, new Date())
+					: denHanCapNhat(lan, new Date())
+			}
 			kr={kr}
-			lanCuoi={ls.data.lan.at(-1) ?? null}
+			lanCuoi={lanCuoi}
 			mt={mt}
 			onDaGui={onDaGui}
 			onXemTruoc={onXemTruoc}
@@ -275,7 +295,7 @@ function KhoiDaTai({
 	mt: ChiTiet;
 	kr: KrCuaMt;
 	denHan: boolean;
-	lanCuoi: LanCapNhat | null;
+	lanCuoi: LanCuoi | null;
 	tuLoiVao: boolean;
 	onXemTruoc: (so: number | null) => void;
 	onDaGui: () => void;
@@ -290,7 +310,8 @@ function KhoiDaTai({
 	const ma = useId();
 	const krCn = useMemo(() => krCapNhatTuSheet(mt, kr), [mt, kr]);
 	const banDau = useMemo(() => oBanDau(krCn, locale), [krCn, locale]);
-	const [mo, setMo] = useState(denHan || tuLoiVao);
+	const [moNguoi, setMo] = useState<boolean | null>(tuLoiVao ? true : null);
+	const mo = moNguoi ?? denHan;
 	const [tieuDiem, setTieuDiem] = useState(tuLoiVao);
 	const [oNhap, setO] = useState<O | null>(null);
 	const o = oNhap ?? banDau;
@@ -403,9 +424,15 @@ function KhoiDaTai({
 	const hienBangChung = krCn.kind === "moc" && so === 1;
 	const saiBangChung = hienBangChung && loiDuongDan(bangChung);
 	const doi =
-		so === null || loi !== null
+		!coNhap || so === null || loi !== null
 			? null
 			: mucDoi(krCn, giaTriCuoi, so, locale, k.mucDoi);
+	const tienDo =
+		so === null || loi !== null
+			? null
+			: krCn.kind === "moc"
+				? tienDoKr("moc", SO_KR_MOC.startValue, SO_KR_MOC.targetValue, so)
+				: tienDoKr(kr.kind, kr.startValue, kr.targetValue, so);
 	const loiMayChu =
 		gui.error?.data?.httpStatus !== undefined && gui.error.data.httpStatus < 500
 			? gui.error.message
@@ -506,6 +533,13 @@ function KhoiDaTai({
 							tuDongFocus={tieuDiem}
 							value={o.giaTri}
 						/>
+						{tienDo === null ? null : (
+							<FieldDescription className="tabular-nums" data-xem-truoc>
+								<span data-tien-do-moi={tienDo}>
+									{t.capNhat.tienDoMoi(tienDo)}
+								</span>
+							</FieldDescription>
+						)}
 						{hienBangChung ? (
 							<Field
 								data-invalid={saiBangChung ? true : undefined}

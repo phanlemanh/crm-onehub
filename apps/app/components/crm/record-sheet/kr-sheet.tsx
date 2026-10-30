@@ -744,7 +744,6 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 	const thuTu = useThuTuHopTuan(keyResultId);
 	const qc = useQueryClient();
 	const daGui = () => {
-		if (tab === TAB.capNhat) setTab(TAB.viec);
 		if (thuTu)
 			void qc.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() });
 	};

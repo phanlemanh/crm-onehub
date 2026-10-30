@@ -7,11 +7,10 @@ import { type KieuKr, tienDoKr } from "@crm/validation/okr-kr";
 import { TINH_TRANG_KR } from "@crm/validation/okr-muc-tieu";
 import { troLyTomTatOutput } from "@crm/validation/okr-tom-tat";
 import { hoiPhienOutput, ketQuaNopTraLoi } from "@crm/validation/okr-tra-loi";
-import { useQuery } from "@tanstack/react-query";
 import { defaultMessageReducer, type EveAgentReducerEvent } from "eve/client";
 import { act, Profiler, useCallback } from "react";
 import { z } from "zod";
-import type { CapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
+import type { MoCapNhatKr } from "@/components/crm/record-sheet/khoi-cap-nhat-kr";
 import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
 import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
 import { moiKrOutput } from "../../api/src/okr/okr-moi-kr.contracts";
@@ -28,6 +27,8 @@ import {
 import {
 	chiTietTu,
 	cho,
+	danhSachTu,
+	daTaiDanhSach,
 	datLai,
 	docCua,
 	dung,
@@ -45,11 +46,13 @@ import {
 	nut,
 	qs,
 	type San,
+	TheoDonVi,
 	thaoHet,
 } from "./khung-gop-y-dung-cho";
 
-const { useCapNhatKr } = await import("@/app/(app)/[slug]/okr/cap-nhat-kr");
-const { useTRPC } = await import("@/lib/trpc/client");
+const { useMoCapNhatKr } = await import(
+	"@/components/crm/record-sheet/khoi-cap-nhat-kr"
+);
 const { okrMessages } = await import("@/lib/messages/okr");
 const { congNgay } = await import(
 	"@/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan"
@@ -71,30 +74,24 @@ const BON_KR = ["k1", "k2", "k3", "k4"].map((id, i) =>
 const chiTiet = (): ObjectiveOutput =>
 	chiTietTu(mucTieu(MT, BON_KR, { canEdit: true }));
 
-type Tay = { mo: CapNhatKr["mo"] | null };
+type Tay = { mo: MoCapNhatKr | null };
 
 const tay: Tay = { mo: null };
 
-function DocKr({ keyResultId }: { keyResultId: string }) {
-	const trpc = useTRPC();
-	useQuery(trpc.okr.canhKr.queryOptions({ keyResultId }));
-	useQuery(trpc.okr.dienBien.queryOptions({ keyResultId }));
-	return null;
+function ThuHook() {
+	tay.mo = useMoCapNhatKr();
+	return <RecordSheetHost />;
 }
 
-function ThuHook({ docKr }: { docKr: string }) {
-	const capNhat = useCapNhatKr();
-	tay.mo = capNhat.mo;
-	return (
-		<>
-			<DocKr keyResultId={docKr} />
-			{capNhat.hop}
-		</>
-	);
-}
-
-const hop = () => qs("[data-hop-cap-nhat-kr]");
+const KHOI = "[data-khoi-cap-nhat-kr]";
+const hop = () => qs('[data-kr-sheet] [data-khoi-cap-nhat-kr="mo"]');
+const krCuaKhoi = () =>
+	hop()?.closest("[data-kr-sheet]")?.getAttribute("data-kr-sheet") ?? null;
+const tieuDeNgan = (id: string) =>
+	qs(`[data-kr-sheet="${id}"] [data-slot="sheet-title"]`);
 const oGiaTri = (id: string) => qs<HTMLInputElement>(`[id="${id}-gia-tri"]`);
+const docTheoKr = (duong: string, id: string) =>
+	docCua(duong).filter((g) => g.vao?.keyResultId === id).length;
 
 beforeEach(datLai);
 afterEach(thaoHet);
@@ -107,33 +104,43 @@ describe("vk7-cap-nhat-ngan", () => {
 			() => new Promise<KetQuaGhi>((r) => traPhien.push(r)),
 		);
 		kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
+		kho.rieng.set("okr.lichSuKr", () => lichSuKrCua(dienBienCua(CA_TANG)));
+		kho.rieng.set("okr.canhKr", (vao) => {
+			const k = BON_KR.find((x) => x.id === vao?.keyResultId);
+			if (!k) throw new LoiTrpc("NOT_FOUND", "khong co KR");
+			return canhCua(k);
+		});
+		kho.chiTiet = chiTiet;
 		const mt = chiTiet();
 		const [k1, , k3] = mt.keyResults;
 		if (!k1 || !k3) throw new Error("thieu KR mau");
-		await dung(<ThuHook docKr={k3.id} />);
+		await dung(<ThuHook />);
+		await cho(() => tay.mo !== null, "loi mo khoi");
+
+		await act(async () => {
+			tay.mo?.(k1.id, "sheet");
+		});
+		await cho(() => krCuaKhoi() === k1.id, "hop K1");
+		await nhip(2);
+		const tieuDiemK1 = document.activeElement === oGiaTri(k1.id);
+		await act(async () => {
+			tay.mo?.(k3.id, "sheet");
+		});
+		await cho(() => krCuaKhoi() === k3.id, "hop K3");
+		await nhip(3);
+		const krCuaHop = krCuaKhoi();
+		if (krCuaHop !== k3.id) throw new Error(`hop sai kr: ${krCuaHop}`);
+		const tieuDiemK3 = document.activeElement === oGiaTri(k3.id);
 		await cho(
 			() =>
-				docCua("okr.canhKr").length === 1 &&
-				docCua("okr.dienBien").length === 1,
+				docTheoKr("okr.canhKr", k3.id) === 1 &&
+				docTheoKr("okr.lichSuKr", k3.id) === 1,
 			"doc KR lan dau",
 		);
 		const docTruoc = {
-			canhKr: docCua("okr.canhKr").length,
-			lichSu: docCua("okr.dienBien").length,
+			canhKr: docTheoKr("okr.canhKr", k3.id),
+			lichSu: docTheoKr("okr.lichSuKr", k3.id),
 		};
-
-		await act(async () => {
-			tay.mo?.(mt, k1);
-		});
-		await cho(() => hop() !== null, "hop K1");
-		const tieuDiemK1 = document.activeElement === oGiaTri(k1.id);
-		await act(async () => {
-			tay.mo?.(mt, k3);
-		});
-		await nhip(3);
-		const krCuaHop = hop()?.getAttribute("data-hop-cap-nhat-kr");
-		if (krCuaHop !== k3.id) throw new Error(`hop sai kr: ${krCuaHop}`);
-		const tieuDiemK3 = document.activeElement === oGiaTri(k3.id);
 		await act(async () => {
 			traPhien[1]?.({ sessionId: "phien-2" });
 		});
@@ -165,8 +172,8 @@ describe("vk7-cap-nhat-ngan", () => {
 		await cho(() => hop() === null, "hop dong sau gui");
 
 		const lamMoi = {
-			"canh-kr": docCua("okr.canhKr").length - docTruoc.canhKr,
-			"lich-su": docCua("okr.dienBien").length - docTruoc.lichSu,
+			"canh-kr": docTheoKr("okr.canhKr", k3.id) - docTruoc.canhKr,
+			"lich-su": docTheoKr("okr.lichSuKr", k3.id) - docTruoc.lichSu,
 		};
 		for (const [truyVan, lan] of Object.entries(lamMoi)) {
 			if (lan < 1) throw new Error(`khong lam moi: ${truyVan}`);
@@ -176,9 +183,9 @@ describe("vk7-cap-nhat-ngan", () => {
 				`o gia tri khong co tieu diem: K1 ${tieuDiemK1}, K3 ${tieuDiemK3}`,
 			);
 		expect({
-			tieuDe: h.querySelector('[data-slot="dialog-description"]')?.textContent,
-			khongDich: h
-				.querySelector('[data-slot="dialog-description"]')
+			tieuDe: tieuDeNgan(k3.id)?.textContent,
+			khongDich: tieuDeNgan(k3.id)
+				?.querySelector("[translate]")
 				?.getAttribute("translate"),
 			phien: goiCua("okr.moCapNhat").map((g) => g.vao),
 			gui: goiCua("okr.guiCapNhat").map((g) => g.vao),
@@ -317,30 +324,28 @@ function dienBienCua(ca: CaKieu) {
 	});
 }
 
-function mtMotKr(id: string, doi: Parameters<typeof kr>[2]): ObjectiveOutput {
-	return chiTietTu(
-		mucTieu(
-			MT,
-			[
-				kr(id, MT, {
-					title: `KR ${id}`,
-					hienTaiQuaCapNhat: true,
-					laCuaToi: true,
-					...doi,
-				}),
-			],
-			{ canEdit: true },
-		),
-	);
+function krMotKr(id: string, doi: Parameters<typeof kr>[2]): KrMau {
+	return kr(id, MT, {
+		title: `KR ${id}`,
+		hienTaiQuaCapNhat: true,
+		laCuaToi: true,
+		...doi,
+	});
 }
 
-async function moHopCua(mt: ObjectiveOutput): Promise<HTMLElement> {
-	const k = mt.keyResults[0];
-	if (!k) throw new Error("thieu KR");
-	await dung(<ThuHook docKr={k.id} />);
-	await act(async () => {
-		tay.mo?.(mt, k);
+const lichSuMoc = () =>
+	lichSuKrOutput.parse({
+		kieu: "moc",
+		tieuDe: "KR moc",
+		dich: 1,
+		donVi: "",
+		coCapNhat: false,
+		lan: [],
+		chuoi: [],
 	});
+
+async function moHopCua(k: KrMau): Promise<HTMLElement> {
+	await dungNgan(k.id, { ds: [k] });
 	await cho(() => hop() !== null, "hop cap nhat");
 	const h = hop();
 	if (!h) throw new Error("khong co hop");
@@ -385,9 +390,10 @@ describe("vk7-xem-truoc", () => {
 			const ca = CA_SO.find((c) => c.ten === ten);
 			if (ca) {
 				kho.rieng.set("okr.dienBien", () => dienBienCua(ca));
+				kho.rieng.set("okr.lichSuKr", () => lichSuKrCua(dienBienCua(ca)));
 				const id = `x-${ten}`;
 				await moHopCua(
-					mtMotKr(id, {
+					krMotKr(id, {
 						kind: ca.kieu,
 						startValue: ca.khoi,
 						targetValue: ca.dich,
@@ -396,7 +402,9 @@ describe("vk7-xem-truoc", () => {
 					}),
 				);
 				await cho(
-					() => qs("[data-xem-truoc] [data-slot='target-line-chart']") !== null,
+					() =>
+						qs("[data-muc-ngan='lich-su'] [data-slot='target-line-chart']") !==
+						null,
 					`do thi xem truoc ${ten}`,
 				);
 				const theoGia = [];
@@ -406,13 +414,13 @@ describe("vk7-xem-truoc", () => {
 					theoGia.push({
 						diemMoi: diemMoi(),
 						lichSu: soDiemLichSu(),
-						dich: qs("[data-xem-truoc] [data-muc='dich']") !== null,
+						dich: qs("[data-muc-ngan='lich-su'] [data-muc='dich']") !== null,
 						tienDo: dongTienDo(),
 						mong: String(tienDoKr(ca.kieu, ca.khoi, ca.dich, so)),
 					});
 				}
 				await goGiaTri(id, "abc");
-				const loi = qs(`[data-hop-cap-nhat-kr] [data-slot="field-error"]`);
+				const loi = qs(`${KHOI} [data-slot="field-error"]`);
 				const thucTe = {
 					theoGia,
 					sai: {
@@ -437,8 +445,9 @@ describe("vk7-xem-truoc", () => {
 				});
 			} else {
 				const id = `x-${ten}`;
+				kho.rieng.set("okr.lichSuKr", lichSuMoc);
 				const h = await moHopCua(
-					mtMotKr(id, {
+					krMotKr(id, {
 						kind: "moc",
 						startValue: 0,
 						targetValue: 1,
@@ -446,8 +455,14 @@ describe("vk7-xem-truoc", () => {
 						unit: "",
 					}),
 				);
-				const chuMoc = () =>
-					qs("[data-xem-truoc='moc'] [data-tien-do-moi]")?.textContent ?? "";
+				const chuMoc = () => {
+					const doi = qs(`${KHOI} [data-xem-truoc-cap-nhat]`)?.textContent;
+					if (doi) return doi.split(" → ").at(-1) ?? "";
+					return (
+						qs(`${KHOI} [data-o="gia-tri"] [data-state="on"]`)?.textContent ??
+						""
+					);
+				};
 				const truoc = {
 					chu: chuMoc().startsWith(mo.moc.chuaXong),
 					tienDo: dongTienDo(),
@@ -462,7 +477,7 @@ describe("vk7-xem-truoc", () => {
 					sau: { chu: chuMoc().startsWith(mo.moc.xong), tienDo: dongTienDo() },
 					doThi: document.querySelectorAll("[data-slot='target-line-chart']")
 						.length,
-					docLichSu: docCua("okr.dienBien").length,
+					docLichSu: docCua("okr.lichSuKr").length,
 				};
 				expect(thucTe).toEqual({
 					truoc: { chu: true, tienDo: "0" },
@@ -496,6 +511,7 @@ const { giaTri } = await import("@/app/(app)/[slug]/okr/bang-kr");
 const { okrCanhKrMessages } = await import("@/lib/messages/okr-canh-kr");
 
 const mk = okrCanhKrMessages("vi").khung;
+const mkk = okrCanhKrMessages("vi").khoiCapNhat;
 
 type KrMau = ReturnType<typeof kr>;
 
@@ -555,6 +571,8 @@ async function dungNgan(krId: string, cho_: ChoNgan = {}) {
 			"okr.dienBien",
 			cho_.dienBien ?? (() => dienBienCua(CA_TANG)),
 		);
+	if (!kho.rieng.has("okr.lichSuKr"))
+		kho.rieng.set("okr.lichSuKr", () => lichSuKrCua(dienBienCua(CA_TANG)));
 	const san = await dung(
 		<>
 			<Profiler id="host" onRender={demMount}>
@@ -570,23 +588,24 @@ async function dungNgan(krId: string, cho_: ChoNgan = {}) {
 
 const nutCo2 = (nhan: string) =>
 	qs<HTMLButtonElement>(`[data-dau-ngan-kr] button[aria-label="${nhan}"]`);
-const nutCapNhatDau = () =>
-	[
-		...document.querySelectorAll<HTMLButtonElement>(
-			"[data-dau-ngan-kr] button",
-		),
-	].find((b) => b.textContent?.trim() === mk.capNhat) ?? null;
 const demKr = () => qs("[data-dau-ngan-kr] [data-dem-kr]")?.textContent ?? null;
 const trangThaiNgan = () =>
 	qs("[data-than-ngan-kr]")?.getAttribute("data-trang-thai") ?? null;
 const daDungXong = () =>
 	trangThaiNgan() === "ST-ngan-kr-mo" ||
 	trangThaiNgan() === "ST-ngan-kr-chi-doc";
+const coKhoi = () => qs(`[data-kr-sheet] ${KHOI}`) !== null;
+const coKhoiHayChiDoc = () =>
+	coKhoi() || trangThaiNgan() === "ST-ngan-kr-chi-doc";
+const nutChinhDau = () =>
+	document.querySelectorAll('[data-dau-ngan-kr] button[data-variant="default"]')
+		.length;
 
 describe("vk7-dau-ngan", () => {
 	test("vk7-dau-ngan: KR thu 2 cua M bon KR — lien ket M, dem 2/4, hai nut sang KR, Cap nhat primary; ma tran quyen ba o; muc tieu mot KR khong dem", async () => {
 		const san = await dungNgan("k2");
 		await cho(daDungXong, "ngan KR k2 xong");
+		await cho(coKhoiHayChiDoc, "khoi cap nhat k2");
 		const lk = qs<HTMLAnchorElement>("[data-lien-ket-muc-tieu]");
 		const dau = {
 			tenMt: lk?.textContent,
@@ -596,7 +615,7 @@ describe("vk7-dau-ngan", () => {
 			dem: demKr(),
 			truoc: nutCo2(mk.krTruoc) !== null,
 			ke: nutCo2(mk.krKe) !== null,
-			capNhat: nutCapNhatDau()?.getAttribute("data-variant") ?? null,
+			capNhat: { nutChinhDau: nutChinhDau(), khoi: coKhoi() },
 		};
 		if (!lk) throw new Error("khong co lien ket muc tieu");
 		await act(async () => {
@@ -609,7 +628,7 @@ describe("vk7-dau-ngan", () => {
 			dem: "2/4",
 			truoc: true,
 			ke: true,
-			capNhat: "default",
+			capNhat: { nutChinhDau: 0, khoi: true },
 		});
 		await thaoHet();
 
@@ -638,7 +657,8 @@ describe("vk7-dau-ngan", () => {
 					}),
 			});
 			await cho(daDungXong, `ngan ${o.ten}`);
-			thucTe[o.ten] = nutCapNhatDau() !== null;
+			await cho(coKhoiHayChiDoc, `khoi ${o.ten}`);
+			thucTe[o.ten] = coKhoi();
 			await thaoHet();
 		}
 		expect(thucTe).toEqual(
@@ -649,11 +669,12 @@ describe("vk7-dau-ngan", () => {
 		const motKr = [BON_KR[0]].filter((k): k is KrMau => k !== undefined);
 		await dungNgan("k1", { ds: motKr });
 		await cho(daDungXong, "ngan muc tieu mot KR");
+		await cho(coKhoiHayChiDoc, "khoi muc tieu mot KR");
 		expect({
 			dem: demKr(),
 			truoc: nutCo2(mk.krTruoc),
 			ke: nutCo2(mk.krKe),
-			capNhat: nutCapNhatDau() !== null,
+			capNhat: coKhoi(),
 		}).toEqual({ dem: null, truoc: null, ke: null, capNhat: true });
 	});
 });
@@ -924,9 +945,20 @@ describe("vk7-cap-nhat-ngan", () => {
 			canhKr: docCua("okr.canhKr").length,
 			lichSu: docCua("okr.lichSuKr").length,
 		};
-		const nutDau = nutCapNhatDau();
-		if (!nutDau) throw new Error("thieu nut Cap nhat o dau ngan");
+		await cho(() => hop() !== null, "khoi mo san");
 		const u = nguoiDung();
+		const nutThu = qs<HTMLButtonElement>(
+			`${KHOI} button[aria-label="${mkk.thu}"]`,
+		);
+		if (!nutThu) throw new Error("thieu nut thu khoi");
+		await act(async () => {
+			await u.click(nutThu);
+		});
+		await cho(() => hop() === null, "khoi thu");
+		const nutDau = qs<HTMLButtonElement>(
+			`${KHOI} [data-nut="mo-khoi-cap-nhat-kr"]`,
+		);
+		if (!nutDau) throw new Error("thieu dong thu cua khoi");
 		await act(async () => {
 			await u.click(nutDau);
 		});
@@ -1030,7 +1062,11 @@ describe("vk7-hep", () => {
 			try {
 				await dungNgan("k2");
 				await cho(daDungXong, `ngan o kho ${k.ten}`);
+				await cho(coKhoiHayChiDoc, `khoi o kho ${k.ten}`);
 				const drawer = qs('[data-slot="drawer-content"]') !== null;
+				const trongNgan = k.drawer
+					? '[data-slot="drawer-content"]'
+					: '[data-slot="sheet-content"]';
 				if (!k.drawer && drawer) throw new Error("drawer tren md");
 				thucTe[k.ten] = {
 					drawer,
@@ -1038,7 +1074,7 @@ describe("vk7-hep", () => {
 					dem: demKr(),
 					truoc: nutCo2(mk.krTruoc) !== null,
 					ke: nutCo2(mk.krKe) !== null,
-					capNhat: nutCapNhatDau() !== null,
+					capNhat: (qs(KHOI)?.closest(trongNgan) ?? null) !== null,
 					dauTrongNgan:
 						qs("[data-dau-ngan-kr]")?.closest(
 							k.drawer
@@ -1160,9 +1196,10 @@ describe("vk7-trang-thai", () => {
 					}),
 			});
 			await cho(daDungXong, `ngan ${b.ten}`);
+			await cho(coKhoiHayChiDoc, `khoi ${b.ten}`);
 			daBo[b.ten] = {
 				trangThai: trangThaiNgan(),
-				capNhat: nutCapNhatDau() !== null,
+				capNhat: qs(KHOI) !== null,
 				soMuc: thuTuMuc().length,
 			};
 			await thaoHet();
@@ -1199,6 +1236,7 @@ describe("vk7-trang-thai", () => {
 		datLai();
 		await dungNgan("k2");
 		await cho(daDungXong, "ngan K2 xong");
+		await cho(() => hop() !== null, "khoi K2 mo");
 		const khongDich = (o: Element | null) =>
 			o?.closest('[translate="no"]') !== null && o !== null;
 		const tenKr = [
@@ -1215,9 +1253,11 @@ describe("vk7-trang-thai", () => {
 			tenKr: khongDich(tenKr ?? null),
 			mucTieu: khongDich(qs("[data-lien-ket-muc-tieu]")),
 			nguoi: khongDich(nguoi ?? null),
-			vong: [nutCo2(mk.krTruoc), nutCo2(mk.krKe), nutCapNhatDau()].map(
-				(b) => b?.className.includes("focus-visible") ?? false,
-			),
+			vong: [
+				nutCo2(mk.krTruoc),
+				nutCo2(mk.krKe),
+				qs(`${KHOI} [data-nut="gui-cap-nhat-kr"]`),
+			].map((b) => b?.className.includes("focus-visible") ?? false),
 		}).toEqual({
 			tenKr: true,
 			mucTieu: true,
@@ -1650,8 +1690,6 @@ describe("vk7-moi-loi", () => {
 	});
 });
 
-const { DetailSheet, ObjectiveSheet } = await import("./khung-gop-y-dung-cho");
-
 const nutDong = (id: string) =>
 	qs<HTMLButtonElement>(`[data-kr="${id}"] [data-nut="cap-nhat-dong-kr"]`);
 const nutDongTatCa = () =>
@@ -1663,12 +1701,34 @@ async function dungDongKr(
 	ds: KrMau[],
 	doi: Parameters<typeof chiTietTu>[1] = {},
 	doiMt: Parameters<typeof mucTieu>[2] = {},
+	coNgan = false,
 ): Promise<San> {
 	const m = mucTieu(MT, ds, { canEdit: true, ...doiMt });
 	kho.chiTiet = () => chiTietTu(m, doi);
 	if (!kho.rieng.has("okr.dienBien"))
 		kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
-	return dungTheoDonVi([m], `?expand=${MT}`);
+	if (!coNgan) return dungTheoDonVi([m], `?expand=${MT}`);
+	if (!kho.rieng.has("okr.lichSuKr"))
+		kho.rieng.set("okr.lichSuKr", () => lichSuKrCua(dienBienCua(CA_TANG)));
+	if (!kho.rieng.has("okr.canhKr"))
+		kho.rieng.set("okr.canhKr", (vao) => {
+			const k = ds.find((x) => x.id === vao?.keyResultId);
+			if (!k) throw new LoiTrpc("NOT_FOUND", "khong co KR");
+			return canhCua(k);
+		});
+	kho.danhSach = () => danhSachTu([m]);
+	const san = await dung(
+		<>
+			<TheoDonVi />
+			<RecordSheetHost />
+		</>,
+		`?expand=${MT}`,
+	);
+	await cho(
+		() => daTaiDanhSach() && qs("[data-so-kr-cho]") === null,
+		"theo don vi tai xong",
+	);
+	return san;
 }
 
 describe("vk7-tren-dong", () => {
@@ -1680,7 +1740,7 @@ describe("vk7-tren-dong", () => {
 	test("vk7-tren-dong: bang KR trang don vi, canEditKr co K1 K3 — dung hai nut Cap nhat hien san tren dong K1 K3, khong trong menu; bam dong K3 mo hop K3, khong mo ngan; menu «…» cua ngan M van mo cung hop", async () => {
 		coKhungDoThi();
 		const DUOC = ["k1", "k3"];
-		await dungDongKr(BON_KR, { canEditKr: DUOC });
+		await dungDongKr(BON_KR, { canEditKr: DUOC }, {}, true);
 		await cho(() => nutDong("k1") !== null, "nut cap nhat dong K1");
 		const MA_TRAN = BON_KR.map((k) => ({ kr: k.id, co: DUOC.includes(k.id) }));
 		expect(MA_TRAN.length).toBe(4);
@@ -1708,11 +1768,10 @@ describe("vk7-tren-dong", () => {
 		await act(async () => {
 			await nguoiDung().click(b3);
 		});
-		await cho(() => hop() !== null, "hop K3 mo tu dong");
+		await cho(() => krCuaKhoi() === k3.id, "hop K3 mo tu dong");
 		expect({
-			hop: hop()?.getAttribute("data-hop-cap-nhat-kr"),
-			tieuDe: hop()?.querySelector('[data-slot="dialog-description"]')
-				?.textContent,
+			hop: krCuaKhoi(),
+			tieuDe: tieuDeNgan(k3.id)?.textContent,
 			moNgan: moGhi.goi,
 			phien: goiCua("okr.moCapNhat").map((g) => g.vao),
 		}).toEqual({
@@ -1727,12 +1786,13 @@ describe("vk7-tren-dong", () => {
 		kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
 		kho.chiTiet = () =>
 			chiTietTu(mucTieu(MT, BON_KR, { canEdit: true }), { canEditKr: DUOC });
-		await dung(
-			<DetailSheet onOpenChange={() => {}} open>
-				<ObjectiveSheet objectiveId={MT} />
-			</DetailSheet>,
-			`?record=objective:${MT}`,
-		);
+		kho.rieng.set("okr.lichSuKr", () => lichSuKrCua(dienBienCua(CA_TANG)));
+		kho.rieng.set("okr.canhKr", (vao) => {
+			const k = BON_KR.find((x) => x.id === vao?.keyResultId);
+			if (!k) throw new LoiTrpc("NOT_FOUND", "khong co KR");
+			return canhCua(k);
+		});
+		await dung(<RecordSheetHost />, `?record=objective:${MT}`);
 		const menuK1 = () =>
 			qs<HTMLButtonElement>('[data-kr-hang="k1"] button[aria-haspopup="menu"]');
 		await cho(() => menuK1() !== null, "menu dong K1 trong ngan M");
@@ -1748,7 +1808,7 @@ describe("vk7-tren-dong", () => {
 			await nguoiDung().click(muc);
 		});
 		await cho(() => hop() !== null, "hop tu menu ngan M");
-		expect(hop()?.getAttribute("data-hop-cap-nhat-kr")).toBe("k1");
+		expect(krCuaKhoi()).toBe("k1");
 	});
 });
 
@@ -1841,7 +1901,7 @@ describe("vk7-ba-bam", () => {
 			coKhungDoThi();
 			kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
 			const ds = BON_KR.map((k) => (k.id === "k2" ? { ...k, ...ca.doi } : k));
-			await dungDongKr(ds);
+			await dungDongKr(ds, {}, {}, true);
 			await cho(() => nutDong("k2") !== null, `nut dong ${ca.ten}`);
 			const nutK = nutDong("k2");
 			if (!nutK) throw new Error("thieu nut dong K");
@@ -1909,7 +1969,7 @@ describe("vk7-ba-bam", () => {
 		datLai();
 		coKhungDoThi();
 		kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
-		await dungDongKr(BON_KR);
+		await dungDongKr(BON_KR, {}, {}, true);
 		await cho(() => nutDong("k2") !== null, "nut dong chua tu tin");
 		const nutK = nutDong("k2");
 		if (!nutK) throw new Error("thieu nut dong K");
