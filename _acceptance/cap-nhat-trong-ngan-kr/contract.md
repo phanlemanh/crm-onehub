@@ -5,7 +5,7 @@ slug: cap-nhat-trong-ngan-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-30
 design_doc: _acceptance/cap-nhat-trong-ngan-kr/design.md
@@ -100,3 +100,12 @@ Quét theo trục (skill `morphological-scan`, preset entity-feature; bản qué
   trước» trong hộp (`hop-cap-nhat-lan-truoc`) nay là dòng đầu Lịch sử cộng dòng mức đổi trong khối; nút «Cập nhật» đầu ngăn
   KR (VK7 `ngan-kr-mot-cho`, HT2) nay là khối trong ngăn. Ma trận đầy đủ dựng ở S3 trước khi sửa thước.
 - Không migration. `entry` mới thêm vào danh sách `LOI_VAO` của `packages/validation/src/okr-cap-nhat.ts`.
+- Ngoài-1 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Công cụ canh việc mất bài kiểm có thể im lặng khi ai đó xoá bớt các câu kiểm giống hệt nhau, hoặc sửa nội dung bên trong một câu kiểm nhiều dòng. Người dùng cuối không bị ảnh hưởng trực tiếp; rủi ro là một bài kiểm cũ bị yếu đi mà không ai được báo. — `_acceptance/cap-nhat-trong-ngan-kr/rang/thuoc-da-ky.mjs`
+- Ngoài-2 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Công cụ canh không theo dõi các thước đo màn đã ký viết theo kiểu khác, nên nếu ai xoá câu kiểm ở đó thì không có cảnh báo tự động. Hiện chưa thấy câu kiểm nào bị mất, nên người dùng chưa gặp ảnh hưởng nào. — `_acceptance/cap-nhat-trong-ngan-kr/rang/thuoc-da-ky.mjs`
+- Ngoài-3 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Công cụ canh so các câu kiểm theo chữ chứ không theo số lần xuất hiện, nên xoá bớt bản trùng không bị phát hiện. Người dùng cuối không thấy gì khác; chỉ là bài kiểm có thể yếu đi âm thầm. — `_acceptance/cap-nhat-trong-ngan-kr/rang/thuoc-da-ky.mjs`
+- Ngoài-4 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Hôm nay khối cập nhật vẫn quyết đúng mở hay thu theo tuần. Nhưng nếu sau này luật «tuần này» đổi ở một nơi mà quên nơi kia, khối có thể mở hay thu sai so với dữ liệu thật. — `apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx`
+- Ngoài-6 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Đang gõ dở một cập nhật KR mà bấm tên mục tiêu ở đầu ngăn thì ngăn chuyển sang mục tiêu và phần đã gõ mất, không hỏi lại. — `apps/app/components/crm/record-sheet/kr-sheet.tsx`
+- Ngoài-7 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Trong một chuỗi thao tác hiếm, lần mở KR kế tiếp có thể đặt con trỏ vào nút ‹ › thay vì ô giá trị, người dùng phải bấm vào ô giá trị. — `apps/app/components/crm/record-sheet/kr-sheet.tsx`
+- Ngoài-8 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Sát ranh giới tuần (khuya Chủ nhật, sáng Thứ hai giờ VN), nếu máy chủ tính tuần lệch thì khối có thể mở hay thu sai mà bài kiểm hiện tại không bắt được. — `apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx`
+- Ngoài-10 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Nếu sau khi gửi ngăn KR đóng hẳn thay vì thu lại, thước màn cũ này vẫn báo xanh. — `_acceptance/canh-kr-okr/rang/man-canh-kr.mjs`
+- Ngoài-11 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Nếu sau khi gửi từ lối cập nhật tuần mà khối không thu lại đúng, hoặc ngăn đóng, thước màn cũ này vẫn báo xanh. — `_acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs`

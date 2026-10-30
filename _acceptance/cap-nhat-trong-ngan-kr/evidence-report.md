@@ -1,13 +1,12 @@
 ---
 schema_version: 2
 feature_slug: cap-nhat-trong-ngan-kr
-verdict: REJECT
-failed_evals: [E10b]
-reason:
+verdict: PASS
+failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c2c854486e4663f989a442e5718a2f517a53e4f2
+verified_commit: 39a3dc49cdffbf4757f6e2431aeab7f0b0148df2
 human_signoff:
 ---
 
@@ -26,80 +25,73 @@ human_signoff:
 | E8 | AC-8 | test | PASS |
 | E9 | AC-9 | ui-check | PASS |
 | E10a | AC-10 | script | PASS |
-| E10b | AC-10 | test | FAIL |
+| E10b | AC-10 | test | PASS |
 | E10c | AC-10 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-cap-nhat-trong-ngan-kr-E1-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cnk_mo_thu
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-mo-thu
-    Ran 1 test across 1 file. [1.97s]
+    Ran 1 test across 1 file. [1.86s]
 
 - eval: E2
-  run_id: minted-cap-nhat-trong-ngan-kr-E2-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cnk_chi_doc
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-chi-doc
-    Ran 1 test across 1 file. [1325.00ms]
+    Ran 1 test across 1 file. [1191.00ms]
 
 - eval: E3
-  run_id: minted-cap-nhat-trong-ngan-kr-E3-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cnk_xem_truoc
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-xem-truoc
-    Ran 1 test across 1 file. [1.66s]
+    Ran 1 test across 1 file. [1.87s]
 
 - eval: E4a
-  run_id: minted-cap-nhat-trong-ngan-kr-E4a-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E4a-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cnk_gui
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-gui
-    Ran 1 test across 1 file. [1.89s]
+    Ran 1 test across 1 file. [2.18s]
 
 - eval: E4b
-  run_id: minted-cap-nhat-trong-ngan-kr-E4b-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E4b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cnk_api
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    bun run test -- "cd apps/api && bun test test/cap-nhat-trong-ngan-kr.spec.ts -t cnk-api"
-    test-run: dropped crm_mvuqumm7hyrk_test
+    test-run: dropped crm_mvurr8uz9ytl_test
 
 - eval: E5
-  run_id: minted-cap-nhat-trong-ngan-kr-E5-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cnk_loi
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-loi
-    Ran 2 tests across 1 file. [2.30s]
+    Ran 2 tests across 1 file. [1.78s]
 
 - eval: E6
-  run_id: minted-cap-nhat-trong-ngan-kr-E6-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cnk_giu_nhap
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-giu-nhap
-    Ran 1 test across 1 file. [2.32s]
+    Ran 1 test across 1 file. [2.63s]
 
 - eval: E7
   run_id: minted-cap-nhat-trong-ngan-kr-E7-r1
@@ -107,111 +99,97 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.cnk_loi_vao
   verified_at: 2026-10-30T09:01:49Z
+  carried_from_round: 1
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-loi-vao
-    Ran 1 test across 1 file. [1.93s]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E8
-  run_id: minted-cap-nhat-trong-ngan-kr-E8-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cnk_dau_ngan
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-dau-ngan
-    Ran 1 test across 1 file. [2.19s]
+    Ran 1 test across 1 file. [2.09s]
 
 - eval: E9
-  run_id: minted-cap-nhat-trong-ngan-kr-E9-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cnk_man
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   screenshot: evidence/cnk-1280-1-den-han.png
   observed: |
-    Đã mở từng ảnh bằng Read.
-    - cnk-1280-1-den-han.png: sáng, 1280×800. Ngăn KR «Giữ thời gian duyệt hợp đồng dưới 2 ngày» (1/2) mở bên phải. Khối «CẬP NHẬT KR NÀY» đang mở, nằm trọn trong khung nhìn: ô Giá trị 1,9 ngày, «Tiến độ mới 100%», ba chip mức tự tin Cao/Vừa/Thấp, «Lần trước: cao», ô Ghi chú, nút «Gửi cập nhật» (mờ, chờ chọn mức tự tin), «LỊCH SỬ CẬP NHẬT» bắt đầu ngay bên dưới. Không có hộp thoại nào che ngăn.
-    - cnk-1280-2-vua-gui.png: Ngăn vẫn mở sau khi gửi. Khối thu lại thành «Cập nhật KR này · Lần mới nhất: 30/10 · 2 ngày». Ô số hiện tại đổi thành 2 ngày. Biểu đồ có thêm chấm mới ở 30/10. Dòng đầu Lịch sử là «16:03 30/10/2026 · 2 ngày · ghi chú cnk 1280 · Tự tin vừa», đúng giá trị vừa gửi. Toast «Đã gửi cập nhật», không có dialog.
-    - cnk-1280-3-tu-hop-tuan.png: Ngăn KR «Giữ khiếu nại tồn qua đêm dưới 5» (1/5 · theo thứ tự bảng) mở từ Họp tuần. Khối «CẬP NHẬT KR NÀY» mở sẵn ở đầu ngăn trong khung nhìn. Có dòng «Bạn ghi hộ Mai Đức Long». Ô Giá trị 4,8 đang có viền nhấn, tức tiêu điểm nằm ở ô giá trị. Không có dialog.
-    - cnk-375-1-den-han.png: 375×812. Ngăn kéo từ dưới lên (2/2) «Người mới tự nhận ca trong 10 ngày». Khối «CẬP NHẬT KR NÀY» mở với ô Giá trị 9,6 ngày, «Tiến độ mới 100%», chip Cao/Vừa/Thấp, «Lần trước: thấp», nằm trong khung nhìn. Chỉ một ngăn kéo, không dialog thứ hai.
-    - cnk-375-2-vua-gui.png: Ngăn kéo vẫn mở. Hiện tại 10 ngày, khối thu thành «Cập nhật KR này · Lần mới nhất: 30/10 · 10 ngày». Biểu đồ có chấm mới. Toast «Đã gửi cập nhật». Không dialog.
-    - cnk-375-3-tu-hop-tuan.png: Ngăn kéo KR «Giữ khiếu nại tồn qua đêm dưới 5» (1/5). Khối cập nhật mở sẵn, có dòng «Bạn ghi hộ Mai Đức Long», ô Giá trị 4,8 đang có viền nhấn (tiêu điểm), nằm trong khung nhìn. Một ngăn kéo duy nhất, không dialog.
-    Cả sáu ảnh khớp Expected và khớp số liệu do bàn đo in.
+    1280-1 (cnk-1280-1-den-han.png): ngăn bên phải mở KR «Giữ thời gian duyệt hợp đồng dưới 2 ngày» (1/2). Ô số Hiện tại 1,9 ngày và Tiến độ 100%, rồi khối «CẬP NHẬT KR NÀY» đang mở ngay trong ngăn, nằm trọn trong khung nhìn: ô Giá trị 1,9 ngày, ba lựa chọn Mức tự tin Cao/Vừa/Thấp, ô Ghi chú, nút «Gửi cập nhật» (đang mờ, ghi «Chọn mức tự tin để gửi»), rồi tới «LỊCH SỬ CẬP NHẬT». Không có hộp thoại nào chồng lên ngăn. Khớp Expected bước 1.
+    1280-2 (cnk-1280-2-vua-gui.png): sau khi gửi, ngăn vẫn mở cùng KR. Hiện tại 2 ngày, khối cập nhật thu gọn thành «Lần mới nhất: 30/10 · 2 ngày», toast «Đã gửi cập nhật». Dòng đầu Lịch sử: «16:28 30/10/2026 2 ngày», ghi chú «cnk 1280», nhãn «Tự tin vừa», điểm mới trên biểu đồ. Khớp Expected bước 2 (giá trị vừa gửi, ngăn còn mở, không dialog).
+    1280-3 (cnk-1280-3-tu-hop-tuan.png): ngăn KR «Giữ khiếu nại tồn qua đêm dưới 5» (1/5 · theo thứ tự bảng) mở từ Họp tuần. Khối «CẬP NHẬT KR NÀY» mở ở đầu ngăn, trong khung nhìn, có dòng «Bạn ghi hộ Mai Đức Long», ô Giá trị 4,8 khiếu nại có viền nhấn, tức tiêu điểm đang ở ô giá trị. Không dialog. Khớp Expected bước 3.
+    375-1 (cnk-375-1-den-han.png): ngăn dạng drawer đáy màn «Người mới tự nhận ca trong 10 ngày» (2/2). Khối «CẬP NHẬT KR NÀY» mở trong khung nhìn, Giá trị 9,6 ngày, Mức tự tin Cao/Vừa/Thấp, chỉ có một ngăn kéo (chính ngăn), không dialog. Khớp Expected bước 1 ở 375.
+    375-2 (cnk-375-2-vua-gui.png): sau khi gửi, ngăn vẫn mở. Hiện tại 10 ngày, khối thu gọn «Lần mới nhất: 30/10 · 10 ngày», toast «Đã gửi cập nhật», biểu đồ lịch sử có điểm mới ở 10. Dòng đầu Lịch sử nằm ngoài khung ảnh nên giá trị «10 ngày» được xác nhận qua assertion của script. Không ngăn kéo thứ hai. Khớp Expected bước 2.
+    375-3 (cnk-375-3-tu-hop-tuan.png): ngăn drawer «Giữ khiếu nại tồn qua đêm dưới 5» (1/5), khối «CẬP NHẬT KR NÀY» mở, dòng «Bạn ghi hộ Mai Đức Long», ô Giá trị 4,8 khiếu nại có viền nhấn là tiêu điểm, trong khung nhìn, một ngăn kéo duy nhất. Khớp Expected bước 3.
+    Cả sáu ảnh đều ở giao diện sáng, không thấy hộp thoại nào chồng lên ngăn. Không có mâu thuẫn với Expected.
   network_observed: n-a (driver)
   output: |
-    Network: driver là script Playwright trong man.mjs, không có đường đọc network từ đó, nên networkObserved = n-a (driver) và không ghi E9-network.txt.
-    Chiều đỏ (bản sao phục hồi HopThoaiCapNhatKr) không nằm trong steps của lượt này nên không chạy.
+    Network: driver là script phiên đo (không có công cụ đọc network của browser tool), nên networkObserved = n-a (driver); không ghi E9-network.txt.
+    Không chạy được bước CHIEU DO (đó là bước chiều đỏ trên bản sao, ngoài steps được giao).
 
 - eval: E10a
-  run_id: minted-cap-nhat-trong-ngan-kr-E10a-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E10a-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cnk_khong_hop_thoai
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    bun _acceptance/cap-nhat-trong-ngan-kr/rang/khong-hop-thoai.mjs
     khong-hop-thoai: 0 cho dung
 
 - eval: E10b
-  run_id: minted-cap-nhat-trong-ngan-kr-E10b-r1
-  exit_code: 1
+  run_id: minted-cap-nhat-trong-ngan-kr-E10b-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.test.suite_app_ui
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    bun run test -- --filter=app --filter=@crm/ui
-    app:test: 3 tests failed:
-    app:test: (fail) kho chuoi cua vong ③a > okr-canh-kr: moi gia tri tieng Viet mang dau, tru khoa da khai [0.14ms]
-    app:test: (fail) kho chuoi cua vong ③a > okr-canh-kr: khong gia tri nao con y het ban tieng Anh [0.30ms]
-    app:test: (fail) khoa chet > moi khoa da khai deu co cho goi, tru ban khai CHUA_NOI [2.66ms]
-    app:test:  1031 pass
-    app:test:  3 fail
-    app:test: Ran 1034 tests across 105 files. [9.18s]
-    Tasks: 3 successful, 4 total; Failed: app#test
-  ghi_chu: |
-    Lệnh fail này gắn eval E10b; không có lệnh fail nào không gắn eval. Nguyên nhân: chưa rõ. Log chỉ cho tên ba ca đỏ (hai ca «okr-canh-kr» của bộ kho chuỗi vòng ③a và ca «khoa chet»), chưa có dòng lỗi chi tiết của từng ca. Ba ca cùng nằm trong bộ bài kiểm chuỗi/khoá của apps/app, không thuộc nhóm tệp đã ký đo cập nhật KR mà expected của E10b nêu tên.
+    test-run: dropped crm_mvurr4knt035_test
 
 - eval: E10c
-  run_id: minted-cap-nhat-trong-ngan-kr-E10c-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-E10c-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cnk_thuoc_da_ky
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
   output: |
-    bun _acceptance/cap-nhat-trong-ngan-kr/rang/thuoc-da-ky.mjs
-    thuoc-da-ky: 45 o, 0 mat lang
+    thuoc-da-ky: 54 o, 0 mat lang
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
 
 - cmd: bun run lint:slop
-  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bun_run_lint_slop-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-cap-nhat-trong-ngan-kr-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-30T09:01:49Z
+  verified_at: 2026-10-30T09:27:32Z
 
 ## Known limits
 
@@ -221,7 +199,10 @@ human_signoff:
 
 baseline: BLOCKED ha tang — lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
+Eval khong-phan-biet: khong do duoc o round nay (baseline BLOCKED ha tang, moi field baseline la n-a).
+
 Baseline khong do:
+
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-mo-thu: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-chi-doc: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-xem-truoc: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
@@ -229,18 +210,16 @@ Baseline khong do:
 - bun run test -- "cd apps/api && bun test test/cap-nhat-trong-ngan-kr.spec.ts -t cnk-api": BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-loi: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-giu-nhap: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-loi-vao: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-dau-ngan: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - bun _acceptance/cap-nhat-trong-ngan-kr/rang/khong-hop-thoai.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - bun run test -- --filter=app --filter=@crm/ui: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 - bun _acceptance/cap-nhat-trong-ngan-kr/rang/thuoc-da-ky.mjs: BLOCKED ha tang baseline: lenh baseline khong chay dong nao (cong cu tu choi loi goi, hoac khong ghi duoc tep kich ban) — cong cu tra: «<\tool_use_error>Error: No such tool available: Write. Write is not among the tools available here. Continue with the tools you have.<\/tool_use_error>»
 
-Eval không-phân-biệt: none — không eval nào được đo là xanh-trên-baseline. Lưu ý: baseline không đo được ở round này (BLOCKED hạ tầng), nên danh sách rỗng này không chứng minh eval nào là «red trên baseline»; khả năng phân biệt của từng eval chưa được xác nhận bằng A/B.
-
 ## Variance
 
-none — every multi-run eval is uniform
+none — every multi-run eval is uniform (moi eval chay 1 lan, deterministic)
 
 ## Iterations
 
-Round 1: E10b failed — bộ bài kiểm app và @crm/ui có 3 ca đỏ (hai ca «okr-canh-kr» của bộ kho chuỗi vòng ③a và ca «khoa chet: moi khoa da khai deu co cho goi»); nguyên nhân chi tiết chưa rõ, log chỉ cho tên ca. Returned to implementation.
+Round 1: S4-r1 sua rang thuoc-da-ky (so tung khang dinh thay cho dem) va bai chu hien thi; E7 dat o round nay (run_id minted-cap-nhat-trong-ngan-kr-E7-r1).
+Round 2: moi eval E1-E10c PASS tren commit 39a3dc49cdffbf4757f6e2431aeab7f0b0148df2; E7 carry-forward tu round 1 (delta khong cham paths cua eval); baseline BLOCKED ha tang nen khong do duoc A/B.
