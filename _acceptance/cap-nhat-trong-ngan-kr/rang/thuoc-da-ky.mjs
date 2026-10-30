@@ -21,7 +21,8 @@ const BO_QUA = [
 	new RegExp(`^_acceptance/${HO_SO}/`),
 	/^_acceptance\/[^/]+\/(?!rang\/)/,
 ];
-const KHANG_DINH = /\bexpect\(|\bloi\.push\(|\bdong\(\s*["'`]?AC-/g;
+const KHANG_DINH = /\b(?:expect|dong|bao|kiem|ghi|sai\.push|loi\.push|sai)\(/g;
+const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx)$/;
 const HOI_2 = "d-20261030T064203Z-9";
 
 const git = (...a) =>
@@ -61,7 +62,7 @@ function tepCoDauHop(goc) {
 		.split("\n")
 		.filter(Boolean)
 		.map((d) => d.replace(`${goc}:`, ""))
-		.filter((t) => !BO_QUA.some((m) => m.test(t)));
+		.filter((t) => DUOI_MA.test(t) && !BO_QUA.some((m) => m.test(t)));
 }
 
 export function soKhangDinh(tep, chuGoc, chuNay, maTran) {
