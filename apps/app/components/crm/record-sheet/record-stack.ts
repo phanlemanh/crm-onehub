@@ -126,7 +126,23 @@ export function useRecordStack() {
 	const closeAll = useCallback(() => write([], "replace"), [write]);
 
 	const thayDinh = useCallback(
-		(ref: RecordRef) => write([...stack.slice(0, -1), ref], "replace"),
+		(ref: RecordRef, duoi?: RecordRef) => {
+			if (!duoi) {
+				write([...stack.slice(0, -1), ref], "replace");
+				return;
+			}
+			const khoaDuoi = recordKey(duoi);
+			write(
+				[
+					...stack
+						.slice(0, -2)
+						.filter((entry) => recordKey(entry) !== khoaDuoi),
+					duoi,
+					ref,
+				],
+				"replace",
+			);
+		},
 		[stack, write],
 	);
 

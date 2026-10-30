@@ -73,7 +73,7 @@ import { LichSuKr } from "./lich-su-kr";
 import { dien, dienNode } from "./plan-copy";
 import { recordKey, useRecordSheetView, useRecordStack } from "./record-stack";
 import { NoiDungSoKr } from "./so-kr-sheet";
-import { useThuTuHopTuan } from "./thu-tu-hop-tuan";
+import { type DongThuTu, useThuTuHopTuan } from "./thu-tu-hop-tuan";
 
 const TAB = {
 	viec: "viec",
@@ -382,14 +382,16 @@ function DauNganHanhDong({
 }: {
 	keyResultId: string;
 	mt: ChiTiet | undefined;
-	thuTu: string[] | null;
+	thuTu: DongThuTu[] | null;
 	onCapNhat: (mt: ChiTiet, kr: KrCuaMt) => void;
 }) {
 	const m = okrCanhKrMessages(useLocale()).khung;
 	const { thayDinh } = useRecordStack();
 	const truoc = useRef<HTMLButtonElement>(null);
 	const ke = useRef<HTMLButtonElement>(null);
-	const ds = thuTu ?? (mt?.keyResults ?? []).map((k) => k.id);
+	const ds = thuTu
+		? thuTu.map((d) => d.keyResultId)
+		: (mt?.keyResults ?? []).map((k) => k.id);
 	const viTri = ds.indexOf(keyResultId);
 	const kr = mt?.keyResults.find((k) => k.id === keyResultId);
 	const daBiet = viTri >= 0;
@@ -409,7 +411,11 @@ function DauNganHanhDong({
 		const dich = ds[viTri + (huong === "ke" ? 1 : -1)];
 		if (!dich) return;
 		CHUYEN_KR.huong = huong;
-		thayDinh({ kind: "kr", id: dich });
+		const mucTieuDich = thuTu?.find((d) => d.keyResultId === dich)?.objectiveId;
+		thayDinh(
+			{ kind: "kr", id: dich },
+			mucTieuDich ? { kind: "objective", id: mucTieuDich } : undefined,
+		);
 	};
 
 	return (

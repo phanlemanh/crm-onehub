@@ -234,6 +234,7 @@ flowchart TD
 - Người vai «chỉ OKR» không được giao bước onboard, không cầm trịch hay theo dõi kế hoạch đối tác, và không nhận tên đối tác qua tin nhắc buổi sáng (`va-lo-ro-vai-chi-okr`)
 - Vai «chỉ OKR» — người mang vai này đăng nhập được, thấy khu OKR và hồ sơ của chính mình, nhưng không đọc được danh bạ, công ty, thoả thuận, chiến dịch, kế hoạch 30 ngày qua màn, tRPC, cầu REST, khoá API hay trợ lý AI (`vai-chi-okr`)
 - Vào được CRM từ mạng đang chặn Google — đăng nhập bằng email và mật khẩu (`vao-bang-email-va-mat-khau`)
+- Trưởng đơn vị đi ‹ › trong ngăn KR mở từ bảng Họp tuần sang một KR thuộc mục tiêu khác, bấm «Về khung mục tiêu» và mở đúng mục tiêu của KR đang xem (`ve-khung-muc-tieu-dung-kr`)
 - Các hồ sơ đã ký đỏ sẵn trên onehub xanh lại: hết lỗi hydration khi mở thẳng record=, hết 403 khi quản trị mở cuộc soạn của người khác, thước quét chuỗi đúng định nghĩa, mang các sửa gốc từ nhánh DH2 (`ve-sinh-do-san-onehub`)
 - viec.bang / viec.con không lộ tiêu đề việc cha khi người xem không có quyền với việc cha (`viec-cha-khong-lo-tieu-de`)
 - Tôi giao một việc gắn với deal hay kế hoạch onboard; người nhận thấy nó trong Việc của tôi và được nhắc buổi sáng (`viec-chung`)

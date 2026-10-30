@@ -2373,6 +2373,11 @@ executors:
     lsml_sau_gui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-sau-gui"
     lsml_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-trang-thai"
     lsml_cam_xuc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-su-moi-lan-cap-nhat.dom.tsx -t lsml-cam-xuc"
+    vkm_qua_muc_tieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-qua-muc-tieu"
+    vkm_lui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-lui"
+    vkm_lien_ket: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-lien-ket"
+    vkm_cung_muc_tieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-cung-muc-tieu"
+    vkm_ngu_canh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/ve-khung-muc-tieu-dung-kr.dom.tsx -t vkm-ngu-canh"
     ttts_doc_ban_chup: 'bun run test -- "cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-doc-ban-chup"'
     ttts_khong_lui: cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-khong-lui
     ttts_bao: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-bao"'
