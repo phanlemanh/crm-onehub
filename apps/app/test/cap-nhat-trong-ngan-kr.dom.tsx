@@ -434,7 +434,7 @@ describe("cnk-mo-thu", () => {
 			nutChinh[0]?.getAttribute("data-nut") !== "gui-cap-nhat-kr"
 		)
 			loi.push(
-				`cnk-mo-thu: (a) khoi ${trangThaiKhoi()} thu tu ${truocSau(so, khoi)}/${truocSau(khoi, lichSu)} nut chinh ${nutChinh.length}`,
+				`cnk-mo-thu: (a) khoi ${trangThaiKhoi()} can mo, thu tu ${truocSau(so, khoi)}/${truocSau(khoi, lichSu)} nut chinh ${nutChinh.length}`,
 			);
 		else dem += 1;
 		if (qs("[data-ghi-ho]") !== null)
@@ -551,9 +551,21 @@ describe("cnk-xem-truoc", () => {
 		const loi: string[] = [];
 		let dem = 0;
 		const O = [
-			{ id: "A", go: "14", mong: "12 → 14 (+2 đại lý)", cham: 1 },
-			{ id: "B", go: "1,08", mong: "1,17 → 1,08 (−0,09 tỷ đồng)", cham: 1 },
-			{ id: "C", go: "Xong", mong: "Chưa xong → Xong", cham: 0 },
+			{
+				id: "A",
+				ten: "tang-toi",
+				go: "14",
+				mong: "12 → 14 (+2 đại lý)",
+				cham: 1,
+			},
+			{
+				id: "B",
+				ten: "ty-dong",
+				go: "1,08",
+				mong: "1,17 → 1,08 (−0,09 tỷ đồng)",
+				cham: 1,
+			},
+			{ id: "C", ten: "moc", go: "Xong", mong: "Chưa xong → Xong", cham: 0 },
 		];
 		for (const o of O) {
 			datLai();
@@ -578,7 +590,7 @@ describe("cnk-xem-truoc", () => {
 				qs(`${KHOI} [data-khoi-lan-truoc]`) === null;
 			if (!coDu)
 				loi.push(
-					`cnk-xem-truoc: ${o.id} muc doi «${mucDoi()}» can «${o.mong}», cham ${chamXemTruoc()} can ${o.cham}`,
+					`cnk-xem-truoc: ${o.ten} muc doi ${mucDoi()} can ${o.mong} (cham ${chamXemTruoc()} can ${o.cham})`,
 				);
 			if (o.id !== "C") {
 				const ov = oGiaTri();
@@ -723,6 +735,7 @@ describe("cnk-loi", () => {
 });
 
 type HanhDong = "esc" | "ke" | "truoc";
+const KY_HIEU: Record<HanhDong, string> = { esc: "Esc", ke: "›", truoc: "‹" };
 
 async function lamHanhDong(h: HanhDong): Promise<void> {
 	if (h === "esc") {
@@ -752,7 +765,9 @@ describe("cnk-giu-nhap", () => {
 			await lamHanhDong(h);
 			await cho(() => daThucThi(h, san), `${h} khong nhap`).catch(() => {});
 			if (!daThucThi(h, san) || hopHoi() !== null)
-				loi.push(`cnk-giu-nhap: ${h} khong nhap van hoi hay khong chay`);
+				loi.push(
+					`cnk-giu-nhap: ${KY_HIEU[h]} khong nhap van hoi hay khong chay`,
+				);
 			else dem += 1;
 			await thaoHet();
 
@@ -764,7 +779,7 @@ describe("cnk-giu-nhap", () => {
 			await lamHanhDong(h);
 			await cho(() => hopHoi() !== null, `${h} hoi`).catch(() => {});
 			if (hopHoi() === null) {
-				loi.push(`cnk-giu-nhap: ${h} co nhap khong hoi`);
+				loi.push(`cnk-giu-nhap: ${KY_HIEU[h]} co nhap khong hoi`);
 				await thaoHet();
 				continue;
 			}
@@ -777,7 +792,7 @@ describe("cnk-giu-nhap", () => {
 			await cho(() => daThucThi(h, san2), `${h} sau khi bo`).catch(() => {});
 			if (!oLai || !daThucThi(h, san2))
 				loi.push(
-					`cnk-giu-nhap: ${h} o lai giu ${oLai}, bo thi chay ${daThucThi(h, san2)}`,
+					`cnk-giu-nhap: ${KY_HIEU[h]} o lai giu ${oLai}, bo thi chay ${daThucThi(h, san2)}`,
 				);
 			else dem += 1;
 			await thaoHet();
