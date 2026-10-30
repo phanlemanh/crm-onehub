@@ -1,5 +1,6 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
+import { OKR_MAU } from "../../../apps/api/scripts/okr-mau/cau-hinh.ts";
 import { db } from "../../../packages/db/src/index.ts";
 import { isMeasureDatabase } from "../../../packages/db/src/measure-database.ts";
 import {
@@ -13,7 +14,6 @@ import {
 	duongHop,
 	giaTriMoiCua,
 	go,
-	krCuaP,
 	lanCua,
 	moTrang,
 	moTrinhDuyet,
@@ -29,7 +29,7 @@ import {
 	ket,
 	khongDo,
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
-import { GOC } from "../../vo-khu-muc-tieu/rang/do-man-lib.mjs";
+import { GOC, phienCua } from "../../vo-khu-muc-tieu/rang/do-man-lib.mjs";
 
 const HO_SO = "cap-nhat-trong-ngan-kr";
 const BANG_CHUNG =
@@ -100,18 +100,35 @@ async function choSql(kr, can) {
 }
 
 async function krDenHan(n) {
-	const ds = await krCuaP(n.pb.id, n.cur);
+	const ds = await db.okrKeyResult.findMany({
+		where: {
+			source: "tay",
+			kind: { not: "moc" },
+			objective: { cycleId: n.cur, status: "cong-bo" },
+			owner: { email: { endsWith: `@${OKR_MAU.mienThu}` } },
+		},
+		orderBy: [{ objective: { position: "asc" } }, { position: "asc" }],
+		select: {
+			id: true,
+			kind: true,
+			currentValue: true,
+			startValue: true,
+			targetValue: true,
+			owner: { select: { email: true } },
+		},
+	});
 	const ket = [];
 	for (const k of ds) {
-		if (k.source !== "tay" || k.kind === "moc") continue;
+		if (ket.length === KHO.length) break;
 		const lan = await lanCua(k.id);
-		if (lan.length > 0 && !lan.some((l) => l.tuan === n.hop.tuan)) ket.push(k);
+		if (lan.length > 0 && !lan.some((l) => l.tuan === n.hop.tuan))
+			ket.push({ ...k, ck: phienCua(k.owner.email) });
 	}
 	return ket;
 }
 
 async function buocMot(n, kho, kr) {
-	const t = await moTrang(n.ck, `/${n.slug}/okr/kr/${kr.id}`, kho, false);
+	const t = await moTrang(kr.ck, `/${n.slug}/okr/kr/${kr.id}`, kho, false);
 	const coKhoi = await cho(t, KHOI(kr.id));
 	const k = await t.evaluate(DOC_KHOI, KHOI(kr.id));
 	const l = await lop(t, kr.id);
@@ -203,7 +220,7 @@ try {
 	const denHan = await krDenHan(n);
 	if (denHan.length < KHO.length)
 		await khongDo(
-			`KHONG DO DUOC: ${n.pb.name} chi co ${denHan.length} KR nhap tay chua cap nhat tuan ${n.hop.tuan}, can ${KHO.length}`,
+			`KHONG DO DUOC: chu ky ${n.cur} chi co ${denHan.length} KR nhap tay chua cap nhat tuan ${n.hop.tuan}, can ${KHO.length}`,
 		);
 	for (const [i, kho] of KHO.entries()) {
 		const t = await buocMot(n, kho, denHan[i]);

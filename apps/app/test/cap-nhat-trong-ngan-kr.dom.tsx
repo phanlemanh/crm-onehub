@@ -89,6 +89,12 @@ const { HopTuan } = await import("@/app/(app)/[slug]/okr/hop-tuan");
 const HOI_BO = okrCanhKrMessages("vi").khoiCapNhat.hoiBo;
 
 type KieuKr = "tang-toi" | "giam-xuong" | "moc";
+type MucDaGui = {
+	keyResultId: string;
+	value: number;
+	confidence: string;
+	note: string;
+};
 type Lan = { id: string; luc: string; tuan: string; giaTri: number };
 type KrMau = {
 	id: string;
@@ -118,11 +124,13 @@ const lan = (id: string, luc: string, tuan: string, giaTri: number): Lan => ({
 	giaTri,
 });
 
-const trang: {
+type TrangKho = {
 	kr: KrMau[];
 	mt: { kyGhiDuoc: boolean; status: "cong-bo" | "da-bo"; suaDuoc: boolean };
 	bay: number;
-} = {
+};
+
+const trang: TrangKho = {
 	kr: [],
 	mt: { kyGhiDuoc: true, status: "cong-bo", suaDuoc: true },
 	bay: 0,
@@ -644,9 +652,7 @@ describe("cnk-gui", () => {
 			);
 			await cho(() => chamLien() === n + 1, "them diem").catch(() => {});
 			const g = goiCua("okr.guiCapNhat");
-			const muc = (
-				g[0]?.vao?.items as { [k: string]: unknown }[] | undefined
-			)?.[0];
+			const muc = (g[0]?.vao?.items as MucDaGui[] | undefined)?.[0];
 			const sau = [
 				g.length === 1 || `goi gui ${g.length}`,
 				g[0]?.vao?.sessionId === "phien-1" || "sessionId",
@@ -735,7 +741,10 @@ describe("cnk-loi", () => {
 });
 
 type HanhDong = "esc" | "ke" | "truoc";
-const KY_HIEU: Record<HanhDong, string> = { esc: "Esc", ke: "›", truoc: "‹" };
+const KY_HIEU = { esc: "Esc", ke: "›", truoc: "‹" } as const satisfies Record<
+	HanhDong,
+	string
+>;
 
 async function lamHanhDong(h: HanhDong): Promise<void> {
 	if (h === "esc") {

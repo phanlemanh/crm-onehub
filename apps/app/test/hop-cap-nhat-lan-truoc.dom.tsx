@@ -128,11 +128,11 @@ type Ca = {
 	soGo: number;
 };
 
-const NHAN_TU_TIN: Record<MucTuTin, string> = {
+const NHAN_TU_TIN = {
 	cao: ui.okr.tuTinCao,
 	vua: ui.okr.tuTinVua,
 	thap: ui.okr.tuTinThap,
-};
+} satisfies Record<MucTuTin, string>;
 
 function vet(
 	id: string,

@@ -117,10 +117,14 @@ export function useMoCapNhatKr(): MoCapNhatKr {
 		(keyResultId, entry, thuTu = null) => {
 			datLoiVao(keyResultId, entry);
 			openRecord({ kind: "kr", id: keyResultId });
-			void dat({
-				[SEARCH_PARAM.record.tab]: TAB_CAP_NHAT,
-				...(thuTu === null ? {} : { [SEARCH_PARAM.record.thuTu]: thuTu }),
-			});
+			void dat(
+				thuTu === null
+					? { [SEARCH_PARAM.record.tab]: TAB_CAP_NHAT }
+					: {
+							[SEARCH_PARAM.record.tab]: TAB_CAP_NHAT,
+							[SEARCH_PARAM.record.thuTu]: thuTu,
+						},
+			);
 		},
 		[openRecord, dat],
 	);
