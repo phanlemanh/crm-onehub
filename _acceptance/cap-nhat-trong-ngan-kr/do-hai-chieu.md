@@ -22,7 +22,12 @@ chạy đúng ca, rồi `git checkout` trả lại (bộ chạy ở scratchpad `
 | E9 | trả bốn tệp lối cập nhật, `kr-sheet.tsx`, `objective-sheet.tsx`, `theo-don-vi/bang.tsx` về bản trước vòng (hộp thoại) | 2 | `SAI 1280 buoc 1: … khoi mo false` |
 | E10a | thêm lại import vào kr-sheet.tsx | 1 | `khong-hop-thoai: kr-sheet.tsx con dung HopThoaiCapNhatKr` |
 | E10c | xoá lặng một `expect` của hop-cap-nhat-lan-truoc.dom.tsx | 1 | `thuoc-da-ky: hop-cap-nhat-lan-truoc.dom.tsx: mat 1 assertion khong co dong so` |
+| E10c (S4-r1) | đổi một câu báo trượt và thêm một khẳng định khác để tổng số không đổi (ca hội đồng chỉ ra) | 1 | `thuoc-da-ky: hop-cap-nhat-lan-truoc.dom.tsx: mat 1 assertion khong co dong so` |
 
 Đối chứng dương trong cùng lần chạy: E10a cấy một import vào bản sao tạm và bắt được; E10c xoá một `expect` trong bộ nhớ và
 bắt được. Hai lần sửa thước do chiều đỏ lộ ra: E10c ban đầu cho mất tối đa bằng số ô `thay-loi-hua` nên lọt bản phá — nay
 chỉ cho mất khi ô khai `[gỡ]`; E7 ban đầu dừng ở ô đầu khi ô sau ném lỗi — nay mỗi ô tự bắt lỗi và in câu đỏ ngay.
+
+Lượt chấm S4 vòng 1 chỉ ra răng E10c đếm tổng nên bù trừ được (phát hiện trong hợp đồng, AC-10). Vòng 2 răng rút từng khẳng
+định (câu báo trượt, dòng `expect(`) và đòi mỗi khẳng định mất có một ô ma trận trích nguyên văn; ma trận thêm 9 ô cho 9
+khẳng định mất thật.
