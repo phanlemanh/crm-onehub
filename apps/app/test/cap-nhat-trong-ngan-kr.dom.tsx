@@ -10,11 +10,11 @@ import {
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { useQueryClient } from "@tanstack/react-query";
-import { act } from "react";
 import { chuoiMoiLan } from "../../api/src/okr/dien-bien";
 import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
 import {
 	dienBienOutput,
+	hopTuanOutput,
 	type LichSuKrOutput,
 	lichSuKrOutput,
 } from "../../api/src/okr/okr-xem.contracts";
@@ -23,6 +23,7 @@ import {
 	bamPhim,
 	chiTietTu,
 	cho,
+	danhSachTu,
 	datLai,
 	dung,
 	goChu,
@@ -35,6 +36,7 @@ import {
 	qs,
 	qsa,
 	type San,
+	TheoDonVi,
 	thaoHet,
 } from "./khung-gop-y-dung-cho";
 
@@ -82,6 +84,7 @@ const { RecordSheetHost } = await import(
 	"@/components/crm/record-sheet/record-sheet-host"
 );
 const { okrCanhKrMessages } = await import("@/lib/messages/okr-canh-kr");
+const { HopTuan } = await import("@/app/(app)/[slug]/okr/hop-tuan");
 
 const HOI_BO = okrCanhKrMessages("vi").khoiCapNhat.hoiBo;
 
@@ -847,5 +850,157 @@ describe("cnk-dau-ngan", () => {
 		console.log(`cnk-dau-ngan: ${dem}/4`);
 		expect(loi.join("\n")).toBe("");
 		expect(dem).toBe(4);
+	});
+});
+
+function dongHop(id: string) {
+	return {
+		keyResultId: id,
+		objectiveId: "mt-1",
+		tieuDe: `KR ${id}`,
+		mucTieu: "Mục tiêu mt-1",
+		chuTen: "Nguyễn Thị Lan",
+		progress: 40,
+		expected: 50,
+		laMoc: false,
+		tuTin: "vua",
+		ghiChu: `ghi chu ${id}`,
+		ghiChuNgay: "2026-10-20",
+		donVi: "đại lý",
+		giaTriMoi: 12,
+		mucDoi: { tu: 9, den: 12, ngayTruoc: "2026-10-13" },
+		lyDo: [{ loai: "ghi-chu", ngay: "2026-10-20" }],
+		checkInId: null,
+		camXuc: [],
+	};
+}
+
+type Loi = "hop-tuan" | "bang-don-vi" | "muc-tieu";
+
+async function dungLoi(loiVao: Loi): Promise<San> {
+	if (loiVao === "hop-tuan") {
+		kho.rieng.set("okr.hopTuan", () =>
+			hopTuanOutput.parse({
+				tuan: "2026-10-26",
+				tuanDau: false,
+				daCapNhat: 1,
+				tongKr: 3,
+				dangBan: ["A", "B"].map(dongHop),
+				conLai: ["C"].map(dongHop),
+			}),
+		);
+		const san = await dung(
+			<>
+				<HopTuan cycleId="q4" unit={{ loai: "bp", id: "bp-1" }} />
+				<RecordSheetHost />
+			</>,
+		);
+		await cho(() => qs('[data-kr-hop="A"]') !== null, "bang hop tuan");
+		return san;
+	}
+	if (loiVao === "bang-don-vi") {
+		const ct = chiTiet();
+		kho.danhSach = () =>
+			danhSachTu([mucTieu("mt-1", ct.keyResults, { canEdit: true })]);
+		const san = await dung(
+			<>
+				<TheoDonVi />
+				<RecordSheetHost />
+			</>,
+		);
+		await cho(() => qs('[data-kr="A"]') !== null, "bang theo don vi");
+		return san;
+	}
+	const san = await dung(<RecordSheetHost />, "?record=objective:mt-1");
+	await cho(() => qs("[data-okr-sheet]") !== null, "ngan muc tieu");
+	return san;
+}
+
+async function bamLoi(loiVao: Loi): Promise<void> {
+	if (loiVao === "hop-tuan") {
+		await cho(
+			() => qs('[data-kr-hop="A"] [data-nut="cap-nhat-dong-kr"]') !== null,
+			"nut dong hop tuan",
+		);
+		await bam(
+			qs('[data-kr-hop="A"] [data-nut="cap-nhat-dong-kr"]'),
+			"nut hop tuan",
+		);
+		return;
+	}
+	if (loiVao === "bang-don-vi") {
+		await cho(
+			() => qs('[data-kr="A"] [data-nut="cap-nhat-dong-kr"]') !== null,
+			"nut dong bang",
+		);
+		await bam(qs('[data-kr="A"] [data-nut="cap-nhat-dong-kr"]'), "nut bang");
+		return;
+	}
+	const MENU = '[aria-label="Thao tác với KR A"]';
+	await cho(() => qs(MENU) !== null, "nut menu KR A");
+	const menu = qs(MENU);
+	await bam(menu ?? null, "menu KR A");
+	await cho(() => qs('[data-muc="cap-nhat-kr"]') !== null, "muc cap nhat");
+	await bam(qs('[data-muc="cap-nhat-kr"]'), "muc cap nhat KR");
+}
+
+const daCuon: Element[] = [];
+const cuonCu = HTMLElement.prototype.scrollIntoView;
+
+describe("cnk-loi-vao", () => {
+	test("cnk-loi-vao: ba loi Cap nhat mo ngan KR, cuon toi khoi va ghi entry rieng", async () => {
+		const loi: string[] = [];
+		let dem = 0;
+		HTMLElement.prototype.scrollIntoView = function (this: HTMLElement) {
+			daCuon.push(this);
+		};
+		try {
+			for (const loiVao of ["hop-tuan", "bang-don-vi", "muc-tieu"] as const) {
+				datLai();
+				trang.kr = krMacDinh();
+				datKho();
+				daCuon.length = 0;
+				const san = await dungLoi(loiVao);
+				await bamLoi(loiVao);
+				await cho(() => nganCua("A"), `${loiVao} ngan A`).catch(() => {});
+				await cho(() => trangThaiKhoi() === "mo", `${loiVao} khoi mo`).catch(
+					() => {},
+				);
+				await cho(
+					() => goiCua("okr.moCapNhat").length > 0,
+					`${loiVao} mo phien`,
+				).catch(() => {});
+				await nhip(3);
+				const hopLa = qsa("[role=dialog]").filter(
+					(h) => h.querySelector("[data-kr-sheet], [data-okr-sheet]") === null,
+				);
+				const khoi = qs(KHOI);
+				const sai = [
+					hopLa.length === 0 || `${loiVao} mo dialog`,
+					nganCua("A") || "ngan A khong mo",
+					trangThaiKhoi() === "mo" || `khoi ${trangThaiKhoi()}`,
+					(document.activeElement !== null &&
+						document.activeElement === oGiaTri()) ||
+						"con tro khong o o gia tri",
+					daCuon.some((e) => khoi !== null && e.contains(khoi)) ||
+						"khong cuon toi khoi",
+					goiCua("okr.moCapNhat")[0]?.vao?.entry === loiVao ||
+						`entry ${goiCua("okr.moCapNhat")[0]?.vao?.entry}`,
+					loiVao !== "hop-tuan" ||
+						(san.url().get("thuTuKr") !== null &&
+							qs("[data-dau-ngan-kr] [data-thu-tu-kr]") !== null) ||
+						"hop tuan mat thu tu bang",
+				].filter((x) => x !== true);
+				if (sai.length > 0)
+					loi.push(`cnk-loi-vao: ${loiVao} ${sai.join(", ")}`);
+				else dem += 1;
+				await thaoHet();
+			}
+		} finally {
+			HTMLElement.prototype.scrollIntoView = cuonCu;
+		}
+		console.log(`cnk-loi-vao: ${dem}/3`);
+		expect(loi.join("\n")).toBe("");
+		expect(dem).toBe(3);
 	});
 });
