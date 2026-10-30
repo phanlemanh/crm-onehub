@@ -165,6 +165,16 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.cnk_man
+    steps:
+      - "Phiên đo riêng qua tien-de.mjs (api và app của CÂY ĐANG XÉT trên cổng tự do, kho crm_<cây>_do); không dùng cổng 3000/3001"
+      - "Bàn đo nạp bộ OKR mẫu và ca hop-tuan; chọn hai KR nhập tay chưa cập nhật trong tuần hiện tại, mỗi khổ một KR, đăng nhập người phụ trách"
+      - "Khổ 1280×800 rồi 375×812: (1) mở /okr/kr/<id> (đích liên kết của Của tôi), đo khối [data-khoi-cap-nhat-kr=mo] trong khung nhìn, đếm [role=dialog] khác ngăn và ngăn kéo; chụp cnk-<kho>-1-den-han.png"
+      - "(2) gõ giá trị mới, chọn mức tự tin, gõ ghi chú, gửi; SQL đếm OkrCheckIn tăng 1, ngăn còn mở, dòng đầu Lịch sử mang giá trị vừa gửi; chụp cnk-<kho>-2-vua-gui.png"
+      - "(3) mở Họp tuần của phòng ban mẫu, bấm «Cập nhật» trên một dòng; đo khối mở trong khung nhìn và tiêu điểm ở ô giá trị; chụp cnk-<kho>-3-tu-hop-tuan.png"
+      - "Đọc dòng cuối «cnk-man: n/6»: mã 0 = 6/6 DUNG; mã 1 = có SAI; mã 2 = không đo được"
+      - "Mở sáu ảnh và đối chiếu bằng mắt với Expected"
+    inputs:
+      - _acceptance/cap-nhat-trong-ngan-kr/evidence/
     paths:
       - "apps/app/components/crm/record-sheet/**"
       - "apps/app/app/(app)/[slug]/okr/**"
