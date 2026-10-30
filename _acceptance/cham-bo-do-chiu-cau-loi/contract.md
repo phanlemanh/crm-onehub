@@ -5,7 +5,7 @@ slug: cham-bo-do-chiu-cau-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: implemented
+status: machine-cleared
 design_doc: _acceptance/cham-bo-do-chiu-cau-loi/design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-30
@@ -64,3 +64,6 @@ Quét tay ba trục (entry «bỏ coverage-scan» trong `decisions.jsonl`):
 - Đỏ sẵn trên nền, ngoài phạm vi: `ssct_so_bo_mau` (mã 1) và `mtv_so` (mã 2) đo trên `onehub` bfca8a74a trước vòng.
 - Thư mục `_acceptance/tro-ly-doc-kho/**` và `_acceptance/eval-model-that-dung-luc/**` nằm ngoài ranh giới dãy V3;
   giám sát đã duyệt `cham-tep` V3-1, V3-2, V3-4; `_acceptance/config.yaml` chỉ thêm dòng (V3-3).
+- Ngoài-1 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Nếu toàn bộ câu của một nhóm (ví dụ bốn câu chuyển nhầm của Zalo) cùng lỗi model mà vẫn dưới trần, lượt chấm vẫn báo đạt dù nhóm đó chưa được đo lần nào, và kết quả đạt đó được dùng lại tới bảy ngày. — `_acceptance/tro-ly-doc-kho/rang/quyet-do.ts`
+- Ngoài-2 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Thẻ người ký đọc nói chấm lại từ tệp đã ghi cũng chặn được lượt thiếu câu, nhưng thực tế chấm lại chỉ bắt được câu trùng. Người ký có thể tin hệ thống chặt hơn thực tế. — `_acceptance/cham-bo-do-chiu-cau-loi/card-plain.json`
+- Ngoài-3 (máy định tuyến 2026-10-30, đề xuất S4 known-limits): Phép kiểm chấm lại bằng lượt mẫu không thể đỏ vì so kết quả với chính nó, nên chưa chứng minh được bản ghi lượt thật khớp với chấm lại. Chỉ lượt thật ở bước ghim mới chứng minh được điều đó. — `_acceptance/cham-bo-do-chiu-cau-loi/rang/f12-xanh.mjs`
