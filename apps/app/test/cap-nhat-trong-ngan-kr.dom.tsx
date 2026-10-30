@@ -1000,7 +1000,7 @@ describe("cnk-loi-vao", () => {
 				);
 				const khoi = qs(KHOI);
 				const sai = [
-					hopLa.length === 0 || `${loiVao} mo dialog`,
+					hopLa.length === 0 || "mo dialog",
 					nganCua("A") || "ngan A khong mo",
 					trangThaiKhoi() === "mo" || `khoi ${trangThaiKhoi()}`,
 					(document.activeElement !== null &&
