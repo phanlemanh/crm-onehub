@@ -1,21 +1,3 @@
 {
-  "feature_plain": "Người phụ trách cập nhật KR ngay trong ngăn chi tiết KR — ô giá trị, mức tự tin, ghi chú nằm giữa ô số và Lịch sử, thấy điểm mới trên biểu đồ và sang KR kế mà không hộp thoại nào che ngăn.",
-  "will_do": [
-    {"id":"AC-1","p":"Sẽ mở sẵn khối cập nhật khi KR đến hạn chưa cập nhật; đã cập nhật thì khối thu một dòng, bấm là mở; người ghi hộ thấy dòng «Ghi hộ <tên>»."},
-    {"id":"AC-2","p":"Sẽ ẩn khối với người không sửa được KR, kỳ đang chấm điểm hay đã đóng, mục tiêu đã bỏ."},
-    {"id":"AC-3","p":"Sẽ xem trước bằng một chấm nét đứt trên biểu đồ Lịch sử và một dòng mức đổi «12 → 14 (+2 đại lý)» — khối không vẽ biểu đồ riêng."},
-    {"id":"AC-4","p":"Sẽ ghi đúng một lần cập nhật khi bấm «Gửi cập nhật» hay Ctrl/⌘+Enter; ngăn vẫn mở, Lịch sử thêm dòng đầu, biểu đồ thêm điểm, ô Hiện tại đổi; KR mốc ghi được Xong kèm liên kết bằng chứng."},
-    {"id":"AC-5","p":"Sẽ báo lỗi gửi ngay trong khối bằng câu người đọc được và giữ nguyên nháp."},
-    {"id":"AC-6","p":"Sẽ hỏi lại trước khi bỏ nháp chưa gửi khi đóng ngăn hay bấm ‹ ›."},
-    {"id":"AC-7","p":"Sẽ biến nút «Cập nhật» trên dòng Họp tuần, dòng bảng theo đơn vị và menu ngăn mục tiêu thành lối mở ngăn KR, cuộn tới khối và đặt con trỏ vào ô giá trị; mỗi lối đếm riêng."},
-    {"id":"AC-9","p":"Sẽ giữ khối trong ngăn kéo ở khổ điện thoại 375, không lớp nào khác mở chồng lên."},
-    {"id":"AC-10","p":"Sẽ gỡ hẳn hộp thoại cập nhật cũ và chuyển các thước đã ký sang đo khối, mỗi assertion có nhãn giữ / chuyển chỗ đo / thay lời hứa."}
-  ],
-  "wont_do": [
-    {"id":"AC-8","p":"Sẽ KHÔNG còn nút chính «Cập nhật» ở đầu ngăn KR; sang KR kế không mang nháp hay trạng thái mở của KR trước."},
-    {"id":"OOS-1","p":"Không đổi ngăn sửa mục tiêu hay sửa KR đang chồng lên ngăn — hàng khác."},
-    {"id":"OOS-2","p":"Không làm ô bằng chứng riêng trong ngăn, không sửa chip người phụ trách đè tên KR ở khổ 1280."},
-    {"id":"OOS-3","p":"Không gửi nhiều KR một lần, không ô nhập trên dòng Họp tuần."},
-    {"id":"OOS-4","p":"Không đổi trang «Cập nhật tuần» — chỉ dùng lại ba ô của nó."}
-  ]
+  "feature_plain": "Người phụ trách cập nhật một KR ngay trong ngăn chi tiết KR — gõ giá trị, chọn mức tự tin, ghi chú, thấy chấm xem trước trên Lịch sử và gửi mà ngăn vẫn mở; mọi nút «Cập nhật» bên ngoài mở ngăn KR thay cho hộp thoại che ngăn."
 }
