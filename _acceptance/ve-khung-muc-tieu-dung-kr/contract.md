@@ -5,7 +5,7 @@ slug: ve-khung-muc-tieu-dung-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: machine-cleared
 approved_by:
 approved_at:
 veto_state: mo
