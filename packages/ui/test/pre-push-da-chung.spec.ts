@@ -23,6 +23,9 @@ const Z = "0".repeat(40);
 const DONG_PHU = "Finished in 1ms on 10 files with 20 rules";
 const NAM = ["check-types", "lint", "lint:slop", "test", "build"];
 const BA = ["check-types", "lint", "lint:slop"];
+const NGAY_MS = 86_400_000;
+const TRAN_DAU_HOOK_MS = Number(process.env.DAU_HOOK_TRAN_MS || 30_000);
+const MOC_GHIM = "2026-09-08T12:00:00+07:00";
 const TEP_CHEP = [
 	".githooks/pre-push",
 	".githooks/gate-shape.json",
@@ -106,6 +109,33 @@ const TAC_GIA = {
 };
 
 const tam: string[] = [];
+
+function bayGio(): number {
+	return Math.round(performance.timeOrigin + performance.now());
+}
+
+function ghimDongHo(moc: string): () => void {
+	const cu = Object.getOwnPropertyDescriptor(globalThis, "Date");
+	const That = globalThis.Date;
+	const ms = That.parse(moc);
+	class DateGhim extends That {
+		constructor(...doi_so: unknown[]) {
+			if (doi_so.length === 0) super(ms);
+			else super(...(doi_so as [number]));
+		}
+		static now(): number {
+			return ms;
+		}
+	}
+	Object.defineProperty(globalThis, "Date", {
+		value: DateGhim,
+		writable: true,
+		configurable: true,
+	});
+	return () => {
+		if (cu) Object.defineProperty(globalThis, "Date", cu);
+	};
+}
 const CAU_HINH_RONG = join(
 	realpathSync(mkdtempSync(join(tmpdir(), "da-chung-cau-hinh-"))),
 	"gitconfig",
@@ -400,53 +430,65 @@ describe("cay-ma", () => {
 });
 
 describe("dau-hook", () => {
-	test("dau-hook (a)(b): day du nam roi day cung cay bo het", () => {
-		const k = dungKho();
-		const s1 = commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
-		const r1 = day(k);
-		expect(r1.ma).toBe(0);
-		expect(soBun(k)).toEqual(NAM);
-		expect(dauRa(k, s1)?.buoc).toEqual(NAM);
-		const s2 = commit(k.goc, ["docs/x.md", "y\n"]);
-		const r2 = day(k);
-		expect(r2.ma).toBe(0);
-		expect(soBun(k)).toEqual([]);
-		const dong = dongDaChung(r2.loi);
-		expect(dong.length).toBe(1);
-		expect(dong[0]).toMatch(
-			new RegExp(
-				`^pre-push: cây mã của ${s2.slice(0, 9)} đã xanh ở hook \\(${s1.slice(0, 9)}, [0-9T:Z-]+\\) — bỏ check-types, lint, lint:slop, test, build\\.$`,
-			),
-		);
-		expect(r2.ra).toContain("gate matches its shape");
-		expect(existsSync(tepDau(k, s2))).toBe(false);
-	});
+	test(
+		"dau-hook (a)(b): day du nam roi day cung cay bo het",
+		() => {
+			const k = dungKho();
+			const s1 = commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
+			const r1 = day(k);
+			expect(r1.ma).toBe(0);
+			expect(soBun(k)).toEqual(NAM);
+			expect(dauRa(k, s1)?.buoc).toEqual(NAM);
+			const s2 = commit(k.goc, ["docs/x.md", "y\n"]);
+			const r2 = day(k);
+			expect(r2.ma).toBe(0);
+			expect(soBun(k)).toEqual([]);
+			const dong = dongDaChung(r2.loi);
+			expect(dong.length).toBe(1);
+			expect(dong[0]).toMatch(
+				new RegExp(
+					`^pre-push: cây mã của ${s2.slice(0, 9)} đã xanh ở hook \\(${s1.slice(0, 9)}, [0-9T:Z-]+\\) — bỏ check-types, lint, lint:slop, test, build\\.$`,
+				),
+			);
+			expect(r2.ra).toContain("gate matches its shape");
+			expect(existsSync(tepDau(k, s2))).toBe(false);
+		},
+		TRAN_DAU_HOOK_MS,
+	);
 
-	test("dau-hook (c): day do khong ghi dau", () => {
-		const k = dungKho();
-		const s1 = commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
-		expect(day(k, { BUN_HONG: "test" }).ma).not.toBe(0);
-		expect(existsSync(tepDau(k, s1))).toBe(false);
-		commit(k.goc, ["docs/x.md", "y\n"]);
-		expect(day(k).ma).toBe(0);
-		expect(soBun(k)).toEqual(NAM);
-	});
+	test(
+		"dau-hook (c): day do khong ghi dau",
+		() => {
+			const k = dungKho();
+			const s1 = commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
+			expect(day(k, { BUN_HONG: "test" }).ma).not.toBe(0);
+			expect(existsSync(tepDau(k, s1))).toBe(false);
+			commit(k.goc, ["docs/x.md", "y\n"]);
+			expect(day(k).ma).toBe(0);
+			expect(soBun(k)).toEqual(NAM);
+		},
+		TRAN_DAU_HOOK_MS,
+	);
 
-	test("dau-hook (d): day chi-T1 ghi dung ba buoc da chay", () => {
-		const k = dungKho();
-		const s1 = commit(k.goc, ["docs/x.md", "y\n"]);
-		expect(day(k).ma).toBe(0);
-		expect(soBun(k)).toEqual(["check-types", "lint", "lint:slop"]);
-		expect(dauRa(k, s1)?.buoc).toEqual(["check-types", "lint", "lint:slop"]);
-	});
+	test(
+		"dau-hook (d): day chi-T1 ghi dung ba buoc da chay",
+		() => {
+			const k = dungKho();
+			const s1 = commit(k.goc, ["docs/x.md", "y\n"]);
+			expect(day(k).ma).toBe(0);
+			expect(soBun(k)).toEqual(["check-types", "lint", "lint:slop"]);
+			expect(dauRa(k, s1)?.buoc).toEqual(["check-types", "lint", "lint:slop"]);
+		},
+		TRAN_DAU_HOOK_MS,
+	);
 
-	test("dau-hook (e): chuoi ngay 13 roi 15", () => {
+	function chuoiNgay13Roi15(): void {
 		const k = dungKho();
 		const s1 = commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
 		day(k);
 		const sua = (ngay: number) => {
 			const d = JSON.parse(readFileSync(tepDau(k, s1), "utf8"));
-			d.luc = new Date(Date.now() - ngay * 86400000)
+			d.luc = new Date(bayGio() - ngay * NGAY_MS)
 				.toISOString()
 				.replace(/\.\d{3}Z$/, "Z");
 			writeFileSync(tepDau(k, s1), JSON.stringify(d));
@@ -454,93 +496,138 @@ describe("dau-hook", () => {
 		sua(13);
 		const s2 = commit(k.goc, ["docs/x.md", "y\n"]);
 		expect(day(k).ma).toBe(0);
-		expect(soBun(k)).toEqual([]);
+		expect(
+			soBun(k),
+			"dau 13 ngay theo gio that cua hook phai con dung",
+		).toEqual([]);
 		expect(existsSync(tepDau(k, s2))).toBe(false);
 		sua(15);
 		commit(k.goc, ["docs/x.md", "z\n"]);
 		expect(day(k).ma).toBe(0);
 		expect(soBun(k)).toEqual(BA);
-	});
+	}
 
-	test("dau-hook (f): .env doi thi khong dung dau", () => {
-		const k = dungKho();
-		commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
-		day(k);
-		writeFileSync(join(k.goc, ".env"), "A=2\n");
-		commit(k.goc, ["docs/x.md", "y\n"]);
-		expect(day(k).ma).toBe(0);
-		expect(soBun(k)).toEqual(BA);
-	});
+	test(
+		"dau-hook (e): chuoi ngay 13 roi 15",
+		() => chuoiNgay13Roi15(),
+		TRAN_DAU_HOOK_MS,
+	);
 
-	test("dau-hook (g): bun va node khac thi khong dung dau", () => {
-		const k = dungKho();
-		commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
-		day(k);
-		commit(k.goc, ["docs/x.md", "y\n"]);
-		expect(day(k, { BUN_PHIEN_BAN: "9.9.9" }).ma).toBe(0);
-		expect(soBun(k)).toEqual(BA);
-		const nodeGia = join(k.d, "node-gia");
-		mkdirSync(nodeGia);
-		const that = spawnSync("which", ["node"], {
-			encoding: "utf8",
-		}).stdout.trim();
-		writeFileSync(
-			join(nodeGia, "node"),
-			`#!/bin/sh\nif [ "$1" = "--version" ]; then echo v0.0.1-gia; exit 0; fi\nexec "${that}" "$@"\n`,
-		);
-		chmodSync(join(nodeGia, "node"), 0o755);
-		commit(k.goc, ["docs/x.md", "z\n"]);
-		expect(day(k, { PATH_TRUOC: `${nodeGia}:` }).ma).toBe(0);
-		expect(soBun(k)).toEqual(BA);
-	});
+	test(
+		"dau-hook (k): dong ho tien trinh bi ghim van tinh ngay theo gio that",
+		() => {
+			const truoc = globalThis.Date;
+			const traLai = ghimDongHo(MOC_GHIM);
+			try {
+				expect(Date.now()).toBe(Date.parse(MOC_GHIM));
+				chuoiNgay13Roi15();
+			} finally {
+				traLai();
+			}
+			expect(globalThis.Date).toBe(truoc);
+		},
+		TRAN_DAU_HOOK_MS,
+	);
 
-	test("dau-hook (h): tep dau hong", () => {
-		const k = dungKho();
-		const s1 = commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
-		day(k);
-		writeFileSync(tepDau(k, s1), "{");
-		commit(k.goc, ["docs/x.md", "y\n"]);
-		const r = day(k);
-		expect(r.ma).toBe(0);
-		expect(soBun(k)).toEqual(BA);
-		expect(r.loi).not.toContain("không đọc được dấu cây");
-	});
+	test(
+		"dau-hook (f): .env doi thi khong dung dau",
+		() => {
+			const k = dungKho();
+			commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
+			day(k);
+			writeFileSync(join(k.goc, ".env"), "A=2\n");
+			commit(k.goc, ["docs/x.md", "y\n"]);
+			expect(day(k).ma).toBe(0);
+			expect(soBun(k)).toEqual(BA);
+		},
+		TRAN_DAU_HOOK_MS,
+	);
 
-	test("dau-hook (i): hai ref", () => {
-		const k = dungKho();
-		commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
-		day(k);
-		commit(k.goc, ["docs/x.md", "y\n"]);
-		git(k.goc, "branch", "-f", "y", "HEAD");
-		expect(day(k, {}, ["HEAD:refs/heads/x", "y:refs/heads/y"]).ma).toBe(0);
-		expect(soBun(k)).toEqual([]);
-		const k2 = dungKho();
-		commit(k2.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
-		day(k2);
-		commit(k2.goc, ["docs/x.md", "y\n"]);
-		git(k2.goc, "checkout", "-q", "-b", "y", "onehub");
-		const sy = commit(k2.goc, ["apps/api/a.ts", "export const a = 9;\n"]);
-		commit(k2.goc, [
-			"_acceptance/h/run-log.jsonl",
-			soChay(s4Du(sy).filter((d) => d.cmd !== LENH_GHIM_LAI[4])),
-		]);
-		expect(day(k2, {}, ["x:refs/heads/x", "y:refs/heads/y"]).ma).toBe(0);
-		expect(soBun(k2)).toEqual(["check-types", "lint"]);
-	});
+	test(
+		"dau-hook (g): bun va node khac thi khong dung dau",
+		() => {
+			const k = dungKho();
+			commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
+			day(k);
+			commit(k.goc, ["docs/x.md", "y\n"]);
+			expect(day(k, { BUN_PHIEN_BAN: "9.9.9" }).ma).toBe(0);
+			expect(soBun(k)).toEqual(BA);
+			const nodeGia = join(k.d, "node-gia");
+			mkdirSync(nodeGia);
+			const that = spawnSync("which", ["node"], {
+				encoding: "utf8",
+			}).stdout.trim();
+			writeFileSync(
+				join(nodeGia, "node"),
+				`#!/bin/sh\nif [ "$1" = "--version" ]; then echo v0.0.1-gia; exit 0; fi\nexec "${that}" "$@"\n`,
+			);
+			chmodSync(join(nodeGia, "node"), 0o755);
+			commit(k.goc, ["docs/x.md", "z\n"]);
+			expect(day(k, { PATH_TRUOC: `${nodeGia}:` }).ma).toBe(0);
+			expect(soBun(k)).toEqual(BA);
+		},
+		TRAN_DAU_HOOK_MS,
+	);
 
-	test("dau-hook (j): chung cua CI khong thanh dau hook", () => {
-		const k = dungKho();
-		git(k.goc, "remote", "set-url", "origin", "https://github.com/x/y.git");
-		git(k.goc, "remote", "set-url", "--push", "origin", "../remote.git");
-		commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
-		const r1 = day(k);
-		expect(r1.ma).toBe(0);
-		expect(dongDaChung(r1.loi)[0]).toContain("đã xanh ở CI");
-		commit(k.goc, ["docs/x.md", "y\n"]);
-		const r2 = day(k, { GH_HONG: "1" });
-		expect(r2.loi).not.toContain("đã xanh ở hook");
-		expect(soBun(k)).toEqual(BA);
-	});
+	test(
+		"dau-hook (h): tep dau hong",
+		() => {
+			const k = dungKho();
+			const s1 = commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
+			day(k);
+			writeFileSync(tepDau(k, s1), "{");
+			commit(k.goc, ["docs/x.md", "y\n"]);
+			const r = day(k);
+			expect(r.ma).toBe(0);
+			expect(soBun(k)).toEqual(BA);
+			expect(r.loi).not.toContain("không đọc được dấu cây");
+		},
+		TRAN_DAU_HOOK_MS,
+	);
+
+	test(
+		"dau-hook (i): hai ref",
+		() => {
+			const k = dungKho();
+			commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
+			day(k);
+			commit(k.goc, ["docs/x.md", "y\n"]);
+			git(k.goc, "branch", "-f", "y", "HEAD");
+			expect(day(k, {}, ["HEAD:refs/heads/x", "y:refs/heads/y"]).ma).toBe(0);
+			expect(soBun(k)).toEqual([]);
+			const k2 = dungKho();
+			commit(k2.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
+			day(k2);
+			commit(k2.goc, ["docs/x.md", "y\n"]);
+			git(k2.goc, "checkout", "-q", "-b", "y", "onehub");
+			const sy = commit(k2.goc, ["apps/api/a.ts", "export const a = 9;\n"]);
+			commit(k2.goc, [
+				"_acceptance/h/run-log.jsonl",
+				soChay(s4Du(sy).filter((d) => d.cmd !== LENH_GHIM_LAI[4])),
+			]);
+			expect(day(k2, {}, ["x:refs/heads/x", "y:refs/heads/y"]).ma).toBe(0);
+			expect(soBun(k2)).toEqual(["check-types", "lint"]);
+		},
+		TRAN_DAU_HOOK_MS,
+	);
+
+	test(
+		"dau-hook (j): chung cua CI khong thanh dau hook",
+		() => {
+			const k = dungKho();
+			git(k.goc, "remote", "set-url", "origin", "https://github.com/x/y.git");
+			git(k.goc, "remote", "set-url", "--push", "origin", "../remote.git");
+			commit(k.goc, ["apps/api/a.ts", "export const a = 2;\n"]);
+			const r1 = day(k);
+			expect(r1.ma).toBe(0);
+			expect(dongDaChung(r1.loi)[0]).toContain("đã xanh ở CI");
+			commit(k.goc, ["docs/x.md", "y\n"]);
+			const r2 = day(k, { GH_HONG: "1" });
+			expect(r2.loi).not.toContain("đã xanh ở hook");
+			expect(soBun(k)).toEqual(BA);
+		},
+		TRAN_DAU_HOOK_MS,
+	);
 });
 
 describe("so-chay", () => {
@@ -655,9 +742,9 @@ describe("nguon-ci", () => {
 			".githooks/da-chung.json",
 			JSON.stringify(khai, null, "\t"),
 		]);
-		const t0 = Date.now();
+		const t0 = bayGio();
 		expect(day(k, { GH_NGU: "30" }).ma).toBe(0);
-		expect(Date.now() - t0).toBeLessThan(20000);
+		expect(bayGio() - t0).toBeLessThan(20000);
 		expect(soBun(k)).toEqual(NAM);
 	});
 
@@ -762,7 +849,7 @@ describe("verify-da-chung", () => {
 	function truocPhieu(k: Kho): string {
 		const t = join(k.d, "truoc");
 		writeFileSync(t, "");
-		const cu = new Date(Date.now() - 60_000);
+		const cu = new Date(bayGio() - 60_000);
 		utimesSync(t, cu, cu);
 		return t;
 	}
@@ -831,7 +918,7 @@ describe("verify-da-chung", () => {
 		const tepPhieu = readdirSync(
 			join(thuMucChung(k), "crm-pre-push", "phieu"),
 		)[0];
-		const cu = new Date(Date.now() - 120_000);
+		const cu = new Date(bayGio() - 120_000);
 		utimesSync(join(thuMucChung(k), "crm-pre-push", "phieu", tepPhieu), cu, cu);
 		const r = verify(k, NAM.join(" "), truocPhieu(k));
 		expect(r.ma).toBe(1);
