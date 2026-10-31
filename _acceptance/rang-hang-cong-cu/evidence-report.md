@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1c52789de92c46c425c35e2ff9f96f9f3a0856eb
+verified_commit: bf04d0ae37b68fff0cc26de4aeb0d75efc015632
 human_signoff:
 ---
 
@@ -168,3 +168,7 @@ Round 2: E9 chạy lại và xanh; E1–E8 carry-forward từ round 1 (delta kh�
 - Số lần răng bắt: 7 lệch thật (lọc tình trạng KR, phạm vi Tổng quan ×2, thẻ dòng thời gian, Lộ trình ×2, Họp tuần, nhóm Đã bỏ, dự án Đã đóng — 9 chỗ ở 7 tệp), khai vào bảng loại `no` kèm đích sửa.
 - Số lệch lọt: 0 đã biết; điểm mù có tên ở Hỏi-2 (chip ở tệp này, tệp khác đặt vào thẻ) và Hỏi-3 (nhóm gập chứa danh sách).
 - PR gộp: chưa (PR nháp).
+
+### Re-pin lần 1 — 2026-10-31, do gộp onehub 202f791a7 (#603 landing, #610 bom giờ) làm bằng chứng cũ
+run_id: repin-20261031T233523Z-44019
+sha: bf04d0ae37b68fff0cc26de4aeb0d75efc015632 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
