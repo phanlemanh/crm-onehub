@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import { gieoDuAnMau, LE_MAU, TEN_DU_AN_MAU } from "@crm/db/du-an-gieo";
 import { ngayVN } from "@crm/db/onboarding-nhac";
@@ -185,6 +186,19 @@ describe("dgt-thuoc", () => {
 			const n2 = await nguoi("dgt-2", "member");
 			const n3 = await nguoi("dgt-3", "member");
 			const n4 = await nguoi("dgt-4", "member");
+			const somNhat = await db.member.findFirstOrThrow({
+				where: { organizationId: WORKSPACE_ID },
+				orderBy: { createdAt: "asc" },
+				select: { createdAt: true },
+			});
+			for (const [i, n] of [n1, n2].entries()) {
+				await db.member.update({
+					where: { id: `m-${n.id}` },
+					data: {
+						createdAt: new Date(somNhat.createdAt.getTime() - (2 - i) * 1000),
+					},
+				});
+			}
 			const url = process.env.TEST_DATABASE_URL ?? "";
 			const mau = await gieoDuAnMau(db, {
 				databaseUrl: url,
@@ -194,6 +208,10 @@ describe("dgt-thuoc", () => {
 			if (!mau.duAnId || !mau.taoBoiId)
 				throw new Error("dgt: gieo khong ra du an");
 			const nguoiMau = mau.taoBoiId;
+			expect(
+				nguoiMau,
+				"gieo mau chon thanh vien som nhat cua kho chung; thanh vien sot cua tep khac (dev-grant-needed) lam nguoi tao mau thi dang nhap bao User not found",
+			).toBe(n1.id);
 			const khac = [n1, n2, n3, n4].filter((n) => n.id !== nguoiMau);
 			const [nguoiP3, nguoiP4] = khac;
 			if (!nguoiP3 || !nguoiP4) throw new Error("dgt: thieu nguoi");
