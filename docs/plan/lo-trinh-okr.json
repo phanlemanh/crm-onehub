@@ -1709,8 +1709,8 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Màn nào đang tải cũng giữ tiêu đề, lỗi tải ở đâu cũng một hình có nút thử lại, và đầu trang không có nút chính tắt mà không nói vì sao»",
       "ghi_chu": "Khảo sát bảy màn 09/10 khi dựng bản mẫu LT1; đích ở docs/design.md mục «Nếp màn trong app». Phạm vi: vòng quay PageShellLoading (39 tệp) → khung xương; bốn khung lỗi (onboarding/danh-muc-table.tsx:231, okr/toan-canh/toan-canh.tsx:86, tai-lieu/loi-tai.tsx:20, okr/trang-thai-okr.tsx:52) → VungTaiLoi đã có trong packages/ui; tiêu đề Tài liệu và OKR dời vào page.tsx; khung chờ Tài liệu (tai-lieu/page.tsx:30) giấu tiêu đề; reminders/page.tsx:58,67 dùng <h2> thô; đầu trang Tài liệu ba nút lệch và chú thích «Chưa bật lưu tệp nguồn» trôi, ở 375 nút đứng trên câu mô tả; Onboarding «Kế hoạch mới» tắt không lý do cùng nút chính thứ hai trong khung trống. Chỉ chạm apps/app.",
-      "buoc_ke": "R2 — lên production 31/10 (tạm); dãy P3, sau E5",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp #388 (481547ec2, 14/10), hồ sơ khung-man-chung signed-off; không còn tệp nào dùng PageShellLoading (đo 31/10 trên aeb8b8152).",
+      "trang_thai": "đã lên onehub"
     },
     {
       "ma": "NM2",
@@ -3857,8 +3857,10 @@
       "slug": "sua-tai-cho-muc-tieu-va-kr",
       "hang": "T2",
       "nhom": "okr",
-      "thu_tu": 104.797,
-      "dung_tren": [],
+      "thu_tu": 104.7994,
+      "dung_tren": [
+        "BK2"
+      ],
       "ten": "Sửa mục tiêu và KR ngay trong ngăn",
       "ten_ngan": "Sửa tại chỗ",
       "vai": "Trưởng đơn vị",
@@ -3871,16 +3873,17 @@
       ],
       "tieu_chi": 9,
       "ly_do": "Chủ kho 30/10 nguyên văn «Cắt lượt và đưa vào tri thức», sau khi duyệt luật ghi trong ngăn (PR #586).",
-      "ghi_chu": "Chạm objective-sheet.tsx và kr-sheet.tsx (vùng record-sheet của M5) — báo M5 trên #375. Mở sau SV8 để khỏi ghim chồng, dù không cần dữ liệu của SV8."
+      "ghi_chu": "Chạm objective-sheet.tsx và kr-sheet.tsx (vùng record-sheet của M5) — báo M5 trên #375. Mở sau SV8 để khỏi ghim chồng, dù không cần dữ liệu của SV8. Đứng sau BK2: chủ kho 31/10 nguyên văn «BK chạy trước» (phiên giám sát Mac Studio, việc giao MBP-3110-1), theo khuyến nghị của điều phối kit: BK1 → BK2 chạy trước SV9, SV10 để hai hàng đó viết trong khung chung và thành các vòng giao diện đầu tiên mà răng BK2 đếm lệch thật."
     },
     {
       "ma": "SV10",
       "slug": "bang-chung-kr-mot-loi",
       "hang": "T2",
       "nhom": "okr",
-      "thu_tu": 104.798,
+      "thu_tu": 104.7995,
       "dung_tren": [
-        "SV8"
+        "SV8",
+        "BK2"
       ],
       "ten": "Ghim bằng chứng KR một lối trong ngăn",
       "ten_ngan": "Bằng chứng một lối",
@@ -3894,7 +3897,7 @@
       ],
       "tieu_chi": 8,
       "ly_do": "Chủ kho 30/10 nguyên văn «Cắt lượt và đưa vào tri thức», sau khi duyệt luật ghi trong ngăn (PR #586).",
-      "ghi_chu": "Đứng trên SV8: ô URL của KR mốc nằm trong khối cập nhật SV8 dựng."
+      "ghi_chu": "Đứng trên SV8: ô URL của KR mốc nằm trong khối cập nhật SV8 dựng. Đứng sau BK2: chủ kho 31/10 nguyên văn «BK chạy trước» (phiên giám sát Mac Studio, việc giao MBP-3110-1), theo khuyến nghị của điều phối kit: BK1 → BK2 chạy trước SV9, SV10 để hai hàng đó viết trong khung chung và thành các vòng giao diện đầu tiên mà răng BK2 đếm lệch thật."
     },
     {
       "ma": "SV11",
@@ -3923,10 +3926,7 @@
       "hang": "T2",
       "nhom": "crm-chung",
       "thu_tu": 104.7991,
-      "dung_tren": [
-        "SV9",
-        "SV10"
-      ],
+      "dung_tren": [],
       "ten": "Mọi ngăn bản ghi mở trong cùng một khung",
       "ten_ngan": "Khung ngăn chung",
       "vai": "Người phụ trách KR",
@@ -3943,8 +3943,8 @@
         "design/patterns/**",
         "docs/design.md"
       ],
-      "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591).",
-      "ghi_chu": "Gồm: design/patterns/ngan-ban-ghi.md khoá theo đối tượng (deal, lien-he, cong-ty, ke-hoach, muc-tieu, kr, so-kr) theo §11.3 finding; mở RecordSheetFrame thêm khe ngăn KR và Số KR cần (hành động riêng ở đầu, thân nhận thẻ con, lỗi «không thấy») — sửa khung, không thoát khung; khe chờ tải và lỗi bắt buộc qua kiểu (răng lớp 1); chờ tải trong ngăn bằng khung xương (QĐ-6, máy quyết, cửa veto mở); một thành phần lỗi tải cho ngăn, ghi vào docs/design.md. Đứng sau SV9 (N1) và SV10 (N2) của đợt okr-ghi-trong-ngan-3010: cùng sửa kr-sheet.tsx và objective-sheet.tsx, khung mở khe theo hình dạng mới của ngăn sau hai hàng đó. SV10 đứng trên SV8 nên BK1 cũng mở sau SV8."
+      "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591). Chủ kho 31/10 nguyên văn «BK chạy trước» (phiên giám sát Mac Studio, việc giao MBP-3110-1), theo khuyến nghị của điều phối kit: BK1 → BK2 chạy trước SV9, SV10 để hai hàng đó viết trong khung chung và thành các vòng giao diện đầu tiên mà răng BK2 đếm lệch thật.",
+      "ghi_chu": "Gồm: design/patterns/ngan-ban-ghi.md khoá theo đối tượng (deal, lien-he, cong-ty, ke-hoach, muc-tieu, kr, so-kr) theo §11.3 finding; mở RecordSheetFrame thêm khe ngăn KR và Số KR cần (hành động riêng ở đầu, thân nhận thẻ con, lỗi «không thấy») — sửa khung, không thoát khung; khe chờ tải và lỗi bắt buộc qua kiểu (răng lớp 1); chờ tải trong ngăn bằng khung xương (QĐ-6, máy quyết, cửa veto mở); một thành phần lỗi tải cho ngăn, ghi vào docs/design.md. Chủ kho đảo thứ tự 31/10: BK1 không còn chờ SV9, SV10 (SV8 đã gộp #592); khung mở khe theo hình dạng hiện tại của ngăn KR, SV9 và SV10 viết vào khung sau BK2. Thành phần lỗi tải trong ngăn là KhungTaiLoi (record-parts.tsx:46): nó nói đúng lý do (khong-con, khong-quyen, mat-ket-noi) mà RecordSheetFrame đã dùng; VungTaiLoi của packages/ui giữ cho tầng trang theo docs/design.md mục «Chờ tải và lỗi tải» — BK1 ghi phân tầng này vào docs/design.md (đối chiếu 31/10: finding kit §5.1 chọn KhungTaiLoi, docs/design.md:118 nói VungTaiLoi cho trang; không trái nhau khi tách tầng)."
     },
     {
       "ma": "BK2",
@@ -3999,7 +3999,7 @@
         "apps/app/test/fixtures/**"
       ],
       "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591).",
-      "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: gộp với BK2 thành 17 tiêu chí, quá ngưỡng tách; khác bề mặt (trang, không phải ngăn) nên không gộp với BK1. Không gộp vào NM1 «Khung màn chung» (chưa mở): NM1 là dọn nợ (39 tệp PageShellLoading, bốn khung lỗi), BK3 là răng chặn tái sinh — bảng ngoại lệ của BK3 liệt chính nợ NM1, NM1 mở sau làm bảng ngắn lại. Không đụng tệp với BK1, BK2 nên chạy song song được."
+      "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: gộp với BK2 thành 17 tiêu chí, quá ngưỡng tách; khác bề mặt (trang, không phải ngăn) nên không gộp với BK1. Không gộp vào NM1 «Khung màn chung»: NM1 đã gộp #388 (14/10) và dọn nợ PageShellLoading, BK3 là răng chặn tái sinh — bảng ngoại lệ của BK3 chỉ liệt các trang còn lệch sau NM1 (sửa 31/10: bản cắt lượt 30/10 ghi nhầm NM1 «chưa mở»). Không đụng tệp với BK1, BK2 nên chạy song song được."
     },
     {
       "ma": "VK20",
