@@ -542,7 +542,7 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 				"data-dang-tai": so.dangTai ? "" : undefined,
 			}}
 			loading={!loi && (!dl || so.dangCho)}
-			error={loi ? loi.message : null}
+			error={loi ? loi.message || t.loi : null}
 			errorView={
 				<KhungTaiLoi
 					tieuDe={t.loi}

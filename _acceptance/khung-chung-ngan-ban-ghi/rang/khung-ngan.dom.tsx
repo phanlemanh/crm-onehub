@@ -35,9 +35,13 @@ async function dung(man: ReactElement, trongNgan = true): Promise<HTMLElement> {
 			<NuqsTestingAdapter>
 				<LocaleProvider locale="vi">
 					<TooltipProvider>
-						<DetailSheet open onOpenChange={() => {}}>
-							{man}
-						</DetailSheet>
+						{trongNgan ? (
+							<DetailSheet open onOpenChange={() => {}}>
+								{man}
+							</DetailSheet>
+						) : (
+							man
+						)}
 					</TooltipProvider>
 				</LocaleProvider>
 			</NuqsTestingAdapter>,
@@ -179,13 +183,22 @@ describe("bk1-khung", () => {
 	});
 
 	const muc = PROTO_CATALOG.find((m) => m.slug === "khung-chung-ngan-ban-ghi");
-	test("bk1-proto: so khai du 7 doi tuong x 3 trang thai va 2 canh so truoc sau", () => {
-		expect(muc?.states.length).toBe(23);
+	const DOI_TUONG = ["deal", "lien-he", "cong-ty", "ke-hoach", "muc-tieu", "kr", "so-kr"];
+	const TRANG = ["dang-tai", "loi", "du"];
+	const MA_TRAN_ST = [
+		...DOI_TUONG.flatMap((d) => TRANG.map((t) => `ST-${d}-${t}`)),
+		"ST-kr-cu-moi-dang-tai",
+		"ST-kr-cu-moi-loi",
+	];
+	test("bk1-proto: so khai dung ma tran viet truoc 7 doi tuong x 3 trang thai va 2 canh truoc sau", () => {
+		expect(MA_TRAN_ST.length).toBe(23);
+		expect([...(muc?.states ?? [])].map((s) => s.id).sort()).toEqual([...MA_TRAN_ST].sort());
 	});
 	for (const s of muc?.states ?? []) {
 		test(`bk1-proto ${s.id}: dung khung dung trang thai`, async () => {
 			await dung(<KhungChungNganBanGhiMau state={s.id} />, false);
 			const tt = /-(dang-tai|loi|du)$/.exec(s.id)?.[1];
+			expect(tt, "state khong co duoi trang thai").toBeDefined();
 			const ngan = [...document.body.querySelectorAll("[data-ngan-mau]")];
 			expect(ngan.length, "moi trang co ngan trong khung").toBeGreaterThan(0);
 			for (const n of ngan) {

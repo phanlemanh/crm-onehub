@@ -6,7 +6,11 @@ import { fileURLToPath } from "node:url";
 const hoSo = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const goc = resolve(hoSo, "../..");
 const slug = "khung-chung-ngan-ban-ghi";
-const coSo = process.env.PROTO_URL ?? "http://localhost:3300";
+const coSo = process.env.APP_URL || process.env.PROTO_URL || "";
+if (!coSo || !process.env.PHIEN_DO || !process.env.DATABASE_URL?.includes(process.env.PHIEN_DO)) {
+	console.error(`TRUOT khong chay trong phien do: APP_URL=${coSo || "(rong)"} — goi qua bun run do:man`);
+	process.exit(2);
+}
 const ra = join(hoSo, "evidence/design-pass");
 mkdirSync(ra, { recursive: true });
 

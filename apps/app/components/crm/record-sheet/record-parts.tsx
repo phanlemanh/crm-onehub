@@ -72,9 +72,17 @@ export function KhungTaiLoi({
 	const { close } = useRecordStack();
 	const chu =
 		lyDo === "khong-con"
-			? t.khongCon
+			? {
+					tieuDe: t.khongCon.tieuDe,
+					moTa: t.khongCon.moTa,
+					dong: t.khongCon.dong,
+				}
 			: lyDo === "khong-quyen"
-				? t.khongQuyen
+				? {
+						tieuDe: t.khongQuyen.tieuDe,
+						moTa: t.khongQuyen.moTa,
+						dong: t.khongQuyen.dong,
+					}
 				: null;
 	return (
 		<div

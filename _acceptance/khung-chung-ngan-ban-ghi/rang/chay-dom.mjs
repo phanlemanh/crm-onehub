@@ -9,6 +9,30 @@ const APP = join(GOC, "apps", "app");
 const ENV = Object.fromEntries(Object.entries(process.env).filter(([k]) => k !== "CLAUDECODE"));
 const KHUNG = join(APP, "components", "crm", "record-sheet", "record-parts.tsx");
 const CHO_TAI = '(loadingView ?? <KhungXuongNgan data-khung-xuong-ngan="" />)';
+const PROTO = join(APP, "app", "proto", "_modules", "khung-chung-ngan-ban-ghi", "index.tsx");
+
+function phaTaiCho(tep, sua, tepDom, nhan, mauDo) {
+	if (spawnSync("git", ["diff", "--quiet", "--", tep], { cwd: GOC }).status !== 0) {
+		console.log(`TRUOT ${nhan} — tep co thay doi chua commit, khong pha tai cho`);
+		return false;
+	}
+	const goc = readFileSync(tep, "utf8");
+	const moi = sua(goc);
+	if (moi === goc) {
+		console.log(`TRUOT ${nhan} — khong tim thay cho can pha`);
+		return false;
+	}
+	let pha;
+	try {
+		writeFileSync(tep, moi);
+		pha = chay(tepDom);
+	} finally {
+		writeFileSync(tep, goc);
+	}
+	const do_ = pha.ma !== 0 && mauDo.every((m) => m.test(pha.ra));
+	console.log(`${do_ ? "DAT" : "TRUOT"} ${nhan}`);
+	return do_;
+}
 
 function chay(NGUON) {
 	const TEN = `bk1-${process.pid}-${NGUON}`;
@@ -38,6 +62,17 @@ for (const b of BO) {
 	const dat = lanh.ma === 0 && /\b0 fail\b/.test(lanh.ra) && b.mau.every((m) => m.test(lanh.ra));
 	console.log(`${dat ? "DAT" : "TRUOT"} ban-lanh ${b.tep}`);
 	ok = ok && dat;
+}
+
+if (BO.some((b) => b.ten === "khung") && ok) {
+	ok =
+		phaTaiCho(
+			PROTO,
+			(g) => g.replace("<Sheet open modal={false}>", "<>").replace("</Sheet>", "</>"),
+			"khung-ngan.dom.tsx",
+			"pha-proto-khong-sheet: o mau bo Sheet thi ca ban mau do (dung khong boc)",
+			[/\(fail\) bk1-khung > bk1-proto ST-/],
+		) && ok;
 }
 
 if (BO.some((b) => b.ten === "that") && ok) {
