@@ -189,7 +189,7 @@ glob và so với `git ls-files` (`$SCRATCHPAD/paths-chet.mjs`). **9 hồ sơ, 1
 | `tro-ly-okr-nen` | `packages/db/src/okr-can-chinh.ts` |
 
 Một mục chết tắt bộ lọc cũ hoá của cả hồ sơ (`staleByPaths` đóng mặc định), nên hồ sơ ấy bị đòi ghim lại sau mọi PR.
-Sửa `evals.yaml` của hồ sơ đã ký là sửa thước: luật tạm 18/10 cấm máy tự sửa → C2, cần chủ kho cho.
+Sửa `evals.yaml` của hồ sơ đã ký là sửa thước: luật tạm 18/10 cấm máy tự sửa → F38, cần chủ kho cho (B12).
 
 ### Đỏ sẵn trên nền
 
@@ -250,14 +250,16 @@ Lệnh: `git grep` trên `origin/onehub`, `apps/app/**`, trừ `apps/app/app/pro
 | `NhomDaBo` gập | 1 chỗ: `apps/app/app/(app)/[slug]/okr/cua-toi.tsx:63` | Của tôi | VK19 nêu «Đã bỏ» |
 | `kr-sheet.tsx`, `so-kr-sheet.tsx` ngoài `RecordSheetFrame` | 2 tệp | `components/crm/record-sheet/` | **BK1** (vùng M5) |
 
-Cách chia:
+Cách chia — mỗi chỗ nợ đúng một hàng gánh:
 
-- **Để hàng răng lo, không dọn tay trước**: mọi mẫu trong bảng «Dấu hiệu vẽ tay» của `docs/design.md` sẽ thành luật
-  `anti-slop` trong `tools/oxlint`. Sửa tay từng chỗ bây giờ rồi dựng răng sau là làm hai lần, và không gì giữ chỗ đã
-  sửa khỏi tái phát. BK2, BK3 là hai răng đầu (khung ngăn, khung trang); răng vẽ tay đi sau, theo cùng khuôn (C4).
-- **Dọn trước lộ trình chính**: không mẫu nào. Không mẫu nào chặn BK1–BK3 hay SV9/SV10; `kr-sheet` đã là của BK1.
-- **Ngoại lệ đáng làm sớm**: 11 tệp `AlertDialog` và 7 tệp `navigator.clipboard` tập trung ở Cài đặt và
-  `agent-builder` — hai khu lộ trình chính không chạm. Có thể chạy song song cùng dãy lộ trình mà không giẫm vùng (C5).
+- **Hex thô** (11 chỗ ở 6 tệp `apps/app/components/landing/*`, đếm của phiên design-floor): SN2 sửa.
+- **`kr-sheet.tsx`, `so-kr-sheet.tsx` ngoài khung**: BK1.
+- **Mọi mẫu còn lại** (`<hN className>`, `spacing={0}`, `AlertDialog`, `navigator.clipboard`, `SECTION_TITLE`,
+  `NhomDaBo` gập, cùng `<table>`, `divide-y` tự dựng, chấm `size-2 rounded-full` mà phiên design-floor đếm thêm):
+  hàng răng vẽ tay BK5. Luật `anti-slop` trong `tools/oxlint/onehub` chặn tệp mới; các chỗ đếm ở trên vào danh sách
+  nợ cũ của chính luật đó, và hàng nào chạm tệp trong danh sách thì sửa luôn. Sửa tay từng chỗ trước khi có răng là
+  làm hai lần, và không gì giữ chỗ đã sửa khỏi tái phát.
+- **Dọn trước lộ trình chính**: không mẫu nào. Không mẫu nào chặn BK1–BK3 hay SV9/SV10.
 
 ## 6. CI: không phải chập chờn
 
@@ -282,7 +284,7 @@ Cả 11 lượt CI đủ (PR sẵn sàng, không nháp) đều đỏ ở **cùng
 
 Ước cỡ chẩn: ca `dau-hook (e)` — nhỏ (một bài thuần git, chạy riêng một tệp được). Ca FK `viec_nguoiGiaoId_fkey` và
 `vai-chi-okr` — nhỏ tới vừa (thứ tự dọn dữ liệu bài kiểm sau khi thêm bảng `viec`; một ca quyền chủ sở hữu cuối).
-`dgt-thuoc` — chưa rõ tới khi tái hiện. Tổng: một hàng C, khoảng nửa ngày giờ máy, **đi đầu** (C1).
+`dgt-thuoc` — chưa rõ tới khi tái hiện. Tổng: một hàng C, khoảng nửa ngày giờ máy, **đi đầu** (F37).
 
 ## 7. Máy
 
@@ -334,32 +336,51 @@ A4 và A5 không đảo được bằng một lệnh, nhưng chỉ xoá bản sa
 | B8 | Bảy hồ sơ `machine-cleared` mở cửa veto 4–8 tuần: ký hay veto? | **Trình bảy thẻ trong một lượt**, chủ kho ký hoặc veto từng thẻ. |
 | B9 | 10 hồ sơ treo ngoài kế hoạch, cộng `chu-thich-glob-md` | Chín hồ sơ «đang cân nhắc»: **bác hoặc xếp vào `chan_troi`**. `thuoc-cua-lat-3a-co-rang`: **đóng theo quan sát**. `chu-thich-glob-md`: **khép** (F36 đã gộp #507). |
 | B10 | Dọn Docker: xoá ảnh không dùng (34,7 GB) và 20 container đã thoát? | **Có**, lúc khoá S4 rảnh: `docker container prune` rồi `docker image prune -a`; giữ ba ảnh đang chạy. |
-| B11 | Bốn ca CI đỏ cố định: hàng C1 chạy trước BK1, hay song song? | **Trước BK1.** Mọi PR của BK sẽ gặp đúng bốn ca này; gộp khi `test` đỏ làm mất tín hiệu thật. |
-| B12 | Cho máy sửa `evals.yaml` của 9 hồ sơ đã ký để vá paths chết (luật tạm 18/10 cấm)? | **Cho, trong một hàng (C2)**, đo hai chiều từng mục, trình trên thẻ Cổng 2 của hàng đó. |
+| B11 | Bốn ca CI đỏ cố định: hàng F37 chạy trước BK1, hay song song? | **Trước BK1.** Mọi PR của BK sẽ gặp đúng bốn ca này; gộp khi `test` đỏ làm mất tín hiệu thật. |
+| B12 | Cho máy sửa `evals.yaml` của 9 hồ sơ đã ký để vá paths chết (luật tạm 18/10 cấm)? | **Cho, trong một hàng (F38)**, đo hai chiều từng mục, trình trên thẻ Cổng 2 của hàng đó. |
+| B13 | Cắt lượt BK5 và BK6 cần dòng `nguon` trỏ một trang tri thức ở kho `crm-onehub-nguon`, mà chưa trang nào nói về hai khoảng hở này (răng dấu hiệu vẽ tay; răng hàng công cụ). Ghi trang mới là đẩy lên kho khác. Cho ghi không? | **Cho**: thêm hai mục vào `wiki/chu-de/ban-do-khuon.md` (trang BK1–BK4 đang trỏ), một commit, rồi cắt lượt trỏ blob mới. Không cho thì BK5, BK6 nằm ở mục chờ điều kiện. |
+| B14 | BK5 và BK6 đi trước SV9, SV10 như BK1–BK3, hay song song? | **Song song.** Chủ kho chốt «BK trước SV» cho BK1–BK3. BK5 chạm `tools/oxlint` và bài kiểm, BK6 chạm bài kiểm trang; SV9, SV10 chạm ngăn KR. Luật mới chỉ chặn tệp mới, nên SV9, SV10 không phải chờ. |
 
 ## (C) Việc dài — thành hàng lộ trình
 
-Mã nối dãy vệ sinh F của `lo-trinh-okr.json` (cuối là F36). Cỡ ước theo giờ máy.
+Ba nguồn hàng, không mã nào trùng: kiểm kê của tệp này (dãy vệ sinh F, nối sau F36), kết quả design-floor (mã SN,
+PR #597, `docs/findings/2026-10-31-design-floor-crm/README.md` mục 5) và khoảng hở phiên bản đồ khuôn đề xuất (mã BK,
+nối sau BK4 của PR #596). Cỡ ước theo giờ máy.
 
 | Mã đề xuất | Slug | Câu giao | Cỡ | Thứ tự |
 | --- | --- | --- | --- | --- |
-| F37 | `ci-test-het-do-co-dinh` | «Một PR chỉ đổi tài liệu ra `test (api)` và `test (app-ui)` xanh trên `onehub`» — bốn ca ở mục 6 | ~4–6 giờ máy | **đầu tiên**, trước BK1 |
-| F38 | `paths-chet-chin-ho-so` | «Chín hồ sơ đã ký hết bị đòi ghim lại chỉ vì một mục `paths` trỏ vào tệp đã đổi tên» | ~3 giờ máy, kèm ghim lại | sau F37, song song BK1 (khác vùng: `_acceptance/**`) |
+| F37 | `ci-test-het-do-co-dinh` | «Một PR chỉ đổi tài liệu ra `test (api)` và `test (app-ui)` xanh trên `onehub`» — bốn ca ở mục 6 | T2, ~4–6 giờ máy | **đầu tiên**, trước BK1 |
+| SN1 | `thuoc-thiet-ke-xanh-rong` | «Hồ sơ mới không khai `design-gate --mode static` trên `.tsx`; 77 khoá `*_san_thiet_ke` được gọi tên là thước rỗng» — luật trong `docs/design.md`, không sửa hồ sơ đã ký | T1, ~0,3 giờ máy | đợt dọn, bất kỳ lúc nào |
+| SN2 | `hex-trang-gioi-thieu` | «Trang giới thiệu không còn mã màu hex nào ngoài tệp token» — 11 hex ở 6 tệp `components/landing/*` | T2 giao diện, ~1 giờ máy, `ui-check` hai khổ | đợt dọn, song song F37 (vùng `landing`) |
+| F38 | `paths-chet-chin-ho-so` | «Chín hồ sơ đã ký hết bị đòi ghim lại chỉ vì một mục `paths` trỏ vào tệp đã đổi tên» | T2, ~3 giờ máy, kèm ghim lại | sau F37, song song BK1 (vùng `_acceptance/**`) |
+| BK5 | `rang-dau-hieu-ve-tay` | «Một dấu hiệu vẽ tay của `docs/design.md` trong tệp mới của `apps/app` làm `lint:slop` đỏ và gọi đúng tên tệp; nợ cũ nằm trong một danh sách của chính luật» — gộp SN3 `luat-ve-tay-thanh-lint` của design-floor; thay hai hàng F40 `rang-ve-tay` và F41 của bản đầu tệp này | T2, ~4–6 giờ máy | dãy K, sau BK2 (chung `tools/oxlint/onehub`) |
+| BK6 | `rang-hang-cong-cu` | «Một màn đặt lọc ngoài hàng công cụ duy nhất — chip trong `Card`, nhóm gập dưới bảng, `ToggleGroup spacing={0}` — làm bài kiểm đỏ và gọi tên tệp» | T2, ~4 giờ máy | dãy L, sau BK3 (chung lối quét trang) |
 | F39 | `nguong-gia-tri-mat-giao-dien` | «Mỗi hồ sơ có mặt giao diện chờ Cổng Giá trị có ngưỡng điền xong, để phiên nghiệm thu mở được» — 51 hồ sơ, máy đề xuất `[đề xuất]`, người chốt | ~4 giờ máy + một buổi người | sau B6, B7; không chặn lộ trình |
-| F40 | `rang-ve-tay` | «Một dấu hiệu vẽ tay của `docs/design.md` trong `apps/app` làm `lint:slop` đỏ và gọi tên tệp» — luật `anti-slop` trong `tools/oxlint` cho `<hN className>`, `spacing={0}`, `AlertDialog`, `navigator.clipboard`, `SECTION_TITLE` | ~6 giờ máy | sau BK2, BK3 (cùng khuôn răng) |
-| F41 | `cai-dat-va-agent-builder-het-ve-tay` | «Cài đặt và Agent builder hỏi lại bằng `ConfirmDialog` và chép bằng `CopyValue`» — 11 tệp `AlertDialog`, 7 tệp `navigator.clipboard` | ~4 giờ máy | song song lộ trình chính, trước F40 bật chặn |
 
-Thứ tự cùng BK và SV (chủ kho đã chốt BK trước SV9, SV10):
+BK5 và BK6 chỉ cắt lượt được khi trang tri thức có mục cho chúng (B13).
+
+**Tiêu chí cộng cho BK2, không thành hàng riêng:** đưa `Sheet` và `Dialog` dựng thô vào danh sách cấm của
+`design/patterns/ngan-ban-ghi.md`, để luật lint của BK2 đọc từ đó. Người cắt lượt BK2 thêm một AC.
+
+**Vào `chan_troi`, kèm `mo_lai_khi`:**
+- SN4 `design-floor-m1`, mở lại khi kit sửa bộ đọc bậc và cách dò nhánh, và lưới tier-mismatch có danh sách «eval
+  design» máy đọc được.
+- SN5 `registry-tu-packages-ui`, mở lại khi kit có bộ đọc JSX cho độ phủ token, hoặc crm có ba hồ sơ viết
+  `reuse-plan.md`.
+- Khuôn «trang danh sách» của bản đồ khuôn, mở lại sau BK6.
+
+Phiên design-floor khuyến nghị chưa bật M1, chưa làm M2, M3; tệp này giữ khuyến nghị đó.
+
+Thứ tự cùng BK và SV (chủ kho đã chốt BK1–BK3 trước SV9, SV10; BK5, BK6 theo B14):
 
 ```text
-F37 ─▶ BK1 ─▶ BK2 ─▶ SV9 ─▶ SV10
-        │      BK3 ─┘
-        └─ F38 (song song, vùng _acceptance)
-F41 (song song, vùng Cài đặt + agent-builder) ─▶ F40 (sau BK2, BK3)
-F39 (việc người + máy, không chặn)
+dãy K:  F37 ─▶ BK1 ─▶ BK2 ─┬─▶ SV9 ─▶ SV10   (SV9 chờ cả BK2 và BK3)
+                           └─▶ BK5           (song song SV9/SV10)
+dãy L:  F37 ─▶ BK3 ─┬─▶ (SV9)
+                    └─▶ BK6
+song song: F38 sau F37 (vùng _acceptance) · SN2 (vùng landing) · SN1 (T1, bất kỳ lúc nào)
+không chặn: F39 (việc người + máy)
 ```
-
-Nợ `<hN className>` và `spacing={0}` ở khu OKR không có hàng riêng: răng F40 bật thì từng hàng chạm tệp đó sửa luôn.
 
 ---
 
