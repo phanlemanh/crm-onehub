@@ -62,6 +62,14 @@ function chepCayGoc(d) {
 	);
 }
 
+function neoHienHanh(nguonV1) {
+	const mau = /^const NEO = \{[^\n]*\};$/m;
+	const neo = readFileSync(join(GOC, DO_NEO.laiRaMan), "utf8").match(mau);
+	if (!neo || !mau.test(nguonV1))
+		tienDe("khong tim thay dong const NEO o ban sua hay ban sua-v1");
+	return nguonV1.replace(mau, neo[0]);
+}
+
 function dungBanSao({ ban, coGit = true, noi = tmpdir() }) {
 	mkdirSync(noi, { recursive: true });
 	const d = mkdtempSync(join(noi, "do-neo-"));
@@ -71,7 +79,7 @@ function dungBanSao({ ban, coGit = true, noi = tmpdir() }) {
 	if (ban === "sua-v1")
 		writeFileSync(
 			join(d, DO_NEO.laiRaMan),
-			git(GOC, "show", `${DO_NEO.suaV1}:${DO_NEO.laiRaMan}`),
+			neoHienHanh(git(GOC, "show", `${DO_NEO.suaV1}:${DO_NEO.laiRaMan}`)),
 		);
 	if (coGit) {
 		writeFileSync(join(d, ".gitignore"), "node_modules\n");
