@@ -41,9 +41,9 @@ Luật mới của giai đoạn hai.
 
 Luật của đợt ban-do-khuon-3010 (chủ kho 30–31/10).
 
-30. **BK chạy trước SV9, SV10.** Chủ kho 31/10 nguyên văn «BK chạy trước». SV9 và SV10 đứng trên BK2 trong lộ trình,
-    không mở trong đợt này. Hàng nào của đợt khác cũng sửa `kr-sheet.tsx`, `so-kr-sheet.tsx`, `objective-sheet.tsx` thì
-    giám sát báo trên #375 trước khi mở, không chạy song song với dãy K.
+30. **BK chạy trước SV9, SV10.** Chủ kho 31/10 nguyên văn «BK chạy trước». SV9 và SV10 đứng trên BK2 trong lộ trình;
+    từ lượt dọn dẹp 31/10 chúng ở cuối dãy K của đợt này. Hàng nào của đợt khác cũng sửa `kr-sheet.tsx`,
+    `so-kr-sheet.tsx`, `objective-sheet.tsx` thì giám sát báo trên #375 trước khi mở, không chạy song song với dãy K.
 31. **Sửa khung, không thoát khung.** BK1 mở `RecordSheetFrame` thêm đúng các khe ngăn KR và Số KR cần (hành động riêng
     ở đầu, thân nhận thẻ con, lỗi «không thấy»), rồi đưa hai ngăn vào khung. Khe chờ tải và lỗi bắt buộc qua kiểu. Một
     ngăn cần thứ khung chưa có thì mở khe ở khung, không dựng tay trong ngăn.
@@ -63,6 +63,19 @@ Luật của đợt ban-do-khuon-3010 (chủ kho 30–31/10).
     `phanlemanh/acceptance-gate-kit#308` khi BK1, BK2 ký và sau mỗi ba vòng giao diện. Phiên thợ không đăng lên kho kit.
 37. **Ghim nhiều hồ sơ** chạy kèm `--tran-phut 200` và xin `gia-han` có `uoc_phut` đủ phủ ngay từ đầu; đẩy xong chờ ít
     nhất 1′ rồi mới `gh pr ready`, để lượt CI đầy đủ không bị huỷ.
+
+Luật của lượt dọn dẹp 31/10 (`docs/plan/don-dep-3110.md`, chủ kho «Đồng ý theo khuyên»).
+
+38. **F37 đi đầu.** Không dãy nào gộp hàng có mã nguồn trong lúc `test (api)` hay `test (app-ui)` còn đỏ cố định trên
+    `onehub`. BK1 và BK3 đứng trên F37 (B11); F38 đứng trên F37 để lượt ghim lại chín hồ sơ chạy trên test xanh. Tới khi
+    F37 gộp, nếp «`test (api)` chập chờn không chặn» không áp cho bốn ca của F37.
+39. **F38 được sửa thước đã ký.** Chủ kho cho (B12) sửa `evals.yaml` của đúng chín hồ sơ ở `ranh_gioi` của F38, mỗi mục
+    đo hai chiều, trình trên thẻ Cổng Bằng chứng của F38. Ngoài chín hồ sơ ấy, luật tạm 18/10 «không tự sửa thước đã ký»
+    vẫn giữ.
+40. **BK5 chặn tệp mới, nợ cũ vào danh sách.** Luật vẽ tay không bắt dọn hết trước khi gộp; chỗ nợ đếm ở mục 5 của kế
+    hoạch vào danh sách nợ cũ của chính luật. Hàng sau chạm tệp trong danh sách thì sửa luôn và gỡ dòng.
+41. **F39: máy đề xuất, người chốt.** Ngưỡng máy điền mang `[đề xuất]`; chủ kho chốt ở thẻ Cổng Bằng chứng của F39.
+    Không đổi ngưỡng sau khi đã có số đo. Hồ sơ không mặt giao diện thuộc PR B6, không thuộc F39.
 
 Tên và giao tiếp.
 
