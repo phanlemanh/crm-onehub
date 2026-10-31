@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Đã có task, deadline và assignee nhưng chưa có góc nhìn rõ về overall progress, milestone, blocker, expected activation …",
+    "muon_lam": "Chủ động nhận diện các MA có nguy cơ chậm onboarding để kịp thời xử lý.",
+    "da_xay_ra": "Đã có task, deadline và assignee nhưng chưa có góc nhìn rõ về overall progress, milestone, blocker, expected activation date và cảnh báo chậm tiến độ.",
+    "man": "/onboarding"
+  },
+  "luc": "2026-10-21T03:11:01.376Z"
+}
