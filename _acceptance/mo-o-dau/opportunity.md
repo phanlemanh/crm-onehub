@@ -3,10 +3,10 @@ schema_version: 1
 slug: mo-o-dau
 feature: Người quyết mở rộng biết nhắm địa bàn nào — giao dịch và độ tập trung theo quận
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: park
+decided_by: Phan Le Manh
+decided_at: 2026-10-31T09:52:29Z
 prototype:
   base_commit:
   disposition:
@@ -126,3 +126,7 @@ thể khép ô này mà không tốn ngày công dựng nào.
   một quận đổi được một quyết định.
 - Mật độ môi giới làm thước chính — bác với lý do ở mục Vấn đề: chỉ báo trễ,
   phía cung; giữ làm số phụ trên cùng bản đồ.
+
+## Quyết định Cổng Đáng 31/10
+
+Xếp lại sau — Mở rộng địa bàn theo quận thuộc dòng tiếp thị tuyến đối tác (09/2026), không có hàng nào trên lộ trình hiện tại; mở lại khi lộ trình có hàng cho người quyết mở rộng địa bàn. Chủ kho 31/10 «Đồng ý theo khuyên» cho B9 của docs/plan/don-dep-3110.md (bác hoặc xếp lại hồ sơ treo ngoài kế hoạch), qua phiên giám sát Mac Studio; máy chọn từng hồ sơ.
