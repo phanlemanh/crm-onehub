@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Mở ngăn KR hay ngăn Số KR thì gặp đúng khung của ngăn deal: cùng đầu ngăn, cùng hình chờ tải, lỗi tải nói đúng lý do — và ngăn mới không còn cách nào bỏ qua khung.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đưa cả bảy loại ngăn qua một khung chung; ngăn nào tự dựng đầu ngăn, vòng quay hay khối lỗi riêng thì bản quét báo đỏ và gọi tên tệp."},
+    {"id": "AC-2", "p": "Sẽ cho ngăn đang tải hiện khung xương cùng hình, vẫn giữ tiêu đề, không vòng quay."},
+    {"id": "AC-3", "p": "Sẽ cho lỗi mất kết nối một khung lỗi chung có nút Thử lại, bấm một lần là tải lại một lần."},
+    {"id": "AC-4", "p": "Sẽ cho lỗi «không còn» hay «không đủ quyền» đúng một nút Đóng, không nút Thử lại; ngăn KR giữ nút «Về mục tiêu»."},
+    {"id": "AC-5", "p": "Sẽ để ngăn KR giữ bố cục riêng (thẻ con giữa thân) bên trong khung."},
+    {"id": "AC-6", "p": "Sẽ làm ngăn quên khai chờ tải hay lỗi thì không biên dịch được."},
+    {"id": "AC-7", "p": "Sẽ giữ nguyên hành vi đã ký của ngăn KR, Số KR và khung lỗi: 18 bài kiểm cũ xanh, không bài nào bị sửa."},
+    {"id": "AC-8", "p": "Sẽ có bản mẫu bấm được: bảy loại ngăn × ba trạng thái, và ngăn KR cũ đặt cạnh ngăn KR mới."},
+    {"id": "AC-9", "p": "Sẽ ghi khuôn ngăn bản ghi thành một tệp máy đọc được và một mục trong luật thiết kế."},
+    {"id": "AC-10", "p": "Sẽ chụp bản mẫu trên app thật ở khổ máy tính và điện thoại, không ảnh nào tràn ngang hay thiếu ngăn."},
+    {"id": "AC-11", "p": "Sẽ chứng trên bốn ngăn thật (deal, liên hệ, công ty, kế hoạch) rằng chờ tải, lỗi và đủ dữ liệu ra cùng một hình."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "KHÔNG làm luật lint chặn ngăn thoát khung — đó là hàng BK2 ngay sau."},
+    {"id": "OOS-2", "p": "KHÔNG đổi hình chờ tải của hai mục con trong thân ngăn KR (Sổ nguồn, số KR nhúng)."},
+    {"id": "OOS-3", "p": "KHÔNG dời thẻ con của ngăn KR lên ngay dưới ô số như ngăn deal."},
+    {"id": "OOS-4", "p": "KHÔNG chụp theme tối: khung không thêm màu mới."},
+    {"id": "OOS-5", "p": "KHÔNG sửa phép đo nào của hồ sơ đã ký."}
+  ]
+}
