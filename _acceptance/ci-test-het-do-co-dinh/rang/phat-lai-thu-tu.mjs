@@ -92,11 +92,22 @@ if (chi !== "ui") {
 	const ra = `${r.stdout}${r.stderr}`;
 	kiemThuTu("api", ra, api);
 	const mkl = api.indexOf("test/mat-khau-lien-ket.spec.ts");
+	const dev = api.indexOf("test/dev-grant-needed.spec.ts");
+	const gieoViec = api
+		.slice(dev + 1, mkl)
+		.filter((t) =>
+			readFileSync(join(GOC, "apps", "api", t), "utf8").includes(
+				"gieoViecMau(",
+			),
+		);
 	ca(
-		"api: mat-khau-lien-ket chay truoc vai-chi-okr va du-an-do-nguong",
-		mkl < api.indexOf("test/vai-chi-okr.spec.ts") &&
+		"api: chuoi ro cua luot do con nguyen — dev-grant-needed, roi tep goi gieoViecMau, roi mat-khau-lien-ket, roi vai-chi-okr va du-an-do-nguong",
+		dev >= 0 &&
+			dev < mkl &&
+			gieoViec.length > 0 &&
+			mkl < api.indexOf("test/vai-chi-okr.spec.ts") &&
 			mkl < api.indexOf("test/du-an-do-nguong.spec.ts"),
-		"thu tu ghi sai",
+		`dev ${dev}, mkl ${mkl}, tep goi gieoViecMau o giua: ${JSON.stringify(gieoViec)}`,
 	);
 	ca(
 		"api: 0 fail, khong loi khoa ngoai, gan-vai va dgt-thuoc xanh",
