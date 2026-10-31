@@ -490,8 +490,8 @@ function caPhamVi() {
 		[DO_NEO.mauPhamVi, "_acceptance/x/contract.md", "docs/x.md"],
 		globs,
 	);
-	const moc = git(GOC, "merge-base", DO_NEO.nhanhChinh, "HEAD").trim();
-	const doi = git(GOC, "diff", "--name-only", `${moc}...HEAD`)
+	const moc = git(GOC, "rev-parse", `${DO_NEO.gopHoSo}^1`).trim();
+	const doi = git(GOC, "diff", "--name-only", moc, DO_NEO.gopHoSo)
 		.split("\n")
 		.filter(Boolean);
 	const ngoai = ngoaiPhamVi(doi, globs);
