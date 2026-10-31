@@ -5,7 +5,7 @@ slug: rang-hang-cong-cu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
+status: machine-cleared
 approved_by: Phan Le Manh
 approved_at: 2026-10-31T13:59:19Z
 design_doc: docs/superpowers/specs/2026-10-31-rang-hang-cong-cu-design.md
