@@ -1784,6 +1784,7 @@ executors:
     kmc_muc: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/khung-xuong.dom.tsx -t tieu-de-muc && cd ../../apps/app && bun test ./test/khung-man-chung.spec.ts -t muc-nhac"
     kmc_lam_moi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-man-chung.dom.tsx -t lam-moi"
     kmc_mot_dau_trang: "cd apps/app && bun test ./test/khung-man-chung.spec.ts -t mot-dau-trang"
+    ktm_quet: "cd apps/app && bun test ./test/khung-trang-mo.spec.ts"
     cmt_breadcrumb: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/breadcrumb-nhan.dom.tsx"
     cmt_quet: "cd apps/app && bun test ./test/chu-man-tieng-viet.spec.ts"
     cmt_nhan_kieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/chu-man-tieng-viet.dom.tsx -t nhan-kieu"
