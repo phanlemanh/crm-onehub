@@ -2436,6 +2436,11 @@ executors:
     cnk_dau_ngan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-dau-ngan"
     cnk_api: 'bun run test -- "cd apps/api && bun test test/cap-nhat-trong-ngan-kr.spec.ts -t cnk-api"'
   script:
+    ctd_dong_ho_tran: node _acceptance/ci-test-het-do-co-dinh/rang/dong-ho-va-tran.mjs
+    ctd_ro_ri: node _acceptance/ci-test-het-do-co-dinh/rang/ro-ri.mjs
+    ctd_phat_lai_ui: node _acceptance/ci-test-het-do-co-dinh/rang/phat-lai-thu-tu.mjs --chi-ui
+    ctd_phat_lai_api: node _acceptance/ci-test-het-do-co-dinh/rang/phat-lai-thu-tu.mjs --chi-api
+    ctd_rieng_ba_luot: node _acceptance/ci-test-het-do-co-dinh/rang/rieng-ba-luot.mjs
     bcd_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-chi-don-vi/rang/man-bo-okr-chi-don-vi.mjs"'
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs

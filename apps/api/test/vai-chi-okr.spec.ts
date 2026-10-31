@@ -1167,6 +1167,18 @@ describe("vai-chi-okr", () => {
 					role: "okr",
 				}),
 			).rejects.toThrow(/owner or an admin/);
+			const chuKhac = await db.member.findMany({
+				where: {
+					organizationId: WORKSPACE_ID,
+					role: "owner",
+					userId: { not: chu.userId },
+				},
+				select: { userId: true },
+			});
+			expect(
+				chuKhac.map((m) => m.userId),
+				"chu phai la chu so huu duy nhat; chu so huu sot cua tep khac lam lenh ha vai khong bi chan",
+			).toEqual([]);
 			await expect(
 				workspace.setMemberRole(chu.userId, {
 					memberId: await memberId(chu.userId),

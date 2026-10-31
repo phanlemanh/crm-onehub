@@ -1,0 +1,34 @@
+{
+  "feature_plain": "Mọi PR trên onehub thôi đỏ ở bốn bài kiểm cố định của CI, nên màu đỏ của test lại mang tin thật.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho bài kiểm của hook trước-đẩy, ca chuỗi ngày (dau-hook e), xanh cả khi bài kiểm ghim đồng hồ chạy trước nó, đúng thứ tự CI đã đỏ."},
+    {"id": "AC-2", "p": "Sẽ có một ca canh giữ (k) tự ghim đồng hồ rồi vẫn tính ngày đúng; ai đổi lại cách tính ngày cũ thì ca này đỏ, gọi đúng lý do."},
+    {"id": "AC-3", "p": "Sẽ cho mỗi ca của nhóm dau-hook trần chờ 30 giây thay vì 5, không đổi điều nào các ca cũ kiểm."},
+    {"id": "AC-4", "p": "Sẽ cho bài kiểm màn xin quyền hộp thư dọn sạch người dùng nó tạo, không để lại một chủ sở hữu sót."},
+    {"id": "AC-5", "p": "Sẽ cho bài kiểm cấp đường đặt mật khẩu chỉ dọn dữ liệu của chính nó, nên không đụng người dùng của bài khác và không chết vì việc đang giao cho họ."},
+    {"id": "AC-7", "p": "Sẽ cho bài đo dự án mẫu tự đứng đầu danh sách thành viên trước khi gieo, kèm một dòng kiểm gọi tên lý do đỏ cũ."},
+    {"id": "AC-8", "p": "Sẽ phát lại đúng 278 tệp bài kiểm máy chủ theo thứ tự lượt CI đỏ, đòi 0 lỗi, và chạy riêng từng tệp trong bốn ca ba lượt liền."}
+  ],
+  "wont_do": [
+    {"id": "AC-6", "p": "Chặn bài kiểm vai chủ sở hữu cuối đỏ mơ hồ: còn chủ sở hữu sót thì nó đỏ ở tiền đề và gọi tên người sót."},
+    {"id": "OOS-1", "p": "KHÔNG sửa bài kiểm ghim đồng hồ (lai-ra-man) — nó nằm trong thước năm hồ sơ đã ký; đã gửi thành việc riêng K-1."},
+    {"id": "OOS-2", "p": "KHÔNG đổi hàm gieo dữ liệu mẫu đang chọn «thành viên sớm nhất»."},
+    {"id": "OOS-3", "p": "KHÔNG rà khoảng 70 tệp bài kiểm khác còn dùng chung tiền tố tên lượt."},
+    {"id": "OOS-4", "p": "KHÔNG đổi quy trình CI hay nếp «test (api) chập chờn không chặn» ngoài bốn ca này."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Ba cách một bài kiểm làm bẩn bài sau đều có tiêu chí: ghim đồng hồ (AC-1, AC-2), để lại người dùng (AC-4, AC-6, AC-7), dọn nhầm dữ liệu bài khác (AC-5)."},
+    {"i": 1, "p": "Thứ tự được đo cả ba kiểu: chạy riêng (AC-8), đúng thứ tự lượt đỏ (AC-1, AC-8), chèn bài gây rò ngay trước (AC-5 đến AC-7)."},
+    {"i": 2, "p": "Hai loại đỏ đều có tiêu chí: kiểm sai (AC-1 đến AC-8) và hết giờ (AC-3)."},
+    {"i": 3, "p": "Mọi phép đo mới đều có chiều đỏ đã chạy thật; hai phép phát lại dựa vào lượt đỏ đo trên nền trước khi sửa."},
+    {"i": 4, "p": "Giả định: thứ tự tệp trên CI giữ như lượt đỏ; nếu đổi, ba ca máy chủ vẫn đứng vì bài gây rò tự dựng lại điều kiện."},
+    {"i": 5, "p": "Giả định: tới khi việc K-1 gộp, một bài kiểm giao diện khác dùng đồng hồ toàn cục vẫn có thể đỏ theo thứ tự (Hỏi-1)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ba lựa chọn máy ghi là «chỉ còn một lối» thật ra còn lối khác (sửa gốc bài ghim đồng hồ, mức trần khác, cách dọn khác). Đã xử: hai lựa chọn thành Hỏi-1 và Hỏi-2 cho anh, lựa chọn thứ ba đổi căn cứ sang nếp đặt tên có sẵn trong kho, và rủi ro giao diện còn lại được ghi thành giả định."},
+    {"i": 1, "p": "Bài vai chủ sở hữu chọn «nói to», bài dự án mẫu chọn «tự đứng vững» — hai nguyên tắc ngược nhau. Đã xử: ghi một nguyên tắc chung (tự dựng tiền đề bằng dữ liệu của chính bài thì được), còn lựa chọn cho bài dự án mẫu thành Hỏi-3."},
+    {"i": 2, "p": "Tiêu chí trần chờ hứa «mọi ca» và «không đổi điều ca cũ kiểm» mà chỉ đo một ca. Đã sửa: đo từng ca hết giờ khi ép trần, và so từng dòng kiểm với bản trước khi sửa."},
+    {"i": 3, "p": "Chỗ đọc số sau gộp chưa nói PR nào được tính (PR chỉ đổi tài liệu bỏ qua bài kiểm) và chưa có ngày đọc. Đã sửa: PR phải chạy bài kiểm, «bỏ qua» không tính là xanh, đọc muộn nhất 03/11."},
+    {"i": 4, "p": "Hai phép phát lại không tự chứng thứ tự còn tái hiện lỗi. Đã sửa một phần: kiểm chuỗi nguyên nhân ngay trong danh sách thứ tự; chạy lại trọn trên bản trước khi sửa thì hoãn vì tốn thêm khoảng 10 phút mỗi lượt chấm."}
+  ]
+}
