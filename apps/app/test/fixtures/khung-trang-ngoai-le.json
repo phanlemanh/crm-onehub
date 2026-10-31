@@ -1,0 +1,107 @@
+[
+	{
+		"tep": "apps/app/app/(landing)/page.tsx",
+		"loai": "ngoai-app",
+		"ly_do": "trang công khai và đăng nhập, ngoài khung app: không có thanh bên và PageShell (docs/design.md mục «Khung trang» chỉ áp màn trong app)"
+	},
+	{
+		"tep": "apps/app/app/(landing)/sign-in/page.tsx",
+		"loai": "ngoai-app",
+		"ly_do": "trang công khai và đăng nhập, ngoài khung app: không có thanh bên và PageShell (docs/design.md mục «Khung trang» chỉ áp màn trong app)"
+	},
+	{
+		"tep": "apps/app/app/(landing)/quen-mat-khau/page.tsx",
+		"loai": "ngoai-app",
+		"ly_do": "trang công khai và đăng nhập, ngoài khung app: không có thanh bên và PageShell (docs/design.md mục «Khung trang» chỉ áp màn trong app)"
+	},
+	{
+		"tep": "apps/app/app/(landing)/dat-mat-khau/[token]/page.tsx",
+		"loai": "ngoai-app",
+		"ly_do": "trang công khai và đăng nhập, ngoài khung app: không có thanh bên và PageShell (docs/design.md mục «Khung trang» chỉ áp màn trong app)"
+	},
+	{
+		"tep": "apps/app/app/(landing)/het-quyen/page.tsx",
+		"loai": "ngoai-app",
+		"ly_do": "trang công khai và đăng nhập, ngoài khung app: không có thanh bên và PageShell (docs/design.md mục «Khung trang» chỉ áp màn trong app)"
+	},
+	{
+		"tep": "apps/app/app/(landing)/grant-access/page.tsx",
+		"loai": "ngoai-app",
+		"ly_do": "trang công khai và đăng nhập, ngoài khung app: không có thanh bên và PageShell (docs/design.md mục «Khung trang» chỉ áp màn trong app)"
+	},
+	{
+		"tep": "apps/app/app/(landing)/onboarding/page.tsx",
+		"loai": "ngoai-app",
+		"ly_do": "trang công khai và đăng nhập, ngoài khung app: không có thanh bên và PageShell (docs/design.md mục «Khung trang» chỉ áp màn trong app)"
+	},
+	{
+		"tep": "apps/app/app/(landing)/onboarding/research/page.tsx",
+		"loai": "ngoai-app",
+		"ly_do": "trang công khai và đăng nhập, ngoài khung app: không có thanh bên và PageShell (docs/design.md mục «Khung trang» chỉ áp màn trong app)"
+	},
+	{
+		"tep": "apps/app/app/proto/page.tsx",
+		"loai": "ban-mau",
+		"ly_do": "bản mẫu của phiên design-pass, dựng theo docs/proto.md, không phải màn của sản phẩm"
+	},
+	{
+		"tep": "apps/app/app/proto/[slug]/page.tsx",
+		"loai": "ban-mau",
+		"ly_do": "bản mẫu của phiên design-pass, dựng theo docs/proto.md, không phải màn của sản phẩm"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/so-do/page.tsx",
+		"loai": "toan-vung",
+		"ly_do": "màn toàn vùng có tên trong docs/design.md (Sơ đồ của khu Mục tiêu): dải công cụ một dòng thay PageShellHeader"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/[objectiveId]/page.tsx",
+		"loai": "toan-vung",
+		"ly_do": "Sơ đồ quanh một mục tiêu, dựng bằng cùng ManSoDo của màn Sơ đồ: ngoại lệ màn toàn vùng của docs/design.md"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/soan/[cuocSoanId]/page.tsx",
+		"loai": "chuyen-huong-sau-tai",
+		"ly_do": "fallback null rồi redirect sang khung soạn của bộ OKR sau khi đọc cuộc soạn; trang không hiện nội dung nào"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/campaigns/[campaignId]/page.tsx",
+		"loai": "tieu-de-theo-du-lieu",
+		"ly_do": "chi tiết chiến dịch: tiêu đề là tên bản ghi, đầu trang lúc tải là breadcrumb trong fallback — soát ở ca breadcrumb-chi-tiet và mot-dau-trang của khung-man-chung (AC-5, AC-16)"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/[trang]/page.tsx",
+		"loai": "tieu-de-theo-du-lieu",
+		"ly_do": "Đọc trang: tiêu đề là tên bản ghi, đầu trang lúc tải là breadcrumb trong fallback — soát ở ca breadcrumb-chi-tiet và mot-dau-trang của khung-man-chung (AC-5, AC-16)"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/de-xuat/[id]/page.tsx",
+		"loai": "tieu-de-theo-du-lieu",
+		"ly_do": "Duyệt đề xuất: tiêu đề là tên bản ghi, đầu trang lúc tải là breadcrumb trong fallback — soát ở ca breadcrumb-chi-tiet và mot-dau-trang của khung-man-chung (AC-5, AC-16)"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/(agent-builder)/agents/[agentId]/page.tsx",
+		"loai": "no",
+		"ly_do": "nợ: chi tiết tác nhân dựng đầu trang trong team-agent-detail.tsx (thành phần khách) dưới Suspense, fallback PageShellFallback nên lúc chờ không có đầu trang; đích: dựng PageShellHeader có breadcrumb trong fallback Suspense ở page.tsx như bốn màn bản ghi của khung-man-chung (AC-5, AC-16), tiêu đề tên bản ghi đổ vào sau tải"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/[trang]/lich-su/page.tsx",
+		"loai": "no",
+		"ly_do": "nợ: Lịch sử trang dựng đầu trang trong man-lich-su.tsx (thành phần khách) dưới Suspense, fallback PageShellFallback nên lúc chờ không có đầu trang; đích: dựng PageShellHeader có breadcrumb trong fallback Suspense ở page.tsx như bốn màn bản ghi của khung-man-chung (AC-5, AC-16), tiêu đề tên bản ghi đổ vào sau tải"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/[trang]/lich-su/[so]/page.tsx",
+		"loai": "no",
+		"ly_do": "nợ: phiên bản cũ của trang dựng đầu trang trong ban-cu.tsx dưới Suspense, fallback PageShellFallback nên lúc chờ không có đầu trang; đích: dựng PageShellHeader có breadcrumb trong fallback Suspense ở page.tsx như bốn màn bản ghi của khung-man-chung (AC-5, AC-16), tiêu đề tên bản ghi đổ vào sau tải"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/(agent-builder)/chat/page.tsx",
+		"loai": "no",
+		"ly_do": "nợ: Hội thoại không dựng PageShellHeader nào, kể cả lúc tải; docs/design.md chưa khai màn này là ngoại lệ toàn vùng; đích: chốt khuôn màn Hội thoại (PageShellHeader có tiêu đề và mô tả, hay khai một ngoại lệ toàn vùng có tên trong docs/design.md) rồi gỡ dòng"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/(agent-builder)/chat/[chatId]/page.tsx",
+		"loai": "no",
+		"ly_do": "nợ: một hội thoại không dựng PageShellHeader nào, kể cả lúc tải; docs/design.md chưa khai màn này là ngoại lệ toàn vùng; đích: chốt khuôn màn Hội thoại (PageShellHeader có tiêu đề và mô tả, hay khai một ngoại lệ toàn vùng có tên trong docs/design.md) rồi gỡ dòng"
+	}
+]
