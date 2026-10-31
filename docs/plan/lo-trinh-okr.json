@@ -4019,7 +4019,9 @@
       "hang": "T2",
       "nhom": "crm-chung",
       "thu_tu": 104.7991,
-      "dung_tren": [],
+      "dung_tren": [
+        "F37"
+      ],
       "ten": "Mọi ngăn bản ghi mở trong cùng một khung",
       "ten_ngan": "Khung ngăn chung",
       "vai": "Người phụ trách KR",
@@ -4037,7 +4039,7 @@
         "docs/design.md"
       ],
       "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591). Chủ kho 31/10 nguyên văn «BK chạy trước» (phiên giám sát Mac Studio, việc giao MBP-3110-1), theo khuyến nghị của điều phối kit: BK1 → BK2 chạy trước SV9, SV10 để hai hàng đó viết trong khung chung và thành các vòng giao diện đầu tiên mà răng BK2 đếm lệch thật.",
-      "ghi_chu": "Gồm: design/patterns/ngan-ban-ghi.md khoá theo đối tượng (deal, lien-he, cong-ty, ke-hoach, muc-tieu, kr, so-kr) theo §11.3 finding; mở RecordSheetFrame thêm khe ngăn KR và Số KR cần (hành động riêng ở đầu, thân nhận thẻ con, lỗi «không thấy») — sửa khung, không thoát khung; khe chờ tải và lỗi bắt buộc qua kiểu (răng lớp 1); chờ tải trong ngăn bằng khung xương (QĐ-6, máy quyết, cửa veto mở); một thành phần lỗi tải cho ngăn, ghi vào docs/design.md. Chủ kho đảo thứ tự 31/10: BK1 không còn chờ SV9, SV10 (SV8 đã gộp #592); khung mở khe theo hình dạng hiện tại của ngăn KR, SV9 và SV10 viết vào khung sau BK2. Thành phần lỗi tải trong ngăn là KhungTaiLoi (record-parts.tsx:46): nó nói đúng lý do (khong-con, khong-quyen, mat-ket-noi) mà RecordSheetFrame đã dùng; VungTaiLoi của packages/ui giữ cho tầng trang theo docs/design.md mục «Chờ tải và lỗi tải» — BK1 ghi phân tầng này vào docs/design.md (đối chiếu 31/10: finding kit §5.1 chọn KhungTaiLoi, docs/design.md:118 nói VungTaiLoi cho trang; không trái nhau khi tách tầng)."
+      "ghi_chu": "Gồm: design/patterns/ngan-ban-ghi.md khoá theo đối tượng (deal, lien-he, cong-ty, ke-hoach, muc-tieu, kr, so-kr) theo §11.3 finding; mở RecordSheetFrame thêm khe ngăn KR và Số KR cần (hành động riêng ở đầu, thân nhận thẻ con, lỗi «không thấy») — sửa khung, không thoát khung; khe chờ tải và lỗi bắt buộc qua kiểu (răng lớp 1); chờ tải trong ngăn bằng khung xương (QĐ-6, máy quyết, cửa veto mở); một thành phần lỗi tải cho ngăn, ghi vào docs/design.md. Chủ kho đảo thứ tự 31/10: BK1 không còn chờ SV9, SV10 (SV8 đã gộp #592); khung mở khe theo hình dạng hiện tại của ngăn KR, SV9 và SV10 viết vào khung sau BK2. Thành phần lỗi tải trong ngăn là KhungTaiLoi (record-parts.tsx:46): nó nói đúng lý do (khong-con, khong-quyen, mat-ket-noi) mà RecordSheetFrame đã dùng; VungTaiLoi của packages/ui giữ cho tầng trang theo docs/design.md mục «Chờ tải và lỗi tải» — BK1 ghi phân tầng này vào docs/design.md (đối chiếu 31/10: finding kit §5.1 chọn KhungTaiLoi, docs/design.md:118 nói VungTaiLoi cho trang; không trái nhau khi tách tầng). Chủ kho 31/10 (B11 của docs/plan/don-dep-3110.md): đứng sau F37, để PR của hàng gặp test (api) và test (app-ui) đã xanh."
     },
     {
       "ma": "BK2",
@@ -4053,13 +4055,13 @@
       "vai": "nen",
       "cau_giao": "«Một ngăn bản ghi dựng ngoài khung chung làm bài kiểm của kho đỏ và gọi đúng tên tệp, còn vòng chạm ngăn bản ghi có ảnh ngăn mới đặt cạnh ngăn deal»",
       "vi_sao": "Luật «Nếp màn trong app» của docs/design.md có và AGENTS.md nạp nó, nhưng răng máy chỉ có ở màu trạng thái và khung trang; ngăn KR thoát khung mà không bài nào đỏ. Không có răng thì mỗi lần dọn xong, ngăn OKR kế tiếp lại đẻ hàng nợ mới.",
-      "bat_khi": "Tiêm một ngăn gọi thẳng DetailSheetHeader thì lint và bài quét đỏ, thông điệp nêu tệp và khối cấm; chỉ sửa docs/ hay _acceptance/ thì im; mọi ngăn hiện có xanh sau BK1 (đối chứng dương); docs/proto.md có dòng màn mẫu ngăn deal mà design-pass đọc",
+      "bat_khi": "Tiêm một ngăn gọi thẳng DetailSheetHeader thì lint và bài quét đỏ, thông điệp nêu tệp và khối cấm; chỉ sửa docs/ hay _acceptance/ thì im; mọi ngăn hiện có xanh sau BK1 (đối chứng dương); docs/proto.md có dòng màn mẫu ngăn deal mà design-pass đọc; Sheet hay Dialog dựng thô trong components/crm/record-sheet/ ngoài tệp khung làm lint đỏ, danh sách cấm đọc từ design/patterns/ngan-ban-ghi.md",
       "dot": "ban-do-khuon-3010",
       "phu": [
         "BK2",
         "BK4"
       ],
-      "tieu_chi": 10,
+      "tieu_chi": 11,
       "vung": [
         "tools/oxlint/**",
         ".oxlintrc.json",
@@ -4067,7 +4069,7 @@
         "docs/proto.md"
       ],
       "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591).",
-      "ghi_chu": "Răng lớp 2 và 3 của bản đồ khuôn: luật oxlint (tools/oxlint/onehub, ghi đè theo glob của .oxlintrc.json) cấm nhập DetailSheetHeader, Skeleton, Spinner, VungTaiLoi trong components/crm/record-sheet/ trừ tệp khung; bài quét trên apps/app/test/lib/quet-jsx.ts — mọi loại bản ghi record-sheet-host.tsx đăng ký dựng khung ở gốc, đọc danh sách đối tượng từ design/patterns/ngan-ban-ghi.md, ngoại lệ thiếu lý do thì đỏ. Gộp BK4 (một dòng màn mẫu trong docs/proto.md, ~2 tiêu chí) vì cùng kết quả «ngăn mới không lệch» và BK4 đứng riêng dưới mục tiêu cỡ. Đứng trên BK1: đối chứng dương cần mọi ngăn đã trong khung."
+      "ghi_chu": "Răng lớp 2 và 3 của bản đồ khuôn: luật oxlint (tools/oxlint/onehub, ghi đè theo glob của .oxlintrc.json) cấm nhập DetailSheetHeader, Skeleton, Spinner, VungTaiLoi trong components/crm/record-sheet/ trừ tệp khung; bài quét trên apps/app/test/lib/quet-jsx.ts — mọi loại bản ghi record-sheet-host.tsx đăng ký dựng khung ở gốc, đọc danh sách đối tượng từ design/patterns/ngan-ban-ghi.md, ngoại lệ thiếu lý do thì đỏ. Gộp BK4 (một dòng màn mẫu trong docs/proto.md, ~2 tiêu chí) vì cùng kết quả «ngăn mới không lệch» và BK4 đứng riêng dưới mục tiêu cỡ. Đứng trên BK1: đối chứng dương cần mọi ngăn đã trong khung. Tiêu chí cộng 31/10 (mục C của docs/plan/don-dep-3110.md, chủ kho «Đồng ý theo khuyên»): đưa Sheet và Dialog dựng thô vào danh sách cấm của design/patterns/ngan-ban-ghi.md để luật lint đọc từ đó — nâng cỡ lên 11, trên mục tiêu có chủ ý vì cùng một luật cấm nhập, tách ra thì thành hàng một tiêu chí."
     },
     {
       "ma": "BK3",
@@ -4075,7 +4077,9 @@
       "hang": "T2",
       "nhom": "crm-chung",
       "thu_tu": 104.7993,
-      "dung_tren": [],
+      "dung_tren": [
+        "F37"
+      ],
       "ten": "Trang sinh sau cũng bị soát khung trang",
       "ten_ngan": "Răng khung trang mở",
       "vai": "nen",
@@ -4092,7 +4096,7 @@
         "apps/app/test/fixtures/**"
       ],
       "ly_do": "Chủ kho 30/10 nguyên văn «Tôi đồng ý với cách giải» rồi «Duyệt và đẩy» cho bản phạm vi docs/plan/pham-vi-ban-do-khuon-3010.md (PR #591).",
-      "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: gộp với BK2 thành 17 tiêu chí, quá ngưỡng tách; khác bề mặt (trang, không phải ngăn) nên không gộp với BK1. Không gộp vào NM1 «Khung màn chung»: NM1 đã gộp #388 (14/10) và dọn nợ PageShellLoading, BK3 là răng chặn tái sinh — bảng ngoại lệ của BK3 chỉ liệt các trang còn lệch sau NM1 (sửa 31/10: bản cắt lượt 30/10 ghi nhầm NM1 «chưa mở»). Không đụng tệp với BK1, BK2 nên chạy song song được."
+      "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: gộp với BK2 thành 17 tiêu chí, quá ngưỡng tách; khác bề mặt (trang, không phải ngăn) nên không gộp với BK1. Không gộp vào NM1 «Khung màn chung»: NM1 đã gộp #388 (14/10) và dọn nợ PageShellLoading, BK3 là răng chặn tái sinh — bảng ngoại lệ của BK3 chỉ liệt các trang còn lệch sau NM1 (sửa 31/10: bản cắt lượt 30/10 ghi nhầm NM1 «chưa mở»). Không đụng tệp với BK1, BK2 nên chạy song song được. Chủ kho 31/10 (B11 của docs/plan/don-dep-3110.md): đứng sau F37, để PR của hàng gặp test (api) và test (app-ui) đã xanh."
     },
     {
       "ma": "VK20",
@@ -4216,6 +4220,180 @@
       "bat_khi": "okr.danhSach, viecCuaBo, hopTuan, bangCham với bp:<id> chỉ trả mục tiêu cấp bộ phận của bộ phận ấy; hàng bộ phận ở danh sách Bộ OKR có tiến độ và KR tự tin thấp là số riêng, khớp cột Mục tiêu; trang một bộ không còn ô chọn đơn vị và lưới đơn vị trực thuộc, mắt xích cuối của dòng vị trí mở menu đơn vị cha, ngang hàng và trực thuộc; Đã bỏ là nút cuối hàng công cụ; bộ phận chưa có mục tiêu riêng có câu rỗng riêng; Toàn cảnh vẫn gộp phòng ban con",
       "ly_do": "Chủ kho 25/10 nguyên văn «Đồng ý hết theo khuyến nghị» cho Q1 (a) bỏ gộp ở mọi thẻ con, Q2 (a) số riêng ở danh sách Bộ OKR, Q3 (a) hàng mới sau HT1, Q4 đổi AC-1 đã ký của toan-canh-okr và thước gop-y-dung-cho, Q6 Đã bỏ thành nút, Q7 đơn vị trực thuộc qua dòng vị trí. Báo cáo: docs/findings/2026-10-25-bo-okr-gom-lan/README.md mục 4–6. Dãy nối tiếp 27/10: VK19 → VK14 → VK17, không song song. Chủ kho 27/10 \"Dời các hàng chưa mở như bảng: Có\" — hàng chồng khu OKR chờ hàng gộp thông (kit #430).",
       "ghi_chu": "Hồ sơ đã ký phải đổi luật, mỗi hồ sơ một dòng sổ fix decided_by chủ kho, đo hai chiều: toan-canh-okr AC-1 và E1 (okr-toan-canh.spec.ts «bp gồm con», chiều đỏ lật); gop-y-dung-cho (gop-y-dung-cho.spec.ts:75-76 đổi bp:BP_KD sang pb của phòng chứa M1, M2); tro-ly-okr-tom-tat theo E1; trang-bo-okr AC-7 (liên kết Đơn vị con) và AC-10 (ô chọn đơn vị), thêm ca bộ phận vào E5. Đứng sau HT1. Bốn điểm của HT1 hàng này gánh vì Q1 (a), theo giám sát 25/10 (phiên V1, chủ kho «Đồng ý theo khuyến nghị»): (1) HT1 AC-6 hứa số trên mục «Đơn vị có KR» (lấy okr.toanCanh, số gộp) bằng số Họp tuần của đơn vị ấy; khi hopTuan(bp) chỉ còn số riêng thì E7, E8 của HT1 đỏ — chọn đếm số riêng hoặc bỏ mục bộ phận; (2) HT1 AC-2 xếp «dẫn cả bộ phận lẫn phòng ban → bộ phận», sau Q1 (a) trưởng bộ phận dễ gặp bộ rỗng — xét lại thứ tự; (3) HT1 E8 có chiều đỏ «hopTuan(bp) bỏ con → đỏ» khoá hành vi gộp — cần dòng sổ fix decided_by chủ kho; (4) danh sách «Đơn vị có KR» trong màn rỗng bộ OneHub của HT1 chuyển sang menu ở dòng vị trí theo Q7. Toàn cảnh giữ gộp (toan-canh-okr AC-5, quyết định 04/10). Đi trước VK15 để cột phải dựng trên tập mục tiêu đúng. Luật chủ kho 24/10 (docs/proto.md): S1 dựng /proto/bo-okr-chi-don-vi trên dữ liệu mẫu dày, chủ kho bấm thử trước Cổng 1."
+    },
+    {
+      "ma": "F37",
+      "slug": "ci-test-het-do-co-dinh",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 104.799,
+      "dung_tren": [],
+      "ten": "CI kiểm hết đỏ cố định",
+      "ten_ngan": "CI hết đỏ cố định",
+      "vai": "nen",
+      "cau_giao": "«Một PR chỉ đổi tài liệu ra test (api) và test (app-ui) xanh trên onehub»",
+      "vi_sao": "Từ 28/10 cả 11 lượt CI đủ (mọi loại PR, kể cả PR chỉ đổi tài liệu) đỏ ở cùng bốn ca: dau-hook (e) ở packages/ui/test/pre-push-da-chung.spec.ts:457, móc dọn của apps/api/test/mat-khau-lien-ket.spec.ts:153 (khoá ngoại viec_nguoiGiaoId_fkey), apps/api/test/vai-chi-okr.spec.ts:1175 và dgt-thuoc (apps/api/test/du-an-do-nguong.spec.ts). Nếp «test (api) chập chờn không chặn» đang che một màu đỏ cố định, nên PR nào cũng gộp khi test đỏ và mất tín hiệu thật.",
+      "bat_khi": "Trên đỉnh onehub sau khi gộp, test (api) và test (app-ui) xanh ở một PR chỉ đổi tài liệu; mỗi ca trong bốn ca chạy riêng tệp ba lượt liền đều xanh; ca dgt-thuoc có dòng expect gọi đúng lý do đỏ cũ trong mô tả PR",
+      "dot": "don-dep-3110",
+      "phu": [
+        "F37"
+      ],
+      "tieu_chi": 8,
+      "vung": [
+        "packages/ui/test/pre-push-da-chung.spec.ts",
+        "scripts/pre-push-t1.mjs",
+        ".githooks/**",
+        "apps/api/test/**"
+      ],
+      "ly_do": "Chủ kho 31/10 nguyên văn «Đồng ý theo khuyên» ở phiên giám sát Mac Studio, cho danh sách A1–A3, B1–B14 kèm khuyến nghị của docs/plan/don-dep-3110.md (#598). B11: F37 chạy trước BK1 và BK3.",
+      "ghi_chu": "Kiểm kê mục 6 của docs/plan/don-dep-3110.md: dòng log nguyên văn của từng ca (lượt 41149763596, #594). Ước cỡ chẩn: dau-hook (e) nhỏ (bài thuần git), FK và vai-chi-okr nhỏ tới vừa (thứ tự dọn dữ liệu sau khi thêm bảng viec; ca chủ sở hữu cuối), dgt-thuoc chưa rõ tới khi tái hiện. Hai ca chỉ đỏ một lần (do-phu E11, tlk-ranh-gioi) là chập chờn thật, không thuộc hàng này. Đứng trên BK1 và BK3: mọi PR của bản đồ khuôn sẽ gặp đúng bốn ca này."
+    },
+    {
+      "ma": "SN1",
+      "slug": "thuoc-thiet-ke-xanh-rong",
+      "hang": "T1",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.7,
+      "dung_tren": [],
+      "ten": "Gọi tên thước thiết kế xanh rỗng",
+      "ten_ngan": "Thước thiết kế rỗng",
+      "vai": "nen",
+      "cau_giao": "«Hồ sơ mới không khai design-gate --mode static trên .tsx, và các khoá *_san_thiet_ke đang có được gọi tên là thước rỗng»",
+      "vi_sao": "77 khoá *_san_thiet_ke của _acceptance/config.yaml gọi design-gate --mode static, 0 khoá có --require-measured: trên .tsx chúng không đo gì mà vẫn báo đạt, nên che mắt người ký Cổng Bằng chứng (docs/findings/2026-10-31-design-floor-crm/README.md mục 1 và 5).",
+      "bat_khi": "docs/design.md có luật: eval giao diện của hồ sơ mới là ui-check hay răng khung, không phải design-gate tĩnh trên .tsx; luật liệt kê 77 khoá đang có là thước rỗng; không hồ sơ đã ký nào bị sửa",
+      "dot": "don-dep-3110",
+      "phu": [
+        "SN1"
+      ],
+      "tieu_chi": 3,
+      "vung": [
+        "docs/design.md"
+      ],
+      "ly_do": "Chủ kho 31/10 nguyên văn «Đồng ý theo khuyên» ở phiên giám sát Mac Studio, cho danh sách A1–A3, B1–B14 kèm khuyến nghị của docs/plan/don-dep-3110.md (#598).",
+      "ghi_chu": "Mã SN của nghiên cứu nâng bậc sàn thiết kế (#597). T1: chỉ chạm tài liệu, thoát ở S0. Dưới mục tiêu cỡ có chủ ý: luật một đoạn, không gộp được với hàng khác mà không trộn T1 với T2."
+    },
+    {
+      "ma": "SN2",
+      "slug": "hex-trang-gioi-thieu",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.71,
+      "dung_tren": [],
+      "ten": "Trang giới thiệu hết mã màu thô",
+      "ten_ngan": "Hex trang giới thiệu",
+      "vai": "Khách xem trang giới thiệu",
+      "cau_giao": "«Khách xem trang giới thiệu thấy đúng màu của bộ giao diện ở cả nền sáng và tối, vì trang không còn mã màu hex nào ngoài tệp token»",
+      "vi_sao": "11 mã hex ở 6 tệp apps/app/components/landing/* là nợ hex thật duy nhất của app (đếm của nghiên cứu sàn thiết kế); làm trước thì bật M1 sau này không chặn oan vòng chạm trang giới thiệu.",
+      "bat_khi": "git grep mã hex trong apps/app/components/landing ra 0 chỗ; ảnh trang giới thiệu hai khổ (1280, 375) ở hai nền không đổi màu ngoài chỗ đã khai",
+      "dot": "don-dep-3110",
+      "phu": [
+        "SN2"
+      ],
+      "tieu_chi": 5,
+      "vung": [
+        "apps/app/components/landing/**",
+        "packages/ui/src/styles/globals.css"
+      ],
+      "ly_do": "Chủ kho 31/10 nguyên văn «Đồng ý theo khuyên» ở phiên giám sát Mac Studio, cho danh sách A1–A3, B1–B14 kèm khuyến nghị của docs/plan/don-dep-3110.md (#598).",
+      "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: vùng landing không chung bề mặt với hàng nào khác của đợt, chạy song song F37."
+    },
+    {
+      "ma": "F38",
+      "slug": "paths-chet-chin-ho-so",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.72,
+      "dung_tren": [
+        "F37"
+      ],
+      "ten": "Vá paths chết của chín hồ sơ đã ký",
+      "ten_ngan": "Paths chết chín hồ sơ",
+      "vai": "nen",
+      "cau_giao": "«Chín hồ sơ đã ký thôi bị đòi ghim lại sau mọi PR chỉ vì một mục paths trỏ vào tệp đã đổi tên»",
+      "vi_sao": "Một mục paths chết tắt bộ lọc hoá cũ của cả hồ sơ (staleByPaths đóng mặc định). Đo 31/10: 9 hồ sơ, 10 mục — cay-can-chinh-co-ly-do (2), cho-tac-nhan-lau, goi-y-mo-ke-hoach, hoi-dap-okr, kara-gop-y-luot-2, ngan-kr-mot-cho, quyet-gop-y-noi-dung-ly-do, toan-canh-okr, tro-ly-okr-nen.",
+      "bat_khi": "Mỗi mục paths của chín hồ sơ khớp ít nhất một tệp của git ls-files; mỗi mục đo hai chiều (một PR chạm tệp được trỏ làm hồ sơ hoá cũ, một PR không chạm thì không); pre-merge-check trên một PR chỉ đổi tài liệu không còn gọi tên chín hồ sơ này",
+      "dot": "don-dep-3110",
+      "phu": [
+        "F38"
+      ],
+      "tieu_chi": 9,
+      "ly_do": "Chủ kho 31/10 nguyên văn «Đồng ý theo khuyên» ở phiên giám sát Mac Studio, cho danh sách A1–A3, B1–B14 kèm khuyến nghị của docs/plan/don-dep-3110.md (#598). B12: cho máy sửa evals.yaml của chín hồ sơ đã ký trong một hàng, đo hai chiều từng mục, trình trên thẻ Cổng Bằng chứng của hàng này (luật tạm 18/10 cấm tự sửa thước đã ký).",
+      "ghi_chu": "Không khai vung: hàng chỉ chạm _acceptance/<chín hồ sơ>/evals.yaml (luật vùng cấm ghi thư mục hồ sơ); ranh_gioi ở gói đợt liệt chín tệp. Sau F37 để lượt ghim lại của chín hồ sơ chạy trên test xanh. Kèm ghim lại chín hồ sơ."
+    },
+    {
+      "ma": "BK5",
+      "slug": "rang-dau-hieu-ve-tay",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 104.79965,
+      "dung_tren": [
+        "BK2"
+      ],
+      "ten": "Dấu hiệu vẽ tay trong tệp mới làm lint đỏ",
+      "ten_ngan": "Răng vẽ tay",
+      "vai": "nen",
+      "cau_giao": "«Một dấu hiệu vẽ tay của docs/design.md trong tệp mới của apps/app làm lint:slop đỏ và gọi đúng tên tệp; nợ cũ nằm trong một danh sách của chính luật»",
+      "vi_sao": "Bảng «Dấu hiệu vẽ tay» của docs/design.md tự hứa thành luật anti-slop trong tools/oxlint nhưng tới nay chỉ được kiểm bằng mắt ở review; đo 31/10 dấu hiệu vẽ tay có ở khoảng 60 tệp (34 thẻ <hN className>, 10 spacing={0}, 11 tệp AlertDialog, 7 tệp navigator.clipboard, 3 tệp SECTION_TITLE, NhomDaBo gập), gấp mười nợ hex. Tri thức: crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md mục «Khoảng hở 1».",
+      "bat_khi": "Tiêm từng dấu hiệu máy đọc được (<table>, navigator.clipboard, <h1>–<h4> tự đặt cỡ, divide-y tự dựng, size-2 rounded-full, ToggleGroup spacing={0}, AlertDialog ráp tay) vào một tệp mới của apps/app thì lint:slop đỏ, thông điệp nêu tệp và thành phần thay; tệp trong danh sách nợ cũ và tệp dưới apps/app/app/proto im; danh sách nợ cũ khớp số đếm của kiểm kê",
+      "dot": "don-dep-3110",
+      "phu": [
+        "BK5"
+      ],
+      "tieu_chi": 10,
+      "vung": [
+        "tools/oxlint/onehub/**",
+        ".oxlintrc.json"
+      ],
+      "ly_do": "Chủ kho 31/10 nguyên văn «Đồng ý theo khuyên» ở phiên giám sát Mac Studio, cho danh sách A1–A3, B1–B14 kèm khuyến nghị của docs/plan/don-dep-3110.md (#598). B13: trang tri thức có mục cho khoảng hở này. B14: chạy song song SV9, SV10 (luật chỉ chặn tệp mới).",
+      "ghi_chu": "Gộp SN3 luat-ve-tay-thanh-lint của nghiên cứu sàn thiết kế; thay hai hàng F40 rang-ve-tay và F41 của bản đầu kiểm kê. Đứng trên BK2 vì chung bộ luật tools/oxlint/onehub. Hàng nào sau này chạm tệp trong danh sách nợ cũ thì sửa luôn và gỡ khỏi danh sách."
+    },
+    {
+      "ma": "BK6",
+      "slug": "rang-hang-cong-cu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 104.7997,
+      "dung_tren": [
+        "BK3"
+      ],
+      "ten": "Lọc đặt ngoài hàng công cụ làm bài kiểm đỏ",
+      "ten_ngan": "Răng hàng công cụ",
+      "vai": "nen",
+      "cau_giao": "«Một màn đặt lọc ngoài hàng công cụ duy nhất — chip trong Card, nhóm gập dưới bảng, ToggleGroup spacing={0} — làm bài kiểm đỏ và gọi tên tệp»",
+      "vi_sao": "Mục «Thứ tự một màn» và «Hàng công cụ» của docs/design.md (chủ kho 25/10) chưa có răng; răng khung trang BK3 chỉ soát đầu trang. Tri thức: crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md mục «Khoảng hở 2».",
+      "bat_khi": "Thêm một trang đặt chip lọc trong CardContent, hay nhóm gập «Đã bỏ (n)» dưới bảng, hay ToggleGroup spacing={0} thì bài kiểm đỏ và nêu tệp; lệch hiện có nằm trong bảng ngoại lệ có lý do; chỉ sửa docs/ thì im",
+      "dot": "don-dep-3110",
+      "phu": [
+        "BK6"
+      ],
+      "tieu_chi": 8,
+      "vung": [
+        "apps/app/test/hang-cong-cu.spec.ts",
+        "apps/app/test/fixtures/**"
+      ],
+      "ly_do": "Chủ kho 31/10 nguyên văn «Đồng ý theo khuyên» ở phiên giám sát Mac Studio, cho danh sách A1–A3, B1–B14 kèm khuyến nghị của docs/plan/don-dep-3110.md (#598). B13: trang tri thức có mục cho khoảng hở này. B14: chạy song song SV9, SV10.",
+      "ghi_chu": "Đứng trên BK3 vì dùng chung lối quét trang. Không chạm apps/app/test/lib/** (vùng BK2, dãy khác): lối quét dùng lại qua nhập, không sửa."
+    },
+    {
+      "ma": "F39",
+      "slug": "nguong-gia-tri-mat-giao-dien",
+      "hang": "T2",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.73,
+      "dung_tren": [],
+      "ten": "Ngưỡng Cổng Giá trị cho hồ sơ có mặt giao diện",
+      "ten_ngan": "Ngưỡng giá trị giao diện",
+      "vai": "nen",
+      "cau_giao": "«Mỗi hồ sơ có mặt giao diện chờ Cổng Giá trị có ngưỡng điền xong, để phiên nghiệm thu mở được»",
+      "vi_sao": "start-scan 31/10: 78 hồ sơ mang cờ nguong-chua-chot; 51 hồ sơ có mặt giao diện (phụ lục B của docs/plan/don-dep-3110.md) — người dùng thật bấm vào được nên ngưỡng phải điền, không khai «không đo được». Ngưỡng còn trống thì skill uat-session từ chối mở phiên.",
+      "bat_khi": "start-scan không còn hồ sơ có mặt giao diện nào mang cờ nguong-chua-chot; mỗi ngưỡng do máy đề xuất mang nhãn [đề xuất] tới khi người chốt ở thẻ Cổng Bằng chứng của hàng này; không ngưỡng nào đổi sau khi đã có số đo",
+      "dot": "don-dep-3110",
+      "phu": [
+        "F39"
+      ],
+      "tieu_chi": 6,
+      "ly_do": "Chủ kho 31/10 nguyên văn «Đồng ý theo khuyên» ở phiên giám sát Mac Studio, cho danh sách A1–A3, B1–B14 kèm khuyến nghị của docs/plan/don-dep-3110.md (#598).",
+      "ghi_chu": "Không khai vung: hàng chỉ chạm _acceptance/<51 hồ sơ>/opportunity.md; ranh_gioi ở gói đợt liệt từng tệp. Đi sau B6 (27 hồ sơ không mặt giao diện khai «Không đo được», PR riêng) và B7 (phán quyết theo nhóm của chủ kho cho 52 hồ sơ quá timebox); không chặn lộ trình. Dưới mục tiêu cỡ có chủ ý: một loại việc trên nhiều tệp."
     }
   ],
   "chan_troi": [
@@ -4364,6 +4542,36 @@
       "cau_giao": "«Một tín hiệu cài lời dặn không lấy được khoá mô hình của lịch gom, kể cả khi Claude Code có lỗi phân quyền»",
       "ly_do": "Hỏi-2 của TH2b (gia-co-gom-tin-hieu), chủ kho duyệt «để sau» 21/10: cách ly hệ điều hành cho phiên gom — người dùng hệ điều hành riêng, chặn mạng theo người dùng, proxy giữ khoá mô hình. TH2b chỉ dựa vào lớp phân quyền của Claude Code, và cách ly hệ điều hành chỉ kiểm được trên Actions.",
       "mo_lai_khi": "Lịch gom tín hiệu đã chạy thật với khoá mô hình"
+    },
+    {
+      "ma": "SN4",
+      "dot": "don-dep-3110",
+      "cau_giao": "«Vòng giao diện mới bị sàn thiết kế bậc M1 chặn khi thêm mã màu thô vào .tsx»",
+      "ly_do": "Kit 2.36.0 có hai lỗi chặn cứng với kho cỡ crm: bộ đọc bậc tràn bộ đệm git ls-files nên bậc luôn là M0, và S3, S4 của design-floor chỉ dò main/master. Bật M1 hôm nay còn làm lưới tier-mismatch dừng 49/49 vòng giao diện từ 17/10 (docs/findings/2026-10-31-design-floor-crm/README.md mục 3–4).",
+      "phu": [
+        "SN4"
+      ],
+      "mo_lai_khi": "Kit đã phát hành bản sửa bộ đọc bậc và cách dò nhánh, và lưới tier-mismatch có danh sách «eval design» máy đọc được gồm floor và ui-check"
+    },
+    {
+      "ma": "SN5",
+      "dot": "don-dep-3110",
+      "cau_giao": "«Registry thành phần và token của sàn thiết kế sinh từ packages/ui, có bài kiểm khớp»",
+      "ly_do": "Điều kiện bậc M2; M2 không thêm gì cho .tsx ở S4 khi kit chưa đo được độ phủ token trong JSX.",
+      "phu": [
+        "SN5"
+      ],
+      "mo_lai_khi": "Kit có bộ đọc JSX cho độ phủ token, hoặc crm có ba hồ sơ viết reuse-plan.md"
+    },
+    {
+      "ma": "BK7",
+      "dot": "don-dep-3110",
+      "cau_giao": "«Trang danh sách mới đi qua khuôn trang danh sách của bản đồ khuôn»",
+      "ly_do": "Khuôn chỉ đáng khai khi răng hàng công cụ đã chạy và cho thấy hình thật của các trang danh sách đang có.",
+      "phu": [
+        "BK7"
+      ],
+      "mo_lai_khi": "BK6 rang-hang-cong-cu đã gộp"
     }
   ],
   "da_bac": [
