@@ -12,7 +12,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>3 việc"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>171 việc"]
+  GB --> DG["Đã giao<br/>172 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>190 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
 ```
@@ -350,6 +350,7 @@ flowchart TD
 - Người điều phối lọc, sắp, tìm và xem theo bảng cột trên danh mục 30 ngày đầu — và bộ lọc ra không kết quả không còn đẩy họ vào ngõ cụt (`quan-ly-danh-muc-30-ngay`) — đã chấm bởi thực tế
 - Quên mật khẩu — người dùng tự xin liên kết đặt lại qua thư (tiếp quản PR (`quen-mat-khau`)
 - Quyền của lượt builder mang theo tường minh — bỏ luật suy commandType từ hình dạng tin nhắn, câu trả lời kế thừa đúng quyền của lượt đã hỏi, và dạy con agent_builder cửa ra not_authorized (`quyen-luot-mang-theo`)
+- Mọi page.tsx của ứng dụng, kể cả trang sinh sau ngày dựng bài kiểm, đều bị soát hình theo màn; trang lệch không có trong bảng ngoại lệ kèm lý do thì bài kiểm đỏ (`rang-khung-trang-mo`) — đã giao — không đo, khai ở Cổng Đáng
 - Vá lối rò Slack — Tác nhân chạy nền không đăng được dữ liệu đối tác vào kênh Slack có người mang vai «chỉ OKR», và lượt chạy nền của Tác nhân được coi là tự động nên mọi thao tác ghi nhạy cảm bị từ chối (`ro-slack-tac-nhan`) — đã giao — không đo, khai ở Cổng Đáng
 - Kết nối Slack thiếu quyền đọc email vẫn không để lọt dữ liệu đối tác tới người mang vai «chỉ OKR» (`slack-thieu-quyen-email`)
 - Các bài so-moi của nop-ban-nhap chọn số thử bằng cách đọc chính gói gửi mô hình — hết đỏ ngẫu nhiên khi tên gieo tình cờ mang chữ số (`so-moi-khong-chap-chon`)

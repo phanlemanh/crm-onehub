@@ -1,0 +1,29 @@
+{
+  "feature_plain": "Mỗi khi có người thêm một trang mới vào ứng dụng mà trang đó tự dựng phần đầu trang (tiêu đề, mô tả) thay vì dùng khung chung, bài kiểm của kho đỏ và gọi đúng tên trang — kể cả trang sinh sau ngày dựng bài kiểm cũ.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đọc mọi trang đang có trong ứng dụng ở mỗi lượt chạy (hôm nay 71 trang), không dựa vào danh sách cố định, và xếp mỗi trang vào đúng một nhóm: dùng khung chung, chỉ chuyển hướng, hoặc ngoại lệ có lý do."},
+    {"id": "AC-3", "p": "Sẽ đỏ khi một trang có khung đầu trang nhưng lúc đang tải thiếu tiêu đề hay câu mô tả, hoặc tự đặt thêm một tiêu đề lớn riêng — và nói đúng chỗ thiếu."},
+    {"id": "AC-5", "p": "Sẽ đỏ khi bảng ngoại lệ có dòng trỏ trang không còn, dòng trùng, loại ngoại lệ lạ hay thiếu lý do."},
+    {"id": "AC-6", "p": "Sẽ đỏ khi một trang đã sửa xong mà vẫn nằm trong bảng ngoại lệ, để dọn nợ xong là phải gỡ dòng; trang tiêu đề theo dữ liệu vẫn phải có đầu trang lúc tải."},
+    {"id": "AC-8", "p": "Sẽ im khi chỉ đổi tài liệu, hồ sơ nghiệm thu hay gói khác ngoài ứng dụng."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Chặn một trang mới tự dựng đầu trang bằng khối chữ riêng: bài đỏ và gọi đúng tên trang."},
+    {"id": "AC-4", "p": "Sẽ KHÔNG đòi dòng ngoại lệ cho trang chỉ chuyển hướng; nhưng trang đó thêm nội dung mà không có đầu trang thì đỏ như trang mới."},
+    {"id": "AC-7", "p": "Sẽ KHÔNG đỏ trên cây hôm nay: 21 ngoại lệ có lý do, trong đó đúng năm trang nợ (chi tiết tác nhân, hai màn Hội thoại, Lịch sử trang, phiên bản cũ của trang), và bài chạy trong lượt kiểm thường của ứng dụng."},
+    {"id": "OOS-1", "p": "Khung chờ hình theo màn của trang mới chưa làm ở đây — đó là Hỏi-1: máy khuyên để cho một việc riêng, vì phải ký lại hai tiêu chí của hồ sơ Khung màn chung."},
+    {"id": "OOS-2", "p": "Không sửa năm trang nợ trong vòng này: bài chặn nợ mới, nợ cũ nằm trong bảng có đích sửa."},
+    {"id": "OOS-3", "p": "Không soát vị trí bộ lọc và hàng công cụ — việc của BK6 (răng hàng công cụ), dùng lại lối quét này."},
+    {"id": "OOS-4", "p": "Không soát tiêu đề mục tự đặt cỡ chữ ở Kết nối và Slack — việc của BK5 (dấu hiệu vẽ tay)."}
+  ],
+  "scope_plain": "Vòng này chỉ thêm bài kiểm; không màn nào người dùng thấy thay đổi.",
+  "coverage_plain": [
+    {"i": 0, "p": "Không cần lưới quét: mỗi trang vào đúng một nhóm và danh sách trang lấy thẳng từ kho, nên «đủ» là bài đọc bằng đúng danh sách ấy (AC-1, tập trang khớp kho); phần lệch đã đếm tay trên cây ra 21 dòng."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Câu giao nói «hình theo màn» mà hợp đồng chỉ soát đầu trang — đây là lựa chọn của chủ kho, không phải của máy. Đã chuyển thành Hỏi-1 trên thẻ này, câu giao giữ nguyên văn."},
+    {"i": 1, "p": "Chưa có bằng chứng bài thật sự chạy trong lượt kiểm thường của ứng dụng. Đã thêm một phép đo đòi dòng đếm trang xuất hiện trong đầu ra của lượt kiểm đó."},
+    {"i": 2, "p": "Bốn phép đo đọc trang thật mà không khai, nên đổi trang sau này không làm chúng hết hạn. Đã khai thêm."},
+    {"i": 3, "p": "Tệp vòng này chạm khác lời khai cũ trong ô cơ hội. Đã khai vùng mới với bộ điều phối, không trùng dãy nào, và ghi một dòng sổ."}
+  ]
+}
