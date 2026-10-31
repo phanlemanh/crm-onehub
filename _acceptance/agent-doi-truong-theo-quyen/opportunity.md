@@ -3,10 +3,10 @@ schema_version: 1
 slug: agent-doi-truong-theo-quyen
 feature: Trợ lý AI chỉ đổi trường của cả đội khi người yêu cầu là quản trị hoặc chủ — hôm nay thành viên thường nhờ trợ lý là thêm hay sửa được trường
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: park
+decided_by: Phan Le Manh
+decided_at: 2026-10-31T09:52:29Z
 prototype:
   base_commit:
   disposition:
@@ -45,3 +45,7 @@ Chưa khai — đợi Cổng Đáng.
 ## Out of scope từ khám phá
 
 - Quyền trên 20 router API khác — bài riêng.
+
+## Quyết định Cổng Đáng 31/10
+
+Xếp lại sau — Lỗ quyền còn sống (manage_fields của tác nhân không kiểm vai), nhưng chưa có hàng; mở lại khi cắt lượt kế có hàng quyền của tác nhân — lớp quyền là T3, cần Cổng Đáng riêng. Chủ kho 31/10 «Đồng ý theo khuyên» cho B9 của docs/plan/don-dep-3110.md (bác hoặc xếp lại hồ sơ treo ngoài kế hoạch), qua phiên giám sát Mac Studio; máy chọn từng hồ sơ.

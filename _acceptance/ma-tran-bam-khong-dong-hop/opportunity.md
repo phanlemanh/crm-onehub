@@ -3,10 +3,10 @@ schema_version: 1
 slug: ma-tran-bam-khong-dong-hop
 feature: Phép đo «bấm trong cột góp ý không đóng hộp» dựa trên ma trận trạng thái thẻ × đích bấm viết trước, không đếm ca bằng ngưỡng và không lặng lẽ bỏ đích thiếu
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: park
+decided_by: Phan Le Manh
+decided_at: 2026-10-31T09:52:29Z
 prototype:
   base_commit:
   disposition:
@@ -31,3 +31,7 @@ thái thẻ») mạnh hơn phép đo. Bước tái hiện trên merge-base là d
 ## Câu hỏi mở cho Cổng Đáng
 
 - Gộp vào lượt `the-gop-y-sua-nhanh` (cùng chạm cột) hay để riêng?
+
+## Quyết định Cổng Đáng 31/10
+
+Xếp lại sau — Phép đo của thẻ góp ý Trợ lý OKR; mở lại khi một vòng chạm the-gop-y-okr.dom.tsx. Chủ kho 31/10 «Đồng ý theo khuyên» cho B9 của docs/plan/don-dep-3110.md (bác hoặc xếp lại hồ sơ treo ngoài kế hoạch), qua phiên giám sát Mac Studio; máy chọn từng hồ sơ.

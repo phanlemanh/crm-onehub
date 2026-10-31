@@ -1,0 +1,74 @@
+schema_version: 1
+feature_slug: ci-test-het-do-co-dinh
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.ctd_phat_lai_ui
+    paths: [packages/ui/test/**, _acceptance/ci-test-het-do-co-dinh/rang/phat-lai-thu-tu.mjs, _acceptance/ci-test-het-do-co-dinh/rang/thu-tu-ui-41191965481.txt]
+    expected: "exit 0; in «DAT tat ca». Chạy 21 tệp spec của @crm/ui đúng thứ tự trong rang/thu-tu-ui-41191965481.txt (lấy từ log lượt CI đỏ 41191965481), lai-ra-man.spec.tsx đứng trước pre-push-da-chung.spec.ts; gỡ CLAUDECODE khỏi env để bun in tên tệp và dòng (pass). Ba ca DAT (đầu ra phải có tên tệp, nên răng gỡ CLAUDECODE): «app-ui: chay dung thu tu tep cua luot 41191965481» (dãy tên tệp trong đầu ra bằng đúng danh sách), «app-ui: lai-ra-man chay truoc pre-push-da-chung», «app-ui: 0 fail, dau-hook (e) xanh» (đầu ra có «(pass) dau-hook > dau-hook (e): chuoi ngay 13 roi 15»). CHIỀU ĐỎ (lệnh tái hiện hai tệp, giám sát duyệt 31/10): từ packages/ui chạy «bun test --preload ./test/setup-dom.ts ./test/lai-ra-man.spec.tsx ./test/pre-push-da-chung.spec.ts -t dau-hook» — bản cũ 6ca59691a cho «(fail) dau-hook > dau-hook (e)», «- Expected  - 1», «+ Received  + 5», bản sửa 10 pass · 0 fail (chieu-do-tren-nen.md)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ctd_dong_ho_tran
+    paths: [packages/ui/test/pre-push-da-chung.spec.ts, packages/ui/test/mau/**, scripts/pre-push-t1.mjs, scripts/pre-push-da-chung.mjs, _acceptance/ci-test-het-do-co-dinh/rang/dong-ho-va-tran.mjs]
+    expected: "exit 0; in «DAT tat ca». Chạy trên bản sao tạm của pre-push-da-chung.spec.ts (thư mục tạm, DA_CHUNG_NGUON trỏ gốc kho), không ghi vào cây. DAT «ban-lanh-co-dung-mot-cho-tinh-ngay-dau» (đúng một chỗ «bayGio() - ngay * NGAY_MS»). ĐỐI CHỨNG DƯƠNG: DAT «doi-chung-duong: (e) (i) (k) xanh tren ban lanh» (3 pass, 0 fail). CHIỀU ĐỎ: DAT «pha-dong-ho: tinh ngay bang Date.now toan cuc thi (k) do dung thong diep» — thay chỗ đó bằng «Date.now() - ngay * NGAY_MS» thì đầu ra có «(fail) dau-hook > dau-hook (k)» và «dau 13 ngay theo gio that cua hook phai con dung». Ca (k) tự ghim Date ở 2026-09-08T12:00:00+07:00 và khẳng định globalThis.Date trở lại đúng đối tượng cũ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.ctd_dong_ho_tran
+    paths: [packages/ui/test/pre-push-da-chung.spec.ts, _acceptance/ci-test-het-do-co-dinh/rang/dong-ho-va-tran.mjs]
+    expected: "exit 0; in «DAT tat ca». DAT «moi-ca-co-tran: moi test cua describe dau-hook mang TRAN_DAU_HOOK_MS» (đếm test( bằng đếm TRAN_DAU_HOOK_MS trong khối, ≥ 10). DAT «khang-dinh-cu-giu-nguyen: moi expect cua ca dau-hook o nen con nguyen, chi them expect cua (k)» — so khối describe dau-hook với git show 6ca59691a (≥ 30 expect ở nền, bỏ khoảng trắng, dấu phẩy cuối và đối số thông điệp của expect): không thiếu câu nào, câu thừa chỉ thuộc tập cho phép của (k). CHIỀU ĐỎ của phép so: DAT «khang-dinh-pha: xoa mot expect cu thi phep so bao thieu dung expect do». CHIỀU ĐỎ của trần: DAT «ep-tran: DAU_HOOK_TRAN_MS=100 thi (i) do vi het gio» và DAT «ep-tran-moi-ca: DAU_HOOK_TRAN_MS=100 thi tung ca dau-hook het gio, ke ca (j)» (từng ca chạy riêng, mỗi lần gọi bun giới hạn 180s) — đầu ra có «timed out after 100ms» và «(fail) dau-hook > dau-hook (i)». ĐỐI CHỨNG: DAT «tra-tran: tran mac dinh thi (i) xanh lai» (1 pass). Trần mặc định 30 000ms; số đo (i)/(j): máy bận 3361/1871ms, CI 27/10 1610/707ms, Docker rảnh 943/392ms — trần gấp khoảng 9 lần lần chậm nhất đo được, nên một lần treo thật (hook chờ mãi) vẫn đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ctd_ro_ri
+    paths: [apps/api/test/dev-grant-needed.spec.ts, apps/api/scripts/dev-grant-needed.ts, _acceptance/ci-test-het-do-co-dinh/rang/ro-ri.mjs]
+    expected: "exit 0; in «DAT tat ca». Mỗi cảnh chạy qua packages/db/scripts/test-run.ts (kho dùng-một-lần, tự xoá). ĐỐI CHỨNG DƯƠNG: DAT «dev-lanh: dev-grant-needed xanh va khong de lai nguoi dung» (0 fail, đếm người dùng <TEST_RUN_ID>-grant-needed@localhost = 0). CHIỀU ĐỎ: DAT «dev-pha: bo afterAll thi con dung mot nguoi dung grant-needed» (bản sao thay afterAll bằng test.skip, đếm = 1)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.ctd_ro_ri
+    paths: [apps/api/test/mat-khau-lien-ket.spec.ts, packages/db/src/viec-gieo.ts, _acceptance/ci-test-het-do-co-dinh/rang/ro-ri.mjs]
+    expected: "exit 0; in «DAT tat ca». Tệp mồi tạm (apps/api/test/f37-<pid>-moi.spec.ts) tạo chủ sở hữu dev-moi-<run> email <run>-moi@localhost, createdAt thành viên 2000-01-01, cùng một thành viên thứ hai, rồi gọi gieoViecMau; mồi tự kiểm có việc giao cho dev-moi-<run>. ĐỐI CHỨNG DƯƠNG: DAT «mkl-lanh: sau moi ro ri, mat-khau-lien-ket xanh va khong xoa nguoi dung cua tep khac» (0 fail, đếm dev-moi-<run> = 1). CHIỀU ĐỎ: DAT «mkl-pha: tien to chung TEST_RUN_ID thi moc don do o khoa ngoai viec_nguoiGiaoId_fkey» (bản sao dòng suffix = process.env.TEST_RUN_ID ?? \"mat-khau-lien-ket\")."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.ctd_ro_ri
+    paths: [apps/api/test/vai-chi-okr.spec.ts, apps/api/src/workspace/workspace.service.ts, _acceptance/ci-test-het-do-co-dinh/rang/ro-ri.mjs]
+    expected: "exit 0; in «DAT tat ca». ĐỐI CHỨNG DƯƠNG: DAT «vai-lanh: khong co chu so huu sot thi gan-vai xanh» (-t gan-vai, 0 fail). CHIỀU ĐỎ: DAT «vai-do: co chu so huu sot thi gan-vai do va goi ten tien de» — tệp mồi chạy trước, đầu ra có «(fail) vai-chi-okr > gan-vai», «chu phai la chu so huu duy nhat» và id «dev-moi-»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ctd_ro_ri
+    paths: [apps/api/test/du-an-do-nguong.spec.ts, packages/db/src/du-an-gieo.ts, _acceptance/du-an-gantt/rang/dap-an.json, _acceptance/du-an-gantt/rang/do-nguong.mjs, _acceptance/ci-test-het-do-co-dinh/rang/ro-ri.mjs]
+    expected: "exit 0; in «DAT tat ca». ĐỐI CHỨNG DƯƠNG: DAT «dgt-lanh: co thanh vien sot som hon, dgt-thuoc van xanh» (tệp mồi chạy trước, -t \"f37-moi|dgt-thuoc\", 0 fail). CHIỀU ĐỎ: DAT «dgt-pha: bo buoc dua n1 n2 len dau thi dgt-thuoc do dung ly do cu» — bản sao đổi vòng dời createdAt thành vòng rỗng, đầu ra có «(fail) dgt-thuoc» và «gieo mau chon thanh vien som nhat cua kho chung»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ctd_phat_lai_api
+    paths: [apps/api/test/**, apps/api/src/**, packages/db/src/**, _acceptance/ci-test-het-do-co-dinh/rang/phat-lai-thu-tu.mjs, _acceptance/ci-test-het-do-co-dinh/rang/thu-tu-api-41191965481.txt]
+    expected: "exit 0; in «DAT tat ca». Chạy 278 tệp spec của apps/api đúng thứ tự rang/thu-tu-api-41191965481.txt qua test-run.ts (kho dùng-một-lần), gỡ CLAUDECODE. Ba ca DAT: «api: chay dung thu tu tep cua luot 41191965481», «api: chuoi ro cua luot do con nguyen — dev-grant-needed, roi tep goi gieoViecMau, roi mat-khau-lien-ket, roi vai-chi-okr va du-an-do-nguong» (tệp thứ tự vẫn dựng lại chuỗi nhân quả: dev-grant-needed vị trí 62, viec-bang-do-nguong gọi gieoViecMau ở giữa, mat-khau-lien-ket 101, sau đó vai-chi-okr và du-an-do-nguong), «api: 0 fail, khong loi khoa ngoai, gan-vai va dgt-thuoc xanh». CHIỀU ĐỎ: cùng thứ tự trên nền 6ca59691a ra «2167 pass · 3 fail», hai dòng «viec_nguoiGiaoId_fkey» (chieu-do-tren-nen.md); sau sửa đo ở S1: «2169 pass · 0 fail»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ctd_rieng_ba_luot
+    paths: [packages/ui/test/pre-push-da-chung.spec.ts, apps/api/test/mat-khau-lien-ket.spec.ts, apps/api/test/vai-chi-okr.spec.ts, apps/api/test/du-an-do-nguong.spec.ts, _acceptance/ci-test-het-do-co-dinh/rang/rieng-ba-luot.mjs]
+    expected: "exit 0; in «DAT tat ca». Mười hai dòng DAT: mỗi tệp trong bốn ca (pre-push-da-chung ở @crm/ui; mat-khau-lien-ket, vai-chi-okr, du-an-do-nguong ở api qua test-run.ts) chạy riêng «luot 1/3», «luot 2/3», «luot 3/3», mỗi lượt 0 fail và có dòng pass của ca: «dau-hook (e)», «quyen-hai-ve», «vai-chi-okr > gan-vai», «dgt-thuoc > dgt-thuoc». CHIỀU ĐỎ: bất kỳ lượt nào đỏ thì in «TRUOT <tệp> luot n/3» và thoát 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

@@ -139,15 +139,18 @@
       "cau_giao": "«Tôi xem được các phiên bản cũ của trang, khôi phục một bản cũ qua duyệt, và lưu trữ trang không còn dùng»",
       "hang": "T3",
       "slug": "lich-su-va-luu-tru-trang",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "dong": 10,
       "ten": "Lượt 3b",
       "ngay": "2026-09-29",
-      "buoc_ke": "Sau 14/10",
+      "buoc_ke": "Đã gộp #391 (c4c8ab0ab, 14/10)",
       "ghi_chu": "Tách từ lượt 3 ngày 29/09, anh nhận ở Cổng Phạm vi. T3 vì cần cột trạng thái lưu trữ trên TaiLieuTrang. Gồm cả «trang lưu trữ không ra kết quả» của tìm kiếm.",
       "dung_tren": [
         "l4a",
         "l4b"
+      ],
+      "pr": [
+        391
       ]
     },
     {
@@ -169,16 +172,19 @@
     {
       "ma": "cb",
       "cau_giao": "«Trợ lý kho được đo trên 50 câu hỏi mẫu viết theo tài liệu của kho mẫu — câu trả lời được, câu phải nói không biết, câu hỏi qua Zalo — không chờ người gom câu hỏi thật»",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "dong": 7,
       "ten": "Bộ câu hỏi mẫu",
       "ngay": "2026-09-28",
-      "buoc_ke": "Dựng bằng dữ liệu mẫu; câu hỏi thật khi có thì thêm vào bộ, không chặn lượt nào",
+      "buoc_ke": "Đã gộp #387 (cf1263e91, 13/10)",
       "ghi_chu": "«Quy tắc viết» v0: máy soạn từ ba văn bản mẫu thật (cách C), anh nhận làm quy tắc và sửa dần khi vận hành. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
       "cho_anh": true,
       "ten_ngan": "Câu hỏi mẫu",
       "slug": "bo-cau-hoi-mau",
-      "du_lieu": "sinh-gia"
+      "du_lieu": "sinh-gia",
+      "pr": [
+        387
+      ]
     },
     {
       "ma": "l5",
@@ -247,13 +253,16 @@
       "dung_tren": [
         "l4"
       ],
-      "trang_thai": "để sau",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T10:40:00Z"
       },
-      "buoc_ke": "Làn M5 · thứ 4"
+      "buoc_ke": "Đã gộp #527 (6a00acf37, 21/10)",
+      "pr": [
+        527
+      ]
     },
     {
       "ma": "l6",
@@ -311,13 +320,16 @@
       "dung_tren": [
         "MH3"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-16T05:33:48Z"
       },
-      "buoc_ke": "Làn M5 · thứ 3"
+      "buoc_ke": "Đã gộp #524 (112bf6d46, 21/10)",
+      "pr": [
+        524
+      ]
     },
     {
       "ma": "l7",

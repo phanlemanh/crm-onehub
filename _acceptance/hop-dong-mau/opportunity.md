@@ -25,7 +25,4 @@ Vì sao: DA23 đo Kara đọc hợp đồng — dữ liệu chỉ có khi phòng
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Chạy lại hai lần không nhân đôi tệp; lệnh thoát lỗi khi trỏ vào production; mỗi tệp sinh ra mang nhãn mẫu» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Chạy lại hai lần không nhân đôi tệp; lệnh thoát lỗi khi trỏ vào production; mỗi tệp sinh ra mang nhãn mẫu
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Chạy lại hai lần không nhân đôi tệp; lệnh thoát lỗi khi trỏ vào production; mỗi tệp sinh ra mang nhãn mẫu» khi hết timebox
-- Timebox: …
+- Không đo được — lệnh nạp dữ liệu mẫu cho môi trường dựng, từ chối chạy trên production; không có người dùng cuối, phép thử đã là tiêu chí của hồ sơ (chạy lại không nhân đôi, có nhãn mẫu).

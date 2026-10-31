@@ -32,9 +32,7 @@ Nguồn: yêu cầu P5-5 (ba ca chập chờn ngoài ranh giới F11); luật 22
 ## Ngưỡng chết / ngưỡng UAT
 
 [đề xuất] Việc nội bộ, không có người dùng.
-- SỐNG: ba ca đỏ chắc chắn dưới điều kiện tái hiện trên bản sao mã cũ và xanh trên mã mới; hai tuần sau gộp, 0 lượt CI/pre-push đỏ ở ba ca này.
-- CHẾT: còn một lượt đỏ ở ba ca sau gộp mà dòng lỗi không gọi tên nguyên nhân.
-- Timebox: đợt `sau-14-10`; đo lần đầu hai tuần sau gộp.
+- Không đo được — thước, CI hay công cụ nội bộ của kho (không khai mặt); không có người dùng cuối để mở phiên nghiệm thu, phép thử là bài kiểm và lượt CI của chính hồ sơ.
 
 ## Câu hỏi mở cho Cổng Phạm vi
 
