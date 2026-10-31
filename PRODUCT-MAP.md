@@ -7,7 +7,7 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>chưa có"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>2 việc"]
+  GD --> B["Sắp mở vòng<br/>3 việc"]
   GD --> XL["Xếp lại sau<br/>8 việc"]
   GD --> DB["Đã bác từ khám phá<br/>3 việc"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
@@ -15,6 +15,7 @@ flowchart TD
   GB --> DG["Đã giao<br/>171 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>190 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
+  HS["Hồ sơ hỏng<br/>1 việc"]
 ```
 
 > **Bốn cổng người** — mỗi cổng là một câu hỏi chỉ người trả lời được:
@@ -25,6 +26,7 @@ flowchart TD
 ## Sắp mở vòng
 
 - Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu (`giai-doan-bo-mac-dinh`)
+- Hồ sơ mới không khai design-gate --mode static trên .tsx, và các khoá *_san_thiet_ke đang có được gọi tên là thước rỗng (`thuoc-thiet-ke-xanh-rong`)
 - Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai (`thuoc-viec-cua-ban-do-duoc`)
 
 ## Đang làm
@@ -418,3 +420,7 @@ flowchart TD
 - Bản mẫu bốn màn khu OKR cho design-pass (Của tôi, Cập nhật tuần, Theo đơn vị, Toàn cảnh) (`ban-mau-okr`) — đã đóng có hồ sơ
 - Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho (`chu-thich-glob-md`) — đã đóng có hồ sơ
 - Cột góp ý của Trợ lý OKR cuộn riêng với form trong hộp sửa rộng, bỏ số đề xuất lặp hai lần, và hộp mở rộng không làm bố cục nhảy (`the-gop-y-cot-cuon-rieng`)
+
+## Hồ sơ hỏng
+
+- `ci-test-het-do-co-dinh` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
