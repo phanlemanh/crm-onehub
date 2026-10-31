@@ -28,4 +28,4 @@ Vì sao: Cài đặt dựng thanh bên 224px bằng NavGroup/NavItem/NavStrip, H
 - Câu hỏi phép đo trả lời: đã đạt «Cài đặt và Hội thoại dùng chung một thành phần thanh bên khu trong packages/ui; docs/design.md có luật khi nào dùng thanh bên khu, khi nào dùng thẻ con» chưa?
 - Kết quả nào là SỐNG: Cài đặt và Hội thoại dùng chung một thành phần thanh bên khu trong packages/ui; docs/design.md có luật khi nào dùng thanh bên khu, khi nào dùng thẻ con
 - Kết quả nào là CHẾT: chưa đạt «Cài đặt và Hội thoại dùng chung một thành phần thanh bên khu trong packages/ui; docs/design.md có luật khi nào dùng thanh bên khu, khi nào dùng thẻ con» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

@@ -28,4 +28,4 @@ Vì sao: Hôm nay không có lối thẳng tới mọi KR đang trượt — ph�
 - Câu hỏi phép đo trả lời: đã đạt «Từ Sức khoẻ tới danh sách KR trượt trong 1 bấm; bộ lọc ghi trên đường dẫn» chưa?
 - Kết quả nào là SỐNG: Từ Sức khoẻ tới danh sách KR trượt trong 1 bấm; bộ lọc ghi trên đường dẫn
 - Kết quả nào là CHẾT: chưa đạt «Từ Sức khoẻ tới danh sách KR trượt trong 1 bấm; bộ lọc ghi trên đường dẫn» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

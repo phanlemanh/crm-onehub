@@ -27,7 +27,7 @@ Vì sao: Đo trên production 14/10: tiêu đề đổi theo từng thẻ (5 tê
 - Câu hỏi phép đo trả lời: Người dùng OKR thật, lần đầu gặp khu Mục tiêu mới, có tự tìm được nút tạo mục tiêu và quay về đúng đơn vị đang xem sau khi đổi thẻ mà không ai chỉ không?
 - Kết quả nào là SỐNG: Năm người dùng thử (vai đang dùng OKR, chưa xem bản mới) làm hai việc — (1) từ trang Mục tiêu bấm được nút «Thêm mục tiêu», (2) đang xem một đơn vị, sang thẻ khác rồi quay lại vẫn thấy đúng đơn vị đó — cả năm người làm được mỗi việc dưới 5 giây, không hỏi.
 - Kết quả nào là CHẾT: Một người trở lên cần quá 5 giây hoặc phải hỏi ở một trong hai việc, khi hết timebox.
-- Timebox: phiên nghiệm thu trong 7 ngày kể từ ngày DH1 gộp vào `onehub`; DH1 nằm trong mốc m-1020dh «OKR · Khu Mục tiêu dễ đi» (hoàn tất dự kiến 20/10/2026).
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: phiên nghiệm thu trong 7 ngày kể từ ngày DH1 gộp vào `onehub`; DH1 nằm trong mốc m-1020dh «OKR · Khu Mục tiêu dễ đi» (hoàn tất dự kiến 20/10/2026).
 
 Bản ở hàng DH1 của lộ trình (để đối chiếu): «Năm người dùng thử tìm nút tạo mục tiêu và quay lại đúng đơn vị sau khi
 đổi thẻ, mỗi việc dưới 5 giây». Máy giữ nguyên ngưỡng, chỉ khai rõ ai thử (người chưa xem bản mới — người đã xem bản

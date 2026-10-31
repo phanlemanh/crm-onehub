@@ -35,4 +35,4 @@ Người gặp: trưởng phòng và nhân viên mọi phòng ban, từ 14/10, c
 - Câu hỏi phép đo trả lời: người mở khung Mục tiêu ở khổ 390 và 1440 có còn gặp lỗi nào trong chín lỗi đã kê, hay mất thay đổi chưa lưu khi bấm liên kết chéo, không.
 - Kết quả nào là SỐNG: đo lại 4 vai × khổ 390/1440 trên bản đã gộp, 0/9 lỗi còn tái hiện, 0 màn mới tràn ngang hay lỗi console; lái thử người lạ không vấp ở khung Mục tiêu.
 - Kết quả nào là CHẾT: còn ≥1 lỗi trong chín lỗi tái hiện, hoặc khung sinh hồi quy mới (tràn ngang, mất dữ liệu đang sửa).
-- Timebox: gộp trước 08/10/2026; đóng băng giao diện OKR từ 12/10.
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: gộp trước 08/10/2026; đóng băng giao diện OKR từ 12/10.

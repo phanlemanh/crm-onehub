@@ -28,4 +28,4 @@ Vì sao: Khoảng 25 câu báo lỗi trong apps/api/src/okr/okr-config.ts, tin n
 - Câu hỏi phép đo trả lời: đã đạt «Không còn tên cũ trong câu báo lỗi và tin nhắc người dùng thấy; bộ chấm soạn của Kara (eval okr-soan) không tụt so với đường nền trước khi đổi lời dặn» chưa?
 - Kết quả nào là SỐNG: Không còn tên cũ trong câu báo lỗi và tin nhắc người dùng thấy; bộ chấm soạn của Kara (eval okr-soan) không tụt so với đường nền trước khi đổi lời dặn
 - Kết quả nào là CHẾT: chưa đạt «Không còn tên cũ trong câu báo lỗi và tin nhắc người dùng thấy; bộ chấm soạn của Kara (eval okr-soan) không tụt so với đường nền trước khi đổi lời dặn» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

@@ -32,7 +32,7 @@ tuần không rõ ràng đáng lẽ nên: Click vào KR -> Chi tiết -> Click v
 - Câu hỏi phép đo trả lời: bấm KR ở bốn chỗ đã nêu có mở chi tiết KR (`?record=…kr:<id>`) chưa, và còn chuỗi «Cập nhật tuần» dùng như danh từ nào trên màn hay trong tin nhắc không?
 - Kết quả nào là SỐNG: cả bốn chỗ mở chi tiết KR; không còn «Cập nhật tuần» dùng như danh từ trong tệp chữ app và tin nhắc agent; cụm «… tuần này» giữ nguyên
 - Kết quả nào là CHẾT: còn một chỗ bấm KR mở chi tiết mục tiêu khi hết timebox
-- Timebox: 2026-10-26 (mốc Họp tuần của đợt okr-hop-tuan-2210)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Họp tuần của đợt okr-hop-tuan-2210)
 
 Cổng Đáng: chủ kho 24/10, nguyên văn «Đồng ý hết theo khuyến nghị», giám sát vk chuyển lời cho dãy V2 cùng ngày (việc A:
 «Làm ngay SV6 `bam-kr-mo-chi-tiet-kr`»).

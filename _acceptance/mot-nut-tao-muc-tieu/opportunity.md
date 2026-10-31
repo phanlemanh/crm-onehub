@@ -28,4 +28,4 @@ Vì sao: Sáu đường tạo mục tiêu ở bốn nơi; đầu trang sáu đi�
 - Câu hỏi phép đo trả lời: đã đạt «Đầu trang khu chỉ còn một nút chính, chỉ ở Của tôi và Bộ OKR» chưa?
 - Kết quả nào là SỐNG: Đầu trang khu chỉ còn một nút chính, chỉ ở Của tôi và Bộ OKR
 - Kết quả nào là CHẾT: chưa đạt «Đầu trang khu chỉ còn một nút chính, chỉ ở Của tôi và Bộ OKR» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

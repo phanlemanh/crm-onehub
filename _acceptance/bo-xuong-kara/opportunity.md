@@ -43,7 +43,7 @@ bản ghi), K5 (Chat + Deal); gián tiếp là mọi người dùng thấy Kara 
 - Kết quả nào là SỐNG: hợp đồng K2 không có AC nào phải viết lại hay bọc một trong sáu khối;
   ba điều chủ kho chốt dùng đúng prop/khối đã có (khoá, nhận theo nhóm, khung co giãn).
 - Kết quả nào là CHẾT: K2 phải viết lại hoặc bọc từ hai khối trở lên để đáp ứng ba điều đó.
-- Timebox: PR của lượt này mở trước 10/10/2026.
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): đọc số chạy thật một lần. Hạn cũ: PR của lượt này mở trước 10/10/2026.
 
 Không có phiên nghiệm thu người dùng cho lượt này: sáu khối chưa lên màn nào trước 14/10.
 Cổng Giá trị đọc ngưỡng trên tại Cổng Phạm vi của K2.

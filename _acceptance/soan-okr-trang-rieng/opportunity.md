@@ -48,4 +48,4 @@ Chủ kho ký `build` lúc 2026-10-07T13:13:50Z cho cả 16 hàng chưa ký củ
   nhóm) hoàn tác được ngay trên dòng.
 - Kết quả nào là CHẾT: ≥ 2/3 người kẹt ở cùng một chỗ (không tìm ra đưa vào, không hiểu dòng
   nào đã quyết, phải bỏ cuộc soạn làm lại), hoặc có một lần mất số đã gõ.
-- Timebox: PR mở trước 16/10/2026; lái-thử trước R1 (23/10).
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: PR mở trước 16/10/2026; lái-thử trước R1 (23/10).

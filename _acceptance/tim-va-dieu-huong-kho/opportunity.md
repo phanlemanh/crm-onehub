@@ -43,7 +43,7 @@ mục 5.1, 6.7, 7.2; bản mẫu `/proto/kho-tai-lieu` trạng thái `ST-tim-nha
 - Câu hỏi phép đo trả lời: sau hai tuần chạy thật, kho có thành mạng các trang dẫn tới nhau và chủ trang có theo kịp hàng duyệt không?
 - Kết quả nào là SỐNG: ≥ 50% trang đã duyệt không mồ côi (có ít nhất một trang đã duyệt khác dẫn tới), đếm bằng hàm Sức khoẻ cuối chạy thật; trung vị thời gian từ đề xuất tới duyệt ≤ 5 ngày làm việc (chung với lộ trình mục 5).
 - Kết quả nào là CHẾT: ≥ 1 lần tìm, «trang nhắc tới» hay Sức khoẻ lộ chữ, tên hay slug của bản chưa duyệt được báo lại trong chạy thật; hoặc trung vị duyệt > 10 ngày làm việc; hoặc < 20% trang đã duyệt không mồ côi.
-- Timebox: đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): đọc số chạy thật một lần. Hạn cũ: đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
 
 ## Kết quả prototype
 

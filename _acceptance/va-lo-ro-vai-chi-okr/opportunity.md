@@ -27,7 +27,7 @@ Vì sao: Giao bước hiện chỉ kiểm có là thành viên; bộ gom nhắc 
 - Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»» chưa?
 - Kết quả nào là SỐNG: [đề xuất] Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»
 - Kết quả nào là CHẾT: [đề xuất] chưa đạt «Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»» khi hết timebox
-- Timebox: trước 14/10/2026 — ngày mọi phòng ban bắt đầu dùng thật.
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: trước 14/10/2026 — ngày mọi phòng ban bắt đầu dùng thật.
 
 ## Nguồn quyết định Cổng Đáng
 

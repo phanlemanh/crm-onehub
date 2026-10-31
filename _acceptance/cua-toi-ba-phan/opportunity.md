@@ -27,7 +27,7 @@ Vì sao: «Của tôi» hôm nay chỉ liệt kê mục tiêu người đó ph�
 - Câu hỏi phép đo trả lời: Trưởng đơn vị có gửi cập nhật tuần ngay trong «Của tôi», không phải sang trang hay thẻ khác, ở phần lớn lượt cập nhật của hai tuần đầu không?
 - Kết quả nào là SỐNG: Trong 14 ngày kể từ ngày DH3 lên production, ít nhất 80 % phiên cập nhật tuần ĐÃ GỬI của người đang dẫn ít nhất một đơn vị là phiên mở và gửi trong «Của tôi» (kể cả phiên đến từ liên kết nhắc Zalo/chuông, vì liên kết đó sẽ đáp xuống «Của tôi»); và có ít nhất 10 phiên đã gửi của nhóm này trong cửa sổ.
 - Kết quả nào là CHẾT: Dưới 80 % khi hết 14 ngày. Dưới 10 phiên đã gửi thì là «không đủ mẫu» — không đọc thành sống, gia hạn thêm 14 ngày một lần rồi đọc lại.
-- Timebox: 14 ngày kể từ ngày DH3 gộp vào `onehub` và lên production; DH3 nằm trong mốc m-1020dh «OKR · Khu Mục tiêu dễ đi» (hoàn tất dự kiến 20/10/2026).
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 14 ngày kể từ ngày DH3 gộp vào `onehub` và lên production; DH3 nằm trong mốc m-1020dh «OKR · Khu Mục tiêu dễ đi» (hoàn tất dự kiến 20/10/2026).
 
 Bản ở hàng DH3 của lộ trình (để đối chiếu): «Trưởng đơn vị gửi cập nhật tuần từ «Của tôi» mà không mở thẻ khác, ở ít
 nhất 80% lượt cập nhật của hai tuần đầu». Máy giữ nguyên con số 80 % và hai tuần, chỉ khai rõ ba thứ:

@@ -37,7 +37,7 @@ trên sheet), L3 (cây có lý do và lọc), L4 (gắn tay và đề xuất Kar
 - Câu hỏi phép đo trả lời: sau khi lên production, căn chỉnh đưa vào từ Soạn OKR có giữ lý do Kara đã viết không?
 - Kết quả nào là SỐNG: trong hai tuần đầu, câu SQL `rang/do-nguong.sql` (căn chỉnh nối `okrDeXuat` qua `taoRaId` có `lyDo` rỗng trong khi `viSao` sau khi cắt khoảng trắng khác rỗng) đếm 0 trên production — gồm cả căn chỉnh mới lẫn căn chỉnh cũ đã điền lại.
 - Kết quả nào là CHẾT: câu đó đếm từ 1 trở lên.
-- Timebox: hai tuần sau khi lên production (tới 22/10/2026).
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: hai tuần sau khi lên production (tới 22/10/2026).
 
 ## Kết quả prototype
 

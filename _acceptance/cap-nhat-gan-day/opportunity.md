@@ -31,4 +31,4 @@ Vì sao: Lần cập nhật chỉ đọc được trong thẻ Trao đổi của 
 - Câu hỏi phép đo trả lời: đã đạt «Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi» chưa?
 - Kết quả nào là SỐNG: Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi
 - Kết quả nào là CHẾT: chưa đạt «Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Tôi dẫn · Đang theo dõi» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

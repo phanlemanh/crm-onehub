@@ -96,7 +96,7 @@ Lịch và phụ thuộc (phiên điều phối lộ trình OKR báo 2026-09-24)
 - Kết quả nào là CHẾT: Một tuần sau khi bật dưới 70% thành viên còn hiệu lực có
   phòng ban chính, hoặc quản trị phải nhờ sửa cơ sở dữ liệu mới dựng được cây — cây không
   đủ làm nền cho OKR quý 4 bắt đầu 2026-10-26.
-- Timebox: vòng làm lượt 1 từ 2026-10-01 đến 2026-10-05; cây thật được dựng trong
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: vòng làm lượt 1 từ 2026-10-01 đến 2026-10-05; cây thật được dựng trong
   tuần 2026-10-19 (danh sách nhân sự tới trước 2026-10-16), nên đo lần đầu 2026-10-26 — một
   tuần sau, cũng là ngày OKR quý 4 bắt đầu.
 

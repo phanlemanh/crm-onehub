@@ -39,4 +39,4 @@ nằm đúng trên đường nạp tệp và viết trang.
 - Câu hỏi phép đo trả lời: trong đợt chạy thật, có nguồn nào kẹt ở «đang đọc» hay «đang soạn» mà người nạp không tự gỡ được không?
 - Kết quả nào là SỐNG: 0 nguồn ở `CHO_DOC`/`CHO_SOAN`/`DANG_SOAN` quá 30 phút trên production trong timebox, và mọi nguồn `LOI` soạn lại được bằng nút «Soạn lại».
 - Kết quả nào là CHẾT: ≥ 1 nguồn kẹt quá 30 phút phải gỡ tay bằng cơ sở dữ liệu, hoặc ≥ 1 lần người viết báo «không tìm thấy trang» khi trang có thật.
-- Timebox: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 (đếm hàng `taiLieuNguon` theo `trangThai` và giờ cập nhật).
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): đọc số chạy thật một lần. Hạn cũ: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 (đếm hàng `taiLieuNguon` theo `trangThai` và giờ cập nhật).

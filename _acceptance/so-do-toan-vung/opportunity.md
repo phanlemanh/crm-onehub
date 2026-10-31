@@ -28,4 +28,4 @@ Vì sao: Sơ đồ quanh mục tiêu dựng khung trang lồng trong khung trang
 - Câu hỏi phép đo trả lời: đã đạt «Sơ đồ không còn bề rộng tối đa của trang; một màn Sơ đồ thay cho Cây căn chỉnh và trang Sơ đồ quanh mục tiêu; Esc thoát toàn màn hình» chưa?
 - Kết quả nào là SỐNG: Sơ đồ không còn bề rộng tối đa của trang; một màn Sơ đồ thay cho Cây căn chỉnh và trang Sơ đồ quanh mục tiêu; Esc thoát toàn màn hình
 - Kết quả nào là CHẾT: chưa đạt «Sơ đồ không còn bề rộng tối đa của trang; một màn Sơ đồ thay cho Cây căn chỉnh và trang Sơ đồ quanh mục tiêu; Esc thoát toàn màn hình» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

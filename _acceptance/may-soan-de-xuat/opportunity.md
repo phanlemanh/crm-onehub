@@ -44,7 +44,7 @@ Vật liệu nền: lộ trình mục 4 «Lượt 2», nghiên cứu `kho-tai-li
 - Câu hỏi phép đo trả lời: trong hai tuần chạy thật, tải tệp lên cho máy soạn có thành đường chính để nội dung vào kho, mà không để một con số sai lọt qua duyệt không?
 - Kết quả nào là SỐNG: ≥ 50% bản máy soạn được duyệt (có hoặc không sửa trước khi duyệt) và ≥ 60% trang đã duyệt trong chạy thật đi từ một nguồn — cả hai đếm từ `TaiLieuDeXuat` (`nguonId`, `trangThai`); chi phí trung bình ≤ 0,2 USD mỗi nguồn, đếm từ sự kiện `MAY_SOAN`.
 - Kết quả nào là CHẾT: ≥ 1 bản máy soạn thành bản đang dùng mà không qua «Duyệt»; hoặc ≥ 1 con số sai trong bản đang dùng đi từ nguồn được báo lại trong chạy thật; hoặc < 25% bản máy soạn được duyệt; hoặc ≥ 50% nguồn tải lên bị «cần gõ tay».
-- Timebox: đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): đọc số chạy thật một lần. Hạn cũ: đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
 
 ## Kết quả prototype
 

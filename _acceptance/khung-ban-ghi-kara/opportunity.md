@@ -59,4 +59,4 @@ chưa có gì trong số đó — người dùng gặp hai trợ lý khác nhau 
 - Kết quả nào là CHẾT: lái thử vẫn gặp chữ tiếng Anh hay gợi ý lập trình viên ở tab Kara,
   hoặc mất chữ khi lỡ đóng ngăn thêm nhanh; hoặc bố cục ngăn mới không được chủ kho duyệt ở bản bấm được
   (S1-D) — khi đó dừng ở Cổng Phạm vi, không dựng.
-- Timebox: PR mở trước 17/10/2026 (ba ngày làm việc sau mốc 14/10).
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): đọc số chạy thật một lần. Hạn cũ: PR mở trước 17/10/2026 (ba ngày làm việc sau mốc 14/10).

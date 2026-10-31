@@ -39,4 +39,4 @@ kho (trả tiền cho phiên hỏng; câu hỏi nội bộ đi qua nhà cung c�
 - Câu hỏi phép đo trả lời: trong đợt chạy thật, có phiên `tro_ly_kho` nào mở ngoài tab Hỏi và Zalo, và có câu hỏi kho nào đi qua model không ZDR không?
 - Kết quả nào là SỐNG: 0 phiên `tro_ly_kho` hỏng vì `KHONG_PHAI_HOI` trên production trong timebox, và mọi lời gọi model của phiên gốc purpose `kho` mang ZDR.
 - Kết quả nào là CHẾT: ≥ 1 phiên `tro_ly_kho` mở từ chat CRM, lượt Tác nhân hay dựng Tác nhân; hoặc ≥ 1 câu hỏi kho đi qua model gốc không ZDR.
-- Timebox: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 (đếm `AgentEvent`/`AiChiPhi` theo phiên con `tro_ly_kho` và purpose phiên gốc).
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): đọc số chạy thật một lần. Hạn cũ: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 (đếm `AgentEvent`/`AiChiPhi` theo phiên con `tro_ly_kho` và purpose phiên gốc).

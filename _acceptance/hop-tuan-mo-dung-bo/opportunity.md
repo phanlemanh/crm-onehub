@@ -28,7 +28,7 @@ Vì sao: Production 22/10: bấm Họp tuần không kèm đơn vị thì bảng
 - Câu hỏi phép đo trả lời: đã đạt «Trưởng phòng mở Họp tuần từ thanh bên, từ thẻ con hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn; không còn màn «0/0 KR» với câu «chưa có lần cập nhật» khi bộ của người xem đã có cập nhật» chưa?
 - Kết quả nào là SỐNG: Trưởng phòng mở Họp tuần từ thanh bên, từ thẻ con hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn; không còn màn «0/0 KR» với câu «chưa có lần cập nhật» khi bộ của người xem đã có cập nhật
 - Kết quả nào là CHẾT: chưa đạt «Trưởng phòng mở Họp tuần từ thanh bên, từ thẻ con hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn; không còn màn «0/0 KR» với câu «chưa có lần cập nhật» khi bộ của người xem đã có cập nhật» khi hết timebox
-- Timebox: 2026-10-26 (mốc Hạn: Quý 4 trên CRM, mọi phòng ban cập nhật và họp tuần hằng tuần — Họp tuần phải mở đúng bộ và họp được trên bảng)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Hạn: Quý 4 trên CRM, mọi phòng ban cập nhật và họp tuần hằng tuần — Họp tuần phải mở đúng bộ và họp được trên bảng)
 
 
 Cổng Đáng: chủ kho duyệt đợt cắt Họp tuần okr-hop-tuan-2210 (PR #543) ngày 22/10, ghi ở nhật ký LUAT.md của đợt vo-khu-muc-tieu lúc 2026-10-22T05:57:32Z — cùng lệ với HT3, HT4 và các hàng VK của đợt.

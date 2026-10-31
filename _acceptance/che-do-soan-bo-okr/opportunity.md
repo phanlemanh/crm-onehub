@@ -28,4 +28,4 @@ Vì sao: Tạo một mục tiêu có ba KR mất khoảng mười bấm qua hộ
 - Câu hỏi phép đo trả lời: đã đạt «Tạo một mục tiêu có ba KR và công bố trong khoảng 3 bấm cộng phần gõ; ngăn theo dõi chỉ còn một chip góp ý» chưa?
 - Kết quả nào là SỐNG: Tạo một mục tiêu có ba KR và công bố trong khoảng 3 bấm cộng phần gõ; ngăn theo dõi chỉ còn một chip góp ý
 - Kết quả nào là CHẾT: chưa đạt «Tạo một mục tiêu có ba KR và công bố trong khoảng 3 bấm cộng phần gõ; ngăn theo dõi chỉ còn một chip góp ý» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

@@ -28,4 +28,4 @@ Vì sao: Hôm nay một KR có ba ngăn và một hộp, bấm ở bốn chỗ r
 - Câu hỏi phép đo trả lời: đã đạt «Cập nhật một KR từ trang bộ OKR trong 3 bấm; mọi lối bấm vào KR mở cùng một ngăn» chưa?
 - Kết quả nào là SỐNG: Cập nhật một KR từ trang bộ OKR trong 3 bấm; mọi lối bấm vào KR mở cùng một ngăn
 - Kết quả nào là CHẾT: chưa đạt «Cập nhật một KR từ trang bộ OKR trong 3 bấm; mọi lối bấm vào KR mở cùng một ngăn» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

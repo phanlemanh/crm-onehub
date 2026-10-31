@@ -28,4 +28,4 @@ Vì sao: Căn chỉnh mang chín tên trên màn, đơn vị gốc năm tên, «
 - Câu hỏi phép đo trả lời: đã đạt «Không còn chuỗi «căn chỉnh», «Đường lý do», «Gắn căn chỉnh», «Chưa nối lên», «Hỏi ý», «Toàn công ty», «Toàn OneHub» trong tệp chữ của khu ở hai thứ tiếng; bản mẫu /proto không đổi» chưa?
 - Kết quả nào là SỐNG: Không còn chuỗi «căn chỉnh», «Đường lý do», «Gắn căn chỉnh», «Chưa nối lên», «Hỏi ý», «Toàn công ty», «Toàn OneHub» trong tệp chữ của khu ở hai thứ tiếng; bản mẫu /proto không đổi
 - Kết quả nào là CHẾT: chưa đạt «Không còn chuỗi «căn chỉnh», «Đường lý do», «Gắn căn chỉnh», «Chưa nối lên», «Hỏi ý», «Toàn công ty», «Toàn OneHub» trong tệp chữ của khu ở hai thứ tiếng; bản mẫu /proto không đổi» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

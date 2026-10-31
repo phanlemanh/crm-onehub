@@ -28,4 +28,4 @@ Vì sao: Hôm nay trang đơn vị có ba lớp điều khiển ngang chồng nh
 - Câu hỏi phép đo trả lời: đã đạt «Trên trang đơn vị chỉ còn một lớp thẻ ngang; mọi đường dẫn cũ (?donOkr=, ?xemOkr=, /okr/theo-don-vi, /okr/toan-canh, /okr/quanh-muc-tieu/…, /okr?tu=nhac) chuyển tới đúng chỗ mới» chưa?
 - Kết quả nào là SỐNG: Trên trang đơn vị chỉ còn một lớp thẻ ngang; mọi đường dẫn cũ (?donOkr=, ?xemOkr=, /okr/theo-don-vi, /okr/toan-canh, /okr/quanh-muc-tieu/…, /okr?tu=nhac) chuyển tới đúng chỗ mới
 - Kết quả nào là CHẾT: chưa đạt «Trên trang đơn vị chỉ còn một lớp thẻ ngang; mọi đường dẫn cũ (?donOkr=, ?xemOkr=, /okr/theo-don-vi, /okr/toan-canh, /okr/quanh-muc-tieu/…, /okr?tu=nhac) chuyển tới đúng chỗ mới» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)

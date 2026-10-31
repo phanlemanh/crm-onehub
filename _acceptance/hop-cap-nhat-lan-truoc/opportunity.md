@@ -28,7 +28,7 @@ Vì sao: Hộp cập nhật đã có đồ thị xem trước và điền sẵn 
 - Câu hỏi phép đo trả lời: đã đạt «Mở hộp cập nhật của một KR đã có lần cập nhật thì thấy ghi chú lần trước mà không bấm thêm; KR chưa có lần nào thì không có khối trống» chưa?
 - Kết quả nào là SỐNG: Mở hộp cập nhật của một KR đã có lần cập nhật thì thấy ghi chú lần trước mà không bấm thêm; KR chưa có lần nào thì không có khối trống
 - Kết quả nào là CHẾT: chưa đạt «Mở hộp cập nhật của một KR đã có lần cập nhật thì thấy ghi chú lần trước mà không bấm thêm; KR chưa có lần nào thì không có khối trống» khi hết timebox
-- Timebox: 2026-10-26 (mốc Hạn: Quý 4 trên CRM, mọi phòng ban cập nhật và họp tuần hằng tuần — Họp tuần phải mở đúng bộ và họp được trên bảng)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Hạn: Quý 4 trên CRM, mọi phòng ban cập nhật và họp tuần hằng tuần — Họp tuần phải mở đúng bộ và họp được trên bảng)
 
 
 Cổng Đáng: chủ kho duyệt đợt cắt Họp tuần okr-hop-tuan-2210 (PR #543) ngày 22/10, ghi ở nhật ký LUAT.md của đợt vo-khu-muc-tieu lúc 2026-10-22T05:57:32Z — cùng lệ với các hàng VK của đợt.

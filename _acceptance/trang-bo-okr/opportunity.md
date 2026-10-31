@@ -28,7 +28,7 @@ Vì sao: Ô chọn đơn vị trên một màn chung thay cho trang riêng của
 - Câu hỏi phép đo trả lời: đã đạt «Mỗi bộ OKR có đường dẫn riêng; đổi thẻ con không mất chu kỳ và bộ đang xem; bộ lọc Tất cả · Tôi dẫn · Đang theo dõi ghi trên đường dẫn» chưa?
 - Kết quả nào là SỐNG: Mỗi bộ OKR có đường dẫn riêng; đổi thẻ con không mất chu kỳ và bộ đang xem; bộ lọc Tất cả · Tôi dẫn · Đang theo dõi ghi trên đường dẫn
 - Kết quả nào là CHẾT: chưa đạt «Mỗi bộ OKR có đường dẫn riêng; đổi thẻ con không mất chu kỳ và bộ đang xem; bộ lọc Tất cả · Tôi dẫn · Đang theo dõi ghi trên đường dẫn» khi hết timebox
-- Timebox: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 2026-10-26 (mốc Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR)
 
 ## Chủ kho chốt ở bước thiết kế (21/10)
 
