@@ -5,7 +5,7 @@ slug: ci-test-het-do-co-dinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: approved
+status: implemented
 design_doc: _acceptance/ci-test-het-do-co-dinh/design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-31
