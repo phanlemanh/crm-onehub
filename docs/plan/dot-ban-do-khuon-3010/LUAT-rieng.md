@@ -66,10 +66,11 @@ Luật của đợt ban-do-khuon-3010 (chủ kho 30–31/10).
 
 Tên và giao tiếp.
 
-26. **Một cửa.** Chủ kho chỉ nói với phiên giám sát `bdk · Giám sát (Mac Studio)`, phiên nhận việc giao
-    MBP-3110-1. Phiên này báo về MBP trên #375 và gộp chỉ khi chủ kho cho. Hai ngoại lệ ký cổng và bấm quyền đi kèm thẻ
-    dẫn đường của giám sát.
-27. **Tên phiên.** Thợ: `bdk·<dãy> · <mã hàng> · <trạng thái>`; trạng thái dùng `đang làm` · `chờ lượt S4` ·
+26. **Một cửa.** Chủ kho chỉ nói với phiên giám sát của đợt (mã app
+    `local_b1684b53-2441-4364-a325-ed529326c362`). Chủ kho 31/10: «Phiên này trở thành phiên điều phối còn các phiên khác
+    trở thành phiên thợ» và «phiên này toàn quyền trong sắp xếp gộp và gộp». Giám sát báo XONG việc giao MBP-3110-1 về
+    MBP trên #375. Hai ngoại lệ ký cổng và bấm quyền đi kèm thẻ dẫn đường của giám sát.
+27. **Tên phiên.** Thợ: `bdk·<dãy> · <mã hàng> · <trạng thái>`; tin gửi giám sát mở đầu `[<mã hàng> · <tên ngắn> (crm) → giám sát]`; trạng thái dùng `đang làm` · `chờ lượt S4` ·
     `chờ anh ký <cổng>` · `chờ anh bấm quyền` · `xong`.
 28. **Nhánh** `<loại>/<slug>`; **PR** `<mã> · <loại>(<slug>): <câu giao ngắn>`, mở dạng nháp (luật 17).
 29. **Tin giữa các phiên** mở đầu `[<nguồn> → <đích>] <loại>` — `yeu-cau` · `tra-loi` · `bao` · `hoi`. Từ vựng theo
