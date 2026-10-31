@@ -1,0 +1,32 @@
+{
+  "feature_plain": "Mỗi tính năng có màn hình đã giao đều có ngưỡng giá trị chủ kho đã chốt, để phiên nghiệm thu mở được và đọc số đúng chỗ.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ ghi vào 51 hồ sơ đúng bảng đề xuất: ô trống thì máy soạn, chữ cũ sai khuôn thì chép nguyên văn vào đúng chỗ, không đổi ý ô nào đã có."},
+    {"id": "AC-3", "p": "Sẽ chỉ bỏ nhãn «đề xuất» khi sổ có dòng chốt mang tên anh — máy không tự chốt."},
+    {"id": "AC-5", "p": "Sẽ ghim lại 51 hồ sơ sau khi F37 gộp, chung lượt với F38 và nhánh dọn dẹp đợt 2."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sau khi anh chốt, sẽ KHÔNG còn tính năng có màn hình nào bị chặn mở phiên nghiệm thu vì ngưỡng chưa chốt (trừ hồ sơ anh chọn để ngoài)."},
+    {"id": "AC-6", "p": "Sẽ KHÔNG còn hồ sơ nào có hạn đọc số đã qua hay không đọc ra ngày (trừ hồ sơ anh ghi miễn)."},
+    {"id": "OOS-1", "p": "KHÔNG đụng 16 hồ sơ không có màn hình — chúng khai «không đo được» ở việc B6 riêng."},
+    {"id": "OOS-2", "p": "KHÔNG đọc số thật — đó là việc của phiên nghiệm thu sau khi chốt."},
+    {"id": "OOS-3", "p": "KHÔNG sửa phần khác của ô cơ hội (vấn đề, giả định, quyết định Cổng Đáng)."},
+    {"id": "OOS-4", "p": "KHÔNG nới bộ đọc của bộ công cụ nghiệm thu để nhận nhãn rút gọn — chuẩn hoá chữ ở hồ sơ thay vào."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Đúng 51 hồ sơ có màn hình đang mang cờ ngưỡng chưa chốt — khớp từng tên với danh sách của F39."},
+    {"i": 1, "p": "Ba tình trạng ô: trống cả bốn (29), thiếu một phần (9), đủ chữ chỉ chờ chốt (13)."},
+    {"i": 2, "p": "Chữ cũ viết sai khuôn ở 8 hồ sơ — chép nguyên văn, ô anh đã duyệt vẫn là đã duyệt."},
+    {"i": 3, "p": "Người quyết: máy chỉ đề xuất, anh chốt bằng một dòng trong sổ."},
+    {"i": 4, "p": "Hai hồ sơ đã có quyết khác của anh — Hỏi-2, Hỏi-3."},
+    {"i": 5, "p": "8 hồ sơ có ô do máy tự sinh đo việc dựng chứ không đo giá trị — máy soạn lại, anh xem chữ cũ cạnh chữ mới."},
+    {"i": 6, "p": "Hạn đọc số: 6 đã qua, 11 không ra ngày — Hỏi-4."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bản soạn lại đầu tiên làm mất ý cũ ở vài hồ sơ mà không thước nào bắt — đã đổi sang chép nguyên văn, thước so lại với chữ cũ."},
+    {"i": 1, "p": "Ngưỡng anh đã duyệt ngày 08/10 suýt bị hạ về «đề xuất» — nay giữ nguyên trạng thái đã duyệt, thước bắt nếu bị gắn lại."},
+    {"i": 2, "p": "Nhiều hạn đọc số đã qua hay không ra ngày — thêm tiêu chí hạn còn hiệu lực và câu Hỏi-4."},
+    {"i": 3, "p": "8 hồ sơ có ô máy tự sinh đo việc dựng — máy soạn lại thành ngưỡng giá trị; hội đồng chấm có thêm danh sách bảng dữ liệu để kiểm nguồn số."},
+    {"i": 4, "p": "Tiêu chí chưa rẽ nhánh theo câu trả lời của anh — nay hồ sơ anh chọn để ngoài được đọc từ sổ, và việc bỏ nhãn chạy sau chốt."}
+  ]
+}
