@@ -3,10 +3,10 @@ schema_version: 1
 slug: the-gop-y-sua-nhanh
 feature: Thẻ góp ý của Trợ lý OKR thôi để viền «ô được chỉ» kẹt sau khi thoát sửa, trả focus về thẻ, bỏ lời nhắc sai trong hộp Sửa KR, và làm dòng đã quyết đọc được
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: park
+decided_by: Phan Le Manh
+decided_at: 2026-10-31T09:52:29Z
 prototype:
   base_commit:
   disposition:
@@ -49,3 +49,7 @@ Buổi lái thử thẻ góp ý trên mã production (onehub 0553e0ce, 30/09/202
 ## Gộp
 
 Gộp vào: gop-y-dung-cho (chủ kho quyết 03/10/2026). Phần tự hết vì lượt đó bỏ cột góp ý khỏi hai hộp Sửa và phần thành AC ghi ở `_acceptance/gop-y-dung-cho/contract.md` mục Notes.
+
+## Quyết định Cổng Đáng 31/10
+
+Xếp lại sau — Bốn lỗi nhỏ của thẻ góp ý từ buổi lái thử 30/09; mở lại khi một vòng chạm thẻ góp ý của Kara, đo lại từng lỗi trên mã khi đó. Chủ kho 31/10 «Đồng ý theo khuyên» cho B9 của docs/plan/don-dep-3110.md (bác hoặc xếp lại hồ sơ treo ngoài kế hoạch), qua phiên giám sát Mac Studio; máy chọn từng hồ sơ.
