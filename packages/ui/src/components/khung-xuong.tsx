@@ -327,6 +327,17 @@ export function KhungXuong({
 	);
 }
 
+export function ChoTaiNgan({
+	nhan,
+	...dau
+}: { nhan?: string } & { [key: `data-${string}`]: string | undefined }) {
+	return (
+		<div {...dau} aria-busy="true" className="min-h-0 flex-1 px-5 py-4">
+			<KhungXuong hinh="ngan" nhan={nhan} />
+		</div>
+	);
+}
+
 export function HangSoDangTai({ nhan }: { nhan?: string }) {
 	return <KhungXuong hinh="hang-so" nhan={nhan} />;
 }

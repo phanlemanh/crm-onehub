@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { Icon } from "@crm/ui/components/icon";
+import { ChoTaiNgan } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -31,7 +32,7 @@ import {
 import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { KhungTaiLoi, KhungXuongNgan, RecordSheetFrame } from "./record-parts";
+import { KhungTaiLoi, RecordSheetFrame } from "./record-parts";
 import { useNgaySo, useRecordStack } from "./record-stack";
 
 type BanGhi = RouterOutputs["okr"]["banGhiChiSo"];
@@ -554,7 +555,7 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 					}}
 				/>
 			}
-			loadingView={<KhungXuongNgan nhan={t.dangTai} />}
+			loadingView={<ChoTaiNgan nhan={t.dangTai} />}
 			title={dl ? <span translate="no">{dl.tenKr}</span> : t.tieuDe}
 			description={dl ? <DinhNghia dl={dl} /> : undefined}
 			than={() => (dl ? <NoiDungSoDaTai so={so} dl={dl} /> : null)}

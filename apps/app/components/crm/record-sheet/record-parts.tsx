@@ -14,7 +14,7 @@ import {
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
+import { ChoTaiNgan } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -133,17 +133,6 @@ export function KhungTaiLoi({
 
 export type DauDuLieu = { [key: `data-${string}`]: string | undefined };
 
-export function KhungXuongNgan({
-	nhan,
-	...dau
-}: { nhan?: string } & DauDuLieu) {
-	return (
-		<div {...dau} aria-busy="true" className="min-h-0 flex-1 px-5 py-4">
-			<KhungXuong hinh="ngan" nhan={nhan} />
-		</div>
-	);
-}
-
 type TheCon =
 	| {
 			tabs: DetailSheetTab[];
@@ -209,7 +198,7 @@ export function KhungNgan({
 		<DetailSheetTabs tabs={tabs} value={tab} onValueChange={onTabChange} />
 	) : null;
 	const thanNgan = loading ? (
-		(loadingView ?? <KhungXuongNgan data-khung-xuong-ngan="" />)
+		(loadingView ?? <ChoTaiNgan data-khung-xuong-ngan="" />)
 	) : error && errorView ? (
 		errorView
 	) : error ? (

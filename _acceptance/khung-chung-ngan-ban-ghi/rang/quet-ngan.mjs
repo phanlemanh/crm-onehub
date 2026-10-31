@@ -22,8 +22,8 @@ const NGOAI_LE_SKELETON = new Set(["kr-sheet.tsx", "so-kr-sheet.tsx"]);
 const LOI_VAO_TRINH_BAY = /<(KhungNgan|KhungKr)\b/;
 const CHI_TRINH_BAY = "kr-sheet.tsx";
 const TRANG_THAI = [
-	{ tep: "kr-sheet.tsx", mau: [/<KhungKr\b[\s\S]{0,1200}?\n\t+trang=\{/, /loadingView:\s*\(?\s*<KhungXuongNgan\b/s, /<KhungTaiLoi\b/] },
-	{ tep: "so-kr-sheet.tsx", mau: [/loadingView=\{\s*<KhungXuongNgan\b/s, /errorView=\{\s*<KhungTaiLoi\b/s] },
+	{ tep: "kr-sheet.tsx", mau: [/<KhungKr\b[\s\S]{0,1200}?\n\t+trang=\{/, /loadingView:\s*\(?\s*<ChoTaiNgan\b/s, /<KhungTaiLoi\b/] },
+	{ tep: "so-kr-sheet.tsx", mau: [/loadingView=\{\s*<ChoTaiNgan\b/s, /errorView=\{\s*<KhungTaiLoi\b/s] },
 ];
 const KHOA_KHUON = ["nhom", "doi_tuong", "khuon", "nhan_dien", "mau_dang_chay", "khe_bat_buoc", "cam_ngoai_khuon", "ngoai_le"];
 
@@ -62,7 +62,7 @@ export function quet(goc) {
 	const tk = doc(THIET_KE);
 	const muc = /### Chờ tải và lỗi tải trong ngăn bản ghi\n([\s\S]*?)\n### /.exec(tk)?.[1] ?? "";
 	if (!muc) loi.push("THIET KE thieu muc «Chờ tải và lỗi tải trong ngăn bản ghi»");
-	for (const t of ["KhungXuongNgan", "KhungTaiLoi", "VungTaiLoi", KHUON]) if (muc && !muc.includes(t)) loi.push(`THIET KE muc ngan khong nhac ${t}`);
+	for (const t of ["ChoTaiNgan", "KhungTaiLoi", "VungTaiLoi", KHUON]) if (muc && !muc.includes(t)) loi.push(`THIET KE muc ngan khong nhac ${t}`);
 	return loi;
 }
 

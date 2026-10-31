@@ -8,7 +8,7 @@ const GOC = resolve(RANG, "..", "..", "..");
 const APP = join(GOC, "apps", "app");
 const ENV = Object.fromEntries(Object.entries(process.env).filter(([k]) => k !== "CLAUDECODE"));
 const KHUNG = join(APP, "components", "crm", "record-sheet", "record-parts.tsx");
-const CHO_TAI = '(loadingView ?? <KhungXuongNgan data-khung-xuong-ngan="" />)';
+const CHO_TAI = '(loadingView ?? <ChoTaiNgan data-khung-xuong-ngan="" />)';
 const PROTO = join(APP, "app", "proto", "_modules", "khung-chung-ngan-ban-ghi", "index.tsx");
 
 function phaTaiCho(tep, sua, tepDom, nhan, mauDo) {

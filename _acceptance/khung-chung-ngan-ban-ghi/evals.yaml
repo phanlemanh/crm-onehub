@@ -6,7 +6,7 @@ evals:
     executor: script
     cmd: config:executors.script.bk1_quet
     paths: [apps/app/components/crm/record-sheet/**, _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs]
-    expected: "exit 0; in «DAT tat ca». DAT «ban-lanh: bay ngan di qua khung, khuon va thiet ke dung» (host map đủ bảy kind; mỗi tệp gọi RecordSheetFrame, KhungNgan hay KhungKr; không nhập DetailSheetHeader, Spinner, VungTaiLoi; Skeleton chỉ ở kr-sheet.tsx, so-kr-sheet.tsx). CHIỀU ĐỎ trên bản sao thư mục tạm: DAT «pha-nhap-cam: deal-sheet nhap DetailSheetHeader thi do, goi ten tep va khoi» (lỗi «CAM deal-sheet.tsx: nhap DetailSheetHeader»), DAT «pha-thoat-khung: deal-sheet khong goi khung thi do» (lỗi «NGOAI KHUNG deal-sheet.tsx: …»), DAT «pha-loi-vao: deal-sheet goi KhungNgan thay RecordSheetFrame thi do» (lỗi «LOI VAO deal-sheet.tsx»), DAT «pha-trang-kr: kr-sheet khong truyen trang cho KhungKr thi do» (lỗi «TRANG THAI kr-sheet.tsx: thieu mau 1»). Bản lạnh còn đòi: chỉ kr-sheet.tsx gọi KhungNgan/KhungKr; kr-sheet truyền trang={…} cho KhungKr, loadingView là KhungXuongNgan, có KhungTaiLoi; so-kr-sheet có loadingView={<KhungXuongNgan và errorView={<KhungTaiLoi."
+    expected: "exit 0; in «DAT tat ca». DAT «ban-lanh: bay ngan di qua khung, khuon va thiet ke dung» (host map đủ bảy kind; mỗi tệp gọi RecordSheetFrame, KhungNgan hay KhungKr; không nhập DetailSheetHeader, Spinner, VungTaiLoi; Skeleton chỉ ở kr-sheet.tsx, so-kr-sheet.tsx). CHIỀU ĐỎ trên bản sao thư mục tạm: DAT «pha-nhap-cam: deal-sheet nhap DetailSheetHeader thi do, goi ten tep va khoi» (lỗi «CAM deal-sheet.tsx: nhap DetailSheetHeader»), DAT «pha-thoat-khung: deal-sheet khong goi khung thi do» (lỗi «NGOAI KHUNG deal-sheet.tsx: …»), DAT «pha-loi-vao: deal-sheet goi KhungNgan thay RecordSheetFrame thi do» (lỗi «LOI VAO deal-sheet.tsx»), DAT «pha-trang-kr: kr-sheet khong truyen trang cho KhungKr thi do» (lỗi «TRANG THAI kr-sheet.tsx: thieu mau 1»). Bản lạnh còn đòi: chỉ kr-sheet.tsx gọi KhungNgan/KhungKr; kr-sheet truyền trang={…} cho KhungKr, loadingView là ChoTaiNgan, có KhungTaiLoi; so-kr-sheet có loadingView={<ChoTaiNgan và errorView={<KhungTaiLoi."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -14,7 +14,7 @@ evals:
     executor: script
     cmd: config:executors.script.bk1_quet
     paths: [design/patterns/ngan-ban-ghi.md, docs/design.md, _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs]
-    expected: "exit 0; in «DAT tat ca». Bản lạnh đỏ nếu khuôn thiếu một trong tám khoá frontmatter, doi_tuong khác [deal, lien-he, cong-ty, ke-hoach, muc-tieu, kr, so-kr], thân khuôn không nhắc một tệp ngăn, hay mục «### Chờ tải và lỗi tải trong ngăn bản ghi» của docs/design.md vắng hoặc không nhắc KhungXuongNgan, KhungTaiLoi, VungTaiLoi, design/patterns/ngan-ban-ghi.md. CHIỀU ĐỎ: DAT «pha-khuon: bo so-kr khoi doi_tuong thi do» (lỗi mở bằng «KHUON doi_tuong»)."
+    expected: "exit 0; in «DAT tat ca». Bản lạnh đỏ nếu khuôn thiếu một trong tám khoá frontmatter, doi_tuong khác [deal, lien-he, cong-ty, ke-hoach, muc-tieu, kr, so-kr], thân khuôn không nhắc một tệp ngăn, hay mục «### Chờ tải và lỗi tải trong ngăn bản ghi» của docs/design.md vắng hoặc không nhắc ChoTaiNgan, KhungTaiLoi, VungTaiLoi, design/patterns/ngan-ban-ghi.md. CHIỀU ĐỎ: DAT «pha-khuon: bo so-kr khoi doi_tuong thi do» (lỗi mở bằng «KHUON doi_tuong»)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3

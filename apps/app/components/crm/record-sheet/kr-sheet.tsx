@@ -6,6 +6,7 @@ import { Button } from "@crm/ui/components/button";
 import { StatGroup } from "@crm/ui/components/dashboard";
 import { useGiuNoiDung } from "@crm/ui/components/giu-thay-doi";
 import { Icon } from "@crm/ui/components/icon";
+import { ChoTaiNgan } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PickListDialog } from "@crm/ui/components/pick-list-dialog";
 import { Progress } from "@crm/ui/components/progress";
@@ -71,7 +72,6 @@ import {
 	type DauDuLieu,
 	KhungNgan,
 	KhungTaiLoi,
-	KhungXuongNgan,
 } from "./record-parts";
 import { recordKey, useRecordSheetView, useRecordStack } from "./record-stack";
 import { NoiDungSoKr } from "./so-kr-sheet";
@@ -701,7 +701,7 @@ function useTrangKhungKr({
 					dangTai={mtQ.isFetching}
 				/>
 			),
-		loadingView: <KhungXuongNgan data-khung-xuong-kr="" nhan={m.dangTaiNgan} />,
+		loadingView: <ChoTaiNgan data-khung-xuong-kr="" nhan={m.dangTaiNgan} />,
 		vungThan: { "data-than-ngan-kr": "", "data-trang-thai": trangThai },
 	};
 }

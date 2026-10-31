@@ -15,7 +15,7 @@ khe_bat_buoc: [loading, error, title]
 khe_tuy_chon: [errorView, loadingView, onRetry, lyDo, description, note, media, actions, stats, tabs, than, vo, vungThan, cuonCaKhung]
 cam_ngoai_khuon: [DetailSheetHeader, Spinner, VungTaiLoi, Skeleton]
 thanh_phan_tang_ngan:
-  cho_tai: KhungXuongNgan
+  cho_tai: ChoTaiNgan
   loi_tai: KhungTaiLoi
 ngoai_le:
   - tep: apps/app/components/crm/record-sheet/kr-sheet.tsx
@@ -40,7 +40,7 @@ Chủ kho chốt 30/10 (bản phạm vi `docs/plan/pham-vi-ban-do-khuon-3010.md`
   ngăn. Ngoại lệ ở `ngoai_le` của frontmatter, mỗi dòng có lý do.
 - **Khung thiếu chỗ thì mở khe ở khung, không thoát khung.** Ngăn KR cần thẻ con nằm giữa thân, «không thấy» có nút về
   mục tiêu, vỏ mang dấu dữ liệu riêng; các khe ấy nay nằm trong khung (`than`, `KhungTaiLoi.hanhDong`, `vo`, `vungThan`).
-- **Chờ tải là khung xương.** Mặc định `KhungXuongNgan` — hình `ngan` của `KhungXuong` trong `packages/ui`: hàng ô số, một
+- **Chờ tải là khung xương.** Mặc định `ChoTaiNgan` — hình `ngan` của `KhungXuong` trong `packages/ui`: hàng ô số, một
   thanh, các đoạn thân. Không vòng quay. Ngăn chỉ đổi nhãn đọc màn hình hay gắn dấu dữ liệu, không đổi hình.
 - **Lỗi tải là `KhungTaiLoi`.** Nó nói đúng lý do: `khong-con` (bản ghi đã xoá hay không tìm thấy, nút Đóng hoặc nút riêng),
   `khong-quyen`, `mat-ket-noi` (mặt thử lại chính là `VungTaiLoi` của `packages/ui`). `VungTaiLoi` dùng thẳng ở tầng trang,

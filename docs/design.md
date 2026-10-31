@@ -123,7 +123,7 @@ mục này ở những gì nó nói riêng.
 Chủ kho chốt 30/10/2026 (hàng BK1). Luật trang ở trên kéo xuống tầng ngăn: mọi ngăn bản ghi dựng bằng
 `RecordSheetFrame`, theo khuôn `design/patterns/ngan-ban-ghi.md`.
 
-- **Chờ tải trong ngăn**: `KhungXuongNgan`, tức hình `ngan` của `KhungXuong`. Đầu ngăn vẫn hiện tiêu đề tạm. Không vòng
+- **Chờ tải trong ngăn**: `ChoTaiNgan` của `packages/ui`, tức hình `ngan` của `KhungXuong`. Đầu ngăn vẫn hiện tiêu đề tạm. Không vòng
   quay.
 - **Lỗi tải trong ngăn**: `KhungTaiLoi` là thành phần duy nhất. Nó nói đúng lý do: bản ghi không còn, không đủ quyền, hay
   mất kết nối. Với mất kết nối, mặt thử lại là chính `VungTaiLoi`.
