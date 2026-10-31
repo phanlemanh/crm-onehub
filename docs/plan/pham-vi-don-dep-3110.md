@@ -9,6 +9,13 @@ lượt cắt này:
 - **B13**: hai khoảng hở BK5, BK6 có mục trong trang tri thức `wiki/chu-de/ban-do-khuon.md`.
 - **B14**: BK5 và BK6 chạy song song SV9, SV10.
 
+**Ghim lại sau F37 (giám sát 31/10).** Mười ba hồ sơ của B6 đã cũ sẵn trên `onehub` và bị kéo vào ghim lại khi phần
+B6 chạm thư mục của chúng: `ba-ho-so-do-san`, `bo-ca-mau-quy-4`, `cham-bo-do-chiu-cau-loi`, `ghim-thuoc-soi-xem-okr`,
+`gia-co-gom-tin-hieu`, `gom-tin-hieu-tu-chay`, `ho-so-do-kiem-cheo`, `khoa-eve-khong-tranh`,
+`khong-re-theo-ten-thanh-luat-kho`, `mo-lai-khong-tra-viec-chi-okr`, `thu-paths-e15-giai-doan`, `zalo-bom-gio`,
+`zalo-hoi-okr-khong-chet`. Phần B6 của chúng nằm trên nhánh `chore/ho-so-nghi-va-khong-do-dot-2`, chưa mở PR; chúng
+ghim lại cùng phần B6 ấy sau khi F37 gộp, chung lượt ghim với F38.
+
 Ba nguồn mã, không mã nào trùng: kiểm kê (dãy vệ sinh F, nối sau F36), nghiên cứu nâng bậc sàn thiết kế
 (`docs/findings/2026-10-31-design-floor-crm/README.md` mục 5, mã SN; SN3 gộp vào BK5) và khoảng hở của bản đồ khuôn (mã
 BK, nối sau BK4). Thêm một tiêu chí cho BK2 (cấm `Sheet` và `Dialog` dựng thô trong ngăn), không thành mã riêng.
