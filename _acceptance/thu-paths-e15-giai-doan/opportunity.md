@@ -31,4 +31,7 @@ Người gặp: mọi phiên gộp vào `onehub` — đo 16/10 trên `onehub 34d
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Không đo được — thước, CI hay công cụ nội bộ của kho (tooling); không có người dùng cuối để mở phiên nghiệm thu, phép thử là bài kiểm và lượt CI của chính hồ sơ.
+- Câu hỏi phép đo trả lời: sau khi gộp, đổi một tệp mà không eval nào của hồ sơ đo có còn kéo hồ sơ đó vào ghim lại không.
+- SỐNG: số hồ sơ hoá cũ của `pre-merge-check` không `--base` giảm so với 245 (đo cùng cây trước/sau), và không hồ sơ nào còn lý do `eval-ngoai-may-thieu-paths` do một eval judgment; đổi một tệp chữ ngoài màn giai đoạn không làm `giai-doan-thoa-thuan` hoá cũ.
+- CHẾT: số hồ sơ hoá cũ không giảm, hoặc một eval judgment bị khai `paths` khác với tệp nó đọc (bộ lọc bỏ qua đúng vật cần ghim lại).
+- Timebox: một ngày công; đếm lại 7 ngày sau gộp số lần một PR bị đòi ghim lại một hồ sơ mà nó không chạm vật đo.

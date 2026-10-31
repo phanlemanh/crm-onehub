@@ -25,4 +25,7 @@ Vì sao: Gom nhóm và cắt lượt hôm nay cần người mở phiên máy v�
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Không đo được — thước, CI hay công cụ nội bộ của kho (ci); không có người dùng cuối để mở phiên nghiệm thu, phép thử là bài kiểm và lượt CI của chính hồ sơ.
+- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Mỗi tín hiệu kéo về có chỗ trong bản gom trong vòng 2 ngày; chủ kho sửa ít hơn một nhóm trên năm (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?
+- Kết quả nào là SỐNG: [đề xuất] Mỗi tín hiệu kéo về có chỗ trong bản gom trong vòng 2 ngày; chủ kho sửa ít hơn một nhóm trên năm (ngưỡng đề xuất — chốt ở Cổng Đáng)
+- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Mỗi tín hiệu kéo về có chỗ trong bản gom trong vòng 2 ngày; chủ kho sửa ít hơn một nhóm trên năm (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox
+- Timebox: [đề xuất] 2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)

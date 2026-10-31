@@ -24,4 +24,7 @@ Vì sao: Ngoài-4 của DA0a, chủ kho tách thành việc riêng ở Cổng B�
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Không đo được — vá đúng đắn ở máy chủ (api, docs), bài kiểm của hồ sơ giữ hành vi; không có hành vi người dùng đếm được riêng cho vá này trong một kỳ đo.
+- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Trên bộ dữ liệu mẫu: mở lại kế hoạch hay bỏ «xong» một bước của người vai «chỉ OKR» không tạo việc đang mở nào cho họ» chưa?
+- Kết quả nào là SỐNG: [đề xuất] Trên bộ dữ liệu mẫu: mở lại kế hoạch hay bỏ «xong» một bước của người vai «chỉ OKR» không tạo việc đang mở nào cho họ
+- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Trên bộ dữ liệu mẫu: mở lại kế hoạch hay bỏ «xong» một bước của người vai «chỉ OKR» không tạo việc đang mở nào cho họ» khi hết timebox
+- Timebox: …

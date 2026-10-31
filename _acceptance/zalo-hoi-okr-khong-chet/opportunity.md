@@ -45,7 +45,9 @@ Chủ kho báo «Zalo phản hồi/thông báo có vẻ đang không hoạt đ�
 ## Ngưỡng chết / ngưỡng UAT
 
 [đề xuất]
-- Không đo được — thước, CI hay công cụ nội bộ của kho (không khai mặt); không có người dùng cuối để mở phiên nghiệm thu, phép thử là bài kiểm và lượt CI của chính hồ sơ.
+- SỐNG: c33 và mọi câu hỏi KR/OKR khác qua Zalo trên máy đo (E15 tro-ly-doc-kho, model thật) có ZaloHoi `da-tra-loi`, không có `MODEL_CALL_FAILED`; sau khi (A) được gỡ, hai tuần đầu trên production 0 dòng «may be called only from an OKR session».
+- CHẾT: còn một lượt Zalo chết vì uỷ quyền OKR sau gộp, hoặc câu trả lời thay thế không nói gì về KR (chỉ là câu xin lỗi khác).
+- Timebox: hàng sửa nóng, trong ngày 08–09/10.
 
 ## Câu hỏi mở cho Cổng Phạm vi
 

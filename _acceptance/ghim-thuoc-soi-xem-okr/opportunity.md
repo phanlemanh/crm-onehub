@@ -24,4 +24,7 @@ Trước đó, ở phiên Phân loại (giám sát chuyển lời 15/10), chủ 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Không đo được — thước, CI hay công cụ nội bộ của kho (không khai mặt); không có người dùng cuối để mở phiên nghiệm thu, phép thử là bài kiểm và lượt CI của chính hồ sơ.
+- Câu hỏi phép đo trả lời: sau khi giao, một PR thêm lời đọc bảng OKR không có điều kiện xem và không có dòng miễn có còn gộp được không.
+- SỐNG: `soi-ma --ca xem` xanh trên onehub ngay sau gộp; CI của PR đỏ khi thước đỏ; trong 14 ngày sau gộp, 0 lần thước đỏ trên onehub mà CI của PR gốc xanh.
+- CHẾT: có một PR gộp vào onehub làm thước đỏ mà CI của PR đó không đỏ.
+- Timebox: nửa ngày công; gộp trước 18/10 (Notes của hợp đồng `gioi-han-duyet-cay-okr` đóng băng từ 19/10); đọc số 14 ngày sau gộp.
