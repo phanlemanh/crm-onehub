@@ -16,7 +16,7 @@ Luật hàng công cụ có, răng không. Đo ở đỉnh nhánh (BK3 `94b81ff8
 | nhóm gập chứa bảng (`CollapsibleContent` chứa `Bang…`, `DataTable`, `SimpleTable`, `Table`) | 3 | 0 | 3: «Còn lại (n)» Họp tuần, «Đã bỏ (n)» mục tiêu, «Đã đóng (n)» dự án |
 
 Phần lớn `ToggleGroup` của app là ô nhập trong form (nằm trong `Field`), không phải lọc. Bài coi một `ToggleGroup` là
-**ô nhập** khi nó nằm trong `Field`, `FieldSet`, `FieldGroup` hoặc mang `aria-labelledby`; ô nhập không bị soát.
+**ô nhập** khi nó nằm trong `Field`, `FieldSet` hay `FieldGroup`; ô nhập không bị soát (Hỏi-1).
 
 ## Cách làm
 
@@ -32,6 +32,17 @@ của hàng. Không chạm `apps/app/test/lib/**` (vùng BK2) và không sửa l
    thay vì theo dòng mã để sửa một dòng ở tệp khác không làm bảng lệch.
 4. **Bảng ngày dựng**: 10 dòng — 7 `no` ghi đích sửa, 3 `o-nhap` (ô nhập chưa bọc `Field`). Nhóm «Đã bỏ» của mục
    tiêu giữ tới SV1 theo sổ `bo-okr-chi-don-vi` (d-20261028T050849Z-5).
+
+## Ba câu chỉ chủ kho chốt
+
+- **Hỏi-1 — ranh ô nhập.** Máy khuyên: `ToggleGroup` trong `Field`, `FieldSet`, `FieldGroup` là ô nhập, không soát; ba ô
+  nhập chưa bọc `Field` vào bảng loại `o-nhap`. Lối khác: không miễn gì, mọi ô nhập vào bảng (bảng thêm vài dòng mỗi khi
+  một form mới dùng `ToggleGroup`).
+- **Hỏi-2 — quét theo tệp.** Máy khuyên: quét từng tệp, chấp nhận điểm mù có tên — một chip trần ở tệp A mà tệp B đặt
+  vào `Card` thì bài không thấy. Lối khác: đi theo chuỗi nhập (cả `@/components`) để thấy quan hệ giữa hai tệp, thêm
+  khoảng nửa ngày máy và một lối quét mới.
+- **Hỏi-3 — nhóm gập.** Máy khuyên: chỉ đỏ khi phần mở của nhóm gập chứa một bảng. Lối khác: đỏ cả khi phần mở là danh
+  sách `Item` sau một bảng; khi đó Mốc lộ trình và khối việc hiện có phải xét từng chỗ, có thể thêm dòng nợ.
 
 ## Không làm
 

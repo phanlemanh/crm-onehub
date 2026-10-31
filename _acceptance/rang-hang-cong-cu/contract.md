@@ -24,7 +24,7 @@ Source input: hàng BK6 (`cau_giao`, `bat_khi`, `ghi_chu`) · `opportunity.md` �
 `ban-do-khuon.md` mục «Khoảng hở 2» · design doc.
 
 Thuật ngữ: **tệp giao diện** = tệp `.tsx` dưới `apps/app/app/` hay `apps/app/components/`, trừ `apps/app/app/proto/`.
-**Chip lọc** = một `ToggleGroup` không nằm trong `Field`, `FieldSet`, `FieldGroup` và không mang `aria-labelledby`.
+**Chip lọc** = một `ToggleGroup` không nằm trong `Field`, `FieldSet` hay `FieldGroup` (Hỏi-1).
 **Bài** = `apps/app/test/hang-cong-cu.spec.ts`. **Bảng** = `apps/app/test/fixtures/hang-cong-cu-ngoai-le.json`.
 
 ## Criteria
@@ -38,8 +38,9 @@ Thuật ngữ: **tệp giao diện** = tệp `.tsx` dưới `apps/app/app/` hay 
   đỏ với một dòng gọi `<tệp>:<dòng>` và «chip lọc trong thẻ».
 - AC-4: Given một tệp giao diện mới có nhóm gập mà phần mở chứa một bảng (`Bang…`, `DataTable`, `SimpleTable`,
   `Table`), When chạy bài, Then bài đỏ với một dòng gọi `<tệp>:<dòng>` và «nhóm gập chứa bảng».
-- AC-5: Given một `ToggleGroup` có `spacing={0}` nằm trong `Field`, When chạy bài, Then nó không bị đếm; And When bỏ
-  `Field` quanh nó, Then bài đỏ như AC-2. Given chip lọc đúng khuôn và nhóm gập không chứa bảng, Then bài im.
+- AC-5: Given một `ToggleGroup` có `spacing={0}` nằm trong `Field`, `FieldSet` hay `FieldGroup` (kể cả trong `Card`), When
+  chạy bài, Then nó không bị đếm; And When thay vật bọc bằng `div`, Then bài đỏ như AC-2 và AC-3; And một chip có
+  `aria-labelledby` trong `CardContent` vẫn đỏ. Given chip lọc đúng khuôn và nhóm gập không chứa bảng, Then bài im.
 - AC-6: Given bảng, When một dòng trỏ tệp không có trong tập tệp, trùng cặp tệp và dấu hiệu, mang dấu hiệu hay loại
   ngoài tập, hoặc `ly_do` rỗng, Then bài đỏ gọi tên tệp và lỗi của dòng; When số chỗ thật của tệp vượt `so`, Then chỗ dư
   đỏ như chỗ mới; When số chỗ thật thấp hơn `so`, Then bài đỏ «ngoại lệ thừa» kèm số khai và số còn.
@@ -63,6 +64,9 @@ bằng nút tự ghép, ô chọn đơn vị trên hàng công cụ và lưới 
   — mảng dòng đỏ. AC-2, AC-3, AC-4 bảo đảm chiều đỏ; AC-7 bảo đảm bảng; AC-8 bảo đảm chiều im.
 
 ## Out of scope
+
+- Chip lọc trần trong một tệp mà tệp khác đặt vào `Card` (quan hệ giữa hai tệp) — chờ chủ kho chốt ở Hỏi-2.
+- Nhóm gập dưới bảng mà phần mở là danh sách `Item` thay vì bảng — chờ chủ kho chốt ở Hỏi-3.
 
 - Sửa bảy chỗ nợ: bảng chặn nợ mới, không dọn nợ cũ (luật 40 của đợt).
 - Bọc ba ô nhập chưa có `Field` (ngày nghỉ tuần, kênh thông báo, loại ghi chú).

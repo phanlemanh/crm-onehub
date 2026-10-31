@@ -12,9 +12,10 @@ evals:
       - "apps/app/test/hang-cong-cu.spec.ts"
       - "apps/app/test/fixtures/hang-cong-cu-ngoai-le.json"
     expected: |
-      Ca "tap-tep": tap tep lay bang git ls-files (cached + others, exclude-standard) tai goc kho suy tu vi tri tep
-      test; co it nhat mot tep duoi apps/app/components/ va khong tep nao duoi apps/app/app/proto/; cay that + bang
-      that -> mang loi rong; in dong "hcc: <n> tep · <m> dau hieu da khai".
+      Ca "tap-tep": tap tep BAI DA DOC (daDoc) BANG tap tinh doc lap bang mot lenh git khac (ls-files --cached --others
+      --exclude-standard voi pathspec :(glob)apps/app/app/**/*.tsx, :(glob)apps/app/components/**/*.tsx,
+      :(exclude,glob)apps/app/app/proto/**) — so bang nhau ca tap, khong chi co mat; tap co tep duoi (app)/[slug] va
+      duoi apps/app/components/; cay that + bang that -> mang loi rong; in dong "hcc: <n> tep · <m> dau hieu da khai".
 
   - id: E2
     criterion: AC-2
@@ -38,7 +39,8 @@ evals:
       - "apps/app/test/hang-cong-cu.spec.ts"
     expected: |
       Ca "chip-trong-the": tep moi dat ToggleGroup trong Card > CardContent -> mang loi dung bang
-      ["hcc: trang-moi/loc.tsx:5 chip loc trong the"].
+      ["hcc: trang-moi/loc.tsx:5 chip loc trong the"]. Ca "ma-tran-boc": chip boc truc tiep boi Card, boi CardHeader, boi
+      CardContent -> moi ca dung ["hcc: trang-moi/loc.tsx:4 chip loc trong the"].
 
   - id: E4
     criterion: AC-4
@@ -50,7 +52,9 @@ evals:
       - "apps/app/test/hang-cong-cu.spec.ts"
     expected: |
       Ca "nhom-gap-bang": tep moi co DataTable roi Collapsible ma CollapsibleContent chua DataTable -> mang loi dung
-      bang ["hcc: trang-moi/loc.tsx:7 nhom gap chua bang duoi bang"].
+      bang ["hcc: trang-moi/loc.tsx:7 nhom gap chua bang duoi bang"]. Ca "ma-tran-boc": CollapsibleContent chua
+      BangDaBo, DataTable, SimpleTable, Table -> moi ca dung ["hcc: trang-moi/loc.tsx:4 nhom gap chua bang duoi bang"];
+      chua Item -> [] (doi chung, xem Hoi-3).
 
   - id: E5
     criterion: AC-5
@@ -63,7 +67,9 @@ evals:
     expected: |
       Ca "doi-chung-duong": chip ToggleGroup variant outline khoang cach mac dinh + Collapsible chua doan chu -> [];
       ToggleGroup spacing={0} trong Field -> []; CUNG tep do doi Field thanh div -> dung
-      ["hcc: trang-moi/loc.tsx:4 chip loc dinh thanh (spacing={0})"].
+      ["hcc: trang-moi/loc.tsx:4 chip loc dinh thanh (spacing={0})"]. Ca "ma-tran-boc": Card > Field, Card > FieldSet,
+      Card > FieldGroup quanh ToggleGroup spacing={0} -> moi ca []; Card > div -> dung [chip dinh thanh :4, chip trong
+      the :4]; chip co aria-labelledby trong CardContent -> dung ["hcc: trang-moi/loc.tsx:4 chip loc trong the"].
 
   - id: E6
     criterion: AC-6
