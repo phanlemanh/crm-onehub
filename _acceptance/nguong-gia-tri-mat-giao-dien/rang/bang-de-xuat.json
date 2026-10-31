@@ -4,7 +4,6 @@
 	"viet_lai_khuon": [
 		"gop-y-dung-cho",
 		"hoan-tac-loat-dung-id",
-		"lo-trinh-ten-va-build",
 		"nen-kara",
 		"okr-cua-toi-tach-theo-doi",
 		"okr-loai-hoc-tap",
@@ -12,1003 +11,1807 @@
 		"the-gop-y-okr",
 		"zalo-gui-hong-ghi-ly-do"
 	],
+	"kit_sinh": [
+		"cap-nhat-trong-ngan-kr",
+		"go-tin-hieu-rac",
+		"hoi-dap-okr",
+		"lo-trinh-nhieu-san-pham",
+		"tieu-diem-sau-hop-xoa-tin-hieu",
+		"trang-thai-tin-hieu-song",
+		"va-lo-ro-vai-chi-okr",
+		"ve-khung-muc-tieu-dung-kr"
+	],
 	"hoi": ["loc-don-vi-khong-tu-dong"],
 	"de_xuat": [
 		{
 			"ho_so": "bo-cuc-hep-ngan-va-kanban",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người dùng mở Bảng cột thoả thuận và ngăn thoả thuận, công ty trên điện thoại có đọc đủ tên, giá trị, giai đoạn và người phụ trách mà không phải xoay ngang hay chuyển sang máy tính không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu chung với 3 người trên điện thoại; docs/telemetry.md không có sự kiện nào đo bố cục hay cắt chữ.",
-			"can_cu": "AC-1, AC-2, AC-3 và AC-6 hứa thẻ và ngăn ở khổ 375 hiện đủ chữ, không cắt «…», không cuộn ngang."
+			"can_cu": "AC-1, AC-2, AC-3 và AC-6 hứa thẻ và ngăn ở khổ 375 hiện đủ chữ, không cắt «…», không cuộn ngang.",
+			"cu": null
 		},
 		{
 			"ho_so": "bo-cuc-hep-ngan-va-kanban",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với 3 người dùng thật trên điện thoại của họ (khổ 375–390) và dữ liệu thật, ít nhất 2 trên 3 người đọc đúng giai đoạn, giá trị và người phụ trách của 3 thoả thuận do người chủ trì chỉ định, và không ai gặp chữ bị cắt «…» hay thẻ tràn viền.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu chung với 3 người trên điện thoại; docs/telemetry.md không có sự kiện nào đo bố cục hay cắt chữ.",
-			"can_cu": "AC-1, AC-2, AC-3 và AC-6 hứa thẻ và ngăn ở khổ 375 hiện đủ chữ, không cắt «…», không cuộn ngang."
+			"can_cu": "AC-1, AC-2, AC-3 và AC-6 hứa thẻ và ngăn ở khổ 375 hiện đủ chữ, không cắt «…», không cuộn ngang.",
+			"cu": null
 		},
 		{
 			"ho_so": "bo-cuc-hep-ngan-va-kanban",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu có người gặp nhãn giai đoạn, số liệu đầu ngăn hay thẻ Kanban bị cắt «…» hoặc tràn viền trên dữ liệu thật, hoặc dưới 2 trên 3 người đọc đúng cả 3 thoả thuận.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu chung với 3 người trên điện thoại; docs/telemetry.md không có sự kiện nào đo bố cục hay cắt chữ.",
-			"can_cu": "AC-1, AC-2, AC-3 và AC-6 hứa thẻ và ngăn ở khổ 375 hiện đủ chữ, không cắt «…», không cuộn ngang."
+			"can_cu": "AC-1, AC-2, AC-3 và AC-6 hứa thẻ và ngăn ở khổ 375 hiện đủ chữ, không cắt «…», không cuộn ngang.",
+			"cu": null
 		},
 		{
 			"ho_so": "bo-cuc-hep-ngan-va-kanban",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu chung với 3 người trên điện thoại; docs/telemetry.md không có sự kiện nào đo bố cục hay cắt chữ.",
-			"can_cu": "AC-1, AC-2, AC-3 và AC-6 hứa thẻ và ngăn ở khổ 375 hiện đủ chữ, không cắt «…», không cuộn ngang."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
+		},
+		{
+			"ho_so": "cap-nhat-trong-ngan-kr",
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Sau khi khối cập nhật nằm ngay trong ngăn KR, người phụ trách KR có mở cập nhật rồi gửi hết thường hơn và nhanh hơn so với hộp thoại cũ không?",
+			"de_xuat": true,
+			"nguon_so": "Bảng okrCheckInSession (cột entry, openedAt, submittedAt, seconds; phiên tạo ở moCapNhat, chốt ở guiCapNhat của okr-cap-nhat.service.ts) và bảng okrCheckIn (keyResultId, weekStart, createdAt); docs/telemetry.md không có sự kiện nào cho cập nhật KR.",
+			"can_cu": "AC-4 hứa gửi xong thêm đúng một OkrCheckIn mà ngăn vẫn mở, AC-7 hứa mỗi lối ghi entry riêng (hop-tuan, bang-don-vi, muc-tieu, sheet) để đo được.",
+			"cu": "đã đạt «Mở một KR đến hạn chưa cập nhật: khối cập nhật mở sẵn trong ngăn, gửi xong ngăn vẫn mở, Lịch sử thêm một dòng ở đầu và biểu đồ thêm một điểm; bấm «Cập nhật» trên dòng Họp tuần mở ngăn KR và cuộn tới khối; không Dialog nào mở trong cả luồng» chưa?"
+		},
+		{
+			"ho_so": "cap-nhat-trong-ngan-kr",
+			"nhan": "Kết quả nào là SỐNG",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, tỉ lệ phiên cập nhật đã mở mà có giờ gửi đạt ít nhất bằng 2 tuần trước khi bật và trung vị số giây của phiên đã gửi không tăng, đồng thời số KR có ít nhất một lần cập nhật mỗi tuần không giảm.",
+			"de_xuat": true,
+			"nguon_so": "Bảng okrCheckInSession (cột entry, openedAt, submittedAt, seconds; phiên tạo ở moCapNhat, chốt ở guiCapNhat của okr-cap-nhat.service.ts) và bảng okrCheckIn (keyResultId, weekStart, createdAt); docs/telemetry.md không có sự kiện nào cho cập nhật KR.",
+			"can_cu": "AC-4 hứa gửi xong thêm đúng một OkrCheckIn mà ngăn vẫn mở, AC-7 hứa mỗi lối ghi entry riêng (hop-tuan, bang-don-vi, muc-tieu, sheet) để đo được.",
+			"cu": "Mở một KR đến hạn chưa cập nhật: khối cập nhật mở sẵn trong ngăn, gửi xong ngăn vẫn mở, Lịch sử thêm một dòng ở đầu và biểu đồ thêm một điểm; bấm «Cập nhật» trên dòng Họp tuần mở ngăn KR và cuộn tới khối; không Dialog nào mở trong cả luồng"
+		},
+		{
+			"ho_so": "cap-nhat-trong-ngan-kr",
+			"nhan": "Kết quả nào là CHẾT",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, tỉ lệ phiên mở mà gửi thấp hơn 2 tuần trước khi bật, hoặc số KR được cập nhật mỗi tuần giảm, hoặc gần như mọi phiên vẫn đến từ một lối duy nhất cho thấy các lối Họp tuần, bảng đơn vị, mục tiêu không được dùng.",
+			"de_xuat": true,
+			"nguon_so": "Bảng okrCheckInSession (cột entry, openedAt, submittedAt, seconds; phiên tạo ở moCapNhat, chốt ở guiCapNhat của okr-cap-nhat.service.ts) và bảng okrCheckIn (keyResultId, weekStart, createdAt); docs/telemetry.md không có sự kiện nào cho cập nhật KR.",
+			"can_cu": "AC-4 hứa gửi xong thêm đúng một OkrCheckIn mà ngăn vẫn mở, AC-7 hứa mỗi lối ghi entry riêng (hop-tuan, bang-don-vi, muc-tieu, sheet) để đo được.",
+			"cu": "chưa đạt «Mở một KR đến hạn chưa cập nhật: khối cập nhật mở sẵn trong ngăn, gửi xong ngăn vẫn mở, Lịch sử thêm một dòng ở đầu và biểu đồ thêm một điểm; bấm «Cập nhật» trên dòng Họp tuần mở ngăn KR và cuộn tới khối; không Dialog nào mở trong cả luồng» khi hết timebox"
 		},
 		{
 			"ho_so": "cap-nhat-trong-ngan-kr",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Lịch đọc số chung của đợt dọn dẹp",
-			"can_cu": "B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp"
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "cay-can-chinh-co-ly-do",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người phụ trách OKR có dùng Cây căn chỉnh và chip «Chưa có lý do» để tìm ra các đường nối còn trống lý do rồi bổ sung chúng không?",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng okrAlignment (lyDo khác null, theo chu kỳ) chụp ngày bật và ngày hạn, cộng quan sát phiên nghiệm thu với 3 người; telemetry không có sự kiện cho cây hay bộ lọc.",
-			"can_cu": "AC-6 và AC-7 (chip «Chưa có lý do» lọc cây và mang số cạnh) cùng câu hàng L3 «lọc được các đường Chưa có lý do»."
+			"can_cu": "AC-6 và AC-7 (chip «Chưa có lý do» lọc cây và mang số cạnh) cùng câu hàng L3 «lọc được các đường Chưa có lý do».",
+			"cu": null
 		},
 		{
 			"ho_so": "cay-can-chinh-co-ly-do",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Đến hạn, tỉ lệ căn chỉnh của chu kỳ hiện hành có lyDo khác null trong bảng okrAlignment tăng ít nhất 10 điểm so với mốc chụp ngày bật, và trong phiên nghiệm thu ít nhất 2 trên 3 người tự tìm được một đường «Chưa có lý do» bằng chip lọc trong vòng 1 phút.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng okrAlignment (lyDo khác null, theo chu kỳ) chụp ngày bật và ngày hạn, cộng quan sát phiên nghiệm thu với 3 người; telemetry không có sự kiện cho cây hay bộ lọc.",
-			"can_cu": "AC-6 và AC-7 (chip «Chưa có lý do» lọc cây và mang số cạnh) cùng câu hàng L3 «lọc được các đường Chưa có lý do»."
+			"can_cu": "AC-6 và AC-7 (chip «Chưa có lý do» lọc cây và mang số cạnh) cùng câu hàng L3 «lọc được các đường Chưa có lý do».",
+			"cu": null
 		},
 		{
 			"ho_so": "cay-can-chinh-co-ly-do",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Tỉ lệ căn chỉnh có lyDo không tăng so với mốc ngày bật, và trong phiên nghiệm thu dưới 2 trên 3 người tìm được đường «Chưa có lý do» bằng bộ lọc.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng okrAlignment (lyDo khác null, theo chu kỳ) chụp ngày bật và ngày hạn, cộng quan sát phiên nghiệm thu với 3 người; telemetry không có sự kiện cho cây hay bộ lọc.",
-			"can_cu": "AC-6 và AC-7 (chip «Chưa có lý do» lọc cây và mang số cạnh) cùng câu hàng L3 «lọc được các đường Chưa có lý do»."
+			"can_cu": "AC-6 và AC-7 (chip «Chưa có lý do» lọc cây và mang số cạnh) cùng câu hàng L3 «lọc được các đường Chưa có lý do».",
+			"cu": null
 		},
 		{
 			"ho_so": "cay-can-chinh-co-ly-do",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Truy vấn bảng okrAlignment (lyDo khác null, theo chu kỳ) chụp ngày bật và ngày hạn, cộng quan sát phiên nghiệm thu với 3 người; telemetry không có sự kiện cho cây hay bộ lọc.",
-			"can_cu": "AC-6 và AC-7 (chip «Chưa có lý do» lọc cây và mang số cạnh) cùng câu hàng L3 «lọc được các đường Chưa có lý do»."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "cho-tac-nhan-lau",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người dựng Tác nhân có rời màn chờ và quay lại đúng lúc nhờ thông báo của Kara, thay vì ngồi nhìn thẻ «Đang dựng» suốt hơn 200 giây không?",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng ThongBao (loại tac-nhan-*, docLuc, duongDan) đối chiếu với AgentConversation của bộ dựng; số lượt nền đọc từ sessions_completed và sessions_failed của install_daily trong docs/telemetry.md.",
-			"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux»."
+			"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux».",
+			"cu": null
 		},
 		{
 			"ho_so": "cho-tac-nhan-lau",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong 2 tuần sau bật, với ít nhất 5 lượt dựng, mọi lượt dựng kết thúc (không tự dừng) có đúng một ThongBao loại tac-nhan-xong, tac-nhan-can-tra-loi hay tac-nhan-hong, và ít nhất một nửa số thông báo đó có docLuc khác null.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng ThongBao (loại tac-nhan-*, docLuc, duongDan) đối chiếu với AgentConversation của bộ dựng; số lượt nền đọc từ sessions_completed và sessions_failed của install_daily trong docs/telemetry.md.",
-			"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux»."
+			"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux».",
+			"cu": null
 		},
 		{
 			"ho_so": "cho-tac-nhan-lau",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có lượt dựng kết thúc mà không có ThongBao nào hoặc có hai, hoặc dưới một phần tư thông báo Tác nhân được đọc trong 2 tuần, hoặc người dùng trong phiên nghiệm thu nói vẫn không biết lượt dựng đã xong.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng ThongBao (loại tac-nhan-*, docLuc, duongDan) đối chiếu với AgentConversation của bộ dựng; số lượt nền đọc từ sessions_completed và sessions_failed của install_daily trong docs/telemetry.md.",
-			"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux»."
+			"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux».",
+			"cu": null
 		},
 		{
 			"ho_so": "cho-tac-nhan-lau",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Truy vấn bảng ThongBao (loại tac-nhan-*, docLuc, duongDan) đối chiếu với AgentConversation của bộ dựng; số lượt nền đọc từ sessions_completed và sessions_failed của install_daily trong docs/telemetry.md.",
-			"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux»."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "chu-man-tieng-viet-khong-tran",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người dùng trình đọc màn hình có nghe vùng điều hướng bằng tiếng Việt, và người mở Cài đặt › Trường trên điện thoại có đọc được kiểu của từng trường không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên điện thoại cộng một lượt VoiceOver do người chủ trì chạy; telemetry không đo trợ năng hay bố cục.",
-			"can_cu": "AC-1 (nhãn «Vị trí trang» ở vi), AC-3 (tên ngắn của kiểu) và AC-5 (nhãn kiểu trọn chữ ở khổ 360)."
+			"can_cu": "AC-1 (nhãn «Vị trí trang» ở vi), AC-3 (tên ngắn của kiểu) và AC-5 (nhãn kiểu trọn chữ ở khổ 360).",
+			"cu": null
 		},
 		{
 			"ho_so": "chu-man-tieng-viet-khong-tran",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu, ít nhất 2 trên 3 người mở Cài đặt › Trường trên điện thoại đọc đúng kiểu của 3 trường chỉ định và không thấy nhãn kiểu tràn ô, và một lượt nghe bằng VoiceOver trên giao diện tiếng Việt đọc breadcrumb là «Vị trí trang».",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên điện thoại cộng một lượt VoiceOver do người chủ trì chạy; telemetry không đo trợ năng hay bố cục.",
-			"can_cu": "AC-1 (nhãn «Vị trí trang» ở vi), AC-3 (tên ngắn của kiểu) và AC-5 (nhãn kiểu trọn chữ ở khổ 360)."
+			"can_cu": "AC-1 (nhãn «Vị trí trang» ở vi), AC-3 (tên ngắn của kiểu) và AC-5 (nhãn kiểu trọn chữ ở khổ 360).",
+			"cu": null
 		},
 		{
 			"ho_so": "chu-man-tieng-viet-khong-tran",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có người trong phiên nghiệm thu gặp nhãn kiểu tràn ô hay đọc sai kiểu trường trên điện thoại, hoặc VoiceOver vẫn đọc «breadcrumb» tiếng Anh trên giao diện tiếng Việt.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên điện thoại cộng một lượt VoiceOver do người chủ trì chạy; telemetry không đo trợ năng hay bố cục.",
-			"can_cu": "AC-1 (nhãn «Vị trí trang» ở vi), AC-3 (tên ngắn của kiểu) và AC-5 (nhãn kiểu trọn chữ ở khổ 360)."
+			"can_cu": "AC-1 (nhãn «Vị trí trang» ở vi), AC-3 (tên ngắn của kiểu) và AC-5 (nhãn kiểu trọn chữ ở khổ 360).",
+			"cu": null
 		},
 		{
 			"ho_so": "chu-man-tieng-viet-khong-tran",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên điện thoại cộng một lượt VoiceOver do người chủ trì chạy; telemetry không đo trợ năng hay bố cục.",
-			"can_cu": "AC-1 (nhãn «Vị trí trang» ở vi), AC-3 (tên ngắn của kiểu) và AC-5 (nhãn kiểu trọn chữ ở khổ 360)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "dai-luu-tru-dung-chung",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi dải báo và vùng khoá thành mảnh chung, người mở một bản ghi đã lưu trữ có còn nhận ra ngay nó đã cất, không sửa nhầm được, và khôi phục bằng một lần bấm không?",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn cột archivedAt và updatedAt của bảng Contact, Deal (Company tương tự nếu có cột), sự kiện api_error theo route trong docs/telemetry.md, và quan sát phiên nghiệm thu với 3 người.",
-			"can_cu": "AC-3 và AC-6 (vùng chỉ đọc, máy chủ không ghi khi bấm vào ô, bấm hai lần chỉ gửi một lần khôi phục) và AC-7 (trông như bản đã ký của V2)."
+			"can_cu": "AC-3 và AC-6 (vùng chỉ đọc, máy chủ không ghi khi bấm vào ô, bấm hai lần chỉ gửi một lần khôi phục) và AC-7 (trông như bản đã ký của V2).",
+			"cu": null
 		},
 		{
 			"ho_so": "dai-luu-tru-dung-chung",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong 2 tuần sau bật, không Contact hay Deal nào còn archivedAt mà có updatedAt muộn hơn archivedAt, không có api_error trên route khôi phục của ba loại bản ghi, và trong phiên nghiệm thu ít nhất 2 trên 3 người nhận ra bản ghi đã lưu trữ và khôi phục được ngay lần bấm đầu.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn cột archivedAt và updatedAt của bảng Contact, Deal (Company tương tự nếu có cột), sự kiện api_error theo route trong docs/telemetry.md, và quan sát phiên nghiệm thu với 3 người.",
-			"can_cu": "AC-3 và AC-6 (vùng chỉ đọc, máy chủ không ghi khi bấm vào ô, bấm hai lần chỉ gửi một lần khôi phục) và AC-7 (trông như bản đã ký của V2)."
+			"can_cu": "AC-3 và AC-6 (vùng chỉ đọc, máy chủ không ghi khi bấm vào ô, bấm hai lần chỉ gửi một lần khôi phục) và AC-7 (trông như bản đã ký của V2).",
+			"cu": null
 		},
 		{
 			"ho_so": "dai-luu-tru-dung-chung",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có bản ghi đang lưu trữ bị ghi đổi sau mốc lưu trữ, hoặc có lần bấm «Khôi phục» gửi hai lệnh hay báo lỗi, hoặc dưới 2 trên 3 người trong phiên nghiệm thu nhận ra bản ghi đã cất.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn cột archivedAt và updatedAt của bảng Contact, Deal (Company tương tự nếu có cột), sự kiện api_error theo route trong docs/telemetry.md, và quan sát phiên nghiệm thu với 3 người.",
-			"can_cu": "AC-3 và AC-6 (vùng chỉ đọc, máy chủ không ghi khi bấm vào ô, bấm hai lần chỉ gửi một lần khôi phục) và AC-7 (trông như bản đã ký của V2)."
+			"can_cu": "AC-3 và AC-6 (vùng chỉ đọc, máy chủ không ghi khi bấm vào ô, bấm hai lần chỉ gửi một lần khôi phục) và AC-7 (trông như bản đã ký của V2).",
+			"cu": null
 		},
 		{
 			"ho_so": "dai-luu-tru-dung-chung",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Truy vấn cột archivedAt và updatedAt của bảng Contact, Deal (Company tương tự nếu có cột), sự kiện api_error theo route trong docs/telemetry.md, và quan sát phiên nghiệm thu với 3 người.",
-			"can_cu": "AC-3 và AC-6 (vùng chỉ đọc, máy chủ không ghi khi bấm vào ô, bấm hai lần chỉ gửi một lần khôi phục) và AC-7 (trông như bản đã ký của V2)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "dau-trang-okr-cho-nut-hoi-kara",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người mở khu OKR trên điện thoại có còn thấy trang Toàn cảnh nhảy, hay bấm nhầm, khi dữ liệu tới không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên điện thoại; telemetry không có số đo dịch bố cục (CLS).",
-			"can_cu": "AC-1 (vùng nội dung lệch không quá 8 px ở khổ 375) và câu cơ hội «mọi người mở khu OKR trên điện thoại — trang nhảy khi dữ liệu tới»."
+			"can_cu": "AC-1 (vùng nội dung lệch không quá 8 px ở khổ 375) và câu cơ hội «mọi người mở khu OKR trên điện thoại — trang nhảy khi dữ liệu tới».",
+			"cu": null
 		},
 		{
 			"ho_so": "dau-trang-okr-cho-nut-hoi-kara",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu, 3 trên 3 người mở Toàn cảnh trên điện thoại của họ không bấm nhầm vì nội dung dịch chuyển và không ai nói trang nhảy khi dữ liệu tới.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên điện thoại; telemetry không có số đo dịch bố cục (CLS).",
-			"can_cu": "AC-1 (vùng nội dung lệch không quá 8 px ở khổ 375) và câu cơ hội «mọi người mở khu OKR trên điện thoại — trang nhảy khi dữ liệu tới»."
+			"can_cu": "AC-1 (vùng nội dung lệch không quá 8 px ở khổ 375) và câu cơ hội «mọi người mở khu OKR trên điện thoại — trang nhảy khi dữ liệu tới».",
+			"cu": null
 		},
 		{
 			"ho_so": "dau-trang-okr-cho-nut-hoi-kara",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có ít nhất một người trong phiên nghiệm thu thấy trang Toàn cảnh nhảy hoặc bấm nhầm vì nội dung tụt xuống khi dữ liệu tới.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên điện thoại; telemetry không có số đo dịch bố cục (CLS).",
-			"can_cu": "AC-1 (vùng nội dung lệch không quá 8 px ở khổ 375) và câu cơ hội «mọi người mở khu OKR trên điện thoại — trang nhảy khi dữ liệu tới»."
+			"can_cu": "AC-1 (vùng nội dung lệch không quá 8 px ở khổ 375) và câu cơ hội «mọi người mở khu OKR trên điện thoại — trang nhảy khi dữ liệu tới».",
+			"cu": null
 		},
 		{
 			"ho_so": "dau-trang-okr-cho-nut-hoi-kara",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên điện thoại; telemetry không có số đo dịch bố cục (CLS).",
-			"can_cu": "AC-1 (vùng nội dung lệch không quá 8 px ở khổ 375) và câu cơ hội «mọi người mở khu OKR trên điện thoại — trang nhảy khi dữ liệu tới»."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "duong-ly-do-muc-tieu",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người xem một mục tiêu có hiểu vì sao nó góp vào mục tiêu cha nhờ khu «Đường lý do», mà không phải đi hỏi người lập không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên dữ liệu thật, cộng truy vấn đếm okrAlignment có lyDo khác null; telemetry không có sự kiện mở sheet.",
-			"can_cu": "AC-1, AC-2 và AC-3 (lý do, căn cứ và ba nhãn mức tin hiện trên sheet mục tiêu)."
+			"can_cu": "AC-1, AC-2 và AC-3 (lý do, căn cứ và ba nhãn mức tin hiện trên sheet mục tiêu).",
+			"cu": null
 		},
 		{
 			"ho_so": "duong-ly-do-muc-tieu",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu trên ít nhất 3 mục tiêu thật có lý do, ít nhất 2 trên 3 người mở sheet nói lại đúng ý lý do và phân biệt đúng «Có số liệu» với «Đặt cược» mà không cần giải thích.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên dữ liệu thật, cộng truy vấn đếm okrAlignment có lyDo khác null; telemetry không có sự kiện mở sheet.",
-			"can_cu": "AC-1, AC-2 và AC-3 (lý do, căn cứ và ba nhãn mức tin hiện trên sheet mục tiêu)."
+			"can_cu": "AC-1, AC-2 và AC-3 (lý do, căn cứ và ba nhãn mức tin hiện trên sheet mục tiêu).",
+			"cu": null
 		},
 		{
 			"ho_so": "duong-ly-do-muc-tieu",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Dưới 2 trên 3 người nói lại được lý do hay phân biệt được mức tin, hoặc đến hạn chu kỳ thật không có căn chỉnh nào có lyDo trong okrAlignment để hiện.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên dữ liệu thật, cộng truy vấn đếm okrAlignment có lyDo khác null; telemetry không có sự kiện mở sheet.",
-			"can_cu": "AC-1, AC-2 và AC-3 (lý do, căn cứ và ba nhãn mức tin hiện trên sheet mục tiêu)."
+			"can_cu": "AC-1, AC-2 và AC-3 (lý do, căn cứ và ba nhãn mức tin hiện trên sheet mục tiêu).",
+			"cu": null
 		},
 		{
 			"ho_so": "duong-ly-do-muc-tieu",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên dữ liệu thật, cộng truy vấn đếm okrAlignment có lyDo khác null; telemetry không có sự kiện mở sheet.",
-			"can_cu": "AC-1, AC-2 và AC-3 (lý do, căn cứ và ba nhãn mức tin hiện trên sheet mục tiêu)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "gan-tay-va-kara-co-ly-do",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Căn chỉnh tạo mới sau khi bật, gắn tay hay nhận từ Kara, có thật sự mang lý do thay vì vẫn trống như trước không?",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng okrAlignment (createdAt, lyDo, lyDoTuKara) đối chiếu OkrDeXuat loại can-chinh ở trạng thái nhan hoặc sua, cùng OkrTrail action sua-ly-do-can-chinh.",
-			"can_cu": "Câu Context «hai đường sinh căn chỉnh hằng ngày vẫn ghi căn chỉnh trống lý do» cùng AC-2 và AC-6 (gắn tay và nhận đề xuất đều ghi lyDo)."
+			"can_cu": "Câu Context «hai đường sinh căn chỉnh hằng ngày vẫn ghi căn chỉnh trống lý do» cùng AC-2 và AC-6 (gắn tay và nhận đề xuất đều ghi lyDo).",
+			"cu": null
 		},
 		{
 			"ho_so": "gan-tay-va-kara-co-ly-do",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong 2 tuần sau bật, với ít nhất 5 căn chỉnh mới, ít nhất 50% căn chỉnh có createdAt sau ngày bật mang lyDo khác null, và mọi căn chỉnh sinh từ đề xuất can-chinh của Kara đã nhận hay sửa đều có lyDo khác null.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng okrAlignment (createdAt, lyDo, lyDoTuKara) đối chiếu OkrDeXuat loại can-chinh ở trạng thái nhan hoặc sua, cùng OkrTrail action sua-ly-do-can-chinh.",
-			"can_cu": "Câu Context «hai đường sinh căn chỉnh hằng ngày vẫn ghi căn chỉnh trống lý do» cùng AC-2 và AC-6 (gắn tay và nhận đề xuất đều ghi lyDo)."
+			"can_cu": "Câu Context «hai đường sinh căn chỉnh hằng ngày vẫn ghi căn chỉnh trống lý do» cùng AC-2 và AC-6 (gắn tay và nhận đề xuất đều ghi lyDo).",
+			"cu": null
 		},
 		{
 			"ho_so": "gan-tay-va-kara-co-ly-do",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Dưới 20% căn chỉnh mới có lý do, hoặc có căn chỉnh sinh từ đề xuất Kara đã nhận mà lyDo vẫn null.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng okrAlignment (createdAt, lyDo, lyDoTuKara) đối chiếu OkrDeXuat loại can-chinh ở trạng thái nhan hoặc sua, cùng OkrTrail action sua-ly-do-can-chinh.",
-			"can_cu": "Câu Context «hai đường sinh căn chỉnh hằng ngày vẫn ghi căn chỉnh trống lý do» cùng AC-2 và AC-6 (gắn tay và nhận đề xuất đều ghi lyDo)."
+			"can_cu": "Câu Context «hai đường sinh căn chỉnh hằng ngày vẫn ghi căn chỉnh trống lý do» cùng AC-2 và AC-6 (gắn tay và nhận đề xuất đều ghi lyDo).",
+			"cu": null
 		},
 		{
 			"ho_so": "gan-tay-va-kara-co-ly-do",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Truy vấn bảng okrAlignment (createdAt, lyDo, lyDoTuKara) đối chiếu OkrDeXuat loại can-chinh ở trạng thái nhan hoặc sua, cùng OkrTrail action sua-ly-do-can-chinh.",
-			"can_cu": "Câu Context «hai đường sinh căn chỉnh hằng ngày vẫn ghi căn chỉnh trống lý do» cùng AC-2 và AC-6 (gắn tay và nhận đề xuất đều ghi lyDo)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "go-tin-hieu-rac",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Sau khi quản trị lưu trữ được tín hiệu rác, đội sản phẩm có còn nhận tín hiệu thử, trùng hay gửi nhầm trong lượt kéo về không?",
+			"de_xuat": true,
+			"nguon_so": "Bảng tinHieu (archivedAt, archivedById, keoVeLuc) và tinHieuVet (loai luu-tru hay khoi-phuc, nguoiId, luc), cộng bản gom của lượt gom tín hiệu trong kho; docs/telemetry.md không có sự kiện cho tín hiệu.",
+			"can_cu": "Context nói rác đi thẳng vào lượt gom và làm nhiễu con số ngưỡng sống; AC-2 hứa lượt kéo về bỏ qua tín hiệu đang lưu trữ, AC-5 hứa khôi phục để lại vết.",
+			"cu": "đã đạt «Lượt kéo về đầu tiên sau khi giao không mang tín hiệu nào đã lưu trữ; mỗi lần gỡ có vết người gỡ (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?"
+		},
+		{
+			"ho_so": "go-tin-hieu-rac",
+			"nhan": "Kết quả nào là SỐNG",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, có ít nhất một tín hiệu được lưu trữ trước khi bị kéo về, và bản gom kế tiếp của đội sản phẩm không xếp tín hiệu nào vào lẻ với lý do thử, trùng hay gửi nhầm.",
+			"de_xuat": true,
+			"nguon_so": "Bảng tinHieu (archivedAt, archivedById, keoVeLuc) và tinHieuVet (loai luu-tru hay khoi-phuc, nguoiId, luc), cộng bản gom của lượt gom tín hiệu trong kho; docs/telemetry.md không có sự kiện cho tín hiệu.",
+			"can_cu": "Context nói rác đi thẳng vào lượt gom và làm nhiễu con số ngưỡng sống; AC-2 hứa lượt kéo về bỏ qua tín hiệu đang lưu trữ, AC-5 hứa khôi phục để lại vết.",
+			"cu": "Lượt kéo về đầu tiên sau khi giao không mang tín hiệu nào đã lưu trữ; mỗi lần gỡ có vết người gỡ (ngưỡng đề xuất — chốt ở Cổng Đáng)"
+		},
+		{
+			"ho_so": "go-tin-hieu-rac",
+			"nhan": "Kết quả nào là CHẾT",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, bản gom vẫn có tín hiệu lẻ vì thử, trùng hay gửi nhầm mà quản trị đã thấy ở thẻ «Tất cả», hoặc phần lớn lần lưu trữ bị khôi phục lại vì lỡ tay.",
+			"de_xuat": true,
+			"nguon_so": "Bảng tinHieu (archivedAt, archivedById, keoVeLuc) và tinHieuVet (loai luu-tru hay khoi-phuc, nguoiId, luc), cộng bản gom của lượt gom tín hiệu trong kho; docs/telemetry.md không có sự kiện cho tín hiệu.",
+			"can_cu": "Context nói rác đi thẳng vào lượt gom và làm nhiễu con số ngưỡng sống; AC-2 hứa lượt kéo về bỏ qua tín hiệu đang lưu trữ, AC-5 hứa khôi phục để lại vết.",
+			"cu": "chưa đạt «Lượt kéo về đầu tiên sau khi giao không mang tín hiệu nào đã lưu trữ; mỗi lần gỡ có vết người gỡ (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox"
+		},
+		{
+			"ho_so": "go-tin-hieu-rac",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)» đã qua hay không ra ngày",
+			"cu": "2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)"
 		},
 		{
 			"ho_so": "gon-dau-trang-lay-y-kien",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Lịch đọc số chung của đợt dọn dẹp",
-			"can_cu": "B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp"
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
+		},
+		{
+			"ho_so": "gop-y-dung-cho",
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "chuan-hoa",
+			"gia_tri": "góp ý của Kara có được quyết (nhận, sửa, bỏ qua) thay vì nằm im không?",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "góp ý của Kara có được quyết (nhận, sửa, bỏ qua) thay vì nằm im không?"
 		},
 		{
 			"ho_so": "gop-y-dung-cho",
 			"nhan": "Kết quả nào là SỐNG",
-			"gia_tri": "30 ngày sau khi lên production, dưới 30% dòng OkrDeXuat của các đơn vị bật Kara còn trangThai cho quá 7 ngày, và tỉ lệ bo-qua của góp ý gắn KR không cao hơn tỉ lệ đó của góp ý về mục tiêu quá 15 điểm.",
-			"nguon_so": "Truy vấn bảng OkrDeXuat (trangThai, keyResultId, nac, ngày tạo, quyetLuc) chụp ngày lên production và ngày hết timebox; telemetry không có sự kiện cho góp ý.",
-			"can_cu": "Chép lại đúng ý hai dòng «SỐNG:», «CHẾT:» chủ kho đã viết trong opportunity.md dưới nhãn rút gọn, nêu rõ bảng đọc số; khớp câu hỏi «góp ý của Kara có được quyết thay vì nằm im»."
+			"loai": "chuan-hoa",
+			"gia_tri": "30 ngày sau khi lên, ít hơn 30% góp ý còn `cho` quá 7 ngày; tỉ lệ bỏ qua của góp ý về KR không cao hơn góp ý về Mục tiêu quá 15 điểm.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "30 ngày sau khi lên, ít hơn 30% góp ý còn `cho` quá 7 ngày; tỉ lệ bỏ qua của góp ý về KR không cao hơn góp ý về Mục tiêu quá 15 điểm."
 		},
 		{
 			"ho_so": "gop-y-dung-cho",
 			"nhan": "Kết quả nào là CHẾT",
-			"gia_tri": "Tỉ lệ dòng OkrDeXuat còn cho quá 7 ngày không giảm so với mốc chụp ngày lên production.",
-			"nguon_so": "Truy vấn bảng OkrDeXuat (trangThai, keyResultId, nac, ngày tạo, quyetLuc) chụp ngày lên production và ngày hết timebox; telemetry không có sự kiện cho góp ý.",
-			"can_cu": "Chép lại đúng ý hai dòng «SỐNG:», «CHẾT:» chủ kho đã viết trong opportunity.md dưới nhãn rút gọn, nêu rõ bảng đọc số; khớp câu hỏi «góp ý của Kara có được quyết thay vì nằm im»."
+			"loai": "chuan-hoa",
+			"gia_tri": "tỉ lệ góp ý nằm im không giảm so với mốc đo trước lượt.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "tỉ lệ góp ý nằm im không giảm so với mốc đo trước lượt."
+		},
+		{
+			"ho_so": "gop-y-dung-cho",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «30 ngày sau khi lên production.» đã qua hay không ra ngày",
+			"cu": "30 ngày sau khi lên production."
 		},
 		{
 			"ho_so": "hoan-tac-loat-bao-dung",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Khi lưu trữ hay hoàn tác hàng loạt, người dùng có hiểu đúng toast, không tưởng lỗi máy chủ là bản «bị bỏ qua» và không hoảng vì «chưa hoàn tác được» khi bản đã về, còn người vận hành có lần ra bản ghi lỗi không?",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký production (runtime log) lọc dòng lỗi của runBulk có recordId, sự kiện api_error theo route lưu trữ và khôi phục hàng loạt trong docs/telemetry.md, và quan sát phiên nghiệm thu với 3 người.",
-			"can_cu": "AC-1 (Logger.error kèm recordId), AC-3, AC-4 (toast tách lỗi máy chủ khỏi bị bỏ qua, «đã được khôi phục từ trước») và AC-8."
+			"can_cu": "AC-1 (Logger.error kèm recordId), AC-3, AC-4 (toast tách lỗi máy chủ khỏi bị bỏ qua, «đã được khôi phục từ trước») và AC-8.",
+			"cu": null
 		},
 		{
 			"ho_so": "hoan-tac-loat-bao-dung",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong 2 tuần sau bật, mọi lô có errored lớn hơn 0 đều có dòng log lỗi kèm recordId trong nhật ký production, và trong phiên nghiệm thu ít nhất 2 trên 3 người xem toast «3 bản đã được khôi phục từ trước.» hiểu bản ghi vẫn ở danh sách mà không đi tìm lỗi.",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký production (runtime log) lọc dòng lỗi của runBulk có recordId, sự kiện api_error theo route lưu trữ và khôi phục hàng loạt trong docs/telemetry.md, và quan sát phiên nghiệm thu với 3 người.",
-			"can_cu": "AC-1 (Logger.error kèm recordId), AC-3, AC-4 (toast tách lỗi máy chủ khỏi bị bỏ qua, «đã được khôi phục từ trước») và AC-8."
+			"can_cu": "AC-1 (Logger.error kèm recordId), AC-3, AC-4 (toast tách lỗi máy chủ khỏi bị bỏ qua, «đã được khôi phục từ trước») và AC-8.",
+			"cu": null
 		},
 		{
 			"ho_so": "hoan-tac-loat-bao-dung",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có lô lỗi máy chủ mà nhật ký production không có dòng log kèm recordId, hoặc trong phiên nghiệm thu quá 1 trên 3 người hiểu toast là đã có lỗi.",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký production (runtime log) lọc dòng lỗi của runBulk có recordId, sự kiện api_error theo route lưu trữ và khôi phục hàng loạt trong docs/telemetry.md, và quan sát phiên nghiệm thu với 3 người.",
-			"can_cu": "AC-1 (Logger.error kèm recordId), AC-3, AC-4 (toast tách lỗi máy chủ khỏi bị bỏ qua, «đã được khôi phục từ trước») và AC-8."
+			"can_cu": "AC-1 (Logger.error kèm recordId), AC-3, AC-4 (toast tách lỗi máy chủ khỏi bị bỏ qua, «đã được khôi phục từ trước») và AC-8.",
+			"cu": null
 		},
 		{
 			"ho_so": "hoan-tac-loat-bao-dung",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Nhật ký production (runtime log) lọc dòng lỗi của runBulk có recordId, sự kiện api_error theo route lưu trữ và khôi phục hàng loạt trong docs/telemetry.md, và quan sát phiên nghiệm thu với 3 người.",
-			"can_cu": "AC-1 (Logger.error kèm recordId), AC-3, AC-4 (toast tách lỗi máy chủ khỏi bị bỏ qua, «đã được khôi phục từ trước») và AC-8."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "hoan-tac-loat-dung-id",
 			"nhan": "Câu hỏi phép đo trả lời",
-			"gia_tri": "Sau khi lưu trữ hàng loạt rồi bấm «Hoàn tác», người dùng có nhận lại đúng những bản mình vừa cất, không đảo việc của người khác, và toast có nói thật số bản không về được bằng tiếng của họ không?",
-			"nguon_so": "Quan sát phiên nghiệm thu với 3 người chạy ca của AC-6, đối chiếu cột archivedAt của Contact, Company, Deal, cộng phản ánh người dùng trong 2 tuần; telemetry chỉ có api_error theo route, không đo nội dung toast.",
-			"can_cu": "Bốn ô [đề xuất] sẵn có trong opportunity.md (giữ ý, thay timebox «1 ngày máy» bằng timebox chung) cùng AC-2, AC-3, AC-4 và AC-6."
+			"loai": "chuan-hoa",
+			"gia_tri": "sau khi lưu trữ hàng loạt rồi «Hoàn tác», có đúng những bản mình vừa cất quay lại — không hơn, không kém — và toast có nói thật số bản không về được, bằng tiếng của người dùng, không?",
+			"de_xuat": true,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "sau khi lưu trữ hàng loạt rồi «Hoàn tác», có đúng những bản mình vừa cất quay lại — không hơn, không kém — và toast có nói thật số bản không về được, bằng tiếng của người dùng, không?"
 		},
 		{
 			"ho_so": "hoan-tac-loat-dung-id",
 			"nhan": "Kết quả nào là SỐNG",
-			"gia_tri": "Trong phiên nghiệm thu, 3 người chạy ca có một bản người khác đã cất trước, và cả 3 lần bản đó vẫn ở «Đã lưu trữ» sau «Hoàn tác» (đối chiếu archivedAt) với toast nói đúng số đã lưu trữ và bị bỏ qua bằng chữ sản phẩm, và trong 2 tuần sau bật không có phản ánh nào về toast chứa câu lỗi máy chủ tiếng Anh.",
-			"nguon_so": "Quan sát phiên nghiệm thu với 3 người chạy ca của AC-6, đối chiếu cột archivedAt của Contact, Company, Deal, cộng phản ánh người dùng trong 2 tuần; telemetry chỉ có api_error theo route, không đo nội dung toast.",
-			"can_cu": "Bốn ô [đề xuất] sẵn có trong opportunity.md (giữ ý, thay timebox «1 ngày máy» bằng timebox chung) cùng AC-2, AC-3, AC-4 và AC-6."
+			"loai": "chuan-hoa",
+			"gia_tri": "trên máy chủ thật, bản đã cất từ trước không bao giờ bị «Hoàn tác» khôi phục; toast «Hoàn tác» ghi đúng số đã khôi phục và số không khôi phục được; 0 toast lưu trữ hay hoàn tác chứa câu lỗi tiếng Anh thô của máy chủ.",
+			"de_xuat": true,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "trên máy chủ thật, bản đã cất từ trước không bao giờ bị «Hoàn tác» khôi phục; toast «Hoàn tác» ghi đúng số đã khôi phục và số không khôi phục được; 0 toast lưu trữ hay hoàn tác chứa câu lỗi tiếng Anh thô của máy chủ."
 		},
 		{
 			"ho_so": "hoan-tac-loat-dung-id",
 			"nhan": "Kết quả nào là CHẾT",
-			"gia_tri": "Có một lần «Hoàn tác» khôi phục bản người khác đã cất, hoặc có toast xanh khi có bản không về được, hoặc có toast chứa câu lỗi máy chủ thô, trong phiên nghiệm thu hay qua phản ánh người dùng.",
-			"nguon_so": "Quan sát phiên nghiệm thu với 3 người chạy ca của AC-6, đối chiếu cột archivedAt của Contact, Company, Deal, cộng phản ánh người dùng trong 2 tuần; telemetry chỉ có api_error theo route, không đo nội dung toast.",
-			"can_cu": "Bốn ô [đề xuất] sẵn có trong opportunity.md (giữ ý, thay timebox «1 ngày máy» bằng timebox chung) cùng AC-2, AC-3, AC-4 và AC-6."
+			"loai": "chuan-hoa",
+			"gia_tri": "«Hoàn tác» còn khôi phục một bản người khác đã cất trước; hoặc còn toast xanh khi có bản không khôi phục được; hoặc còn câu lỗi máy chủ thô trên toast.",
+			"de_xuat": true,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "«Hoàn tác» còn khôi phục một bản người khác đã cất trước; hoặc còn toast xanh khi có bản không khôi phục được; hoặc còn câu lỗi máy chủ thô trên toast."
 		},
 		{
 			"ho_so": "hoan-tac-loat-dung-id",
 			"nhan": "Timebox",
+			"loai": "timebox-b7",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát phiên nghiệm thu với 3 người chạy ca của AC-6, đối chiếu cột archivedAt của Contact, Company, Deal, cộng phản ánh người dùng trong 2 tuần; telemetry chỉ có api_error theo route, không đo nội dung toast.",
-			"can_cu": "Bốn ô [đề xuất] sẵn có trong opportunity.md (giữ ý, thay timebox «1 ngày máy» bằng timebox chung) cùng AC-2, AC-3, AC-4 và AC-6."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «1 ngày máy.» đã qua hay không ra ngày",
+			"cu": "1 ngày máy."
 		},
 		{
 			"ho_so": "hoi-dap-okr",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Người dùng có quay lại hỏi Kara về OKR trên web và thấy câu trả lời hữu ích không?",
+			"de_xuat": true,
+			"nguon_so": "Bảng okrLuotHoi (userId, ngay, cuocHoiId) đếm người và lượt hỏi, okrHoiPhanHoi (huuIch, userId) cho phần hữu ích, okrCuocHoi (nguoiHoiUserId) và aiChiPhi với tinhNang okr.hoi-dap cho chi phí; zalo_questions của docs/telemetry.md thuộc hàng C2 nên không dùng.",
+			"can_cu": "AC-10 hứa người dùng hỏi trong cột Kara và mỗi câu có một AiFeedback; AC-6 đặt trần 40 câu mỗi người mỗi ngày đếm qua lượt hỏi.",
+			"cu": "đã đạt «Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production» chưa?"
+		},
+		{
+			"ho_so": "hoi-dap-okr",
+			"nhan": "Kết quả nào là SỐNG",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, ít nhất 5 người khác nhau hỏi ít nhất một câu, ít nhất 3 người hỏi ở cả hai tuần, và trong các phản hồi đã bấm thì phần «không hữu ích» dưới 30%.",
+			"de_xuat": true,
+			"nguon_so": "Bảng okrLuotHoi (userId, ngay, cuocHoiId) đếm người và lượt hỏi, okrHoiPhanHoi (huuIch, userId) cho phần hữu ích, okrCuocHoi (nguoiHoiUserId) và aiChiPhi với tinhNang okr.hoi-dap cho chi phí; zalo_questions của docs/telemetry.md thuộc hàng C2 nên không dùng.",
+			"can_cu": "AC-10 hứa người dùng hỏi trong cột Kara và mỗi câu có một AiFeedback; AC-6 đặt trần 40 câu mỗi người mỗi ngày đếm qua lượt hỏi.",
+			"cu": "Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production"
+		},
+		{
+			"ho_so": "hoi-dap-okr",
+			"nhan": "Kết quả nào là CHẾT",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, không quá 2 người hỏi hay không ai hỏi lại ở tuần thứ hai, hoặc từ 50% phản hồi đã bấm trở lên là «không hữu ích».",
+			"de_xuat": true,
+			"nguon_so": "Bảng okrLuotHoi (userId, ngay, cuocHoiId) đếm người và lượt hỏi, okrHoiPhanHoi (huuIch, userId) cho phần hữu ích, okrCuocHoi (nguoiHoiUserId) và aiChiPhi với tinhNang okr.hoi-dap cho chi phí; zalo_questions của docs/telemetry.md thuộc hàng C2 nên không dùng.",
+			"can_cu": "AC-10 hứa người dùng hỏi trong cột Kara và mỗi câu có một AiFeedback; AC-6 đặt trần 40 câu mỗi người mỗi ngày đếm qua lượt hỏi.",
+			"cu": "chưa đạt «Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production» khi hết timebox"
 		},
 		{
 			"ho_so": "kara-mot-ten",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người dùng có nhận ra và gọi AI của sản phẩm bằng một tên Kara ở mọi bề mặt, thay vì lẫn «Trợ lý», «tác nhân», «máy soạn» không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên ba bề mặt cộng kết quả luật máy một tên AI trên CI của onehub; telemetry không đo chữ trên màn.",
-			"can_cu": "AC-1 đến AC-5 (mọi bề mặt gọi AI là Kara) và AC-7 (luật máy giữ một tên)."
+			"can_cu": "AC-1 đến AC-5 (mọi bề mặt gọi AI là Kara) và AC-7 (luật máy giữ một tên).",
+			"cu": null
 		},
 		{
 			"ho_so": "kara-mot-ten",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu, ít nhất 2 trên 3 người được hỏi «ai đã làm việc này» ở ba bề mặt (tóm tắt tuần, Soạn OKR, Tài liệu) đều trả lời là Kara, và luật máy «một tên AI» xanh trên onehub suốt timebox.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên ba bề mặt cộng kết quả luật máy một tên AI trên CI của onehub; telemetry không đo chữ trên màn.",
-			"can_cu": "AC-1 đến AC-5 (mọi bề mặt gọi AI là Kara) và AC-7 (luật máy giữ một tên)."
+			"can_cu": "AC-1 đến AC-5 (mọi bề mặt gọi AI là Kara) và AC-7 (luật máy giữ một tên).",
+			"cu": null
 		},
 		{
 			"ho_so": "kara-mot-ten",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Dưới 2 trên 3 người gọi AI là Kara ở cả ba bề mặt, hoặc người dùng còn gặp một chuỗi gọi AI bằng tên khác trên màn thật.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên ba bề mặt cộng kết quả luật máy một tên AI trên CI của onehub; telemetry không đo chữ trên màn.",
-			"can_cu": "AC-1 đến AC-5 (mọi bề mặt gọi AI là Kara) và AC-7 (luật máy giữ một tên)."
+			"can_cu": "AC-1 đến AC-5 (mọi bề mặt gọi AI là Kara) và AC-7 (luật máy giữ một tên).",
+			"cu": null
 		},
 		{
 			"ho_so": "kara-mot-ten",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát phiên nghiệm thu với 3 người trên ba bề mặt cộng kết quả luật máy một tên AI trên CI của onehub; telemetry không đo chữ trên màn.",
-			"can_cu": "AC-1 đến AC-5 (mọi bề mặt gọi AI là Kara) và AC-7 (luật máy giữ một tên)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-cho-don-vi-mot-hinh",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, người mở trang Theo đơn vị có còn thấy màn chờ đổi hình giữa chừng hay bấm trượt ô chọn đơn vị lúc trang đang tải không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, vì docs/telemetry.md chỉ gửi sự kiện phía máy chủ và không có sự kiện nào về màn chờ.",
-			"can_cu": "AC-1 (mọi lúc tải chỉ một chữ ký khung) và AC-3 (đỉnh ô chọn đơn vị không đổi quá 1 px giữa lúc tải và lúc bảng dựng)."
+			"can_cu": "AC-1 (mọi lúc tải chỉ một chữ ký khung) và AC-3 (đỉnh ô chọn đơn vị không đổi quá 1 px giữa lúc tải và lúc bảng dựng).",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-cho-don-vi-mot-hinh",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người mở trang Theo đơn vị bằng tải cứng và đổi đơn vị, trên máy tính và điện thoại, 0 người chỉ ra màn chờ nhảy hình hay hỏi «đang tải hay hỏng», và 0 người bấm trượt ô chọn đơn vị vì nó dịch chỗ.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, vì docs/telemetry.md chỉ gửi sự kiện phía máy chủ và không có sự kiện nào về màn chờ.",
-			"can_cu": "AC-1 (mọi lúc tải chỉ một chữ ký khung) và AC-3 (đỉnh ô chọn đơn vị không đổi quá 1 px giữa lúc tải và lúc bảng dựng)."
+			"can_cu": "AC-1 (mọi lúc tải chỉ một chữ ký khung) và AC-3 (đỉnh ô chọn đơn vị không đổi quá 1 px giữa lúc tải và lúc bảng dựng).",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-cho-don-vi-mot-hinh",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Từ 2 người trở lên trong phiên nói màn chờ đổi hình hay giật, hoặc có người bấm trượt ô chọn đơn vị lúc đang tải, hoặc có một góp ý cùng nội dung gửi về trong timebox.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, vì docs/telemetry.md chỉ gửi sự kiện phía máy chủ và không có sự kiện nào về màn chờ.",
-			"can_cu": "AC-1 (mọi lúc tải chỉ một chữ ký khung) và AC-3 (đỉnh ô chọn đơn vị không đổi quá 1 px giữa lúc tải và lúc bảng dựng)."
+			"can_cu": "AC-1 (mọi lúc tải chỉ một chữ ký khung) và AC-3 (đỉnh ô chọn đơn vị không đổi quá 1 px giữa lúc tải và lúc bảng dựng).",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-cho-don-vi-mot-hinh",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, vì docs/telemetry.md chỉ gửi sự kiện phía máy chủ và không có sự kiện nào về màn chờ.",
-			"can_cu": "AC-1 (mọi lúc tải chỉ một chữ ký khung) và AC-3 (đỉnh ô chọn đơn vị không đổi quá 1 px giữa lúc tải và lúc bảng dựng)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-man-chung",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, người đang chờ một màn tải hay gặp lỗi tải có luôn biết mình đang ở màn nào và tự gỡ được bằng «Thử lại» mà không phải hỏi ai không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, lỗi tải dựng bằng truy vấn bị giữ hay trả lỗi; sự kiện api_error của docs/telemetry.md chỉ đếm lỗi theo route, không đo người có gỡ được hay không.",
-			"can_cu": "Câu vấn đề «màn nào đang tải cũng giữ tiêu đề, lỗi tải một hình có nút thử lại, nút chính tắt phải nói vì sao» cùng AC-4, AC-6, AC-8, AC-9."
+			"can_cu": "Câu vấn đề «màn nào đang tải cũng giữ tiêu đề, lỗi tải một hình có nút thử lại, nút chính tắt phải nói vì sao» cùng AC-4, AC-6, AC-8, AC-9.",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-man-chung",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người, mỗi người gặp ít nhất một màn đang tải và một lỗi tải dựng sẵn, ít nhất 2 trên 3 người gọi đúng tên màn lúc đang tải và tự bấm «Thử lại» để về nội dung, và 0 người hỏi vì sao một nút đầu trang bị tắt.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, lỗi tải dựng bằng truy vấn bị giữ hay trả lỗi; sự kiện api_error của docs/telemetry.md chỉ đếm lỗi theo route, không đo người có gỡ được hay không.",
-			"can_cu": "Câu vấn đề «màn nào đang tải cũng giữ tiêu đề, lỗi tải một hình có nút thử lại, nút chính tắt phải nói vì sao» cùng AC-4, AC-6, AC-8, AC-9."
+			"can_cu": "Câu vấn đề «màn nào đang tải cũng giữ tiêu đề, lỗi tải một hình có nút thử lại, nút chính tắt phải nói vì sao» cùng AC-4, AC-6, AC-8, AC-9.",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-man-chung",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Quá nửa người trong phiên không gọi được tên màn lúc đang tải hoặc không tìm ra cách thử lại khi lỗi, hoặc có người hỏi vì sao nút chính bị tắt ở Onboarding, Tổ chức hay SSO.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, lỗi tải dựng bằng truy vấn bị giữ hay trả lỗi; sự kiện api_error của docs/telemetry.md chỉ đếm lỗi theo route, không đo người có gỡ được hay không.",
-			"can_cu": "Câu vấn đề «màn nào đang tải cũng giữ tiêu đề, lỗi tải một hình có nút thử lại, nút chính tắt phải nói vì sao» cùng AC-4, AC-6, AC-8, AC-9."
+			"can_cu": "Câu vấn đề «màn nào đang tải cũng giữ tiêu đề, lỗi tải một hình có nút thử lại, nút chính tắt phải nói vì sao» cùng AC-4, AC-6, AC-8, AC-9.",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-man-chung",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, lỗi tải dựng bằng truy vấn bị giữ hay trả lỗi; sự kiện api_error của docs/telemetry.md chỉ đếm lỗi theo route, không đo người có gỡ được hay không.",
-			"can_cu": "Câu vấn đề «màn nào đang tải cũng giữ tiêu đề, lỗi tải một hình có nút thử lại, nút chính tắt phải nói vì sao» cùng AC-4, AC-6, AC-8, AC-9."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-soan-chan-lien-ket",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, người soạn OKR trong khung bên phải có còn mất chữ đang gõ hay bản Kara đang soạn vì lỡ bấm một liên kết trong khung không?",
+			"de_xuat": true,
 			"nguon_so": "Góp ý và issue của người dùng trong timebox cộng quan sát phiên nghiệm thu N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
-			"can_cu": "AC-1 và AC-2 (bấm liên kết khi có thứ dở thì hỏi, ở lại giữ chữ) và AC-4 (không có gì dở thì đi ngay, không hỏi)."
+			"can_cu": "AC-1 và AC-2 (bấm liên kết khi có thứ dở thì hỏi, ở lại giữ chữ) và AC-4 (không có gì dở thì đi ngay, không hỏi).",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-soan-chan-lien-ket",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong timebox có 0 góp ý hay issue báo mất chữ gõ dở khi bấm liên kết trong khung soạn, và trong phiên nghiệm thu với ít nhất 3 người bấm «Tới Kho tài liệu» lúc đang gõ dở thì cả 3 đều thấy hộp hỏi và ai chọn ở lại đều giữ nguyên chữ.",
+			"de_xuat": true,
 			"nguon_so": "Góp ý và issue của người dùng trong timebox cộng quan sát phiên nghiệm thu N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
-			"can_cu": "AC-1 và AC-2 (bấm liên kết khi có thứ dở thì hỏi, ở lại giữ chữ) và AC-4 (không có gì dở thì đi ngay, không hỏi)."
+			"can_cu": "AC-1 và AC-2 (bấm liên kết khi có thứ dở thì hỏi, ở lại giữ chữ) và AC-4 (không có gì dở thì đi ngay, không hỏi).",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-soan-chan-lien-ket",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có ít nhất 1 báo mất chữ hay mất bản soạn do bấm liên kết trong khung, hoặc trong phiên quá nửa người gặp hộp hỏi khi khung không có gì dở và thấy nó cản đường.",
+			"de_xuat": true,
 			"nguon_so": "Góp ý và issue của người dùng trong timebox cộng quan sát phiên nghiệm thu N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
-			"can_cu": "AC-1 và AC-2 (bấm liên kết khi có thứ dở thì hỏi, ở lại giữ chữ) và AC-4 (không có gì dở thì đi ngay, không hỏi)."
+			"can_cu": "AC-1 và AC-2 (bấm liên kết khi có thứ dở thì hỏi, ở lại giữ chữ) và AC-4 (không có gì dở thì đi ngay, không hỏi).",
+			"cu": null
 		},
 		{
 			"ho_so": "khung-soan-chan-lien-ket",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Góp ý và issue của người dùng trong timebox cộng quan sát phiên nghiệm thu N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
-			"can_cu": "AC-1 và AC-2 (bấm liên kết khi có thứ dở thì hỏi, ở lại giữ chữ) và AC-4 (không có gì dở thì đi ngay, không hỏi)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "lich-su-va-luu-tru-trang",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, người dùng Kho tài liệu có thật sự quay lại bản cũ và lưu trữ trang không còn dùng qua duyệt, thay vì để trang cũ nằm lẫn trong danh sách không?",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn production bảng TaiLieuDeXuat theo loai và trangThai cùng bảng TaiLieuSuKien loại khôi phục và lưu trữ (mốc luc); docs/telemetry.md không có thuộc tính nào cho Kho tài liệu.",
-			"can_cu": "Ô cơ hội «xem phiên bản cũ, khôi phục bản cũ qua duyệt, lưu trữ trang không còn dùng» cùng AC-3, AC-4, AC-5, AC-6."
+			"can_cu": "Ô cơ hội «xem phiên bản cũ, khôi phục bản cũ qua duyệt, lưu trữ trang không còn dùng» cùng AC-3, AC-4, AC-5, AC-6.",
+			"cu": null
 		},
 		{
 			"ho_so": "lich-su-va-luu-tru-trang",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong timebox, bảng TaiLieuDeXuat có ít nhất 3 đề xuất loại lưu trữ hoặc quay lại phiên bản cũ đã được duyệt, và không quá 1 trang đã lưu trữ bị khôi phục trong vòng 7 ngày vì lưu trữ nhầm.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn production bảng TaiLieuDeXuat theo loai và trangThai cùng bảng TaiLieuSuKien loại khôi phục và lưu trữ (mốc luc); docs/telemetry.md không có thuộc tính nào cho Kho tài liệu.",
-			"can_cu": "Ô cơ hội «xem phiên bản cũ, khôi phục bản cũ qua duyệt, lưu trữ trang không còn dùng» cùng AC-3, AC-4, AC-5, AC-6."
+			"can_cu": "Ô cơ hội «xem phiên bản cũ, khôi phục bản cũ qua duyệt, lưu trữ trang không còn dùng» cùng AC-3, AC-4, AC-5, AC-6.",
+			"cu": null
 		},
 		{
 			"ho_so": "lich-su-va-luu-tru-trang",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Hết timebox mà TaiLieuDeXuat có 0 đề xuất lưu trữ và 0 đề xuất quay lại bản cũ được duyệt, hoặc quá nửa số trang đã lưu trữ bị khôi phục trong vòng 7 ngày.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn production bảng TaiLieuDeXuat theo loai và trangThai cùng bảng TaiLieuSuKien loại khôi phục và lưu trữ (mốc luc); docs/telemetry.md không có thuộc tính nào cho Kho tài liệu.",
-			"can_cu": "Ô cơ hội «xem phiên bản cũ, khôi phục bản cũ qua duyệt, lưu trữ trang không còn dùng» cùng AC-3, AC-4, AC-5, AC-6."
+			"can_cu": "Ô cơ hội «xem phiên bản cũ, khôi phục bản cũ qua duyệt, lưu trữ trang không còn dùng» cùng AC-3, AC-4, AC-5, AC-6.",
+			"cu": null
 		},
 		{
 			"ho_so": "lich-su-va-luu-tru-trang",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Truy vấn production bảng TaiLieuDeXuat theo loai và trangThai cùng bảng TaiLieuSuKien loại khôi phục và lưu trữ (mốc luc); docs/telemetry.md không có thuộc tính nào cho Kho tài liệu.",
-			"can_cu": "Ô cơ hội «xem phiên bản cũ, khôi phục bản cũ qua duyệt, lưu trữ trang không còn dùng» cùng AC-3, AC-4, AC-5, AC-6."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "lien-quan-loc-ban-da-cat",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, người xem ngăn công ty, cá nhân hay thoả thuận có đọc đúng số bản đang dùng và vẫn tự tìm lại được bản đã lưu trữ từ ngăn không?",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký vấp theo khuôn stranger-drive-template trong phiên nghiệm thu với N ít nhất 3 người, đúng đường đo thứ hai hợp đồng đã khai.",
-			"can_cu": "Mục Đường đo «người lạ tìm lại một thoả thuận đã cất từ ngăn công ty» cùng AC-5, AC-7 và AC-13."
+			"can_cu": "Mục Đường đo «người lạ tìm lại một thoả thuận đã cất từ ngăn công ty» cùng AC-5, AC-7 và AC-13.",
+			"cu": null
 		},
 		{
 			"ho_so": "lien-quan-loc-ban-da-cat",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người, ít nhất 2 trên 3 người tìm lại một thoả thuận đã lưu trữ từ ngăn công ty qua «+n đã lưu trữ» trong 1 phút không cần gợi ý, và 0 người hiểu «+n đã lưu trữ» là nút lưu trữ hay đọc số trên tab mà tính cả bản đã cất.",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký vấp theo khuôn stranger-drive-template trong phiên nghiệm thu với N ít nhất 3 người, đúng đường đo thứ hai hợp đồng đã khai.",
-			"can_cu": "Mục Đường đo «người lạ tìm lại một thoả thuận đã cất từ ngăn công ty» cùng AC-5, AC-7 và AC-13."
+			"can_cu": "Mục Đường đo «người lạ tìm lại một thoả thuận đã cất từ ngăn công ty» cùng AC-5, AC-7 và AC-13.",
+			"cu": null
 		},
 		{
 			"ho_so": "lien-quan-loc-ban-da-cat",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Quá nửa người không tìm ra bản đã cất từ ngăn hoặc hiểu «+n đã lưu trữ» là nút để lưu trữ, hoặc có báo số trên tab hay số liệu đầu ngăn công ty lệch số bản đang dùng.",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký vấp theo khuôn stranger-drive-template trong phiên nghiệm thu với N ít nhất 3 người, đúng đường đo thứ hai hợp đồng đã khai.",
-			"can_cu": "Mục Đường đo «người lạ tìm lại một thoả thuận đã cất từ ngăn công ty» cùng AC-5, AC-7 và AC-13."
+			"can_cu": "Mục Đường đo «người lạ tìm lại một thoả thuận đã cất từ ngăn công ty» cùng AC-5, AC-7 và AC-13.",
+			"cu": null
 		},
 		{
 			"ho_so": "lien-quan-loc-ban-da-cat",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Nhật ký vấp theo khuôn stranger-drive-template trong phiên nghiệm thu với N ít nhất 3 người, đúng đường đo thứ hai hợp đồng đã khai.",
-			"can_cu": "Mục Đường đo «người lạ tìm lại một thoả thuận đã cất từ ngăn công ty» cùng AC-5, AC-7 và AC-13."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "lo-trinh-nhieu-san-pham",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Chủ kho có đọc được lộ trình của một sản phẩm thứ hai ngay trên trang Lộ trình, cập nhật theo nhánh chính, mà không phải mở kho GitHub của sản phẩm đó không?",
+			"de_xuat": true,
+			"nguon_so": "Bảng SanPhamLoTrinh (caiLuc, taoLuc, layDauLuc, kiemLuc, nguonDoiLuc, trangThaiLay, luuTruLuc) và SanPhamNguoiXem (capLuc), đọc qua lệnh đo của AC-10; docs/telemetry.md không có sự kiện xem trang.",
+			"can_cu": "AC-10 hứa lệnh đo in độ trễ từ khai và cài tới bản chụp đầu và cờ khi quá một ngày; AC-2 hứa bản chụp đổi theo đầu nhánh, AC-4 hứa quyền xem theo sản phẩm.",
+			"cu": "đã đạt «Kho thứ hai (OneHub Platform hoặc kho kit) hiện đủ trên trang trong ngày cài, và người không có quyền với sản phẩm đó không thấy nó (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?"
+		},
+		{
+			"ho_so": "lo-trinh-nhieu-san-pham",
+			"nhan": "Kết quả nào là SỐNG",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, ít nhất một sản phẩm ngoài CRM có bản chụp đầu trong vòng một ngày tính từ lúc khai và cài ứng dụng, trạng thái lấy giữ «đã lấy» qua mỗi lần nhánh chính đổi, và có ít nhất một người được cấp quyền xem sản phẩm đó.",
+			"de_xuat": true,
+			"nguon_so": "Bảng SanPhamLoTrinh (caiLuc, taoLuc, layDauLuc, kiemLuc, nguonDoiLuc, trangThaiLay, luuTruLuc) và SanPhamNguoiXem (capLuc), đọc qua lệnh đo của AC-10; docs/telemetry.md không có sự kiện xem trang.",
+			"can_cu": "AC-10 hứa lệnh đo in độ trễ từ khai và cài tới bản chụp đầu và cờ khi quá một ngày; AC-2 hứa bản chụp đổi theo đầu nhánh, AC-4 hứa quyền xem theo sản phẩm.",
+			"cu": "Kho thứ hai (OneHub Platform hoặc kho kit) hiện đủ trên trang trong ngày cài, và người không có quyền với sản phẩm đó không thấy nó (ngưỡng đề xuất — chốt ở Cổng Đáng)"
+		},
+		{
+			"ho_so": "lo-trinh-nhieu-san-pham",
+			"nhan": "Kết quả nào là CHẾT",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Sau 2 tuần chưa sản phẩm nào ngoài CRM có bản chụp, hoặc bản chụp đầu trễ quá một ngày, hoặc sản phẩm đã khai đứng ở trạng thái lấy hỏng từ hai lần kiểm liên tiếp trở lên.",
+			"de_xuat": true,
+			"nguon_so": "Bảng SanPhamLoTrinh (caiLuc, taoLuc, layDauLuc, kiemLuc, nguonDoiLuc, trangThaiLay, luuTruLuc) và SanPhamNguoiXem (capLuc), đọc qua lệnh đo của AC-10; docs/telemetry.md không có sự kiện xem trang.",
+			"can_cu": "AC-10 hứa lệnh đo in độ trễ từ khai và cài tới bản chụp đầu và cờ khi quá một ngày; AC-2 hứa bản chụp đổi theo đầu nhánh, AC-4 hứa quyền xem theo sản phẩm.",
+			"cu": "chưa đạt «Kho thứ hai (OneHub Platform hoặc kho kit) hiện đủ trên trang trong ngày cài, và người không có quyền với sản phẩm đó không thấy nó (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox"
+		},
+		{
+			"ho_so": "lo-trinh-nhieu-san-pham",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)» đã qua hay không ra ngày",
+			"cu": "2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)"
 		},
 		{
 			"ho_so": "lo-trinh-ten-va-build",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi gộp, người đọc trang lộ trình có thấy đúng tên OneHub Center và các dãy có còn bị chặn đẩy vì bản dựng panic symlink không?",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký job CI đọc bằng gh run list và gh run view lọc chuỗi «infinite loop», cộng đầu ra của _acceptance/doi-ten-onehub-center/rang/quet-ten.mjs; không có telemetry.",
-			"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được»."
+			"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được».",
+			"cu": null
 		},
 		{
 			"ho_so": "lo-trinh-ten-va-build",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong timebox có 0 lượt CI hay pre-push trên onehub và trên PR mở đỏ với dòng «symlink … infinite loop» của next build, và phép quét tên OneHub Center giữ 0 SAI ở mọi lượt chạy.",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký job CI đọc bằng gh run list và gh run view lọc chuỗi «infinite loop», cộng đầu ra của _acceptance/doi-ten-onehub-center/rang/quet-ten.mjs; không có telemetry.",
-			"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được»."
+			"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được».",
+			"cu": null
 		},
 		{
 			"ho_so": "lo-trinh-ten-va-build",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có ít nhất 1 lượt CI hay pre-push đỏ với dòng panic «infinite loop» của next build, hoặc trang lộ trình lại hiện chữ «CRM» cho người đọc.",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký job CI đọc bằng gh run list và gh run view lọc chuỗi «infinite loop», cộng đầu ra của _acceptance/doi-ten-onehub-center/rang/quet-ten.mjs; không có telemetry.",
-			"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được»."
+			"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được».",
+			"cu": null
 		},
 		{
 			"ho_so": "lo-trinh-ten-va-build",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Nhật ký job CI đọc bằng gh run list và gh run view lọc chuỗi «infinite loop», cộng đầu ra của _acceptance/doi-ten-onehub-center/rang/quet-ten.mjs; không có telemetry.",
-			"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được»."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-don-vi-khong-tu-dong",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, người lọc mục tiêu ở trang Theo đơn vị có chọn liền nhiều giá trị lọc mà không phải mở lại menu hay khung Lọc không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; hợp đồng đã bỏ đường đo và telemetry không có sự kiện lọc.",
-			"can_cu": "AC-1 và AC-2 (menu và khung Lọc không đóng từ lúc tích tới khi dòng mới hiện) cùng AC-3 (bảng không bị gỡ khi đổi lọc)."
+			"can_cu": "AC-1 và AC-2 (menu và khung Lọc không đóng từ lúc tích tới khi dòng mới hiện) cùng AC-3 (bảng không bị gỡ khi đổi lọc).",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-don-vi-khong-tu-dong",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người, mỗi người lọc theo hai giá trị liên tiếp ở máy tính và ở điện thoại, ít nhất 2 trên 3 người làm xong mà không phải mở lại menu Lọc lần nào, và 0 người nói bảng nháy hay biến mất khi đổi lọc.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; hợp đồng đã bỏ đường đo và telemetry không có sự kiện lọc.",
-			"can_cu": "AC-1 và AC-2 (menu và khung Lọc không đóng từ lúc tích tới khi dòng mới hiện) cùng AC-3 (bảng không bị gỡ khi đổi lọc)."
+			"can_cu": "AC-1 và AC-2 (menu và khung Lọc không đóng từ lúc tích tới khi dòng mới hiện) cùng AC-3 (bảng không bị gỡ khi đổi lọc).",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-don-vi-khong-tu-dong",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Quá nửa người phải mở lại menu hay khung Lọc sau mỗi lần chọn, hoặc có người nói bảng biến mất hay nháy khi đổi lọc.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; hợp đồng đã bỏ đường đo và telemetry không có sự kiện lọc.",
-			"can_cu": "AC-1 và AC-2 (menu và khung Lọc không đóng từ lúc tích tới khi dòng mới hiện) cùng AC-3 (bảng không bị gỡ khi đổi lọc)."
+			"can_cu": "AC-1 và AC-2 (menu và khung Lọc không đóng từ lúc tích tới khi dòng mới hiện) cùng AC-3 (bảng không bị gỡ khi đổi lọc).",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-don-vi-khong-tu-dong",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; hợp đồng đã bỏ đường đo và telemetry không có sự kiện lọc.",
-			"can_cu": "AC-1 và AC-2 (menu và khung Lọc không đóng từ lúc tích tới khi dòng mới hiện) cùng AC-3 (bảng không bị gỡ khi đổi lọc)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-moi-truong",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, nhân viên quan hệ đối tác có thật sự lọc theo trường chữ, số, ngày, ô tích hay ô trống và lưu bộ lọc ấy ở Thoả thuận không?",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn production bảng SavedView theo cột entity và nội dung cột filters, cộng quan sát phiên nghiệm thu; docs/telemetry.md không có thuộc tính nào về lọc.",
-			"can_cu": "Câu vấn đề «lọc theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận» cùng AC-1, AC-2, AC-3."
+			"can_cu": "Câu vấn đề «lọc theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận» cùng AC-1, AC-2, AC-3.",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-moi-truong",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong timebox, bảng SavedView có ít nhất 2 bộ lọc đã lưu của Thoả thuận, và ít nhất 1 bộ lọc đã lưu ở bất kỳ loại bản ghi nào mang giá trị lọc kiểu mới (has:, gte:, lte:, none, yes, no hay một mốc ngày).",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn production bảng SavedView theo cột entity và nội dung cột filters, cộng quan sát phiên nghiệm thu; docs/telemetry.md không có thuộc tính nào về lọc.",
-			"can_cu": "Câu vấn đề «lọc theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận» cùng AC-1, AC-2, AC-3."
+			"can_cu": "Câu vấn đề «lọc theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận» cùng AC-1, AC-2, AC-3.",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-moi-truong",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Hết timebox mà SavedView có 0 bộ lọc đã lưu của Thoả thuận và 0 bộ lọc mang giá trị kiểu mới, hoặc trong phiên nghiệm thu quá nửa người không đặt được lọc «trống» hay lọc khoảng số.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn production bảng SavedView theo cột entity và nội dung cột filters, cộng quan sát phiên nghiệm thu; docs/telemetry.md không có thuộc tính nào về lọc.",
-			"can_cu": "Câu vấn đề «lọc theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận» cùng AC-1, AC-2, AC-3."
+			"can_cu": "Câu vấn đề «lọc theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận» cùng AC-1, AC-2, AC-3.",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-moi-truong",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Truy vấn production bảng SavedView theo cột entity và nội dung cột filters, cộng quan sát phiên nghiệm thu; docs/telemetry.md không có thuộc tính nào về lọc.",
-			"can_cu": "Câu vấn đề «lọc theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận» cùng AC-1, AC-2, AC-3."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-va-kieu-xem-chung",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, đường dẫn danh sách có bộ lọc gửi cho đồng nghiệp có mở ra đúng bộ lọc và kiểu xem, và người dùng có lọc được ở danh sách thứ hai mà không phải học lại không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
-			"can_cu": "Câu vấn đề «lọc và chuyển kiểu xem ở mọi danh sách như nhau, gửi đường dẫn là giữ nguyên bộ lọc» cùng AC-6 và AC-7."
+			"can_cu": "Câu vấn đề «lọc và chuyển kiểu xem ở mọi danh sách như nhau, gửi đường dẫn là giữ nguyên bộ lọc» cùng AC-6 và AC-7.",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-va-kieu-xem-chung",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người, mỗi người gửi cho người khác một đường dẫn có bộ lọc ở Thoả thuận, Onboarding hoặc Tài liệu, ít nhất 2 trên 3 đường dẫn mở ra đúng bộ lọc và kiểu xem, và ít nhất 2 trên 3 người lọc được ở màn thứ hai không cần hướng dẫn.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
-			"can_cu": "Câu vấn đề «lọc và chuyển kiểu xem ở mọi danh sách như nhau, gửi đường dẫn là giữ nguyên bộ lọc» cùng AC-6 và AC-7."
+			"can_cu": "Câu vấn đề «lọc và chuyển kiểu xem ở mọi danh sách như nhau, gửi đường dẫn là giữ nguyên bộ lọc» cùng AC-6 và AC-7.",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-va-kieu-xem-chung",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có ít nhất 1 đường dẫn gửi đi mở ra sai bộ lọc hay sai kiểu xem, hoặc quá nửa người phải hỏi cách lọc ở màn thứ hai.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
-			"can_cu": "Câu vấn đề «lọc và chuyển kiểu xem ở mọi danh sách như nhau, gửi đường dẫn là giữ nguyên bộ lọc» cùng AC-6 và AC-7."
+			"can_cu": "Câu vấn đề «lọc và chuyển kiểu xem ở mọi danh sách như nhau, gửi đường dẫn là giữ nguyên bộ lọc» cùng AC-6 và AC-7.",
+			"cu": null
 		},
 		{
 			"ho_so": "loc-va-kieu-xem-chung",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
-			"can_cu": "Câu vấn đề «lọc và chuyển kiểu xem ở mọi danh sách như nhau, gửi đường dẫn là giữ nguyên bộ lọc» cùng AC-6 và AC-7."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "luu-tru-truong-khong-hoi",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, quản trị lưu trữ một trường có hiểu trường chỉ được cất và tự lấy lại được bằng «Hoàn tác» khi lỡ tay, không cần hộp hỏi lại không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người cộng góp ý của người dùng trong timebox; telemetry không có sự kiện về trường.",
-			"can_cu": "Ô cơ hội «lưu trữ một trường thôi hỏi lại và có Hoàn tác» cùng AC-1, AC-3 và AC-8."
+			"can_cu": "Ô cơ hội «lưu trữ một trường thôi hỏi lại và có Hoàn tác» cùng AC-1, AC-3 và AC-8.",
+			"cu": null
 		},
 		{
 			"ho_so": "luu-tru-truong-khong-hoi",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người quản trị lưu trữ một trường rồi lấy lại, ít nhất 2 trên 3 người tự bấm «Hoàn tác» không cần gợi ý và nói trường được cất chứ không bị xoá, và trong timebox có 0 báo mất trường vì lưu trữ nhầm.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người cộng góp ý của người dùng trong timebox; telemetry không có sự kiện về trường.",
-			"can_cu": "Ô cơ hội «lưu trữ một trường thôi hỏi lại và có Hoàn tác» cùng AC-1, AC-3 và AC-8."
+			"can_cu": "Ô cơ hội «lưu trữ một trường thôi hỏi lại và có Hoàn tác» cùng AC-1, AC-3 và AC-8.",
+			"cu": null
 		},
 		{
 			"ho_so": "luu-tru-truong-khong-hoi",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Quá nửa người trong phiên nghĩ trường đã bị xoá hoặc không thấy «Hoàn tác», hoặc có ít nhất 1 báo mất trường không lấy lại được.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người cộng góp ý của người dùng trong timebox; telemetry không có sự kiện về trường.",
-			"can_cu": "Ô cơ hội «lưu trữ một trường thôi hỏi lại và có Hoàn tác» cùng AC-1, AC-3 và AC-8."
+			"can_cu": "Ô cơ hội «lưu trữ một trường thôi hỏi lại và có Hoàn tác» cùng AC-1, AC-3 và AC-8.",
+			"cu": null
 		},
 		{
 			"ho_so": "luu-tru-truong-khong-hoi",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người cộng góp ý của người dùng trong timebox; telemetry không có sự kiện về trường.",
-			"can_cu": "Ô cơ hội «lưu trữ một trường thôi hỏi lại và có Hoàn tác» cùng AC-1, AC-3 và AC-8."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "mau-trang-thai-chung",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, người dùng nhìn một chấm trạng thái ở OKR, Kara, lịch họp hay Tài liệu có đoán đúng nghĩa của nó như nhau ở mọi khu không?",
+			"de_xuat": true,
 			"nguon_so": "Chấm kín trong phiên nghiệm thu với N ít nhất 3 người; không có telemetry nào đo cách đọc màu.",
-			"can_cu": "Câu vấn đề «cùng một nghĩa mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu» cùng AC-3 và AC-6."
+			"can_cu": "Câu vấn đề «cùng một nghĩa mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu» cùng AC-3 và AC-6.",
+			"cu": null
 		},
 		{
 			"ho_so": "mau-trang-thai-chung",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu chấm kín với ít nhất 3 người xem 6 chấm trạng thái lấy từ ít nhất 3 khu khác nhau, mỗi người gọi đúng nghĩa ít nhất 5 trên 6 chấm, và không ai đọc chấm «đang chạy» thành lỗi hay rủi ro.",
+			"de_xuat": true,
 			"nguon_so": "Chấm kín trong phiên nghiệm thu với N ít nhất 3 người; không có telemetry nào đo cách đọc màu.",
-			"can_cu": "Câu vấn đề «cùng một nghĩa mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu» cùng AC-3 và AC-6."
+			"can_cu": "Câu vấn đề «cùng một nghĩa mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu» cùng AC-3 và AC-6.",
+			"cu": null
 		},
 		{
 			"ho_so": "mau-trang-thai-chung",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có người gọi đúng dưới 4 trên 6 chấm, hoặc từ 2 người trở lên hiểu cùng một màu thành hai nghĩa khác nhau ở hai khu.",
+			"de_xuat": true,
 			"nguon_so": "Chấm kín trong phiên nghiệm thu với N ít nhất 3 người; không có telemetry nào đo cách đọc màu.",
-			"can_cu": "Câu vấn đề «cùng một nghĩa mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu» cùng AC-3 và AC-6."
+			"can_cu": "Câu vấn đề «cùng một nghĩa mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu» cùng AC-3 và AC-6.",
+			"cu": null
 		},
 		{
 			"ho_so": "mau-trang-thai-chung",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Chấm kín trong phiên nghiệm thu với N ít nhất 3 người; không có telemetry nào đo cách đọc màu.",
-			"can_cu": "Câu vấn đề «cùng một nghĩa mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu» cùng AC-3 và AC-6."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "nen-kara",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi có nền, các lượt AI kế tiếp có dựng đề xuất, dấu và phản hồi của Kara bằng thành phần chung của packages/ui, để người dùng thấy AI cùng một kiểu ở mọi màn không?",
+			"de_xuat": true,
 			"nguon_so": "Đếm bằng git grep trong apps/app chỗ dùng thành phần chung so với chỗ tự dựng, đếm kiểu dấu trên màn thật theo khảo sát mục 1–2, cộng quan sát phiên nghiệm thu N ít nhất 3 người.",
-			"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12."
+			"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12.",
+			"cu": null
 		},
 		{
 			"ho_so": "nen-kara",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Tới hết timebox, mọi lượt AI gộp sau nen-kara dựng đề xuất, dấu và phản hồi bằng ProposedChange, KaraMark, KaraLabel, AiFeedback chứ không tự dựng, số kiểu dấu nhận diện AI trên màn thật giảm từ bốn xuống tối đa hai, và trong phiên nghiệm thu ít nhất 2 trên 3 người chỉ đúng nút chính của một đề xuất inline.",
+			"de_xuat": true,
 			"nguon_so": "Đếm bằng git grep trong apps/app chỗ dùng thành phần chung so với chỗ tự dựng, đếm kiểu dấu trên màn thật theo khảo sát mục 1–2, cộng quan sát phiên nghiệm thu N ít nhất 3 người.",
-			"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12."
+			"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12.",
+			"cu": null
 		},
 		{
 			"ho_so": "nen-kara",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có ít nhất 1 lượt AI gộp sau nen-kara tự dựng thẻ đề xuất hay dấu Kara riêng ngoài packages/ui, hoặc số kiểu dấu nhận diện AI trên màn thật vẫn là bốn.",
+			"de_xuat": true,
 			"nguon_so": "Đếm bằng git grep trong apps/app chỗ dùng thành phần chung so với chỗ tự dựng, đếm kiểu dấu trên màn thật theo khảo sát mục 1–2, cộng quan sát phiên nghiệm thu N ít nhất 3 người.",
-			"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12."
+			"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12.",
+			"cu": null
 		},
 		{
 			"ho_so": "nen-kara",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Đếm bằng git grep trong apps/app chỗ dùng thành phần chung so với chỗ tự dựng, đếm kiểu dấu trên màn thật theo khảo sát mục 1–2, cộng quan sát phiên nghiệm thu N ít nhất 3 người.",
-			"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "ngan-ban-ghi-giu-danh-tinh",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người dùng mở và đóng ngăn bản ghi trong việc hằng ngày có thấy ngăn trượt ra vào liền mạch, không biến mất, không chớp, không trễ, mà dữ liệu trong ngăn vẫn đúng ngay khi mở không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=5 người (ghi lại lời người thử và số lần ngăn mở trống); telemetry không có sự kiện phía trình duyệt cho ngăn nên không có số máy.",
-			"can_cu": "AC-3, AC-4 (ngăn trượt ra vào, vào trong 150 ms, không bị gỡ) và AC-6, AC-7 (đọc được dữ liệu ngay lượt vẽ đầu, không bị bản cũ đè)."
+			"can_cu": "AC-3, AC-4 (ngăn trượt ra vào, vào trong 150 ms, không bị gỡ) và AC-6, AC-7 (đọc được dữ liệu ngay lượt vẽ đầu, không bị bản cũ đè).",
+			"cu": null
 		},
 		{
 			"ho_so": "ngan-ban-ghi-giu-danh-tinh",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu chung với ít nhất 5 người, mỗi người mở rồi đóng ngăn ít nhất 5 lần trên Thoả thuận và Mục tiêu ở cả máy tính lẫn điện thoại, 0 người nói ngăn «biến mất», «chớp» hay «mở chậm», và 0 lần ngăn vừa mở hiện ô trống hay số cũ phải tải lại mới đúng.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=5 người (ghi lại lời người thử và số lần ngăn mở trống); telemetry không có sự kiện phía trình duyệt cho ngăn nên không có số máy.",
-			"can_cu": "AC-3, AC-4 (ngăn trượt ra vào, vào trong 150 ms, không bị gỡ) và AC-6, AC-7 (đọc được dữ liệu ngay lượt vẽ đầu, không bị bản cũ đè)."
+			"can_cu": "AC-3, AC-4 (ngăn trượt ra vào, vào trong 150 ms, không bị gỡ) và AC-6, AC-7 (đọc được dữ liệu ngay lượt vẽ đầu, không bị bản cũ đè).",
+			"cu": null
 		},
 		{
 			"ho_so": "ngan-ban-ghi-giu-danh-tinh",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có từ 2 trên 5 người trở lên tự nêu ngăn biến mất, chớp hay chậm khi mở đóng, hoặc có ít nhất 1 lần ngăn vừa mở hiện dữ liệu trống hay cũ phải tải lại mới đúng.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=5 người (ghi lại lời người thử và số lần ngăn mở trống); telemetry không có sự kiện phía trình duyệt cho ngăn nên không có số máy.",
-			"can_cu": "AC-3, AC-4 (ngăn trượt ra vào, vào trong 150 ms, không bị gỡ) và AC-6, AC-7 (đọc được dữ liệu ngay lượt vẽ đầu, không bị bản cũ đè)."
+			"can_cu": "AC-3, AC-4 (ngăn trượt ra vào, vào trong 150 ms, không bị gỡ) và AC-6, AC-7 (đọc được dữ liệu ngay lượt vẽ đầu, không bị bản cũ đè).",
+			"cu": null
 		},
 		{
 			"ho_so": "ngan-ban-ghi-giu-danh-tinh",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=5 người (ghi lại lời người thử và số lần ngăn mở trống); telemetry không có sự kiện phía trình duyệt cho ngăn nên không có số máy.",
-			"can_cu": "AC-3, AC-4 (ngăn trượt ra vào, vào trong 150 ms, không bị gỡ) và AC-6, AC-7 (đọc được dữ liệu ngay lượt vẽ đầu, không bị bản cũ đè)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "nhap-truong-luc-tao",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «phiên nghiệm thu đầu tiên sau khi DA16 lên production, gộp chung buổi đọc số của gói truong-hop-dong.» đã qua hay không ra ngày",
+			"cu": "phiên nghiệm thu đầu tiên sau khi DA16 lên production, gộp chung buổi đọc số của gói truong-hop-dong."
+		},
+		{
+			"ho_so": "okr-cua-toi-tach-theo-doi",
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "chuan-hoa",
+			"gia_tri": "người mở «Của tôi» có còn thấy OKR không phải của mình lẫn trong danh sách chính không, và khi cần thì có tìm được mục mình đang theo dõi không?",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "người mở «Của tôi» có còn thấy OKR không phải của mình lẫn trong danh sách chính không, và khi cần thì có tìm được mục mình đang theo dõi không?"
 		},
 		{
 			"ho_so": "okr-cua-toi-tach-theo-doi",
 			"nhan": "Kết quả nào là SỐNG",
-			"gia_tri": "Trong phiên nghiệm thu với 5 người dùng OKR có theo dõi mục tiêu của đơn vị khác, ít nhất 4 trên 5 người chỉ đúng đâu là mục tiêu của mình và tự tìm được mục đang theo dõi qua «Đang theo dõi» khi được hỏi, và có 0 báo cáo «thấy OKR người khác trong Của tôi» trong 2 tuần sau khi bật.",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=5 người cộng số báo cáo người dùng gửi trong 2 tuần sau khi bật; telemetry không có sự kiện cho tab Của tôi.",
-			"can_cu": "Gộp lại ba gạch SỐNG và hai gạch CHẾT anh đã duyệt 08/10 trong opportunity.md thành một câu mỗi ô, dựa trên AC-5 (bảng chính chỉ có mục tiêu của U, «Đang theo dõi (n)» tách riêng)."
+			"loai": "chuan-hoa",
+			"gia_tri": "ở lái-thử người-lạ, ≥ 4/5 người chỉ đúng đâu là mục tiêu của mình, đâu là mục đang theo dõi; ≥ 4/5 người tự mở được nhóm «Đang theo dõi» khi được hỏi về một mục mình theo dõi; 0 báo cáo «thấy OKR người khác trong Của tôi» trong 2 tuần sau khi giao.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "ở lái-thử người-lạ, ≥ 4/5 người chỉ đúng đâu là mục tiêu của mình, đâu là mục đang theo dõi; ≥ 4/5 người tự mở được nhóm «Đang theo dõi» khi được hỏi về một mục mình theo dõi; 0 báo cáo «thấy OKR người khác trong Của tôi» trong 2 tuần sau khi giao."
 		},
 		{
 			"ho_so": "okr-cua-toi-tach-theo-doi",
 			"nhan": "Kết quả nào là CHẾT",
-			"gia_tri": "Có ít nhất 1 báo cáo thấy OKR không phải của mình lẫn trong danh sách chính của «Của tôi», hoặc từ 2 trên 5 người trở lên không tìm được mục mình đang theo dõi trong phiên nghiệm thu.",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=5 người cộng số báo cáo người dùng gửi trong 2 tuần sau khi bật; telemetry không có sự kiện cho tab Của tôi.",
-			"can_cu": "Gộp lại ba gạch SỐNG và hai gạch CHẾT anh đã duyệt 08/10 trong opportunity.md thành một câu mỗi ô, dựa trên AC-5 (bảng chính chỉ có mục tiêu của U, «Đang theo dõi (n)» tách riêng)."
+			"loai": "chuan-hoa",
+			"gia_tri": "lại có báo cáo thấy OKR người khác trong danh sách chính; hoặc ≥ 2/5 người không tìm thấy mục mình theo dõi vì nhóm gập sẵn.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "lại có báo cáo thấy OKR người khác trong danh sách chính; hoặc ≥ 2/5 người không tìm thấy mục mình theo dõi vì nhóm gập sẵn."
+		},
+		{
+			"ho_so": "okr-cua-toi-tach-theo-doi",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «một vòng feature-loop T2 (đã giao 07/10). Đo trong 2 tuần sau khi giao.» đã qua hay không ra ngày",
+			"cu": "một vòng feature-loop T2 (đã giao 07/10). Đo trong 2 tuần sau khi giao."
+		},
+		{
+			"ho_so": "okr-loai-hoc-tap",
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "chuan-hoa",
+			"gia_tri": "đơn vị có dùng loại «Học tập» đúng chỗ, cho mục tiêu kiểm giả thuyết, và có ghi được điều học được khi đóng kỳ không?",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "đơn vị có dùng loại «Học tập» đúng chỗ, cho mục tiêu kiểm giả thuyết, và có ghi được điều học được khi đóng kỳ không?"
 		},
 		{
 			"ho_so": "okr-loai-hoc-tap",
 			"nhan": "Kết quả nào là SỐNG",
-			"gia_tri": "Khi kỳ OKR kế đóng, truy vấn bảng mục tiêu cho thấy có ít nhất 1 mục tiêu loại hoc-tap đã công bố, 100% mục tiêu học tập đã công bố có «Điều học được», và có 0 báo cáo nhãn «Trượt» trên mục tiêu học tập.",
-			"nguon_so": "Truy vấn bảng mục tiêu theo loại hoc-tap và ô Điều học được lúc kỳ kế đóng, cộng báo cáo của người duyệt và câu hỏi Kara bắt được; telemetry không có sự kiện cho loại mục tiêu.",
-			"can_cu": "Gộp ba gạch SỐNG và hai gạch CHẾT anh đã duyệt 08/10 thành một câu mỗi ô, dựa trên AC-2 (giữa kỳ đọc như tham vọng, không Trượt) và AC-4, AC-5 (không đóng kỳ khi còn mục tiêu học tập đã công bố chưa ghi điều học được)."
+			"loai": "chuan-hoa",
+			"gia_tri": "kỳ OKR kế có ≥ 1 mục tiêu học tập đã công bố; 100% mục tiêu học tập có «Điều học được» khi kỳ đóng; không ai báo nhãn «Trượt» trên mục tiêu học tập.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "kỳ OKR kế có ≥ 1 mục tiêu học tập đã công bố; 100% mục tiêu học tập có «Điều học được» khi kỳ đóng; không ai báo nhãn «Trượt» trên mục tiêu học tập."
 		},
 		{
 			"ho_so": "okr-loai-hoc-tap",
 			"nhan": "Kết quả nào là CHẾT",
-			"gia_tri": "Hết kỳ OKR kế mà truy vấn bảng mục tiêu ra 0 mục tiêu học tập đã công bố, hoặc người duyệt hay Kara ghi nhận ít nhất 2 mục tiêu chọn «Học tập» để né «Trượt» cho một việc thực chất là cam kết.",
-			"nguon_so": "Truy vấn bảng mục tiêu theo loại hoc-tap và ô Điều học được lúc kỳ kế đóng, cộng báo cáo của người duyệt và câu hỏi Kara bắt được; telemetry không có sự kiện cho loại mục tiêu.",
-			"can_cu": "Gộp ba gạch SỐNG và hai gạch CHẾT anh đã duyệt 08/10 thành một câu mỗi ô, dựa trên AC-2 (giữa kỳ đọc như tham vọng, không Trượt) và AC-4, AC-5 (không đóng kỳ khi còn mục tiêu học tập đã công bố chưa ghi điều học được)."
+			"loai": "chuan-hoa",
+			"gia_tri": "sau một kỳ không đơn vị nào dùng loại này; hoặc ≥ 2 trường hợp (Kara hoặc người duyệt bắt được) chọn «Học tập» để né «Trượt» cho một mục tiêu thực chất là cam kết.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "sau một kỳ không đơn vị nào dùng loại này; hoặc ≥ 2 trường hợp (Kara hoặc người duyệt bắt được) chọn «Học tập» để né «Trượt» cho một mục tiêu thực chất là cam kết."
+		},
+		{
+			"ho_so": "okr-loai-hoc-tap",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «một vòng feature-loop T2 (đã giao 08/10). Đo ở kỳ OKR kế.» đã qua hay không ra ngày",
+			"cu": "một vòng feature-loop T2 (đã giao 08/10). Đo ở kỳ OKR kế."
+		},
+		{
+			"ho_so": "quyet-gop-y-noi-dung-ly-do",
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "chuan-hoa",
+			"gia_tri": "người quyết một góp ý bị từ chối vì lý do cố định có kể lại đúng lý do không.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "người quyết một góp ý bị từ chối vì lý do cố định có kể lại đúng lý do không."
 		},
 		{
 			"ho_so": "quyet-gop-y-noi-dung-ly-do",
 			"nhan": "Kết quả nào là SỐNG",
-			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người, mỗi người quyết một Căn chỉnh tới đích chưa công bố, cả 3 người tự nói được lý do «đích chưa công bố» và không ai bấm thử lại quá một lần.",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người (đếm số lần bấm thử lại và ghi nguyên lời người thử kể lý do); telemetry không có sự kiện cho việc quyết góp ý.",
-			"can_cu": "Câu SỐNG và CHẾT sẵn có trong opportunity.md (nhãn «SỐNG:» và «CHẾT:» chưa đúng khuôn), thêm số người, dựa trên AC-3 (dòng lỗi dưới góp ý là câu lý do của mã) và Thước đo thành công «mỗi lý do cố định hiện đúng câu lý do»."
+			"loai": "chuan-hoa",
+			"gia_tri": "ở lái-thử người-lạ trước R1, nhận một Căn chỉnh tới đích chưa công bố; người thử nói được «đích chưa công bố» và không bấm thử lại quá một lần.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "ở lái-thử người-lạ trước R1, nhận một Căn chỉnh tới đích chưa công bố; người thử nói được «đích chưa công bố» và không bấm thử lại quá một lần."
 		},
 		{
 			"ho_so": "quyet-gop-y-noi-dung-ly-do",
 			"nhan": "Kết quả nào là CHẾT",
-			"gia_tri": "Có ít nhất 1 người trong phiên nghiệm thu bấm thử lại từ hai lần trở lên hoặc gọi lỗi đó là «lỗi mạng» hay «thử lại sau».",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người (đếm số lần bấm thử lại và ghi nguyên lời người thử kể lý do); telemetry không có sự kiện cho việc quyết góp ý.",
-			"can_cu": "Câu SỐNG và CHẾT sẵn có trong opportunity.md (nhãn «SỐNG:» và «CHẾT:» chưa đúng khuôn), thêm số người, dựa trên AC-3 (dòng lỗi dưới góp ý là câu lý do của mã) và Thước đo thành công «mỗi lý do cố định hiện đúng câu lý do»."
+			"loai": "chuan-hoa",
+			"gia_tri": "người thử bấm thử lại nhiều lần hoặc nói «lỗi mạng».",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "người thử bấm thử lại nhiều lần hoặc nói «lỗi mạng»."
+		},
+		{
+			"ho_so": "quyet-gop-y-noi-dung-ly-do",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «lái-thử người-lạ kế tiếp của dãy Kara OKR.» đã qua hay không ra ngày",
+			"cu": "lái-thử người-lạ kế tiếp của dãy Kara OKR."
 		},
 		{
 			"ho_so": "soan-okr-khong-lac",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «lái-thử người-lạ kế tiếp của dãy Kara OKR.» đã qua hay không ra ngày",
+			"cu": "lái-thử người-lạ kế tiếp của dãy Kara OKR."
 		},
 		{
 			"ho_so": "sort-moi-truong",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «gộp chung buổi đọc số của gói truong-hop-dong sau khi DA17, DA18 lên production.» đã qua hay không ra ngày",
+			"cu": "gộp chung buổi đọc số của gói truong-hop-dong sau khi DA17, DA18 lên production."
 		},
 		{
 			"ho_so": "sua-sau-chay-that",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, người viết và người duyệt Kho tài liệu có hết vấp các hạn chế đã gom (số bản chờ sai, ô chọn rỗng khi tải lỗi, mục lục lỗi ký tự, liên kết http lọt, câu tiếng Việt trên giao diện tiếng Anh) mà trợ lý kho vẫn trả lời đúng không kém trước không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người đối chiếu bảng G1–G12 của design.md, cộng bảng kết quả do-bo-mau.ts so với _acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md.",
-			"can_cu": "Context (danh sách góp ý là các hạn chế còn mở của tám hồ sơ Kho, đo lại trên bộ câu hỏi mẫu sau khi sửa) và AC-2, AC-3, AC-5, AC-6, AC-7, AC-9, AC-13."
+			"can_cu": "Context (danh sách góp ý là các hạn chế còn mở của tám hồ sơ Kho, đo lại trên bộ câu hỏi mẫu sau khi sửa) và AC-2, AC-3, AC-5, AC-6, AC-7, AC-9, AC-13.",
+			"cu": null
 		},
 		{
 			"ho_so": "sua-sau-chay-that",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người viết hoặc duyệt trang Kho tài liệu, 0 người vấp lại mục nào trong G1–G12, và đo lại bộ 50 câu hỏi mẫu bằng do-bo-mau.ts trên bản đã bật không có câu đạt nào thành không đạt so với lượt đo đã ký (câu lỗi gọi model tách riêng).",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người đối chiếu bảng G1–G12 của design.md, cộng bảng kết quả do-bo-mau.ts so với _acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md.",
-			"can_cu": "Context (danh sách góp ý là các hạn chế còn mở của tám hồ sơ Kho, đo lại trên bộ câu hỏi mẫu sau khi sửa) và AC-2, AC-3, AC-5, AC-6, AC-7, AC-9, AC-13."
+			"can_cu": "Context (danh sách góp ý là các hạn chế còn mở của tám hồ sơ Kho, đo lại trên bộ câu hỏi mẫu sau khi sửa) và AC-2, AC-3, AC-5, AC-6, AC-7, AC-9, AC-13.",
+			"cu": null
 		},
 		{
 			"ho_so": "sua-sau-chay-that",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có từ 2 người trở lên vấp lại cùng một mục trong G1–G12, hoặc bộ 50 câu hỏi mẫu có từ 2 câu trở lên chuyển từ đạt sang không đạt so với lượt đo đã ký (không kể câu lỗi gọi model).",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người đối chiếu bảng G1–G12 của design.md, cộng bảng kết quả do-bo-mau.ts so với _acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md.",
-			"can_cu": "Context (danh sách góp ý là các hạn chế còn mở của tám hồ sơ Kho, đo lại trên bộ câu hỏi mẫu sau khi sửa) và AC-2, AC-3, AC-5, AC-6, AC-7, AC-9, AC-13."
+			"can_cu": "Context (danh sách góp ý là các hạn chế còn mở của tám hồ sơ Kho, đo lại trên bộ câu hỏi mẫu sau khi sửa) và AC-2, AC-3, AC-5, AC-6, AC-7, AC-9, AC-13.",
+			"cu": null
 		},
 		{
 			"ho_so": "sua-sau-chay-that",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người đối chiếu bảng G1–G12 của design.md, cộng bảng kết quả do-bo-mau.ts so với _acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md.",
-			"can_cu": "Context (danh sách góp ý là các hạn chế còn mở của tám hồ sơ Kho, đo lại trên bộ câu hỏi mẫu sau khi sửa) và AC-2, AC-3, AC-5, AC-6, AC-7, AC-9, AC-13."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "tac-nhan-va",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người dùng mở màn tác nhân trên điện thoại có đọc được trạng thái và kết quả lượt chạy bằng tiếng Việt, và bộ dựng tác nhân có hỏi lại đúng lúc thay vì đứng im chờ một câu không ai được hỏi không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người ở khổ 375 px, cộng truy vấn bảng hội thoại dựng đối chiếu câu hỏi đang chờ của phiên con với pendingQuestion của conversations.builderById; telemetry chỉ có sessions_failed và agent_error, không tách được ca treo im lặng.",
-			"can_cu": "Câu giao của hàng E5 trong Context («đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng») cùng AC-1, AC-2, AC-4 và AC-5, AC-9."
+			"can_cu": "Câu giao của hàng E5 trong Context («đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng») cùng AC-1, AC-2, AC-4 và AC-5, AC-9.",
+			"cu": null
 		},
 		{
 			"ho_so": "tac-nhan-va",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người dựng hoặc xem tác nhân ở khổ điện thoại, 0 người gặp chữ máy tiếng Anh hay phải cuộn ngang, và trong 2 tuần sau khi bật truy vấn hội thoại dựng cho 0 hội thoại có phiên con đang chờ trả lời mà pendingQuestion rỗng.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người ở khổ 375 px, cộng truy vấn bảng hội thoại dựng đối chiếu câu hỏi đang chờ của phiên con với pendingQuestion của conversations.builderById; telemetry chỉ có sessions_failed và agent_error, không tách được ca treo im lặng.",
-			"can_cu": "Câu giao của hàng E5 trong Context («đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng») cùng AC-1, AC-2, AC-4 và AC-5, AC-9."
+			"can_cu": "Câu giao của hàng E5 trong Context («đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng») cùng AC-1, AC-2, AC-4 và AC-5, AC-9.",
+			"cu": null
 		},
 		{
 			"ho_so": "tac-nhan-va",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có ít nhất 1 hội thoại dựng thật treo im lặng vì câu hỏi lượt sau bị bỏ (phiên con chờ mà màn mở ô soạn), hoặc từ 2 người trở lên trong phiên nghiệm thu không đọc được kết quả lượt chạy trên điện thoại.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người ở khổ 375 px, cộng truy vấn bảng hội thoại dựng đối chiếu câu hỏi đang chờ của phiên con với pendingQuestion của conversations.builderById; telemetry chỉ có sessions_failed và agent_error, không tách được ca treo im lặng.",
-			"can_cu": "Câu giao của hàng E5 trong Context («đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng») cùng AC-1, AC-2, AC-4 và AC-5, AC-9."
+			"can_cu": "Câu giao của hàng E5 trong Context («đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng») cùng AC-1, AC-2, AC-4 và AC-5, AC-9.",
+			"cu": null
 		},
 		{
 			"ho_so": "tac-nhan-va",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người ở khổ 375 px, cộng truy vấn bảng hội thoại dựng đối chiếu câu hỏi đang chờ của phiên con với pendingQuestion của conversations.builderById; telemetry chỉ có sessions_failed và agent_error, không tách được ca treo im lặng.",
-			"can_cu": "Câu giao của hàng E5 trong Context («đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng») cùng AC-1, AC-2, AC-4 và AC-5, AC-9."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "chuan-hoa",
+			"gia_tri": "người lạ có quyết được ba đề xuất mà không lúng túng không?",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "người lạ có quyết được ba đề xuất mà không lúng túng không?"
 		},
 		{
 			"ho_so": "the-gop-y-okr",
 			"nhan": "Kết quả nào là SỐNG",
-			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người chưa làm vòng này, mỗi người quyết đủ ba đề xuất của Kara trong hộp sửa mục tiêu và KR trong một lượt mà không hỏi «bấm nút nào», và hộp đóng ngoài ý 0 lần.",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người lạ (đếm lần hỏi nút, lần bấm nhầm, lần hộp đóng ngoài ý); telemetry không có sự kiện cho thẻ góp ý.",
-			"can_cu": "Câu hỏi đã có trong opportunity.md cùng ba gạch «[đề xuất]» SỐNG, CHẾT, Timebox của nó, dựa trên AC-5 (một nút tô màu duy nhất), AC-8 (bấm trong cột không đóng hộp) và AC-14 (người không làm lượt chỉ ra ngay nút chính)."
+			"loai": "chuan-hoa",
+			"gia_tri": "người lạ quyết đủ ba đề xuất trong một lượt lái thử mà không hỏi «bấm nút nào», 0 lần hộp đóng ngoài ý.",
+			"de_xuat": true,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "người lạ quyết đủ ba đề xuất trong một lượt lái thử mà không hỏi «bấm nút nào», 0 lần hộp đóng ngoài ý."
 		},
 		{
 			"ho_so": "the-gop-y-okr",
 			"nhan": "Kết quả nào là CHẾT",
-			"gia_tri": "Có ít nhất 1 người bấm nhầm «Bác» thay «Nhận», hoặc hộp đóng ngoài ý ít nhất 1 lần, hoặc từ 2 trên 3 người trở lên phải hỏi nút nào là nút chính.",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người lạ (đếm lần hỏi nút, lần bấm nhầm, lần hộp đóng ngoài ý); telemetry không có sự kiện cho thẻ góp ý.",
-			"can_cu": "Câu hỏi đã có trong opportunity.md cùng ba gạch «[đề xuất]» SỐNG, CHẾT, Timebox của nó, dựa trên AC-5 (một nút tô màu duy nhất), AC-8 (bấm trong cột không đóng hộp) và AC-14 (người không làm lượt chỉ ra ngay nút chính)."
+			"loai": "chuan-hoa",
+			"gia_tri": "người lạ bấm nhầm «Bác» thay «Nhận», hoặc hộp đóng ngoài ý ≥ 1 lần.",
+			"de_xuat": true,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "người lạ bấm nhầm «Bác» thay «Nhận», hoặc hộp đóng ngoài ý ≥ 1 lần."
 		},
 		{
 			"ho_so": "the-gop-y-okr",
 			"nhan": "Timebox",
+			"loai": "timebox-b7",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người lạ (đếm lần hỏi nút, lần bấm nhầm, lần hộp đóng ngoài ý); telemetry không có sự kiện cho thẻ góp ý.",
-			"can_cu": "Câu hỏi đã có trong opportunity.md cùng ba gạch «[đề xuất]» SỐNG, CHẾT, Timebox của nó, dựa trên AC-5 (một nút tô màu duy nhất), AC-8 (bấm trong cột không đóng hộp) và AC-14 (người không làm lượt chỉ ra ngay nút chính)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «lái thử người lạ trong tuần sau khi gộp; đọc số cùng phiên nghiệm thu.» đã qua hay không ra ngày",
+			"cu": "lái thử người lạ trong tuần sau khi gộp; đọc số cùng phiên nghiệm thu."
 		},
 		{
 			"ho_so": "them-buoc-bao-dung",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người lập và theo dõi kế hoạch có biết vì sao không thêm được bước khi danh sách phòng ban tải lỗi, và có tin con số việc quá hạn trên Tổng quan khớp với danh sách bước của mình không?",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người, cộng sự kiện api_error (route, status_code) có thật trong docs/telemetry.md để biết ngày danh sách phòng ban tải lỗi, đối chiếu báo cáo người dùng.",
-			"can_cu": "AC-3, AC-4 (vùng lỗi kèm thử lại thay ô chọn trống) và AC-6, AC-7, AC-9 (số quá hạn trên Tổng quan đếm theo ngày Việt Nam như máy chủ)."
+			"can_cu": "AC-3, AC-4 (vùng lỗi kèm thử lại thay ô chọn trống) và AC-6, AC-7, AC-9 (số quá hạn trên Tổng quan đếm theo ngày Việt Nam như máy chủ).",
+			"cu": null
 		},
 		{
 			"ho_so": "them-buoc-bao-dung",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong phiên nghiệm thu với ít nhất 3 người quản lý kế hoạch, cả 3 xác nhận số «việc quá hạn» ở Tổng quan khớp danh sách bước của mình, và trong 2 tuần sau khi bật có 0 báo cáo «form thêm bước trống không biết vì sao» kể cả ngày có sự kiện api_error route /trpc/onboarding.listDepartments.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người, cộng sự kiện api_error (route, status_code) có thật trong docs/telemetry.md để biết ngày danh sách phòng ban tải lỗi, đối chiếu báo cáo người dùng.",
-			"can_cu": "AC-3, AC-4 (vùng lỗi kèm thử lại thay ô chọn trống) và AC-6, AC-7, AC-9 (số quá hạn trên Tổng quan đếm theo ngày Việt Nam như máy chủ)."
+			"can_cu": "AC-3, AC-4 (vùng lỗi kèm thử lại thay ô chọn trống) và AC-6, AC-7, AC-9 (số quá hạn trên Tổng quan đếm theo ngày Việt Nam như máy chủ).",
+			"cu": null
 		},
 		{
 			"ho_so": "them-buoc-bao-dung",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có ít nhất 1 người chỉ ra số việc quá hạn ở Tổng quan lệch danh sách bước, hoặc có báo cáo form thêm bước trống không lý do trong ngày có api_error route /trpc/onboarding.listDepartments.",
+			"de_xuat": true,
 			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người, cộng sự kiện api_error (route, status_code) có thật trong docs/telemetry.md để biết ngày danh sách phòng ban tải lỗi, đối chiếu báo cáo người dùng.",
-			"can_cu": "AC-3, AC-4 (vùng lỗi kèm thử lại thay ô chọn trống) và AC-6, AC-7, AC-9 (số quá hạn trên Tổng quan đếm theo ngày Việt Nam như máy chủ)."
+			"can_cu": "AC-3, AC-4 (vùng lỗi kèm thử lại thay ô chọn trống) và AC-6, AC-7, AC-9 (số quá hạn trên Tổng quan đếm theo ngày Việt Nam như máy chủ).",
+			"cu": null
 		},
 		{
 			"ho_so": "them-buoc-bao-dung",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người, cộng sự kiện api_error (route, status_code) có thật trong docs/telemetry.md để biết ngày danh sách phòng ban tải lỗi, đối chiếu báo cáo người dùng.",
-			"can_cu": "AC-3, AC-4 (vùng lỗi kèm thử lại thay ô chọn trống) và AC-6, AC-7, AC-9 (số quá hạn trên Tổng quan đếm theo ngày Việt Nam như máy chủ)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "thong-bao-mot-nguon-nhieu-kenh",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)» đã qua hay không ra ngày",
+			"cu": "2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)"
 		},
 		{
 			"ho_so": "tieu-diem-sau-hop-xoa-tin-hieu",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Người dùng chỉ bằng bàn phím có huỷ hay gặp lỗi khi xoá tín hiệu rồi làm tiếp ngay ở đúng dòng mà không phải dò lại từ đầu trang không?",
+			"de_xuat": true,
+			"nguon_so": "Quan sát trong phiên nghiệm thu có số người, theo đúng cách đo AC-6; docs/telemetry.md và schema.prisma không có gì ghi tiêu điểm hay thao tác bàn phím.",
+			"can_cu": "AC-1 đến AC-3 hứa tiêu điểm về nút ⋮ của dòng ở mọi đường đóng hộp, AC-6 đo bằng bàn phím ở 375 và 1280px trên trang chạy thật.",
+			"cu": "đã đạt «Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?"
+		},
+		{
+			"ho_so": "tieu-diem-sau-hop-xoa-tin-hieu",
+			"nhan": "Kết quả nào là SỐNG",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong một phiên nghiệm thu với ít nhất 2 người dùng thật chỉ dùng bàn phím trên production ở 375 và 1280px, mọi lần bấm «Giữ lại», Esc hay xoá hỏng đều để tiêu điểm ở nút ⋮ của đúng dòng và không ai phải bấm Tab từ đầu trang để quay lại.",
+			"de_xuat": true,
+			"nguon_so": "Quan sát trong phiên nghiệm thu có số người, theo đúng cách đo AC-6; docs/telemetry.md và schema.prisma không có gì ghi tiêu điểm hay thao tác bàn phím.",
+			"can_cu": "AC-1 đến AC-3 hứa tiêu điểm về nút ⋮ của dòng ở mọi đường đóng hộp, AC-6 đo bằng bàn phím ở 375 và 1280px trên trang chạy thật.",
+			"cu": "Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)"
+		},
+		{
+			"ho_so": "tieu-diem-sau-hop-xoa-tin-hieu",
+			"nhan": "Kết quả nào là CHẾT",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong phiên nghiệm thu có ít nhất một lần tiêu điểm rơi về đầu trang hay sang dòng khác sau «Giữ lại», Esc hay xoá hỏng, hoặc người thử phải dò lại để tìm dòng vừa thao tác.",
+			"de_xuat": true,
+			"nguon_so": "Quan sát trong phiên nghiệm thu có số người, theo đúng cách đo AC-6; docs/telemetry.md và schema.prisma không có gì ghi tiêu điểm hay thao tác bàn phím.",
+			"can_cu": "AC-1 đến AC-3 hứa tiêu điểm về nút ⋮ của dòng ở mọi đường đóng hộp, AC-6 đo bằng bàn phím ở 375 và 1280px trên trang chạy thật.",
+			"cu": "chưa đạt «Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox"
+		},
+		{
+			"ho_so": "tieu-diem-sau-hop-xoa-tin-hieu",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)» đã qua hay không ra ngày",
+			"cu": "2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)"
 		},
 		{
 			"ho_so": "trang-lo-trinh-mo-hinh-hien-thi",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Người xem trang Lộ trình trong CRM có thấy cùng một bức tranh mốc, việc chưa hẹn mốc và tên việc như LO-TRINH.html, đủ để không phải mở tệp kia ra đối chiếu không?",
+			"de_xuat": true,
 			"nguon_so": "Đối chiếu tay hoặc bằng ca đối chiếu của AC-5 giữa trang production và khối dữ liệu của LO-TRINH.html sau mỗi lần vẽ lại, cộng quan sát trong phiên nghiệm thu với N=3 người.",
-			"can_cu": "Context («để trang CRM và LO-TRINH.html không bao giờ nói hai điều khác nhau về cùng một lộ trình») và AC-2, AC-5 (dòng số và tập hiển thị khớp khối thật, không hộp «Trang có thể thiếu một phần»)."
+			"can_cu": "Context («để trang CRM và LO-TRINH.html không bao giờ nói hai điều khác nhau về cùng một lộ trình») và AC-2, AC-5 (dòng số và tập hiển thị khớp khối thật, không hộp «Trang có thể thiếu một phần»).",
+			"cu": null
 		},
 		{
 			"ho_so": "trang-lo-trinh-mo-hinh-hien-thi",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong 2 tuần sau khi bật, mỗi lần LO-TRINH.html được vẽ lại sau một lần gộp, đối chiếu kiểu xem «Mốc» trên production cho 0 lệch về tập mốc, việc dưới mốc, tên hiển thị và nhóm «Chưa hẹn mốc», và ít nhất 2 trên 3 người xem trong phiên nghiệm thu trả lời đúng «mốc kế còn bao nhiêu việc» chỉ từ trang CRM.",
+			"de_xuat": true,
 			"nguon_so": "Đối chiếu tay hoặc bằng ca đối chiếu của AC-5 giữa trang production và khối dữ liệu của LO-TRINH.html sau mỗi lần vẽ lại, cộng quan sát trong phiên nghiệm thu với N=3 người.",
-			"can_cu": "Context («để trang CRM và LO-TRINH.html không bao giờ nói hai điều khác nhau về cùng một lộ trình») và AC-2, AC-5 (dòng số và tập hiển thị khớp khối thật, không hộp «Trang có thể thiếu một phần»)."
+			"can_cu": "Context («để trang CRM và LO-TRINH.html không bao giờ nói hai điều khác nhau về cùng một lộ trình») và AC-2, AC-5 (dòng số và tập hiển thị khớp khối thật, không hộp «Trang có thể thiếu một phần»).",
+			"cu": null
 		},
 		{
 			"ho_so": "trang-lo-trinh-mo-hinh-hien-thi",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Có ít nhất 1 lần trang CRM và LO-TRINH.html nói khác nhau về mốc hay việc của cùng một lộ trình, hoặc cờ «khối chưa mang mô hình hiển thị» hay hộp «Trang có thể thiếu một phần» còn hiện trên production.",
+			"de_xuat": true,
 			"nguon_so": "Đối chiếu tay hoặc bằng ca đối chiếu của AC-5 giữa trang production và khối dữ liệu của LO-TRINH.html sau mỗi lần vẽ lại, cộng quan sát trong phiên nghiệm thu với N=3 người.",
-			"can_cu": "Context («để trang CRM và LO-TRINH.html không bao giờ nói hai điều khác nhau về cùng một lộ trình») và AC-2, AC-5 (dòng số và tập hiển thị khớp khối thật, không hộp «Trang có thể thiếu một phần»)."
+			"can_cu": "Context («để trang CRM và LO-TRINH.html không bao giờ nói hai điều khác nhau về cùng một lộ trình») và AC-2, AC-5 (dòng số và tập hiển thị khớp khối thật, không hộp «Trang có thể thiếu một phần»).",
+			"cu": null
 		},
 		{
 			"ho_so": "trang-lo-trinh-mo-hinh-hien-thi",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Đối chiếu tay hoặc bằng ca đối chiếu của AC-5 giữa trang production và khối dữ liệu của LO-TRINH.html sau mỗi lần vẽ lại, cộng quan sát trong phiên nghiệm thu với N=3 người.",
-			"can_cu": "Context («để trang CRM và LO-TRINH.html không bao giờ nói hai điều khác nhau về cùng một lộ trình») và AC-2, AC-5 (dòng số và tập hiển thị khớp khối thật, không hộp «Trang có thể thiếu một phần»)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "trang-thai-tin-hieu-song",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Người gửi tín hiệu có biết trong ngày khi tín hiệu của mình đổi chỗ và mở thông báo ra xem không?",
+			"de_xuat": true,
+			"nguon_so": "Bảng ThongBao với nguồn tin-hieu-doi-cho (taoLuc, docLuc, moLuc, nguoiNhanId) so với BanChupLoTrinh (sha, commitLuc), đọc qua lệnh đo của AC-8; docs/telemetry.md không có sự kiện cho thông báo.",
+			"can_cu": "AC-3 hứa mỗi lần đổi chỗ sinh đúng một thông báo cho người gửi, AC-8 hứa lệnh đo in độ trễ từng lần và cờ lần thiếu hay trễ quá một ngày.",
+			"cu": "đã đạt «Một tháng sau khi giao, người gửi nhận thông báo cho mọi lần tín hiệu đổi chỗ trong vòng một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?"
+		},
+		{
+			"ho_so": "trang-thai-tin-hieu-song",
+			"nhan": "Kết quả nào là SỐNG",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, mọi lần tín hiệu có người nhận hợp lệ đổi chỗ trên nhánh chính đều có thông báo trong vòng một ngày tính từ giờ commit, và ít nhất một nửa số thông báo đổi chỗ được người nhận mở.",
+			"de_xuat": true,
+			"nguon_so": "Bảng ThongBao với nguồn tin-hieu-doi-cho (taoLuc, docLuc, moLuc, nguoiNhanId) so với BanChupLoTrinh (sha, commitLuc), đọc qua lệnh đo của AC-8; docs/telemetry.md không có sự kiện cho thông báo.",
+			"can_cu": "AC-3 hứa mỗi lần đổi chỗ sinh đúng một thông báo cho người gửi, AC-8 hứa lệnh đo in độ trễ từng lần và cờ lần thiếu hay trễ quá một ngày.",
+			"cu": "Một tháng sau khi giao, người gửi nhận thông báo cho mọi lần tín hiệu đổi chỗ trong vòng một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)"
+		},
+		{
+			"ho_so": "trang-thai-tin-hieu-song",
+			"nhan": "Kết quả nào là CHẾT",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, có lần đổi chỗ thiếu thông báo hay trễ quá một ngày, hoặc dưới một phần tư số thông báo đổi chỗ được mở.",
+			"de_xuat": true,
+			"nguon_so": "Bảng ThongBao với nguồn tin-hieu-doi-cho (taoLuc, docLuc, moLuc, nguoiNhanId) so với BanChupLoTrinh (sha, commitLuc), đọc qua lệnh đo của AC-8; docs/telemetry.md không có sự kiện cho thông báo.",
+			"can_cu": "AC-3 hứa mỗi lần đổi chỗ sinh đúng một thông báo cho người gửi, AC-8 hứa lệnh đo in độ trễ từng lần và cờ lần thiếu hay trễ quá một ngày.",
+			"cu": "chưa đạt «Một tháng sau khi giao, người gửi nhận thông báo cho mọi lần tín hiệu đổi chỗ trong vòng một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox"
+		},
+		{
+			"ho_so": "trang-thai-tin-hieu-song",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)» đã qua hay không ra ngày",
+			"cu": "2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)"
 		},
 		{
 			"ho_so": "truong-chuan-o-cai-dat",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «phiên nghiệm thu đầu tiên sau khi DA15 lên production, gộp chung buổi đọc số của gói truong-hop-dong sau DA17, DA18.» đã qua hay không ra ngày",
+			"cu": "phiên nghiệm thu đầu tiên sau khi DA15 lên production, gộp chung buổi đọc số của gói truong-hop-dong sau DA17, DA18."
 		},
 		{
 			"ho_so": "truong-mot-cach-cu-xu",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «phiên nghiệm thu đầu tiên sau khi DA14 lên production, gộp chung buổi đọc số của gói truong-hop-dong sau DA17, DA18.» đã qua hay không ra ngày",
+			"cu": "phiên nghiệm thu đầu tiên sau khi DA14 lên production, gộp chung buổi đọc số của gói truong-hop-dong sau DA17, DA18."
 		},
 		{
 			"ho_so": "truong-tep",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Nhân viên quan hệ đối tác có thật sự gắn hợp đồng vào bản ghi CRM và dùng bộ lọc «Chưa có tệp» để tìm bản ghi còn thiếu hợp đồng không?",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng FieldFile (đếm tệp, bản ghi, người tải) và bảng trường theo kiểu FILE trên production, cộng quan sát trong phiên nghiệm thu với N=3 người; telemetry không có sự kiện cho trường Tệp.",
-			"can_cu": "Câu giao DA19 trong opportunity.md («gắn tệp hợp đồng… và lọc được bản ghi nào chưa có») cùng AC-2 (mỗi tệp thành một hàng FieldFile) và AC-5, AC-10 (lọc some, none và «Chưa có tệp (n)»)."
+			"can_cu": "Câu giao DA19 trong opportunity.md («gắn tệp hợp đồng… và lọc được bản ghi nào chưa có») cùng AC-2 (mỗi tệp thành một hàng FieldFile) và AC-5, AC-10 (lọc some, none và «Chưa có tệp (n)»).",
+			"cu": null
 		},
 		{
 			"ho_so": "truong-tep",
 			"nhan": "Kết quả nào là SỐNG",
+			"loai": "may-soan",
 			"gia_tri": "Trong 2 tuần sau khi quản trị tạo một trường kiểu Tệp, truy vấn bảng FieldFile cho thấy ít nhất 10 tệp gắn vào ít nhất 5 bản ghi thoả thuận, công ty hay cá nhân khác nhau do ít nhất 2 người tải lên, và trong phiên nghiệm thu ít nhất 2 trên 3 người tự lọc ra được bản ghi «Chưa có tệp» mà không cần chỉ.",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng FieldFile (đếm tệp, bản ghi, người tải) và bảng trường theo kiểu FILE trên production, cộng quan sát trong phiên nghiệm thu với N=3 người; telemetry không có sự kiện cho trường Tệp.",
-			"can_cu": "Câu giao DA19 trong opportunity.md («gắn tệp hợp đồng… và lọc được bản ghi nào chưa có») cùng AC-2 (mỗi tệp thành một hàng FieldFile) và AC-5, AC-10 (lọc some, none và «Chưa có tệp (n)»)."
+			"can_cu": "Câu giao DA19 trong opportunity.md («gắn tệp hợp đồng… và lọc được bản ghi nào chưa có») cùng AC-2 (mỗi tệp thành một hàng FieldFile) và AC-5, AC-10 (lọc some, none và «Chưa có tệp (n)»).",
+			"cu": null
 		},
 		{
 			"ho_so": "truong-tep",
 			"nhan": "Kết quả nào là CHẾT",
+			"loai": "may-soan",
 			"gia_tri": "Hết timebox mà chưa quản trị nào tạo trường kiểu Tệp, hoặc bảng FieldFile có dưới 3 tệp hay chỉ một người tải, hoặc từ 2 trên 3 người trở lên trong phiên nghiệm thu không tìm được bộ lọc «Chưa có tệp».",
+			"de_xuat": true,
 			"nguon_so": "Truy vấn bảng FieldFile (đếm tệp, bản ghi, người tải) và bảng trường theo kiểu FILE trên production, cộng quan sát trong phiên nghiệm thu với N=3 người; telemetry không có sự kiện cho trường Tệp.",
-			"can_cu": "Câu giao DA19 trong opportunity.md («gắn tệp hợp đồng… và lọc được bản ghi nào chưa có») cùng AC-2 (mỗi tệp thành một hàng FieldFile) và AC-5, AC-10 (lọc some, none và «Chưa có tệp (n)»)."
+			"can_cu": "Câu giao DA19 trong opportunity.md («gắn tệp hợp đồng… và lọc được bản ghi nào chưa có») cùng AC-2 (mỗi tệp thành một hàng FieldFile) và AC-5, AC-10 (lọc some, none và «Chưa có tệp (n)»).",
+			"cu": null
 		},
 		{
 			"ho_so": "truong-tep",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Truy vấn bảng FieldFile (đếm tệp, bản ghi, người tải) và bảng trường theo kiểu FILE trên production, cộng quan sát trong phiên nghiệm thu với N=3 người; telemetry không có sự kiện cho trường Tệp.",
-			"can_cu": "Câu giao DA19 trong opportunity.md («gắn tệp hợp đồng… và lọc được bản ghi nào chưa có») cùng AC-2 (mỗi tệp thành một hàng FieldFile) và AC-5, AC-10 (lọc some, none và «Chưa có tệp (n)»)."
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "va-lo-ro-vai-chi-okr",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Sau khi vá, người vai «chỉ OKR» có còn bị giao việc kế hoạch hay nhận tên đối tác trong tin nhắc buổi sáng, trong khi vẫn nhận nhắc về KR của mình không?",
+			"de_xuat": true,
+			"nguon_so": "Bảng member (role okr), OnboardingStep (assigneeId, completedAt), OnboardingPlan (ownerId, closedAt), OnboardingWatch (userId) và AgentTask kind nhac-ke-hoach (payload.daGui), đọc bằng _acceptance/va-lo-ro-vai-chi-okr/rang/ro-vai-chi-okr.mjs; docs/telemetry.md không có sự kiện theo vai.",
+			"can_cu": "AC-10 hứa thước đếm đúng vật đang mở của người vai okr, AC-7 và AC-8 hứa tin nhắc tới họ có tên KR mà không có mục kế hoạch hay tên công ty.",
+			"cu": "đã đạt «Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»» chưa?"
+		},
+		{
+			"ho_so": "va-lo-ro-vai-chi-okr",
+			"nhan": "Kết quả nào là SỐNG",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, thước ro-vai-chi-okr chạy trên production mỗi tuần đều ra 0 bước, kế hoạch hay lượt theo dõi đang mở thuộc người vai «chỉ OKR», không tin nhắc nào gửi tới họ có mục kế hoạch, và mỗi người vai đó có việc OKR đến hạn vẫn nhận ít nhất một tin nhắc.",
+			"de_xuat": true,
+			"nguon_so": "Bảng member (role okr), OnboardingStep (assigneeId, completedAt), OnboardingPlan (ownerId, closedAt), OnboardingWatch (userId) và AgentTask kind nhac-ke-hoach (payload.daGui), đọc bằng _acceptance/va-lo-ro-vai-chi-okr/rang/ro-vai-chi-okr.mjs; docs/telemetry.md không có sự kiện theo vai.",
+			"can_cu": "AC-10 hứa thước đếm đúng vật đang mở của người vai okr, AC-7 và AC-8 hứa tin nhắc tới họ có tên KR mà không có mục kế hoạch hay tên công ty.",
+			"cu": "Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»"
+		},
+		{
+			"ho_so": "va-lo-ro-vai-chi-okr",
+			"nhan": "Kết quả nào là CHẾT",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong 2 tuần sau khi bật, thước ra từ 1 vật đang mở trở lên thuộc người vai «chỉ OKR», hoặc có tin nhắc tới họ mang mục kế hoạch hay tên công ty, hoặc họ thôi nhận nhắc về KR.",
+			"de_xuat": true,
+			"nguon_so": "Bảng member (role okr), OnboardingStep (assigneeId, completedAt), OnboardingPlan (ownerId, closedAt), OnboardingWatch (userId) và AgentTask kind nhac-ke-hoach (payload.daGui), đọc bằng _acceptance/va-lo-ro-vai-chi-okr/rang/ro-vai-chi-okr.mjs; docs/telemetry.md không có sự kiện theo vai.",
+			"can_cu": "AC-10 hứa thước đếm đúng vật đang mở của người vai okr, AC-7 và AC-8 hứa tin nhắc tới họ có tên KR mà không có mục kế hoạch hay tên công ty.",
+			"cu": "chưa đạt «Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»» khi hết timebox"
+		},
+		{
+			"ho_so": "va-lo-ro-vai-chi-okr",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «trước 14/10/2026 — ngày mọi phòng ban bắt đầu dùng thật.» đã qua hay không ra ngày",
+			"cu": "trước 14/10/2026 — ngày mọi phòng ban bắt đầu dùng thật."
+		},
+		{
+			"ho_so": "ve-khung-muc-tieu-dung-kr",
+			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trưởng đơn vị đi ‹ › qua KR của nhiều mục tiêu trong buổi Họp tuần có quay về đúng mục tiêu của KR đang xem mà không phải đóng ngăn và mở lại không?",
+			"de_xuat": true,
+			"nguon_so": "Quan sát trong phiên nghiệm thu có số người ở buổi Họp tuần; okrCheckInSession với entry hop-tuan chỉ cho biết có dùng lối Họp tuần, còn docs/telemetry.md và schema.prisma không ghi lần bấm nút về hay khung đang mở.",
+			"can_cu": "AC-1 và AC-3 hứa nút quay lại và liên kết tên mục tiêu mở khung mục tiêu của KR đang xem sau mỗi lần ‹ ›, không chồng thêm khung.",
+			"cu": "đã đạt «Mở ngăn KR từ bảng Họp tuần, đi › sang KR của mục tiêu khác, bấm «Về khung mục tiêu»: khung mở đúng mục tiêu của KR đang xem» chưa?"
+		},
+		{
+			"ho_so": "ve-khung-muc-tieu-dung-kr",
+			"nhan": "Kết quả nào là SỐNG",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong buổi Họp tuần thật đầu tiên sau khi bật, quan sát ít nhất 2 trưởng đơn vị đi ‹ › qua KR của từ hai mục tiêu trở lên, mọi lần bấm «Về khung mục tiêu» hay tên mục tiêu ở dòng phụ đề đều mở đúng mục tiêu và không ai phải đóng ngăn mở lại.",
+			"de_xuat": true,
+			"nguon_so": "Quan sát trong phiên nghiệm thu có số người ở buổi Họp tuần; okrCheckInSession với entry hop-tuan chỉ cho biết có dùng lối Họp tuần, còn docs/telemetry.md và schema.prisma không ghi lần bấm nút về hay khung đang mở.",
+			"can_cu": "AC-1 và AC-3 hứa nút quay lại và liên kết tên mục tiêu mở khung mục tiêu của KR đang xem sau mỗi lần ‹ ›, không chồng thêm khung.",
+			"cu": "Mở ngăn KR từ bảng Họp tuần, đi › sang KR của mục tiêu khác, bấm «Về khung mục tiêu»: khung mở đúng mục tiêu của KR đang xem"
+		},
+		{
+			"ho_so": "ve-khung-muc-tieu-dung-kr",
+			"nhan": "Kết quả nào là CHẾT",
+			"loai": "thay-de-xuat-kit",
+			"gia_tri": "Trong buổi Họp tuần quan sát có ít nhất một lần nút về hay tên mục tiêu mở nhầm mục tiêu hoặc chồng thêm khung, hoặc người chủ trì phải đóng ngăn để tìm lại mục tiêu.",
+			"de_xuat": true,
+			"nguon_so": "Quan sát trong phiên nghiệm thu có số người ở buổi Họp tuần; okrCheckInSession với entry hop-tuan chỉ cho biết có dùng lối Họp tuần, còn docs/telemetry.md và schema.prisma không ghi lần bấm nút về hay khung đang mở.",
+			"can_cu": "AC-1 và AC-3 hứa nút quay lại và liên kết tên mục tiêu mở khung mục tiêu của KR đang xem sau mỗi lần ‹ ›, không chồng thêm khung.",
+			"cu": "chưa đạt «Mở ngăn KR từ bảng Họp tuần, đi › sang KR của mục tiêu khác, bấm «Về khung mục tiêu»: khung mở đúng mục tiêu của KR đang xem» khi hết timebox"
 		},
 		{
 			"ho_so": "ve-khung-muc-tieu-dung-kr",
 			"nhan": "Timebox",
+			"loai": "may-soan",
 			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
-			"nguon_so": "Lịch đọc số chung của đợt dọn dẹp",
-			"can_cu": "B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp"
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Ô trống",
+			"cu": null
 		},
 		{
 			"ho_so": "viec-rieng-chi-nguoi-trong-cuoc",
-			"nhan": null,
-			"loai": "chi-chot"
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «phiên nghiệm thu đầu tiên sau khi bản sửa lên production, gộp chung buổi đọc số ≈30/10 của làn M5.» đã qua hay không ra ngày",
+			"cu": "phiên nghiệm thu đầu tiên sau khi bản sửa lên production, gộp chung buổi đọc số ≈30/10 của làn M5."
 		},
 		{
 			"ho_so": "zalo-gui-hong-ghi-ly-do",
 			"nhan": "Câu hỏi phép đo trả lời",
+			"loai": "may-soan",
 			"gia_tri": "Sau khi bật, mỗi lần Zalo gửi hỏng hay tin vào bị bỏ qua, người vận hành có đọc được lý do từ đúng một dòng nhật ký để nối lại cho người dùng, và người hỏi qua Zalo có nhận lại được trả lời không?",
+			"de_xuat": true,
 			"nguon_so": "Nhật ký production qua vercel logs -p crm-onehub-agent (dòng [zalo]) và thuộc tính zalo_questions theo kết quả (có khoá gui-hong) của sự kiện install_daily trong docs/telemetry.md.",
-			"can_cu": "Câu SỐNG và CHẾT sẵn có trong opportunity.md (nhãn chưa đúng khuôn) cùng AC-1, AC-3 (dòng [zalo] mang lý do của Zalo) và AC-4 (tin bị bỏ qua có đúng một dòng ly_do)."
+			"can_cu": "Câu SỐNG và CHẾT sẵn có trong opportunity.md (nhãn chưa đúng khuôn) cùng AC-1, AC-3 (dòng [zalo] mang lý do của Zalo) và AC-4 (tin bị bỏ qua có đúng một dòng ly_do).",
+			"cu": null
 		},
 		{
 			"ho_so": "zalo-gui-hong-ghi-ly-do",
 			"nhan": "Kết quả nào là SỐNG",
-			"gia_tri": "Mọi dòng [zalo] sendMessage hỏng trên nhật ký production của crm-onehub-agent sau khi gộp đều mang mã HTTP cùng description hay error_code của Zalo, và khoá gui-hong của zalo_questions trong install_daily chiếm không quá 10% số câu hỏi Zalo của mỗi tuần.",
-			"nguon_so": "Nhật ký production qua vercel logs -p crm-onehub-agent (dòng [zalo]) và thuộc tính zalo_questions theo kết quả (có khoá gui-hong) của sự kiện install_daily trong docs/telemetry.md.",
-			"can_cu": "Câu SỐNG và CHẾT sẵn có trong opportunity.md (nhãn chưa đúng khuôn) cùng AC-1, AC-3 (dòng [zalo] mang lý do của Zalo) và AC-4 (tin bị bỏ qua có đúng một dòng ly_do)."
+			"loai": "chuan-hoa",
+			"gia_tri": "lần «Gửi thử» kế tiếp sau khi gộp in một dòng nhật ký có mã HTTP và `description`/`error_code` của Zalo; mỗi tin webhook không sinh phiên in đúng một dòng mã nhánh; sự kiện `webhook-test` không còn ghi «sai khuon».",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "lần «Gửi thử» kế tiếp sau khi gộp in một dòng nhật ký có mã HTTP và `description`/`error_code` của Zalo; mỗi tin webhook không sinh phiên in đúng một dòng mã nhánh; sự kiện `webhook-test` không còn ghi «sai khuon»."
 		},
 		{
 			"ho_so": "zalo-gui-hong-ghi-ly-do",
 			"nhan": "Kết quả nào là CHẾT",
-			"gia_tri": "Còn ít nhất 1 dòng sendMessage hỏng trên nhật ký production sau khi gộp mà không có lý do của Zalo, hoặc khoá gui-hong của zalo_questions vượt 10% câu hỏi trong một tuần mà nhật ký không chỉ ra được vì sao.",
-			"nguon_so": "Nhật ký production qua vercel logs -p crm-onehub-agent (dòng [zalo]) và thuộc tính zalo_questions theo kết quả (có khoá gui-hong) của sự kiện install_daily trong docs/telemetry.md.",
-			"can_cu": "Câu SỐNG và CHẾT sẵn có trong opportunity.md (nhãn chưa đúng khuôn) cùng AC-1, AC-3 (dòng [zalo] mang lý do của Zalo) và AC-4 (tin bị bỏ qua có đúng một dòng ly_do)."
+			"loai": "chuan-hoa",
+			"gia_tri": "sau khi gộp còn một lần `sendMessage` hỏng mà nhật ký vẫn không có lý do của Zalo.",
+			"de_xuat": false,
+			"nguon_so": "chữ cũ của hồ sơ",
+			"can_cu": "Chuẩn hoá khuôn, giữ nguyên chữ và nhãn",
+			"cu": "sau khi gộp còn một lần `sendMessage` hỏng mà nhật ký vẫn không có lý do của Zalo."
+		},
+		{
+			"ho_so": "zalo-gui-hong-ghi-ly-do",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4: timebox cũ «hàng sửa nóng, trong ngày 08–09/10.» đã qua hay không ra ngày",
+			"cu": "hàng sửa nóng, trong ngày 08–09/10."
 		}
 	]
 }

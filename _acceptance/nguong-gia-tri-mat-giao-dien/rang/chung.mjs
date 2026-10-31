@@ -74,3 +74,44 @@ export function tepGoc(tep) {
 		encoding: "utf8",
 	});
 }
+
+const BIET_DANH = {
+	SỐNG: "Kết quả nào là SỐNG",
+	CHẾT: "Kết quả nào là CHẾT",
+};
+
+export function mucNguong(text) {
+	const L = text.split("\n");
+	const i = L.findIndex((l) => l.startsWith("## Ngưỡng"));
+	if (i < 0) return null;
+	let j = L.findIndex((l, k) => k > i && l.startsWith("## "));
+	if (j < 0) j = L.length;
+	return { i, j, muc: L.slice(i + 1, j) };
+}
+
+export function nhanCuaDong(l, nhanDs) {
+	const m = /^- (\[đề xuất\] )?([^:]+?):\s?(.*)$/.exec(l);
+	if (!m) return null;
+	const lb = nhanDs.includes(m[2]) ? m[2] : BIET_DANH[m[2]];
+	if (!lb) return null;
+	const tienTo = Boolean(m[1]) || m[3].startsWith(DE_XUAT);
+	return { nhan: lb, tienTo, dau: m[3].replace(DE_XUAT, "").trim() };
+}
+
+export function docRong(text, nhanDs) {
+	const ra = new Map();
+	const m = mucNguong(text);
+	if (!m) return ra;
+	for (let k = 0; k < m.muc.length; k += 1) {
+		const o = nhanCuaDong(m.muc[k], nhanDs);
+		if (!o) continue;
+		const phan = o.dau ? [o.dau] : [];
+		while (k + 1 < m.muc.length && /^\s+\S/.test(m.muc[k + 1])) {
+			k += 1;
+			phan.push(m.muc[k].trim().replace(/^- /, ""));
+		}
+		const gia = phan.join(" ").trim();
+		if (gia && !/^…$/.test(gia)) ra.set(o.nhan, { gia, tienTo: o.tienTo });
+	}
+	return ra;
+}

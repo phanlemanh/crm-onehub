@@ -8,49 +8,29 @@ import {
 	goiKit,
 	khongDo,
 	napNguong,
-	oNguong,
+	docRong,
 	tepGoc,
 } from "./chung.mjs";
+import { daChot, dongChot } from "./mien.mjs";
 
-const { n, nhan } = napNguong(goiKit());
+const { nhan } = napNguong(goiKit());
 
-export function dongChot(soText) {
-	const ra = [];
-	for (const l of soText.split("\n")) {
-		if (!l.trim()) continue;
-		let d;
-		try {
-			d = JSON.parse(l);
-		} catch {
-			continue;
-		}
-		if (d.chot_nguong && d.decided_by?.trim()) ra.push(d);
-	}
-	return ra;
-}
-
-export function daChot(chot, hs) {
-	return chot.some(
-		(d) =>
-			d.chot_nguong.ho_so === "*" || (d.chot_nguong.ho_so ?? []).includes(hs),
-	);
-}
-
-export function boTienTo(cu, moi, nhanDs) {
+export function boTienTo(cu, moi, dong, nhanDs) {
 	const bo = [];
 	for (const lb of nhanDs) {
-		const a = cu.get(lb) ?? "";
-		const b = moi.get(lb) ?? "";
-		const coTruoc = a.startsWith(DE_XUAT);
-		if (b && !b.startsWith(DE_XUAT) && (coTruoc || !a || /^…$/.test(a.trim())))
-			bo.push(lb);
+		const a = cu.get(lb);
+		const b = moi.get(lb);
+		const r = dong.find((x) => x.nhan === lb);
+		const phaiNhan = Boolean(a?.tienTo) || Boolean(r?.de_xuat);
+		if (b && phaiNhan && !b.tienTo) bo.push(lb);
 	}
 	return bo;
 }
 
 const dc = boTienTo(
-	new Map([["Timebox", "[đề xuất] 2026-11-14"]]),
-	new Map([["Timebox", "2026-11-14"]]),
+	new Map([["Timebox", { gia: "2026-11-14", tienTo: true }]]),
+	new Map([["Timebox", { gia: "2026-11-14", tienTo: false }]]),
+	[],
 	["Timebox"],
 );
 if (dc.length !== 1 || daChot([], "x"))
@@ -65,8 +45,9 @@ let soChot = 0;
 for (const hs of [...new Set(BANG.de_xuat.map((r) => r.ho_so))].sort()) {
 	const tep = `_acceptance/${hs}/opportunity.md`;
 	const bo = boTienTo(
-		oNguong(n, tepGoc(tep)),
-		oNguong(n, readFileSync(join(GOC, tep), "utf8")),
+		docRong(tepGoc(tep), nhan),
+		docRong(readFileSync(join(GOC, tep), "utf8"), nhan),
+		BANG.de_xuat.filter((r) => r.ho_so === hs && r.nhan),
 		nhan,
 	);
 	if (!bo.length) continue;

@@ -3688,6 +3688,7 @@ executors:
     f39_doi_chieu: bun _acceptance/nguong-gia-tri-mat-giao-dien/rang/doi-chieu.mjs
     f39_chot: bun _acceptance/nguong-gia-tri-mat-giao-dien/rang/chot.mjs
     f39_ghim: bun _acceptance/nguong-gia-tri-mat-giao-dien/rang/ghim.mjs
+    f39_timebox: bun _acceptance/nguong-gia-tri-mat-giao-dien/rang/timebox.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

@@ -1,7 +1,8 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { GOC, goiKit, khongDo, napNguong } from "./chung.mjs";
+import { GOC, goiKit, HS, khongDo, napNguong } from "./chung.mjs";
+import { dongMien } from "./mien.mjs";
 
 const ag = goiKit();
 const { n, tpl } = napNguong(ag);
@@ -52,7 +53,16 @@ const matNguoi = (slug) => {
 	const s = /^surfaces:\s*(.*)$/m.exec(readFileSync(tep, "utf8"))?.[1] ?? "";
 	return n.coNguoiDungCuoi(s);
 };
-const conLai = [...new Set(co)].filter(matNguoi).sort();
+const ngoai = dongMien(
+	readFileSync(join(GOC, HS, "decisions.jsonl"), "utf8"),
+	"ngoai_ac1",
+);
+for (const s of [...ngoai].sort())
+	console.log(`NGOAI AC-1 ${s} (dong so co ten nguoi)`);
+const conLai = [...new Set(co)]
+	.filter(matNguoi)
+	.filter((s) => !ngoai.has(s))
+	.sort();
 for (const s of conLai) console.log(`CON CO ${s}`);
 console.log(
 	`start-scan: ${co.length} ho so mang co nguong-chua-chot, ${conLai.length} co mat nguoi dung cuoi`,

@@ -12,7 +12,9 @@ Kit bật cờ khi `thresholdState` khác `chot`, tức cả khi còn ô trống
 | Trống cả bốn ô | 29 | máy soạn bốn ô |
 | Thiếu một phần | 9 | máy soạn ô thiếu |
 | Đủ chữ, còn nhãn | 13 | chỉ chờ người chốt |
-| Viết sai khuôn (nhãn «SỐNG:», dòng thụt, nhãn sau `[đề xuất]`, thiếu cả mục) | 9 (nằm trong các nhóm trên) | gộp lại chữ cũ đúng khuôn |
+| Viết sai khuôn (nhãn «SỐNG:», dòng thụt, nhãn sau `[đề xuất]`, thiếu cả mục) | 8 (nằm trong các nhóm trên) | chuẩn hoá cơ học: chép nguyên văn, giữ nhãn cũ |
+| Ô do kit tự sinh «đã đạt «X» chưa?» (X là tiêu chí dựng) | 8 | máy soạn lại thành ngưỡng giá trị, vẫn `[đề xuất]` |
+| Timebox đã qua (6) hay không ra ngày (11) | 17 | Hỏi-4: đổi sang mốc B7 |
 
 ## Ba điều giám sát dặn kiểm
 
@@ -33,8 +35,11 @@ Kit bật cờ khi `thresholdState` khác `chot`, tức cả khi còn ô trống
   lấy từ phiên nghiệm thu có số người (thường 3–5), truy vấn bảng có thật, hay nhật ký. Ba tác tử soạn đọc hợp đồng
   và ô cơ hội của từng hồ sơ; mỗi dòng bảng mang nguồn số và căn cứ.
 - **Timebox chung**: «2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)», cùng mốc B7 chủ kho đồng ý.
-- **Viết lại khuôn**: chữ cũ sai khuôn gộp lại thành một câu đúng nhãn, giữ ý, không đặt mức mới — trừ khi ghi rõ ở bảng
-  (hoan-tac-loat-dung-id: Timebox «1 ngày máy» là hạn dựng, thay bằng timebox chung).
+- **Chuẩn hoá khuôn, không soạn lại**: bộ đọc rộng (`rang/chung.mjs` `docRong`) đọc chữ cũ ở mọi kiểu sai khuôn rồi chép
+  nguyên văn vào đúng nhãn, giữ nhãn cũ. Phản biện 31/10 chứng bản soạn lại làm mất vế cũ và thêm ngưỡng mới; ô chủ kho
+  đã duyệt (okr-cua-toi-tach-theo-doi, okr-loai-hoc-tap 08/10) vẫn ở trạng thái đã duyệt.
+- **Chốt bằng dòng sổ, bỏ nhãn bằng công cụ**: `rang/bo-nhan.mjs` chỉ bỏ nhãn ở hồ sơ có dòng `chot_nguong` mang tên người.
+  Thử trên bản sao: chốt «*» rồi bỏ nhãn → `start-scan` còn 0 hồ sơ có mặt người dùng mang cờ.
 - **Không nới bộ đọc của kit** cho nhãn rút gọn — chuẩn hoá chữ ở hồ sơ.
 
 ## Câu cho người (Cổng Phạm vi)
@@ -42,3 +47,4 @@ Kit bật cờ khi `thresholdState` khác `chot`, tức cả khi còn ô trống
 - Hỏi-1: chốt bảng ngay ở Cổng Phạm vi, hay ghi `[đề xuất]` rồi chốt ở Cổng Bằng chứng (luật 41).
 - Hỏi-2: loc-don-vi-khong-tu-dong — sổ cũ cố ý để trống ngưỡng (d-20261021T091517Z-7).
 - Hỏi-3: lo-trinh-ten-va-build — chủ kho ghi «Không đo bằng người dùng»; kit không nhận «không đo được» ở hồ sơ có mặt người dùng.
+- Hỏi-4: 17 timebox đã qua hay không ra ngày — đổi sang mốc B7 hay ghi miễn.

@@ -64,7 +64,9 @@ evals:
       Chay start-scan --root cua kit, gom moi slug mang co nguong-chua-chot, loc theo coNguoiDungCuoi(surfaces cua
       contract.md): 0 slug -> "start-scan: <k> ho so mang co nguong-chua-chot, 0 co mat nguoi dung cuoi", thoat 0; con
       slug -> dong "CON CO <slug>" va thoat 1.
-      CHIEU DO: tren onehub ed4e85288 in 51 dong CON CO (dung 51 ho so cua ranh gioi F39), thoat 1.
+      Ho so co ten trong dong so «ngoai_ac1» mang decided_by: in «NGOAI AC-1 <slug>», khong tinh.
+      CHIEU DO: tren onehub ed4e85288 in 51 dong CON CO (dung 51 ho so cua ranh gioi F39), thoat 1; sau khi ap bang ma chua
+      chot van 51 (o con [đề xuất]). Thu tren ban sao 31/10: chot «*» roi bo-nhan.mjs -> 0 ho so mat nguoi dung cuoi.
 
   - id: E2
     criterion: AC-2
@@ -125,9 +127,10 @@ evals:
       - "_acceptance/zalo-gui-hong-ghi-ly-do/opportunity.md"
     expected: |
       Doi chung duong cung luot: mau doi chu mot o da co va ghi gia tri lech bang -> bat ca hai, ghim thong diep; khac ->
-      thoat 2. Moi ho so cua bang-de-xuat.json (dung 51): o may soan bang «[đề xuất] <gia tri bang>» hay «<gia tri bang>»;
-      dong bang co nguon_so va can_cu; o da co chu khong doi ngoai bo nhan; git diff -U0 ed4e85288 chi cham bon dong o
-      (ho so viet_lai_khuon duoc bo dong cu, ho so thieu muc duoc them tieu de) -> "DUNG <ho so>". Lech -> SAI goi o.
+      thoat 2. Moi ho so cua bang-de-xuat.json (dung 51), doc hai phia bang docRong (nhan «SỐNG:»/«CHẾT:», dong thut, nhan
+      sau [đề xuất]): o co dong bang mang dung gia tri dong ay; dong may soan co nguon_so va can_cu; dong chuan-hoa dung chu
+      cu cua ho so va giu nhan cu; o khong co dong bang khong doi chu va khong bi gan lai [đề xuất]; dong them/go chi la
+      bon o (them tieu de muc khi ho so thieu muc) -> "DUNG <ho so>". Lech -> SAI goi o.
       CHIEU DO: tren onehub ed4e85288 38 ho so SAI «o trong» (13 ho so chi-chot dung vi chua doi).
 
   - id: E3
@@ -198,14 +201,79 @@ evals:
   - id: E4
     criterion: AC-4
     executor: judgment
-    inputs: [_acceptance/nguong-gia-tri-mat-giao-dien/bang-de-xuat.md, docs/telemetry.md]
-    paths: [_acceptance/nguong-gia-tri-mat-giao-dien/bang-de-xuat.md, docs/telemetry.md]
+    inputs: [_acceptance/nguong-gia-tri-mat-giao-dien/bang-de-xuat.md, docs/telemetry.md, packages/db/prisma/schema.prisma]
+    paths: [_acceptance/nguong-gia-tri-mat-giao-dien/bang-de-xuat.md, docs/telemetry.md, packages/db/prisma/schema.prisma]
     question: >-
-      Doc bang-de-xuat.md. Voi moi o SONG va CHET danh dau «máy soạn»: o co neu mot con so hay mot dieu quan sat cu the
+      Doc bang-de-xuat.md. Voi moi o SONG va CHET loai «máy soạn» hay «máy soạn thay đề xuất kit tự sinh»: o do gia tri
+      cho nguoi dung (khong phai tieu chi dung hay eval may), co neu mot con so hay mot dieu quan sat cu the
       (vd «2 tren 3 nguoi», «it nhat 3 de xuat», «0 bao cao») khong, va cot Nguon co tro toi thu co that khong — su kien
-      co trong docs/telemetry.md, mot bang du lieu, hay phien nghiem thu co so nguoi. Tra PASS khi moi o deu dat; FAIL
+      co trong docs/telemetry.md, bang/cot co trong schema.prisma, hay phien nghiem thu co so nguoi. Tra PASS khi moi o deu dat; FAIL
       liet ten ho so va o khong dat, kem ly do mot dong.
     evidence_required: [panel_votes, rationale]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.f39_timebox
+    paths:
+      - "_acceptance/nguong-gia-tri-mat-giao-dien/rang/**"
+      - "_acceptance/nguong-gia-tri-mat-giao-dien/decisions.jsonl"
+      - "_acceptance/bo-cuc-hep-ngan-va-kanban/opportunity.md"
+      - "_acceptance/cap-nhat-trong-ngan-kr/opportunity.md"
+      - "_acceptance/cay-can-chinh-co-ly-do/opportunity.md"
+      - "_acceptance/cho-tac-nhan-lau/opportunity.md"
+      - "_acceptance/chu-man-tieng-viet-khong-tran/opportunity.md"
+      - "_acceptance/dai-luu-tru-dung-chung/opportunity.md"
+      - "_acceptance/dau-trang-okr-cho-nut-hoi-kara/opportunity.md"
+      - "_acceptance/duong-ly-do-muc-tieu/opportunity.md"
+      - "_acceptance/gan-tay-va-kara-co-ly-do/opportunity.md"
+      - "_acceptance/go-tin-hieu-rac/opportunity.md"
+      - "_acceptance/gon-dau-trang-lay-y-kien/opportunity.md"
+      - "_acceptance/gop-y-dung-cho/opportunity.md"
+      - "_acceptance/hoan-tac-loat-bao-dung/opportunity.md"
+      - "_acceptance/hoan-tac-loat-dung-id/opportunity.md"
+      - "_acceptance/hoi-dap-okr/opportunity.md"
+      - "_acceptance/kara-mot-ten/opportunity.md"
+      - "_acceptance/khung-cho-don-vi-mot-hinh/opportunity.md"
+      - "_acceptance/khung-man-chung/opportunity.md"
+      - "_acceptance/khung-soan-chan-lien-ket/opportunity.md"
+      - "_acceptance/lich-su-va-luu-tru-trang/opportunity.md"
+      - "_acceptance/lien-quan-loc-ban-da-cat/opportunity.md"
+      - "_acceptance/lo-trinh-nhieu-san-pham/opportunity.md"
+      - "_acceptance/lo-trinh-ten-va-build/opportunity.md"
+      - "_acceptance/loc-don-vi-khong-tu-dong/opportunity.md"
+      - "_acceptance/loc-moi-truong/opportunity.md"
+      - "_acceptance/loc-va-kieu-xem-chung/opportunity.md"
+      - "_acceptance/luu-tru-truong-khong-hoi/opportunity.md"
+      - "_acceptance/mau-trang-thai-chung/opportunity.md"
+      - "_acceptance/nen-kara/opportunity.md"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/opportunity.md"
+      - "_acceptance/nhap-truong-luc-tao/opportunity.md"
+      - "_acceptance/okr-cua-toi-tach-theo-doi/opportunity.md"
+      - "_acceptance/okr-loai-hoc-tap/opportunity.md"
+      - "_acceptance/quyet-gop-y-noi-dung-ly-do/opportunity.md"
+      - "_acceptance/soan-okr-khong-lac/opportunity.md"
+      - "_acceptance/sort-moi-truong/opportunity.md"
+      - "_acceptance/sua-sau-chay-that/opportunity.md"
+      - "_acceptance/tac-nhan-va/opportunity.md"
+      - "_acceptance/the-gop-y-okr/opportunity.md"
+      - "_acceptance/them-buoc-bao-dung/opportunity.md"
+      - "_acceptance/thong-bao-mot-nguon-nhieu-kenh/opportunity.md"
+      - "_acceptance/tieu-diem-sau-hop-xoa-tin-hieu/opportunity.md"
+      - "_acceptance/trang-lo-trinh-mo-hinh-hien-thi/opportunity.md"
+      - "_acceptance/trang-thai-tin-hieu-song/opportunity.md"
+      - "_acceptance/truong-chuan-o-cai-dat/opportunity.md"
+      - "_acceptance/truong-mot-cach-cu-xu/opportunity.md"
+      - "_acceptance/truong-tep/opportunity.md"
+      - "_acceptance/va-lo-ro-vai-chi-okr/opportunity.md"
+      - "_acceptance/ve-khung-muc-tieu-dung-kr/opportunity.md"
+      - "_acceptance/viec-rieng-chi-nguoi-trong-cuoc/opportunity.md"
+      - "_acceptance/zalo-gui-hong-ghi-ly-do/opportunity.md"
+    expected: |
+      Doi chung duong cung luot: timeboxDate cua kit doc ra 2026-11-14 va khong doc ra «trong ngày 08–09/10»; lech -> thoat 2.
+      Moi ho so: Timebox doc ra ngay khong truoc ngay chay -> khong in; ho so trong dong so «mien_timebox» mang decided_by ->
+      «MIEN <slug>»; con lai -> «SAI <slug>: timebox khong ra ngay | da qua (<ngay>)», thoat 1.
+      CHIEU DO: tren onehub ed4e85288 50 SAI (6 da qua, 11 khong ra ngay, con lai o trong).
 
   - id: E5
     criterion: AC-5

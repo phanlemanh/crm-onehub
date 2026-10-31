@@ -25,17 +25,20 @@ bảng đề xuất `_acceptance/nguong-gia-tri-mat-giao-dien/bang-de-xuat.md` (
 
 ## Criteria
 
-- AC-1: Given ngưỡng đã chốt, When chạy `start-scan` của kit trên đỉnh nhánh, Then không hồ sơ nào có mặt người dùng cuối còn mang cờ `nguong-chua-chot`; và bộ đọc ngưỡng của kit xếp đúng ba mẫu đối chứng (ô trống → chưa chốt, `[đề xuất]` → đề xuất, đủ chữ → chốt).
-- AC-2: Given 51 `opportunity.md` so với gốc ed4e85288, When đối chiếu từng ô ngưỡng với bảng đề xuất, Then ô máy soạn khớp bảng từng chữ (có hay không nhãn `[đề xuất]`), mỗi dòng bảng có nguồn số và căn cứ, ô đã có chữ không đổi ngoài việc bỏ nhãn, và không dòng nào ngoài bốn ô đổi — trừ hồ sơ «viết lại khuôn» khai tên trong bảng.
+- AC-1: Given người đã chốt (dòng `chot_nguong` mang tên người trong sổ của hồ sơ này — ở Cổng Phạm vi hay Cổng Bằng chứng tuỳ Hỏi-1) và công cụ bỏ nhãn đã chạy, When chạy `start-scan` của kit trên đỉnh nhánh, Then không hồ sơ nào có mặt người dùng cuối còn mang cờ `nguong-chua-chot`, trừ hồ sơ có tên trong dòng sổ `ngoai_ac1` mang tên người (Hỏi-2, Hỏi-3 chọn b); bộ đọc ngưỡng của kit xếp đúng ba mẫu đối chứng. Chốt ở Cổng Bằng chứng thì AC-1 chấm lại ngay sau chốt, trước lượt ghim.
+- AC-2: Given 51 `opportunity.md` so với gốc ed4e85288, When đối chiếu từng ô ngưỡng với bảng đề xuất, Then mỗi ô có dòng bảng mang đúng giá trị của dòng ấy, mỗi dòng máy soạn có nguồn số và căn cứ, dòng «chuẩn hoá» mang đúng chữ cũ của hồ sơ (đọc bằng bộ đọc rộng: nhãn «SỐNG:»/«CHẾT:», dòng thụt, nhãn sau `[đề xuất]`) và giữ nhãn cũ, ô không có dòng bảng không đổi ngoài việc bỏ nhãn, không ô nào bị gắn lại `[đề xuất]` khi trước không có, và không dòng nào ngoài bốn ô bị thêm hay gỡ.
 - AC-3: Given một ô mất nhãn `[đề xuất]` so với gốc hay so với bảng, When đọc sổ quyết định của hồ sơ F39, Then sổ có dòng chốt mang tên người (`decided_by`) phủ hồ sơ ấy; máy không tự bỏ nhãn.
-- AC-4: Given bảng đề xuất, When đọc mọi ô SỐNG và CHẾT máy soạn, Then mỗi ô nêu một con số hay điều quan sát cụ thể, và nguồn số là thứ có thật trong kho (sự kiện ở `docs/telemetry.md`, bảng dữ liệu, hay phiên nghiệm thu có số người). (judgment)
+- AC-4: Given bảng đề xuất, When đọc mọi ô SỐNG và CHẾT máy soạn (cả ô thay đề xuất kit tự sinh), Then mỗi ô đo giá trị cho người dùng (không phải tiêu chí dựng hay eval máy), nêu một con số hay điều quan sát cụ thể, và nguồn số là thứ có thật (sự kiện ở `docs/telemetry.md`, bảng/cột ở `schema.prisma`, hay phiên nghiệm thu có số người). (judgment)
+- AC-6: Given 51 hồ sơ sau khi áp bảng, When đọc Timebox bằng `timeboxDate` của kit, Then mỗi hồ sơ có một ngày không trước ngày chạy, trừ hồ sơ có tên trong dòng sổ `mien_timebox` mang tên người.
 - AC-5: Given F37 đã gộp và lượt ghim lại đã chạy, When đọc dòng `repin` cuối của 51 hồ sơ, Then dòng ấy trùng `verified_commit`, có sau lần sửa `opportunity.md` của hồ sơ, và mọi bộ kiểm cùng eval máy thoát 0.
 
 ## Coverage
 
 - Trục hồ sơ: 51 hồ sơ có mặt người dùng cuối mang cờ [thước CE: start-scan 31/10 lọc theo coNguoiDungCuoi, khớp từng tên ranh giới F39]
 - Trục trạng thái ô: trống cả bốn (29) · thiếu một phần (9) · đủ chữ còn nhãn (13) [thước CE: thresholdState và bulletOf của kit]
-- Trục khuôn chữ cũ: đúng khuôn · sai khuôn (9 hồ sơ «viết lại khuôn») [thước CE: nhãn ngoài bốn nhãn của khuôn hay dòng thụt]
+- Trục khuôn chữ cũ: đúng khuôn · sai khuôn (8 hồ sơ «chuẩn hoá khuôn», giữ chữ và nhãn) [thước CE: bộ đọc rộng docRong so với bulletOf của kit]
+- Trục nguồn của ô cũ: người viết · kit tự sinh theo mẫu «đã đạt «X» chưa?» (8 hồ sơ, máy soạn lại) [thước CE: mẫu câu của S0-MO-O]
+- Trục timebox: còn hạn · đã qua · không ra ngày (17 hồ sơ — Hỏi-4) [thước CE: timeboxDate của kit]
 - Trục người quyết: máy đề xuất · người chốt (AC-3) [thước CE: luật 41 của đợt]
 - Trục hồ sơ đã có quyết khác: loc-don-vi-khong-tu-dong, lo-trinh-ten-va-build — Hỏi-2, Hỏi-3
 
