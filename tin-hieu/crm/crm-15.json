@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Hiện người dùng cần tạo/cập nhật từng Công ty hoặc Cá nhân thủ công; chưa có chức năng import hàng loạt từ file Excel/CS…",
+    "muon_lam": "Tạo mới/cập nhật nhiều MA và Agent trên OneHub Center một cách nhanh chóng.",
+    "da_xay_ra": "Hiện người dùng cần tạo/cập nhật từng Công ty hoặc Cá nhân thủ công; chưa có chức năng import hàng loạt từ file Excel/CSV theo template chuẩn.",
+    "man": "/companies"
+  },
+  "luc": "2026-10-21T03:11:25.457Z"
+}
