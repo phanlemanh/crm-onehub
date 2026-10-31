@@ -5,7 +5,7 @@ slug: rang-khung-trang-mo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-31T12:23:09Z
 design_doc: docs/superpowers/specs/2026-10-31-rang-khung-trang-mo-design.md
