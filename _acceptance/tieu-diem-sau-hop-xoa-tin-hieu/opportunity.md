@@ -25,7 +25,7 @@ Vì sao: Gốc: _acceptance/sua-giao-dien-tin-hieu/ — Ngoài-6 ở Cổng Bằ
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox
-- Timebox: [đề xuất] 2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)
+- Câu hỏi phép đo trả lời: Người dùng chỉ bằng bàn phím có huỷ hay gặp lỗi khi xoá tín hiệu rồi làm tiếp ngay ở đúng dòng mà không phải dò lại từ đầu trang không?
+- Kết quả nào là SỐNG: Trong một phiên nghiệm thu với ít nhất 2 người dùng thật chỉ dùng bàn phím trên production ở 375 và 1280px, mọi lần bấm «Giữ lại», Esc hay xoá hỏng đều để tiêu điểm ở nút ⋮ của đúng dòng và không ai phải bấm Tab từ đầu trang để quay lại.
+- Kết quả nào là CHẾT: Trong phiên nghiệm thu có ít nhất một lần tiêu điểm rơi về đầu trang hay sang dòng khác sau «Giữ lại», Esc hay xoá hỏng, hoặc người thử phải dò lại để tìm dòng vừa thao tác.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

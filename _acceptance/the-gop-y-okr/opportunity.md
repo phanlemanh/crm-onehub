@@ -26,9 +26,9 @@ thị trường dùng hiện nay».
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: người lạ có quyết được ba đề xuất mà không lúng túng không?
-- [đề xuất] Kết quả nào là SỐNG: người lạ quyết đủ ba đề xuất trong một lượt lái thử mà không hỏi «bấm nút nào», 0 lần hộp đóng ngoài ý.
-- [đề xuất] Kết quả nào là CHẾT: người lạ bấm nhầm «Bác» thay «Nhận», hoặc hộp đóng ngoài ý ≥ 1 lần.
-- [đề xuất] Timebox: lái thử người lạ trong tuần sau khi gộp; đọc số cùng phiên nghiệm thu.
+- Kết quả nào là SỐNG: người lạ quyết đủ ba đề xuất trong một lượt lái thử mà không hỏi «bấm nút nào», 0 lần hộp đóng ngoài ý.
+- Kết quả nào là CHẾT: người lạ bấm nhầm «Bác» thay «Nhận», hoặc hộp đóng ngoài ý ≥ 1 lần.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Nguồn ngoài & phạm vi kế thừa
 

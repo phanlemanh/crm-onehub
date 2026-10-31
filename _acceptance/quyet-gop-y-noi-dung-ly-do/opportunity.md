@@ -35,9 +35,9 @@ Câu lý do phía máy chủ (`OKR.thongDiep`, `apps/api/src/okr/okr-config.ts`)
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: người quyết một góp ý bị từ chối vì lý do cố định có kể lại đúng lý do không.
-- SỐNG: ở lái-thử người-lạ trước R1, nhận một Căn chỉnh tới đích chưa công bố; người thử nói được «đích chưa công bố» và không bấm thử lại quá một lần.
-- CHẾT: người thử bấm thử lại nhiều lần hoặc nói «lỗi mạng».
-- Timebox: lái-thử người-lạ kế tiếp của dãy Kara OKR.
+- Kết quả nào là SỐNG: ở lái-thử người-lạ trước R1, nhận một Căn chỉnh tới đích chưa công bố; người thử nói được «đích chưa công bố» và không bấm thử lại quá một lần.
+- Kết quả nào là CHẾT: người thử bấm thử lại nhiều lần hoặc nói «lỗi mạng».
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Nguồn ngoài & phạm vi kế thừa
 

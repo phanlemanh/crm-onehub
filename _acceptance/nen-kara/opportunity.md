@@ -40,3 +40,10 @@ muốn, dựng tạm ở proto).
 
 - Lượt này chỉ dựng nền (thành phần + bài kiểm + mục `/proto`), không đổi màn nào — đồng ý?
 - Giữ `Confirmation` làm thân của bản `card`, hay bỏ hẳn cho cả hai độ dày?
+
+## Ngưỡng chết / ngưỡng UAT
+
+- Câu hỏi phép đo trả lời: Sau khi có nền, các lượt AI kế tiếp có dựng đề xuất, dấu và phản hồi của Kara bằng thành phần chung của packages/ui, để người dùng thấy AI cùng một kiểu ở mọi màn không?
+- Kết quả nào là SỐNG: Tới hết timebox, mọi lượt AI gộp sau nen-kara dựng đề xuất, dấu và phản hồi bằng ProposedChange, KaraMark, KaraLabel, AiFeedback chứ không tự dựng, số kiểu dấu nhận diện AI trên màn thật giảm từ bốn xuống tối đa hai, và trong phiên nghiệm thu ít nhất 2 trên 3 người chỉ đúng nút chính của một đề xuất inline.
+- Kết quả nào là CHẾT: Có ít nhất 1 lượt AI gộp sau nen-kara tự dựng thẻ đề xuất hay dấu Kara riêng ngoài packages/ui, hoặc số kiểu dấu nhận diện AI trên màn thật vẫn là bốn.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

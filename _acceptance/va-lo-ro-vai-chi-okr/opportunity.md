@@ -24,10 +24,10 @@ Vì sao: Giao bước hiện chỉ kiểm có là thành viên; bộ gom nhắc 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»» khi hết timebox
-- Timebox: trước 14/10/2026 — ngày mọi phòng ban bắt đầu dùng thật.
+- Câu hỏi phép đo trả lời: Sau khi vá, người vai «chỉ OKR» có còn bị giao việc kế hoạch hay nhận tên đối tác trong tin nhắc buổi sáng, trong khi vẫn nhận nhắc về KR của mình không?
+- Kết quả nào là SỐNG: Trong 2 tuần sau khi bật, thước ro-vai-chi-okr chạy trên production mỗi tuần đều ra 0 bước, kế hoạch hay lượt theo dõi đang mở thuộc người vai «chỉ OKR», không tin nhắc nào gửi tới họ có mục kế hoạch, và mỗi người vai đó có việc OKR đến hạn vẫn nhận ít nhất một tin nhắc.
+- Kết quả nào là CHẾT: Trong 2 tuần sau khi bật, thước ra từ 1 vật đang mở trở lên thuộc người vai «chỉ OKR», hoặc có tin nhắc tới họ mang mục kế hoạch hay tên công ty, hoặc họ thôi nhận nhắc về KR.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Nguồn quyết định Cổng Đáng
 

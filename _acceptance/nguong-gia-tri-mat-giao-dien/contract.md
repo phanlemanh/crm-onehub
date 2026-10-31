@@ -5,7 +5,7 @@ slug: nguong-gia-tri-mat-giao-dien
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-10-31-nguong-gia-tri-mat-giao-dien-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-31

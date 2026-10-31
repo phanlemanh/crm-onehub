@@ -30,6 +30,6 @@ Vì sao: Soát 20/10: trường tự tạo đi đường riêng (record-fields.t
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: người dùng thật có phân biệt được trường chuẩn với trường tự tạo trên phiếu và bảng không, và có còn gặp câu lỗi tiếng Anh khi lưu trường không.
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu, che chữ «tự tạo» ở Cài đặt › Trường rồi cho người dùng xem một phiếu và một bảng: không quá một trên năm người chỉ đúng trường nào là tự tạo; gõ «1.234,5» vào ô Số lưu được ngay lần đầu.
-- Kết quả nào là CHẾT: [đề xuất] đa số người chỉ ra được trường tự tạo nhờ cách hiện khác, hoặc còn một đường lưu trường in câu tiếng Anh của máy chủ.
-- Timebox: [đề xuất] phiên nghiệm thu đầu tiên sau khi DA14 lên production, gộp chung buổi đọc số của gói truong-hop-dong sau DA17, DA18.
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, che chữ «tự tạo» ở Cài đặt › Trường rồi cho người dùng xem một phiếu và một bảng: không quá một trên năm người chỉ đúng trường nào là tự tạo; gõ «1.234,5» vào ô Số lưu được ngay lần đầu.
+- Kết quả nào là CHẾT: đa số người chỉ ra được trường tự tạo nhờ cách hiện khác, hoặc còn một đường lưu trường in câu tiếng Anh của máy chủ.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

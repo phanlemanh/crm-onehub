@@ -25,7 +25,7 @@ Vì sao: Production 30/10: bấm «Cập nhật» ở đầu ngăn KR mở hộp
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Mở một KR đến hạn chưa cập nhật: khối cập nhật mở sẵn trong ngăn, gửi xong ngăn vẫn mở, Lịch sử thêm một dòng ở đầu và biểu đồ thêm một điểm; bấm «Cập nhật» trên dòng Họp tuần mở ngăn KR và cuộn tới khối; không Dialog nào mở trong cả luồng» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Mở một KR đến hạn chưa cập nhật: khối cập nhật mở sẵn trong ngăn, gửi xong ngăn vẫn mở, Lịch sử thêm một dòng ở đầu và biểu đồ thêm một điểm; bấm «Cập nhật» trên dòng Họp tuần mở ngăn KR và cuộn tới khối; không Dialog nào mở trong cả luồng
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Mở một KR đến hạn chưa cập nhật: khối cập nhật mở sẵn trong ngăn, gửi xong ngăn vẫn mở, Lịch sử thêm một dòng ở đầu và biểu đồ thêm một điểm; bấm «Cập nhật» trên dòng Họp tuần mở ngăn KR và cuộn tới khối; không Dialog nào mở trong cả luồng» khi hết timebox
-- Timebox: …
+- Câu hỏi phép đo trả lời: Sau khi khối cập nhật nằm ngay trong ngăn KR, người phụ trách KR có mở cập nhật rồi gửi hết thường hơn và nhanh hơn so với hộp thoại cũ không?
+- Kết quả nào là SỐNG: Trong 2 tuần sau khi bật, tỉ lệ phiên cập nhật đã mở mà có giờ gửi đạt ít nhất bằng 2 tuần trước khi bật và trung vị số giây của phiên đã gửi không tăng, đồng thời số KR có ít nhất một lần cập nhật mỗi tuần không giảm.
+- Kết quả nào là CHẾT: Trong 2 tuần sau khi bật, tỉ lệ phiên mở mà gửi thấp hơn 2 tuần trước khi bật, hoặc số KR được cập nhật mỗi tuần giảm, hoặc gần như mọi phiên vẫn đến từ một lối duy nhất cho thấy các lối Họp tuần, bảng đơn vị, mục tiêu không được dùng.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
