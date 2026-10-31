@@ -6,7 +6,7 @@ import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { memberListInput } from "../src/workspace/workspace.contracts";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 
-const suffix = process.env.TEST_RUN_ID ?? "mat-khau-lien-ket";
+const suffix = `mkl-${process.env.TEST_RUN_ID ?? "local"}`;
 
 const DANH_SACH_THANH_VIEN = memberListInput.parse({});
 
