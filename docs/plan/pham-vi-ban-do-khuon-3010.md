@@ -34,6 +34,9 @@ nguon: crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md#c9d74eaf0b846ddf5f3c2d50c9bf
 ```
 <!-- PHAM-VI-MA>>> -->
 
+Trang tri thức ở dòng `nguon` đã cập nhật 31/10 (commit `278f002`, blob `c14b6409`): khai mã BK1–BK4, trạng thái 31/10,
+đường báo về kit. Dòng `nguon` giữ blob `c9d74eaf` là bản chủ kho duyệt 30/10.
+
 ## Chi tiết cho người cắt lượt và vòng mở sau
 
 - **BK1 — khung và bản đồ.**
@@ -53,7 +56,7 @@ nguon: crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md#c9d74eaf0b846ddf5f3c2d50c9bf
   - Hai chiều bắt buộc. Chiều đỏ: tiêm một ngăn gọi thẳng `DetailSheetHeader` thì đỏ, gọi đúng tên tệp. Chiều im: chỉ sửa
     `docs/` hay `_acceptance/` thì im. Thêm đối chứng dương: mọi ngăn hiện có xanh sau BK1.
 - **BK3 — mở răng khung trang.** Phần «hình theo màn» của `apps/app/test/khung-man-chung.spec.ts` chuyển sang quét
-  mọi `page.tsx`, có bảng ngoại lệ kèm lý do. Gần hàng NM1 «Khung màn chung» (chưa mở) — người cắt lượt xét gộp.
+  mọi `page.tsx`, có bảng ngoại lệ kèm lý do. Gần hàng NM1 «Khung màn chung» — người cắt lượt xét gộp. (Sửa 31/10: NM1 đã gộp #388 ngày 14/10, không phải «chưa mở».)
 - **BK4 — màn mẫu.** Thêm một dòng «màn mẫu» trong `docs/proto.md`, để `design-pass` chụp ngăn mới cạnh ngăn deal ở
   Cổng Phạm vi. Người phản ứng lúc rảnh; không thêm lượt gọi người.
 
