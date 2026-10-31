@@ -1,0 +1,32 @@
+{
+  "feature_plain": "Khách mở trang giới thiệu luôn thấy đúng màu của bộ giao diện, kể cả khi máy họ đặt nền sáng; trang không còn mã màu tự đặt nào.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ tô 11 chỗ trên trang (nhãn nhỏ, ô hỏi, chấm việc, viền khung soạn, ngôi sao, lệnh «/Create agent») bằng màu chung của bộ giao diện, đo trên trang đang chạy."},
+    {"id": "AC-3", "p": "Sẽ làm sáu chỗ chữ nhỏ đủ tương phản để đọc trên nền tối (ít nhất 4.5:1; hôm nay vài nhãn chỉ 2.9:1)."},
+    {"id": "AC-4", "p": "Sẽ giữ trang nền tối ngay cả khi máy khách đặt nền sáng — hôm nay trang thành nền trắng và chữ «Vercel · Next.js · Context» biến mất."},
+    {"id": "AC-6", "p": "Sẽ không đổi gì khác trên trang: so ảnh trước và sau, ngoài 11 chỗ đã khai phải trùng từng điểm ảnh."},
+    {"id": "AC-5", "p": "Sẽ giữ nguyên cách ô hỏi phản hồi: chữ gợi ý màu nhạt, bấm một câu gợi ý thì chữ sáng lên."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sẽ KHÔNG còn mã màu tự đặt nào trong mã trang giới thiệu; thước quét tự thử bắt một mã cài thử trước khi tin kết quả 0."},
+    {"id": "OOS-1", "p": "KHÔNG đổi chữ trắng trần của trang (không phải mã màu tự đặt) — để một việc nhỏ riêng."},
+    {"id": "OOS-2", "p": "KHÔNG đụng màu logo các hãng khác và biểu đồ dùng chung — màu đó đúng chỗ hoặc là bắt nhầm."},
+    {"id": "OOS-3", "p": "KHÔNG bật lưới chặn màu tự đặt cho cả kho — chờ bộ công cụ sửa hai lỗi chặn."},
+    {"id": "OOS-4", "p": "KHÔNG thêm màu riêng cho trang giới thiệu — trừ khi anh chọn lối đó ở Hỏi-1."},
+    {"id": "OOS-5", "p": "KHÔNG ép giao diện tối cho cả ứng dụng ở khung gốc — sửa trong bảng màu chung là đủ và nằm trong ranh giới."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ 11 chỗ màu mà nghiên cứu sàn thiết kế đếm được; AC-1 (quét mã) quét lại cả thư mục để không sót chỗ thứ 12."},
+    {"i": 1, "p": "Hai khổ màn hình: máy tính 1280 và điện thoại 375."},
+    {"i": 2, "p": "Hai cài đặt nền của máy khách: sáng và tối — ảnh chụp cây hôm nay đã chứng nền sáng đang hỏng."},
+    {"i": 3, "p": "Hai trạng thái ô hỏi: chưa bấm câu gợi ý và đã bấm."},
+    {"i": 4, "p": "Tương phản của mọi chỗ chữ đổi màu, đo với nền thật phía sau."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Thiếu ảnh để anh trả lời câu hỏi gu nhìn — đã chụp trang trước vòng và dựng bản nháp sau, đặt cạnh nhau trong gói này."},
+    {"i": 1, "p": "Chọn màu cho lệnh «/Create agent» là gu nhìn mà máy đã tự quyết — đã chuyển thành câu hỏi Hỏi-2 cho anh."},
+    {"i": 2, "p": "Lời hứa «chỉ 11 chỗ đổi» chưa có thước máy — đã thêm so từng điểm ảnh trước/sau, kèm thử tô đỏ tiêu đề để chắc thước bắt được."},
+    {"i": 3, "p": "Một tệp của thước đo chưa được khai trong danh sách tệp theo dõi — đã khai, nên sửa thước sẽ làm bằng chứng hết hạn."},
+    {"i": 4, "p": "Việc bỏ đổi chữ trắng trần chưa có dấu vết — đã ghi vào sổ quyết định kèm căn cứ."}
+  ]
+}
