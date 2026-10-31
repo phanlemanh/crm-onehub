@@ -16,6 +16,8 @@ Ran 2188 tests across 278 files. [377.04s]
 Ran 2187 tests across 278 files. [396.72s]
 
 ## app-ui — lai-ra-man.spec.tsx chạy trước pre-push-da-chung.spec.ts, -t dau-hook, bản cũ
+Lệnh (từ packages/ui): `bun test --preload ./test/setup-dom.ts ./test/lai-ra-man.spec.tsx ./test/pre-push-da-chung.spec.ts -t dau-hook`
+Bản sửa (168633d2a trở đi): 10 pass · 0 fail.
 (fail) dau-hook > dau-hook (e): chuoi ngay 13 roi 15 [1492.26ms]
 - Expected  - 1
 + Received  + 5
