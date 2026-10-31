@@ -29,6 +29,6 @@ Vì sao: Ngăn KR gom lịch sử theo tuần, nên gửi lần thứ hai trong 
 - Câu hỏi phép đo trả lời: đã đạt «Gửi hai lần cập nhật cho một KR trong cùng tuần: Lịch sử tăng hai dòng và biểu đồ có hai điểm» chưa?
 - Kết quả nào là SỐNG: Gửi hai lần cập nhật cho một KR trong cùng tuần: Lịch sử tăng hai dòng và biểu đồ có hai điểm
 - Kết quả nào là CHẾT: chưa đạt «Gửi hai lần cập nhật cho một KR trong cùng tuần: Lịch sử tăng hai dòng và biểu đồ có hai điểm» khi hết timebox
-- Timebox: tới 2026-10-29
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: tới 2026-10-29
 
 Cổng Đáng 2026-10-28, chủ kho nguyên văn ở phiên giám sát: «SV7 Cổng Đáng: build; timebox tới 2026-10-29; ngưỡng giữ như đề xuất».
