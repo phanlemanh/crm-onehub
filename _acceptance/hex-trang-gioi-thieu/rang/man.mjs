@@ -45,6 +45,7 @@ const ANH =
 	process.env.HTG_CHEP_ANH === "1" || process.env.HTG_TRUOC === "1" || XEM_SAU
 		? join(GOC, "_acceptance", "hex-trang-gioi-thieu", "evidence")
 		: join(GOC, ".acceptance-runs", "hex-trang-gioi-thieu", "anh");
+const BANG_CHUNG = join(GOC, "_acceptance", "hex-trang-gioi-thieu", "evidence");
 const KHO = [1280, 375];
 const CSS_NHAP_SAU = (() => {
 	if (!XEM_SAU) return "";
@@ -52,7 +53,7 @@ const CSS_NHAP_SAU = (() => {
 		join(GOC, "packages", "ui", "src", "styles", "globals.css"),
 		"utf8",
 	);
-	const goc = /\n:root \{([^}]*)\}/.exec(css)?.[1];
+	const goc = /\n(?:\.dark,\n)?:root \{([^}]*)\}/.exec(css)?.[1];
 	const toi = /\n\.dark \{([^}]*)\}/.exec(css)?.[1];
 	if (!goc || !toi) {
 		console.log(
@@ -194,7 +195,7 @@ try {
 				giong,
 				`E4 nen-sang${giong ? "=" : "!="}nen-toi ${rong}: ${k.loi ?? `${k.khac} diem khac${k.hop ? ` trong ${k.hop}` : ""}`}`,
 			);
-			const tepMat = join(ANH, `truoc-mat-${rong}.json`);
+			const tepMat = join(BANG_CHUNG, `truoc-mat-${rong}.json`);
 			if (TIEN_TO === "truoc") {
 				const tr = await moTrang(rong, "dark");
 				const m = await tr.evaluate(matHex);
@@ -219,7 +220,7 @@ try {
 				await trang.screenshot({ fullPage: true, type: "png" }),
 			);
 			await trang.close();
-			const tep = join(ANH, `truoc-${rong}.png`);
+			const tep = join(BANG_CHUNG, `truoc-${rong}.png`);
 			if (!existsSync(tep))
 				await khongDo(
 					`KHONG DO DUOC: thieu anh truoc ${tep} (chup bang HTG_TRUOC=1 tu onehub truoc vong)`,
