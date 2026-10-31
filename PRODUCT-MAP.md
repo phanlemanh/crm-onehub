@@ -15,7 +15,6 @@ flowchart TD
   GB --> DG["Đã giao<br/>172 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>192 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
-  HS["Hồ sơ hỏng<br/>1 việc"]
 ```
 
 > **Bốn cổng người** — mỗi cổng là một câu hỏi chỉ người trả lời được:
@@ -423,7 +422,3 @@ flowchart TD
 - Bản mẫu bốn màn khu OKR cho design-pass (Của tôi, Cập nhật tuần, Theo đơn vị, Toàn cảnh) (`ban-mau-okr`) — đã đóng có hồ sơ
 - Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho (`chu-thich-glob-md`) — đã đóng có hồ sơ
 - Cột góp ý của Trợ lý OKR cuộn riêng với form trong hộp sửa rộng, bỏ số đề xuất lặp hai lần, và hộp mở rộng không làm bố cục nhảy (`the-gop-y-cot-cuon-rieng`)
-
-## Hồ sơ hỏng
-
-- `ci-test-het-do-co-dinh` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
