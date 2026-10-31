@@ -20,6 +20,7 @@ Nguồn: P6 phát hiện khi đẩy K6d 2026-10-10 ~02:20Z (yeu-cau P6-32); giá
 
 ## Ngưỡng chết / ngưỡng UAT
 
+- Không đo được — vá đúng đắn ở máy chủ (api), bài kiểm của hồ sơ giữ hành vi; không có hành vi người dùng đếm được riêng cho vá này trong một kỳ đo.
 - Không đo được bằng người dùng — đây là bài kiểm. Phép thử là: bài kiểm xanh ở giờ thật hôm nay và ở mọi mốc GOC, và lệnh đẩy của làn khác qua được `pre-push`.
 
 ## Out of scope từ khám phá

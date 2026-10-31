@@ -33,9 +33,7 @@ Nguồn: Ngoài-6 và Ngoài-7 của ca-chap-chon-cach-ly, Cổng 2 2026-10-08T0
 ## Ngưỡng chết / ngưỡng UAT
 
 [đề xuất] Việc nội bộ, không có người dùng.
-- SỐNG: bài ép thứ tự của cả hai khe đỏ trên mã cũ và xanh trên mã mới; hai tuần sau gộp, 0 lượt đỏ nào trong pre-push/CI/làn ghim lại có dấu «eve của chủ khoá bị lượt chờ dừng» (ConnectionRefused kèm khoá đổi chủ giữa bài).
-- CHẾT: còn một lượt như thế sau gộp, hoặc bài ép thứ tự chỉ xanh nhờ may rủi (chạy 20 lần không đỏ đều trên mã cũ).
-- Timebox: đợt `sau-14-10`; đo lần đầu hai tuần sau gộp.
+- Không đo được — thước, CI hay công cụ nội bộ của kho (không khai mặt); không có người dùng cuối để mở phiên nghiệm thu, phép thử là bài kiểm và lượt CI của chính hồ sơ.
 
 ## Câu hỏi mở cho Cổng Phạm vi
 
