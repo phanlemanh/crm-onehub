@@ -1,0 +1,112 @@
+schema_version: 1
+slug: hex-trang-gioi-thieu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.htg_hex
+    paths:
+      - "apps/app/components/landing/**"
+      - "_acceptance/hex-trang-gioi-thieu/rang/hex.mjs"
+    expected: |
+      Thuoc nap RE_HEX tu design-floor-s4.mjs cua goi acceptance-gate (khong chep regex tay) va quet moi tep
+      git ls-files apps/app/components/landing.
+      DOI CHUNG DUONG (chay truoc, cung lan): chep ask-card.tsx sang thu muc tam, tiem `text-[#123456]` vao dong 1,
+      quet thu muc tam -> phai bao dung 1 cho "ask-card.tsx:1"; khong bao -> in "KHONG DO DUOC: doi chung duong
+      khong bat ma tiem" va thoat 2.
+      Quet that: 0 cho -> in "HEX 0 CHO" va thoat 0; con cho -> in tung dong "<tep>:<dong> <ma>" va thoat 1.
+      CHIEU DO: tren onehub truoc vong (11 cho) thuoc thoat 1 va in 11 dong.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.htg_man
+    paths:
+      - "apps/app/components/landing/**"
+      - "apps/app/app/(landing)/**"
+      - "packages/ui/src/styles/globals.css"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man.mjs"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man-cho.mjs"
+    expected: |
+      Thuoc chay qua tien-de.mjs (phien do rieng cua cay), mo / o 1280, tim 11 cho theo chu va cau truc (khong them
+      thuoc tinh vao ma de do). Voi moi cho: mau tinh duoc cua thuoc tinh da khai (color, background-color,
+      border-color, stroke) bang mau cua mot phan tu do dat `var(--<token>)` ngay trong vung .dark cua trang.
+      In mot dong "E2 DUNG|SAI <so> <ten cho> <mau that> <mau token>". Tim khong ra mot cho -> SAI ghi
+      "khong thay <ten cho>" (khong bo qua).
+      CHIEU DO: tren onehub truoc vong, cho 1, 2, 4, 5, 6, 7, 8, 9, 10, 11 SAI; cho 3 DUNG (#1A1A1A trung muted).
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.htg_man
+    paths:
+      - "apps/app/components/landing/**"
+      - "packages/ui/src/styles/globals.css"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man.mjs"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man-cho.mjs"
+    expected: |
+      Cung luot do voi E2. Voi sau cho chu (BUILT WITH, SUGGESTED, nhan mono WHY, han viec dau tien, chu goi y
+      trong o hoi, /Create agent): ti le tuong phan WCAG giua mau chu va mau nen that (nen dau tien khong trong
+      suot tu phan tu len tren, tron alpha) >= 4.5. In "E3 DUNG|SAI <ten cho> <ti le>".
+      CHIEU DO: tren onehub truoc vong nhan SUGGESTED (#5A5A5A tren nen the) duoi 4.5 -> SAI.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.htg_man
+    paths:
+      - "apps/app/components/landing/**"
+      - "apps/app/app/(landing)/**"
+      - "packages/ui/src/styles/globals.css"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man.mjs"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man-cho.mjs"
+    expected: |
+      Thuoc chup toan trang / o 1280 va 375 (tat chuyen dong), moi kho hai lan: prefers-color-scheme light va dark.
+      So TUNG DIEM ANH (khong so byte PNG — ma hoa khong tat dinh): 0 diem khac -> "E4 DUNG nen-sang=nen-toi <kho>: 0
+      diem khac"; khac -> SAI kem so diem va hop bao vung khac, anh nen sang luu .acceptance-runs/.
+      CHIEU DO: tren onehub 6ca59691a (token ngu nghia chi khai o :root) nen sang ve trang nen trang — SAI ca hai kho,
+      hop khac phu ca trang (do 31/10: 5253088 diem o 1280).
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.htg_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, nguyen van: IS_MARKETING=true HTG_CHEP_ANH=1 EVAL=E6 bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/hex-trang-gioi-thieu/rang/man.mjs\""
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo sau-1280.png, sau-375.png trong _acceptance/hex-trang-gioi-thieu/evidence/ canh truoc-1280.png, truoc-375.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/hex-trang-gioi-thieu/evidence/
+    paths:
+      - "apps/app/components/landing/**"
+      - "apps/app/app/(landing)/**"
+      - "packages/ui/src/styles/globals.css"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man.mjs"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man-cho.mjs"
+    expected: |
+      Anh truoc-<kho>.png va mat na truoc-mat-<kho>.json chup tu onehub 6ca59691a bang HTG_TRUOC=1 (cung thuoc); mat
+      na = hop bao cua MOI phan tu mang ma hex (lop `[#...]` hay thuoc tinh stroke) tren trang truoc vong, gom moi lan
+      hien cua mot cho (chấm va han viec lap o tung dong).
+      So tung diem anh sau (cay, nen toi) voi anh truoc, bo qua mat na (+3px): 0 diem khac -> "E6 DUNG truoc-vs-sau
+      <kho> ngoai 11 cho: 0 diem khac"; khac -> SAI kem so diem va diem dau tien.
+      DOI CHUNG DUONG (cung luot): to h1 do roi chup lai, so voi anh sau cung mat na -> phai > 0 diem khac; = 0 ->
+      "KHONG DO DUOC: doi chung duong E6 ..." thoat 2.
+      CHIEU DO: doi them mot mau ngoai 11 cho (vd text-white cua chu Vercel) -> SAI.
+      Nguoi cham mo sau-* canh truoc-*: 11 cho doi dung nhu bang «Hien trang» cua design doc (nhan nho sang hon, sao
+      cam, lenh /Create agent xanh sang hon, chấm va vien xam nhat hon chut), khong gi khac.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.htg_man
+    paths:
+      - "apps/app/components/landing/ask-card.tsx"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man.mjs"
+      - "_acceptance/hex-trang-gioi-thieu/rang/man-cho.mjs"
+    expected: |
+      Cung luot do. O hoi luc dau hien "What do they sell?" voi mau = var(--muted-foreground); bam nut goi y dau tien
+      (aria-pressed doi sang true) -> o hoi hien dung cau vua bam voi mau = var(--foreground). In "E5 DUNG|SAI
+      <truoc> -> <sau>".
+      CHIEU DO: tren onehub truoc vong mau luc dau la #6E6E6E khac muted-foreground -> SAI.

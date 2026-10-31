@@ -333,3 +333,22 @@ Người phụ trách là Người, Giá trị là Tiền — và đi qua cùng 
   được. Bản ghi không có chủ thì chỉ quản trị.
 - **Gọi tên** theo `CONTEXT.md`: «trường»; khi cần phân biệt, «trường chuẩn» và
   «trường tự tạo». Không «tuỳ chỉnh», không «động».
+
+## Đo giao diện trong hồ sơ: thước tĩnh trên `.tsx` là thước rỗng
+
+Chủ kho chốt 31/10/2026 (hàng SN1, `docs/findings/2026-10-31-design-floor-crm/README.md` mục 1). Chạy
+`design-gate --mode static` trên một tệp `.tsx` thì lệnh không đo gì mà vẫn thoát 0. Thử trên
+`apps/app/components/landing/ask-card.tsx`, một tệp có mã màu thô thật: không cờ thì thoát 0; thêm
+`--require-measured` thì thoát 5 với `KHONG-DO-DUOC`. Một eval như vậy báo «đạt» trên thẻ Cổng Bằng chứng, nên
+người ký tin là màn đã được kiểm, trong khi chưa có gì được đo.
+
+- **Hồ sơ mới không khai `design-gate --mode static` trên `.tsx`.** Một tiêu chí về giao diện được đo bằng một trong
+  hai cách:
+  - `ui-check` trên bản đang chạy (`config:executors.design.ui_check`, hay lệnh đo màn qua `bun run do:man`);
+  - một răng khung: bài kiểm hay luật lint đọc mã và đỏ khi màn thoát khung, như răng của các hàng BK.
+- **Mọi khoá `*_san_thiet_ke` đang có trong `_acceptance/config.yaml` là thước rỗng** — 77 khoá ngày 31/10, không khoá
+  nào mang `--require-measured`. Đếm lại bằng `grep -c "_san_thiet_ke:" _acceptance/config.yaml`. Eval của hồ sơ đã
+  ký trỏ vào các khoá ấy cho kết quả «đạt», nhưng màu xanh đó không phải bằng chứng về giao diện.
+- **Không sửa hồ sơ đã ký để gỡ các khoá này.** Sửa `evals.yaml` hay `config.yaml` của hồ sơ đã ký thì phải ghim lại.
+  Khoá cũ ở yên tới khi kho có bậc sàn thiết kế đo thật (SN4 trở đi).
+- Hồ sơ mới khai sai lối cũ thì bị trả lại ở Cổng Phạm vi. Luật này chưa có răng máy; khi có, nó đi cùng hàng SN3.
