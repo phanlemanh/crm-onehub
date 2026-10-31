@@ -1,0 +1,119 @@
+schema_version: 1
+slug: rang-hang-cong-cu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.hcc_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/components/**/*.tsx"
+      - "apps/app/test/hang-cong-cu.spec.ts"
+      - "apps/app/test/fixtures/hang-cong-cu-ngoai-le.json"
+    expected: |
+      Ca "tap-tep": tap tep lay bang git ls-files (cached + others, exclude-standard) tai goc kho suy tu vi tri tep
+      test; co it nhat mot tep duoi apps/app/components/ va khong tep nao duoi apps/app/app/proto/; cay that + bang
+      that -> mang loi rong; in dong "hcc: <n> tep · <m> dau hieu da khai".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.hcc_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/components/**/*.tsx"
+      - "apps/app/test/hang-cong-cu.spec.ts"
+    expected: |
+      Ca "chip-dinh-thanh": bo doc chen tep moi "apps/app/app/(app)/[slug]/trang-moi/loc.tsx" co ToggleGroup
+      spacing={0} ngoai Field -> mang loi dung bang ["hcc: trang-moi/loc.tsx:3 chip loc dinh thanh (spacing={0})"].
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.hcc_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/components/**/*.tsx"
+      - "apps/app/test/hang-cong-cu.spec.ts"
+    expected: |
+      Ca "chip-trong-the": tep moi dat ToggleGroup trong Card > CardContent -> mang loi dung bang
+      ["hcc: trang-moi/loc.tsx:5 chip loc trong the"].
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.hcc_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/components/**/*.tsx"
+      - "apps/app/test/hang-cong-cu.spec.ts"
+    expected: |
+      Ca "nhom-gap-bang": tep moi co DataTable roi Collapsible ma CollapsibleContent chua DataTable -> mang loi dung
+      bang ["hcc: trang-moi/loc.tsx:7 nhom gap chua bang duoi bang"].
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.hcc_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/components/**/*.tsx"
+      - "apps/app/test/hang-cong-cu.spec.ts"
+    expected: |
+      Ca "doi-chung-duong": chip ToggleGroup variant outline khoang cach mac dinh + Collapsible chua doan chu -> [];
+      ToggleGroup spacing={0} trong Field -> []; CUNG tep do doi Field thanh div -> dung
+      ["hcc: trang-moi/loc.tsx:4 chip loc dinh thanh (spacing={0})"].
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.hcc_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/components/**/*.tsx"
+      - "apps/app/test/hang-cong-cu.spec.ts"
+      - "apps/app/test/fixtures/hang-cong-cu-ngoai-le.json"
+    expected: |
+      Ca "bang-ngoai-le", cac ban sao cua bang that chay cung ham: dong tro tep khong co -> dung
+      ["hcc: ngoai le tro tep khong con khong-co.tsx"]; dong trung -> chua "hcc: ngoai le trung <tep> <dau hieu>";
+      loai "khac" -> dung ["hcc: ngoai le loai la khac o <tep>"]; ly_do " " -> dung
+      ["hcc: ngoai le thieu ly do o <tep>"]; dau_hieu "khac" -> chua "hcc: ngoai le dau hieu la khac o <tep>";
+      so khai + 1 -> dung ["hcc: ngoai le thua <tep> <dau hieu> (khai <so+1>, con <so>)"]; dong lich-lam-viec ha so
+      ve 0 -> dung mot dong bat dau "hcc: settings/lich-lam-viec/lich-lam-viec.tsx:" va ket "chip loc trong the".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.hcc_quet
+    paths:
+      - "apps/app/test/fixtures/hang-cong-cu-ngoai-le.json"
+      - "apps/app/test/hang-cong-cu.spec.ts"
+    expected: |
+      Ca "doi-chung-bang": bang co dung 10 dong; tap tep cua dong loai "no" bang dung {okr/moi-kr/moi-kr.tsx,
+      overview-scope.tsx, components/crm/timeline/timeline.tsx, components/lo-trinh/trang-lo-trinh.tsx,
+      okr/hop-tuan.tsx, okr/nhom-da-bo.tsx, components/du-an/tat-ca-du-an.tsx} (ghim ten); moi dong "no" co ly_do
+      chua "đích:". Cung voi E1 (cay that xanh).
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.hcc_quet
+    paths:
+      - "apps/app/test/hang-cong-cu.spec.ts"
+    expected: |
+      Ca "chieu-im": danh sach them "docs/x/loc.tsx", "_acceptance/x/loc.tsx", "packages/ui/src/x/loc.tsx",
+      "apps/app/app/proto/_modules/x/loc.tsx", bo doc tra ve chip dinh thanh cho ca bon -> mang loi rong. Doi chung
+      duong la E2 (cung noi dung o apps/app/app thi do).
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.suite_app_ui
+    paths:
+      - "apps/app/package.json"
+      - "apps/app/test/hang-cong-cu.spec.ts"
+      - "apps/app/test/fixtures/hang-cong-cu-ngoai-le.json"
+    expected: |
+      Lenh suite cua goi app (bun run test qua turbo, cung lenh CI va pre-push) thoat 0 va DAU RA co dong
+      "hcc: <n> tep · <m> dau hieu da khai" voi n bang so tep E1 in. Thieu dong hcc trong dau ra -> FAIL du thoat 0.

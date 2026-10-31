@@ -1,0 +1,72 @@
+[
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/moi-kr/moi-kr.tsx",
+		"dau_hieu": "chip-dinh-thanh",
+		"so": 1,
+		"loai": "no",
+		"ly_do": "nợ: chip lọc tình trạng KR dính thành một thanh; đích: ToggleGroup variant=\"outline\" size=\"sm\" khoảng cách mặc định, số đếm qua prop count"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/overview-scope.tsx",
+		"dau_hieu": "chip-dinh-thanh",
+		"so": 2,
+		"loai": "no",
+		"ly_do": "nợ: chip phạm vi của Tổng quan và bản chờ tải của nó dính thành thanh; đích: chip một kiểu như mục «Hàng công cụ» của docs/design.md"
+	},
+	{
+		"tep": "apps/app/components/crm/timeline/timeline.tsx",
+		"dau_hieu": "chip-dinh-thanh",
+		"so": 1,
+		"loai": "no",
+		"ly_do": "nợ: thẻ Tất cả · Ghi chú · … của dòng thời gian tự ghép bằng ToggleGroup dính thanh; đích: Tabs variant=\"line\" hoặc ViewSwitch, không tự ghép"
+	},
+	{
+		"tep": "apps/app/components/lo-trinh/trang-lo-trinh.tsx",
+		"dau_hieu": "chip-dinh-thanh",
+		"so": 2,
+		"loai": "no",
+		"ly_do": "nợ: lọc vòng đời và nút chia cột của Lộ trình dính thanh; đích: vòng đời thành chip, chia cột thành ViewSwitch"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx",
+		"dau_hieu": "nhom-gap-bang",
+		"so": 1,
+		"loai": "no",
+		"ly_do": "nợ: «Còn lại (n)» là tập con của cùng danh sách gập dưới bảng Họp tuần; đích: một giá trị lọc trên hàng công cụ"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/nhom-da-bo.tsx",
+		"dau_hieu": "nhom-gap-bang",
+		"so": 1,
+		"loai": "no",
+		"ly_do": "nợ: nhóm gập «Đã bỏ (n)» dưới bảng mục tiêu, Của tôi giữ tới SV1 (sổ bo-okr-chi-don-vi d-20261028T050849Z-5); đích: nút bật tắt Đã bỏ cuối hàng công cụ (docs/vong-doi.md)"
+	},
+	{
+		"tep": "apps/app/components/du-an/tat-ca-du-an.tsx",
+		"dau_hieu": "nhom-gap-bang",
+		"so": 1,
+		"loai": "no",
+		"ly_do": "nợ: nhóm gập «Đã đóng (n)» dưới bảng dự án; đích: nút bật tắt Đã đóng cuối hàng công cụ (docs/vong-doi.md)"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/lich-lam-viec/lich-lam-viec.tsx",
+		"dau_hieu": "chip-trong-the",
+		"so": 1,
+		"loai": "o-nhap",
+		"ly_do": "ô chọn ngày nghỉ trong tuần của một form cài đặt, không lọc danh sách nào; chưa bọc Field nên máy không tự nhận ra"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/notifications/khoi-kenh.tsx",
+		"dau_hieu": "chip-dinh-thanh",
+		"so": 1,
+		"loai": "o-nhap",
+		"ly_do": "ô chọn kênh nhận thông báo của một form cài đặt, không lọc danh sách nào; chưa bọc Field nên máy không tự nhận ra"
+	},
+	{
+		"tep": "apps/app/components/crm/timeline/activity-composer.tsx",
+		"dau_hieu": "chip-dinh-thanh",
+		"so": 1,
+		"loai": "o-nhap",
+		"ly_do": "ô chọn loại ghi chú trong khối soạn của ngăn bản ghi, không lọc danh sách nào"
+	}
+]
