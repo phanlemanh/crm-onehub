@@ -1,0 +1,66 @@
+{
+  "dot": "ban-do-khuon-3010",
+  "muc_tieu": "Mọi ngăn bản ghi mở trong cùng một khung, ngăn mới dựng ngoài khung thì bài kiểm đỏ, và trang sinh sau cũng bị soát khung trang",
+  "day": [
+    {
+      "id": "K",
+      "worktree": "/CHUA-CO-WORKTREE/K",
+      "link": ""
+    },
+    {
+      "id": "L",
+      "worktree": "/CHUA-CO-WORKTREE/L",
+      "link": ""
+    }
+  ],
+  "hang": [
+    {
+      "ma": "BK1",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "khung-chung-ngan-ban-ghi",
+      "day": "K",
+      "uu_tien": 0,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/khung-chung-ngan-ban-ghi/**",
+        "apps/app/components/crm/record-sheet/**",
+        "apps/app/app/proto/_modules/khung-chung-ngan-ban-ghi/**",
+        "design/patterns/**",
+        "docs/design.md"
+      ],
+      "moc": "2026-11-03"
+    },
+    {
+      "ma": "BK2",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "rang-giu-khung-ngan",
+      "day": "K",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/rang-giu-khung-ngan/**",
+        "tools/oxlint/**",
+        ".oxlintrc.json",
+        "apps/app/test/lib/**",
+        "apps/app/test/khung-ngan-chung.spec.ts",
+        "docs/proto.md"
+      ],
+      "moc": "2026-11-05"
+    },
+    {
+      "ma": "BK3",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "rang-khung-trang-mo",
+      "day": "L",
+      "uu_tien": 0,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/rang-khung-trang-mo/**",
+        "apps/app/test/khung-man-chung.spec.ts",
+        "apps/app/test/fixtures/**"
+      ],
+      "moc": "2026-11-03"
+    }
+  ],
+  "ngoai_hang_merge": []
+}

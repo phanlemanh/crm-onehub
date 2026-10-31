@@ -61,6 +61,10 @@ nguon: crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md#c9d74eaf0b846ddf5f3c2d50c9bf
 `objective-sheet.tsx`. Không chạy song song hai vòng sửa cùng tệp ngăn; người cắt lượt xếp thứ tự (máy khuyến nghị
 N1 và N2 trước, BK1 sau, để khung mở khe theo hình dạng mới của ngăn).
 
+**Thứ tự đảo 31/10.** Chủ kho chọn «BK chạy trước» theo khuyến nghị của điều phối kit: BK1 → BK2 chạy trước SV9 (N1)
+và SV10 (N2), để hai hàng đó viết trong khung và thành các vòng giao diện đầu tiên mà răng BK2 đếm lệch thật. Lộ
+trình ghi SV9, SV10 đứng trên BK2; BK1 không còn chờ hàng nào.
+
 **Ngoài phạm vi:**
 - Cơ chế chung trong kit: lệnh khuôn, khối thẻ, dò khuôn từ mã. Thuộc kho kit, sau khi kho thứ hai khai cùng hình dạng.
 - Trạng thái rỗng và tải theo từng khu ngoài ngăn bản ghi.
