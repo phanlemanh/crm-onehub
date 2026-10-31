@@ -25,7 +25,7 @@ evals:
     cmd: config:executors.test.gymk_xu_ly
     expected: "exit 0; -t gy-xu-ly của apps/api/test/goi-y-mo-ke-hoach.spec.ts. Ma trận viết trước bốn người × hai thủ tục: người nhận 'gy-p' (member), quản trị 'gy-qt' (admin), người thứ ba 'gy-x' (member), người vai okr 'gy-okr'. boQuaGoiY bởi gy-p: trangThai khác BO_QUA, xuLyBoiId khác gy-p hay xuLyLuc null thì ném 'gy: bo qua nguoi nhan sai'; bởi gy-qt trên gợi ý khác: xuLyBoiId khác gy-qt thì ném 'gy: bo qua quan tri sai'; bởi gy-x và gy-okr: không phải TRPCError FORBIDDEN hay gợi ý đổi (so cả hàng trước/sau) thì ném 'gy: nguoi khac bo qua duoc <ai>'; goiYCuaDeal bởi gy-x khác null thì ném 'gy: nguoi khac doc duoc', bởi gy-p trả gợi ý CHO của deal đang thắng, khác thì ném 'gy: nguoi nhan khong doc duoc' (đối chứng dương); deal của gợi ý chuyển thắng→mở thì goiYCuaDeal bởi gy-p trả null, không thì ném 'gy: goi y hien khi deal roi thang'. boQuaGoiY lại gợi ý đã BO_QUA: không phải BAD_REQUEST chứa nguyên văn 'Gợi ý này đã được xử lý.' hay hàng đổi thì ném 'gy: xu ly lai khong bi chan'. Số ô đã chạy khác số hàng bảng thì ném 'gy: bang quyen thieu o'. Chiều đỏ ở E11 (e)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/onboarding/**, packages/db/src/goi-y-ke-hoach.ts, packages/validation/src/goi-y-ke-hoach.ts, apps/api/test/goi-y-mo-ke-hoach.spec.ts]
+    paths: ["apps/api/src/onboarding/**", packages/db/src/goi-y-ke-hoach.ts, apps/api/test/goi-y-mo-ke-hoach.spec.ts]
 
   - id: E4
     criterion: AC-4
@@ -89,6 +89,7 @@ evals:
   - id: E9
     criterion: AC-9
     executor: judgment
+    paths: [CONTEXT.md, docs/api.md, docs/plan/lo-trinh-viec-du-an.json]
     question: >-
       Đọc CONTEXT.md (mục «Gợi ý mở kế hoạch» và mục «Gợi ý»), docs/api.md (mục router onboarding) và
       docs/plan/lo-trinh-viec-du-an.json (hàng DA3b) như một người mới vào kho. Tài liệu có nói rõ sáu điều không:
