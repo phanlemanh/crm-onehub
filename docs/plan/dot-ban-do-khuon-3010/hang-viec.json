@@ -1,6 +1,6 @@
 {
   "dot": "ban-do-khuon-3010",
-  "muc_tieu": "Mọi ngăn bản ghi mở trong cùng một khung, ngăn mới dựng ngoài khung thì bài kiểm đỏ, và trang sinh sau cũng bị soát khung trang",
+  "muc_tieu": "CI kiểm hết đỏ cố định rồi mọi ngăn bản ghi mở trong cùng một khung, ngăn mới dựng ngoài khung, dấu hiệu vẽ tay hay lọc ngoài hàng công cụ thì bài kiểm đỏ, trang sinh sau cũng bị soát khung trang, và hai việc ghi trong ngăn (SV9, SV10) viết vào khung đó; dãy D dọn nợ thước và trang giới thiệu song song",
   "day": [
     {
       "id": "K",
@@ -11,15 +11,49 @@
       "id": "L",
       "worktree": "/CHUA-CO-WORKTREE/L",
       "link": ""
+    },
+    {
+      "id": "D",
+      "worktree": "/CHUA-CO-WORKTREE/D",
+      "link": ""
     }
   ],
   "hang": [
+    {
+      "ma": "F37",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "ci-test-het-do-co-dinh",
+      "day": "K",
+      "uu_tien": 0,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/ci-test-het-do-co-dinh/**",
+        "packages/ui/test/pre-push-da-chung.spec.ts",
+        "scripts/pre-push-t1.mjs",
+        ".githooks/**",
+        "apps/api/test/**"
+      ],
+      "moc": "2026-11-01"
+    },
+    {
+      "ma": "SN1",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "thuoc-thiet-ke-xanh-rong",
+      "day": "K",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/thuoc-thiet-ke-xanh-rong/**",
+        "docs/design.md"
+      ],
+      "moc": "2026-11-01"
+    },
     {
       "ma": "BK1",
       "tep": "docs/plan/lo-trinh-okr.json",
       "slug": "khung-chung-ngan-ban-ghi",
       "day": "K",
-      "uu_tien": 0,
+      "uu_tien": 2,
       "s4": "local",
       "ranh_gioi": [
         "_acceptance/khung-chung-ngan-ban-ghi/**",
@@ -35,7 +69,7 @@
       "tep": "docs/plan/lo-trinh-okr.json",
       "slug": "rang-giu-khung-ngan",
       "day": "K",
-      "uu_tien": 1,
+      "uu_tien": 3,
       "s4": "local",
       "ranh_gioi": [
         "_acceptance/rang-giu-khung-ngan/**",
@@ -43,9 +77,53 @@
         ".oxlintrc.json",
         "apps/app/test/lib/**",
         "apps/app/test/khung-ngan-chung.spec.ts",
-        "docs/proto.md"
+        "docs/proto.md",
+        "design/patterns/ngan-ban-ghi.md"
       ],
       "moc": "2026-11-05"
+    },
+    {
+      "ma": "BK5",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "rang-dau-hieu-ve-tay",
+      "day": "K",
+      "uu_tien": 4,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/rang-dau-hieu-ve-tay/**",
+        "tools/oxlint/onehub/**",
+        ".oxlintrc.json"
+      ],
+      "moc": "2026-11-06"
+    },
+    {
+      "ma": "SV9",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "sua-tai-cho-muc-tieu-va-kr",
+      "day": "K",
+      "uu_tien": 5,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/sua-tai-cho-muc-tieu-va-kr/**",
+        "apps/app/components/crm/record-sheet/**",
+        "apps/app/app/(app)/[slug]/okr/**",
+        "apps/app/components/crm/inline-field.tsx"
+      ],
+      "moc": "2026-11-08"
+    },
+    {
+      "ma": "SV10",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "bang-chung-kr-mot-loi",
+      "day": "K",
+      "uu_tien": 6,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/bang-chung-kr-mot-loi/**",
+        "apps/app/components/crm/record-sheet/**",
+        "apps/app/app/(app)/[slug]/okr/**"
+      ],
+      "moc": "2026-11-10"
     },
     {
       "ma": "BK3",
@@ -60,6 +138,117 @@
         "apps/app/test/fixtures/**"
       ],
       "moc": "2026-11-03"
+    },
+    {
+      "ma": "BK6",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "rang-hang-cong-cu",
+      "day": "L",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/rang-hang-cong-cu/**",
+        "apps/app/test/hang-cong-cu.spec.ts"
+      ],
+      "moc": "2026-11-05"
+    },
+    {
+      "ma": "SN2",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "hex-trang-gioi-thieu",
+      "day": "D",
+      "uu_tien": 0,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/hex-trang-gioi-thieu/**",
+        "apps/app/components/landing/**",
+        "packages/ui/src/styles/globals.css"
+      ],
+      "moc": "2026-11-01"
+    },
+    {
+      "ma": "F38",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "paths-chet-chin-ho-so",
+      "day": "D",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/paths-chet-chin-ho-so/**",
+        "_acceptance/cay-can-chinh-co-ly-do/evals.yaml",
+        "_acceptance/cho-tac-nhan-lau/evals.yaml",
+        "_acceptance/goi-y-mo-ke-hoach/evals.yaml",
+        "_acceptance/hoi-dap-okr/evals.yaml",
+        "_acceptance/kara-gop-y-luot-2/evals.yaml",
+        "_acceptance/ngan-kr-mot-cho/evals.yaml",
+        "_acceptance/quyet-gop-y-noi-dung-ly-do/evals.yaml",
+        "_acceptance/toan-canh-okr/evals.yaml",
+        "_acceptance/tro-ly-okr-nen/evals.yaml"
+      ],
+      "moc": "2026-11-03"
+    },
+    {
+      "ma": "F39",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "nguong-gia-tri-mat-giao-dien",
+      "day": "D",
+      "uu_tien": 2,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/nguong-gia-tri-mat-giao-dien/**",
+        "_acceptance/bo-cuc-hep-ngan-va-kanban/opportunity.md",
+        "_acceptance/cap-nhat-trong-ngan-kr/opportunity.md",
+        "_acceptance/cay-can-chinh-co-ly-do/opportunity.md",
+        "_acceptance/cho-tac-nhan-lau/opportunity.md",
+        "_acceptance/chu-man-tieng-viet-khong-tran/opportunity.md",
+        "_acceptance/dai-luu-tru-dung-chung/opportunity.md",
+        "_acceptance/dau-trang-okr-cho-nut-hoi-kara/opportunity.md",
+        "_acceptance/duong-ly-do-muc-tieu/opportunity.md",
+        "_acceptance/gan-tay-va-kara-co-ly-do/opportunity.md",
+        "_acceptance/go-tin-hieu-rac/opportunity.md",
+        "_acceptance/gon-dau-trang-lay-y-kien/opportunity.md",
+        "_acceptance/gop-y-dung-cho/opportunity.md",
+        "_acceptance/hoan-tac-loat-bao-dung/opportunity.md",
+        "_acceptance/hoan-tac-loat-dung-id/opportunity.md",
+        "_acceptance/hoi-dap-okr/opportunity.md",
+        "_acceptance/kara-mot-ten/opportunity.md",
+        "_acceptance/khung-cho-don-vi-mot-hinh/opportunity.md",
+        "_acceptance/khung-man-chung/opportunity.md",
+        "_acceptance/khung-soan-chan-lien-ket/opportunity.md",
+        "_acceptance/lich-su-va-luu-tru-trang/opportunity.md",
+        "_acceptance/lien-quan-loc-ban-da-cat/opportunity.md",
+        "_acceptance/lo-trinh-nhieu-san-pham/opportunity.md",
+        "_acceptance/lo-trinh-ten-va-build/opportunity.md",
+        "_acceptance/loc-don-vi-khong-tu-dong/opportunity.md",
+        "_acceptance/loc-moi-truong/opportunity.md",
+        "_acceptance/loc-va-kieu-xem-chung/opportunity.md",
+        "_acceptance/luu-tru-truong-khong-hoi/opportunity.md",
+        "_acceptance/mau-trang-thai-chung/opportunity.md",
+        "_acceptance/nen-kara/opportunity.md",
+        "_acceptance/ngan-ban-ghi-giu-danh-tinh/opportunity.md",
+        "_acceptance/nhap-truong-luc-tao/opportunity.md",
+        "_acceptance/okr-cua-toi-tach-theo-doi/opportunity.md",
+        "_acceptance/okr-loai-hoc-tap/opportunity.md",
+        "_acceptance/quyet-gop-y-noi-dung-ly-do/opportunity.md",
+        "_acceptance/soan-okr-khong-lac/opportunity.md",
+        "_acceptance/sort-moi-truong/opportunity.md",
+        "_acceptance/sua-sau-chay-that/opportunity.md",
+        "_acceptance/tac-nhan-va/opportunity.md",
+        "_acceptance/the-gop-y-okr/opportunity.md",
+        "_acceptance/them-buoc-bao-dung/opportunity.md",
+        "_acceptance/thong-bao-mot-nguon-nhieu-kenh/opportunity.md",
+        "_acceptance/tieu-diem-sau-hop-xoa-tin-hieu/opportunity.md",
+        "_acceptance/trang-lo-trinh-mo-hinh-hien-thi/opportunity.md",
+        "_acceptance/trang-thai-tin-hieu-song/opportunity.md",
+        "_acceptance/truong-chuan-o-cai-dat/opportunity.md",
+        "_acceptance/truong-mot-cach-cu-xu/opportunity.md",
+        "_acceptance/truong-tep/opportunity.md",
+        "_acceptance/va-lo-ro-vai-chi-okr/opportunity.md",
+        "_acceptance/ve-khung-muc-tieu-dung-kr/opportunity.md",
+        "_acceptance/viec-rieng-chi-nguoi-trong-cuoc/opportunity.md",
+        "_acceptance/zalo-gui-hong-ghi-ly-do/opportunity.md"
+      ],
+      "moc": "2026-11-05"
     }
   ],
   "ngoai_hang_merge": []

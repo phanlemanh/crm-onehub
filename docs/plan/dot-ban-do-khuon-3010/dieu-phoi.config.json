@@ -27,9 +27,18 @@
     "apps/app/lib/messages/*.ts"
   ],
   "nguon_hang": [
+    "docs/plan/lo-trinh-okr.json:F37",
+    "docs/plan/lo-trinh-okr.json:SN1",
     "docs/plan/lo-trinh-okr.json:BK1",
     "docs/plan/lo-trinh-okr.json:BK2",
-    "docs/plan/lo-trinh-okr.json:BK3"
+    "docs/plan/lo-trinh-okr.json:BK5",
+    "docs/plan/lo-trinh-okr.json:SV9",
+    "docs/plan/lo-trinh-okr.json:SV10",
+    "docs/plan/lo-trinh-okr.json:BK3",
+    "docs/plan/lo-trinh-okr.json:BK6",
+    "docs/plan/lo-trinh-okr.json:SN2",
+    "docs/plan/lo-trinh-okr.json:F38",
+    "docs/plan/lo-trinh-okr.json:F39"
   ],
   "han_muc": {
     "bao_truoc_pct": 80,
