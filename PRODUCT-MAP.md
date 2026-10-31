@@ -6,12 +6,12 @@
 
 ```mermaid
 flowchart TD
-  A["Đang cân nhắc cơ hội<br/>1 việc"] --> GD{"Cổng Đáng"}
+  A["Đang cân nhắc cơ hội<br/>chưa có"] --> GD{"Cổng Đáng"}
   GD --> B["Sắp mở vòng<br/>2 việc"]
   GD --> XL["Xếp lại sau<br/>8 việc"]
   GD --> DB["Đã bác từ khám phá<br/>3 việc"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>171 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>190 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
@@ -22,10 +22,6 @@ flowchart TD
 > đã đủ và đúng chưa · **Cổng Bằng chứng** đã làm đúng thứ đã hứa chưa ·
 > **Cổng Giá trị** thứ đã giao có ăn thua không.
 
-## Đang cân nhắc cơ hội
-
-- Mọi page.tsx của ứng dụng, kể cả trang sinh sau ngày dựng bài kiểm, đều bị soát hình theo màn; trang lệch không có trong bảng ngoại lệ kèm lý do thì bài kiểm đỏ (`rang-khung-trang-mo`)
-
 ## Sắp mở vòng
 
 - Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu (`giai-doan-bo-mac-dinh`)
@@ -33,6 +29,7 @@ flowchart TD
 
 ## Đang làm
 
+- Mọi page.tsx của ứng dụng, kể cả trang sinh sau ngày dựng bài kiểm, đều bị soát hình theo màn; trang lệch không có trong bảng ngoại lệ kèm lý do thì bài kiểm đỏ (`rang-khung-trang-mo`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
