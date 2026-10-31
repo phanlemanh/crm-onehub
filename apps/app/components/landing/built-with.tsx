@@ -6,7 +6,7 @@ export function BuiltWith() {
 	return (
 		<div className="flex w-full max-w-6xl select-none flex-col items-center gap-[14px] pt-10">
 			<div className="flex flex-col items-center gap-5">
-				<p className="font-mono text-[13px]/4 tracking-widest text-[#6E6E6E]">
+				<p className="font-mono text-[13px]/4 tracking-widest text-muted-foreground">
 					BUILT WITH
 				</p>
 

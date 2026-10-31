@@ -51,7 +51,7 @@ export function MonoLabel({
 	return (
 		<p
 			className={cn(
-				"select-none font-mono text-[#5A5A5A] text-[11px]/4 tracking-widest",
+				"select-none font-mono text-muted-foreground text-[11px]/4 tracking-widest",
 				className,
 			)}
 		>
