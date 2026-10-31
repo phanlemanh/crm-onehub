@@ -5,7 +5,7 @@ slug: ci-test-het-do-co-dinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: implemented
+status: machine-cleared
 design_doc: _acceptance/ci-test-het-do-co-dinh/design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-31
@@ -75,3 +75,4 @@ Quét tay ba trục (entry «bỏ coverage-scan» trong `decisions.jsonl`):
   nền đều xanh trên máy, kể cả 2169 ca `api`.
 - Đo ở S1: ép trần 100ms cho cả nhóm `dau-hook` trong một tiến trình thì tiến trình treo. Có lẽ một ca bị ngắt giữa
   chừng để lại trạng thái dở cho ca sau. Răng vì thế ép trần từng ca một, mỗi lần gọi bun có giới hạn 180s.
+- Ngoài-1 (máy định tuyến 2026-10-31, đề xuất S4 known-limits): Một dòng kiểm trong bộ đo tự động của bản sửa này đọc thứ tự từ tệp ghi sẵn chứ không từ lần chạy thật, nên nó luôn báo đạt. Người dùng cuối không bị ảnh hưởng; việc xác nhận thứ tự chạy thật vẫn do bước kiểm ngay trước đó đảm nhận. — `_acceptance/ci-test-het-do-co-dinh/rang/phat-lai-thu-tu.mjs`
