@@ -29,7 +29,7 @@ Vì sao: Hôm nay có hai đường cập nhật: bảng hàng loạt ở Của 
 - Câu hỏi phép đo trả lời: đã đạt «Của tôi không còn bảng cập nhật hàng loạt; tin nhắc, Của tôi, ngăn KR và dòng bộ OKR đều mở cùng hộp một KR; bấm tin nhắc «N KR chờ» tới KR chứ không tới /okr?tu=nhac» chưa?
 - Kết quả nào là SỐNG: Của tôi không còn bảng cập nhật hàng loạt; tin nhắc, Của tôi, ngăn KR và dòng bộ OKR đều mở cùng hộp một KR; bấm tin nhắc «N KR chờ» tới KR chứ không tới /okr?tu=nhac
 - Kết quả nào là CHẾT: chưa đạt «Của tôi không còn bảng cập nhật hàng loạt; tin nhắc, Của tôi, ngăn KR và dòng bộ OKR đều mở cùng hộp một KR; bấm tin nhắc «N KR chờ» tới KR chứ không tới /okr?tu=nhac» khi hết timebox
-- Timebox: 30/10/2026 — ngày của hàng SV1; đo bằng bài kiểm máy trên dữ liệu mẫu `okr:mau`, không chờ người dùng thật (CLAUDE.md «Lộ trình là việc dựng»).
+- Timebox: 2026-11-14 — lùi theo B7 (chủ kho đồng ý 31/10): một phiên nghiệm thu chung sau khi BK và SV gộp. Hạn cũ: 30/10/2026 — ngày của hàng SV1; đo bằng bài kiểm máy trên dữ liệu mẫu `okr:mau`, không chờ người dùng thật (CLAUDE.md «Lộ trình là việc dựng»).
 
 ## Nguồn quyết định Cổng Đáng
 
