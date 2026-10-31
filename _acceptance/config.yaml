@@ -2442,6 +2442,11 @@ executors:
     ctd_phat_lai_ui: node _acceptance/ci-test-het-do-co-dinh/rang/phat-lai-thu-tu.mjs --chi-ui
     ctd_phat_lai_api: node _acceptance/ci-test-het-do-co-dinh/rang/phat-lai-thu-tu.mjs --chi-api
     ctd_rieng_ba_luot: node _acceptance/ci-test-het-do-co-dinh/rang/rieng-ba-luot.mjs
+    bk1_quet: node _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs
+    bk1_dom: node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs
+    bk1_kieu: node _acceptance/khung-chung-ngan-ban-ghi/rang/kieu-bat-buoc.mjs
+    bk1_bai_cu: node _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs
+    bk1_chup: PROTO_ROUTE=1 bun run do:man --chay "PROTO_URL=$APP_URL node _acceptance/khung-chung-ngan-ban-ghi/rang/chup-proto.mjs"
     bcd_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-chi-don-vi/rang/man-bo-okr-chi-don-vi.mjs"'
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs

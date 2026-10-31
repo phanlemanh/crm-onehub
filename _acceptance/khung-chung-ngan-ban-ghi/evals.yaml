@@ -1,0 +1,89 @@
+schema_version: 1
+feature_slug: khung-chung-ngan-ban-ghi
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.bk1_quet
+    paths: [apps/app/components/crm/record-sheet/**, _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs]
+    expected: "exit 0; in «DAT tat ca». DAT «ban-lanh: bay ngan di qua khung, khuon va thiet ke dung» (host map đủ bảy kind; mỗi tệp gọi RecordSheetFrame, KhungNgan hay KhungKr; không nhập DetailSheetHeader, Spinner, VungTaiLoi; Skeleton chỉ ở kr-sheet.tsx, so-kr-sheet.tsx). CHIỀU ĐỎ trên bản sao thư mục tạm: DAT «pha-nhap-cam: deal-sheet nhap DetailSheetHeader thi do, goi ten tep va khoi» (lỗi «CAM deal-sheet.tsx: nhap DetailSheetHeader»), DAT «pha-thoat-khung: deal-sheet khong goi khung thi do» (lỗi «NGOAI KHUNG deal-sheet.tsx: …»)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.bk1_quet
+    paths: [design/patterns/ngan-ban-ghi.md, docs/design.md, _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs]
+    expected: "exit 0; in «DAT tat ca». Bản lạnh đỏ nếu khuôn thiếu một trong tám khoá frontmatter, doi_tuong khác [deal, lien-he, cong-ty, ke-hoach, muc-tieu, kr, so-kr], thân khuôn không nhắc một tệp ngăn, hay mục «### Chờ tải và lỗi tải trong ngăn bản ghi» của docs/design.md vắng hoặc không nhắc KhungXuongNgan, KhungTaiLoi, VungTaiLoi, design/patterns/ngan-ban-ghi.md. CHIỀU ĐỎ: DAT «pha-khuon: bo so-kr khoi doi_tuong thi do» (lỗi mở bằng «KHUON doi_tuong»)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.bk1_dom
+    paths: [apps/app/components/crm/record-sheet/record-parts.tsx, packages/ui/src/components/khung-xuong.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/khung-ngan.dom.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs]
+    expected: "exit 0; in «DAT tat ca». Chép khung-ngan.dom.tsx vào apps/app/test với tên tạm rồi xoá; gỡ CLAUDECODE. Ca «bk1-cho-tai: khung xuong hinh ngan, dau ngan giu tieu de, khong vong quay» pass: có [data-khung-xuong=\"ngan\"][aria-busy=\"true\"] và [data-khung-xuong-ngan], tiêu đề «Tieu de tam» còn, không .animate-spin."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.bk1_dom
+    paths: [apps/app/components/crm/record-sheet/record-parts.tsx, packages/ui/src/components/vung-tai-loi.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/khung-ngan.dom.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs]
+    expected: "exit 0; ca «bk1-loi-mat-ket-noi: KhungTaiLoi boc VungTaiLoi, thu lai goi dung mot lan» pass: [data-khung-tai-loi][data-ly-do=\"mat-ket-noi\"] chứa [data-vung-tai-loi]; bấm [data-slot=\"kara-retry\"] thì bộ đếm = 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bk1_dom
+    paths: [apps/app/components/crm/record-sheet/record-parts.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/khung-ngan.dom.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs]
+    expected: "exit 0; hai ca pass: «bk1-loi-ly-do: khong-con co nut Dong, khong-quyen co nut Dong, khong nut thu lai» (mỗi lý do đúng 1 button, không [data-slot=\"kara-retry\"]) và «bk1-hanh-dong: khe hanhDong thay nut mac dinh, giu data-nut» ([data-nut=\"ve-muc-tieu\"] mang chữ «Ve muc tieu», bấm thì bộ đếm = 1)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.bk1_dom
+    paths: [apps/app/components/crm/record-sheet/record-parts.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/khung-ngan.dom.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs]
+    expected: "exit 0; ca «bk1-than: the con nam giua than, vo va vung than mang dau du lieu» pass: [data-vo-thu=\"a\"] có, [data-than-thu=\"b\"] có, thứ tự trong vùng thân là [truoc, the, sau]."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.bk1_kieu
+    paths: [apps/app/components/crm/record-sheet/record-parts.tsx, apps/app/tsconfig.json, _acceptance/khung-chung-ngan-ban-ghi/rang/kieu-bat-buoc.mjs]
+    expected: "exit 0; in «DAT tat ca». Viết bốn tệp tsx tạm và một tsconfig tạm trong apps/app, chạy bunx tsc, rồi xoá. DAT «lanh — tsc phai im»; CHIỀU ĐỎ: DAT «thieu-loading — tsc phai doi prop 'loading'», DAT «thieu-error — tsc phai doi prop 'error'», DAT «tabs-thieu-tab — tsc phai doi prop 'tab'» (khối lỗi của tệp đó có error TS và tên prop)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bk1_bai_cu
+    paths: [apps/app/components/crm/record-sheet/**, apps/app/components/detail-sheet.tsx, packages/ui/src/components/khung-xuong.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs]
+    expected: "exit 0; in «DAT tat ca». 18 dòng DAT, mỗi tệp apps/app/test/<tên>.dom.tsx chạy riêng với TZ=Asia/Ho_Chi_Minh, 0 fail và ≥ 1 pass: ngan-kr-mot-cho, okr-canh-kr, cap-nhat-trong-ngan-kr, hop-tuan-tren-bang, ve-khung-muc-tieu-dung-kr, moi-kr-ca-cong-ty, cap-nhat-gan-day, hop-cap-nhat-lan-truoc, lich-su-moi-lan-cap-nhat, okr-sheet, so-kr, khung-loi-ban-ghi-dung-ly-do, khung-loi-ban-ghi-khong-con, kara-ban-ghi, thong-bao-mat-dich, da-luu-tru-tai-loi, ngan-ban-ghi-giu, ngan-ban-ghi-nap-san. Đo ở S1: 189 pass."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.bk1_dom
+    paths: [apps/app/app/proto/_modules/khung-chung-ngan-ban-ghi/**, apps/app/app/proto/catalog.ts, apps/app/components/crm/record-sheet/record-parts.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/khung-ngan.dom.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs]
+    expected: "exit 0; «bk1-proto: so khai du 7 doi tuong x 3 trang thai va 2 canh so truoc sau» pass (23 state trong PROTO_CATALOG), và 23 ca «bk1-proto <state>: dung khung dung trang thai» pass — dựng không bọc DetailSheet; mỗi [data-ngan-mau] có [data-slot=\"sheet-header\"] hoặc [data-slot=\"drawer-header\"]; -dang-tai có [data-khung-xuong=\"ngan\"], -loi có [data-khung-tai-loi], -du không có cả hai. ĐỐI CHỨNG ÂM: «bk1-doi-chung-am: ngan KR tu dung cu khong co khung xuong ngan, ngan trong khung thi co» pass. Đầu ra 30 pass · 0 fail."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bk1_chup
+    paths: [apps/app/components/crm/record-sheet/**, apps/app/components/detail-sheet.tsx, packages/ui/src/components/khung-xuong.tsx, apps/app/app/proto/_modules/khung-chung-ngan-ban-ghi/**, _acceptance/khung-chung-ngan-ban-ghi/rang/chup-proto.mjs]
+    steps:
+      - "Chạy đúng lệnh của eval (bun run do:man dựng API và app của cây đang xét trên cổng tự do, PROTO_ROUTE=1); không gọi thẳng chup-proto.mjs ngoài phiên đo"
+      - "Đọc dòng cuối: «xong; 46 anh; tran ngang: 0; khong co ngan: 0» và mã thoát 0"
+      - "Mở ảnh evidence/design-pass/ST-kr-dang-tai--desktop-1280--light.png, ST-so-kr-loi--desktop-1280--light.png, ST-muc-tieu-du--mobile-375--light.png, ST-kr-cu-moi-dang-tai--desktop-1280--light.png, ST-kr-loi--mobile-375--light.png"
+      - "Trên mỗi ảnh so ô bên trái với ô deal: đầu ngăn cùng hình (tiêu đề, nút đóng), chờ tải cùng hình khung xương (hai ô số, thanh thẻ, đoạn), lỗi cùng một khung có tiêu đề, một câu, một nút"
+      - "Ở cảnh ST-kr-cu-moi-dang-tai: ô trái (ngăn KR tự dựng cũ) KHÁC hình khung xương ô phải — đối chứng âm"
+    expected: "exit 0; 46 ảnh, tràn ngang 0, thiếu ngăn 0; người chấm xác nhận bốn điều của bước 4 trên năm ảnh, và ô cũ ở cảnh trước–sau khác hình."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
