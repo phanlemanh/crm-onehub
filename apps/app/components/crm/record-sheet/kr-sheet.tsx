@@ -1,6 +1,5 @@
 "use client";
 
-import ChartLine from "@carbon/icons-react/es/ChartLine";
 import ChevronLeft from "@carbon/icons-react/es/ChevronLeft";
 import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import { Button } from "@crm/ui/components/button";
@@ -17,7 +16,6 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
-import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { useSearchInput } from "@crm/ui/hooks/use-search-input";
 import { formatDay } from "@crm/ui/lib/format";
 import {
@@ -40,15 +38,11 @@ import { giaTri } from "@/app/(app)/[slug]/okr/gia-tri-kr";
 import { CANH_KR } from "@/app/(app)/[slug]/okr/kieu";
 import { useXemDuocBanGhi } from "@/app/(app)/[slug]/okr/nguon-so";
 import {
-	CuonCaKhungContext,
-	DetailSheetEmpty,
-	DetailSheetHeader,
 	DetailSheetProperties,
 	DetailSheetProperty,
 	DetailSheetProse,
 	DetailSheetSection,
 	type DetailSheetTab,
-	DetailSheetTabs,
 	SECTION_TITLE,
 } from "@/components/detail-sheet";
 import { okrMessages } from "@/lib/messages/okr";
@@ -73,6 +67,12 @@ import {
 } from "./kr-viec";
 import { LichSuKr } from "./lich-su-kr";
 import { dien, dienNode } from "./plan-copy";
+import {
+	type DauDuLieu,
+	KhungNgan,
+	KhungTaiLoi,
+	KhungXuongNgan,
+} from "./record-parts";
 import { recordKey, useRecordSheetView, useRecordStack } from "./record-stack";
 import { NoiDungSoKr } from "./so-kr-sheet";
 import { type DongThuTu, useThuTuHopTuan } from "./thu-tu-hop-tuan";
@@ -94,6 +94,14 @@ export type DauNganKr = {
 	hanhDong: ReactNode;
 };
 
+export type TrangKhungKr = {
+	loading: boolean;
+	error: string | null;
+	errorView?: ReactNode;
+	loadingView?: ReactNode;
+	vungThan?: DauDuLieu;
+};
+
 export function KhungKr({
 	duLieu,
 	tab,
@@ -103,6 +111,7 @@ export function KhungKr({
 	bangChung,
 	dau,
 	than,
+	trang,
 }: {
 	duLieu: TrangThaiCanh;
 	tab: string;
@@ -112,6 +121,7 @@ export function KhungKr({
 	bangChung: ReactNode;
 	dau?: DauNganKr;
 	than?: (tabs: ReactNode) => ReactNode;
+	trang?: TrangKhungKr;
 }) {
 	const m = okrCanhKrMessages(useLocale()).khung;
 	const canh = duLieu.loai === "xong" ? duLieu.canh : null;
@@ -123,33 +133,31 @@ export function KhungKr({
 	];
 	const dangMo = tabs.some((t) => t.value === tab) ? tab : TAB.viec;
 	const tenKr = canh?.kr.title ?? dau?.tieuDe ?? null;
-	const theTab = (
-		<DetailSheetTabs tabs={tabs} value={dangMo} onValueChange={onTab} />
-	);
 	return (
-		<div
-			className="contents"
-			data-kr-sheet={canh?.kr.id}
-			data-kieu-kr={canh?.kr.kind}
-		>
-			<DetailSheetHeader
-				title={
-					tenKr === null ? m.tieuDeCho : <span translate="no">{tenKr}</span>
-				}
-				description={
-					dau
-						? dau.mucTieu
-						: canh
-							? dienNode(m.phuTrach, {
-									ten: <span translate="no">{canh.kr.ownerName}</span>,
-								})
-							: undefined
-				}
-				actions={dau?.hanhDong}
-				onBack={onBack}
-			/>
-			{than ? than(theTab) : theTab}
-		</div>
+		<KhungNgan
+			loading={trang?.loading ?? false}
+			error={trang?.error ?? null}
+			errorView={trang?.errorView}
+			loadingView={trang?.loadingView}
+			vungThan={trang?.vungThan}
+			vo={{ "data-kr-sheet": canh?.kr.id, "data-kieu-kr": canh?.kr.kind }}
+			title={tenKr === null ? m.tieuDeCho : <span translate="no">{tenKr}</span>}
+			description={
+				dau
+					? dau.mucTieu
+					: canh
+						? dienNode(m.phuTrach, {
+								ten: <span translate="no">{canh.kr.ownerName}</span>,
+							})
+						: undefined
+			}
+			actions={dau?.hanhDong}
+			onBack={onBack}
+			tabs={tabs}
+			tab={dangMo}
+			onTabChange={onTab}
+			than={than}
+		/>
 	);
 }
 
@@ -623,40 +631,12 @@ function CacMucKr({
 	);
 }
 
-function DangTaiKr() {
-	const m = okrCanhKrMessages(useLocale()).khung;
-	return (
-		<DetailSheetSection>
-			<div aria-busy="true" className="flex flex-col gap-3" data-khung-xuong-kr>
-				<span className="sr-only" role="status">
-					{m.dangTaiNgan}
-				</span>
-				<div className="grid grid-cols-2 gap-3">
-					<Skeleton className="h-20 w-full" />
-					<Skeleton className="h-20 w-full" />
-				</div>
-				<Skeleton className="h-3 w-full" />
-				<Skeleton className="h-40 w-full" />
-			</div>
-		</DetailSheetSection>
-	);
-}
-
-function KhongThayKr({ ve }: { ve: DuongVe }) {
-	const m = okrCanhKrMessages(useLocale()).khung;
-	return (
-		<DetailSheetEmpty
-			action={
-				<Button data-nut="ve-muc-tieu" onClick={ve.onVe} variant="outline">
-					{ve.coMucTieuDuoi ? m.khongCo.veMucTieu : m.khongCo.dongKhung}
-				</Button>
-			}
-			description={m.khongThay}
-			icon={ChartLine}
-			title={m.khongCo.tieuDe}
-		/>
-	);
-}
+type TrangThaiNgan =
+	| "ST-ngan-kr-mo"
+	| "ST-ngan-kr-chi-doc"
+	| "ST-ngan-kr-dang-tai"
+	| "ST-ngan-kr-loi"
+	| "ST-ngan-kr-khong-thay";
 
 type TrangMucTieu = {
 	data: ChiTiet | undefined;
@@ -665,64 +645,65 @@ type TrangMucTieu = {
 	isFetching: boolean;
 };
 
-type TrangThaiNgan =
-	| "ST-ngan-kr-mo"
-	| "ST-ngan-kr-chi-doc"
-	| "ST-ngan-kr-dang-tai"
-	| "ST-ngan-kr-loi"
-	| "ST-ngan-kr-khong-thay";
-
-function ThanNganKr({
+function useTrangKhungKr({
 	duLieu,
 	mtQ,
 	kr,
 	ve,
 	onThuLai,
-	children,
 }: {
 	duLieu: TrangThaiCanh;
 	mtQ: TrangMucTieu;
 	kr: KrCuaMt | null;
 	ve: DuongVe;
 	onThuLai: () => void;
-	children: (mt: ChiTiet, kr: KrCuaMt) => ReactNode;
-}) {
+}): TrangKhungKr {
 	const m = okrCanhKrMessages(useLocale()).khung;
 	const mt = mtQ.data;
-	const [trangThai, noiDung]: [TrangThaiNgan, ReactNode] =
-		duLieu.loai === "loi" && duLieu.khongCo
-			? ["ST-ngan-kr-khong-thay", <KhongThayKr key="kt" ve={ve} />]
-			: duLieu.loai === "loi" || mtQ.isError
-				? [
-						"ST-ngan-kr-loi",
-						<DetailSheetSection key="loi">
-							<VungTaiLoi
-								dangTai={mtQ.isFetching}
-								moTa={m.loiTaiMoTa}
-								onThuLai={onThuLai}
-								tieuDe={m.loiTai}
-							/>
-						</DetailSheetSection>,
-					]
-				: duLieu.loai === "dang-tai" || mtQ.isPending
-					? ["ST-ngan-kr-dang-tai", <DangTaiKr key="dt" />]
-					: !mt || !kr
-						? ["ST-ngan-kr-khong-thay", <KhongThayKr key="kt" ve={ve} />]
-						: [
-								coNutCapNhat(mt, kr) ? "ST-ngan-kr-mo" : "ST-ngan-kr-chi-doc",
-								children(mt, kr),
-							];
-	return (
-		<CuonCaKhungContext.Provider value>
-			<div
-				className="flex min-h-0 flex-1 flex-col overflow-y-auto"
-				data-than-ngan-kr
-				data-trang-thai={trangThai}
-			>
-				{noiDung}
-			</div>
-		</CuonCaKhungContext.Provider>
+	const khongThay = (
+		<KhungTaiLoi
+			lyDo="khong-con"
+			tieuDe={m.khongCo.tieuDe}
+			moTa={m.khongThay}
+			hanhDong={{
+				nhan: ve.coMucTieuDuoi ? m.khongCo.veMucTieu : m.khongCo.dongKhung,
+				onClick: ve.onVe,
+				"data-nut": "ve-muc-tieu",
+			}}
+		/>
 	);
+	const trangThai: TrangThaiNgan =
+		duLieu.loai === "loi" && duLieu.khongCo
+			? "ST-ngan-kr-khong-thay"
+			: duLieu.loai === "loi" || mtQ.isError
+				? "ST-ngan-kr-loi"
+				: duLieu.loai === "dang-tai" || mtQ.isPending
+					? "ST-ngan-kr-dang-tai"
+					: !mt || !kr
+						? "ST-ngan-kr-khong-thay"
+						: coNutCapNhat(mt, kr)
+							? "ST-ngan-kr-mo"
+							: "ST-ngan-kr-chi-doc";
+	return {
+		loading: trangThai === "ST-ngan-kr-dang-tai",
+		error:
+			trangThai === "ST-ngan-kr-loi" || trangThai === "ST-ngan-kr-khong-thay"
+				? m.loiTai
+				: null,
+		errorView:
+			trangThai === "ST-ngan-kr-khong-thay" ? (
+				khongThay
+			) : (
+				<KhungTaiLoi
+					tieuDe={m.loiTai}
+					moTa={m.loiTaiMoTa}
+					onRetry={onThuLai}
+					dangTai={mtQ.isFetching}
+				/>
+			),
+		loadingView: <KhungXuongNgan data-khung-xuong-kr="" nhan={m.dangTaiNgan} />,
+		vungThan: { "data-than-ngan-kr": "", "data-trang-thai": trangThai },
+	};
 }
 
 export function KrSheet({ keyResultId }: { keyResultId: string }) {
@@ -777,6 +758,13 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 		if (q.isError) void q.refetch();
 		if (mtQ.isError) void mtQ.refetch();
 	};
+	const trang = useTrangKhungKr({
+		duLieu,
+		mtQ,
+		kr: krMt,
+		ve,
+		onThuLai: thuLai,
+	});
 
 	return (
 		<>
@@ -796,26 +784,19 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 						/>
 					),
 				}}
-				than={(tabs) => (
-					<ThanNganKr
-						duLieu={duLieu}
-						kr={krMt}
-						mtQ={mtQ}
-						onThuLai={thuLai}
-						ve={ve}
-					>
-						{(mtDu, krDu) => (
-							<CacMucKr
-								key={krDu.id}
-								kr={krDu}
-								mt={mtDu}
-								onDaGui={daGui}
-								tab={tab}
-								tabs={tabs}
-							/>
-						)}
-					</ThanNganKr>
-				)}
+				trang={trang}
+				than={(tabs) =>
+					mt && krMt ? (
+						<CacMucKr
+							key={krMt.id}
+							kr={krMt}
+							mt={mt}
+							onDaGui={daGui}
+							tab={tab}
+							tabs={tabs}
+						/>
+					) : null
+				}
 				viec={
 					<KrViecDanhSach
 						duLieu={duLieu}
