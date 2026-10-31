@@ -149,7 +149,7 @@ function FollowUpCard() {
 						<span
 							className={cn(
 								"size-[7px] shrink-0 rounded-full",
-								item.next ? "animate-pulse bg-primary" : "bg-[#3A3A3A]",
+								item.next ? "animate-pulse bg-primary" : "bg-border",
 							)}
 						/>
 						<span
@@ -160,7 +160,7 @@ function FollowUpCard() {
 						>
 							{item.label}
 						</span>
-						<span className="shrink-0 font-mono text-[11px]/[18px] text-[#6E6E6E]">
+						<span className="shrink-0 font-mono text-[11px]/[18px] text-muted-foreground">
 							{item.due}
 						</span>
 					</li>
@@ -210,7 +210,7 @@ function ResearchingSpinner() {
 				cy="8"
 				r="6"
 				fill="none"
-				stroke="#4A4A4A"
+				stroke="var(--border)"
 				strokeWidth="2"
 			/>
 			<path
