@@ -118,6 +118,17 @@ mục này ở những gì nó nói riêng.
 - **Lỗi tải**: `VungTaiLoi` — tiêu đề, một câu nói chuyện gì hỏng, nút thử lại.
   Không dựng khung lỗi riêng ở màn.
 
+### Chờ tải và lỗi tải trong ngăn bản ghi
+
+Chủ kho chốt 30/10/2026 (hàng BK1). Luật trang ở trên kéo xuống tầng ngăn: mọi ngăn bản ghi dựng bằng
+`RecordSheetFrame`, theo khuôn `design/patterns/ngan-ban-ghi.md`.
+
+- **Chờ tải trong ngăn**: `KhungXuongNgan`, tức hình `ngan` của `KhungXuong`. Đầu ngăn vẫn hiện tiêu đề tạm. Không vòng
+  quay.
+- **Lỗi tải trong ngăn**: `KhungTaiLoi` là thành phần duy nhất. Nó nói đúng lý do: bản ghi không còn, không đủ quyền, hay
+  mất kết nối. Với mất kết nối, mặt thử lại là chính `VungTaiLoi`.
+- **Phân tầng**: `VungTaiLoi` dùng thẳng ở tầng trang; trong ngăn, nó chỉ xuất hiện qua `KhungTaiLoi`.
+
 ### Thanh bên khu và thẻ con
 
 Ba cách đi giữa các trang, mỗi cách cho một việc:
