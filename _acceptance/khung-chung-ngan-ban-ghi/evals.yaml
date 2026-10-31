@@ -6,7 +6,7 @@ evals:
     executor: script
     cmd: config:executors.script.bk1_quet
     paths: [apps/app/components/crm/record-sheet/**, _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs]
-    expected: "exit 0; in «DAT tat ca». DAT «ban-lanh: bay ngan di qua khung, khuon va thiet ke dung» (host map đủ bảy kind; mỗi tệp gọi RecordSheetFrame, KhungNgan hay KhungKr; không nhập DetailSheetHeader, Spinner, VungTaiLoi; Skeleton chỉ ở kr-sheet.tsx, so-kr-sheet.tsx). CHIỀU ĐỎ trên bản sao thư mục tạm: DAT «pha-nhap-cam: deal-sheet nhap DetailSheetHeader thi do, goi ten tep va khoi» (lỗi «CAM deal-sheet.tsx: nhap DetailSheetHeader»), DAT «pha-thoat-khung: deal-sheet khong goi khung thi do» (lỗi «NGOAI KHUNG deal-sheet.tsx: …»)."
+    expected: "exit 0; in «DAT tat ca». DAT «ban-lanh: bay ngan di qua khung, khuon va thiet ke dung» (host map đủ bảy kind; mỗi tệp gọi RecordSheetFrame, KhungNgan hay KhungKr; không nhập DetailSheetHeader, Spinner, VungTaiLoi; Skeleton chỉ ở kr-sheet.tsx, so-kr-sheet.tsx). CHIỀU ĐỎ trên bản sao thư mục tạm: DAT «pha-nhap-cam: deal-sheet nhap DetailSheetHeader thi do, goi ten tep va khoi» (lỗi «CAM deal-sheet.tsx: nhap DetailSheetHeader»), DAT «pha-thoat-khung: deal-sheet khong goi khung thi do» (lỗi «NGOAI KHUNG deal-sheet.tsx: …»), DAT «pha-loi-vao: deal-sheet goi KhungNgan thay RecordSheetFrame thi do» (lỗi «LOI VAO deal-sheet.tsx»), DAT «pha-trang-kr: kr-sheet khong truyen trang cho KhungKr thi do» (lỗi «TRANG THAI kr-sheet.tsx: thieu mau 1»). Bản lạnh còn đòi: chỉ kr-sheet.tsx gọi KhungNgan/KhungKr; kr-sheet truyền trang={…} cho KhungKr, loadingView là KhungXuongNgan, có KhungTaiLoi; so-kr-sheet có loadingView={<KhungXuongNgan và errorView={<KhungTaiLoi."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -54,7 +54,7 @@ evals:
     executor: script
     cmd: config:executors.script.bk1_kieu
     paths: [apps/app/components/crm/record-sheet/record-parts.tsx, apps/app/tsconfig.json, _acceptance/khung-chung-ngan-ban-ghi/rang/kieu-bat-buoc.mjs]
-    expected: "exit 0; in «DAT tat ca». Viết bốn tệp tsx tạm và một tsconfig tạm trong apps/app, chạy bunx tsc, rồi xoá. DAT «lanh — tsc phai im»; CHIỀU ĐỎ: DAT «thieu-loading — tsc phai doi prop 'loading'», DAT «thieu-error — tsc phai doi prop 'error'», DAT «tabs-thieu-tab — tsc phai doi prop 'tab'» (khối lỗi của tệp đó có error TS và tên prop)."
+    expected: "exit 0; in «DAT tat ca». Viết bốn tệp tsx tạm và một tsconfig tạm trong apps/app, chạy bunx tsc, rồi xoá. DAT «lanh — tsc phai im»; CHIỀU ĐỎ: DAT «thieu-loading — tsc phai doi prop 'loading'», DAT «thieu-error — tsc phai doi prop 'error'», DAT «tabs-thieu-tab — tsc phai doi prop 'tab'», và với KhungNgan: DAT «khung-ngan-lanh — tsc phai im», DAT «khung-ngan-thieu-loading — tsc phai doi prop 'loading'», DAT «khung-ngan-thieu-error — tsc phai doi prop 'error'» (khối lỗi của tệp đó có error TS và tên prop)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -62,7 +62,7 @@ evals:
     executor: script
     cmd: config:executors.script.bk1_bai_cu
     paths: [apps/app/components/crm/record-sheet/**, apps/app/components/detail-sheet.tsx, packages/ui/src/components/khung-xuong.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs]
-    expected: "exit 0; in «DAT tat ca». 18 dòng DAT, mỗi tệp apps/app/test/<tên>.dom.tsx chạy riêng với TZ=Asia/Ho_Chi_Minh, 0 fail và ≥ 1 pass: ngan-kr-mot-cho, okr-canh-kr, cap-nhat-trong-ngan-kr, hop-tuan-tren-bang, ve-khung-muc-tieu-dung-kr, moi-kr-ca-cong-ty, cap-nhat-gan-day, hop-cap-nhat-lan-truoc, lich-su-moi-lan-cap-nhat, okr-sheet, so-kr, khung-loi-ban-ghi-dung-ly-do, khung-loi-ban-ghi-khong-con, kara-ban-ghi, thong-bao-mat-dich, da-luu-tru-tai-loi, ngan-ban-ghi-giu, ngan-ban-ghi-nap-san. Đo ở S1: 189 pass."
+    expected: "exit 0; in «DAT tat ca». DAT «khong-sua-bai-da-ky — 18 tep khong doi so voi <merge-base>» (git diff --name-only <merge-base HEAD origin/onehub> trên 18 tệp rỗng). 18 dòng DAT, mỗi tệp apps/app/test/<tên>.dom.tsx chạy riêng với TZ=Asia/Ho_Chi_Minh, 0 fail và ≥ 1 pass: ngan-kr-mot-cho, okr-canh-kr, cap-nhat-trong-ngan-kr, hop-tuan-tren-bang, ve-khung-muc-tieu-dung-kr, moi-kr-ca-cong-ty, cap-nhat-gan-day, hop-cap-nhat-lan-truoc, lich-su-moi-lan-cap-nhat, okr-sheet, so-kr, khung-loi-ban-ghi-dung-ly-do, khung-loi-ban-ghi-khong-con, kara-ban-ghi, thong-bao-mat-dich, da-luu-tru-tai-loi, ngan-ban-ghi-giu, ngan-ban-ghi-nap-san. DAT «tong-pass — <n> (can >= 189)». Đo ở S1: 189 pass."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
@@ -71,6 +71,14 @@ evals:
     cmd: config:executors.script.bk1_dom
     paths: [apps/app/app/proto/_modules/khung-chung-ngan-ban-ghi/**, apps/app/app/proto/catalog.ts, apps/app/components/crm/record-sheet/record-parts.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/khung-ngan.dom.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs]
     expected: "exit 0; «bk1-proto: so khai du 7 doi tuong x 3 trang thai va 2 canh so truoc sau» pass (23 state trong PROTO_CATALOG), và 23 ca «bk1-proto <state>: dung khung dung trang thai» pass — dựng không bọc DetailSheet; mỗi [data-ngan-mau] có [data-slot=\"sheet-header\"] hoặc [data-slot=\"drawer-header\"]; -dang-tai có [data-khung-xuong=\"ngan\"], -loi có [data-khung-tai-loi], -du không có cả hai. ĐỐI CHỨNG ÂM: «bk1-doi-chung-am: ngan KR tu dung cu khong co khung xuong ngan, ngan trong khung thi co» pass. Đầu ra 30 pass · 0 fail."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.bk1_dom
+    paths: [apps/app/components/crm/record-sheet/**, apps/app/components/detail-sheet.tsx, packages/ui/src/components/khung-xuong.tsx, packages/ui/src/components/vung-tai-loi.tsx, apps/app/test/khung-gop-y.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/ngan-that.dom.tsx, _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs]
+    expected: "exit 0; in «DAT tat ca». Chép ngan-that.dom.tsx (dữ liệu giả chép từ khung-loi-ban-ghi-dung-ly-do.dom.tsx, giàn ./khung-gop-y) vào apps/app/test tên tạm rồi xoá. Ma trận viết trước 4 ngăn × 4 trạng thái = 16 ô (expect(MA_TRAN.length * NGAN.length).toBe(16)); toEqual cả bảng: dang-tai {dau: true, ban: \"true\", quay: false}, loi-mat-ket-noi {dau: true, lyDo: \"mat-ket-noi\", vung: true}, khong-con {dau: true, lyDo: \"khong-con\", vung: false}, du {dau: true, loi: false, xuong: false} cho contact, company, deal, plan. DAT «ban-lanh ngan-that.dom.tsx». CHIỀU ĐỎ: DAT «pha-cho-tai: khung cho tai bang vong quay thi bon ngan that do» — tạm thay chỗ chọn chờ tải mặc định trong record-parts.tsx bằng một div animate-spin (chỉ khi tệp không có thay đổi chưa commit, trả lại trong finally), đầu ra có «(fail) bk1-ngan-that» và «khung xuong»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10

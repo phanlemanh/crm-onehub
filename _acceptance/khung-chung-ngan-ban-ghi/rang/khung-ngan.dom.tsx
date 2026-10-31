@@ -51,18 +51,32 @@ const qs = (s: string) => document.body.querySelector<HTMLElement>(s);
 describe("bk1-khung", () => {
 	test("bk1-cho-tai: khung xuong hinh ngan, dau ngan giu tieu de, khong vong quay", async () => {
 		await dung(<KhungNgan loading error={null} title="Tieu de tam" />);
-		expect(qs('[data-khung-xuong="ngan"][aria-busy="true"]'), "thieu khung xuong hinh ngan").not.toBeNull();
-		expect(qs("[data-khung-xuong-ngan]"), "thieu vo khung xuong ngan").not.toBeNull();
+		expect(
+			qs('[data-khung-xuong="ngan"][aria-busy="true"]'),
+			"thieu khung xuong hinh ngan",
+		).not.toBeNull();
+		expect(
+			qs("[data-khung-xuong-ngan]"),
+			"thieu vo khung xuong ngan",
+		).not.toBeNull();
 		expect(document.body.textContent).toContain("Tieu de tam");
-		expect(document.body.querySelector(".animate-spin"), "con vong quay").toBeNull();
+		expect(
+			document.body.querySelector(".animate-spin"),
+			"con vong quay",
+		).toBeNull();
 	});
 
 	test("bk1-loi-mat-ket-noi: KhungTaiLoi boc VungTaiLoi, thu lai goi dung mot lan", async () => {
 		let goi = 0;
-		await dung(<KhungNgan loading={false} error="x" onRetry={() => goi++} title="T" />);
+		await dung(
+			<KhungNgan loading={false} error="x" onRetry={() => goi++} title="T" />,
+		);
 		const vo = qs('[data-khung-tai-loi][data-ly-do="mat-ket-noi"]');
 		expect(vo, "thieu vo KhungTaiLoi mat-ket-noi").not.toBeNull();
-		expect(vo?.querySelector("[data-vung-tai-loi]"), "mat thu lai khong phai VungTaiLoi").not.toBeNull();
+		expect(
+			vo?.querySelector("[data-vung-tai-loi]"),
+			"mat thu lai khong phai VungTaiLoi",
+		).not.toBeNull();
 		const nut = vo?.querySelector<HTMLElement>('[data-slot="kara-retry"]');
 		await act(async () => nut?.click());
 		expect(goi).toBe(1);
@@ -73,8 +87,14 @@ describe("bk1-khung", () => {
 			await dung(<KhungTaiLoi lyDo={lyDo} onRetry={() => {}} />);
 			const vo = qs(`[data-khung-tai-loi][data-ly-do="${lyDo}"]`);
 			expect(vo, `thieu ${lyDo}`).not.toBeNull();
-			expect(vo?.querySelector('[data-slot="kara-retry"]'), `${lyDo} khong duoc co thu lai`).toBeNull();
-			expect(vo?.querySelectorAll("button").length, `${lyDo} phai co mot nut`).toBe(1);
+			expect(
+				vo?.querySelector('[data-slot="kara-retry"]'),
+				`${lyDo} khong duoc co thu lai`,
+			).toBeNull();
+			expect(
+				vo?.querySelectorAll("button").length,
+				`${lyDo} phai co mot nut`,
+			).toBe(1);
 			for (const r of dangMo.splice(0)) act(() => r.unmount());
 			document.body.innerHTML = "";
 		}
@@ -87,7 +107,11 @@ describe("bk1-khung", () => {
 				lyDo="khong-con"
 				tieuDe="Khong thay KR"
 				moTa="KR da bi go"
-				hanhDong={{ nhan: "Ve muc tieu", onClick: () => bam++, "data-nut": "ve-muc-tieu" }}
+				hanhDong={{
+					nhan: "Ve muc tieu",
+					onClick: () => bam++,
+					"data-nut": "ve-muc-tieu",
+				}}
 			/>,
 		);
 		const nut = qs('[data-khung-tai-loi] [data-nut="ve-muc-tieu"]');
@@ -105,7 +129,9 @@ describe("bk1-khung", () => {
 				title="T"
 				vo={{ "data-vo-thu": "a" }}
 				vungThan={{ "data-than-thu": "b" }}
-				tabs={[{ value: "v", label: "Viec", content: <p data-noi-dung-the="" /> }]}
+				tabs={[
+					{ value: "v", label: "Viec", content: <p data-noi-dung-the="" /> },
+				]}
 				tab="v"
 				onTabChange={() => {}}
 				than={(theCon) => (
@@ -120,19 +146,36 @@ describe("bk1-khung", () => {
 		expect(qs('[data-vo-thu="a"]'), "vo khong mang dau").not.toBeNull();
 		const vung = qs('[data-than-thu="b"]');
 		expect(vung, "vung than khong mang dau").not.toBeNull();
-		const thu = [...(vung?.querySelectorAll("[data-truoc-the],[role=tablist],[data-sau-the]") ?? [])].map((e) =>
-			e.hasAttribute("data-truoc-the") ? "truoc" : e.hasAttribute("data-sau-the") ? "sau" : "the",
+		const thu = [
+			...(vung?.querySelectorAll(
+				"[data-truoc-the],[role=tablist],[data-sau-the]",
+			) ?? []),
+		].map((e) =>
+			e.hasAttribute("data-truoc-the")
+				? "truoc"
+				: e.hasAttribute("data-sau-the")
+					? "sau"
+					: "the",
 		);
 		expect(thu).toEqual(["truoc", "the", "sau"]);
 	});
 
 	test("bk1-doi-chung-am: ngan KR tu dung cu khong co khung xuong ngan, ngan trong khung thi co", async () => {
-		await dung(<KhungChungNganBanGhiMau state="ST-kr-cu-moi-dang-tai" />, false);
+		await dung(
+			<KhungChungNganBanGhiMau state="ST-kr-cu-moi-dang-tai" />,
+			false,
+		);
 		const cu = qs("[data-ngan-cu]");
 		const moi = qs('[data-ngan-mau="kr"]');
 		expect(cu, "thieu ngan cu").not.toBeNull();
-		expect(cu?.querySelector('[data-khung-xuong="ngan"]'), "ngan cu lai co khung xuong ngan").toBeNull();
-		expect(moi?.querySelector('[data-khung-xuong="ngan"]'), "ngan moi thieu khung xuong ngan").not.toBeNull();
+		expect(
+			cu?.querySelector('[data-khung-xuong="ngan"]'),
+			"ngan cu lai co khung xuong ngan",
+		).toBeNull();
+		expect(
+			moi?.querySelector('[data-khung-xuong="ngan"]'),
+			"ngan moi thieu khung xuong ngan",
+		).not.toBeNull();
 	});
 
 	const muc = PROTO_CATALOG.find((m) => m.slug === "khung-chung-ngan-ban-ghi");
@@ -146,10 +189,27 @@ describe("bk1-khung", () => {
 			const ngan = [...document.body.querySelectorAll("[data-ngan-mau]")];
 			expect(ngan.length, "moi trang co ngan trong khung").toBeGreaterThan(0);
 			for (const n of ngan) {
-				expect(n.querySelector('[data-slot="sheet-header"], [data-slot="drawer-header"]'), "thieu dau ngan").not.toBeNull();
-				if (tt === "dang-tai") expect(n.querySelector('[data-khung-xuong="ngan"]'), "thieu khung xuong").not.toBeNull();
-				if (tt === "loi") expect(n.querySelector("[data-khung-tai-loi]"), "thieu KhungTaiLoi").not.toBeNull();
-				if (tt === "du") expect(n.querySelector("[data-khung-tai-loi],[data-khung-xuong]"), "trang du con trang thai khac").toBeNull();
+				expect(
+					n.querySelector(
+						'[data-slot="sheet-header"], [data-slot="drawer-header"]',
+					),
+					"thieu dau ngan",
+				).not.toBeNull();
+				if (tt === "dang-tai")
+					expect(
+						n.querySelector('[data-khung-xuong="ngan"]'),
+						"thieu khung xuong",
+					).not.toBeNull();
+				if (tt === "loi")
+					expect(
+						n.querySelector("[data-khung-tai-loi]"),
+						"thieu KhungTaiLoi",
+					).not.toBeNull();
+				if (tt === "du")
+					expect(
+						n.querySelector("[data-khung-tai-loi],[data-khung-xuong]"),
+						"trang du con trang thai khac",
+					).toBeNull();
 			}
 		});
 	}

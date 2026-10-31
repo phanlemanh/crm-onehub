@@ -19,6 +19,12 @@ const NGAN = [
 const CAM = ["DetailSheetHeader", "Spinner", "VungTaiLoi"];
 const KHUNG = /<(RecordSheetFrame|KhungNgan|KhungKr)\b/;
 const NGOAI_LE_SKELETON = new Set(["kr-sheet.tsx", "so-kr-sheet.tsx"]);
+const LOI_VAO_TRINH_BAY = /<(KhungNgan|KhungKr)\b/;
+const CHI_TRINH_BAY = "kr-sheet.tsx";
+const TRANG_THAI = [
+	{ tep: "kr-sheet.tsx", mau: [/<KhungKr\b[\s\S]{0,1200}?\n\t+trang=\{/, /loadingView:\s*\(?\s*<KhungXuongNgan\b/s, /<KhungTaiLoi\b/] },
+	{ tep: "so-kr-sheet.tsx", mau: [/loadingView=\{\s*<KhungXuongNgan\b/s, /errorView=\{\s*<KhungTaiLoi\b/s] },
+];
 const KHOA_KHUON = ["nhom", "doi_tuong", "khuon", "nhan_dien", "mau_dang_chay", "khe_bat_buoc", "cam_ngoai_khuon", "ngoai_le"];
 
 function nhap(ma, ten) {
@@ -37,6 +43,14 @@ export function quet(goc) {
 		for (const c of CAM) if (nhap(ma, c)) loi.push(`CAM ${n.tep}: nhap ${c}`);
 		if (nhap(ma, "Skeleton") && !NGOAI_LE_SKELETON.has(n.tep))
 			loi.push(`CAM ${n.tep}: nhap Skeleton ngoai danh sach ngoai le`);
+		if (n.tep !== CHI_TRINH_BAY && LOI_VAO_TRINH_BAY.test(ma))
+			loi.push(`LOI VAO ${n.tep}: goi KhungNgan hay KhungKr thay RecordSheetFrame, mat nut quay lai`);
+	}
+	for (const t of TRANG_THAI) {
+		const ma = doc(`${THU_MUC}/${t.tep}`);
+		t.mau.forEach((m, i) => {
+			if (!m.test(ma)) loi.push(`TRANG THAI ${t.tep}: thieu mau ${i + 1} (${m.source.slice(0, 40)})`);
+		});
 	}
 	const khuon = doc(KHUON);
 	const fm = /^---\n([\s\S]*?)\n---/.exec(khuon)?.[1] ?? "";
@@ -72,7 +86,16 @@ try {
 	writeFileSync(deal, goc.replace(/<RecordSheetFrame\b/g, "<KhungTuDung"));
 	const pha2 = quet(tam);
 	ok = ca("pha-thoat-khung: deal-sheet khong goi khung thi do", pha2.includes("NGOAI KHUNG deal-sheet.tsx: khong goi RecordSheetFrame, KhungNgan hay KhungKr"), pha2.join("; ")) && ok;
+	writeFileSync(deal, goc.replace(/<RecordSheetFrame\b/g, "<KhungNgan"));
+	const pha4 = quet(tam);
+	ok = ca("pha-loi-vao: deal-sheet goi KhungNgan thay RecordSheetFrame thi do", pha4.some((d) => d.startsWith("LOI VAO deal-sheet.tsx")), pha4.join("; ")) && ok;
 	writeFileSync(deal, goc);
+	const krp = join(tam, THU_MUC, "kr-sheet.tsx");
+	const krGoc = readFileSync(krp, "utf8");
+	writeFileSync(krp, krGoc.replace(/(<KhungKr\b[\s\S]{0,1200}?\n\t+)trang=\{/, "$1trangBo={"));
+	const pha5 = quet(tam);
+	ok = ca("pha-trang-kr: kr-sheet khong truyen trang cho KhungKr thi do", pha5.some((d) => d.startsWith("TRANG THAI kr-sheet.tsx: thieu mau 1")), pha5.join("; ")) && ok;
+	writeFileSync(krp, krGoc);
 	const k = join(tam, KHUON);
 	writeFileSync(k, readFileSync(k, "utf8").replace(", so-kr]", "]"));
 	const pha3 = quet(tam);

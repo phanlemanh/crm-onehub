@@ -6,12 +6,15 @@ import { fileURLToPath } from "node:url";
 const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const APP = join(GOC, "apps", "app");
 const NHAN = `bk1-${process.pid}`;
-const NHAP = `import { RecordSheetFrame } from "@/components/crm/record-sheet/record-parts";\n`;
+const NHAP = `import { KhungNgan, RecordSheetFrame } from "@/components/crm/record-sheet/record-parts";\n`;
 const CA = [
 	{ ten: "lanh", ma: `<RecordSheetFrame loading={false} error={null} title="t" />`, mong: null },
 	{ ten: "thieu-loading", ma: `<RecordSheetFrame error={null} title="t" />`, mong: "loading" },
 	{ ten: "thieu-error", ma: `<RecordSheetFrame loading={false} title="t" />`, mong: "error" },
 	{ ten: "tabs-thieu-tab", ma: `<RecordSheetFrame loading={false} error={null} title="t" tabs={[]} />`, mong: "tab" },
+	{ ten: "khung-ngan-lanh", ma: `<KhungNgan loading={false} error={null} title="t" />`, mong: null },
+	{ ten: "khung-ngan-thieu-loading", ma: `<KhungNgan error={null} title="t" />`, mong: "loading" },
+	{ ten: "khung-ngan-thieu-error", ma: `<KhungNgan loading={false} title="t" />`, mong: "error" },
 ];
 
 const tam = [];
