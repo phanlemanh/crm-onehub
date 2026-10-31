@@ -5,7 +5,7 @@ slug: khung-chung-ngan-ban-ghi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [web]
-status: approved
+status: implemented
 design_doc: _acceptance/khung-chung-ngan-ban-ghi/design.md
 veto_state: mo
 veto_opened_at: 2026-10-31T17:30:00Z
