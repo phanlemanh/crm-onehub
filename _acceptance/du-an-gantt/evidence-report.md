@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1c357d7bf6c01265c7f25cad1751640984792e94
+verified_commit: 7f58b685dac241914c5e3e9786c9e74e447889aa
 human_signoff: manh 2026-10-18
 ---
 
@@ -333,3 +333,7 @@ none — moi eval chay mot lan, deterministic, khong co eval nao mang phuong sai
 Round 1: chay may dau tien tren sha ad235d5bf, ghi trong run-log (hau to r1). Baseline do o round nay.
 Round 2: REJECT — E13 chua dat, co 3 finding trong hop dong va 18 finding ngoai hop dong. Tra ve phan trien khai (commit 91bc21d52 va 1c357d7bf).
 Round 3: moi eval may deu dat, bay lenh suite deu dat; verdict PENDING-JUDGMENT vi hop dong T3 can human_override truc tiep tren E14 (hoi dong de xuat PASS, panel mang sang tu round 2).
+
+### Re-pin lần 1 — 2026-10-31, do sửa bom giờ ca dg-man-keo 375 trong tệp bằng chứng (#610), sau gộp onehub
+run_id: repin-20261031T225619Z-76506
+sha: 7f58b685dac241914c5e3e9786c9e74e447889aa · suites: 7 lệnh exit 0 · evals: 23/23 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
