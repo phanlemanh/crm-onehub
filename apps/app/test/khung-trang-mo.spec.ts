@@ -155,10 +155,8 @@ describe("chuyen-huong", () => {
 	});
 
 	test("chieu do: trang chuyen huong them JSX khong dau trang", () => {
-		const doc = docThay(
-			DOC,
-			THOA_THUAN,
-			(s) => `${s}\nexport const x = <div>x</div>;\n`,
+		const doc = docThay(DOC, THOA_THUAN, (s) =>
+			s.replace(/\tredirect\(/, "\treturn <div>x</div>;\n\tredirect("),
 		);
 		const { loi, nhom } = quetKhungTrang(doc, TRANG, BANG);
 		expect(nhom["chuyen-huong"]).not.toContain(THOA_THUAN);
