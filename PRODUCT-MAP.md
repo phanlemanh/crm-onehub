@@ -11,7 +11,7 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>8 việc"]
   GD --> DB["Đã bác từ khám phá<br/>3 việc"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>171 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>190 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
@@ -29,6 +29,7 @@ flowchart TD
 
 ## Đang làm
 
+- Một PR chỉ đổi tài liệu ra test (api) và test (app-ui) xanh trên onehub (`ci-test-het-do-co-dinh`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
