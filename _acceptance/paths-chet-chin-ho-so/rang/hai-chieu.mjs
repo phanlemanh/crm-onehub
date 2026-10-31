@@ -11,8 +11,7 @@ function khongDo(dong) {
 }
 
 const core = napKit();
-if (typeof core.staleByPaths !== "function")
-	khongDo("evidence-core thieu staleByPaths");
+if (!("staleByPaths" in core)) khongDo("evidence-core thieu staleByPaths");
 const ds = cayGit();
 const cay = core.dungCayPaths(ds);
 

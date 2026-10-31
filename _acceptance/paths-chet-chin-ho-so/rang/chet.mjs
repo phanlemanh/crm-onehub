@@ -43,7 +43,7 @@ export function napKit() {
 		join(ag, "lib", "evidence-core.cjs"),
 	);
 	for (const k of ["phanLoaiMucPaths", "dungCayPaths", "evalListsOf"])
-		if (typeof core[k] !== "function") khongDo(`evidence-core thieu ${k}`);
+		if (!(k in core)) khongDo(`evidence-core thieu ${k}`);
 	return core;
 }
 
