@@ -5,6 +5,7 @@ import {
 	describe,
 	expect,
 	mock,
+	setSystemTime,
 	test,
 } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -607,6 +608,15 @@ describe("dg-man-keo", () => {
 	});
 
 	test("dg-man-keo: 375 Đặt ngày cho việc chưa có lịch", async () => {
+		setSystemTime(new Date("2026-10-20T03:00:00Z"));
+		try {
+			await datNgay375();
+		} finally {
+			setSystemTime();
+		}
+	});
+
+	const datNgay375 = async () => {
 		const goiDoi: DauVao[] = [];
 		root375();
 		datDuAn();
@@ -651,7 +661,7 @@ describe("dg-man-keo", () => {
 		) {
 			throw new Error(`dg: dat ngay 375 sai ${JSON.stringify(goiDoi)}`);
 		}
-	});
+	};
 
 	test("dg-man-keo: máy chủ từ chối thì thanh về chỗ cũ và toast đúng lời; thành công thì làm mới", async () => {
 		const LOI = "Việc này phải bắt đầu sau khi «A» xong (hạn 23/10).";
