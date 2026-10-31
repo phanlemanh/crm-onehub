@@ -1,0 +1,140 @@
+schema_version: 1
+slug: rang-khung-trang-mo
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ktm_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+      - "apps/app/test/fixtures/khung-trang-ngoai-le.json"
+    expected: |
+      Ca "tap-trang": lop quet lay danh sach bang "git ls-files" tai goc kho (suy goc tu vi tri tep test, khong
+      hardcode), loc page.tsx duoi apps/app/app/. Quan he: tap trang da quet BANG tap ls-files (so tung phan tu ca
+      hai chieu, khong chi dem > 0); tong so trang ba nhom khung + chuyen-huong + ngoai-le bang dung so trang, khong
+      trang nao o hai nhom. In mot dong "ktm: <n> trang · khung <a> · chuyen-huong <b> · ngoai-le <c>". CHIEU DO
+      (cung ham, danh sach co chen): them mot duong page.tsx co that tren dia vao danh sach ls-files gia ma bo doc
+      khong co -> do ghim "ktm: khong doc duoc <tep>"; bo mot trang khoi danh sach doi chieu -> do ghim
+      "ktm: tap trang lech ls-files".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ktm_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+    expected: |
+      Ca "trang-moi-ngoai-khung": bo doc co chen mot trang moi
+      "apps/app/app/(app)/[slug]/trang-moi/page.tsx" (export default tra ve <div><h1>Tieu de</h1><p>Mo ta</p></div>,
+      khong PageShellHeader), chay CUNG ham quet voi bang that -> do ghim
+      "ktm: trang-moi/page.tsx dung dau trang ngoai PageShellHeader". DOI CHUNG DUONG: cung trang do viet lai bang
+      PageShell > PageShellHeader > PageShellHeading > PageShellTitle + PageShellDescription -> 0 dong do.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ktm_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+    expected: |
+      Ca "thieu-mot-khoi": ba ban sao trong bo doc cua mot trang khung that (tai-lieu/page.tsx), moi ban mot loi:
+      (a) boc PageShellTitle vao <Suspense fallback={null}> -> do ghim "ktm: tai-lieu/page.tsx thieu tieu de luc tai";
+      (b) xoa PageShellDescription -> do ghim "ktm: tai-lieu/page.tsx thieu mo ta luc tai";
+      (c) them <h1>x</h1> canh PageShellHeader -> do ghim "ktm: tai-lieu/page.tsx dung <h1> rieng".
+      Moi ban chi do dung mot dong cua chinh loi do (so dong do = 1). Ban goc khong sua -> 0 dong.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ktm_quet
+    paths:
+      - "apps/app/app/**/page.tsx"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+    expected: |
+      Ca "chuyen-huong": moi trang khong co phan tu JSX nao thuoc nhom chuyen-huong; tap do o cay that gom
+      deals/[dealId]/page.tsx va settings/notifications/page.tsx (ghim ten), va khong trang nao cua nhom co dong
+      trong bang. CHIEU DO: ban sao deals/[dealId]/page.tsx them "return <div>x</div>" vao ham mac dinh -> trang
+      ra khoi nhom chuyen-huong va do ghim "ktm: deals/[dealId]/page.tsx dung dau trang ngoai PageShellHeader".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ktm_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+      - "apps/app/test/fixtures/khung-trang-ngoai-le.json"
+    expected: |
+      Ca "bang-ngoai-le": bon ban sao cua bang that, moi ban mot loi, chay cung ham:
+      dong tro tep khong co -> "ktm: ngoai le tro tep khong con <tep>"; dong trung -> "ktm: ngoai le trung <tep>";
+      loai "khac" -> "ktm: ngoai le loai la khac o <tep>"; ly_do "" -> "ktm: ngoai le thieu ly do o <tep>".
+      Moi ban do dung dong cua no. Bang that -> 0 dong.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ktm_quet
+    paths:
+      - "apps/app/app/**/page.tsx"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+      - "apps/app/test/fixtures/khung-trang-ngoai-le.json"
+    expected: |
+      Ca "ngoai-le-thua": bang that cong mot dong {tep: contacts/page.tsx (trang khung), loai: no, ly_do: "x"} ->
+      do ghim "ktm: ngoai le thua contacts/page.tsx". Ca "tieu-de-theo-du-lieu": ban sao
+      campaigns/[campaignId]/page.tsx bo PageShellHeader khoi fallback -> do ghim
+      "ktm: campaigns/[campaignId]/page.tsx mang tieu-de-theo-du-lieu ma khong co PageShellHeader luc tai".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ktm_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+      - "apps/app/test/fixtures/khung-trang-ngoai-le.json"
+    expected: |
+      Ca "doi-chung-duong": cay that + bang that -> mang loi rong (toEqual([])). Bang co dung 21 dong; tap tep cua
+      dong loai "no" bang dung {(agent-builder)/agents/[agentId], (agent-builder)/chat, (agent-builder)/chat/[chatId],
+      tai-lieu/[trang]/lich-su, tai-lieu/[trang]/lich-su/[so]} (page.tsx, ghim ten); moi dong "no" co ly_do chua
+      "dich:". Tep test nam o apps/app/test/*.spec.ts nen bun test cua apps/app nhat no.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ktm_quet
+    paths:
+      - "apps/app/app/**/*.tsx"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+    expected: |
+      Ca "chieu-im": danh sach ls-files gia gom them "docs/x/page.tsx", "_acceptance/x/page.tsx",
+      "packages/ui/x/page.tsx" (bo doc tra ve mot trang dung h1 tho cho ca ba) -> tap trang khong doi so voi cay
+      that va mang loi khong co dong nao nhac ba duong do. DOI CHUNG: cung noi dung dat o
+      "apps/app/app/(app)/[slug]/x/page.tsx" -> do ghim "ktm: x/page.tsx dung dau trang ngoai PageShellHeader".
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.suite_app_ui
+    paths:
+      - "apps/app/package.json"
+      - "apps/app/test/khung-trang-mo.spec.ts"
+      - "apps/app/test/support/khung-trang.ts"
+      - "apps/app/test/fixtures/khung-trang-ngoai-le.json"
+      - "apps/app/app/**/*.tsx"
+    expected: |
+      Lenh suite cua goi app (bun run test qua turbo, cung lenh CI va pre-push chay) thoat 0, va DAU RA cua chinh
+      lenh do co dong "ktm: <n> trang · khung <a> · chuyen-huong <b> · ngoai-le <c>" voi n bang so trang E1 in,
+      cung ten ca "doi-chung-duong". Thieu dong ktm trong dau ra = bai khong chay trong bun run test -> FAIL, du
+      lenh thoat 0. Chieu do cua noi dung do bang E2 (cung ham quet, cung bang).
