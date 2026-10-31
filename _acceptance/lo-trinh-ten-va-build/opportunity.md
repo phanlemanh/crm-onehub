@@ -22,6 +22,10 @@ Nguồn: giám sát đợt `sau-14-10` mở hàng H6 (ưu tiên 0, ngoại lệ 
 ## Ngưỡng chết / ngưỡng UAT
 
 - Không đo bằng người dùng. Phép thử: quét tên 0 SAI; `next build` xanh khi có symlink vòng; bản dựng của trang lộ trình vẫn mang `LO-TRINH.html` và không kéo theo cả kho; bốn PR bị chặn đẩy được.
+- Câu hỏi phép đo trả lời: Sau khi gộp, người đọc trang lộ trình có thấy đúng tên OneHub Center và các dãy có còn bị chặn đẩy vì bản dựng panic symlink không?
+- Kết quả nào là SỐNG: Trong timebox có 0 lượt CI hay pre-push trên onehub và trên PR mở đỏ với dòng «symlink … infinite loop» của next build, và phép quét tên OneHub Center giữ 0 SAI ở mọi lượt chạy.
+- Kết quả nào là CHẾT: Có ít nhất 1 lượt CI hay pre-push đỏ với dòng panic «infinite loop» của next build, hoặc trang lộ trình lại hiện chữ «CRM» cho người đọc.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Out of scope từ khám phá
 

@@ -28,4 +28,4 @@ Vì sao: Zalo và Slack đang là đường đi riêng của tác nhân; rẽ ch
 - Câu hỏi phép đo trả lời: đã đạt «Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi» chưa? (chốt bởi Manh Phan 2026-10-24)
 - Kết quả nào là SỐNG: Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi
 - Kết quả nào là CHẾT: chưa đạt «Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi» khi hết timebox
-- Timebox: [đề xuất] 2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

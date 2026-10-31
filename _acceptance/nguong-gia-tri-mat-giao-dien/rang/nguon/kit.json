@@ -1,0 +1,82 @@
+[
+	{
+		"ho_so": "cap-nhat-trong-ngan-kr",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi khối cập nhật nằm ngay trong ngăn KR, người phụ trách KR có mở cập nhật rồi gửi hết thường hơn và nhanh hơn so với hộp thoại cũ không?",
+			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi bật, tỉ lệ phiên cập nhật đã mở mà có giờ gửi đạt ít nhất bằng 2 tuần trước khi bật và trung vị số giây của phiên đã gửi không tăng, đồng thời số KR có ít nhất một lần cập nhật mỗi tuần không giảm.",
+			"Kết quả nào là CHẾT": "Trong 2 tuần sau khi bật, tỉ lệ phiên mở mà gửi thấp hơn 2 tuần trước khi bật, hoặc số KR được cập nhật mỗi tuần giảm, hoặc gần như mọi phiên vẫn đến từ một lối duy nhất cho thấy các lối Họp tuần, bảng đơn vị, mục tiêu không được dùng."
+		},
+		"nguon_so": "Bảng okrCheckInSession (cột entry, openedAt, submittedAt, seconds; phiên tạo ở moCapNhat, chốt ở guiCapNhat của okr-cap-nhat.service.ts) và bảng okrCheckIn (keyResultId, weekStart, createdAt); docs/telemetry.md không có sự kiện nào cho cập nhật KR.",
+		"can_cu": "AC-4 hứa gửi xong thêm đúng một OkrCheckIn mà ngăn vẫn mở, AC-7 hứa mỗi lối ghi entry riêng (hop-tuan, bang-don-vi, muc-tieu, sheet) để đo được."
+	},
+	{
+		"ho_so": "go-tin-hieu-rac",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi quản trị lưu trữ được tín hiệu rác, đội sản phẩm có còn nhận tín hiệu thử, trùng hay gửi nhầm trong lượt kéo về không?",
+			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi bật, có ít nhất một tín hiệu được lưu trữ trước khi bị kéo về, và bản gom kế tiếp của đội sản phẩm không xếp tín hiệu nào vào lẻ với lý do thử, trùng hay gửi nhầm.",
+			"Kết quả nào là CHẾT": "Trong 2 tuần sau khi bật, bản gom vẫn có tín hiệu lẻ vì thử, trùng hay gửi nhầm mà quản trị đã thấy ở thẻ «Tất cả», hoặc phần lớn lần lưu trữ bị khôi phục lại vì lỡ tay."
+		},
+		"nguon_so": "Bảng tinHieu (archivedAt, archivedById, keoVeLuc) và tinHieuVet (loai luu-tru hay khoi-phuc, nguoiId, luc), cộng bản gom của lượt gom tín hiệu trong kho; docs/telemetry.md không có sự kiện cho tín hiệu.",
+		"can_cu": "Context nói rác đi thẳng vào lượt gom và làm nhiễu con số ngưỡng sống; AC-2 hứa lượt kéo về bỏ qua tín hiệu đang lưu trữ, AC-5 hứa khôi phục để lại vết."
+	},
+	{
+		"ho_so": "hoi-dap-okr",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Người dùng có quay lại hỏi Kara về OKR trên web và thấy câu trả lời hữu ích không?",
+			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi bật, ít nhất 5 người khác nhau hỏi ít nhất một câu, ít nhất 3 người hỏi ở cả hai tuần, và trong các phản hồi đã bấm thì phần «không hữu ích» dưới 30%.",
+			"Kết quả nào là CHẾT": "Trong 2 tuần sau khi bật, không quá 2 người hỏi hay không ai hỏi lại ở tuần thứ hai, hoặc từ 50% phản hồi đã bấm trở lên là «không hữu ích»."
+		},
+		"nguon_so": "Bảng okrLuotHoi (userId, ngay, cuocHoiId) đếm người và lượt hỏi, okrHoiPhanHoi (huuIch, userId) cho phần hữu ích, okrCuocHoi (nguoiHoiUserId) và aiChiPhi với tinhNang okr.hoi-dap cho chi phí; zalo_questions của docs/telemetry.md thuộc hàng C2 nên không dùng.",
+		"can_cu": "AC-10 hứa người dùng hỏi trong cột Kara và mỗi câu có một AiFeedback; AC-6 đặt trần 40 câu mỗi người mỗi ngày đếm qua lượt hỏi."
+	},
+	{
+		"ho_so": "lo-trinh-nhieu-san-pham",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Chủ kho có đọc được lộ trình của một sản phẩm thứ hai ngay trên trang Lộ trình, cập nhật theo nhánh chính, mà không phải mở kho GitHub của sản phẩm đó không?",
+			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi bật, ít nhất một sản phẩm ngoài CRM có bản chụp đầu trong vòng một ngày tính từ lúc khai và cài ứng dụng, trạng thái lấy giữ «đã lấy» qua mỗi lần nhánh chính đổi, và có ít nhất một người được cấp quyền xem sản phẩm đó.",
+			"Kết quả nào là CHẾT": "Sau 2 tuần chưa sản phẩm nào ngoài CRM có bản chụp, hoặc bản chụp đầu trễ quá một ngày, hoặc sản phẩm đã khai đứng ở trạng thái lấy hỏng từ hai lần kiểm liên tiếp trở lên."
+		},
+		"nguon_so": "Bảng SanPhamLoTrinh (caiLuc, taoLuc, layDauLuc, kiemLuc, nguonDoiLuc, trangThaiLay, luuTruLuc) và SanPhamNguoiXem (capLuc), đọc qua lệnh đo của AC-10; docs/telemetry.md không có sự kiện xem trang.",
+		"can_cu": "AC-10 hứa lệnh đo in độ trễ từ khai và cài tới bản chụp đầu và cờ khi quá một ngày; AC-2 hứa bản chụp đổi theo đầu nhánh, AC-4 hứa quyền xem theo sản phẩm."
+	},
+	{
+		"ho_so": "tieu-diem-sau-hop-xoa-tin-hieu",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Người dùng chỉ bằng bàn phím có huỷ hay gặp lỗi khi xoá tín hiệu rồi làm tiếp ngay ở đúng dòng mà không phải dò lại từ đầu trang không?",
+			"Kết quả nào là SỐNG": "Trong một phiên nghiệm thu với ít nhất 2 người dùng thật chỉ dùng bàn phím trên production ở 375 và 1280px, mọi lần bấm «Giữ lại», Esc hay xoá hỏng đều để tiêu điểm ở nút ⋮ của đúng dòng và không ai phải bấm Tab từ đầu trang để quay lại.",
+			"Kết quả nào là CHẾT": "Trong phiên nghiệm thu có ít nhất một lần tiêu điểm rơi về đầu trang hay sang dòng khác sau «Giữ lại», Esc hay xoá hỏng, hoặc người thử phải dò lại để tìm dòng vừa thao tác."
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu có số người, theo đúng cách đo AC-6; docs/telemetry.md và schema.prisma không có gì ghi tiêu điểm hay thao tác bàn phím.",
+		"can_cu": "AC-1 đến AC-3 hứa tiêu điểm về nút ⋮ của dòng ở mọi đường đóng hộp, AC-6 đo bằng bàn phím ở 375 và 1280px trên trang chạy thật."
+	},
+	{
+		"ho_so": "trang-thai-tin-hieu-song",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Người gửi tín hiệu có biết trong ngày khi tín hiệu của mình đổi chỗ và mở thông báo ra xem không?",
+			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi bật, mọi lần tín hiệu có người nhận hợp lệ đổi chỗ trên nhánh chính đều có thông báo trong vòng một ngày tính từ giờ commit, và ít nhất một nửa số thông báo đổi chỗ được người nhận mở.",
+			"Kết quả nào là CHẾT": "Trong 2 tuần sau khi bật, có lần đổi chỗ thiếu thông báo hay trễ quá một ngày, hoặc dưới một phần tư số thông báo đổi chỗ được mở."
+		},
+		"nguon_so": "Bảng ThongBao với nguồn tin-hieu-doi-cho (taoLuc, docLuc, moLuc, nguoiNhanId) so với BanChupLoTrinh (sha, commitLuc), đọc qua lệnh đo của AC-8; docs/telemetry.md không có sự kiện cho thông báo.",
+		"can_cu": "AC-3 hứa mỗi lần đổi chỗ sinh đúng một thông báo cho người gửi, AC-8 hứa lệnh đo in độ trễ từng lần và cờ lần thiếu hay trễ quá một ngày."
+	},
+	{
+		"ho_so": "va-lo-ro-vai-chi-okr",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi vá, người vai «chỉ OKR» có còn bị giao việc kế hoạch hay nhận tên đối tác trong tin nhắc buổi sáng, trong khi vẫn nhận nhắc về KR của mình không?",
+			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi bật, thước ro-vai-chi-okr chạy trên production mỗi tuần đều ra 0 bước, kế hoạch hay lượt theo dõi đang mở thuộc người vai «chỉ OKR», không tin nhắc nào gửi tới họ có mục kế hoạch, và mỗi người vai đó có việc OKR đến hạn vẫn nhận ít nhất một tin nhắc.",
+			"Kết quả nào là CHẾT": "Trong 2 tuần sau khi bật, thước ra từ 1 vật đang mở trở lên thuộc người vai «chỉ OKR», hoặc có tin nhắc tới họ mang mục kế hoạch hay tên công ty, hoặc họ thôi nhận nhắc về KR."
+		},
+		"nguon_so": "Bảng member (role okr), OnboardingStep (assigneeId, completedAt), OnboardingPlan (ownerId, closedAt), OnboardingWatch (userId) và AgentTask kind nhac-ke-hoach (payload.daGui), đọc bằng _acceptance/va-lo-ro-vai-chi-okr/rang/ro-vai-chi-okr.mjs; docs/telemetry.md không có sự kiện theo vai.",
+		"can_cu": "AC-10 hứa thước đếm đúng vật đang mở của người vai okr, AC-7 và AC-8 hứa tin nhắc tới họ có tên KR mà không có mục kế hoạch hay tên công ty."
+	},
+	{
+		"ho_so": "ve-khung-muc-tieu-dung-kr",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Trưởng đơn vị đi ‹ › qua KR của nhiều mục tiêu trong buổi Họp tuần có quay về đúng mục tiêu của KR đang xem mà không phải đóng ngăn và mở lại không?",
+			"Kết quả nào là SỐNG": "Trong buổi Họp tuần thật đầu tiên sau khi bật, quan sát ít nhất 2 trưởng đơn vị đi ‹ › qua KR của từ hai mục tiêu trở lên, mọi lần bấm «Về khung mục tiêu» hay tên mục tiêu ở dòng phụ đề đều mở đúng mục tiêu và không ai phải đóng ngăn mở lại.",
+			"Kết quả nào là CHẾT": "Trong buổi Họp tuần quan sát có ít nhất một lần nút về hay tên mục tiêu mở nhầm mục tiêu hoặc chồng thêm khung, hoặc người chủ trì phải đóng ngăn để tìm lại mục tiêu."
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu có số người ở buổi Họp tuần; okrCheckInSession với entry hop-tuan chỉ cho biết có dùng lối Họp tuần, còn docs/telemetry.md và schema.prisma không ghi lần bấm nút về hay khung đang mở.",
+		"can_cu": "AC-1 và AC-3 hứa nút quay lại và liên kết tên mục tiêu mở khung mục tiêu của KR đang xem sau mỗi lần ‹ ›, không chồng thêm khung."
+	}
+]
