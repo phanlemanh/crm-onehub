@@ -335,14 +335,17 @@
       "slug": "khoa-viec-con-dung-thu-tu",
       "cau_giao": "«Thêm việc con vào dự án không vấp khoá với dời ngày hay sửa mốc cùng lúc»",
       "vi_sao": "Ngoài-1 và Ngoài-2 của DA12 (va-gantt-lich-bay-ngay): taoViecCon khoá việc cha rồi mới khoá dự án, ngược thứ tự khoaDuAn/khoaMot, nên thêm việc con đúng lúc dời ngày hay sửa mốc có thể treo khoá. Chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng DA12 20/10.",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "ten": "Khoá việc con đúng thứ tự",
       "ten_ngan": "Khoá việc con",
       "dung_tren": [
         "DA12"
       ],
       "ghi_chu": "Nguồn: _acceptance/va-gantt-lich-bay-ngay/decisions.jsonl d-20261020T032627Z-13, -14. Gợi ý của V1: khoá duAn trước khoá việc cha trong docDuAnNhanViec.",
-      "buoc_ke": "Làn M5 · thứ 1"
+      "buoc_ke": "Đã gộp #528 (0c9356779, 21/10)",
+      "pr": [
+        528
+      ]
     },
     {
       "ma": "DA14",
