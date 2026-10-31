@@ -58,7 +58,7 @@ import {
 import { docSoOkr } from "@crm/validation/okr-kr";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { Fragment, type ReactNode, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -545,6 +545,7 @@ export function OGiaTri({
 	datGiaTri,
 	khoa,
 	tuDongFocus = false,
+	moTa,
 }: {
 	kr: KrCapNhat;
 	value: string;
@@ -554,6 +555,7 @@ export function OGiaTri({
 	datGiaTri: (v: string) => void;
 	khoa: boolean;
 	tuDongFocus?: boolean;
+	moTa?: ReactNode;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
@@ -613,6 +615,7 @@ export function OGiaTri({
 				</ToggleGroup>
 				<FieldDescription>
 					{moTaSoMay ??
+						moTa ??
 						`${nhanLan}: ${giaTri(kr, kr.currentValue, locale).toLowerCase()}`}
 				</FieldDescription>
 			</Field>
@@ -657,6 +660,8 @@ export function OGiaTri({
 				<FieldDescription className="tabular-nums">
 					{moTaSoMay}
 				</FieldDescription>
+			) : moTa ? (
+				<FieldDescription className="tabular-nums">{moTa}</FieldDescription>
 			) : (
 				<FieldDescription className="tabular-nums">
 					{nhanLan} {giaTri(kr, kr.currentValue, locale)} · {m.dich}{" "}

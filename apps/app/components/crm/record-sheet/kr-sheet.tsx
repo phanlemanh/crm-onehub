@@ -5,6 +5,7 @@ import ChevronLeft from "@carbon/icons-react/es/ChevronLeft";
 import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import { Button } from "@crm/ui/components/button";
 import { StatGroup } from "@crm/ui/components/dashboard";
+import { useGiuNoiDung } from "@crm/ui/components/giu-thay-doi";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PickListDialog } from "@crm/ui/components/pick-list-dialog";
@@ -34,7 +35,7 @@ import {
 	useState,
 } from "react";
 import { toast } from "sonner";
-import { coNutCapNhat, useCapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
+import { coNutCapNhat } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import { giaTri } from "@/app/(app)/[slug]/okr/gia-tri-kr";
 import { CANH_KR } from "@/app/(app)/[slug]/okr/kieu";
 import { useXemDuocBanGhi } from "@/app/(app)/[slug]/okr/nguon-so";
@@ -59,6 +60,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { TAB_SO_NGUON } from "./dien-bien-kr";
+import { KhoiCapNhatKr, TAB_CAP_NHAT } from "./khoi-cap-nhat-kr";
 import { type BangChungVao, KrBangChung } from "./kr-bang-chung";
 import {
 	type CanhKr,
@@ -79,6 +81,7 @@ const TAB = {
 	viec: "viec",
 	bangChung: "bang-chung",
 	soNguon: TAB_SO_NGUON,
+	capNhat: TAB_CAP_NHAT,
 } as const;
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
@@ -378,22 +381,20 @@ function DauNganHanhDong({
 	keyResultId,
 	mt,
 	thuTu,
-	onCapNhat,
 }: {
 	keyResultId: string;
 	mt: ChiTiet | undefined;
 	thuTu: DongThuTu[] | null;
-	onCapNhat: (mt: ChiTiet, kr: KrCuaMt) => void;
 }) {
 	const m = okrCanhKrMessages(useLocale()).khung;
 	const { thayDinh } = useRecordStack();
+	const giu = useGiuNoiDung();
 	const truoc = useRef<HTMLButtonElement>(null);
 	const ke = useRef<HTMLButtonElement>(null);
 	const ds = thuTu
 		? thuTu.map((d) => d.keyResultId)
 		: (mt?.keyResults ?? []).map((k) => k.id);
 	const viTri = ds.indexOf(keyResultId);
-	const kr = mt?.keyResults.find((k) => k.id === keyResultId);
 	const daBiet = viTri >= 0;
 
 	useEffect(() => {
@@ -412,10 +413,13 @@ function DauNganHanhDong({
 		if (!dich) return;
 		CHUYEN_KR.huong = huong;
 		const mucTieuDich = thuTu?.find((d) => d.keyResultId === dich)?.objectiveId;
-		thayDinh(
-			{ kind: "kr", id: dich },
-			mucTieuDich ? { kind: "objective", id: mucTieuDich } : undefined,
-		);
+		const di = () =>
+			thayDinh(
+				{ kind: "kr", id: dich },
+				mucTieuDich ? { kind: "objective", id: mucTieuDich } : undefined,
+			);
+		if (giu?.coThayDoi) giu.hoiRoi(di);
+		else di();
 	};
 
 	return (
@@ -460,15 +464,6 @@ function DauNganHanhDong({
 						tat={!daBiet || viTri === ds.length - 1}
 					/>
 				</>
-			) : null}
-			{mt && kr && coNutCapNhat(mt, kr) ? (
-				<Button
-					data-nut="cap-nhat-ngan-kr"
-					onClick={() => onCapNhat(mt, kr)}
-					size="sm"
-				>
-					{m.capNhat}
-				</Button>
 			) : null}
 		</div>
 	);
@@ -576,13 +571,17 @@ function CacMucKr({
 	kr,
 	tabs,
 	tab,
+	onDaGui,
 }: {
 	mt: ChiTiet;
 	kr: KrCuaMt;
 	tabs: ReactNode;
 	tab: string;
+	onDaGui: () => void;
 }) {
-	const m = okrCanhKrMessages(useLocale()).khung;
+	const locale = useLocale();
+	const m = okrCanhKrMessages(locale).khung;
+	const [xemTruoc, setXemTruoc] = useState<number | null>(null);
 	const soNguon = useRef<HTMLElement>(null);
 	const moSoNguon = tab === TAB.soNguon;
 	useEffect(() => {
@@ -591,7 +590,26 @@ function CacMucKr({
 	return (
 		<div>
 			<OSoKr kr={kr} mt={mt} />
-			<LichSuKr kr={kr} />
+			{coNutCapNhat(mt, kr) ? (
+				<KhoiCapNhatKr
+					kr={kr}
+					mt={mt}
+					onDaGui={onDaGui}
+					onXemTruoc={setXemTruoc}
+					tuLoiVao={tab === TAB.capNhat}
+				/>
+			) : null}
+			<LichSuKr
+				kr={kr}
+				xemTruoc={
+					xemTruoc === null
+						? null
+						: {
+								so: xemTruoc,
+								nhan: okrCanhKrMessages(locale).khoiCapNhat.xemTruoc,
+							}
+				}
+			/>
 			<section className="border-b" data-muc-ngan="viec-bang-chung">
 				<DauMuc>{m.viecBangChung}</DauMuc>
 				{tabs}
@@ -725,12 +743,10 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 	);
 	const thuTu = useThuTuHopTuan(keyResultId);
 	const qc = useQueryClient();
-	const capNhat = useCapNhatKr({
-		onDaGui: () => {
-			if (thuTu)
-				void qc.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() });
-		},
-	});
+	const daGui = () => {
+		if (thuTu)
+			void qc.invalidateQueries({ queryKey: trpc.okr.hopTuan.queryKey() });
+	};
 	const ghi = useGhiCanh(keyResultId, objectiveId);
 	const duoiMotMinh = stack.length === 1;
 	const loiNguoiLam = (loi: Error, vao: ViecVao) =>
@@ -777,7 +793,6 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 							keyResultId={keyResultId}
 							mt={krMt ? mt : undefined}
 							thuTu={thuTu}
-							onCapNhat={capNhat.mo}
 						/>
 					),
 				}}
@@ -790,7 +805,14 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 						ve={ve}
 					>
 						{(mtDu, krDu) => (
-							<CacMucKr kr={krDu} mt={mtDu} tab={tab} tabs={tabs} />
+							<CacMucKr
+								key={krDu.id}
+								kr={krDu}
+								mt={mtDu}
+								onDaGui={daGui}
+								tab={tab}
+								tabs={tabs}
+							/>
 						)}
 					</ThanNganKr>
 				)}
@@ -831,7 +853,6 @@ export function KrSheet({ keyResultId }: { keyResultId: string }) {
 					) : null
 				}
 			/>
-			{capNhat.hop}
 			{gan && q.data?.quyen.ganDuoc ? (
 				<ChonSangKien canh={q.data} loai={gan} dong={() => setGan(null)} />
 			) : null}

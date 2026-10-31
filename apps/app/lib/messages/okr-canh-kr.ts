@@ -291,6 +291,22 @@ const vi = {
 		bangChung: "Bằng chứng (tuỳ chọn)",
 		goiY: "Đường dẫn tới văn bản cho thấy mốc đã xong. Lúc chấm cuối kỳ, người chấm sẽ thấy nó.",
 	},
+	khoiCapNhat: {
+		tieuDe: "Cập nhật KR này",
+		moiNhat: "Lần mới nhất: {ngay} · {giaTri}",
+		chuaCo: "Chưa có lần cập nhật nào",
+		conNhap: "còn nháp chưa gửi",
+		thu: "Thu khối cập nhật",
+		phim: "Gửi nhanh: Ctrl/⌘ + Enter",
+		chonTuTin: "Chọn mức tự tin để gửi",
+		xemTruoc: "Lần này",
+		hoiBo: {
+			tieuDe: "Bỏ cập nhật đang soạn?",
+			than: "Giá trị, mức tự tin và ghi chú bạn vừa nhập cho KR này sẽ mất.",
+			nut: "Bỏ",
+			thoi: "Tiếp tục sửa",
+		},
+	},
 };
 
 export type OkrCanhKrMessages = typeof vi;
@@ -587,6 +603,22 @@ const en: OkrCanhKrMessages = {
 	capNhat: {
 		bangChung: "Evidence (optional)",
 		goiY: "A link to the document showing the milestone is done. Whoever scores the cycle will see it.",
+	},
+	khoiCapNhat: {
+		tieuDe: "Update this key result",
+		moiNhat: "Latest: {ngay} · {giaTri}",
+		chuaCo: "No updates yet",
+		conNhap: "unsent draft",
+		thu: "Collapse the update form",
+		phim: "Quick send: Ctrl/⌘ + Enter",
+		chonTuTin: "Pick a confidence level to send",
+		xemTruoc: "This update",
+		hoiBo: {
+			tieuDe: "Discard this update?",
+			than: "The value, confidence and note you entered for this key result will be lost.",
+			nut: "Discard",
+			thoi: "Keep editing",
+		},
 	},
 };
 

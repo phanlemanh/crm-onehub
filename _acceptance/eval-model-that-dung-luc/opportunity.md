@@ -45,3 +45,7 @@ Mỗi lượt ghim lại chạy lại mọi eval của hồ sơ, kể cả eval 
 ## Quyết định Cổng Đáng
 
 07/10/2026, chủ kho: «Đưa F9-F12 vào đợt» — `build`, làm trong dãy P4 của đợt `sau-14-10`. Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.
+
+## Ngưỡng chết / ngưỡng UAT
+
+- Không đo được — thước, CI hay công cụ nội bộ của kho (không khai mặt); không có người dùng cuối để mở phiên nghiệm thu, phép thử là bài kiểm và lượt CI của chính hồ sơ.

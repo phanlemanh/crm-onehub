@@ -1,13 +1,29 @@
-import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	mock,
+	setSystemTime,
+	test,
+} from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { homNayVN } from "@crm/validation/ngay-vn";
 import {
 	GHI_CHU_TOI_DA,
 	type GuiCapNhatInput,
 	guiCapNhatInput,
 } from "@crm/validation/okr-cap-nhat";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { act } from "react";
+import { chuoiMoiLan } from "../../api/src/okr/dien-bien";
 import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
-import { dienBienOutput } from "../../api/src/okr/okr-xem.contracts";
+import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
+import {
+	dienBienOutput,
+	lichSuKrOutput,
+} from "../../api/src/okr/okr-xem.contracts";
 import {
 	chiTietTu,
 	cho,
@@ -24,29 +40,79 @@ import {
 	qs,
 	qsa,
 	thaoHet,
+	ui,
 } from "./khung-gop-y-dung-cho";
 
-const { useCapNhatKr } = await import("@/app/(app)/[slug]/okr/cap-nhat-kr");
-const { krCapNhatTuSheet } = await import(
-	"@/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr"
+mock.module("next/navigation", () => ({
+	useRouter: () => ({
+		push: () => {},
+		replace: () => {},
+		prefetch: () => {},
+	}),
+	useParams: () => ({ slug: "ws" }),
+	usePathname: () => "/ws/okr/bo-okr",
+	useSearchParams: () => new URLSearchParams(),
+}));
+const NGUON_CACHE = readFileSync(
+	join(import.meta.dir, "..", "lib", "trpc", "cache.ts"),
+	"utf8",
+);
+const KHOA_CACHE_OKR = new Set(
+	[...NGUON_CACHE.matchAll(/trpc\.okr\.([A-Za-z]+)\.queryKey\(\)/g)].map(
+		(m) => `okr.${m[1]}`,
+	),
+);
+mock.module("@/lib/trpc/cache", () => ({
+	useCrmCache: () => {
+		const qc = useQueryClient();
+		return {
+			okr: async (id?: string) => {
+				kho.daLamMoi.push(id ?? "");
+				await qc.invalidateQueries({
+					predicate: (q) => KHOA_CACHE_OKR.has(String(q.queryKey[0])),
+				});
+			},
+		};
+	},
+}));
+mock.module("@/components/crm/stage-change", () => ({
+	CloseReasonDialog: () => null,
+	DealStageMenu: () => null,
+}));
+mock.module("@/components/crm/fields/fields-sheet", () => ({
+	FieldsSheetHost: () => null,
+}));
+
+const { RecordSheetHost } = await import(
+	"@/components/crm/record-sheet/record-sheet-host"
+);
+const { krCapNhatTuSheet, mucDoi } = await import(
+	"@/components/crm/record-sheet/khoi-cap-nhat-kr"
 );
 const { BangCapNhat, OGiaTri } = await import(
 	"@/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan"
 );
 const { giaTri } = await import("@/app/(app)/[slug]/okr/bang-kr");
-const { useTRPC } = await import("@/lib/trpc/client");
+const { luc } = await import("@/app/(app)/[slug]/okr/bang-vet");
 const { okrMessages } = await import("@/lib/messages/okr");
 const { okrLanTruocMessages } = await import("@/lib/messages/okr-lan-truoc");
+const { okrCanhKrMessages } = await import("@/lib/messages/okr-canh-kr");
+const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 const { NGHIA_TU_TIN } = await import("@crm/ui/components/okr-status");
 const { toneTheoNghia } = await import("@crm/ui/lib/status-tone");
 
 const mo = okrMessages("vi");
 const ml = okrLanTruocMessages("vi");
+const mk = okrCanhKrMessages("vi");
+const loiLichSu = okrToanCanhMessages("vi").dienBien.loi;
 
 const MT = "mt-hct";
 const LUC = "2026-10-15T02:30:00.000Z";
 const TUAN = "2026-10-12";
+const NGAY_GIO = luc(LUC, "vi");
 const GHI_CHU = "Chốt xong 2 hợp đồng, chờ pháp chế <A&B> 🚀";
+const BAY_GIO = new Date("2026-10-22T03:00:00.000Z");
+const TUAN_KY = ["2026-10-05", "2026-10-12", "2026-10-19", "2026-10-26"];
 
 type MucTuTin = "cao" | "vua" | "thap";
 type Ca = {
@@ -58,32 +124,15 @@ type Ca = {
 	so: number | string;
 	tuTin: MucTuTin;
 	ghiChu: string | null;
+	go: string;
+	soGo: number;
 };
 
-type Tay = {
-	mo: ReturnType<typeof useCapNhatKr>["mo"] | null;
-	mt: ObjectiveOutput | null;
-};
-const tay: Tay = { mo: null, mt: null };
-
-function ThuHook({
-	keyResultId,
-	docDienBien,
-}: {
-	keyResultId: string;
-	docDienBien: boolean;
-}) {
-	const trpc = useTRPC();
-	const q = useQuery(trpc.okr.objective.queryOptions({ id: MT }));
-	useQuery({
-		...trpc.okr.dienBien.queryOptions({ keyResultId }),
-		enabled: docDienBien,
-	});
-	const capNhat = useCapNhatKr();
-	tay.mo = capNhat.mo;
-	tay.mt = q.data ?? null;
-	return capNhat.hop;
-}
+const NHAN_TU_TIN = {
+	cao: ui.okr.tuTinCao,
+	vua: ui.okr.tuTinVua,
+	thap: ui.okr.tuTinThap,
+} satisfies Record<MucTuTin, string>;
 
 function vet(
 	id: string,
@@ -104,29 +153,54 @@ function vet(
 	};
 }
 
-function dienBien(
-	ca: Pick<Ca, "kind" | "dich" | "unit">,
-	diem: {
-		tuan: string;
-		giaTri: number | null;
-		tuTin: MucTuTin | null;
-		ghiChu: string | null;
-	}[],
-) {
-	return dienBienOutput.parse({
+type Lan = {
+	id: string;
+	luc: string;
+	tuan: string;
+	giaTri: number | null;
+	tuTin: MucTuTin;
+	ghiChu: string | null;
+};
+
+function lichSu(ca: Pick<Ca, "kind" | "dich" | "unit">, lan: Lan[]) {
+	const laMoc = ca.kind === "moc";
+	return lichSuKrOutput.parse({
 		kieu: ca.kind,
 		tieuDe: "KR",
-		khoi: 0,
 		dich: ca.dich,
 		donVi: ca.unit,
-		coCapNhat: diem.length > 0,
-		tuanDau: diem[0]?.tuan ?? null,
-		diem: diem.map((d) => ({
-			...d,
-			kyVong: null,
-			checkInId: null,
+		coCapNhat: lan.length > 0,
+		lan: lan.map((l) => ({
+			checkInId: l.id,
+			luc: l.luc,
+			ngay: homNayVN(new Date(l.luc)),
+			tuan: l.tuan,
+			giaTri: laMoc ? null : l.giaTri,
+			tuTin: l.tuTin,
+			ghiChu: l.ghiChu,
 			camXuc: [],
 		})),
+		chuoi: chuoiMoiLan(
+			{
+				id: "kr",
+				thuTu: 0,
+				khoaLuc: null,
+				kieu: ca.kind,
+				khoi: 0,
+				dich: ca.dich,
+				lan: lan.map((l) => ({
+					id: l.id,
+					tuan: l.tuan,
+					luc: new Date(l.luc),
+					tuTin: l.tuTin,
+					ghiChu: l.ghiChu ?? "",
+					giaTri: l.giaTri ?? 0,
+				})),
+			},
+			TUAN_KY,
+			new Date(),
+			() => null,
+		),
 	});
 }
 
@@ -155,36 +229,135 @@ function mtCua(
 	);
 }
 
-const hop = () => qs("[data-hop-cap-nhat-kr]");
-const khoi = () => qs("[data-lan-truoc]");
+function datKhoNgan(): void {
+	kho.rieng.set("okr.canhKr", (vao) => {
+		const k = kho
+			.chiTiet()
+			.keyResults.find((x) => x.id === String(vao?.keyResultId ?? ""));
+		if (!k) throw new LoiTrpc("NOT_FOUND", "khong co KR");
+		return canhKrOutput.parse({
+			kr: {
+				id: k.id,
+				title: k.title,
+				kind: k.kind,
+				objectiveId: MT,
+				ownerName: k.owner.name,
+				xong: false,
+			},
+			dong: [],
+			bangChung: [],
+			quyen: { suaDuoc: true, ganDuoc: false },
+			khoa: false,
+			choDuyet: false,
+		});
+	});
+	kho.rieng.set("okr.dienBien", () =>
+		dienBienOutput.parse({
+			kieu: "tang-toi",
+			tieuDe: "KR",
+			khoi: 0,
+			dich: 100,
+			donVi: "khách",
+			coCapNhat: false,
+			tuanDau: null,
+			diem: [],
+		}),
+	);
+}
 
-async function moHop(
+const roCu = globalThis.ResizeObserver;
+const rectCu = HTMLElement.prototype.getBoundingClientRect;
+class QuanSatCoCo {
+	constructor(private cb: ResizeObserverCallback) {}
+	observe(el: Element) {
+		this.cb(
+			[
+				{
+					target: el,
+					contentRect: { width: 640, height: 160 } as DOMRectReadOnly,
+				} as ResizeObserverEntry,
+			],
+			this as unknown as ResizeObserver,
+		);
+	}
+	unobserve() {}
+	disconnect() {}
+}
+function coKhungDoThi(): void {
+	globalThis.ResizeObserver = QuanSatCoCo as unknown as typeof ResizeObserver;
+	HTMLElement.prototype.getBoundingClientRect = () =>
+		({
+			width: 640,
+			height: 160,
+			top: 0,
+			left: 0,
+			right: 640,
+			bottom: 160,
+			x: 0,
+			y: 0,
+			toJSON: () => ({}),
+		}) as DOMRect;
+}
+
+const KHOI = "[data-khoi-cap-nhat-kr]";
+const LICH_SU = '[data-muc-ngan="lich-su"]';
+const DONG = "[data-lich-su-kr] [data-lan-cap-nhat]";
+const khoiCapNhat = () => qs(KHOI);
+const trangThaiKhoi = () =>
+	khoiCapNhat()?.getAttribute("data-khoi-cap-nhat-kr");
+const dongDau = () => qs(DONG);
+const ghiChuDau = () =>
+	qs(
+		'[data-slot="item-description"]',
+		dongDau() ?? document.createElement("i"),
+	);
+const soDau = () =>
+	qs("[data-gia-tri-lan]", dongDau() ?? document.createElement("i"));
+const mucDoiKhoi = () =>
+	qs(`${KHOI} [data-xem-truoc-cap-nhat]`)?.textContent ?? null;
+const ngan = () => qs("[data-kr-sheet]");
+
+async function moKhoi(
 	mt: ObjectiveOutput,
 	locale: "vi" | "en" = "vi",
-	docDienBien = true,
+	choKhoi = true,
 ) {
 	kho.chiTiet = () => mt;
 	const k = mt.keyResults[0];
 	if (!k) throw new Error("thieu KR");
 	await dung(
-		<ThuHook docDienBien={docDienBien} keyResultId={k.id} />,
-		"",
+		<RecordSheetHost />,
+		`?record=objective:${MT},kr:${k.id}&tab=cap-nhat`,
 		locale,
 	);
-	await cho(() => tay.mt !== null, "doc muc tieu");
-	await act(async () => {
-		if (tay.mt) tay.mo?.(tay.mt, k);
-	});
-	await cho(() => hop() !== null, "hop cap nhat");
+	await cho(() => qs(`[data-kr-sheet="${k.id}"]`) !== null, "ngan KR");
+	if (choKhoi) await cho(() => trangThaiKhoi() === "mo", "khoi cap nhat");
 	return k;
+}
+
+async function goGiaTri(id: string, chu: string): Promise<void> {
+	const o = qs<HTMLInputElement>(`[id="${id}-gia-tri"]`);
+	if (!o) throw new Error("thieu o gia tri");
+	const u = nguoiDung();
+	await act(async () => {
+		await u.clear(o);
+		await u.type(o, chu);
+	});
+	await nhip(2);
 }
 
 beforeEach(() => {
 	datLai();
-	tay.mo = null;
-	tay.mt = null;
+	datKhoNgan();
+	setSystemTime(BAY_GIO);
+	coKhungDoThi();
 });
-afterEach(thaoHet);
+afterEach(async () => {
+	await thaoHet();
+	setSystemTime();
+	globalThis.ResizeObserver = roCu;
+	HTMLElement.prototype.getBoundingClientRect = rectCu;
+});
 
 const MA_TRAN: Ca[] = [
 	{
@@ -196,6 +369,8 @@ const MA_TRAN: Ca[] = [
 		so: 1234.5,
 		tuTin: "vua",
 		ghiChu: GHI_CHU,
+		go: "1300",
+		soGo: 1300,
 	},
 	{
 		ten: "phan-tram",
@@ -206,6 +381,8 @@ const MA_TRAN: Ca[] = [
 		so: 45,
 		tuTin: "cao",
 		ghiChu: "Đạt nửa chặng",
+		go: "50",
+		soGo: 50,
 	},
 	{
 		ten: "moc",
@@ -216,6 +393,8 @@ const MA_TRAN: Ca[] = [
 		so: 1,
 		tuTin: "thap",
 		ghiChu: "Đã ký",
+		go: mo.moc.chuaXong,
+		soGo: 0,
 	},
 	{
 		ten: "so-may",
@@ -226,64 +405,71 @@ const MA_TRAN: Ca[] = [
 		so: 55,
 		tuTin: "vua",
 		ghiChu: "Theo số CRM",
+		go: "60",
+		soGo: 60,
 	},
 ];
 
+function lanMot(ca: Ca, doi: Partial<Lan> = {}): Lan {
+	return {
+		id: "c1",
+		luc: LUC,
+		tuan: TUAN,
+		giaTri: Number(ca.so),
+		tuTin: ca.tuTin,
+		ghiChu: ca.ghiChu,
+		...doi,
+	};
+}
+
+function soLanTruocLech(ca: Ca, so: string | null, soMong: string): boolean {
+	return ca.kind !== "moc" && so !== soMong;
+}
+
 describe("hct-khoi", () => {
-	test("hct-khoi: ma tran bon o viet truoc — khoi dau hop co ngay gio VN, so dung kieu, muc tu tin, ghi chu nguyen van khong dich; o so goi Hien tai", async () => {
+	test("hct-khoi: ma tran bon o viet truoc — dong dau Lich su co ngay gio VN, so dung kieu, muc tu tin, ghi chu nguyen van khong dich; muc doi tinh tu lan truoc; o so goi Hien tai", async () => {
 		const loi: string[] = [];
 		const daChay: string[] = [];
 		for (const ca of MA_TRAN) {
 			datLai();
+			datKhoNgan();
 			const id = `k-${ca.ten}`;
-			kho.rieng.set("okr.dienBien", () =>
-				dienBien(ca, [
-					{
-						tuan: TUAN,
-						giaTri: ca.kind === "moc" ? null : Number(ca.so),
-						tuTin: ca.tuTin,
-						ghiChu: ca.ghiChu,
-					},
-				]),
-			);
-			const k = await moHop(
-				mtCua(id, ca, [vet("v1", id, LUC, ca.so, ca.tuTin)]),
-			);
+			kho.rieng.set("okr.lichSuKr", () => lichSu(ca, [lanMot(ca)]));
+			const mt = mtCua(id, ca, [vet("v1", id, LUC, ca.so, ca.tuTin)]);
+			const k = await moKhoi(mt);
 			await cho(
-				() => docCua("okr.dienBien").length > 0,
-				`doc dien bien ${ca.ten}`,
+				() => docCua("okr.lichSuKr").length > 0,
+				`doc lich su ${ca.ten}`,
 			);
 			await nhip(3);
-			const h = hop();
-			const b = khoi();
+			const h = khoiCapNhat();
+			const b = dongDau();
 			if (!h || !b) {
 				loi.push(`hct-khoi: thieu khoi (${ca.ten})`);
 			} else {
-				const oSo = qs('[data-o="gia-tri"]', h);
-				if (
-					!oSo ||
-					!(b.compareDocumentPosition(oSo) & Node.DOCUMENT_POSITION_FOLLOWING)
-				)
-					loi.push(`hct-khoi: khoi khong dung truoc o gia tri (${ca.ten})`);
+				if (!(h.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING))
+					loi.push(
+						`hct-khoi: dong dau Lich su khong dung sau khoi cap nhat (${ca.ten})`,
+					);
 				const tieuDe =
 					b.querySelector('[data-slot="item-title"]')?.textContent ?? "";
 				const gio = tieuDe.match(/\d{2}:\d{2}/)?.[0] ?? "";
-				if (!tieuDe.includes("15/10, 09:30"))
+				if (!tieuDe.includes(NGAY_GIO))
 					loi.push(`hct-khoi: ngay gio lech (${gio}, can 09:30)`);
-				if (!(h.textContent ?? "").includes(ml.tieuDe))
+				if (!(qs(LICH_SU)?.textContent ?? "").includes(mk.khung.lichSu))
 					loi.push(`hct-khoi: hop thieu tieu de khoi (${ca.ten})`);
-				const so = qs("[data-lan-truoc-so]", b)?.textContent ?? null;
+				const so = soDau()?.textContent ?? null;
 				const soMong = giaTri(k, Number(ca.so), "vi");
-				if (so !== soMong)
+				if (soLanTruocLech(ca, so, soMong))
 					loi.push(`hct-khoi: so lech (${ca.ten}: ${so}, can ${soMong})`);
 				const st = qs('[data-slot="status-indicator"]', b);
 				if (
 					st?.getAttribute("data-tone") !==
 						toneTheoNghia(NGHIA_TU_TIN[ca.tuTin]) ||
-					st.textContent?.trim() !== mo.capNhat.mucTuTin[ca.tuTin]
+					st.textContent?.trim() !== NHAN_TU_TIN[ca.tuTin]
 				)
 					loi.push(`hct-khoi: muc tu tin lech (${ca.ten})`);
-				const gc = qs("[data-ghi-chu-truoc]", b);
+				const gc = ghiChuDau();
 				if (gc?.textContent !== ca.ghiChu || !gc?.closest('[translate="no"]'))
 					loi.push(`hct-khoi: thieu ghi chu lan truoc (${ca.ten})`);
 				if (ca.ten === "so-may") {
@@ -292,9 +478,31 @@ describe("hct-khoi", () => {
 							?.textContent ?? "";
 					if (!moTa.includes(mo.capNhat.hienTai) || !moTa.includes("70 khách"))
 						loi.push(`hct-khoi: o so khong goi Hien tai (${moTa})`);
-					if (h.textContent?.includes(`${mo.capNhat.lanTruoc["lan-truoc"]} 70`))
+					if (
+						ngan()?.textContent?.includes(
+							`${mo.capNhat.lanTruoc["lan-truoc"]} 70`,
+						)
+					)
 						loi.push("hct-khoi: hai so cung nhan lan truoc (55, 70)");
 				}
+				if (ca.kind === "moc")
+					await act(async () => {
+						await nguoiDung().click(
+							nut(ca.go, qs('[data-o="gia-tri"]', h) ?? h),
+						);
+					});
+				else await goGiaTri(k.id, ca.go);
+				await nhip(2);
+				const doiMong = mucDoi(
+					{ kind: ca.kind, unit: ca.unit },
+					Number(ca.so),
+					ca.soGo,
+					"vi",
+				);
+				if (mucDoiKhoi() !== doiMong)
+					loi.push(
+						`hct-khoi: muc doi lech (${ca.ten}: ${mucDoiKhoi()}, can ${doiMong})`,
+					);
 			}
 			daChay.push(ca.ten);
 			await thaoHet();
@@ -335,12 +543,12 @@ describe("hct-rong", () => {
 		const ca = MA_TRAN[0] as Ca;
 		const loi: string[] = [];
 
-		kho.rieng.set("okr.dienBien", () => dienBien(ca, []));
-		const kA = await moHop(mtCua("k-a", ca, []));
+		kho.rieng.set("okr.lichSuKr", () => lichSu(ca, []));
+		const kA = await moKhoi(mtCua("k-a", ca, []));
 		await nhip(3);
 		const a = {
-			khoi: qsa("[data-lan-truoc]").length,
-			chu: hop()?.textContent?.includes(ml.tieuDe) ?? true,
+			khoi: qsa(DONG).length,
+			chu: ngan()?.textContent?.includes(ml.tieuDe) ?? true,
 			tieuDiem: document.activeElement?.id === `${kA.id}-gia-tri`,
 		};
 		if (a.khoi !== 0 || a.chu)
@@ -348,40 +556,42 @@ describe("hct-rong", () => {
 		await thaoHet();
 
 		datLai();
-		kho.rieng.set("okr.dienBien", () =>
-			dienBien(ca, [{ tuan: TUAN, giaTri: 50, tuTin: "vua", ghiChu: null }]),
+		datKhoNgan();
+		kho.rieng.set("okr.lichSuKr", () =>
+			lichSu(ca, [lanMot(ca, { giaTri: 50, tuTin: "vua", ghiChu: null })]),
 		);
-		await moHop(mtCua("k-b", ca, [vet("v1", "k-b", LUC, 50, "vua")]));
-		await cho(
-			() => qs("[data-ghi-chu-truoc-cho]") === null && khoi() !== null,
-			"khoi b tai xong",
-		);
+		await moKhoi(mtCua("k-b", ca, [vet("v1", "k-b", LUC, 50, "vua")]));
+		await cho(() => dongDau() !== null, "khoi b tai xong");
 		const b = {
-			khoi: qsa("[data-lan-truoc]").length,
-			so: qs("[data-lan-truoc-so]") !== null,
-			ghiChu: qsa("[data-ghi-chu-truoc]").length,
+			khoi: qsa(DONG).length,
+			so: soDau() !== null,
+			ghiChu: ghiChuDau() === null ? 0 : 1,
 		};
 		if (b.ghiChu !== 0)
 			loi.push("hct-rong: co dong ghi chu khi lan truoc khong ghi chu");
 		await thaoHet();
 
 		datLai();
-		kho.rieng.set("okr.dienBien", () =>
-			dienBien(ca, [{ tuan: TUAN, giaTri: 50, tuTin: "vua", ghiChu: "Co" }]),
+		datKhoNgan();
+		kho.rieng.set("okr.lichSuKr", () =>
+			lichSu(ca, [lanMot(ca, { giaTri: 50, tuTin: "vua", ghiChu: "Co" })]),
 		);
-		await moHop(mtCua("k-c", ca, [vet("v1", "k-c", LUC, 50, "vua")]));
-		await cho(() => qs("[data-ghi-chu-truoc]") !== null, "doi chung c");
-		const c = { ghiChu: qsa("[data-ghi-chu-truoc]").length };
+		await moKhoi(mtCua("k-c", ca, [vet("v1", "k-c", LUC, 50, "vua")]));
+		await cho(() => ghiChuDau() !== null, "doi chung c");
+		const c = { ghiChu: ghiChuDau() === null ? 0 : 1 };
 		await thaoHet();
 
 		datLai();
-		kho.rieng.set("okr.dienBien", () => dienBien(ca, []));
-		await moHop(mtCua("k-d", ca, [vet("v1", "k-d", LUC, "abc", "vua")]));
-		await cho(() => khoi() !== null, "khoi d");
+		datKhoNgan();
+		kho.rieng.set("okr.lichSuKr", () =>
+			lichSu(ca, [lanMot(ca, { giaTri: null, tuTin: "vua", ghiChu: null })]),
+		);
+		await moKhoi(mtCua("k-d", ca, [vet("v1", "k-d", LUC, "abc", "vua")]));
+		await cho(() => dongDau() !== null, "khoi d");
 		const d = {
-			khoi: qsa("[data-lan-truoc]").length,
-			so: qs("[data-lan-truoc-so]") !== null,
-			ngay: khoi()?.textContent?.includes("15/10, 09:30") ?? false,
+			khoi: qsa(DONG).length,
+			so: soDau() !== null,
+			ngay: dongDau()?.textContent?.includes(NGAY_GIO) ?? false,
 		};
 
 		expect({ loi, a, b, c, d }).toEqual({
@@ -400,62 +610,67 @@ describe("hct-tai", () => {
 		const loi: string[] = [];
 		const u = nguoiDung();
 
-		kho.rieng.set("okr.dienBien", () => new Promise<object>(() => {}));
-		await moHop(mtCua("k-cho", ca, [vet("v1", "k-cho", LUC, 1234.5, "vua")]));
+		kho.rieng.set("okr.lichSuKr", () => new Promise<object>(() => {}));
+		await moKhoi(
+			mtCua("k-cho", ca, [vet("v1", "k-cho", LUC, 1234.5, "vua")]),
+			"vi",
+			false,
+		);
 		await nhip(3);
-		const b = khoi();
-		const coDu =
-			(b?.textContent?.includes("15/10, 09:30") ?? false) &&
-			qs("[data-lan-truoc-so]", b ?? document.body) !== null &&
-			qs('[data-slot="status-indicator"]', b ?? document.body) !== null;
-		if (!coDu) loi.push("hct-tai: thieu ngay so tu tin khi dang tai ghi chu");
-		const cho1 = qs("[data-ghi-chu-truoc-cho]") !== null;
+		const cho1 = qs(`${LICH_SU} [data-slot="skeleton"]`) !== null;
 		await act(async () => {
-			await u.click(nut(mo.capNhat.mucTuTin.cao, hop() ?? document.body));
+			await u.click(
+				nut(mo.capNhat.mucTuTin.cao, khoiCapNhat() ?? document.body),
+			);
 		});
 		await cho(
 			() =>
-				qs<HTMLButtonElement>('[data-nut="gui-cap-nhat-kr"]')?.disabled ===
-				false,
+				qs<HTMLButtonElement>(`${KHOI} [data-nut="gui-cap-nhat-kr"]`)
+					?.disabled === false,
 			"gui duoc khi dang tai",
 		);
 		await thaoHet();
 
 		datLai();
+		datKhoNgan();
 		let lan = 0;
-		kho.rieng.set("okr.dienBien", () => {
+		kho.rieng.set("okr.lichSuKr", () => {
 			lan += 1;
 			if (lan === 1) throw new LoiTrpc("INTERNAL_SERVER_ERROR", "hong");
-			return dienBien(ca, [
-				{ tuan: TUAN, giaTri: 1234.5, tuTin: "vua", ghiChu: "Lan hai" },
+			return lichSu(ca, [
+				lanMot(ca, { giaTri: 1234.5, tuTin: "vua", ghiChu: "Lan hai" }),
 			]);
 		});
-		await moHop(
+		await moKhoi(
 			mtCua("k-loi", ca, [vet("v1", "k-loi", LUC, 1234.5, "vua")]),
 			"vi",
 			false,
 		);
-		await cho(() => qs("[data-ghi-chu-truoc-loi]") !== null, "loi ghi chu");
-		const cauLoi = khoi()?.textContent?.includes(ml.loiGhiChu) ?? false;
-		const coNut = (khoi()?.querySelectorAll("button") ?? []).length > 0;
+		await cho(
+			() => qs(`${LICH_SU} [data-vung-tai-loi]`) !== null,
+			"loi ghi chu",
+		);
+		const lichSuEl = () => qs(LICH_SU);
+		const cauLoi = lichSuEl()?.textContent?.includes(loiLichSu) ?? false;
+		const coNut = (lichSuEl()?.querySelectorAll("button") ?? []).length > 0;
 		if (!coNut) loi.push("hct-tai: thieu nut thu lai khi loi");
 		await act(async () => {
-			await u.click(nut(mo.capNhat.mucTuTin.cao, hop() ?? document.body));
+			await u.click(
+				nut(mo.capNhat.mucTuTin.cao, khoiCapNhat() ?? document.body),
+			);
 		});
 		const guiDuoc =
-			qs<HTMLButtonElement>('[data-nut="gui-cap-nhat-kr"]')?.disabled === false;
-		const docTruoc = docCua("okr.dienBien").length;
+			qs<HTMLButtonElement>(`${KHOI} [data-nut="gui-cap-nhat-kr"]`)
+				?.disabled === false;
+		const docTruoc = docCua("okr.lichSuKr").length;
 		if (coNut)
 			await act(async () => {
-				await u.click(nut(ml.thuLai, khoi() ?? document.body));
+				await u.click(nut(ml.thuLai, lichSuEl() ?? document.body));
 			});
-		await cho(
-			() => qs("[data-ghi-chu-truoc]") !== null || !coNut,
-			"ghi chu sau thu lai",
-		);
+		await cho(() => ghiChuDau() !== null || !coNut, "ghi chu sau thu lai");
 		const sau = {
-			docThem: docCua("okr.dienBien").length - docTruoc,
-			ghiChu: qs("[data-ghi-chu-truoc]")?.textContent ?? null,
+			docThem: docCua("okr.lichSuKr").length - docTruoc,
+			ghiChu: ghiChuDau()?.textContent ?? null,
 		};
 
 		expect({ loi, cho1, cauLoi, guiDuoc, sau }).toEqual({
@@ -469,27 +684,28 @@ describe("hct-tai", () => {
 });
 
 describe("hct-goi-y", () => {
-	test("hct-goi-y: hop co ba cau goi y duoi o ghi chu (vi, en), o mot dong 200 ky tu; trang Cap nhat tuan khong co", async () => {
+	test("hct-goi-y: khoi co ba cau goi y duoi o ghi chu (vi, en), o mot dong 200 ky tu; trang Cap nhat tuan khong co", async () => {
 		const ca = MA_TRAN[0] as Ca;
 		const loi: string[] = [];
 		const docGoiY = () =>
 			[
-				...(qs('[data-o="ghi-chu"] [data-goi-y-ghi-chu]')?.querySelectorAll(
-					"[data-cau-goi-y]",
-				) ?? []),
+				...(qs(
+					`${KHOI} [data-o="ghi-chu"] [data-goi-y-ghi-chu]`,
+				)?.querySelectorAll("[data-cau-goi-y]") ?? []),
 			].map((c) => c.textContent);
 
-		kho.rieng.set("okr.dienBien", () => dienBien(ca, []));
-		await moHop(mtCua("k-g", ca, []));
+		kho.rieng.set("okr.lichSuKr", () => lichSu(ca, []));
+		await moKhoi(mtCua("k-g", ca, []));
 		const vi = docGoiY();
 		if (vi.length === 0) loi.push("hct-goi-y: thieu cau hoi goi y trong hop");
-		const o = qs<HTMLInputElement>('[data-o="ghi-chu"] input');
+		const o = qs<HTMLInputElement>(`${KHOI} [data-o="ghi-chu"] input`);
 		const oGhiChu = { the: o?.tagName ?? null, toiDa: o?.maxLength ?? null };
 		await thaoHet();
 
 		datLai();
-		kho.rieng.set("okr.dienBien", () => dienBien(ca, []));
-		await moHop(mtCua("k-g-en", ca, []), "en");
+		datKhoNgan();
+		kho.rieng.set("okr.lichSuKr", () => lichSu(ca, []));
+		await moKhoi(mtCua("k-g-en", ca, []), "en");
 		const en = docGoiY();
 		await thaoHet();
 
@@ -535,7 +751,7 @@ describe("hct-goi-y", () => {
 });
 
 describe("hct-sau-gui", () => {
-	test("hct-sau-gui: gui xong may lam moi dien bien va muc tieu; mo lai hop thi khoi la lan vua gui", async () => {
+	test("hct-sau-gui: gui xong may lam moi Lich su va muc tieu; mo lai khoi thi dong dau Lich su la lan vua gui", async () => {
 		const ca = MA_TRAN[0] as Ca;
 		const id = "k-sg";
 		const lucCu = "2026-10-20T02:00:00.000Z";
@@ -548,16 +764,28 @@ describe("hct-sau-gui", () => {
 		const mtCu = mtCua(id, { ...ca, hienTai: 40 }, [
 			vet("v1", id, lucCu, 40, "cao"),
 		]);
-		kho.rieng.set("okr.dienBien", () =>
-			dienBien(ca, [
-				daGui
-					? {
-							tuan: tuanNay,
-							giaTri: daGui.value,
-							tuTin: daGui.confidence,
-							ghiChu: daGui.note,
-						}
-					: { tuan: tuanNay, giaTri: 40, tuTin: "cao", ghiChu: "A" },
+		kho.rieng.set("okr.lichSuKr", () =>
+			lichSu(ca, [
+				{
+					id: "c1",
+					luc: lucCu,
+					tuan: tuanNay,
+					giaTri: 40,
+					tuTin: "cao",
+					ghiChu: "A",
+				},
+				...(daGui
+					? [
+							{
+								id: "c2",
+								luc: lucMoi,
+								tuan: tuanNay,
+								giaTri: daGui.value,
+								tuTin: daGui.confidence,
+								ghiChu: daGui.note === "" ? null : daGui.note,
+							},
+						]
+					: []),
 			]),
 		);
 		kho.ghiRieng.set("okr.guiCapNhat", async (vao) => {
@@ -576,64 +804,77 @@ describe("hct-sau-gui", () => {
 				]);
 			return { id: "ok", canhBao: null };
 		});
-		const k = await moHop(mtCu);
-		await cho(
-			() => qs("[data-ghi-chu-truoc]")?.textContent === "A",
-			"ghi chu cu",
-		);
+		const k = await moKhoi(mtCu);
+		await cho(() => ghiChuDau()?.textContent === "A", "ghi chu cu");
 		const u = nguoiDung();
 		const o = qs<HTMLInputElement>(`[id="${id}-gia-tri"]`);
 		if (!o) throw new Error("thieu o gia tri");
 		await act(async () => {
 			await u.clear(o);
 			await u.type(o, "60");
-			await u.click(nut(mo.capNhat.mucTuTin.thap, hop() ?? document.body));
+			await u.click(
+				nut(mo.capNhat.mucTuTin.thap, khoiCapNhat() ?? document.body),
+			);
 			const g = qs<HTMLInputElement>(`[id="${id}-ghi-chu"]`);
 			if (!g) throw new Error("hct-sau-gui: thieu o ghi chu");
 			await u.type(g, "Moi");
 		});
 		const docTruoc = {
-			dienBien: docCua("okr.dienBien").length,
+			lichSu: docCua("okr.lichSuKr").length,
 			mucTieu: docCua("okr.objective").length,
 		};
 		await cho(
 			() =>
-				qs<HTMLButtonElement>('[data-nut="gui-cap-nhat-kr"]')?.disabled ===
-				false,
+				qs<HTMLButtonElement>(`${KHOI} [data-nut="gui-cap-nhat-kr"]`)
+					?.disabled === false,
 			"nut gui",
 		);
 		await act(async () => {
-			await u.click(qs('[data-nut="gui-cap-nhat-kr"]') ?? document.body);
+			await u.click(
+				qs(`${KHOI} [data-nut="gui-cap-nhat-kr"]`) ?? document.body,
+			);
 		});
-		await cho(() => hop() === null, "hop dong");
-		await cho(() => tay.mt?.trail.length === 2, "muc tieu moi");
+		await cho(() => trangThaiKhoi() === "thu", "khoi thu sau gui");
+		await cho(
+			() => docCua("okr.objective").length > docTruoc.mucTieu,
+			"muc tieu moi",
+		);
 		const lamMoi = {
-			dienBien: docCua("okr.dienBien").length > docTruoc.dienBien,
+			lichSu: docCua("okr.lichSuKr").length > docTruoc.lichSu,
 			mucTieu: docCua("okr.objective").length > docTruoc.mucTieu,
 		};
 		await act(async () => {
-			if (tay.mt) tay.mo?.(tay.mt, k);
+			await u.click(
+				qs(`${KHOI} [data-nut="mo-khoi-cap-nhat-kr"]`) ?? document.body,
+			);
 		});
 		await cho(
-			() => khoi() !== null && qs("[data-ghi-chu-truoc]") !== null,
+			() => trangThaiKhoi() === "mo" && ghiChuDau() !== null,
 			"khoi sau gui",
 		);
-		const thay = qs("[data-ghi-chu-truoc]")?.textContent ?? null;
+		await nhip(3);
+		const thay = ghiChuDau()?.textContent ?? null;
 		const loi =
 			thay === "Moi" ? [] : [`hct-sau-gui: ghi chu cu sau khi gui (${thay})`];
+		const so = soDau()?.textContent ?? null;
+		const tuTin =
+			qs(
+				'[data-slot="status-indicator"]',
+				dongDau() ?? document.body,
+			)?.textContent?.trim() ?? null;
+		await goGiaTri(k.id, "70");
 		expect({
 			loi,
 			lamMoi,
-			so: qs("[data-lan-truoc-so]")?.textContent ?? null,
-			tuTin:
-				qs(
-					'[data-lan-truoc] [data-slot="status-indicator"]',
-				)?.textContent?.trim() ?? null,
+			so,
+			tuTin,
+			mucDoi: mucDoiKhoi(),
 		}).toEqual({
 			loi: [],
-			lamMoi: { dienBien: true, mucTieu: true },
+			lamMoi: { lichSu: true, mucTieu: true },
 			so: giaTri(k, 60, "vi"),
-			tuTin: mo.capNhat.mucTuTin.thap,
+			tuTin: NHAN_TU_TIN.thap,
+			mucDoi: mucDoi({ kind: ca.kind, unit: ca.unit }, 60, 70, "vi"),
 		});
 	});
 });

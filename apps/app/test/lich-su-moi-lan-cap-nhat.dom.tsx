@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	mock,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { useQueryClient } from "@tanstack/react-query";
@@ -323,6 +331,7 @@ beforeEach(() => {
 });
 afterEach(async () => {
 	await thaoHet();
+	setSystemTime();
 	globalThis.ResizeObserver = roCu;
 	HTMLElement.prototype.getBoundingClientRect = rectCu;
 });
@@ -501,17 +510,19 @@ describe("lsml-bieu-do", () => {
 	});
 });
 
-async function guiTuHop(giaTri: string): Promise<void> {
-	const h = qs("[data-hop-cap-nhat-kr]");
-	if (!h) throw new Error("khong co hop cap nhat");
-	const o = h.querySelector<HTMLInputElement>('[id$="-gia-tri"]');
+const KHOI_MO = '[data-khoi-cap-nhat-kr="mo"]';
+
+async function guiTuKhoi(giaTri: string): Promise<void> {
+	const h = qs(KHOI_MO);
+	if (!h) throw new Error("khong co khoi cap nhat");
+	const o = h.querySelector<HTMLInputElement>('[data-o="gia-tri"] input');
 	if (!o) throw new Error("khong co o gia tri");
 	const u = nguoiDung();
 	await act(async () => {
 		await u.clear(o);
 		await u.type(o, giaTri);
 	});
-	const muc = [...h.querySelectorAll("button")].find(
+	const muc = [...h.querySelectorAll('[data-o="tu-tin"] button')].find(
 		(b) => b.textContent?.trim() === mo.capNhat.mucTuTin.vua,
 	);
 	if (muc) await bamChuot(muc);
@@ -537,6 +548,7 @@ function NutDieuHuongThu() {
 describe("lsml-sau-gui", () => {
 	test("lsml-sau-gui: hai lan gui trong tuan, moi lan them mot dong va mot cham", async () => {
 		coKhungDoThi();
+		setSystemTime(HOM_NAY);
 		const lan: LanMau[] = CHIN_LAN.slice(0, 7);
 		let dem = 0;
 		const loi: string[] = [];
@@ -559,12 +571,10 @@ describe("lsml-sau-gui", () => {
 			const dongTruoc = dongLan().length;
 			const chamTruoc = chamGiaTri();
 			const docTruoc = docCua("okr.lichSuKr").length;
-			await bamChuot(qs('[data-nut="cap-nhat-ngan-kr"]') as HTMLElement);
-			await cho(
-				() => qs("[data-hop-cap-nhat-kr]") !== null,
-				`hop lan ${i + 1}`,
-			);
-			await guiTuHop(gia);
+			if (i > 0)
+				await bamChuot(qs('[data-nut="mo-khoi-cap-nhat-kr"]') as HTMLElement);
+			await cho(() => qs(KHOI_MO) !== null, `khoi lan ${i + 1}`);
+			await guiTuKhoi(gia);
 			await cho(
 				() => dongLan().length === dongTruoc + 1,
 				`dong tang lan ${i + 1}`,

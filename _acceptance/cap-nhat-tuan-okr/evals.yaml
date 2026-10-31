@@ -204,7 +204,7 @@ evals:
     layer: backend-effect
     cmd: PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} CHI=E18,E19 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
     paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/components/crm/record-sheet/objective-trao-doi.tsx, apps/api/src/okr/**, _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs]
-    expected: "Cùng lần chạy với E18, SQL thẳng DATABASE_URL: sau bước 3 okrComment của O +1 với authorUserId R, keyResultId KR1, okrMention có M; sau bước 4 okrFollow (O, R) có; sau bước 5 okrCheckIn của KR1 +1 với authorUserId TP, onBehalf true, phiên entry sheet. CHIỀU ĐỎ: khung soạn không gửi mentionUserIds → okrMention thiếu M, bài đỏ in tập."
+    expected: "Cùng lần chạy với E18, SQL thẳng DATABASE_URL: sau bước 3 okrComment của O +1 với authorUserId R, keyResultId KR1, okrMention có M; sau bước 4 okrFollow (O, R) có; sau bước 5 okrCheckIn của KR1 +1 với authorUserId TP, onBehalf true, phiên entry muc-tieu (lối menu «…» của ngăn mục tiêu, AC-7 của cap-nhat-trong-ngan-kr). CHIỀU ĐỎ: khung soạn không gửi mentionUserIds → okrMention thiếu M, bài đỏ in tập."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E20

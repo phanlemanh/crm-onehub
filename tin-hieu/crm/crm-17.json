@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Thiếu tab nhật trạng thái của đối tác",
+    "muon_lam": "Bổ sung cập nhật trạng thái quan hệ đối tác để giúp theo dõi hoạt động toàn trình và hiện trạng của mỗi đối tác.",
+    "da_xay_ra": "Thiếu tab nhật trạng thái của đối tác",
+    "man": "/companies"
+  },
+  "luc": "2026-10-26T08:24:11.850Z"
+}

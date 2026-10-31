@@ -2426,6 +2426,15 @@ executors:
     bcd_da_bo: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-da-bo
     bcd_rong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-rong
     bcd_hop_tuan_goc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/bo-okr-chi-don-vi.dom.tsx -t bcd-hop-tuan-goc
+    cnk_mo_thu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-mo-thu"
+    cnk_chi_doc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-chi-doc"
+    cnk_xem_truoc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-xem-truoc"
+    cnk_gui: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-gui"
+    cnk_loi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-loi"
+    cnk_giu_nhap: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-giu-nhap"
+    cnk_loi_vao: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-loi-vao"
+    cnk_dau_ngan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cap-nhat-trong-ngan-kr.dom.tsx -t cnk-dau-ngan"
+    cnk_api: 'bun run test -- "cd apps/api && bun test test/cap-nhat-trong-ngan-kr.spec.ts -t cnk-api"'
   script:
     bcd_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-chi-don-vi/rang/man-bo-okr-chi-don-vi.mjs"'
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
@@ -3672,6 +3681,9 @@ executors:
     vk10_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/che-do-soan-bo-okr/rang/man-soan.mjs"'
     vk10_san_thiet_ke: bun _acceptance/che-do-soan-bo-okr/rang/san-thiet-ke.mjs
     vk10_khong_doi_hinh: bun _acceptance/che-do-soan-bo-okr/rang/khong-doi-hinh.mjs
+    cnk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-trong-ngan-kr/rang/man.mjs"'
+    cnk_khong_hop_thoai: bun _acceptance/cap-nhat-trong-ngan-kr/rang/khong-hop-thoai.mjs
+    cnk_thuoc_da_ky: bun _acceptance/cap-nhat-trong-ngan-kr/rang/thuoc-da-ky.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

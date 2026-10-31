@@ -11,6 +11,32 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "cap-nhat-trong-ngan-kr",
+		ten: "Cập nhật KR ngay trong ngăn — khối cập nhật giữa ô số và Lịch sử thay hộp thoại che ngăn",
+		states: [
+			{
+				id: "ST-cnk-hom-nay",
+				nhan: "Hôm nay — nút Cập nhật, hộp thoại che ngăn",
+			},
+			{ id: "ST-cnk-mo-san", nhan: "Đến hạn chưa cập nhật — khối mở sẵn" },
+			{
+				id: "ST-cnk-xem-truoc",
+				nhan: "Đang gõ 14 — chấm nét đứt, dòng 12 → 14",
+			},
+			{ id: "ST-cnk-thu", nhan: "Đã cập nhật tuần này — khối thu một dòng" },
+			{ id: "ST-cnk-vua-gui", nhan: "Vừa gửi — dòng mới, ô số đổi, toast" },
+			{ id: "ST-cnk-loi", nhan: "Gửi lỗi — báo lỗi trong khối, nháp còn" },
+			{ id: "ST-cnk-moc", nhan: "KR mốc — chọn Xong hiện ô bằng chứng" },
+			{ id: "ST-cnk-ghi-ho", nhan: "Trưởng đơn vị ghi hộ" },
+			{ id: "ST-cnk-giu-nhap", nhan: "Còn nháp, bấm › — hỏi giữ thay đổi" },
+			{ id: "ST-cnk-chi-doc", nhan: "Không quyền — không có khối" },
+			{
+				id: "ST-cnk-tu-hop-tuan",
+				nhan: "Từ Họp tuần — khối mở, tiêu điểm, 2/5",
+			},
+		],
+	},
+	{
 		slug: "lich-su-moi-lan-cap-nhat",
 		ten: "Lịch sử KR hiện mọi lần cập nhật — mỗi lần một dòng có giờ, biểu đồ mỗi lần một điểm",
 		states: [

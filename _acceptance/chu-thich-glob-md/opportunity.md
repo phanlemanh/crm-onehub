@@ -3,7 +3,7 @@ schema_version: 1
 slug: chu-thich-glob-md
 feature: "Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho"
 owner: phanlemanh@gmail.com
-stage: decided               # discovery | decided | archived
+stage: archived               # discovery | decided | archived
 decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
 decided_by: Phan Le Manh
 decided_at: 2026-10-19T13:18:56Z     # ISO UTC
@@ -27,3 +27,7 @@ Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở g
 - Kết quả nào là SỐNG: …
 - Kết quả nào là CHẾT: …
 - Timebox: …
+
+## Khép 31/10
+
+Hàng F36 đã gộp ở #507 (22/10) như việc T1 làm thẳng, không qua vòng; ô này đóng lại để bộ quét thôi xếp nó «sắp mở vòng». Chủ kho 31/10 «Đồng ý theo khuyên» cho B9 của docs/plan/don-dep-3110.md (bác hoặc xếp lại hồ sơ treo ngoài kế hoạch), qua phiên giám sát Mac Studio; máy chọn từng hồ sơ.

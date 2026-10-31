@@ -3,10 +3,10 @@ schema_version: 1
 slug: the-thong-tin-ca-nhan
 feature: Gợi ý thông tin của tác tử ở tab Tổng quan của Cá nhân trải hết hàng, nói rõ là tác tử đề xuất và độ tin, và đặt giá trị cũ cạnh giá trị mới
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: park
+decided_by: Phan Le Manh
+decided_at: 2026-10-31T09:52:29Z
 prototype:
   base_commit:
   disposition:
@@ -33,3 +33,7 @@ Gốc: hồ sơ `_acceptance/the-gop-y-okr` (AC-10) và buổi lái thử 30/09 
 
 - Hiện độ tin bằng chữ («vừa», «khá chắc», «đã xác minh») hay bằng dấu?
 - Có đưa «Sửa» vào thẻ thông tin như thẻ viết lại của OKR không?
+
+## Quyết định Cổng Đáng 31/10
+
+Xếp lại sau — Thẻ đề xuất ở tab Tổng quan của Cá nhân (facts.tsx) chưa có hàng; mở lại khi cắt lượt kế chạm ngăn Cá nhân. Chủ kho 31/10 «Đồng ý theo khuyên» cho B9 của docs/plan/don-dep-3110.md (bác hoặc xếp lại hồ sơ treo ngoài kế hoạch), qua phiên giám sát Mac Studio; máy chọn từng hồ sơ.

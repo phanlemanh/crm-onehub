@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Chưa có góc nhìn tổng hợp để phân nhóm, filter và so sánh MA theo performance/health; việc tạo nhiều MA cũng đang cần nh…",
+    "muon_lam": "Theo dõi và phân tích tổng thể portfolio MA để nhận diện nhóm cần ưu tiên hoặc hỗ trợ.",
+    "da_xay_ra": "Chưa có góc nhìn tổng hợp để phân nhóm, filter và so sánh MA theo performance/health; việc tạo nhiều MA cũng đang cần nhập từng record thay vì import hàng loạt.",
+    "man": "/companies"
+  },
+  "luc": "2026-10-21T03:09:16.639Z"
+}

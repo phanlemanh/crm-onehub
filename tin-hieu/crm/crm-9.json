@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Màn Cá nhân hiện chủ yếu là danh sách hồ sơ; chưa thể hiện Agent đang ở đâu trong funnel Onboard → Contribute → Qualifie…",
+    "muon_lam": "Theo dõi trạng thái của Agent tự do xuyên suốt từ onboard đến khi trở thành Agent có đóng góp/chất lượng.",
+    "da_xay_ra": "Màn Cá nhân hiện chủ yếu là danh sách hồ sơ; chưa thể hiện Agent đang ở đâu trong funnel Onboard → Contribute → Qualified.",
+    "man": "/contacts"
+  },
+  "luc": "2026-10-21T03:09:35.625Z"
+}

@@ -246,10 +246,21 @@ try {
 			() =>
 				document.querySelector('[data-trang-thai="ST-ngan-kr-mo"]') !== null,
 		);
-		const den = await t.evaluate(() => {
+		await d.doi(
+			t,
+			(k) =>
+				document.querySelector(
+					`[data-kr-sheet="${k}"] [data-khoi-cap-nhat-kr]`,
+				) !== null,
+			krId,
+		);
+		const den = await t.evaluate((k) => {
 			const u = new URL(window.location.href);
 			const ngan = document.querySelector('[data-trang-thai="ST-ngan-kr-mo"]');
-			const nut = document.querySelector('[data-nut="cap-nhat-ngan-kr"]');
+			const khoi = `[data-kr-sheet="${k}"] [data-khoi-cap-nhat-kr]`;
+			const nut = document.querySelector(
+				`${khoi} [data-nut="mo-khoi-cap-nhat-kr"], ${khoi} [data-o="gia-tri"]`,
+			);
 			const r = nut?.getBoundingClientRect();
 			return {
 				path: u.pathname,
@@ -260,7 +271,7 @@ try {
 				nutTrongKhung:
 					r !== undefined && r.top >= 0 && r.bottom <= window.innerHeight,
 			};
-		});
+		}, krId);
 		dong(
 			den.path.endsWith("/okr/bo-okr") &&
 				den.donOkr === (kr ? khoaDon(kr.objective) : "") &&
@@ -272,19 +283,26 @@ try {
 		);
 		await t.screenshot({ path: join(BANG_CHUNG, `E14-mo-kr-${kho}.png`) });
 
-		await d.bamSel(t, '[data-nut="cap-nhat-ngan-kr"]');
+		if (await t.$(`[data-kr-sheet="${krId}"] [data-nut="mo-khoi-cap-nhat-kr"]`))
+			await d.bamSel(
+				t,
+				`[data-kr-sheet="${krId}"] [data-nut="mo-khoi-cap-nhat-kr"]`,
+			);
 		await d.doi(
 			t,
-			() =>
+			(k) =>
 				document.querySelector(
-					'[role="dialog"] [data-slot=dialog-title], [role="dialog"] h2',
+					`[data-kr-sheet="${k}"] [data-khoi-cap-nhat-kr="mo"]`,
 				) !== null,
+			krId,
 		);
 		await choMs(500);
 		const hop = await t.evaluate(
-			() =>
-				[...document.querySelectorAll('[role="dialog"]')].at(-1)?.textContent ??
-				"",
+			(k) =>
+				document.querySelector(
+					`[data-kr-sheet="${k}"]:has([data-khoi-cap-nhat-kr="mo"])`,
+				)?.textContent ?? "",
+			krId,
 		);
 		dong(
 			kr ? hop.includes(kr.title) : false,

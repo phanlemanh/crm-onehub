@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f91b4721b353b24c36cac18e10f33321c8f697f8
+verified_commit: 7afd6ddb4c0fefc206a8c191c10c8ff3e33796b0
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -357,3 +357,7 @@ sha: f28f4ba412ec6e954970c6eccbf75eb5e909a72e · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 10 — 2026-10-23, do VK9 mot-nut-tao-muc-tieu: eval thay bởi VK9, bàn đo qua hộp Thêm mục tiêu (V2-20 b2), thước Cài đặt theo hiện trạng (V2-21), sau gộp onehub
 run_id: repin-20261023T034523Z-32223
 sha: f91b4721b353b24c36cac18e10f33321c8f697f8 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 11 — 2026-10-30, do SV8 cap-nhat-trong-ngan-kr: chuyển chỗ đo sang khối trong ngăn (V1-7, V1-10), sửa lỗi gửi từ lối ngoài và ba thước đã ký (V1-11)
+run_id: repin-20261030T151528Z-63369
+sha: 7afd6ddb4c0fefc206a8c191c10c8ff3e33796b0 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · diff chạm vật đo ngoài làn máy: E11, E14, E16 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

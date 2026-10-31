@@ -19,6 +19,8 @@ const NAM_TEP = [
 	"hop-tuan-tren-bang.dom.tsx",
 	"hop-cap-nhat-lan-truoc.dom.tsx",
 	"cap-nhat-gan-day.dom.tsx",
+	"ve-khung-muc-tieu-dung-kr.dom.tsx",
+	"cap-nhat-trong-ngan-kr.dom.tsx",
 ];
 const NGOAI_DANH_SACH = new Set([
 	"ngan-kr-mot-cho.dom.tsx",

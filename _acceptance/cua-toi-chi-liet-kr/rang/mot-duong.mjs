@@ -12,9 +12,10 @@
  *      được thành literal là vi phạm. Tệp định nghĩa của (1) được miễn — mã đã thôi dùng, giữ lại cho
  *      hồ sơ đã ký (design doc mục 7);
  *  (3) không tệp nào đọc SEARCH_PARAM.okr.tu;
- *  (4) ngăn KR (kr-sheet.tsx) và bảng của bộ (theo-don-vi/bang.tsx — nơi dòng KR của bộ nhận nút
- *      «Cập nhật») gọi useCapNhatKr(), truyền `.mo` và dựng `.hop`; và cap-nhat-kr.tsx mở lượt với
- *      entry đúng "sheet".
+ *  (4) ngăn KR (kr-sheet.tsx) dựng khối cập nhật một KR (KhoiCapNhatKr) và bảng của bộ
+ *      (theo-don-vi/bang.tsx — nơi dòng KR của bộ nhận nút «Cập nhật») dựng NutCapNhatDong; và
+ *      khoi-cap-nhat-kr.tsx mở lượt với entry thuộc bốn lối của khối (sheet, hop-tuan, bang-don-vi,
+ *      muc-tieu), không bao giờ nhac, viec-cua-toi hay cua-toi.
  * Rồi mỗi luật một đối chứng: cài một bản phá vào bộ nhớ (CompilerHost đọc nội dung thay thế, cây thật
  * không bị ghi), quét lại, phải ra đúng vi phạm có thông điệp ghim.
  * Mã thoát: 0 «DUNG AC-6: 4/4» và 4 đối chứng đỏ đúng · 1 có vi phạm hay đối chứng sai · 2 không đo được.
@@ -28,14 +29,34 @@ const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const APP = join(GOC, "apps", "app");
 const OKR = join(APP, "app", "(app)", "[slug]", "okr");
 const TEP_BANG = join(OKR, "cap-nhat-tuan", "cap-nhat-tuan.tsx");
-const TEP_MO = join(OKR, "cap-nhat-kr.tsx");
+const TEP_MO = join(
+	APP,
+	"components",
+	"crm",
+	"record-sheet",
+	"khoi-cap-nhat-kr.tsx",
+);
 const TEP_DUNG_HOP = [
 	join(APP, "components", "crm", "record-sheet", "kr-sheet.tsx"),
 	join(OKR, "theo-don-vi", "bang.tsx"),
 ];
+const THE_CAP_NHAT_MOT_KR = new Map([
+	[resolve(TEP_DUNG_HOP[0]), "KhoiCapNhatKr"],
+	[resolve(TEP_DUNG_HOP[1]), "NutCapNhatDong"],
+]);
 const TEN_BANG = new Set(["BangCapNhat", "CapNhatTuan"]);
-const LOI_VAO = ["nhac", "viec-cua-toi", "tab", "sheet", "cua-toi"];
+const LOI_VAO = [
+	"nhac",
+	"viec-cua-toi",
+	"tab",
+	"sheet",
+	"cua-toi",
+	"hop-tuan",
+	"bang-don-vi",
+	"muc-tieu",
+];
 const CAM = new Set(["nhac", "viec-cua-toi", "cua-toi"]);
+const LOI_VAO_KHOI = new Set(["sheet", "hop-tuan", "bang-don-vi", "muc-tieu"]);
 
 function khongDo(ly) {
 	console.log(`KHONG DO DUOC: ${ly}`);
@@ -169,39 +190,33 @@ function quet(thay = new Map(), them = []) {
 	for (const tep of TEP_DUNG_HOP) {
 		const sf = program.getSourceFile(tep);
 		if (!sf) khongDo(`thieu ${relative(GOC, tep)} trong chuong trinh`);
-		let bien = null;
-		let mo = false;
-		let hop = false;
+		const the = THE_CAP_NHAT_MOT_KR.get(resolve(tep));
+		let dung = false;
 		const tim = (nut) => {
 			if (
-				ts.isVariableDeclaration(nut) &&
-				nut.initializer &&
-				ts.isCallExpression(nut.initializer) &&
-				nut.initializer.expression.getText(sf) === "useCapNhatKr" &&
-				ts.isIdentifier(nut.name)
+				(ts.isJsxOpeningElement(nut) || ts.isJsxSelfClosingElement(nut)) &&
+				nut.tagName.getText(sf) === the
 			)
-				bien = nut.name.text;
+				dung = true;
 			ts.forEachChild(nut, tim);
 		};
 		tim(sf);
-		const dem = (nut) => {
-			if (bien && ts.isPropertyAccessExpression(nut)) {
-				const chu = nut.getText(sf);
-				if (chu === `${bien}.mo`) mo = true;
-				if (chu === `${bien}.hop` && ts.isJsxExpression(nut.parent)) hop = true;
-			}
-			ts.forEachChild(nut, dem);
-		};
-		dem(sf);
-		if (!(bien && mo && hop))
+		if (!dung)
 			viPham.push(`SAI AC-6 (4): ${basename(tep)} khong mo hop mot KR`);
 	}
 	const moSheet = entryMo.filter((e) => e.tep === TEP_MO);
 	if (
 		moSheet.length === 0 ||
-		!moSheet.every((e) => e.giaTri?.length === 1 && e.giaTri[0] === "sheet")
+		!moSheet.every(
+			(e) =>
+				e.giaTri !== null &&
+				e.giaTri.length > 0 &&
+				e.giaTri.every((v) => LOI_VAO_KHOI.has(v) && !CAM.has(v)),
+		)
 	)
-		viPham.push("SAI AC-6 (4): cap-nhat-kr.tsx khong mo luot voi entry sheet");
+		viPham.push(
+			"SAI AC-6 (4): khoi-cap-nhat-kr.tsx khong mo luot voi entry thuoc bon loi cua khoi",
+		);
 	return viPham;
 }
 
@@ -270,11 +285,7 @@ const DOI_CHUNG = [
 	},
 	{
 		luat: 4,
-		thay: thayMot(
-			TEP_DUNG_HOP[0],
-			"onCapNhat={capNhat.mo}",
-			"onCapNhat={() => {}}",
-		),
+		thay: thayMot(TEP_DUNG_HOP[0], "<KhoiCapNhatKr", "<KhoiCapNhatKrPha"),
 		them: [],
 		ghim: /^SAI AC-6 \(4\): kr-sheet\.tsx khong mo hop mot KR$/,
 	},

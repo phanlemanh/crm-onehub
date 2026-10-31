@@ -10,6 +10,9 @@ export const LOI_VAO = [
 	"tab",
 	"sheet",
 	"cua-toi",
+	"hop-tuan",
+	"bang-don-vi",
+	"muc-tieu",
 ] as const;
 export type LoiVao = (typeof LOI_VAO)[number];
 export const DUONG_KR_TRONG_BO = "/okr/kr";

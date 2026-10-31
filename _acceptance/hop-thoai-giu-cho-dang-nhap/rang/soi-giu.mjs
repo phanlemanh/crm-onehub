@@ -1,3 +1,4 @@
+import { execFileSync, spawnSync } from "node:child_process";
 import {
 	copyFileSync,
 	existsSync,
@@ -9,7 +10,6 @@ import {
 	statSync,
 	writeFileSync,
 } from "node:fs";
-import { execFileSync, spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -242,7 +242,6 @@ const DANH_SACH = [
 	`${SLUG}/deals/deals-bulk-actions.tsx`,
 	`${SLUG}/settings/connections/slack/slack-channels.tsx`,
 	`${SLUG}/settings/organization/hop-thoai-vi-tri.tsx`,
-	`${SLUG}/okr/hop-thoai-cap-nhat-kr.tsx`,
 	`${SLUG}/settings/giai-doan/hop-thoai-giai-doan.tsx`,
 	`${SLUG}/settings/okr/hop-thoai-mo-lai.tsx`,
 	`${SLUG}/settings/okr/sheet-mau-okr.tsx`,

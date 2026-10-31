@@ -151,40 +151,55 @@ async function doKho(tenKho, ca) {
 			.catch(() => false);
 		if (!moNgan)
 			await p.goto(`${trang}&record=kr:${ca.k}`, { waitUntil: "load" });
-		const nutCapNhat = `[data-kr-sheet="${ca.k}"] [data-nut="cap-nhat-ngan-kr"]`;
-		await p.waitForSelector(nutCapNhat, { visible: true });
-		await p.click(nutCapNhat);
-		const hop = `[data-hop-cap-nhat-kr="${ca.k}"]`;
-		await p.waitForSelector(`${hop} [data-lan-truoc]`, { visible: true });
+		const ngan = `[data-kr-sheet="${ca.k}"]`;
+		const khoiCapNhat = `${ngan} [data-khoi-cap-nhat-kr="mo"]`;
+		await p.waitForSelector(`${ngan} [data-khoi-cap-nhat-kr]`, {
+			visible: true,
+		});
+		const nutMo = await p.$(`${ngan} [data-nut="mo-khoi-cap-nhat-kr"]`);
+		if (nutMo) await nutMo.click();
+		await p.waitForSelector(khoiCapNhat, { visible: true });
+		const hop = `${ngan} [data-muc-ngan="lich-su"]`;
+		const lanTruoc = "[data-lich-su-kr] [data-lan-cap-nhat]";
+		const ghiChuTruoc = '[data-slot="item-description"]';
+		await p.waitForSelector(`${hop} ${lanTruoc}`, { visible: true });
 		const coGhiChu = await p
-			.waitForSelector(`${hop} [data-ghi-chu-truoc]`, { visible: true })
+			.waitForSelector(`${hop} ${lanTruoc}:first-child ${ghiChuTruoc}`, {
+				visible: true,
+			})
 			.then(() => true)
 			.catch(() => false);
 		kiem(`${tenKho}: khoi lan truoc co ghi chu`, coGhiChu);
-		const doc = await p.evaluate((h) => {
-			const hopEl = document.querySelector(h);
-			const khoi = hopEl?.querySelector("[data-lan-truoc]");
-			const gc = khoi?.querySelector("[data-ghi-chu-truoc]");
-			const tran = (el) => (el ? el.scrollWidth > el.clientWidth + 1 : true);
-			const vuot = (el) => {
-				if (!el || !hopEl) return true;
-				const a = el.getBoundingClientRect();
-				const b = hopEl.getBoundingClientRect();
-				return a.left < b.left - 1 || a.right > b.right + 1;
-			};
-			return {
-				ghiChu: gc?.textContent ?? null,
-				khongDich: gc?.closest('[translate="no"]') !== null,
-				hopTran: tran(hopEl),
-				khoiTran: vuot(khoi),
-				gcTran: vuot(gc),
-				goiY: hopEl?.querySelectorAll("[data-cau-goi-y]").length ?? 0,
-			};
-		}, hop);
-		const doiChungHop = await p.evaluate(
-			(h, rongChen) => {
+		const doc = await p.evaluate(
+			(h, lt, gct, kc) => {
 				const hopEl = document.querySelector(h);
-				const khoi = hopEl?.querySelector("[data-lan-truoc]");
+				const khoi = hopEl?.querySelector(lt);
+				const gc = khoi?.querySelector(gct);
+				const tran = (el) => (el ? el.scrollWidth > el.clientWidth + 1 : true);
+				const vuot = (el) => {
+					if (!el || !hopEl) return true;
+					const a = el.getBoundingClientRect();
+					const b = hopEl.getBoundingClientRect();
+					return a.left < b.left - 1 || a.right > b.right + 1;
+				};
+				return {
+					ghiChu: gc?.textContent ?? null,
+					khongDich: gc?.closest('[translate="no"]') !== null,
+					hopTran: tran(hopEl),
+					khoiTran: vuot(khoi),
+					gcTran: vuot(gc),
+					goiY: document.querySelectorAll(`${kc} [data-cau-goi-y]`).length,
+				};
+			},
+			hop,
+			lanTruoc,
+			ghiChuTruoc,
+			khoiCapNhat,
+		);
+		const doiChungHop = await p.evaluate(
+			(h, lt, rongChen) => {
+				const hopEl = document.querySelector(h);
+				const khoi = hopEl?.querySelector(lt);
 				if (!hopEl || !khoi) return { bao: false, vi: "khong thay hop" };
 				const tran = (el) => el.scrollWidth > el.clientWidth + 1;
 				const vuot = (el) => {
@@ -202,6 +217,7 @@ async function doKho(tenKho, ca) {
 				return { bao, vi };
 			},
 			hop,
+			lanTruoc,
 			MAN.rongChen,
 		);
 		kiem(
@@ -235,19 +251,23 @@ async function doKho(tenKho, ca) {
 						r.left >= 0 &&
 						r.right <= window.innerWidth
 				: false;
-		}, hop);
+		}, khoiCapNhat);
 		kiem(`${tenKho}: nut gui nam trong khung nhin`, nutGui);
-		await p.evaluate((h) => {
-			for (const s of [
-				"nextjs-portal",
-				".tsqd-parent-container",
-				".tsqd-open-btn-container",
-			])
-				for (const el of document.querySelectorAll(s)) el.remove();
-			document.querySelector(`${h} [data-lan-truoc]`)?.scrollIntoView({
-				block: "start",
-			});
-		}, hop);
+		await p.evaluate(
+			(h, lt) => {
+				for (const s of [
+					"nextjs-portal",
+					".tsqd-parent-container",
+					".tsqd-open-btn-container",
+				])
+					for (const el of document.querySelectorAll(s)) el.remove();
+				document.querySelector(`${h} ${lt}`)?.scrollIntoView({
+					block: "start",
+				});
+			},
+			hop,
+			lanTruoc,
+		);
 		await tre(MAN.cho.yenMs);
 		const tep = join(ANH, `hct-${tenKho}.png`);
 		await p.screenshot({ path: tep });
