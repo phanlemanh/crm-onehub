@@ -113,15 +113,22 @@ async function clean(): Promise<void> {
 		select: { id: true },
 	});
 	const caNhanIds = caNhanCu.map((r) => r.id);
-	await db.deal.deleteMany({
+	const thoaThuanCu = await db.deal.findMany({
 		where: {
 			OR: [{ companyId: { in: congTyIds } }, { name: { contains: ma } }],
 		},
+		select: { id: true },
 	});
+	const thoaThuanIds = thoaThuanCu.map((r) => r.id);
+	await db.deal.deleteMany({ where: { id: { in: thoaThuanIds } } });
 	await db.activity.deleteMany({ where: { companyId: { in: congTyIds } } });
 	await db.agentTask.deleteMany({
 		where: {
-			OR: [{ companyId: { in: congTyIds } }, { contactId: { in: caNhanIds } }],
+			OR: [
+				{ companyId: { in: congTyIds } },
+				{ contactId: { in: caNhanIds } },
+				{ dealId: { in: thoaThuanIds } },
+			],
 		},
 	});
 	await db.contact.deleteMany({ where: { id: { in: caNhanIds } } });
