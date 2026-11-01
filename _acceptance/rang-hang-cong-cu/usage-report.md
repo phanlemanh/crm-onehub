@@ -1,0 +1,67 @@
+### S4 round 1 — wf_82e5c27c-e30 (14 agent, 26,291 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 2 | 4,488 | 4 | 59,478 | 30 |
+| baseline:diffBase | claude-sonnet-5-5 | 3 | 3,462 | 6 | 118,638 | 219 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 3,449 | 4 | 54,286 | 38 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,305 | 4 | 54,343 | 81 |
+| review:bugs | claude-opus-5-5 | 4 | 2,076 | 8 | 196,860 | 32 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 1,921 | 4 | 3,140 | 414 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,709 | 4 | 54,288 | 10 |
+| review:measurement | claude-opus-5-5 | 4 | 1,699 | 8 | 188,697 | 29 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 4 | 1,652 | 8 | 118,902 | 634 |
+| review:conventions | claude-opus-5-5 | 5 | 1,310 | 10 | 259,765 | 26 |
+| machine:cd apps/app && bun test ./test/hang-cong | claude-haiku-5-5 | 2 | 701 | 4 | 54,313 | 7 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 685 | 4 | 3,140 | 410 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 504 | 4 | 54,282 | 7 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 330 | 4 | 49,941 | 6 |
+
+
+wall: 1651s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 3,462 | 118,638 | 219 | 14:13:42 | 14:17:21 |
+| machine | 8 | 12,926 | 396,694 | 1610 | 14:13:42 | 14:40:32 |
+| review | 3 | 5,085 | 645,322 | 35 | 14:13:42 | 14:14:17 |
+| capture | 1 | 330 | 49,941 | 6 | 14:40:34 | 14:40:41 |
+| synthesize | 1 | 4,488 | 59,478 | 30 | 14:40:43 | 14:41:13 |
+
+- **claude-sonnet-5-5**: 3 agent · 7 calls · out 8,280 · in 14 · cache_read 228,057 · cache_create 192,790
+- **claude-haiku-5-5**: 8 agent · 18 calls · out 12,926 · in 36 · cache_read 396,694 · cache_create 595,693
+- **claude-opus-5-5**: 3 agent · 13 calls · out 5,085 · in 26 · cache_read 645,322 · cache_create 212,267
+
+### S4 round 2 — wf_7cc8732b-e95 (13 agent, 24,324 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 4 | 3,953 | 8 | 210,643 | 28 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 3,715 | 4 | 54,300 | 41 |
+| baseline:diffBase | claude-sonnet-5-5 | 3 | 2,891 | 6 | 117,048 | 216 |
+| review:bugs | claude-opus-5-5 | 5 | 2,390 | 10 | 242,161 | 42 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 2,313 | 4 | 54,327 | 306 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 5 | 2,155 | 10 | 177,440 | 650 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,909 | 4 | 54,302 | 10 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 1,521 | 4 | 3,140 | 434 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 954 | 4 | 54,357 | 82 |
+| review:conventions | claude-opus-5-5 | 3 | 739 | 6 | 107,325 | 22 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 683 | 4 | 54,296 | 8 |
+| review:measurement | claude-opus-5-5 | 3 | 681 | 6 | 107,996 | 18 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 420 | 4 | 49,955 | 11 |
+
+
+wall: 1591s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 2,891 | 117,048 | 216 | 14:43:20 | 14:46:55 |
+| machine | 7 | 13,250 | 452,162 | 1547 | 14:43:20 | 15:09:07 |
+| review | 3 | 3,810 | 457,482 | 47 | 14:43:20 | 14:44:06 |
+| capture | 1 | 420 | 49,955 | 11 | 15:09:09 | 15:09:20 |
+| synthesize | 1 | 3,953 | 210,643 | 28 | 15:09:22 | 15:09:50 |
+
+- **claude-sonnet-5-5**: 3 agent · 9 calls · out 7,264 · in 18 · cache_read 377,646 · cache_create 196,129
+- **claude-haiku-5-5**: 7 agent · 17 calls · out 13,250 · in 34 · cache_read 452,162 · cache_create 491,751
+- **claude-opus-5-5**: 3 agent · 11 calls · out 3,810 · in 22 · cache_read 457,482 · cache_create 192,535
+

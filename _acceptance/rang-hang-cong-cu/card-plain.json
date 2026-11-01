@@ -1,0 +1,92 @@
+{
+  "feature_plain": "Khi có người đặt bộ lọc của một màn ra ngoài hàng công cụ — chip lọc trong thẻ, chip dính thành một thanh, hay một nhóm gập «Đã bỏ (n)» chứa bảng dưới bảng chính — bài kiểm của kho đỏ và gọi đúng tệp, dòng.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ đọc mọi tệp giao diện của ứng dụng (hôm nay 534 tệp, trừ bản mẫu) ở mỗi lượt, và chứng tập đã đọc bằng đúng danh sách kho đưa ra."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ đỏ khi một tệp mới đặt chip lọc dính thành một thanh, gọi tệp và dòng."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ đỏ khi một tệp mới đặt chip lọc trong một thẻ (thân thẻ, đầu thẻ hay chính thẻ)."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ đỏ khi một tệp mới gập một bảng vào một nhóm đóng mở."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ bỏ qua ô chọn của form (nằm trong khối trường), nhưng gỡ khối trường ra thì đỏ; chip có nhãn trỏ tiêu đề vẫn bị soát."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ đỏ khi bảng ngoại lệ trỏ tệp không còn, khai trùng, sai loại, thiếu lý do, khai thừa số chỗ, hoặc khi một tệp đã khai thêm chỗ mới."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ im với tài liệu, hồ sơ nghiệm thu, gói khác và bản mẫu."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-7",
+      "p": "Sẽ KHÔNG đỏ trên cây hôm nay: 10 ngoại lệ có lý do, trong đó đúng bảy nợ (lọc tình trạng KR, phạm vi Tổng quan, thẻ dòng thời gian, Lộ trình, Họp tuần, nhóm Đã bỏ, dự án Đã đóng), và bài chạy trong lượt kiểm thường của ứng dụng."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Chưa soát chip ở một tệp mà tệp khác đặt vào thẻ — Hỏi-2."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Chưa soát nhóm gập chứa danh sách thay vì bảng — Hỏi-3."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không sửa bảy chỗ nợ trong vòng này: bài chặn nợ mới, nợ cũ nằm trong bảng có đích sửa."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không bọc ba ô chọn của form chưa có khối trường (ngày nghỉ tuần, kênh thông báo, loại ghi chú)."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không soát lọc bằng nút tự ghép, ô chọn đơn vị trên hàng công cụ và lưới thẻ dưới bảng."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Không soát thứ tự các tầng của một màn."
+    }
+  ],
+  "scope_plain": "Vòng này chỉ thêm bài kiểm; không màn nào người dùng thấy thay đổi. Ba mục đầu đang chờ anh chốt.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Phủ ba dấu hiệu luật nêu tên (chip dính thanh, chip trong thẻ, nhóm gập dưới bảng), hai loại chip (ô chọn của form, chip lọc) và bảng ngoại lệ khai đúng hay khai lệch. Lọc bằng nút tự ghép, ô chọn đơn vị trên hàng công cụ và lưới thẻ dưới bảng để sau."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Ranh giữa ô chọn của form và chip lọc là lựa chọn có đánh đổi mà máy đã tự quyết. Đã thành Hỏi-1; bỏ luôn lối miễn qua nhãn trỏ tiêu đề và thêm ca đo cho từng loại khối trường."
+    },
+    {
+      "i": 1,
+      "p": "Quét từng tệp thì không thấy một chip ở tệp này bị tệp khác đặt vào thẻ. Đã thành Hỏi-2; điểm mù ghi rõ ngoài phạm vi."
+    },
+    {
+      "i": 2,
+      "p": "Máy thu «nhóm gập dưới bảng» về «nhóm gập chứa bảng» mà không ghi lại. Đã thành Hỏi-3."
+    },
+    {
+      "i": 3,
+      "p": "Phép đo chưa phủ mọi loại thẻ và mọi loại bảng hợp đồng nêu. Đã thêm một ca cho từng loại."
+    },
+    {
+      "i": 4,
+      "p": "Phép đo tập tệp chỉ đo có mặt, chưa đo bằng nhau. Đã đổi sang so với một danh sách tính riêng; ca tệp chưa theo dõi để sau vì bài không ghi tệp vào cây."
+    }
+  ]
+}
