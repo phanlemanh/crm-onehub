@@ -1883,6 +1883,20 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-kr-cu-moi-loi", nhan: "Ngăn KR trước và sau — lỗi tải" },
 		],
 	},
+	{
+		slug: "sua-tai-cho-muc-tieu-va-kr",
+		ten: "Sửa mục tiêu và KR ngay trong ngăn",
+		states: [
+			{ id: "ST-muc-tieu-xem", nhan: "Mục tiêu — xem" },
+			{ id: "ST-muc-tieu-dang-sua", nhan: "Mục tiêu — đang sửa" },
+			{ id: "ST-muc-tieu-dang-luu", nhan: "Mục tiêu — đang lưu" },
+			{ id: "ST-muc-tieu-loi", nhan: "Mục tiêu — lỗi lưu" },
+			{ id: "ST-kr-xem", nhan: "KR — xem" },
+			{ id: "ST-kr-dang-sua", nhan: "KR — đang sửa" },
+			{ id: "ST-kr-dang-luu", nhan: "KR — đang lưu" },
+			{ id: "ST-kr-loi", nhan: "KR — lỗi lưu" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
