@@ -43,6 +43,7 @@ const CAU_NHANH_LOI =
 	"Không tải được đồng tiền báo cáo, nên chưa lưu được số tiền. Bỏ trống số tiền để tạo thoả thuận, hoặc thử lại.";
 const UNG_VIEN = ["EUR", "VND", "JPY"];
 const DONG_BAO_CAO = "VND";
+const KHOA_NGHIEN_CUU_GIA = "lan-do-khong-phai-khoa-that";
 const SO = "150.000.000";
 const CENTS = 15_000_000_000;
 const CHO_DONG = 20_000;
@@ -115,7 +116,10 @@ if (thietLap.loi)
 const baoCaoGoc = thietLap.gia.reportingCurrency;
 let baoCao = baoCaoGoc;
 
+let donKhoaNghienCuu = async () => {};
+
 async function traBaoCao() {
+	await donKhoaNghienCuu();
 	if (baoCao === baoCaoGoc) return;
 	await goiApiTao(cookie, "currency.setReportingCurrency", {
 		currency: baoCaoGoc,
@@ -158,6 +162,16 @@ async function vaiQuanTriTrongKhoDo() {
 		update: { role: "admin" },
 	});
 	console.log(`tien de: ${NGUOI} co vai admin trong kho do ${kho}`);
+	const { readContextDevKey, writeContextDevKey } = await import(
+		"../../../packages/db/src/settings.ts"
+	);
+	if ((await readContextDevKey(db)) === null) {
+		await writeContextDevKey(db, KHOA_NGHIEN_CUU_GIA);
+		donKhoaNghienCuu = () => writeContextDevKey(db, "");
+		console.log(
+			"tien de: dat khoa nghien cuu gia (se don) de qua cong nghien cuu",
+		);
+	}
 }
 
 if (baoCao === "USD") {
