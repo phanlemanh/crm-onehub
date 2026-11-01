@@ -19,6 +19,9 @@ export const DA_RA = [
 	"packages/auth/test/cong-vao.integration.spec.ts :: findFirst({ where: { organizationId: WORKSPACE_ID, email: dia }, select: { status: true }, })",
 	"packages/auth/test/quen-mat-khau.integration.spec.ts :: findFirst({ where: { identifier: `${PASSWORD.verificationPrefix}${chiaTuThu(daGui[0])}`, }, })",
 	"packages/auth/test/quen-mat-khau.integration.spec.ts :: findFirst({ where: { identifier: `${PASSWORD.verificationPrefix}${c1}` }, })",
+	'apps/agent-okr/test/nop-tra-loi.integration.spec.ts :: findFirstOrThrow({ where: { hienThi: "cong-khai", status: "cong-bo", keyResults: { some: {} }, }, select: { id: true, title: true, keyResults: { select: { id: true }, take: 1 }, }, })',
+	"apps/agent-okr/test/nop-tra-loi.integration.spec.ts :: findFirstOrThrow({ where: { objectiveId: GIOI_HAN }, select: { id: true }, })",
+	"packages/db/test/viec-gieo.spec.ts :: findFirstOrThrow({ where: { tieuDe } })",
 ];
 
 function cay() {
