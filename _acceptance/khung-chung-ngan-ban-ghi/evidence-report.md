@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: ebcbce30e0dfbe0105c1927ac8ddcc1739ba172d
-human_signoff:
+human_signoff: Phan Le Manh 2026-11-01 — ký Cổng Bằng chứng trên vòng chấm 3 (PASS, 11/11 eval, 7 suite xanh; vòng 1 và 2 REJECT đã sửa). Ngoài-1 ghi Known limits; đồng ý cắt; Treo phê hết.
 ---
 
 # Evidence Report: khung-chung-ngan-ban-ghi

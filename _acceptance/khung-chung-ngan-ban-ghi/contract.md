@@ -5,7 +5,7 @@ slug: khung-chung-ngan-ban-ghi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [web]
-status: verified
+status: signed-off
 design_doc: _acceptance/khung-chung-ngan-ban-ghi/design.md
 veto_state: mo
 veto_opened_at: 2026-10-31T17:30:00Z
@@ -68,6 +68,9 @@ Quét tay hai trục (dòng «bỏ coverage-scan» trong `decisions.jsonl`):
 - `packages/ui/src/components/khung-xuong.tsx` nằm ngoài ranh giới dãy K: giám sát duyệt `cham-tep` K-6 (thêm hình
   `ngan`). `apps/app/app/proto/catalog.ts`, `registry.ts`: `cham-tep` K-7. `_acceptance/config.yaml`: `cham-tep` K-8,
   chỉ thêm năm khoá `bk1_*`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-11-01:
+  - Ngoài-1: Ngăn Số KR mất kết nối vẫn báo lỗi và có nút Thử lại, nhưng nút khác hình và không có trạng thái đang
+    thử lại như `VungTaiLoi` của các ngăn khác.
 - `docs/design.md` cũng bị SN1 (#609) sửa ở mục cuối; mục của BK1 đứng riêng ngay sau «Chờ tải và lỗi tải». BK1 gộp
   onehub sau khi #609 lên.
 - Hợp đồng có 11 tiêu chí (trên mục tiêu 8–10, dưới trần 12): AC-11 thêm sau phản biện context sạch, vì không tiêu chí
