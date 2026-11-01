@@ -209,5 +209,6 @@ evals:
       - "apps/app/package.json"
       - "apps/app/test/khung-ngan.spec.ts"
     expected: |
-      exit 0; lệnh «cd apps/app && bun test -t proto-mau» (cùng lệnh bun test mà script «test» của apps/app chạy, không đưa
-      đường tệp) in «khung-ngan.spec.ts» và ít nhất «1 pass», 0 fail.
+      exit 0; lệnh «cd apps/app && bun test -t 'khung-ngan proto-mau'» (cùng lệnh bun test mà script «test» của apps/app
+      chạy, không đưa đường tệp; tên đầy đủ gồm describe «khung-ngan» của bài) in «1 pass» và «0 fail». Bài không nằm
+      trong glob của bun test thì in «0 pass» — đỏ.

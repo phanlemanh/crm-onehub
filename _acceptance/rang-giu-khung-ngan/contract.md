@@ -5,7 +5,7 @@ slug: rang-giu-khung-ngan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-11-01-rang-giu-khung-ngan-design.md
 veto_state: mo
 veto_opened_at: 2026-11-01T05:50:00Z
@@ -46,8 +46,8 @@ hoa). **Dòng ngoại lệ** = một mục của `ngoai_le`: một tệp, một 
   đỏ; When `ly_do` rỗng hay vắng, Then luật đỏ các khối ấy và bài đỏ gọi tên tệp, khối kèm «thiếu lý do».
 - AC-6: Given bài, When một dòng ngoại lệ trỏ tệp không có, mang khối ngoài `cam_ngoai_khuon`, hoặc tệp không còn nhập
   một khối của dòng, Then bài đỏ gọi tên tệp, khối và lỗi («tệp không có», «khối không cấm», «ngoại lệ thừa»).
-- AC-7: Given bài, When `record-sheet-host.tsx` đăng ký một `kind` không có trong `nhan_dien.kind` (hay ngược lại), Then
-  bài đỏ gọi tên `kind`; When thành phần của một ngăn đăng ký có gốc JSX không phải `RecordSheetFrame` (hay một thành
+- AC-7: Given bài, When `record-sheet-host.tsx` đăng ký một `kind` không có trong `nhan_dien.kind` mà cũng không có dòng
+  mang lý do trong `nhan_dien.ngoai_khuon` (hay khuôn có `kind` mà host không đăng ký), Then bài đỏ gọi tên `kind`; When thành phần của một ngăn đăng ký có gốc JSX không phải `RecordSheetFrame` (hay một thành
   phần cùng tệp có gốc `KhungNgan`), Then bài đỏ gọi tên tệp.
 - AC-8: Given cùng câu nhập `DetailSheetHeader` trong một tệp dưới `docs/`, `_acceptance/`, hay `apps/app/components/`
   ngoài thư mục ngăn, When chạy luật, Then không dòng `ngan-trong-khung` nào.
@@ -79,6 +79,7 @@ mục «Vấn đề». Quan hệ hai tệp (ngăn mở `Sheet` chồng lên ngă
 - Ngăn mở `Sheet` hay `Dialog` chồng lên ngăn từ một tệp ngoài thư mục ngăn (quan hệ giữa hai tệp).
 - Luật cho tầng trang và dấu hiệu vẽ tay chung — BK3, BK5.
 - Đổi hình của ngăn nào: vòng không chạm tệp ngăn.
+- Đưa ngăn Việc (`kind` `viec`, `KhungViec`) vào khuôn — vòng này chỉ khai nó ở `nhan_dien.ngoai_khuon` kèm lý do «nợ».
 
 ## Notes
 

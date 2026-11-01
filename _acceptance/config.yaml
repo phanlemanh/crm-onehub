@@ -2450,7 +2450,7 @@ executors:
     bk1_bai_cu: node _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs
     bk1_chup: PROTO_ROUTE=1 bun run do:man --chay "PROTO_URL=$APP_URL node _acceptance/khung-chung-ngan-ban-ghi/rang/chup-proto.mjs"
     bk2_luat: node _acceptance/rang-giu-khung-ngan/rang/luat-lint.mjs
-    bk2_app_test: "cd apps/app && bun test -t proto-mau"
+    bk2_app_test: "cd apps/app && bun test -t 'khung-ngan proto-mau'"
     bcd_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-chi-don-vi/rang/man-bo-okr-chi-don-vi.mjs"'
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs
