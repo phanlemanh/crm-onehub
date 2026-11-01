@@ -63,7 +63,15 @@ describe("bk1-khung", () => {
 			qs("[data-khung-xuong-ngan]"),
 			"thieu vo khung xuong ngan",
 		).not.toBeNull();
-		expect(document.body.textContent).toContain("Tieu de tam");
+		const dau = qs('[data-slot="sheet-header"], [data-slot="drawer-header"]');
+		expect(dau, "thieu dau ngan").not.toBeNull();
+		expect(dau?.textContent, "tieu de khong nam trong dau ngan").toContain(
+			"Tieu de tam",
+		);
+		expect(
+			qs("[data-khung-xuong-ngan]")?.textContent ?? "",
+			"tieu de lot xuong than ngan",
+		).not.toContain("Tieu de tam");
 		expect(
 			document.body.querySelector(".animate-spin"),
 			"con vong quay",
@@ -118,8 +126,14 @@ describe("bk1-khung", () => {
 				}}
 			/>,
 		);
-		const nut = qs('[data-khung-tai-loi] [data-nut="ve-muc-tieu"]');
+		const vo = qs('[data-khung-tai-loi][data-ly-do="khong-con"]');
+		const nut = vo?.querySelector<HTMLElement>('[data-nut="ve-muc-tieu"]');
 		expect(nut?.textContent).toBe("Ve muc tieu");
+		expect(
+			vo?.querySelectorAll("button").length,
+			"nut mac dinh van con canh nut cua khe",
+		).toBe(1);
+		expect(vo?.textContent, "con nut Dong mac dinh").not.toContain("Đóng");
 		expect(document.body.textContent).toContain("Khong thay KR");
 		await act(async () => nut?.click());
 		expect(bam).toBe(1);

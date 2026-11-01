@@ -68,11 +68,7 @@ import {
 } from "./kr-viec";
 import { LichSuKr } from "./lich-su-kr";
 import { dien, dienNode } from "./plan-copy";
-import {
-	type DauDuLieu,
-	KhungNgan,
-	KhungTaiLoi,
-} from "./record-parts";
+import { type DauDuLieu, KhungNgan, KhungTaiLoi } from "./record-parts";
 import { recordKey, useRecordSheetView, useRecordStack } from "./record-stack";
 import { NoiDungSoKr } from "./so-kr-sheet";
 import { type DongThuTu, useThuTuHopTuan } from "./thu-tu-hop-tuan";

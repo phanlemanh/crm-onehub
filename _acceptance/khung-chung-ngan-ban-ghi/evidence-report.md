@@ -7,13 +7,13 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4a5e925d4e250edf683eafc29da270680f6e5142
+verified_commit: bb388f7e792b984a3ce50d7727e847c64988e59d
 human_signoff:
 ---
 
 # Evidence Report: khung-chung-ngan-ban-ghi
 
-Vòng 1. Verdict REJECT: mười một eval của hợp đồng đều đạt, nhưng một lệnh suite không gắn eval (`bun run test -- --filter=app --filter=@crm/ui`) đỏ với ba bài kiểm. Không eval nào bị đánh rớt, nên `failed_evals` để trống; lệnh đỏ được ghi ở mục Lệnh suite bên dưới.
+Round 2. Mọi eval của hợp đồng đều đạt, nhưng một lệnh suite không gắn eval nào đỏ (`bunx turbo run lint --force`, gói `app`), nên verdict tổng là REJECT.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -32,151 +32,168 @@ Vòng 1. Verdict REJECT: mười một eval của hợp đồng đều đạt, n
 ## Evidence
 
 - eval: E1
-  run_id: minted-khung-chung-ngan-ban-ghi-E1-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_quet
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs
     DAT tat ca
 
 - eval: E2
-  run_id: minted-khung-chung-ngan-ban-ghi-E2-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_quet
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs
     DAT tat ca
 
 - eval: E3
-  run_id: minted-khung-chung-ngan-ban-ghi-E3-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_dom
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs
     DAT tat ca
 
 - eval: E4
-  run_id: minted-khung-chung-ngan-ban-ghi-E4-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_dom
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs
     DAT tat ca
 
 - eval: E5
-  run_id: minted-khung-chung-ngan-ban-ghi-E5-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_dom
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs
     DAT tat ca
 
 - eval: E6
-  run_id: minted-khung-chung-ngan-ban-ghi-E6-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_dom
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs
     DAT tat ca
 
 - eval: E7
-  run_id: minted-khung-chung-ngan-ban-ghi-E7-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_kieu
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/kieu-bat-buoc.mjs
     DAT tat ca
 
 - eval: E8
-  run_id: minted-khung-chung-ngan-ban-ghi-E8-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_bai_cu
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs
     DAT tat ca
 
 - eval: E9
-  run_id: minted-khung-chung-ngan-ban-ghi-E9-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_dom
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs
     DAT tat ca
 
 - eval: E11
-  run_id: minted-khung-chung-ngan-ban-ghi-E11-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_dom
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   output: |
+    node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs
     DAT tat ca
 
 - eval: E10
-  run_id: minted-khung-chung-ngan-ban-ghi-E10-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bk1_chup
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
   screenshot: evidence/E10-step1.png
   observed: |
-    Đã mở cả năm ảnh gốc. (1) ST-kr-dang-tai desktop: ô KR và ô Deal cùng đầu ngăn (tiêu đề bên trái, nút đóng X bên phải, đường kẻ dưới) và cùng khung xương: hai ô số cạnh nhau, một thanh thẻ mảnh, ba đoạn hai dòng; hai ô giống nhau. (2) ST-so-kr-loi desktop: ô Số KR và ô Deal cùng một khung có viền, mỗi khung gồm tiêu đề («Không tải được số» / «Không tải được bản ghi này»), một câu mô tả và một nút «Thử lại», căn giữa dọc; cùng hình, chỉ khác chữ. (3) ST-muc-tieu-du mobile 375: ô Mục tiêu và ô Deal cùng đầu ngăn (tiêu đề nhiều dòng, nút Sửa, X), vùng ô số, thanh thẻ, nội dung; cùng bố cục, không tràn ngang. (4) ST-kr-cu-moi-dang-tai desktop: ô trái «Trước — ngăn KR tự dựng» có hai ô số, một thanh mỏng và MỘT khối chữ nhật lớn; ô phải «Sau — ngăn KR trong khung» có hai ô số, thanh thẻ và ba đoạn hai dòng; hai hình khác nhau rõ, đối chứng âm đạt. (5) ST-kr-loi mobile: ô KR lỗi («Không thấy KR», một câu, nút «Về mục tiêu») và ô Deal lỗi («Không tải được bản ghi này», một câu, «Thử lại») cùng một khung có tiêu đề, một câu, một nút; đầu ngăn cùng hình. Khớp Expected.
+    ST-kr-dang-tai desktop 1280: left "KR" and right "Deal" drawers both show title + X, two grey stat blocks, a bar and three line-pairs of skeleton; identical shape. ST-so-kr-loi desktop: left "Số KR" and right "Deal" show the same bordered error box with title, one sentence, one "Thử lại" button.
+    ST-muc-tieu-du mobile 375: goal drawer has title, "Sửa" button, X, two stat cells, tab bar and body, same layout as the Deal drawer; no horizontal overflow. ST-kr-cu-moi-dang-tai desktop: left old self-built KR skeleton (shorter stat blocks, one thin bar, large block) visibly differs from right in-frame skeleton. ST-kr-loi mobile: "KR" error frame with title, one sentence, one "Về mục tiêu" button, same frame as the Deal error.
   network_observed: n-a (driver)
   output: |
-    Lệnh: PROTO_ROUTE=1 bun run do:man --chay "PROTO_URL=$APP_URL node .../chup-proto.mjs". Dòng cuối: «xong; 46 anh; tran ngang: 0; khong co ngan: 0», «phien-do: xong — mã 0» (log ở evidence/E10-run.log). Khung đã lưu: E10-step1.png đến E10-step5.png trong _acceptance/khung-chung-ngan-ban-ghi/evidence/.
+    Step 4: head of drawer (title + close X, divider) same as the Deal cell on all 5 images: PASS. Loading skeleton same as Deal in ST-kr-dang-tai: PASS. Error frame same in ST-so-kr-loi and ST-kr-loi: PASS. ST-muc-tieu-du matches the Deal layout: PASS.
+    Step 5: ST-kr-cu-moi-dang-tai: left (old self-built KR drawer) differs from the right skeleton: PASS (negative control differs).
+    Network: driver has no network reader; not read.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
-  exit_code: 1
-  verified_at: 2026-10-31T16:32:35Z
-  output: |
-    Lệnh không gắn eval nào. 1050 pass, 3 fail trên 1053 bài ở 106 tệp (gói app).
-    Ba bài đỏ:
-    - hinh-theo-man > bang hinh bang dung tap tep goc va moi tep dung hinh
-    - checkout-nong > thieu commit goc: bo phep so, chi mot dong ghi chu
-    - khoa chet > moi khoa da khai deu co cho goi, tru ban khai CHUA_NOI
-    Turbo: app#test lỗi, 3 trên 4 tác vụ thành công.
+  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  exit_code: 0
+  verified_at: 2026-11-01T01:09:40Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bunx_turbo_run_lint_force-r1
-  exit_code: 0
-  verified_at: 2026-10-31T16:32:35Z
+  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bunx_turbo_run_lint_force-r2
+  exit_code: 1
+  verified_at: 2026-11-01T01:09:40Z
+  output: |
+    app:lint: components/crm/record-sheet/kr-sheet.tsx format
+    app:lint:   × Formatter would have printed the following content:
+    app:lint:      71     │ - import·{ → type·DauDuLieu, KhungNgan, KhungTaiLoi } from "./record-parts"; (nhiều dòng)
+    app:lint:          71 │ + import·{·type·DauDuLieu,·KhungNgan,·KhungTaiLoi·}·from·"./record-parts";
+    app:lint: Checked 1442 files in 673ms. No fixes applied.
+    app:lint: Found 1 error.
+    app:lint: Found 37 warnings.
+    app:lint: Found 21 infos.
+    Tasks: 10 successful, 11 total
+    Failed: app#lint
 
 - cmd: bun run lint:slop
-  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_lint_slop-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-khung-chung-ngan-ban-ghi-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-31T16:32:35Z
+  verified_at: 2026-11-01T01:09:40Z
 
 ## Known limits
 
@@ -186,13 +203,13 @@ Vòng 1. Verdict REJECT: mười một eval của hợp đồng đều đạt, n
 
 none — moi eval feature deu red tren baseline (co phan biet)
 
-Ghi chú thật: bốn eval có lệnh riêng (E1 và E2, E3 đến E6 cùng E9 và E11, E7, E8) không đo được baseline, nên trường baseline của chúng là n-a. Dòng trên là câu mẫu máy tính sẵn cho danh sách eval không-phân-biệt, danh sách đó rỗng.
+Lệnh không gắn eval đỏ: `bunx turbo run lint --force` (gói `app`, tệp `components/crm/record-sheet/kr-sheet.tsx`, lỗi định dạng của formatter, 1 lỗi). Đây là nguyên nhân verdict REJECT dù failed_evals rỗng.
 
 Baseline khong do:
-- node _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs: bo qua baseline: tep _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs co o cay dang kiem nhung chua co o merge-base 6aa709e5839bd268a4cd985ab3ce3ffc8ce0da90 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs: bo qua baseline: tep _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs co o cay dang kiem nhung chua co o merge-base 6aa709e5839bd268a4cd985ab3ce3ffc8ce0da90 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/khung-chung-ngan-ban-ghi/rang/kieu-bat-buoc.mjs: bo qua baseline: tep _acceptance/khung-chung-ngan-ban-ghi/rang/kieu-bat-buoc.mjs co o cay dang kiem nhung chua co o merge-base 6aa709e5839bd268a4cd985ab3ce3ffc8ce0da90 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs: bo qua baseline: tep _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs co o cay dang kiem nhung chua co o merge-base 6aa709e5839bd268a4cd985ab3ce3ffc8ce0da90 — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs: bo qua baseline: tep _acceptance/khung-chung-ngan-ban-ghi/rang/quet-ngan.mjs co o cay dang kiem nhung chua co o merge-base 6dd20c52307e2a425800ea351ce1b3683696fc9f — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs: bo qua baseline: tep _acceptance/khung-chung-ngan-ban-ghi/rang/chay-dom.mjs co o cay dang kiem nhung chua co o merge-base 6dd20c52307e2a425800ea351ce1b3683696fc9f — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/khung-chung-ngan-ban-ghi/rang/kieu-bat-buoc.mjs: bo qua baseline: tep _acceptance/khung-chung-ngan-ban-ghi/rang/kieu-bat-buoc.mjs co o cay dang kiem nhung chua co o merge-base 6dd20c52307e2a425800ea351ce1b3683696fc9f — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs: bo qua baseline: tep _acceptance/khung-chung-ngan-ban-ghi/rang/bai-cu.mjs co o cay dang kiem nhung chua co o merge-base 6dd20c52307e2a425800ea351ce1b3683696fc9f — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
@@ -200,4 +217,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ba bài (hinh-theo-man, checkout-nong, khoa chet), không gắn eval nào; mười một eval của hợp đồng đều đạt. Chưa rõ nguyên nhân từng bài: đầu ra chỉ có tên bài, chưa có dòng lỗi nguyên văn. Trả về cho khâu cài đặt.
+Round 1: lịch sử round trước nằm ở các bản ghi cũ của hồ sơ, không nạp lại vào vòng này.
+Round 2: mọi eval E1-E11 đạt; `bunx turbo run lint --force` đỏ ở gói `app` (lỗi định dạng ở kr-sheet.tsx). Verdict REJECT, trả về để sửa định dạng rồi chạy lại.
