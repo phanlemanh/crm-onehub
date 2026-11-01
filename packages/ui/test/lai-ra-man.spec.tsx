@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, expect, test } from "bun:test";
+import { afterAll, afterEach, beforeEach, expect, test } from "bun:test";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { act, createElement, type ReactElement } from "react";
@@ -63,6 +63,14 @@ Object.defineProperty(globalThis, "Date", {
 	value: DateNeo,
 	writable: true,
 	configurable: true,
+});
+
+afterAll(() => {
+	Object.defineProperty(globalThis, "Date", {
+		value: DateThat,
+		writable: true,
+		configurable: true,
+	});
 });
 
 const DOC_NGHE_DUOC = [

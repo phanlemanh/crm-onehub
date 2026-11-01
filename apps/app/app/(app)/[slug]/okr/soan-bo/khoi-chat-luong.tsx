@@ -74,6 +74,7 @@ export function KhoiChatLuong({
 						</p>
 						<Progress
 							value={kq.xet === 0 ? 0 : (kq.dat / kq.xet) * PHAN_TRAM}
+							variant="neutral"
 							aria-label={m.tieuDe}
 						/>
 						<FieldDescription>{m.moTa}</FieldDescription>

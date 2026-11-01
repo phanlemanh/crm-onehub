@@ -1,0 +1,201 @@
+{
+	"goc": "ed4e85288",
+	"sua": [
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E3",
+			"cu": "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E3",
+			"cu": "apps/app/test/cay-can-chinh-ly-do.dom.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E4",
+			"cu": "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E4",
+			"cu": "apps/app/test/cay-can-chinh-ly-do.dom.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E5",
+			"cu": "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E5",
+			"cu": "apps/app/test/cay-can-chinh-ly-do.dom.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E6",
+			"cu": "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E6",
+			"cu": "apps/app/test/cay-can-chinh-ly-do.dom.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E7",
+			"cu": "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E7",
+			"cu": "apps/app/test/cay-can-chinh-ly-do.dom.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E8",
+			"cu": "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E8",
+			"cu": "apps/app/test/cay-can-chinh-ly-do.dom.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E10",
+			"cu": "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cay-can-chinh-co-ly-do",
+			"eval": "E11",
+			"cu": "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx",
+			"moi": null,
+			"can_cu": "da7278cd2 (21/10) xoá Cây căn chỉnh; eval đã nghỉ, thay bởi so-do-toan-vung#AC-6"
+		},
+		{
+			"ho_so": "cho-tac-nhan-lau",
+			"eval": "E5",
+			"cu": "apps/app/lib/thong-bao*.ts",
+			"moi": "apps/app/lib/thong-bao/**",
+			"can_cu": "45411a0d8 (14/10) tạo thư mục lib/thong-bao/; bài kiểm cho-tac-nhan-lau-chuong.dom.tsx import @/lib/thong-bao/cau và /dong"
+		},
+		{
+			"ho_so": "goi-y-mo-ke-hoach",
+			"eval": "E3",
+			"cu": "packages/validation/src/goi-y-ke-hoach.ts",
+			"moi": null,
+			"can_cu": "Tệp chưa từng có trong lịch sử kho (git log --all rỗng); packages/db/src/goi-y-ke-hoach.ts đã có trong cùng mục; bài kiểm của E3 (goi-y-mo-ke-hoach.spec.ts và support/) không nhắc tới goi-y-ke-hoach của validation"
+		},
+		{
+			"ho_so": "hoi-dap-okr",
+			"eval": "E11",
+			"cu": "apps/agent-okr/agent/instructions.md",
+			"moi": null,
+			"can_cu": "853263b91 (15/10) tách lời dặn thành apps/agent-okr/agent/instructions/** — đã có trong cùng mục; loi-dan-theo-phien.spec.ts dòng 57 chỉ khẳng định instructions.md không còn"
+		},
+		{
+			"ho_so": "kara-gop-y-luot-2",
+			"eval": "E13",
+			"cu": "apps/app/lib/okr-search-params.ts",
+			"moi": null,
+			"can_cu": "Tệp chưa từng có ở đường này; eval đã nghỉ, thay bởi che-do-soan-bo-okr#AC-7"
+		},
+		{
+			"ho_so": "ngan-kr-mot-cho",
+			"eval": "E5",
+			"cu": "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx",
+			"moi": "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx",
+			"can_cu": "0fd14e6e6 (30/10) thay hộp thoại bằng khối cập nhật trong ngăn KR; ngan-kr-mot-cho.dom.tsx import @/components/crm/record-sheet/khoi-cap-nhat-kr"
+		},
+		{
+			"ho_so": "ngan-kr-mot-cho",
+			"eval": "E9",
+			"cu": "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx",
+			"moi": "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx",
+			"can_cu": "như E5"
+		},
+		{
+			"ho_so": "quyet-gop-y-noi-dung-ly-do",
+			"eval": "E3",
+			"cu": "apps/app/test/gop-y-dung-cho-k3c.dom.tsx",
+			"moi": null,
+			"can_cu": "852d4a31d (26/10) xoá bài kiểm; eval đã nghỉ, thay bởi che-do-soan-bo-okr#AC-7"
+		},
+		{
+			"ho_so": "quyet-gop-y-noi-dung-ly-do",
+			"eval": "E4",
+			"cu": "apps/app/test/gop-y-dung-cho-k3c.dom.tsx",
+			"moi": null,
+			"can_cu": "852d4a31d (26/10) xoá bài kiểm; eval đã nghỉ, thay bởi che-do-soan-bo-okr#AC-7"
+		},
+		{
+			"ho_so": "quyet-gop-y-noi-dung-ly-do",
+			"eval": "E5",
+			"cu": "apps/app/test/gop-y-dung-cho-k3c.dom.tsx",
+			"moi": null,
+			"can_cu": "852d4a31d (26/10) xoá bài kiểm; eval đã nghỉ, thay bởi che-do-soan-bo-okr#AC-7"
+		},
+		{
+			"ho_so": "toan-canh-okr",
+			"eval": "E21",
+			"cu": "apps/app/app/(app)/[slug]/okr/suc-khoe/**",
+			"moi": "apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/**",
+			"can_cu": "Trang Sức khoẻ chương trình nay nằm dưới okr/toan-canh/suc-khoe/ (page.tsx, suc-khoe.tsx …); không còn tệp nào dưới okr/suc-khoe/"
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E21",
+			"cu": "packages/db/src/okr-can-chinh.ts",
+			"moi": "packages/validation/src/okr-can-chinh.ts",
+			"can_cu": "Đường sai gói: thước E21 (rang/tien-do-da-doi.mjs) đọc export ./okr-can-chinh của packages/validation/package.json, trỏ packages/validation/src/okr-can-chinh.ts"
+		},
+		{
+			"ho_so": "goi-y-mo-ke-hoach",
+			"eval": "E9",
+			"cu": null,
+			"moi": [
+				"CONTEXT.md",
+				"docs/api.md",
+				"docs/plan/lo-trinh-viec-du-an.json"
+			],
+			"can_cu": "Hỏi-1: eval judgment đang chạy không có paths làm bộ lọc tắt (eval-ngoai-may-thieu-paths:E9); paths = đúng inputs hội đồng đọc"
+		},
+		{
+			"ho_so": "hoi-dap-okr",
+			"eval": "E9j",
+			"cu": null,
+			"moi": [
+				"_acceptance/hoi-dap-okr/evidence/do-hoi-dap.md",
+				"_acceptance/hoi-dap-okr/contract.md"
+			],
+			"can_cu": "Hỏi-1: như E9 của goi-y-mo-ke-hoach (eval-ngoai-may-thieu-paths:E9j); paths = đúng inputs hội đồng đọc"
+		}
+	]
+}

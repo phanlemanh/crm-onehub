@@ -38,7 +38,7 @@ evals:
     cmd: config:executors.test.vk7_cap_nhat_ngan
     expected: "exit 0; -t vk7-cap-nhat-ngan: bấm msg.capNhat ở đầu ngăn → [data-hop-cap-nhat-kr] có mặt và document.activeElement là ô giá trị; nhập giá trị, chọn tự tin, bấm [data-nut=gui-cap-nhat-kr] → mutation giả guiCapNhat nhận đúng một item keyResultId K; trpc giả trả dữ liệu cũ ở lần gọi đầu và dữ liệu mới ở mọi lần gọi sau mutation, bài KHÔNG tự gọi invalidate hay setQueryData: số lần gọi lại canhKr và truy vấn lịch sử sau gửi ≥ 1 mỗi truy vấn (in 'khong lam moi: <truy vấn>'); hộp vắng, chồng vẫn [objective:M, kr:K], StatCard Hiện tại hiện giá trị mới, số dòng lịch sử và số điểm đồ thị tăng 1. Đối chứng dương: trước khi gửi giá trị cũ hiện. Đối chứng đỏ ghim: bản sao bỏ làm mới truy vấn lịch sử → in 'khong lam moi: lich-su'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx", apps/app/test/ngan-kr-mot-cho.dom.tsx]
+    paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx, apps/app/test/ngan-kr-mot-cho.dom.tsx]
 
   - id: E6
     criterion: AC-6
@@ -71,7 +71,7 @@ evals:
     cmd: config:executors.test.vk7_xem_truoc
     expected: "exit 0; -t vk7-xem-truoc: hộp của KR số (khoi 0, dich 100, lịch sử 3 điểm): gõ 40 → đồ thị có 3 điểm lịch sử + 1 điểm [data-diem-moi] mang giá trị 40, [data-muc=dich] có mặt; dòng tiến độ mới === kết quả tienDoKr(kieu, 0, 100, 40) gọi từ packages/validation thật (không chép số); gõ 60 → điểm và dòng đổi; gõ 'abc' → không [data-diem-moi], có lỗi msg.loiSo. Ma trận viết trước ba kiểu KR (tăng tới, giảm tới, mốc — số ô === 3): mốc → chữ Xong / Chưa xong, không TargetLineChart. Đối chứng đỏ: bản sao bỏ điểm mới → in 'thieu diem moi'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx", "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx", apps/app/test/ngan-kr-mot-cho.dom.tsx]
+    paths: [apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx, "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx", apps/app/test/ngan-kr-mot-cho.dom.tsx]
 
   - id: E10
     criterion: AC-9

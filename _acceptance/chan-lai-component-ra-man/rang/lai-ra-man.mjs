@@ -6,7 +6,7 @@ import { GOC as THU_MUC_GOC, docFile, docMacDinh } from "./moi-mac-dinh.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
 
-const NEO = { mac_dinh: 132, dong_bang_cu: 10 };
+const NEO = { mac_dinh: 136, dong_bang_cu: 10 };
 
 function banVeRong(banVe) {
 	return Object.values(banVe)
