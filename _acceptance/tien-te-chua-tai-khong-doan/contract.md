@@ -5,7 +5,7 @@ slug: tien-te-chua-tai-khong-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: machine-cleared
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-tien-te-chua-tai-khong-doan-design.md
 approved_by:
 approved_at:
@@ -56,5 +56,6 @@ Chân sản phẩm: hai ô gọi thiết lập tiền tệ [SUY-TỪ-REPO: apps/
 
 - Hai hành vi của hồ sơ `o-so-tien-doc-theo-tieng` được giữ nguyên và vẫn do bộ đo của hồ sơ đó canh: nút Tạo của tấm tạo không khoá vì số tiền (AC-6 cũ), nút Tạo của thêm nhanh khoá khi thiết lập đang tải (AC-8 cũ). Vòng này chạm tệp của hồ sơ đó nên hồ sơ đó được ghim lại bằng làn máy trước khi giao.
 - Đổi chữ sau khi giao: hồ sơ `ten-dong-tien-bao-cao` (Ngoài-1 của hồ sơ này) thay «đồng tiền mặc định» bằng «đồng tiền báo cáo» ở hai câu của tấm tạo mà AC-1 và AC-2 trên đây ghim nguyên văn. Hành vi không đổi; câu hiện hành nằm ở AC-1 của hồ sơ đó.
-- Known limits (Ngoài-2, Gate 2): thước màn thật (`rang/man-that.mjs`) gặp ngoại lệ bất ngờ ở vài bước (bấm, chờ bộ chọn, gọi mạng trong bộ chặn yêu cầu) thì thoát mã 1 như «tính năng hỏng» thay vì mã 2 «không đo được».
-- Known limits (Ngoài-3, Gate 2): thước soi mã (`rang/soi-ma.mjs`) tính con số khẳng định kỳ vọng từ chính danh sách nó lặp, nên phép so số khẳng định không bao giờ đỏ; danh sách khoá câu chữ chọn tay, không rút từ diff.
+- Known limits — chọn ở Cổng Bằng chứng 2026-11-02:
+  - Ngoài-2: thước màn thật (`rang/man-that.mjs`) gặp ngoại lệ bất ngờ ở vài bước (bấm, chờ bộ chọn, gọi mạng trong bộ chặn yêu cầu) thì thoát mã 1 như «tính năng hỏng» thay vì mã 2 «không đo được».
+  - Ngoài-3: thước soi mã (`rang/soi-ma.mjs`) tính con số khẳng định kỳ vọng từ chính danh sách nó lặp, nên phép so số khẳng định không bao giờ đỏ; danh sách khoá câu chữ chọn tay, không rút từ diff.
