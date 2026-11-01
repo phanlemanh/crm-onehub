@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cc2c13b1c828b562847578b89f34986708af652e
+verified_commit: aaefe670df0c5838097a9cce87178a7f23ed0278
 human_signoff: 
 ---
 
@@ -140,3 +140,7 @@ sha: fd4ed7c19a1d747430525b716a645d0a4fd7f732 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 7 — 2026-11-01, do sua-viec-may-sot-test-api: sáu chỗ dọn của bộ test api
 run_id: repin-20261101T093514Z-26659
 sha: cc2c13b1c828b562847578b89f34986708af652e · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-11-01, do hoá cũ sau khi gộp onehub d8daf37d7 (#614)
+run_id: repin-20261101T102146Z-59177
+sha: aaefe670df0c5838097a9cce87178a7f23ed0278 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
