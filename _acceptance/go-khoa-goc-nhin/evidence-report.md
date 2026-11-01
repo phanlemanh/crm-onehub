@@ -7,8 +7,8 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6d01a2b462872b15d5ae560439fe5a54b2fcf64b
-human_signoff:
+verified_commit: 4d0c9c01179bff94bf64fb609993ace54132b66a
+human_signoff: Phan Le Manh 2026-11-01 — ký Cổng 2 trong cửa veto (B8 dọn dẹp 31/10) trên verdict PASS 7/7 eval, ghim lại repin-20261101T062656Z-16061. Đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: go-khoa-goc-nhin
@@ -238,3 +238,7 @@ sha: cfc9e4a17fb05f456291afb5e0d73f50479669ff · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-06, do paths thư mục trần thành thư-mục/** trước khi bật hoá cũ theo paths
 run_id: repin-20261006T035956Z-62627
 sha: 6d01a2b462872b15d5ae560439fe5a54b2fcf64b · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
+
+### Re-pin lần 3 — 2026-11-01, do B8: ghim trên onehub b65feb175 sau sửa ba thước lệch, trước khi chủ kho ký cửa veto mở
+run_id: repin-20261101T062656Z-16061
+sha: 4d0c9c01179bff94bf64fb609993ace54132b66a · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

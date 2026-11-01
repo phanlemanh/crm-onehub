@@ -6,8 +6,8 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b3945503b3e68a2b34b7b99e17a39b90142fc9dd
-human_signoff:
+verified_commit: 4d0c9c01179bff94bf64fb609993ace54132b66a
+human_signoff: Phan Le Manh 2026-11-01 — ký Cổng 2 trong cửa veto (B8 dọn dẹp 31/10) trên verdict PASS 18/18 eval, ghim lại repin-20261101T062656Z-16061. Ngoài-1 tới Ngoài-9 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: moi-phia-deu-thay-ke-hoach
@@ -295,3 +295,7 @@ sha: 6a097f48c6375365e03375be816aca43768c769c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-10, do gop onehub 5042d0ce (LT1b cham detail-sheet.tsx) cho PR 360
 run_id: repin-20261010T140306Z-53419
 sha: b3945503b3e68a2b34b7b99e17a39b90142fc9dd · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-11-01, do B8: ghim trên onehub b65feb175 sau sửa ba thước lệch, trước khi chủ kho ký cửa veto mở
+run_id: repin-20261101T062656Z-16061
+sha: 4d0c9c01179bff94bf64fb609993ace54132b66a · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

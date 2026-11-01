@@ -5,7 +5,7 @@ slug: go-khoa-goc-nhin
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [api, ui]
-status: machine-cleared
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
