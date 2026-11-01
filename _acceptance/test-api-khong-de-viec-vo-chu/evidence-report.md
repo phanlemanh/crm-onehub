@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: aaefe670df0c5838097a9cce87178a7f23ed0278
-human_signoff: 
+human_signoff: Phan Le Manh 2026-11-02 — ký Cổng 2 trong cửa veto (dãy L) trên verdict PASS, làn trước chữ ký bỏ qua vì cây bằng pin trên đỉnh e292d1cfb. Ngoài-1, 2, 3, 4, 5 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: test-api-khong-de-viec-vo-chu
