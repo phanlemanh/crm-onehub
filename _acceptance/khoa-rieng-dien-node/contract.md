@@ -5,7 +5,7 @@ slug: khoa-rieng-dien-node
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: machine-cleared
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-26-khoa-rieng-dien-node-design.md
 approved_by:
 approved_at:

@@ -589,7 +589,7 @@ describe("the-tasks-man", () => {
 	});
 
 	test("the-tasks-man: tich buoc thu hai goi setStepDone dung buoc, lam moi tong quan va ke hoach", async () => {
-		setSystemTime(new Date(2026, 8, 22, 23, 30));
+		setSystemTime(new Date("2026-09-22T23:30:00+07:00"));
 		dat("dashboard.summary", () => tongQuanGia());
 		const tq = tongQuanMessages("vi");
 		await mo(<DashboardSummary />);

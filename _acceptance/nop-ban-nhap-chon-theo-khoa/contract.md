@@ -5,7 +5,7 @@ slug: nop-ban-nhap-chon-theo-khoa
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: machine-cleared
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo

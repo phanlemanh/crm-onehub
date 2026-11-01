@@ -7,8 +7,8 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ef36480392ffb9f09b1487ca24c05029b9600c98
-human_signoff:
+verified_commit: 2f47162de740c0ea080fd5ca74a6cbb28889e2cb
+human_signoff: Phan Le Manh 2026-11-01 — ký Cổng 2 trong cửa veto (B8 dọn dẹp 31/10) trên verdict PASS 5/5 eval, ghim lại repin-20261101T071458Z-73294. Đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: nop-ban-nhap-chon-theo-khoa
@@ -142,3 +142,11 @@ sha: 85c14a8226c78b291ad69371b4d276cdb18db330 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-07, do gộp onehub b9e51ffa (#300) vào nhánh của #301
 run_id: repin-20261007T213136Z-90346
 sha: ef36480392ffb9f09b1487ca24c05029b9600c98 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 (E4 không khai paths) · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-11-01, do B8: ghim trên onehub b65feb175 sau sửa ba thước lệch, trước khi chủ kho ký cửa veto mở
+run_id: repin-20261101T062656Z-16061
+sha: 4d0c9c01179bff94bf64fb609993ace54132b66a · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 (E4 không khai paths) · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-11-01, do B8: hoá cũ sau khi gộp onehub ac0be9406 (#612)
+run_id: repin-20261101T071458Z-73294
+sha: 2f47162de740c0ea080fd5ca74a6cbb28889e2cb · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 (E4 không khai paths) · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

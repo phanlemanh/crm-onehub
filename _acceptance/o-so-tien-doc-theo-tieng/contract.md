@@ -5,7 +5,7 @@ slug: o-so-tien-doc-theo-tieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: machine-cleared
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-o-so-tien-doc-theo-tieng-design.md
 approved_by:
 approved_at:
