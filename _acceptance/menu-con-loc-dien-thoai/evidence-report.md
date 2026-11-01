@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 483fbb30a55f10f4e034552fad01d2f84a9c5db6
+verified_commit: f3a129185da6c0deaccd5d72043a7b9d813118a5
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -160,3 +160,7 @@ Không có eval judgment trong hợp đồng này — không có panel để đ�
 
 Round 1: E2 không đạt — cảnh ô tìm Công ty lọc hết nên menu con rỗng, ảnh không có mục nào; răng khong-cham-noi-goi cũng chưa bắt thẻ nhiều dòng. Returned to implementation (sửa ở 483fbb30a).
 Round 2: E1, E2, E3, E4, E5, E6, E7 đều đạt; bảy lệnh suite đạt. Verdict PASS, chờ người ký ở Cổng Bằng chứng.
+
+### Re-pin lần 1 — 2026-11-01, do F38 lối a: sửa thước 4 hồ sơ + gộp #603/#610/#609 chạm vùng canh
+run_id: repin-20261031T235939Z-42423
+sha: f3a129185da6c0deaccd5d72043a7b9d813118a5 · suites: 7 lệnh exit 0 · evals: 3/3 eval máy đạt kỳ vọng · ngoài làn máy: E1, E2, E3, E4 · diff chạm vật đo ngoài làn máy: E1 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3, AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
