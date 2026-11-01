@@ -82,10 +82,11 @@ evals:
       - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
       - "apps/app/test/sua-tai-cho-okr.dom.tsx"
     expected: |
-      Bốn ca. ten-ngan (gõ «ab», Enter) và vi-sao-dai (501 ký tự): 0 lời gọi mutation, toast đúng chuỗi độ dài của okr
-      messages, ô hiện giá trị cũ. nguoi-roi và khac: tRPC giả ném lỗi mang message «SERVER_MSG_XYZ» → toast bằng đúng
-      loiLuuTruong(moTa, "vi") của trường ấy (USER → câu «Người này không còn trong đội», TEXT → «Thử lại sau một lát»),
-      toast KHÔNG chứa «SERVER_MSG_XYZ», ô hiện giá trị cũ.
+      Năm ca. ten-ngan (gõ «ab», Enter) và vi-sao-dai (501 ký tự): 0 lời gọi mutation, toast đúng chuỗi độ dài của okr
+      messages, ô hiện giá trị cũ. Ba ca lỗi máy chủ, dựng bằng TRPCClientError với data.code thật của service:
+      nguoi-roi (USER, BAD_REQUEST, message «SERVER_MSG_XYZ») → toast chứa câu tuChoi.nguoi; nguoi-cam (USER, FORBIDDEN) →
+      toast «Chưa lưu được Phụ trách. Thử lại sau một lát.»; ten-loi (TEXT, INTERNAL_SERVER_ERROR) → «Chưa lưu được Tên. Thử
+      lại sau một lát.» Mỗi ca toast KHÔNG chứa «SERVER_MSG_XYZ», ô hiện giá trị cũ.
 
   - id: E8
     criterion: AC-8
@@ -96,9 +97,10 @@ evals:
       - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
       - "apps/app/test/sua-tai-cho-okr.dom.tsx"
     expected: |
-      Ca "lam-moi": sau khi lưu tên KR, khoá truy vấn okr của mục tiêu bị invalidate (đếm lời gọi invalidate của
-      QueryClient theo khoá okr.get với id mục tiêu ≥ 1). Ca "sua-menu": chọn «Sửa» ở menu đầu ngăn vẫn đặt hopOkr=muc-tieu
-      và hộp sửa có mặt.
+      QueryClient thật, máy chủ giả trả dữ liệu mới sau lần lưu. Ca "lam-moi-mt": lưu tên mục tiêu → đầu ngăn mục tiêu chứa
+      tên mới. Ca "lam-moi-kr": lưu tên KR ở ngăn KR → đầu ngăn KR và dòng KR trong bảng của ngăn mục tiêu (dựng cùng
+      QueryClient) chứa tên mới. Đối chứng: bản sao luồng bỏ cache.okr → hai ca đỏ («khong lam moi»). Ca "sua-menu": chọn
+      «Sửa» ở menu đầu ngăn vẫn đặt hopOkr=muc-tieu và hộp sửa có mặt.
 
   - id: E9
     criterion: AC-8
@@ -138,3 +140,31 @@ evals:
       - ".oxlintrc.json"
     expected: |
       exit 0 và 0 dòng onehub(ngan-trong-khung): vòng không mở lớp chồng thô nào trong thư mục ngăn.
+
+  - id: E12
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.sv9_api
+    layer: backend-effect
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/sua-tai-cho-okr.spec.ts"
+    expected: |
+      Bài API trên cơ sở dữ liệu thử, dùng router thật: chu-kr-ten (phiên chủ KR không quyền đơn vị) updateKeyResult({ id,
+      title }) → thành công, tên đổi trong DB; chu-kr-nguoi cùng phiên ({ id, ownerUserId }) → lỗi FORBIDDEN; truong-don-vi
+      updateObjective({ id, title }) → thành công. Quyền phía UI lấy từ cùng cờ canEdit, canEditKr mà detail trả về cho
+      từng phiên (khẳng định cờ khớp kết quả gọi).
+
+  - id: E13
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Ma trận viết trước 13 ô (ngăn × trường × cách kết), mỗi ô một ca «ket: <ô>» ghim mảng lời gọi: mt-ten {enter,
+      roi-o → [{id,title}]; esc → []}, mt-vi-sao {ctrl-enter, roi-o → [{id,whyNow}]; esc → []}, mt-nguoi {chon → [{id,
+      ownerUserId}]; esc → []}, kr-ten {enter, roi-o → [{id,title}]; esc → []}, kr-nguoi {chon → [{id,ownerUserId}];
+      esc → []}. Số ca = 13.

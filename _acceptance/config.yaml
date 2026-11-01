@@ -1788,6 +1788,7 @@ executors:
     hcc_quet: "cd apps/app && bun test ./test/hang-cong-cu.spec.ts"
     bk2_quet: "cd apps/app && bun test ./test/khung-ngan.spec.ts"
     bk5_quet: "cd apps/app && bun test ./test/dau-hieu-ve-tay.spec.ts"
+    sv9_api: 'bun run test -- "cd apps/api && bun test test/sua-tai-cho-okr.spec.ts"'
     sv9_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/sua-tai-cho-okr.dom.tsx"
     sv9_bai_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-sheet.dom.tsx ./test/khung-tao-okr.dom.tsx ./test/sheet-quyen-cap-nhat.dom.tsx ./test/ngan-kr-mot-cho.dom.tsx"
     cmt_breadcrumb: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/breadcrumb-nhan.dom.tsx"

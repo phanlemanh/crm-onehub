@@ -35,16 +35,20 @@ Thuật ngữ: **ngăn mục tiêu** = `objective-sheet.tsx`; **ngăn KR** = `kr
   Ctrl/⌘+Enter, Then gọi `okr.updateObjective` với `{ id, whyNow }`.
 - AC-4: Given ô Người phụ trách của mục tiêu, When chọn một thành viên khác, Then gọi `okr.updateObjective` với
   `{ id, ownerUserId }` và ô hiện tên người mới; người phụ trách hiện tại đã rời đơn vị vẫn hiện tên kèm nhãn «đã rời».
-- AC-5: Given ngăn KR của người có quyền sửa đơn vị, When sửa ô Tên KR rồi Enter, Then gọi `okr.updateKeyResult` với
+- AC-5 (cross-layer): Given ngăn KR của người có quyền sửa đơn vị, When sửa ô Tên KR rồi Enter, Then gọi `okr.updateKeyResult` với
   `{ id, title }`; When đổi Người phụ trách KR, Then gọi với `{ id, ownerUserId }`. Given người xem chỉ là chủ KR (không quyền
-  đơn vị), Then ô Tên KR sửa được còn Người phụ trách KR chỉ đọc.
+  đơn vị), Then ô Tên KR sửa được còn Người phụ trách KR chỉ đọc; And ở máy chủ thật, chủ KR không quyền đơn vị gọi
+  `updateKeyResult({ id, title })` thì được còn `({ id, ownerUserId })` thì bị từ chối, và người có quyền sửa đơn vị gọi
+  `updateObjective({ id, title })` thì được.
 - AC-6: Given người xem không có quyền, hay mục tiêu đã bỏ, đang chờ duyệt, hay chu kỳ không ghi được, When ngăn mục tiêu
   hay ngăn KR mở, Then ba trường hiện chữ và không có ô sửa nào.
 - AC-7: Given tên ngoài 3–200 ký tự hay «Vì sao» quá 500 ký tự, When lưu, Then không gọi máy chủ, báo câu độ dài bằng
-  tiếng người dùng và ô trở về giá trị cũ; Given máy chủ từ chối (người không còn trong đơn vị, lỗi khác), Then báo câu
-  theo kiểu trường của `loiLuuTruong` (không phải câu máy chủ) và ô hiện giá trị cũ.
-- AC-8: Given lưu thành công ở ngăn mục tiêu hay ngăn KR, Then dữ liệu mục tiêu được làm mới (`cache.okr`) nên dòng KR trong
-  bảng của ngăn mục tiêu và đầu ngăn KR hiện giá trị mới mà không tải lại trang; And «Sửa» ở menu vẫn mở hộp sửa cho các
+  tiếng người dùng và ô trở về giá trị cũ; Given máy chủ từ chối lưu Người phụ trách bằng `BAD_REQUEST` (người không còn
+  trong đơn vị), Then báo câu «không còn trong đội» của `loiLuuTruong`; Given mọi lỗi khác (`FORBIDDEN`, lỗi máy chủ, mất
+  mạng) ở bất kỳ ô nào, Then báo «Chưa lưu được <tên ô>. Thử lại sau một lát.»; không câu nào là câu máy chủ, và ô hiện
+  giá trị cũ.
+- AC-8: Given lưu thành công ở ngăn mục tiêu hay ngăn KR, Then dữ liệu mục tiêu được làm mới (`cache.okr`) nên đầu ngăn mục
+  tiêu, dòng KR trong bảng của ngăn mục tiêu và đầu ngăn KR hiện giá trị mới mà không tải lại trang; And «Sửa» ở menu vẫn mở hộp sửa cho các
   trường khác như cũ.
 - AC-9: Given bản mẫu `/proto/sua-tai-cho-muc-tieu-va-kr`, Then ngăn mục tiêu và ngăn KR hiện bốn trạng thái — xem, đang
   sửa, đang lưu, lỗi lưu — ở khổ 1280 và 375, chữ dài xuống dòng không tràn, và ô sửa dùng cùng thành phần với ngăn deal.

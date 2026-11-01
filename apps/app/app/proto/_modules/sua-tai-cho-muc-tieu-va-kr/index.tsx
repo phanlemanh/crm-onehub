@@ -117,11 +117,19 @@ function NganThu({ ngan, trang }: { ngan: NganMau; trang: TrangMau }) {
 	);
 }
 
-function timTrang(state: string): { ngan: NganMau; trang: TrangMau } {
-	for (const ngan of NGAN_MAU)
-		for (const trang of TRANG_MAU)
-			if (st(ngan, trang) === state) return { ngan, trang };
-	return { ngan: "muc-tieu", trang: "xem" };
+type ViTriMau = { ngan: NganMau; trang: TrangMau };
+
+const VI_TRI_MAU: readonly ViTriMau[] = NGAN_MAU.flatMap((ngan) =>
+	TRANG_MAU.map((trang) => ({ ngan, trang })),
+);
+
+function timTrang(state: string): ViTriMau {
+	return (
+		VI_TRI_MAU.find((v) => st(v.ngan, v.trang) === state) ?? {
+			ngan: "muc-tieu",
+			trang: "xem",
+		}
+	);
 }
 
 export function SuaTaiChoMucTieuVaKrMau({ state }: { state: string }) {
