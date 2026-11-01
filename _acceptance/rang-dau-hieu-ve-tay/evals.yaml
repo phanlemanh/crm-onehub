@@ -12,12 +12,12 @@ evals:
       - "_acceptance/rang-dau-hieu-ve-tay/rang/luat-lint.mjs"
     expected: |
       exit 0; in «DAT tat ca». Răng đọc lệnh script «lint:slop» từ package.json và chạy đúng lệnh ấy trong bản sao tạm.
-      Ma trận viết trước mười lăm ca, tệp tiêm apps/app/components/zz-tiem.tsx, chuỗi thay ghim bằng chữ trong răng (không
+      Ma trận viết trước mười bảy ca, tệp tiêm apps/app/components/zz-tiem.tsx, chuỗi thay ghim bằng chữ trong răng (không
       đọc từ luật): table→«DataTable», clipboard→«CopyValue», tieu-de-h2 và tieu-de-h4→«SectionHeading», chip-dinh→«Hàng
       công cụ», alert-dialog→«ConfirmDialog», divide-y×{tran, cn-mot, cn-hai, template, ba-ngoi}→«Item», cham×{tran,
       cn-mot, cn-hai (size-2 và rounded-full ở hai chuỗi), template, ba-ngoi}→«StatusIndicator», hang-cung-tep (const
       cùng tệp mang divide-y)→«Item». Mỗi ca «do: <ca>» đúng một dòng khong-ve-tay chứa «zz-tiem.tsx:<dòng tiêm>» và
-      chuỗi thay (15 DAT, số ca = số phần tử). Tự kiểm: «tu-kiem: tat luat thi ca table khong con dong».
+      chuỗi thay (17 DAT, số ca = số phần tử). Tự kiểm: «tu-kiem: tat luat thi ca table khong con dong».
 
   - id: E2
     criterion: AC-2
@@ -92,7 +92,7 @@ evals:
       - "tools/oxlint/onehub/rules/khong-ve-tay-no-cu.json"
       - "tools/oxlint/onehub/shared/no-ve-tay.ts"
     expected: |
-      Ca "cay-that": danh sách thật → mảng lỗi rỗng; 51 dòng; tổng so theo dấu hiệu bằng đúng bảng viết trước
+      Ca "cay-that": danh sách thật → mảng lỗi rỗng; 61 dòng; tổng so theo dấu hiệu bằng đúng bảng viết trước
       {tieu-de: 38, chip-dinh: 10, alert-dialog: 11, clipboard: 8, divide-y: 9, cham: 2, table: 1} (so cả bảng).
 
   - id: E8

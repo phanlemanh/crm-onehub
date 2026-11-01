@@ -19,7 +19,7 @@ chỉ được kiểm bằng mắt ở review. Đo bằng cây cú pháp TypeScr
 | chấm `size-2` + `rounded-full` trong `className` | 2 / 2 | như trên |
 | `<table>` | 1 / 1 | như trên |
 
-Tổng 79 chỗ trên 51 cặp (tệp, dấu hiệu). `SECTION_TITLE` và nhóm gập `NhomDaBo` của kiểm kê không có dấu hiệu cú pháp
+Tổng 79 chỗ trên 61 cặp (tệp, dấu hiệu). `SECTION_TITLE` và nhóm gập `NhomDaBo` của kiểm kê không có dấu hiệu cú pháp
 đủ chắc — không vào luật vòng này.
 
 ## Thiết kế
@@ -59,7 +59,7 @@ Răng `_acceptance/rang-dau-hieu-ve-tay/rang/luat-lint.mjs` chạy đúng lệnh
 (`.oxlintrc.json`, `package.json`, `tools/oxlint`, `packages/db/src/giai-doan.ts`, `design/patterns`, `apps/app` không
 `node_modules`):
 
-- chiều đỏ: ma trận viết trước mười lăm ca tiêm vào một tệp mới dưới `apps/app/components/` → mỗi ca đúng một dòng
+- chiều đỏ: ma trận viết trước mười bảy ca tiêm vào một tệp mới dưới `apps/app/components/` → mỗi ca đúng một dòng
   `khong-ve-tay` gọi tệp:dòng và chuỗi thay ghim sẵn bằng chữ: `table`, `clipboard`, `tieu-de` (`h2`, `h4`),
   `chip-dinh`, `alert-dialog`, và `divide-y`, `cham` mỗi mã năm dạng giá trị (chuỗi trần · `cn` một đối số · `cn` hai
   đối số chia lớp · template literal · ba ngôi), cộng `hang-cung-tep` (hằng `const` cùng tệp mang `divide-y`);

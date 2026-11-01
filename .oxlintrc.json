@@ -103,6 +103,28 @@
 		},
 		{
 			"files": [
+				"apps/app/**"
+			],
+			"rules": {
+				"onehub/khong-ve-tay": "error"
+			}
+		},
+		{
+			"files": [
+				"apps/app/app/proto/**",
+				"apps/app/**/test/**",
+				"apps/app/**/*.spec.ts",
+				"apps/app/**/*.spec.tsx",
+				"apps/app/**/*.dom.tsx",
+				"apps/app/**/*.test.ts",
+				"apps/app/**/*.test.tsx"
+			],
+			"rules": {
+				"onehub/khong-ve-tay": "off"
+			}
+		},
+		{
+			"files": [
 				"apps/app/components/crm/record-sheet/**"
 			],
 			"rules": {

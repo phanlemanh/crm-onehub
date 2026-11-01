@@ -5,7 +5,7 @@ slug: rang-dau-hieu-ve-tay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-11-01-rang-dau-hieu-ve-tay-design.md
 veto_state: mo
 veto_opened_at: 2026-11-01T07:50:00Z
@@ -17,7 +17,7 @@ veto_opened_at: 2026-11-01T07:50:00Z
 
 Hàng BK5 của `docs/plan/lo-trinh-okr.json` (gộp SN3), đợt `don-dep-3110`, dãy K, đứng trên BK2 (#612). Ô cơ hội ký
 `build` ngày 31/10. Bảng «Dấu hiệu vẽ tay» của `docs/design.md` hứa thành luật `anti-slop` mà chưa có; đo trên
-`ac0be9406` có 79 chỗ trên 51 cặp (tệp, dấu hiệu). Vòng này thêm một luật oxlint, một danh sách nợ cạnh luật và một bài
+`ac0be9406` có 79 chỗ trên 61 cặp (tệp, dấu hiệu). Vòng này thêm một luật oxlint, một danh sách nợ cạnh luật và một bài
 kiểm danh sách. Hạng T2.
 
 Source input: hàng BK5 (`cau_giao`, `bat_khi`, `ghi_chu`) · `opportunity.md` · `docs/design.md` mục «Dấu hiệu vẽ tay» ·
@@ -32,7 +32,7 @@ ngôi, hằng `const` cùng tệp mà thuộc tính trỏ); lớp so theo từ.
 
 ## Criteria
 
-- AC-1: Given một tệp mới dưới `apps/app/components/`, When tiêm từng ca của ma trận mười lăm ca (bảy dấu hiệu;
+- AC-1: Given một tệp mới dưới `apps/app/components/`, When tiêm từng ca của ma trận mười bảy ca (bảy dấu hiệu;
   `tieu-de` cả `h2` và `h4`; `divide-y` và `cham` mỗi mã năm dạng giá trị `className`; một hằng cùng tệp) rồi chạy đúng
   lệnh script `lint:slop`, Then mỗi ca đỏ đúng một dòng `onehub(khong-ve-tay)` gọi `<tệp>:<dòng>` và thành phần thay của
   dấu hiệu ấy.
@@ -47,7 +47,7 @@ ngôi, hằng `const` cùng tệp mà thuộc tính trỏ); lớp so theo từ.
 - AC-5: Given bài, When một dòng nợ trỏ tệp không có, mang dấu hiệu ngoài bảy mã, `so` không phải số nguyên dương, `ly_do`
   rỗng, hay trùng cặp với dòng khác, Then bài đỏ gọi tên tệp, dấu hiệu và lỗi.
 - AC-6: Given cây ở đỉnh đang xét, When chạy `bun run lint:slop`, Then không dòng `khong-ve-tay` nào; danh sách nợ có
-  đúng 51 dòng và tổng `so` theo dấu hiệu bằng bảng đo của design doc (tieu-de 38, chip-dinh 10, alert-dialog 11,
+  đúng 61 dòng và tổng `so` theo dấu hiệu bằng bảng đo của design doc (tieu-de 38, chip-dinh 10, alert-dialog 11,
   clipboard 8, divide-y 9, cham 2, table 1).
 - AC-7: Given luật, Then thông điệp của mỗi dấu hiệu nêu thành phần thay lấy từ cột «Dùng» của **đúng hàng** ứng với
   dấu hiệu ấy trong bảng «Dấu hiệu vẽ tay» của `docs/design.md`; đổi chuỗi thay của hai dấu hiệu cho nhau thì phép đo

@@ -1,0 +1,368 @@
+[
+	{
+		"tep": "apps/app/app/(app)/[slug]/campaigns/[campaignId]/campaign-detail.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 3,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx",
+		"dau_hieu": "chip-dinh",
+		"so": 2,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang chip của mục «Hàng công cụ» và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/moi-kr/moi-kr.tsx",
+		"dau_hieu": "chip-dinh",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang chip của mục «Hàng công cụ» và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/overview-scope.tsx",
+		"dau_hieu": "chip-dinh",
+		"so": 2,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang chip của mục «Hàng công cụ» và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/api-keys/api-keys-table.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/google-connection.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/microsoft-connection.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/page.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/page.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 2,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/page.tsx",
+		"dau_hieu": "cham",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang StatusIndicator và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/page.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/page.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 5,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/people/slack-people-matches.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+		"dau_hieu": "clipboard",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang CopyValue và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-disconnect-button.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-scope-groups.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/zalo/ket-noi-zalo-than.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/zalo/ket-noi-zalo-than.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 4,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/members/phat-chia-dialog.tsx",
+		"dau_hieu": "clipboard",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang CopyValue và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/notifications/khoi-kenh.tsx",
+		"dau_hieu": "chip-dinh",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang chip của mục «Hàng công cụ» và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx",
+		"dau_hieu": "clipboard",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang CopyValue và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/organization/chi-tiet-chua-co.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/organization/chi-tiet-chung.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 2,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/organization/chi-tiet-goc.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/organization/chi-tiet-phong-ban.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/sso/sso-table.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+		"dau_hieu": "clipboard",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang CopyValue và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(landing)/dat-mat-khau/[token]/dat-mat-khau-form.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(landing)/dat-mat-khau/[token]/lien-ket-khong-hop-le.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/app/(landing)/het-quyen/page.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+		"dau_hieu": "clipboard",
+		"so": 2,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang CopyValue và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 4,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/agent-builder-home.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/agent-capabilities.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/agent-code.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/agent-history.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/delete-chat-action.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/share-chat-dialog.tsx",
+		"dau_hieu": "cham",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang StatusIndicator và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/share-chat-dialog.tsx",
+		"dau_hieu": "clipboard",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang CopyValue và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/team-agent-detail.tsx",
+		"dau_hieu": "alert-dialog",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang ConfirmDialog và hạ số"
+	},
+	{
+		"tep": "apps/app/components/agent-builder/team-agents-index.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/auth-shell.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/crm/record-sheet/kr-sheet.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/crm/timeline/activity-composer.tsx",
+		"dau_hieu": "chip-dinh",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang chip của mục «Hàng công cụ» và hạ số"
+	},
+	{
+		"tep": "apps/app/components/crm/timeline/timeline.tsx",
+		"dau_hieu": "chip-dinh",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang chip của mục «Hàng công cụ» và hạ số"
+	},
+	{
+		"tep": "apps/app/components/crm/timeline/timeline.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	},
+	{
+		"tep": "apps/app/components/crm/timeline/timeline.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/detail-sheet.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/landing/bento-card.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/landing/closing-cta.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/landing/hero.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/landing/product-shot/companies-page.tsx",
+		"dau_hieu": "table",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang DataTable hay SimpleTable và hạ số"
+	},
+	{
+		"tep": "apps/app/components/landing/section-heading.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang PageShellTitle, CardTitle hay SectionHeading và hạ số"
+	},
+	{
+		"tep": "apps/app/components/landing/setup-prompt-button.tsx",
+		"dau_hieu": "clipboard",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang CopyValue và hạ số"
+	},
+	{
+		"tep": "apps/app/components/lo-trinh/trang-lo-trinh.tsx",
+		"dau_hieu": "chip-dinh",
+		"so": 2,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang chip của mục «Hàng công cụ» và hạ số"
+	},
+	{
+		"tep": "apps/app/components/page-shell.tsx",
+		"dau_hieu": "tieu-de",
+		"so": 1,
+		"ly_do": "PageShellTitle tự dựng thẻ h1 của tiêu đề trang — đây chính là thành phần thay"
+	},
+	{
+		"tep": "apps/app/components/slack/channel-picker.tsx",
+		"dau_hieu": "divide-y",
+		"so": 1,
+		"ly_do": "nợ cũ đo 01/11 trên onehub ac0be9406 — hàng nào chạm tệp này thì dời sang Item hay Card và hạ số"
+	}
+]
