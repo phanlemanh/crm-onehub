@@ -58,7 +58,7 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.ctnl_dong_chuong
-    paths: [apps/app/components/thong-bao/**, apps/app/lib/thong-bao*.ts, apps/app/lib/messages/thong-bao.ts, packages/validation/src/thong-bao.ts, apps/app/test/cho-tac-nhan-lau-chuong.dom.tsx]
+    paths: ["apps/app/components/thong-bao/**", "apps/app/lib/thong-bao/**", apps/app/lib/messages/thong-bao.ts, packages/validation/src/thong-bao.ts, apps/app/test/cho-tac-nhan-lau-chuong.dom.tsx]
     expected: |
       apps/app/test/cho-tac-nhan-lau-chuong.dom.tsx: ba noiDung lay tu ban ghi ma bo ghi cua E4 sinh (fixture rut tu writer
       that, khong viet tay) -> moi dong chuong co cau rieng theo loai (vi va en), ten tac nhan nam trong phan tu translate="no",

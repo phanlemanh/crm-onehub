@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1a1c0eed2235ddd3bf3e684bc182624485af152e
+verified_commit: a2bc8af341e88824eac6005b789a736a1c8c8e28
 human_signoff: Phan Le Manh 2026-10-07
 ---
 
@@ -206,3 +206,7 @@ Không có eval judgment nào trong vòng này, không có panel nào được c
 
 Round 1: mọi eval của hợp đồng xanh nhưng lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở ca không-khớp của bảng danh mục onboarding (danh-muc-quan-ly.dom.tsx), không gắn eval nào nên failed_evals rỗng. Verdict REJECT, trả về triển khai.
 Round 2: đã vá ở hai commit bcad1554d (nơi gọi tự đưa màn rỗng vì lọc riêng qua filteredEmpty, giữ màn không khớp và màn lỗi của danh mục) và f769014fe (bảng danh mục giữ nhãn bộ lọc chỉ là tên). Mười một eval và bảy lệnh suite đều xanh trên commit 1a1c0eed2. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-31, do F38 sửa paths chết + K-1 lai-ra-man trả Date; ghim lại sau F37 và #604 (onehub 6aa709e58)
+run_id: repin-20261031T151643Z-23675
+sha: a2bc8af341e88824eac6005b789a736a1c8c8e28 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -1,0 +1,33 @@
+{
+  "feature_plain": "Chín hồ sơ đã ký thôi bị đòi ghim lại sau mọi PR: mỗi hồ sơ chỉ còn trỏ tới tệp có thật, nên chỉ PR chạm vật của nó mới làm nó cần ghim lại.",
+  "will_do": [
+    {"id": "AC-3", "p": "Sẽ giữ đúng việc canh hồ sơ: PR chạm một tệp hồ sơ đang canh vẫn làm hồ sơ ấy cần ghim lại."},
+    {"id": "AC-4", "p": "Sẽ sửa đúng 27 dòng của bảng sửa — gỡ hay thêm đúng những đường đã liệt, không đường sống nào bị gỡ thêm."},
+    {"id": "AC-6", "p": "Sẽ làm bốn dòng sổ hỏng của hồ sơ gom-tin-hieu-tu-chay đọc được lại, chỉ bỏ dấu ngoặc thừa, không đổi chữ."},
+    {"id": "AC-7", "p": "Sẽ ghim lại chín hồ sơ và gom-tin-hieu-tu-chay sau khi F37 gộp, mọi bộ kiểm và eval xanh."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sẽ KHÔNG còn mục nào trong chín hồ sơ trỏ tới tệp không có; thước tự thử bắt một mục chết cài sẵn trước khi tin kết quả 0."},
+    {"id": "AC-2", "p": "Sẽ KHÔNG đòi ghim lại hồ sơ khi PR không chạm vật nào nó canh."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG đổi lệnh, kỳ vọng, trạng thái hay tiêu chí nào của chín hồ sơ — chỉ dòng danh sách tệp canh."},
+    {"id": "OOS-1", "p": "KHÔNG ghim lại 61 hồ sơ của nhánh dọn dẹp đợt 2 và 5 hồ sơ của F37 trong PR này — chúng đi chung lượt ghim nhưng là vật của nhánh khác."},
+    {"id": "OOS-2", "p": "KHÔNG sửa bộ công cụ nghiệm thu để một mục chết thôi tắt việc canh cả hồ sơ — gửi bộ công cụ nếu cần."},
+    {"id": "OOS-3", "p": "KHÔNG sửa bước chạy cũ của một ui-check ở toan-canh-okr vẫn mở đường /okr/suc-khoe — chỉ được sửa danh sách tệp canh."},
+    {"id": "OOS-4", "p": "KHÔNG chạm hồ sơ đã ký nào khác ngoài chín hồ sơ (và gom-tin-hieu-tu-chay nếu anh đồng ý ở Hỏi-2)."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ chín hồ sơ mà đo 31/10 tìm ra; AC-1 (quét mục chết) quét lại cả chín."},
+    {"i": 1, "p": "Ba kiểu mục chết: tệp đã xoá ở eval đã nghỉ, tệp đã xoá có tệp thay, đường chưa từng có — mỗi dòng có commit làm căn cứ."},
+    {"i": 2, "p": "Hai chiều: PR không chạm thì hồ sơ yên (AC-2), PR chạm thì hồ sơ cần ghim (AC-3)."},
+    {"i": 3, "p": "Chỉ danh sách tệp canh đổi — ràng buộc chủ kho đặt cho việc sửa thước đã ký (AC-5)."},
+    {"i": 4, "p": "Bốn dòng sổ hỏng của hồ sơ thứ mười — câu Hỏi-2 cho anh."},
+    {"i": 5, "p": "Eval chấm bằng hội đồng mà không khai tệp canh cũng tắt việc canh — câu Hỏi-1 cho anh."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Hai hồ sơ còn một lý do khác bị đòi ghim: eval chấm bằng hội đồng không khai tệp canh — đã thành Hỏi-1, thử trên bản sao thì đủ chín hồ sơ xanh."},
+    {"i": 1, "p": "Một đường tưởng chưa từng có thật ra sai gói — thước của hồ sơ đọc tệp cùng tên ở gói khác; đã đổi sang thay đường thay vì gỡ."},
+    {"i": 2, "p": "Chưa có thước chứng không gỡ lén đường sống — đã thêm phép so đúng tập gỡ và thêm với bảng sửa."},
+    {"i": 3, "p": "Sửa sổ của hồ sơ đã ký thứ mười chưa có người cho phép — đã thành Hỏi-2 và đưa hồ sơ ấy vào lượt ghim."},
+    {"i": 4, "p": "Ngưỡng «PR chỉ đổi tài liệu» không đạt nguyên văn vì hai hồ sơ canh cả tài liệu — đường đo đọc ngưỡng theo «không chạm tệp canh nào»."}
+  ]
+}

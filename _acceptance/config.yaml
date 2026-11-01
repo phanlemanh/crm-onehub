@@ -1682,7 +1682,7 @@ executors:
     kekt_doi_chu: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t doi-chu"
     kekt_dau: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t so-dau"
     mcl_lop: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/menu-con-dich-vao.dom.tsx -t lop-dich
-    mcl_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- packages/ui/test/data-table-loc-ro.dom.tsx packages/ui/test/data-table-locale.spec.tsx packages/ui/test/render-diff.spec.tsx packages/ui/test/lai-ra-man.spec.tsx apps/app/test/bang-crm-loc-ro.dom.tsx && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx ./test/data-table-locale.spec.tsx ./test/render-diff.spec.tsx ./test/lai-ra-man.spec.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-crm-loc-ro.dom.tsx'
+    mcl_hoi_quy: 'git diff --quiet 4685fbe12bdd1e0184ccea88015dafaa5e9361e3^1 4685fbe12bdd1e0184ccea88015dafaa5e9361e3 -- packages/ui/test/data-table-loc-ro.dom.tsx packages/ui/test/data-table-locale.spec.tsx packages/ui/test/render-diff.spec.tsx packages/ui/test/lai-ra-man.spec.tsx apps/app/test/bang-crm-loc-ro.dom.tsx && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx ./test/data-table-locale.spec.tsx ./test/render-diff.spec.tsx ./test/lai-ra-man.spec.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-crm-loc-ro.dom.tsx'
     kcs_don_vi: 'node --test "scripts/kiem-cheo/test/*.test.mjs"'
     kcs_lich: node --test scripts/dieu-phoi/test/lich.test.mjs
     dsk_dang_luu: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/sortable-save-list.dom.tsx -t dang-luu
@@ -3696,6 +3696,11 @@ executors:
     f39_chot: bun _acceptance/nguong-gia-tri-mat-giao-dien/rang/chot.mjs
     f39_ghim: bun _acceptance/nguong-gia-tri-mat-giao-dien/rang/ghim.mjs
     f39_timebox: bun _acceptance/nguong-gia-tri-mat-giao-dien/rang/timebox.mjs
+    f38_chet: bun _acceptance/paths-chet-chin-ho-so/rang/chet.mjs
+    f38_hai_chieu: bun _acceptance/paths-chet-chin-ho-so/rang/hai-chieu.mjs
+    f38_chi_paths: bun _acceptance/paths-chet-chin-ho-so/rang/chi-paths.mjs
+    f38_so_hong: bun _acceptance/paths-chet-chin-ho-so/rang/so-hong.mjs
+    f38_ghim: bun _acceptance/paths-chet-chin-ho-so/rang/ghim.mjs
     htg_hex: bun _acceptance/hex-trang-gioi-thieu/rang/hex.mjs
     htg_man: 'IS_MARKETING=true EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hex-trang-gioi-thieu/rang/man.mjs"'
   design:

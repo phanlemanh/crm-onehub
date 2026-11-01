@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c5761ebed7df598af10192d787f79c3db38b3be0
+verified_commit: a2bc8af341e88824eac6005b789a736a1c8c8e28
 human_signoff: Manh Phan 2026-10-21 — ký Cổng Bằng chứng trên S4 vòng 2 (PASS, 10/10 eval, 0 mục trong hợp đồng). Ngoài-3 mở hợp đồng mới; Ngoài-1, 2, 4–12 ghi Known limits; cắt/hoãn đồng ý cắt.
 ---
 
@@ -203,3 +203,7 @@ Round 2: sửa câu báo và danh sách khoá cho khớp Hỏi-1 (chỉ ANTHROPI
 ### Re-pin lần 1 — 2026-10-22, do TH2b gia-co-gom-tin-hieu sửa bộ chạy lịch gom và bộ thử dùng chung
 run_id: repin-20261022T013104Z-49420
 sha: c5761ebed7df598af10192d787f79c3db38b3be0 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E7b · diff chạm vật đo ngoài làn máy: E7b — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-31, do F38 sửa paths chết + K-1 lai-ra-man trả Date; ghim lại sau F37 và #604 (onehub 6aa709e58)
+run_id: repin-20261031T151643Z-23675
+sha: a2bc8af341e88824eac6005b789a736a1c8c8e28 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E7b · diff chạm vật đo ngoài làn máy: E7b — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

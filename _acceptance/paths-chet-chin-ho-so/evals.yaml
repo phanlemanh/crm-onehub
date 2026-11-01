@@ -1,0 +1,158 @@
+schema_version: 1
+slug: paths-chet-chin-ho-so
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.f38_chet
+    paths:
+      - "_acceptance/paths-chet-chin-ho-so/rang/**"
+      - "_acceptance/cay-can-chinh-co-ly-do/evals.yaml"
+      - "_acceptance/cho-tac-nhan-lau/evals.yaml"
+      - "_acceptance/goi-y-mo-ke-hoach/evals.yaml"
+      - "_acceptance/hoi-dap-okr/evals.yaml"
+      - "_acceptance/kara-gop-y-luot-2/evals.yaml"
+      - "_acceptance/ngan-kr-mot-cho/evals.yaml"
+      - "_acceptance/quyet-gop-y-noi-dung-ly-do/evals.yaml"
+      - "_acceptance/toan-canh-okr/evals.yaml"
+      - "_acceptance/tro-ly-okr-nen/evals.yaml"
+    expected: |
+      Doi chung duong cung luot: evals mau co "a/khong-co.ts" tren cay chi co a/co.ts -> bat dung X1 a/khong-co.ts; khong bat
+      -> "KHONG DO DUOC" thoat 2. Quet that: moi muc paths cua chin ho so qua phanLoaiMucPaths cua kit (nap qua
+      scripts/resolve-plugin.mjs) tren git ls-files; 0 muc chet -> "MUC CHET: 0", thoat 0; con muc -> dong "CHET <ho so>
+      <eval> <muc> (<ma>)" va thoat 1.
+      CHIEU DO: tren onehub ed4e85288 in 25 dong CHET, thoat 1.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.f38_hai_chieu
+    paths:
+      - "_acceptance/paths-chet-chin-ho-so/rang/**"
+      - "_acceptance/cay-can-chinh-co-ly-do/evals.yaml"
+      - "_acceptance/cho-tac-nhan-lau/evals.yaml"
+      - "_acceptance/goi-y-mo-ke-hoach/evals.yaml"
+      - "_acceptance/hoi-dap-okr/evals.yaml"
+      - "_acceptance/kara-gop-y-luot-2/evals.yaml"
+      - "_acceptance/ngan-kr-mot-cho/evals.yaml"
+      - "_acceptance/quyet-gop-y-noi-dung-ly-do/evals.yaml"
+      - "_acceptance/toan-canh-okr/evals.yaml"
+      - "_acceptance/tro-ly-okr-nen/evals.yaml"
+    expected: |
+      Doi chung duong cung luot: staleByPaths voi mot muc chet -> apply false, reason paths-khong-tro-toi-tep; khac -> thoat 2.
+      Moi ho so: chon tep dau tien cua git ls-files khong khop muc nao; staleByPaths([tep]) -> apply true va giu 0 tep ->
+      dong "DUNG <ho so> chieu-im". Bo loc tat hay giu tep -> SAI.
+      CHIEU DO: tren onehub ed4e85288 ca chin dong chieu-im SAI (bo loc tat vi muc chet).
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.f38_hai_chieu
+    paths:
+      - "_acceptance/paths-chet-chin-ho-so/rang/**"
+      - "_acceptance/cay-can-chinh-co-ly-do/evals.yaml"
+      - "_acceptance/cho-tac-nhan-lau/evals.yaml"
+      - "_acceptance/goi-y-mo-ke-hoach/evals.yaml"
+      - "_acceptance/hoi-dap-okr/evals.yaml"
+      - "_acceptance/kara-gop-y-luot-2/evals.yaml"
+      - "_acceptance/ngan-kr-mot-cho/evals.yaml"
+      - "_acceptance/quyet-gop-y-noi-dung-ly-do/evals.yaml"
+      - "_acceptance/toan-canh-okr/evals.yaml"
+      - "_acceptance/tro-ly-okr-nen/evals.yaml"
+    expected: |
+      Cung luot E2. Moi muc paths con lai cua moi ho so: chon mot tep khop; staleByPaths([tep khop, tep ngoai]) -> apply true,
+      giu tep khop, bo tep ngoai -> dong "DUNG <ho so> chieu-cu: <muc>". Muc khong tro toi tep nao -> SAI.
+      KET LUAN F38: <n> DUNG, 0 SAI thoat 0.
+      CHIEU DO: tren onehub ed4e85288 moi dong chieu-cu SAI (287 SAI tong).
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.f38_chi_paths
+    paths:
+      - "_acceptance/paths-chet-chin-ho-so/rang/**"
+      - "_acceptance/cay-can-chinh-co-ly-do/evals.yaml"
+      - "_acceptance/cho-tac-nhan-lau/evals.yaml"
+      - "_acceptance/goi-y-mo-ke-hoach/evals.yaml"
+      - "_acceptance/hoi-dap-okr/evals.yaml"
+      - "_acceptance/kara-gop-y-luot-2/evals.yaml"
+      - "_acceptance/ngan-kr-mot-cho/evals.yaml"
+      - "_acceptance/quyet-gop-y-noi-dung-ly-do/evals.yaml"
+      - "_acceptance/toan-canh-okr/evals.yaml"
+      - "_acceptance/tro-ly-okr-nen/evals.yaml"
+    expected: |
+      Doi chung duong cung luot: mau go them muc song a/song.ts va them b/khac.ts ngoai bang -> bat ca hai, ghim thong diep;
+      khac -> thoat 2. Moi ho so: so tap paths tung eval voi git show ed4e85288 (evalListsOf cua kit): tap bo = dung cac
+      «cu» cua rang/bang-sua.json, tap them = dung cac «moi» -> "DUNG <ho so> tap-paths: dung bang sua". Go hay them
+      ngoai bang, con muc phai go, thieu muc phai them -> SAI goi ten muc.
+      CHIEU DO: tren onehub ed4e85288 ca chin ho so SAI «con muc phai go».
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.f38_chi_paths
+    paths:
+      - "_acceptance/paths-chet-chin-ho-so/rang/**"
+      - "_acceptance/cay-can-chinh-co-ly-do/evals.yaml"
+      - "_acceptance/cho-tac-nhan-lau/evals.yaml"
+      - "_acceptance/goi-y-mo-ke-hoach/evals.yaml"
+      - "_acceptance/hoi-dap-okr/evals.yaml"
+      - "_acceptance/kara-gop-y-luot-2/evals.yaml"
+      - "_acceptance/ngan-kr-mot-cho/evals.yaml"
+      - "_acceptance/quyet-gop-y-noi-dung-ly-do/evals.yaml"
+      - "_acceptance/toan-canh-okr/evals.yaml"
+      - "_acceptance/tro-ly-okr-nen/evals.yaml"
+    expected: |
+      Doi chung duong cung luot: ba dong gia (+paths, -paths, +cmd) -> chi bat dong «+    cmd: x»; khac -> thoat 2.
+      Moi ho so: git diff -U0 ed4e85288 -- evals.yaml; moi dong them/bot phai mo bang "    paths: [" -> "DUNG <ho so>
+      chi-paths: <n> dong doi, 0 dong ngoai paths". Dong nao khac -> SAI goi dong dau tien.
+      CHIEU DO: sua them mot dong cmd hay status trong ban sao -> SAI.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.f38_so_hong
+    paths:
+      - "_acceptance/paths-chet-chin-ho-so/rang/**"
+      - "_acceptance/gom-tin-hieu-tu-chay/decisions.jsonl"
+    expected: |
+      Doi chung duong cung luot: so mau co dong 2 doi chu -> bat "dong 2 doi ngoai mot dau } thua"; khac -> thoat 2.
+      So sanh tung dong voi git show ed4e85288: moi dong doc duoc JSON; dong khac goc chi khac mot dau } thua o cuoi ->
+      "goc 4 dong hong, nay 0; 0 loi" thoat 0.
+      CHIEU DO: tren onehub ed4e85288 dong 20-23 "van hong" -> thoat 1.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.f38_ghim
+    paths:
+      - "_acceptance/paths-chet-chin-ho-so/rang/**"
+      - "_acceptance/cay-can-chinh-co-ly-do/run-log.jsonl"
+      - "_acceptance/cho-tac-nhan-lau/run-log.jsonl"
+      - "_acceptance/goi-y-mo-ke-hoach/run-log.jsonl"
+      - "_acceptance/hoi-dap-okr/run-log.jsonl"
+      - "_acceptance/kara-gop-y-luot-2/run-log.jsonl"
+      - "_acceptance/ngan-kr-mot-cho/run-log.jsonl"
+      - "_acceptance/quyet-gop-y-noi-dung-ly-do/run-log.jsonl"
+      - "_acceptance/toan-canh-okr/run-log.jsonl"
+      - "_acceptance/tro-ly-okr-nen/run-log.jsonl"
+      - "_acceptance/cay-can-chinh-co-ly-do/evidence-report.md"
+      - "_acceptance/cho-tac-nhan-lau/evidence-report.md"
+      - "_acceptance/goi-y-mo-ke-hoach/evidence-report.md"
+      - "_acceptance/hoi-dap-okr/evidence-report.md"
+      - "_acceptance/kara-gop-y-luot-2/evidence-report.md"
+      - "_acceptance/ngan-kr-mot-cho/evidence-report.md"
+      - "_acceptance/quyet-gop-y-noi-dung-ly-do/evidence-report.md"
+      - "_acceptance/toan-canh-okr/evidence-report.md"
+      - "_acceptance/tro-ly-okr-nen/evidence-report.md"
+      - "_acceptance/gom-tin-hieu-tu-chay/decisions.jsonl"
+      - "_acceptance/gom-tin-hieu-tu-chay/run-log.jsonl"
+      - "_acceptance/gom-tin-hieu-tu-chay/evidence-report.md"
+    expected: |
+      Muoi ho so: chin ho so (theo evals.yaml) va gom-tin-hieu-tu-chay (theo decisions.jsonl). Doi chung duong cung luot: dong repin co sha khong la hau due cua lan sua -> bat "ghim b co truoc lan sua paths"; khac
+      -> thoat 2. Moi ho so: evals.yaml phai da doi so voi ed4e85288; dong repin cuoi trong run-log.jsonl co sha =
+      verified_commit cua evidence-report.md, la hau due cua commit cuoi sua evals.yaml, suites_exit va evals_exit toan 0 ->
+      "DUNG <ho so> ghim <sha>".
+      CHIEU DO: sau S3, truoc luot ghim (sau F37), ca chin SAI "co truoc lan sua paths"; tren onehub ed4e85288 ca chin SAI
+      "chua doi so voi goc"; gom-tin-hieu-tu-chay SAI "ghim c5761ebed co truoc lan sua".
