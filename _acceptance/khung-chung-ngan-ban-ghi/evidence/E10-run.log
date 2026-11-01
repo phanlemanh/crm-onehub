@@ -1,0 +1,103 @@
+$ bun scripts/lan-do/phien-do.mjs --chay "PROTO_URL=\$APP_URL node _acceptance/khung-chung-ngan-ban-ghi/rang/chup-proto.mjs"
+phien-do: kho crm_dot_ban_do_khuon_3010_do · app http://localhost:4711 · api http://localhost:4380
+(node:12679) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/manh-macmini/dev/crm/.claude/worktrees/dot-ban-do-khuon-3010/apps/app/app/proto/catalog.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/manh-macmini/dev/crm/.claude/worktrees/dot-ban-do-khuon-3010/apps/app/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ST-deal-dang-tai desktop-1280 light
+ST-deal-loi desktop-1280 light
+ST-deal-du desktop-1280 light
+ST-lien-he-dang-tai desktop-1280 light
+ST-lien-he-loi desktop-1280 light
+ST-lien-he-du desktop-1280 light
+ST-cong-ty-dang-tai desktop-1280 light
+ST-cong-ty-loi desktop-1280 light
+ST-cong-ty-du desktop-1280 light
+ST-ke-hoach-dang-tai desktop-1280 light
+ST-ke-hoach-loi desktop-1280 light
+ST-ke-hoach-du desktop-1280 light
+ST-muc-tieu-dang-tai desktop-1280 light
+ST-muc-tieu-loi desktop-1280 light
+ST-muc-tieu-du desktop-1280 light
+ST-kr-dang-tai desktop-1280 light
+ST-kr-loi desktop-1280 light
+ST-kr-du desktop-1280 light
+ST-so-kr-dang-tai desktop-1280 light
+ST-so-kr-loi desktop-1280 light
+ST-so-kr-du desktop-1280 light
+ST-kr-cu-moi-dang-tai desktop-1280 light
+ST-kr-cu-moi-loi desktop-1280 light
+ST-deal-dang-tai mobile-375 light
+ST-deal-loi mobile-375 light
+ST-deal-du mobile-375 light
+ST-lien-he-dang-tai mobile-375 light
+ST-lien-he-loi mobile-375 light
+ST-lien-he-du mobile-375 light
+ST-cong-ty-dang-tai mobile-375 light
+ST-cong-ty-loi mobile-375 light
+ST-cong-ty-du mobile-375 light
+ST-ke-hoach-dang-tai mobile-375 light
+ST-ke-hoach-loi mobile-375 light
+ST-ke-hoach-du mobile-375 light
+ST-muc-tieu-dang-tai mobile-375 light
+ST-muc-tieu-loi mobile-375 light
+ST-muc-tieu-du mobile-375 light
+ST-kr-dang-tai mobile-375 light
+ST-kr-loi mobile-375 light
+ST-kr-du mobile-375 light
+ST-so-kr-dang-tai mobile-375 light
+ST-so-kr-loi mobile-375 light
+ST-so-kr-du mobile-375 light
+ST-kr-cu-moi-dang-tai mobile-375 light
+ST-kr-cu-moi-loi mobile-375 light
+| state | kho | theme | scrollWidth | clientWidth | tran |
+|---|---|---|---|---|---|
+| ST-deal-dang-tai | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-deal-loi | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-deal-du | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-lien-he-dang-tai | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-lien-he-loi | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-lien-he-du | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-cong-ty-dang-tai | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-cong-ty-loi | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-cong-ty-du | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-ke-hoach-dang-tai | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-ke-hoach-loi | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-ke-hoach-du | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-muc-tieu-dang-tai | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-muc-tieu-loi | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-muc-tieu-du | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-kr-dang-tai | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-kr-loi | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-kr-du | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-so-kr-dang-tai | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-so-kr-loi | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-so-kr-du | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-kr-cu-moi-dang-tai | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-kr-cu-moi-loi | desktop-1280 | light | 1280 | 1280 | khong |
+| ST-deal-dang-tai | mobile-375 | light | 375 | 375 | khong |
+| ST-deal-loi | mobile-375 | light | 375 | 375 | khong |
+| ST-deal-du | mobile-375 | light | 375 | 375 | khong |
+| ST-lien-he-dang-tai | mobile-375 | light | 375 | 375 | khong |
+| ST-lien-he-loi | mobile-375 | light | 375 | 375 | khong |
+| ST-lien-he-du | mobile-375 | light | 375 | 375 | khong |
+| ST-cong-ty-dang-tai | mobile-375 | light | 375 | 375 | khong |
+| ST-cong-ty-loi | mobile-375 | light | 375 | 375 | khong |
+| ST-cong-ty-du | mobile-375 | light | 375 | 375 | khong |
+| ST-ke-hoach-dang-tai | mobile-375 | light | 375 | 375 | khong |
+| ST-ke-hoach-loi | mobile-375 | light | 375 | 375 | khong |
+| ST-ke-hoach-du | mobile-375 | light | 375 | 375 | khong |
+| ST-muc-tieu-dang-tai | mobile-375 | light | 375 | 375 | khong |
+| ST-muc-tieu-loi | mobile-375 | light | 375 | 375 | khong |
+| ST-muc-tieu-du | mobile-375 | light | 375 | 375 | khong |
+| ST-kr-dang-tai | mobile-375 | light | 375 | 375 | khong |
+| ST-kr-loi | mobile-375 | light | 375 | 375 | khong |
+| ST-kr-du | mobile-375 | light | 375 | 375 | khong |
+| ST-so-kr-dang-tai | mobile-375 | light | 375 | 375 | khong |
+| ST-so-kr-loi | mobile-375 | light | 375 | 375 | khong |
+| ST-so-kr-du | mobile-375 | light | 375 | 375 | khong |
+| ST-kr-cu-moi-dang-tai | mobile-375 | light | 375 | 375 | khong |
+| ST-kr-cu-moi-loi | mobile-375 | light | 375 | 375 | khong |
+xong; 46 anh; tran ngang: 0; khong co ngan: 0
+phien-do: xong — mã 0
+__EXIT=0

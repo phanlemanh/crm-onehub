@@ -14,15 +14,15 @@ import {
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
-import { KaraRetry } from "@crm/ui/components/kara/state";
+import { ChoTaiNgan } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
 	type SimpleTableColumn,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
-import { Spinner } from "@crm/ui/components/spinner";
 import { TableCell } from "@crm/ui/components/table";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { useKhoMan } from "@crm/ui/hooks/use-kho-man";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
@@ -43,14 +43,28 @@ import { recordSheetMessages } from "@/lib/messages/record-sheet";
 import { NGAY_LUU_TRU } from "./record-actions";
 import { useOpenRecord, useRecordStack } from "./record-stack";
 
+export type HanhDongLoi = {
+	nhan: string;
+	onClick: () => void;
+	"data-nut"?: string;
+};
+
 export function KhungTaiLoi({
 	lyDo = "mat-ket-noi",
 	onRetry,
+	dangTai = false,
 	coDong = true,
+	tieuDe,
+	moTa,
+	hanhDong,
 }: {
 	lyDo?: LyDoLoi;
 	onRetry?: () => void;
+	dangTai?: boolean;
 	coDong?: boolean;
+	tieuDe?: string;
+	moTa?: string;
+	hanhDong?: HanhDongLoi;
 }) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
@@ -71,38 +85,91 @@ export function KhungTaiLoi({
 					}
 				: null;
 	return (
-		<div className="flex min-h-0 flex-1 items-center justify-center p-6">
-			<Empty
-				border="solid"
-				size="compact"
-				data-khung-tai-loi=""
-				data-ly-do={lyDo}
-			>
-				<EmptyHeader>
-					<EmptyTitle>{chu ? chu.tieuDe : m.misc.recordNotLoaded}</EmptyTitle>
-					<EmptyDescription>{chu ? chu.moTa : t.loiMoTa}</EmptyDescription>
-				</EmptyHeader>
-				{chu && coDong ? (
-					<EmptyContent>
-						<Button variant="outline" size="sm" onClick={close}>
-							{chu.dong}
-						</Button>
-					</EmptyContent>
-				) : null}
-				{!chu && onRetry ? (
-					<EmptyContent>
-						<KaraRetry onClick={onRetry} />
-					</EmptyContent>
-				) : null}
-			</Empty>
+		<div
+			className="flex min-h-0 flex-1 items-center justify-center p-6"
+			data-khung-tai-loi=""
+			data-ly-do={lyDo}
+		>
+			{!chu && onRetry && !hanhDong ? (
+				<VungTaiLoi
+					tieuDe={tieuDe ?? m.misc.recordNotLoaded}
+					moTa={moTa ?? t.loiMoTa}
+					onThuLai={onRetry}
+					dangTai={dangTai}
+				/>
+			) : (
+				<Empty border="solid" size="compact">
+					<EmptyHeader>
+						<EmptyTitle>
+							{tieuDe ?? (chu ? chu.tieuDe : m.misc.recordNotLoaded)}
+						</EmptyTitle>
+						<EmptyDescription>
+							{moTa ?? (chu ? chu.moTa : t.loiMoTa)}
+						</EmptyDescription>
+					</EmptyHeader>
+					{hanhDong ? (
+						<EmptyContent>
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={hanhDong.onClick}
+								data-nut={hanhDong["data-nut"]}
+							>
+								{hanhDong.nhan}
+							</Button>
+						</EmptyContent>
+					) : chu && coDong ? (
+						<EmptyContent>
+							<Button variant="outline" size="sm" onClick={close}>
+								{chu.dong}
+							</Button>
+						</EmptyContent>
+					) : null}
+				</Empty>
+			)}
 		</div>
 	);
 }
 
-export function RecordSheetFrame({
+export type DauDuLieu = { [key: `data-${string}`]: string | undefined };
+
+type TheCon =
+	| {
+			tabs: DetailSheetTab[];
+			tab: string;
+			onTabChange: (tab: string) => void;
+	  }
+	| { tabs?: never; tab?: never; onTabChange?: never };
+
+export type KhungNganProps = {
+	loading: boolean;
+	error: string | null;
+	errorView?: ReactNode;
+	loadingView?: ReactNode;
+	onRetry?: () => void;
+	lyDo?: LyDoLoi;
+	title: ReactNode;
+	description?: ReactNode;
+	note?: ReactNode;
+	media?: ReactNode;
+	actions?: ReactNode;
+	stats?: ReactNode;
+	than?: (theCon: ReactNode) => ReactNode;
+	vo?: DauDuLieu;
+	vungThan?: DauDuLieu;
+	cuonCaKhung?: boolean;
+} & TheCon;
+
+export function RecordSheetFrame(props: KhungNganProps) {
+	const { stack, close } = useRecordStack();
+	return <KhungNgan {...props} onBack={stack.length > 1 ? close : undefined} />;
+}
+
+export function KhungNgan({
 	loading,
 	error,
 	errorView,
+	loadingView,
 	onRetry,
 	lyDo,
 	title,
@@ -114,28 +181,36 @@ export function RecordSheetFrame({
 	tabs,
 	tab,
 	onTabChange,
+	than,
+	vo,
+	vungThan,
 	cuonCaKhung = false,
-}: {
-	loading: boolean;
-	error: string | null;
-	errorView?: ReactNode;
-	onRetry?: () => void;
-	lyDo?: LyDoLoi;
-	title: ReactNode;
-	description?: ReactNode;
-	note?: ReactNode;
-	media?: ReactNode;
-	actions?: ReactNode;
-	stats?: ReactNode;
-	tabs: DetailSheetTab[];
-	tab: string;
-	onTabChange: (tab: string) => void;
-	cuonCaKhung?: boolean;
-}) {
-	const { stack, close } = useRecordStack();
+	onBack,
+}: KhungNganProps & { onBack?: () => void }) {
 	const kho = useKhoMan();
 	const cuon = cuonCaKhung && kho === "dien-thoai";
-	const ngu = cuonCaKhung && kho === "chua-biet" ? "chua-biet" : cuon;
+	const ngu = vungThan
+		? true
+		: cuonCaKhung && kho === "chua-biet"
+			? "chua-biet"
+			: cuon;
+	const theCon = tabs ? (
+		<DetailSheetTabs tabs={tabs} value={tab} onValueChange={onTabChange} />
+	) : null;
+	const thanNgan = loading ? (
+		(loadingView ?? <ChoTaiNgan data-khung-xuong-ngan="" />)
+	) : error && errorView ? (
+		errorView
+	) : error ? (
+		<KhungTaiLoi lyDo={lyDo} onRetry={onRetry} />
+	) : than ? (
+		than(theCon)
+	) : (
+		<>
+			{stats}
+			{theCon}
+		</>
+	);
 
 	const khung = (
 		<>
@@ -145,26 +220,18 @@ export function RecordSheetFrame({
 				description={description}
 				note={note}
 				actions={actions}
-				onBack={stack.length > 1 ? close : undefined}
+				onBack={onBack}
 			/>
 
-			{loading ? (
-				<div className="flex min-h-0 flex-1 items-center justify-center">
-					<Spinner />
+			{vungThan ? (
+				<div
+					{...vungThan}
+					className="flex min-h-0 flex-1 flex-col overflow-y-auto"
+				>
+					{thanNgan}
 				</div>
-			) : error && errorView ? (
-				errorView
-			) : error ? (
-				<KhungTaiLoi lyDo={lyDo} onRetry={onRetry} />
 			) : (
-				<>
-					{stats}
-					<DetailSheetTabs
-						tabs={tabs}
-						value={tab}
-						onValueChange={onTabChange}
-					/>
-				</>
+				thanNgan
 			)}
 		</>
 	);
@@ -172,6 +239,7 @@ export function RecordSheetFrame({
 	return (
 		<CuonCaKhungContext.Provider value={ngu}>
 			<div
+				{...vo}
 				data-cuon-ca-khung={cuon ? "" : undefined}
 				className={
 					cuon ? "flex min-h-0 flex-1 flex-col overflow-y-auto" : "contents"

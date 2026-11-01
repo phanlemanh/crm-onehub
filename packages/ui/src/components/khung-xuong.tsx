@@ -15,6 +15,7 @@ const KHUNG_XUONG = {
 	hangSo: { oSo: 4 },
 	chiTiet: { doan: 3 },
 	bangHaiDong: { hang: 5 },
+	ngan: { oSo: 2, doan: 3 },
 } as const;
 
 const LOP_HANG_CONG_CU =
@@ -29,7 +30,8 @@ export type HinhKhungXuong =
 	| "tong-quan"
 	| "hang-so"
 	| "chi-tiet"
-	| "bang-hai-dong";
+	| "bang-hai-dong"
+	| "ngan";
 
 const day = (so: number, tien: string) =>
 	Array.from({ length: so }, (_, i) => `${tien}-${i}`);
@@ -159,6 +161,25 @@ function ChiTiet() {
 	);
 }
 
+function Ngan() {
+	return (
+		<div className="flex flex-col gap-4">
+			<div data-khung-hang="o-so" className="grid grid-cols-2 gap-3">
+				{day(KHUNG_XUONG.ngan.oSo, "o-so").map((k) => (
+					<Skeleton key={k} className="h-20 w-full" />
+				))}
+			</div>
+			<Skeleton data-khung-hang="thanh" className="h-3 w-full" />
+			{day(KHUNG_XUONG.ngan.doan, "doan").map((k) => (
+				<div data-khung-hang="doan" key={k} className="flex flex-col gap-2">
+					<Skeleton className="h-4 w-full" />
+					<Skeleton className="h-4 w-10/12" />
+				</div>
+			))}
+		</div>
+	);
+}
+
 function XuongPhaiHang() {
 	return (
 		<>
@@ -265,6 +286,7 @@ function Than({ hinh, cot }: { hinh: HinhKhungXuong; cot: 1 | 2 }) {
 	if (hinh === "the") return <The cot={cot} />;
 	if (hinh === "tong-quan") return <TongQuan />;
 	if (hinh === "hang-so") return <HangSo />;
+	if (hinh === "ngan") return <Ngan />;
 	return <ChiTiet />;
 }
 
@@ -301,6 +323,17 @@ export function KhungXuong({
 			<span role="status" aria-live="polite" className="sr-only">
 				{nhan ?? msg.khungXuong.dangTai}
 			</span>
+		</div>
+	);
+}
+
+export function ChoTaiNgan({
+	nhan,
+	...dau
+}: { nhan?: string } & { [key: `data-${string}`]: string | undefined }) {
+	return (
+		<div {...dau} aria-busy="true" className="min-h-0 flex-1 px-5 py-4">
+			<KhungXuong hinh="ngan" nhan={nhan} />
 		</div>
 	);
 }

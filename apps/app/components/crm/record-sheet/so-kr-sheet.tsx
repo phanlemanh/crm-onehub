@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { Icon } from "@crm/ui/components/icon";
+import { ChoTaiNgan } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -24,7 +25,6 @@ import { chuSo, hienPhamVi, KHOA_NGUON } from "@/app/(app)/[slug]/okr/nguon-so";
 import {
 	DetailSheetBody,
 	DetailSheetEmpty,
-	DetailSheetHeader,
 	DetailSheetSection,
 	DetailSheetStat,
 	DetailSheetStats,
@@ -32,6 +32,7 @@ import {
 import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { KhungTaiLoi, RecordSheetFrame } from "./record-parts";
 import { useNgaySo, useRecordStack } from "./record-stack";
 
 type BanGhi = RouterOutputs["okr"]["banGhiChiSo"];
@@ -459,6 +460,12 @@ function ThanSoKr({ so }: { so: SoKr }) {
 				</DetailSheetSection>
 			</DetailSheetBody>
 		);
+	return <NoiDungSoDaTai so={so} dl={dl} />;
+}
+
+function NoiDungSoDaTai({ so, dl }: { so: SoKr; dl: NonNullable<SoKr["dl"]> }) {
+	const locale = useLocale();
+	const t = okrSoMessages(locale).trangThai.so;
 	return (
 		<>
 			<SoDaChup dl={dl} />
@@ -522,25 +529,36 @@ export function NoiDungSoKr({ keyResultId }: { keyResultId: string }) {
 }
 
 export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
-	const t = okrSoMessages(useLocale()).trangThai.so;
-	const { stack, close } = useRecordStack();
+	const s = okrSoMessages(useLocale());
+	const t = s.trangThai.so;
 	const so = useSoKr(keyResultId);
-	const { dl } = so;
+	const { dl, loi } = so;
 
 	return (
-		<div
-			className="contents"
-			data-so-kr-sheet={keyResultId}
-			data-trang-thai={so.trangThai}
-			data-ngay-so={so.ngay}
-			data-dang-tai={so.dangTai ? "" : undefined}
-		>
-			<DetailSheetHeader
-				title={dl ? <span translate="no">{dl.tenKr}</span> : t.tieuDe}
-				description={dl ? <DinhNghia dl={dl} /> : undefined}
-				onBack={stack.length > 1 ? close : undefined}
-			/>
-			<ThanSoKr so={so} />
-		</div>
+		<RecordSheetFrame
+			vo={{
+				"data-so-kr-sheet": keyResultId,
+				"data-trang-thai": so.trangThai,
+				"data-ngay-so": so.ngay ?? undefined,
+				"data-dang-tai": so.dangTai ? "" : undefined,
+			}}
+			loading={!loi && (!dl || so.dangCho)}
+			error={loi ? loi.message || t.loi : null}
+			errorView={
+				<KhungTaiLoi
+					tieuDe={t.loi}
+					moTa={loi?.message}
+					hanhDong={{
+						nhan: s.thuLai,
+						onClick: so.thuLai,
+						"data-nut": "thu-lai",
+					}}
+				/>
+			}
+			loadingView={<ChoTaiNgan nhan={t.dangTai} />}
+			title={dl ? <span translate="no">{dl.tenKr}</span> : t.tieuDe}
+			description={dl ? <DinhNghia dl={dl} /> : undefined}
+			than={() => (dl ? <NoiDungSoDaTai so={so} dl={dl} /> : null)}
+		/>
 	);
 }
