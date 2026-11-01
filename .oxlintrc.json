@@ -103,6 +103,14 @@
 		},
 		{
 			"files": [
+				"apps/app/components/crm/record-sheet/**"
+			],
+			"rules": {
+				"onehub/ngan-trong-khung": "error"
+			}
+		},
+		{
+			"files": [
 				"packages/telemetry/src/allowlist.ts"
 			],
 			"rules": {

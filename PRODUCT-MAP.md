@@ -13,7 +13,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>172 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>195 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>196 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
 ```
 
@@ -166,6 +166,7 @@ flowchart TD
 - OKR và tổ chức vá — dựng cây và đặt OKR không vấp (R1d) (`okr-to-chuc-va`)
 - Chín hồ sơ đã ký thôi bị đòi ghim lại sau mọi PR chỉ vì một mục paths trỏ vào tệp đã đổi tên (`paths-chet-chin-ho-so`)
 - Quyết một góp ý của Kara mà máy chủ từ chối vì lý do cố định thì người dùng thấy đúng lý do theo ngôn ngữ trang, không phải câu «thử lại sau ít phút» (`quyet-gop-y-noi-dung-ly-do`)
+- Một ngăn bản ghi dựng ngoài khung chung làm bài kiểm của kho đỏ và gọi đúng tên tệp, còn vòng chạm ngăn bản ghi có ảnh ngăn mới đặt cạnh ngăn deal (`rang-giu-khung-ngan`)
 - Một màn đặt lọc ngoài hàng công cụ duy nhất — chip trong Card, nhóm gập dưới bảng, ToggleGroup spacing={0} — làm bài kiểm đỏ và gọi tên tệp (`rang-hang-cong-cu`)
 - Tác nhân CRM và Trợ lý Kho tài liệu dùng model mặc định rẻ hơn mà không tụt chất lượng trên bộ đo (`re-mo-hinh-mac-dinh`)
 - Toàn cảnh › Theo đơn vị có cách xem Sơ đồ — mỗi đơn vị một thẻ, đường nối theo căn chỉnh thật, lọc «Cần chú ý», mở thẻ ngay trên sơ đồ, thu gọn khi hơn 12 đơn vị (`so-do-can-chinh-don-vi`)
