@@ -31,6 +31,7 @@ const CAU_TAO_LOI =
 const CAU_NHANH_LOI =
 	"Không tải được đồng tiền báo cáo, nên chưa lưu được số tiền. Bỏ trống số tiền để tạo thoả thuận, hoặc thử lại.";
 const UNG_VIEN = ["EUR", "VND", "JPY"];
+const DONG_BAO_CAO = "VND";
 const SO = "150.000.000";
 const CENTS = 15_000_000_000;
 const CHO_DONG = 20_000;
@@ -100,21 +101,47 @@ async function doc(duong, vao) {
 const thietLap = await doc("currency.settings");
 if (thietLap.loi)
 	await khongDo(`KHONG DO DUOC: tien de thieu — ${thietLap.loi}`);
-const baoCao = thietLap.gia.reportingCurrency;
+const baoCaoGoc = thietLap.gia.reportingCurrency;
+let baoCao = baoCaoGoc;
+
+async function traBaoCao() {
+	if (baoCao === baoCaoGoc) return;
+	await goiApiTao(cookie, "currency.setReportingCurrency", {
+		currency: baoCaoGoc,
+	});
+}
+
+async function khongDoTraLai(...dong) {
+	await traBaoCao();
+	await khongDo(...dong);
+}
+
 if (baoCao === "USD") {
-	await khongDo(
-		"KHONG DO DUOC: dong tien bao cao la USD — khong phan biet duoc voi ban cu luon doan USD",
-	);
+	const doi = await goiApiTao(cookie, "currency.setReportingCurrency", {
+		currency: DONG_BAO_CAO,
+	});
+	if (doi.loi)
+		await khongDo(`KHONG DO DUOC: tien de thieu — ${doi.loi}`);
+	baoCao = DONG_BAO_CAO;
+	const doc2 = await doc("currency.settings");
+	if (doc2.loi || doc2.gia.reportingCurrency !== DONG_BAO_CAO) {
+		await khongDoTraLai(
+			`KHONG DO DUOC: doi dong tien bao cao sang ${DONG_BAO_CAO} khong an — ${doc2.loi ?? doc2.gia.reportingCurrency}`,
+		);
+	}
+	console.log(`tien de: dong tien bao cao ${baoCaoGoc} -> ${DONG_BAO_CAO}`);
 }
 const dongChon = UNG_VIEN.find((ma) => ma !== baoCao && ma !== "USD");
 
 const toi = await doc("users.me");
-if (toi.loi) await khongDo(`KHONG DO DUOC: tien de thieu — ${toi.loi}`);
+if (toi.loi) await khongDoTraLai(`KHONG DO DUOC: tien de thieu — ${toi.loi}`);
 const tenCongTy = `Cong ty ${MA}`;
 const congTy = await goiApiTao(cookie, "companies.create", { name: tenCongTy });
-if (congTy.loi) await khongDo(`KHONG DO DUOC: tien de thieu — ${congTy.loi}`);
+if (congTy.loi)
+	await khongDoTraLai(`KHONG DO DUOC: tien de thieu — ${congTy.loi}`);
 
 async function donDep() {
+	await traBaoCao();
 	const tao = await doc("deals.list", { q: MA, pageSize: 50 });
 	const ids = (tao.gia?.rows ?? []).map((r) => r.id);
 	if (ids.length > 0) {
