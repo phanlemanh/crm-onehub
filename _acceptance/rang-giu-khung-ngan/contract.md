@@ -5,7 +5,7 @@ slug: rang-giu-khung-ngan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-11-01-rang-giu-khung-ngan-design.md
 veto_state: mo
 veto_opened_at: 2026-11-01T05:50:00Z
@@ -85,3 +85,6 @@ mục «Vấn đề». Quan hệ hai tệp (ngăn mở `Sheet` chồng lên ngă
 
 - Vòng chạm `design/patterns/ngan-ban-ghi.md` và bộ luật oxlint: hồ sơ đã ký có `paths` trên các tệp ấy được ghim lại
   trong cùng PR theo kết quả `pre-merge-check`.
+- Ngoài-1 (máy định tuyến 2026-11-01, đề xuất S4 known-limits): Một người viết ngăn mới vẫn có thể lách luật cấm bằng cách nhập cả bộ thành phần hoặc xuất lại, và không ai bị báo. Ngoài ra, một câu nhập chỉ lấy kiểu có thể bị báo oan. — `tools/oxlint/onehub/rules/ngan-trong-khung.ts`
+- Ngoài-2 (máy định tuyến 2026-11-01, đề xuất S4 known-limits): Nếu một ngăn nhập thành phần cấm dưới tên khác, luật và bài kiểm sẽ đòi hai điều ngược nhau, và người viết bị kẹt giữa hai thông báo đỏ. Hiện chưa tệp nào gặp. — `apps/app/test/khung-ngan.spec.ts`
+- Ngoài-3 (máy định tuyến 2026-11-01, đề xuất S4 known-limits): Bài kiểm từng loại ngăn có thể báo xanh dù một ngăn đã thoát khỏi khung chung, nhưng ca quét toàn bộ vẫn bắt được. Người dùng không thấy ảnh hưởng. — `apps/app/test/khung-ngan.spec.ts`
