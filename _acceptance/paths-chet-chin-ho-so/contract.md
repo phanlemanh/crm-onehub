@@ -5,7 +5,7 @@ slug: paths-chet-chin-ho-so
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-10-31-paths-chet-chin-ho-so-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-31
@@ -60,3 +60,5 @@ bảng sửa `_acceptance/paths-chet-chin-ho-so/rang/bang-sua.json`.
 
 - Sửa `evals.yaml` của hồ sơ đã ký làm chính chín hồ sơ này hoá cũ một lần; lượt ghim lại sau F37 (AC-7) gỡ nó.
 - Hàng F38 đứng trên F37 (luật 38): S4 và lượt ghim chạy sau khi F37 gộp.
+- Ngoài-1 (máy định tuyến 2026-11-01, đề xuất S4 known-limits): Công cụ dùng một lần để áp bảng sửa có thể làm hỏng tệp nếu ai đó chạy lại với bảng khác. Chín hồ sơ hiện tại không bị ảnh hưởng. — `_acceptance/paths-chet-chin-ho-so/rang/ap-sua.mjs`
+- Ngoài-2 (máy định tuyến 2026-11-01, đề xuất S4 known-limits): Thước kiểm sổ quyết định sẽ không bắt được trường hợp một dòng bị xoá trắng. Sổ hiện tại vẫn đúng và không mất dòng nào. — `_acceptance/paths-chet-chin-ho-so/rang/so-hong.mjs`
