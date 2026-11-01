@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 56f45c7d29aaf29ec98a1e0e9e5d7216f41c8651
+verified_commit: a2bc8af341e88824eac6005b789a736a1c8c8e28
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -152,3 +152,7 @@ Round 2: vẽ lại bản đồ sản phẩm bằng kit 2.26 và siết `mot-ngu
 ### Re-pin lần 1 — 2026-10-29, do hoá cũ do gộp onehub c16e13c9c (VK19); thước sửa theo V1-65
 run_id: repin-20261029T140608Z-86679
 sha: 56f45c7d29aaf29ec98a1e0e9e5d7216f41c8651 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E4, E5, E8 · thay bởi hồ sơ đã ký: E3→che-do-soan-bo-okr#AC-7, E4→che-do-soan-bo-okr#AC-7, E5→che-do-soan-bo-okr#AC-7, E8→che-do-soan-bo-okr#AC-7 · AC không có chốt máy: AC-3, AC-4, AC-5, AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-31, do F38 sửa paths chết + K-1 lai-ra-man trả Date; ghim lại sau F37 và #604 (onehub 6aa709e58)
+run_id: repin-20261031T151643Z-23675
+sha: a2bc8af341e88824eac6005b789a736a1c8c8e28 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E4, E5, E8 · thay bởi hồ sơ đã ký: E3→che-do-soan-bo-okr#AC-7, E4→che-do-soan-bo-okr#AC-7, E5→che-do-soan-bo-okr#AC-7, E8→che-do-soan-bo-okr#AC-7 · AC không có chốt máy: AC-3, AC-4, AC-5, AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

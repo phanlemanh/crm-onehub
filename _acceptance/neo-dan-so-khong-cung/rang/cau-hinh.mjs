@@ -38,4 +38,5 @@ export const DO_NEO = Object.freeze({
 	lenhCong: ["cl_tieng_viet_den_man", "cl_dan_so"],
 	mauPhamVi: "packages/ui/src/components/button.tsx",
 	nhanhChinh: "origin/onehub",
+	gopHoSo: "679b5164662723a0d3fc74ee75581cb4db398613",
 });

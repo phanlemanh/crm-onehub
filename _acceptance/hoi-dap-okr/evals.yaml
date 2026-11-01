@@ -95,6 +95,7 @@ evals:
   - id: E9j
     criterion: AC-9
     executor: judgment
+    paths: [_acceptance/hoi-dap-okr/evidence/do-hoi-dap.md, _acceptance/hoi-dap-okr/contract.md]
     inputs: [_acceptance/hoi-dap-okr/evidence/do-hoi-dap.md, _acceptance/hoi-dap-okr/contract.md]
     question: "Đọc bảng do-hoi-dap.md. Với từng câu, so câu trả lời dựng với kỳ vọng đã khai và với ảnh chụp giá trị Mục tiêu, KR trong chính dòng đó: phiếu «đúng ý» của hội đồng ZDR có hợp lý không (không lạc đề, không né khi ảnh chụp có dữ liệu, không bịa điều ảnh chụp không có)? Có câu nào hội đồng chấm đúng ý mà dòng của nó cho thấy sai không? Dòng tổng có đạt ba ngưỡng của AC-9 trong contract.md không?"
     evidence_required: [panel_votes, rationale]
@@ -127,7 +128,7 @@ evals:
     cmd: config:executors.test.hdo_soan_giu
     expected: "exit 0; các bài soạn có sẵn của agent-okr (goi-soan, app-rieng, nop-ban-nhap) và cua-okr.spec.ts xanh không sửa kỳ vọng — tệp bài cũ không đổi so merge-base (git diff --quiet); thêm ca: phiên okr-soan nạp lời dặn soạn và gói bối cảnh, phiên okr-hoi không nạp chữ nào của lời dặn soạn (so một câu mốc của instructions soạn). Chiều đỏ: nạp lời dặn soạn cho mọi phiên thì ca okr-hoi đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/agent-okr/agent/instructions/**, apps/agent-okr/agent/instructions.md, apps/agent-okr/test/**, apps/app/test/cua-okr.spec.ts]
+    paths: ["apps/agent-okr/agent/instructions/**", "apps/agent-okr/test/**", apps/app/test/cua-okr.spec.ts]
 
   - id: E11c
     criterion: AC-11
