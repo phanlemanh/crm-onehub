@@ -5,7 +5,7 @@ slug: rang-dau-hieu-ve-tay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-11-01-rang-dau-hieu-ve-tay-design.md
 veto_state: mo
 veto_opened_at: 2026-11-01T07:50:00Z
@@ -76,3 +76,5 @@ là Never vòng này (không dấu hiệu cú pháp).
 ## Notes
 
 - `tieu-de` 38 chỗ khác kiểm kê 31/10 (34): kiểm kê đếm chuỗi `className="…"`; luật đếm mọi thuộc tính `className`.
+- Ngoài-1 (máy định tuyến 2026-11-01, đề xuất S4 known-limits): Nếu ai đó gõ sai một dòng trong danh sách nợ cũ, kiểm tra chất lượng khi đẩy mã vẫn xanh và dòng đó lặng lẽ bị bỏ qua. Chỉ bài kiểm riêng của danh sách mới phát hiện ra. — `tools/oxlint/onehub/rules/khong-ve-tay.ts`
+- Ngoài-2 (máy định tuyến 2026-11-01, đề xuất S4 known-limits): Một dòng nợ khai số chỗ bằng chữ hoặc giá trị sai kiểu vẫn có thể được chấp nhận thay vì bị từ chối. Danh sách nợ có thể lỏng hơn mức người viết luật mong muốn. — `tools/oxlint/onehub/shared/no-ve-tay.ts`
