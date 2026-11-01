@@ -1,0 +1,124 @@
+schema_version: 1
+slug: rang-dau-hieu-ve-tay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.bk5_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - ".oxlintrc.json"
+      - "_acceptance/rang-dau-hieu-ve-tay/rang/luat-lint.mjs"
+    expected: |
+      exit 0; in «DAT tat ca». Răng đọc lệnh script «lint:slop» từ package.json và chạy đúng lệnh ấy trong bản sao tạm.
+      Ma trận viết trước mười lăm ca, tệp tiêm apps/app/components/zz-tiem.tsx, chuỗi thay ghim bằng chữ trong răng (không
+      đọc từ luật): table→«DataTable», clipboard→«CopyValue», tieu-de-h2 và tieu-de-h4→«SectionHeading», chip-dinh→«Hàng
+      công cụ», alert-dialog→«ConfirmDialog», divide-y×{tran, cn-mot, cn-hai, template, ba-ngoi}→«Item», cham×{tran,
+      cn-mot, cn-hai (size-2 và rounded-full ở hai chuỗi), template, ba-ngoi}→«StatusIndicator», hang-cung-tep (const
+      cùng tệp mang divide-y)→«Item». Mỗi ca «do: <ca>» đúng một dòng khong-ve-tay chứa «zz-tiem.tsx:<dòng tiêm>» và
+      chuỗi thay (15 DAT, số ca = số phần tử). Tự kiểm: «tu-kiem: tat luat thi ca table khong con dong».
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.bk5_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - "_acceptance/rang-dau-hieu-ve-tay/rang/luat-lint.mjs"
+    expected: |
+      Mười một ca gần dạng, mỗi ca «im: <ca>» 0 dòng: h2-khong-class, toggle-khong-spacing, spacing-1, size2-khong-tron,
+      size25-tron, divide-y-0, divide-x, Table-hoa, navigator-share, confirm-dialog, hang-tep-khac (className={X} với X
+      nhập từ tệp khác).
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.bk5_luat
+    paths:
+      - ".oxlintrc.json"
+      - "tools/oxlint/onehub/**"
+      - "_acceptance/rang-dau-hieu-ve-tay/rang/luat-lint.mjs"
+    expected: |
+      Bốn ca «im-cho: <thư mục>», mỗi ca một tệp chứa cả chín dấu hiệu của E1: apps/app/app/proto/, apps/app/test/,
+      packages/ui/src/, docs/ — mỗi ca 0 dòng khong-ve-tay. Đối chứng cùng lượt: cùng tệp ở apps/app/components/ đỏ đủ 9
+      dòng («doi-chung: chin dau hieu trong mot tep thi 9 dong»).
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bk5_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - "_acceptance/rang-dau-hieu-ve-tay/rang/luat-lint.mjs"
+    expected: |
+      Trên tệp nợ apps/app/components/landing/product-shot/companies-page.tsx (table, so 1): «no-bang: dung so thi im» 0
+      dòng; «no-vuot: them mot table thi do» — đúng 2 dòng khong-ve-tay chứa «vượt nợ cũ»; «no-thieu: bo table thi do» —
+      đúng 1 dòng chứa «nợ cũ khai 1, còn 0»; «no-dau-hieu-khac: them navigator.clipboard thi do nhu cho moi» — đúng 1
+      dòng chứa «CopyValue», không chứa «vượt nợ cũ».
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.bk5_quet
+    paths:
+      - "apps/app/test/dau-hieu-ve-tay.spec.ts"
+      - "tools/oxlint/onehub/shared/no-ve-tay.ts"
+      - "tools/oxlint/onehub/rules/khong-ve-tay-no-cu.json"
+    expected: |
+      Năm ca, mỗi ca dựng từ chữ JSON thật đã sửa một chỗ, mảng lỗi đúng bằng một dòng: "tep-khong-co" →
+      ["no ve tay khong-co.tsx/table: tep khong co"]; "dau-hieu-la" → ["no ve tay companies-page.tsx/bang: dau hieu la"];
+      "so-sai" → ["no ve tay companies-page.tsx/table: so khong phai so nguyen duong"]; "thieu-ly-do" → ["no ve tay
+      companies-page.tsx/table: thieu ly do"]; "trung-cap" → ["no ve tay companies-page.tsx/table: trung cap"].
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.bk5_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - ".oxlintrc.json"
+      - "apps/app/**"
+      - "_acceptance/rang-dau-hieu-ve-tay/rang/luat-lint.mjs"
+    expected: |
+      «cay-that: bun run lint:slop tren cay that khong dong khong-ve-tay nao» (chạy ở gốc cây thật, đếm 0).
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.bk5_quet
+    paths:
+      - "apps/app/test/dau-hieu-ve-tay.spec.ts"
+      - "tools/oxlint/onehub/rules/khong-ve-tay-no-cu.json"
+      - "tools/oxlint/onehub/shared/no-ve-tay.ts"
+    expected: |
+      Ca "cay-that": danh sách thật → mảng lỗi rỗng; 51 dòng; tổng so theo dấu hiệu bằng đúng bảng viết trước
+      {tieu-de: 38, chip-dinh: 10, alert-dialog: 11, clipboard: 8, divide-y: 9, cham: 2, table: 1} (so cả bảng).
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bk5_luat
+    paths:
+      - "tools/oxlint/onehub/rules/khong-ve-tay.ts"
+      - "docs/design.md"
+      - "_acceptance/rang-dau-hieu-ve-tay/rang/luat-lint.mjs"
+    expected: |
+      Răng tách bảng «### Dấu hiệu vẽ tay» của docs/design.md thành hàng (cột Vẽ tay → cột Dùng) và dùng ánh xạ viết trước
+      mã → hàng: table→«`<table>`», clipboard→«`navigator.clipboard`», tieu-de→hai hàng «`<h1>`, `<h2>`» và «`<h3>`,
+      `<h4>`», divide-y→«`<ul className="divide-y …">`», cham→«chấm `size-2 rounded-full bg-*`», chip-dinh→«`ToggleGroup
+      spacing={0}`», alert-dialog→«`AlertDialog` ráp tay». Bảy ca «thay-dung-hang: <mã>»: mọi tên trong backtick của chuỗi
+      thay (đọc từ thông điệp luật trên bản sao) thuộc tập tên backtick ở cột Dùng của đúng hàng; hàng không có tên
+      backtick thì chuỗi thay chứa nguyên chữ cột Dùng. Chiều đỏ: «doi-cheo: doi chuoi thay table va clipboard cho nhau thi
+      thay-dung-hang do» — trên bản sao luật đổi chéo, phép đo trả TRUOT cho cả hai mã.
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.bk5_app_test
+    paths:
+      - "apps/app/package.json"
+      - "apps/app/test/dau-hieu-ve-tay.spec.ts"
+    expected: |
+      exit 0; «cd apps/app && bun test -t 'dau-hieu-ve-tay cay-that'» (cùng lệnh bun test của script test, không đưa đường
+      tệp) in «1 pass» và «0 fail»; bài ngoài glob thì «0 pass» — đỏ.
