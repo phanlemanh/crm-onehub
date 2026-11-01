@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 4d0c9c01179bff94bf64fb609993ace54132b66a
-human_signoff:
+human_signoff: Phan Le Manh 2026-11-01 — ký Cổng 2 trong cửa veto (B8 dọn dẹp 31/10) trên verdict PASS 3/3 eval, ghim lại repin-20261101T062656Z-16061. Đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: khoa-rieng-dien-node

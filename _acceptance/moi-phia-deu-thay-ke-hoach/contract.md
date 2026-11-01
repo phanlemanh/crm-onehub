@@ -5,7 +5,7 @@ slug: moi-phia-deu-thay-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: machine-cleared
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-22-moi-phia-deu-thay-ke-hoach-design.md
 approved_by:
 approved_at:
