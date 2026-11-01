@@ -1,0 +1,214 @@
+schema_version: 1
+slug: rang-giu-khung-ngan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.bk2_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - ".oxlintrc.json"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "apps/app/components/crm/record-sheet/**"
+      - "_acceptance/rang-giu-khung-ngan/rang/luat-lint.mjs"
+    expected: |
+      exit 0; in «DAT tat ca». Răng đọc lệnh của script «lint:slop» từ package.json (không chép tay) và chạy đúng lệnh ấy
+      trong bản sao tạm. DAT «do-header: deal-sheet nhap DetailSheetHeader thi do» — mã thoát khác 0, đầu ra có đúng một
+      dòng chứa «ngan-trong-khung», chứa «deal-sheet.tsx:<dòng của câu nhập tiêm>» (số dòng tính trước khi tiêm),
+      «DetailSheetHeader» và «RecordSheetFrame» (thay_cho của khuôn). CHIỀU ĐỎ ghim: luật không đăng ký hay không bật cho
+      thư mục ngăn thì ca TRUOT «khong co dong ngan-trong-khung».
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.bk2_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "_acceptance/rang-giu-khung-ngan/rang/luat-lint.mjs"
+    expected: |
+      Ma trận viết trước tám cặp (tên → thay): DetailSheetHeader → RecordSheetFrame, Spinner → ChoTaiNgan, VungTaiLoi →
+      KhungTaiLoi, Skeleton → ChoTaiNgan, Sheet → RecordSheetFrame, SheetContent → RecordSheetFrame, Dialog → «khối soạn
+      trong ngăn, ConfirmDialog hay PickListDialog», DialogContent → cùng chuỗi Dialog. Mỗi cặp một ca «ma-tran: <tên>»,
+      đúng một dòng ngan-trong-khung chứa tên và chuỗi thay (8 DAT, số ca = số phần tử). Đối chứng cùng tệp: «gan-ten:
+      ConfirmDialog, PickListDialog, DetailSheetSection, SkeletonRow im» — 0 dòng.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.bk2_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "_acceptance/rang-giu-khung-ngan/rang/luat-lint.mjs"
+    expected: |
+      DAT «khuon-them: them KhoiThu vao cam_ngoai_khuon thi KhoiThu do» (bản sao khuôn thêm tên, tệp nhập KhoiThu → một
+      dòng gọi KhoiThu). DAT «khuon-bot: bo Spinner thi Spinner im» (bản sao bỏ Spinner, deal-sheet nhập Spinner → 0 dòng).
+      DAT «khong-danh-sach-trong-ma: tools/oxlint/onehub/rules/ngan-trong-khung.ts khong chua ten khoi nao» — tệp luật
+      không chứa chuỗi nào trong {DetailSheetHeader, Spinner, VungTaiLoi, Skeleton, Sheet", Dialog", RecordSheetFrame,
+      ChoTaiNgan, KhungTaiLoi} (Sheet", Dialog" = tên đứng riêng trong nháy).
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.bk2_quet
+    paths:
+      - "apps/app/test/khung-ngan.spec.ts"
+      - "tools/oxlint/onehub/shared/**"
+      - "design/patterns/ngan-ban-ghi.md"
+    expected: |
+      Ca "khu-hoi-yaml": bộ đọc tự viết và Bun.YAML.parse trên frontmatter của khuôn thật cho bằng nhau sâu ở doi_tuong,
+      khuon.nhap, nhan_dien, mau_dang_chay.tep, cam_ngoai_khuon, cam_ho, thay_cho, ngoai_le (dàn phẳng thành cặp tệp/khối).
+      Ca "danh-sach-khoi": chữ khuôn thật sửa «cam_ngoai_khuon: [...]» thành danh sách dạng khối «- Spinner» → bộ đọc ném
+      lỗi chứa "cam_ngoai_khuon". Ca "thieu-thay": chữ khuôn thật bỏ dòng thay_cho của Spinner → lỗi chứa
+      "thay_cho thieu Spinner".
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bk2_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "_acceptance/rang-giu-khung-ngan/rang/luat-lint.mjs"
+    expected: |
+      DAT «khung-mien: record-parts.tsx im» (cây thật: 0 dòng cho record-parts.tsx dù tệp nhập DetailSheetHeader,
+      VungTaiLoi). DAT «khung-doi: doi khuon.nhap sang deal-sheet thi record-parts do, deal-sheet nhap DetailSheetHeader
+      im» — record-parts.tsx có dòng gọi DetailSheetHeader.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.bk2_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "_acceptance/rang-giu-khung-ngan/rang/luat-lint.mjs"
+    expected: |
+      DAT «ngoai-le-dung-cap: kr-sheet nhap Skeleton im, nhap them Spinner thi Spinner do» (đúng một dòng, gọi Spinner).
+      DAT «ngoai-le-thieu-ly-do: xoa ly_do dong kr-sheet thi Skeleton do».
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.bk2_quet
+    paths:
+      - "apps/app/test/khung-ngan.spec.ts"
+      - "apps/app/test/lib/**"
+      - "tools/oxlint/onehub/shared/**"
+      - "design/patterns/ngan-ban-ghi.md"
+    expected: |
+      Ca "thieu-ly-do": bộ đọc tiêm khuôn có một dòng ngoai_le ly_do rỗng → mảng lỗi đúng bằng
+      ["ngoai_le kr-sheet.tsx/Skeleton: thieu ly do"]. Đối chứng: khuôn thật → không lỗi ngoai_le nào.
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.bk2_quet
+    paths:
+      - "apps/app/test/khung-ngan.spec.ts"
+      - "apps/app/test/lib/**"
+      - "tools/oxlint/onehub/shared/**"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "apps/app/components/crm/record-sheet/**"
+    expected: |
+      Ba ca, mỗi ca mảng lỗi đúng bằng một dòng: "tep-khong-co" → ["ngoai_le khong-co.tsx/Spinner: tep khong co"];
+      "khoi-khong-cam" → ["ngoai_le so-kr-sheet.tsx/DetailSheetEmpty: khoi khong cam"]; "ngoai-le-thua" (bộ đọc tiêm
+      quick-add.tsx bỏ câu nhập Spinner) → ["ngoai_le quick-add.tsx/Spinner: ngoai le thua"].
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.bk2_quet
+    paths:
+      - "apps/app/test/khung-ngan.spec.ts"
+      - "apps/app/test/lib/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "design/patterns/ngan-ban-ghi.md"
+    expected: |
+      Ca "kind-thua": host tiêm thêm nhánh kind === "hop-dong" → lỗi chứa "host dang ky kind hop-dong khong co trong
+      khuon". Ca "kind-thieu": khuôn tiêm thêm kind "hop-dong" → lỗi "khuon co kind hop-dong ma host khong dang ky". Ca
+      "ngoai-khung": deal-sheet.tsx tiêm thay gốc RecordSheetFrame bằng DetailSheetHeader → lỗi "deal-sheet.tsx: goc JSX
+      la DetailSheetHeader, khong phai khung". Ma trận dương: bảy kind thật, mỗi kind một ca «khung: <kind>» xanh (7 ca).
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.bk2_luat
+    paths:
+      - ".oxlintrc.json"
+      - "tools/oxlint/onehub/**"
+      - "_acceptance/rang-giu-khung-ngan/rang/luat-lint.mjs"
+    expected: |
+      Ba ca chiều im, cùng câu nhập DetailSheetHeader: «im: docs/», «im: _acceptance/», «im: apps/app/components/ngoai» —
+      mỗi ca 0 dòng ngan-trong-khung. Đối chứng cùng lượt: cùng câu nhập trong thư mục ngăn đỏ (ca E1).
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.bk2_luat
+    paths:
+      - "tools/oxlint/onehub/**"
+      - ".oxlintrc.json"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "apps/app/components/crm/record-sheet/**"
+      - "_acceptance/rang-giu-khung-ngan/rang/luat-lint.mjs"
+    expected: |
+      DAT «cay-that: bun run lint:slop tren cay that khong dong ngan-trong-khung nao» (chạy bun run lint:slop ở gốc cây
+      thật, không bản sao; đếm dòng chứa «ngan-trong-khung» = 0).
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.bk2_quet
+    paths:
+      - "apps/app/test/khung-ngan.spec.ts"
+      - "apps/app/test/lib/**"
+      - "tools/oxlint/onehub/shared/**"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "apps/app/components/crm/record-sheet/**"
+    expected: |
+      Ca "cay-that": cây thật → mảng lỗi rỗng; ngoai_le có 14 dòng trên 14 tệp; tập cặp (tệp, khối) bằng đúng tập viết trước
+      20 cặp (so cả tập): kr-sheet/Skeleton, so-kr-sheet/Skeleton, company-plans/Spinner, contact-plans/Skeleton,
+      contact-plans/VungTaiLoi, khoi-cap-nhat-kr/Spinner, kr-bang-chung/Dialog, kr-bang-chung/Spinner, lich-su-kr/Skeleton,
+      lich-su-kr/VungTaiLoi, objective-duyet/Dialog, objective-duyet/Spinner, objective-hien-thi/Dialog,
+      objective-hien-thi/Spinner, objective-trao-doi/Skeleton, objective-trao-doi/Spinner, plan-steps/VungTaiLoi,
+      quick-add/Spinner, kr-viec/Skeleton, objective-dien-bien/Skeleton.
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.bk2_quet
+    paths:
+      - "apps/app/test/khung-ngan.spec.ts"
+      - "design/patterns/ngan-ban-ghi.md"
+    expected: |
+      Ca "sheet-dialog": cam_ngoai_khuon của khuôn thật chứa "Sheet" và "Dialog"; mỗi tệp trong {kr-bang-chung.tsx,
+      objective-duyet.tsx, objective-hien-thi.tsx} có dòng ngoai_le với khối Dialog và ly_do khác rỗng.
+
+  - id: E13
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.bk2_quet
+    paths:
+      - "apps/app/test/khung-ngan.spec.ts"
+      - "docs/proto.md"
+      - "design/patterns/ngan-ban-ghi.md"
+    expected: |
+      Ca "proto-mau": docs/proto.md có một dòng chứa cả mau_dang_chay.tep của khuôn và "design/patterns/ngan-ban-ghi.md".
+      Ca "proto-lech": khuôn tiêm mau_dang_chay.tep = ".../contact-sheet.tsx" → lỗi đúng bằng ["docs/proto.md: dong man
+      mau lech khuon"]. Bản ghi tiêm dựng bằng cách sửa chữ đọc từ khuôn thật.
+
+  - id: E14
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.bk2_app_test
+    paths:
+      - "apps/app/package.json"
+      - "apps/app/test/khung-ngan.spec.ts"
+    expected: |
+      exit 0; lệnh «cd apps/app && bun test -t 'khung-ngan proto-mau'» (cùng lệnh bun test mà script «test» của apps/app
+      chạy, không đưa đường tệp; tên đầy đủ gồm describe «khung-ngan» của bài) in «1 pass» và «0 fail». Bài không nằm
+      trong glob của bun test thì in «0 pass» — đỏ.

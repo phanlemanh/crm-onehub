@@ -97,6 +97,13 @@ Bốn bước, theo đúng thứ tự:
    ngược lại, đều là mồ côi và bị phép đo bắt.
 4. **Chạy phép đo** — `cd apps/app && bun test test/proto-catalog.spec.ts`.
 
+## Màn mẫu của một khuôn
+
+Một khuôn ở `design/patterns/` khai màn mẫu ở khoá `mau_dang_chay`. Vòng chạm một đối tượng của khuôn đặt ảnh màn mới
+cạnh ảnh màn mẫu trong gói design-pass, để người duyệt so hai hình trên cùng một trang.
+
+- Ngăn bản ghi: màn mẫu là ngăn deal `apps/app/components/crm/record-sheet/deal-sheet.tsx`, khuôn `design/patterns/ngan-ban-ghi.md`.
+
 ## Block ReUI chỉ là tham chiếu bố cục
 
 Block Pro của ReUI (vd `settings-8`, `settings-12`, `onboarding-2`) là vật liệu
