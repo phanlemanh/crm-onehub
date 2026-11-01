@@ -22,7 +22,7 @@ Tôi hỏi về OKR trên web hoặc Zalo và nhận câu trả lời theo quy�
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production» khi hết timebox
-- Timebox: [đề xuất] 2026-10-31 (mốc R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11))
+- Câu hỏi phép đo trả lời: Người dùng có quay lại hỏi Kara về OKR trên web và thấy câu trả lời hữu ích không?
+- Kết quả nào là SỐNG: Trong 2 tuần sau khi bật, ít nhất 5 người khác nhau hỏi ít nhất một câu, ít nhất 3 người hỏi ở cả hai tuần, và trong các phản hồi đã bấm thì phần «không hữu ích» dưới 30%.
+- Kết quả nào là CHẾT: Trong 2 tuần sau khi bật, không quá 2 người hỏi hay không ai hỏi lại ở tuần thứ hai, hoặc từ 50% phản hồi đã bấm trở lên là «không hữu ích».
+- Timebox: 2026-10-31 (mốc R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11))

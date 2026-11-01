@@ -32,9 +32,9 @@ Nguyên nhân đọc từ mã trên onehub `0d9ef3183`: khung việc ghi chữ �
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: người không trong cuộc có còn thấy được việc mà khung việc hứa là chỉ người trong cuộc thấy không, ở bất kỳ màn nào.
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu, một thành viên không trong cuộc đi hết Của tôi · Tất cả dự án · Danh sách · Bảng · Gantt của một dự án, và mọi việc khung ghi «chỉ người trong cuộc thấy» không hiện tiêu đề, số đếm hay ngày với người đó; mọi việc người đó thấy thì khung nói đúng ai thấy nó.
-- Kết quả nào là CHẾT: [đề xuất] còn một màn hay một con số (tiêu đề, số việc, khoảng ngày, mốc chờ) cho người không trong cuộc biết về một việc mà khung hứa là riêng.
-- Timebox: [đề xuất] phiên nghiệm thu đầu tiên sau khi bản sửa lên production, gộp chung buổi đọc số ≈30/10 của làn M5.
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, một thành viên không trong cuộc đi hết Của tôi · Tất cả dự án · Danh sách · Bảng · Gantt của một dự án, và mọi việc khung ghi «chỉ người trong cuộc thấy» không hiện tiêu đề, số đếm hay ngày với người đó; mọi việc người đó thấy thì khung nói đúng ai thấy nó.
+- Kết quả nào là CHẾT: còn một màn hay một con số (tiêu đề, số việc, khoảng ngày, mốc chờ) cho người không trong cuộc biết về một việc mà khung hứa là riêng.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Kết quả prototype
 

@@ -25,7 +25,7 @@ Vì sao: Tín hiệu rác (thử, trùng, nhầm) vào thẳng lượt gom và l
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Lượt kéo về đầu tiên sau khi giao không mang tín hiệu nào đã lưu trữ; mỗi lần gỡ có vết người gỡ (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Lượt kéo về đầu tiên sau khi giao không mang tín hiệu nào đã lưu trữ; mỗi lần gỡ có vết người gỡ (ngưỡng đề xuất — chốt ở Cổng Đáng)
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Lượt kéo về đầu tiên sau khi giao không mang tín hiệu nào đã lưu trữ; mỗi lần gỡ có vết người gỡ (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox
-- Timebox: [đề xuất] 2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)
+- Câu hỏi phép đo trả lời: Sau khi quản trị lưu trữ được tín hiệu rác, đội sản phẩm có còn nhận tín hiệu thử, trùng hay gửi nhầm trong lượt kéo về không?
+- Kết quả nào là SỐNG: Trong 2 tuần sau khi bật, có ít nhất một tín hiệu được lưu trữ trước khi bị kéo về, và bản gom kế tiếp của đội sản phẩm không xếp tín hiệu nào vào lẻ với lý do thử, trùng hay gửi nhầm.
+- Kết quả nào là CHẾT: Trong 2 tuần sau khi bật, bản gom vẫn có tín hiệu lẻ vì thử, trùng hay gửi nhầm mà quản trị đã thấy ở thẻ «Tất cả», hoặc phần lớn lần lưu trữ bị khôi phục lại vì lỡ tay.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

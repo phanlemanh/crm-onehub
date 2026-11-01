@@ -1,0 +1,134 @@
+[
+	{
+		"ho_so": "khung-cho-don-vi-mot-hinh",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, người mở trang Theo đơn vị có còn thấy màn chờ đổi hình giữa chừng hay bấm trượt ô chọn đơn vị lúc trang đang tải không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người mở trang Theo đơn vị bằng tải cứng và đổi đơn vị, trên máy tính và điện thoại, 0 người chỉ ra màn chờ nhảy hình hay hỏi «đang tải hay hỏng», và 0 người bấm trượt ô chọn đơn vị vì nó dịch chỗ.",
+			"Kết quả nào là CHẾT": "Từ 2 người trở lên trong phiên nói màn chờ đổi hình hay giật, hoặc có người bấm trượt ô chọn đơn vị lúc đang tải, hoặc có một góp ý cùng nội dung gửi về trong timebox.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, vì docs/telemetry.md chỉ gửi sự kiện phía máy chủ và không có sự kiện nào về màn chờ.",
+		"can_cu": "AC-1 (mọi lúc tải chỉ một chữ ký khung) và AC-3 (đỉnh ô chọn đơn vị không đổi quá 1 px giữa lúc tải và lúc bảng dựng)."
+	},
+	{
+		"ho_so": "khung-man-chung",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, người đang chờ một màn tải hay gặp lỗi tải có luôn biết mình đang ở màn nào và tự gỡ được bằng «Thử lại» mà không phải hỏi ai không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người, mỗi người gặp ít nhất một màn đang tải và một lỗi tải dựng sẵn, ít nhất 2 trên 3 người gọi đúng tên màn lúc đang tải và tự bấm «Thử lại» để về nội dung, và 0 người hỏi vì sao một nút đầu trang bị tắt.",
+			"Kết quả nào là CHẾT": "Quá nửa người trong phiên không gọi được tên màn lúc đang tải hoặc không tìm ra cách thử lại khi lỗi, hoặc có người hỏi vì sao nút chính bị tắt ở Onboarding, Tổ chức hay SSO.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người, lỗi tải dựng bằng truy vấn bị giữ hay trả lỗi; sự kiện api_error của docs/telemetry.md chỉ đếm lỗi theo route, không đo người có gỡ được hay không.",
+		"can_cu": "Câu vấn đề «màn nào đang tải cũng giữ tiêu đề, lỗi tải một hình có nút thử lại, nút chính tắt phải nói vì sao» cùng AC-4, AC-6, AC-8, AC-9."
+	},
+	{
+		"ho_so": "khung-soan-chan-lien-ket",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, người soạn OKR trong khung bên phải có còn mất chữ đang gõ hay bản Kara đang soạn vì lỡ bấm một liên kết trong khung không?",
+			"Kết quả nào là SỐNG": "Trong timebox có 0 góp ý hay issue báo mất chữ gõ dở khi bấm liên kết trong khung soạn, và trong phiên nghiệm thu với ít nhất 3 người bấm «Tới Kho tài liệu» lúc đang gõ dở thì cả 3 đều thấy hộp hỏi và ai chọn ở lại đều giữ nguyên chữ.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 báo mất chữ hay mất bản soạn do bấm liên kết trong khung, hoặc trong phiên quá nửa người gặp hộp hỏi khi khung không có gì dở và thấy nó cản đường.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Góp ý và issue của người dùng trong timebox cộng quan sát phiên nghiệm thu N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
+		"can_cu": "AC-1 và AC-2 (bấm liên kết khi có thứ dở thì hỏi, ở lại giữ chữ) và AC-4 (không có gì dở thì đi ngay, không hỏi)."
+	},
+	{
+		"ho_so": "lich-su-va-luu-tru-trang",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, người dùng Kho tài liệu có thật sự quay lại bản cũ và lưu trữ trang không còn dùng qua duyệt, thay vì để trang cũ nằm lẫn trong danh sách không?",
+			"Kết quả nào là SỐNG": "Trong timebox, bảng TaiLieuDeXuat có ít nhất 3 đề xuất loại lưu trữ hoặc quay lại phiên bản cũ đã được duyệt, và không quá 1 trang đã lưu trữ bị khôi phục trong vòng 7 ngày vì lưu trữ nhầm.",
+			"Kết quả nào là CHẾT": "Hết timebox mà TaiLieuDeXuat có 0 đề xuất lưu trữ và 0 đề xuất quay lại bản cũ được duyệt, hoặc quá nửa số trang đã lưu trữ bị khôi phục trong vòng 7 ngày.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Truy vấn production bảng TaiLieuDeXuat theo loai và trangThai cùng bảng TaiLieuSuKien loại khôi phục và lưu trữ (mốc luc); docs/telemetry.md không có thuộc tính nào cho Kho tài liệu.",
+		"can_cu": "Ô cơ hội «xem phiên bản cũ, khôi phục bản cũ qua duyệt, lưu trữ trang không còn dùng» cùng AC-3, AC-4, AC-5, AC-6."
+	},
+	{
+		"ho_so": "lien-quan-loc-ban-da-cat",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, người xem ngăn công ty, cá nhân hay thoả thuận có đọc đúng số bản đang dùng và vẫn tự tìm lại được bản đã lưu trữ từ ngăn không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người, ít nhất 2 trên 3 người tìm lại một thoả thuận đã lưu trữ từ ngăn công ty qua «+n đã lưu trữ» trong 1 phút không cần gợi ý, và 0 người hiểu «+n đã lưu trữ» là nút lưu trữ hay đọc số trên tab mà tính cả bản đã cất.",
+			"Kết quả nào là CHẾT": "Quá nửa người không tìm ra bản đã cất từ ngăn hoặc hiểu «+n đã lưu trữ» là nút để lưu trữ, hoặc có báo số trên tab hay số liệu đầu ngăn công ty lệch số bản đang dùng.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Nhật ký vấp theo khuôn stranger-drive-template trong phiên nghiệm thu với N ít nhất 3 người, đúng đường đo thứ hai hợp đồng đã khai.",
+		"can_cu": "Mục Đường đo «người lạ tìm lại một thoả thuận đã cất từ ngăn công ty» cùng AC-5, AC-7 và AC-13."
+	},
+	{
+		"ho_so": "lo-trinh-ten-va-build",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi gộp, người đọc trang lộ trình có thấy đúng tên OneHub Center và các dãy có còn bị chặn đẩy vì bản dựng panic symlink không?",
+			"Kết quả nào là SỐNG": "Trong timebox có 0 lượt CI hay pre-push trên onehub và trên PR mở đỏ với dòng «symlink … infinite loop» của next build, và phép quét tên OneHub Center giữ 0 SAI ở mọi lượt chạy.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 lượt CI hay pre-push đỏ với dòng panic «infinite loop» của next build, hoặc trang lộ trình lại hiện chữ «CRM» cho người đọc.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Nhật ký job CI đọc bằng gh run list và gh run view lọc chuỗi «infinite loop», cộng đầu ra của _acceptance/doi-ten-onehub-center/rang/quet-ten.mjs; không có telemetry.",
+		"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được»."
+	},
+	{
+		"ho_so": "loc-don-vi-khong-tu-dong",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, người lọc mục tiêu ở trang Theo đơn vị có chọn liền nhiều giá trị lọc mà không phải mở lại menu hay khung Lọc không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người, mỗi người lọc theo hai giá trị liên tiếp ở máy tính và ở điện thoại, ít nhất 2 trên 3 người làm xong mà không phải mở lại menu Lọc lần nào, và 0 người nói bảng nháy hay biến mất khi đổi lọc.",
+			"Kết quả nào là CHẾT": "Quá nửa người phải mở lại menu hay khung Lọc sau mỗi lần chọn, hoặc có người nói bảng biến mất hay nháy khi đổi lọc.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; hợp đồng đã bỏ đường đo và telemetry không có sự kiện lọc.",
+		"can_cu": "AC-1 và AC-2 (menu và khung Lọc không đóng từ lúc tích tới khi dòng mới hiện) cùng AC-3 (bảng không bị gỡ khi đổi lọc)."
+	},
+	{
+		"ho_so": "loc-moi-truong",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, nhân viên quan hệ đối tác có thật sự lọc theo trường chữ, số, ngày, ô tích hay ô trống và lưu bộ lọc ấy ở Thoả thuận không?",
+			"Kết quả nào là SỐNG": "Trong timebox, bảng SavedView có ít nhất 2 bộ lọc đã lưu của Thoả thuận, và ít nhất 1 bộ lọc đã lưu ở bất kỳ loại bản ghi nào mang giá trị lọc kiểu mới (has:, gte:, lte:, none, yes, no hay một mốc ngày).",
+			"Kết quả nào là CHẾT": "Hết timebox mà SavedView có 0 bộ lọc đã lưu của Thoả thuận và 0 bộ lọc mang giá trị kiểu mới, hoặc trong phiên nghiệm thu quá nửa người không đặt được lọc «trống» hay lọc khoảng số.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Truy vấn production bảng SavedView theo cột entity và nội dung cột filters, cộng quan sát phiên nghiệm thu; docs/telemetry.md không có thuộc tính nào về lọc.",
+		"can_cu": "Câu vấn đề «lọc theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận» cùng AC-1, AC-2, AC-3."
+	},
+	{
+		"ho_so": "loc-va-kieu-xem-chung",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, đường dẫn danh sách có bộ lọc gửi cho đồng nghiệp có mở ra đúng bộ lọc và kiểu xem, và người dùng có lọc được ở danh sách thứ hai mà không phải học lại không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người, mỗi người gửi cho người khác một đường dẫn có bộ lọc ở Thoả thuận, Onboarding hoặc Tài liệu, ít nhất 2 trên 3 đường dẫn mở ra đúng bộ lọc và kiểu xem, và ít nhất 2 trên 3 người lọc được ở màn thứ hai không cần hướng dẫn.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 đường dẫn gửi đi mở ra sai bộ lọc hay sai kiểu xem, hoặc quá nửa người phải hỏi cách lọc ở màn thứ hai.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người; telemetry không có sự kiện phía trình duyệt.",
+		"can_cu": "Câu vấn đề «lọc và chuyển kiểu xem ở mọi danh sách như nhau, gửi đường dẫn là giữ nguyên bộ lọc» cùng AC-6 và AC-7."
+	},
+	{
+		"ho_so": "luu-tru-truong-khong-hoi",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, quản trị lưu trữ một trường có hiểu trường chỉ được cất và tự lấy lại được bằng «Hoàn tác» khi lỡ tay, không cần hộp hỏi lại không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người quản trị lưu trữ một trường rồi lấy lại, ít nhất 2 trên 3 người tự bấm «Hoàn tác» không cần gợi ý và nói trường được cất chứ không bị xoá, và trong timebox có 0 báo mất trường vì lưu trữ nhầm.",
+			"Kết quả nào là CHẾT": "Quá nửa người trong phiên nghĩ trường đã bị xoá hoặc không thấy «Hoàn tác», hoặc có ít nhất 1 báo mất trường không lấy lại được.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N ít nhất 3 người cộng góp ý của người dùng trong timebox; telemetry không có sự kiện về trường.",
+		"can_cu": "Ô cơ hội «lưu trữ một trường thôi hỏi lại và có Hoàn tác» cùng AC-1, AC-3 và AC-8."
+	},
+	{
+		"ho_so": "mau-trang-thai-chung",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, người dùng nhìn một chấm trạng thái ở OKR, Kara, lịch họp hay Tài liệu có đoán đúng nghĩa của nó như nhau ở mọi khu không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu chấm kín với ít nhất 3 người xem 6 chấm trạng thái lấy từ ít nhất 3 khu khác nhau, mỗi người gọi đúng nghĩa ít nhất 5 trên 6 chấm, và không ai đọc chấm «đang chạy» thành lỗi hay rủi ro.",
+			"Kết quả nào là CHẾT": "Có người gọi đúng dưới 4 trên 6 chấm, hoặc từ 2 người trở lên hiểu cùng một màu thành hai nghĩa khác nhau ở hai khu.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Chấm kín trong phiên nghiệm thu với N ít nhất 3 người; không có telemetry nào đo cách đọc màu.",
+		"can_cu": "Câu vấn đề «cùng một nghĩa mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu» cùng AC-3 và AC-6."
+	},
+	{
+		"ho_so": "nen-kara",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi có nền, các lượt AI kế tiếp có dựng đề xuất, dấu và phản hồi của Kara bằng thành phần chung của packages/ui, để người dùng thấy AI cùng một kiểu ở mọi màn không?",
+			"Kết quả nào là SỐNG": "Tới hết timebox, mọi lượt AI gộp sau nen-kara dựng đề xuất, dấu và phản hồi bằng ProposedChange, KaraMark, KaraLabel, AiFeedback chứ không tự dựng, số kiểu dấu nhận diện AI trên màn thật giảm từ bốn xuống tối đa hai, và trong phiên nghiệm thu ít nhất 2 trên 3 người chỉ đúng nút chính của một đề xuất inline.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 lượt AI gộp sau nen-kara tự dựng thẻ đề xuất hay dấu Kara riêng ngoài packages/ui, hoặc số kiểu dấu nhận diện AI trên màn thật vẫn là bốn.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Đếm bằng git grep trong apps/app chỗ dùng thành phần chung so với chỗ tự dựng, đếm kiểu dấu trên màn thật theo khảo sát mục 1–2, cộng quan sát phiên nghiệm thu N ít nhất 3 người.",
+		"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12."
+	}
+]

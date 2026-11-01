@@ -30,6 +30,6 @@ Vì sao: dynamic-fields.md §7 để sort sang giai đoạn hai rồi chưa làm
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: người dùng thật có sắp được danh sách theo một trường tự tạo khi cần, và có còn thấy trường tự tạo biến mất ở khổ hẹp hay trên thẻ Kanban không.
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu, giao «sắp thoả thuận theo một trường tự tạo kiểu Ngày» và «tìm giá trị trường tự tạo trên thẻ Kanban»: ít nhất bốn trên năm người làm được không cần hỏi; trên điện thoại cột trường tự tạo hiện như cột chuẩn cùng kiểu.
-- Kết quả nào là CHẾT: [đề xuất] đa số người không tìm ra cách sắp theo trường tự tạo, hoặc bấm sắp mà thứ tự không đổi.
-- Timebox: [đề xuất] gộp chung buổi đọc số của gói truong-hop-dong sau khi DA17, DA18 lên production.
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, giao «sắp thoả thuận theo một trường tự tạo kiểu Ngày» và «tìm giá trị trường tự tạo trên thẻ Kanban»: ít nhất bốn trên năm người làm được không cần hỏi; trên điện thoại cột trường tự tạo hiện như cột chuẩn cùng kiểu.
+- Kết quả nào là CHẾT: đa số người không tìm ra cách sắp theo trường tự tạo, hoặc bấm sắp mà thứ tự không đổi.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
