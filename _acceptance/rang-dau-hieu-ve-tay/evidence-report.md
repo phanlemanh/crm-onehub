@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1723efbd33f18b2613b9ccc187df69764ce15340
+verified_commit: 5a177fbbaf3c88f543336ab41c8898d93b24919e
 human_signoff:
 ---
 
@@ -173,3 +173,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: all 9 evals passed; no failures, no judgment items pending.
+
+### Re-pin lần 1 — 2026-11-01, do hoá cũ do gộp onehub 9752bef05
+run_id: repin-20261101T085716Z-63449
+sha: 5a177fbbaf3c88f543336ab41c8898d93b24919e · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
