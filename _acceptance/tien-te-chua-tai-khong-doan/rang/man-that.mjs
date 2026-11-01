@@ -2,6 +2,8 @@ import { mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { isMeasureDatabase } from "../../../packages/db/src/measure-database.ts";
+import { tenDb } from "../../../scripts/lan-do/kho-nhap.mjs";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 import {
 	API,
@@ -13,12 +15,21 @@ import {
 	ket,
 	khongDo,
 	mu,
+	NGUOI,
 	phien,
 	suySlug,
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BANG_CHUNG = join(HERE, "..", "..", "..", ".acceptance-runs", "tien-te-chua-tai-khong-doan", "evidence");
+const BANG_CHUNG = join(
+	HERE,
+	"..",
+	"..",
+	"..",
+	".acceptance-runs",
+	"tien-te-chua-tai-khong-doan",
+	"evidence",
+);
 const RONG = 1440;
 const CAO = 900;
 const KY_MONG = 10;
@@ -116,12 +127,45 @@ async function khongDoTraLai(...dong) {
 	await khongDo(...dong);
 }
 
+async function vaiQuanTriTrongKhoDo() {
+	const kho = tenDb(process.env.DATABASE_URL ?? "");
+	if (kho === null || !isMeasureDatabase(kho)) {
+		await khongDo(
+			`KHONG DO DUOC: DATABASE_URL tro kho "${kho ?? "?"}" khong phai kho do dung-mot-lan — khong cap vai admin cho nguoi cua phien, khong ghi gi`,
+		);
+	}
+	const { db } = await import("../../../packages/db/src/index.ts");
+	const { WORKSPACE_ID } = await import(
+		"../../../packages/db/src/workspace.ts"
+	);
+	const toi = await db.user.findUnique({
+		where: { email: NGUOI },
+		select: { id: true },
+	});
+	if (!toi)
+		await khongDo(`KHONG DO DUOC: tien de thieu — khong thay nguoi ${NGUOI}`);
+	await db.member.upsert({
+		where: {
+			organizationId_userId: { organizationId: WORKSPACE_ID, userId: toi.id },
+		},
+		create: {
+			id: `member-${toi.id}`,
+			organizationId: WORKSPACE_ID,
+			userId: toi.id,
+			role: "admin",
+			createdAt: new Date(),
+		},
+		update: { role: "admin" },
+	});
+	console.log(`tien de: ${NGUOI} co vai admin trong kho do ${kho}`);
+}
+
 if (baoCao === "USD") {
+	await vaiQuanTriTrongKhoDo();
 	const doi = await goiApiTao(cookie, "currency.setReportingCurrency", {
 		currency: DONG_BAO_CAO,
 	});
-	if (doi.loi)
-		await khongDo(`KHONG DO DUOC: tien de thieu — ${doi.loi}`);
+	if (doi.loi) await khongDo(`KHONG DO DUOC: tien de thieu — ${doi.loi}`);
 	baoCao = DONG_BAO_CAO;
 	const doc2 = await doc("currency.settings");
 	if (doc2.loi || doc2.gia.reportingCurrency !== DONG_BAO_CAO) {
