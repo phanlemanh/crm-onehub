@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f3a129185da6c0deaccd5d72043a7b9d813118a5
+verified_commit: b80ceaf6c26105c4ae657ca8d481e456ec0a2201
 human_signoff: Phan Le Manh 2026-09-24
 ---
 
@@ -187,3 +187,7 @@ sha: bb2a22fbce6f69655e42f173fc8031f0bee76cf0 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-11-01, do F38 lối a: sửa thước 4 hồ sơ + gộp #603/#610/#609 chạm vùng canh
 run_id: repin-20261031T235939Z-42423
 sha: f3a129185da6c0deaccd5d72043a7b9d813118a5 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-11-01, do F38: #608 (BK6) chạm vùng canh apps/app/test/** — chuỗi ghim do hàng chồng vùng (kit #430)
+run_id: repin-20261101T030047Z-77478
+sha: b80ceaf6c26105c4ae657ca8d481e456ec0a2201 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
