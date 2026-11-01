@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: fd4ed7c19a1d747430525b716a645d0a4fd7f732
+verified_commit: cc2c13b1c828b562847578b89f34986708af652e
 human_signoff: 
 ---
 
@@ -136,3 +136,7 @@ sha: dfc8ff345842e738f421c08891eb1754198d9064 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-09-25, do gộp onehub 5d9e8b9c (#135 Zalo) vào nhánh — mã Zalo không chạm phòng ban
 run_id: repin-20260925T042418Z-71551
 sha: fd4ed7c19a1d747430525b716a645d0a4fd7f732 · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng
+
+### Re-pin lần 7 — 2026-11-01, do sua-viec-may-sot-test-api: sáu chỗ dọn của bộ test api
+run_id: repin-20261101T093514Z-26659
+sha: cc2c13b1c828b562847578b89f34986708af652e · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
