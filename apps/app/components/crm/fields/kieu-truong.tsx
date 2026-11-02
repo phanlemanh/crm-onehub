@@ -421,7 +421,9 @@ function luaChonNguoi(moTa: MoTaTruong, locale: Locale): LuaChonTruong[] {
 	if (hienTai && moTa.nguoiDung && !ds.some((muc) => muc.value === hienTai)) {
 		ds.push({
 			value: hienTai,
-			label: moTa.nguoi?.name ?? m.owner.formerMember,
+			label: moTa.nguoi
+				? `${moTa.nguoi.name} · ${m.owner.formerMember}`
+				: m.owner.formerMember,
 		});
 	}
 	return ds;
@@ -449,6 +451,7 @@ function OChon({ moTa }: { moTa: MoTaTruong }) {
 			placeholder={moTa.kieu === "USER" ? m.owner.unassigned : undefined}
 			emptyValue={moTa.batBuoc ? undefined : RONG}
 			saving={moTa.dangLuu}
+			userData={moTa.kieu === "USER"}
 			onSave={(next) => moTa.luu(next === RONG ? null : next)}
 		/>
 	);

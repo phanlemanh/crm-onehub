@@ -1115,7 +1115,6 @@ const KHOA_MOI = [
 	"soNguon",
 	"nguonTay",
 	"chiTiet",
-	"chiTietPhuTrach",
 	"chiTietHan",
 	"chiTietKieu",
 	"khongThay",

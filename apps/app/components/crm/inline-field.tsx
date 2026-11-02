@@ -440,6 +440,7 @@ export function InlineSelectField({
 	saving = false,
 	placeholder,
 	emptyValue,
+	userData = false,
 }: {
 	label: string;
 	value: string;
@@ -448,6 +449,7 @@ export function InlineSelectField({
 	saving?: boolean;
 	placeholder?: string;
 	emptyValue?: string;
+	userData?: boolean;
 }) {
 	const id = useId();
 
@@ -458,7 +460,12 @@ export function InlineSelectField({
 			</label>
 			<div className="flex min-w-0 items-center gap-1.5">
 				<Select value={value} onValueChange={onSave} disabled={saving}>
-					<SelectTrigger id={id} variant="ghost" className="w-full">
+					<SelectTrigger
+						id={id}
+						variant="ghost"
+						className="w-full"
+						translate={userData ? "no" : undefined}
+					>
 						<SelectValue placeholder={placeholder ?? <EmptyCellValue />}>
 							{emptyValue !== undefined && value === emptyValue ? (
 								<EmptyCellValue />

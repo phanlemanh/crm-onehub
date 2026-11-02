@@ -54,6 +54,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { TruongTaiChoKr } from "./chi-tiet-okr";
 import { TAB_SO_NGUON } from "./dien-bien-kr";
 import { KhoiCapNhatKr, TAB_CAP_NHAT } from "./khoi-cap-nhat-kr";
 import { type BangChungVao, KrBangChung } from "./kr-bang-chung";
@@ -548,15 +549,19 @@ function SoNguonKr({ kr }: { kr: KrCuaMt }) {
 	return <NoiDungSoKr keyResultId={kr.id} />;
 }
 
-function ChiTietKr({ kr }: { kr: KrCuaMt }) {
+function ChiTietKr({ mt, kr }: { mt: ChiTiet; kr: KrCuaMt }) {
 	const locale = useLocale();
 	const m = okrCanhKrMessages(locale).khung;
+	const trpc = useTRPC();
+	const nguoi = useQuery(trpc.okr.thanhVien.queryOptions());
 	return (
 		<DetailSheetSection data-muc-ngan="chi-tiet" title={m.chiTiet}>
+			<TruongTaiChoKr
+				kr={kr}
+				mt={mt}
+				nguoiDung={nguoi.data?.map((n) => ({ ...n, image: null }))}
+			/>
 			<DetailSheetProperties columns={1}>
-				<DetailSheetProperty label={m.chiTietPhuTrach}>
-					<span translate="no">{kr.owner.name}</span>
-				</DetailSheetProperty>
 				{kr.dueOn ? (
 					<DetailSheetProperty label={m.chiTietHan}>
 						{formatDay(kr.dueOn, locale)}
@@ -622,7 +627,7 @@ function CacMucKr({
 				<DauMuc>{m.soNguon}</DauMuc>
 				<SoNguonKr kr={kr} />
 			</section>
-			<ChiTietKr kr={kr} />
+			<ChiTietKr kr={kr} mt={mt} />
 		</div>
 	);
 }
