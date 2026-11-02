@@ -67,7 +67,7 @@ export function truongMucTieu(
 			khoa: KHOA_TRUONG_OKR.viSao,
 			nhan: o.nhan.truongViSao,
 			kieu: "LONG_TEXT",
-			giaTri: mt.whyNow === "" ? null : mt.whyNow,
+			giaTri: mt.whyNow.trim() === "" ? null : mt.whyNow,
 			goiY: o.nhan.goiYViSao,
 			luu: (giaTri) => o.luu(KHOA_TRUONG_OKR.viSao, String(giaTri ?? "")),
 			dangLuu: o.dangLuu(KHOA_TRUONG_OKR.viSao),

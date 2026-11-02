@@ -197,7 +197,6 @@ const vi = {
 	},
 	sheet: {
 		tabKr: "KR",
-		khuViSao: "Vì sao lúc này",
 		khuChiTiet: "Chi tiết",
 		truongTen: "Tên",
 		truongViSao: "Vì sao lúc này",
@@ -978,7 +977,6 @@ const en: OkrMessages = {
 	},
 	sheet: {
 		tabKr: "KR",
-		khuViSao: "Why now",
 		khuChiTiet: "Details",
 		truongTen: "Name",
 		truongViSao: "Why now",

@@ -1382,9 +1382,18 @@ const mtSheet = (doi: Partial<MucTieuOutput> = {}) =>
 		}),
 	);
 
+function giaTriViSao(khu: Element | null): string | null {
+	const o =
+		khu?.querySelector(
+			`button[aria-label="${m.sheet.truongViSao}"] span:not(.text-muted-foreground)`,
+		) ?? khu?.querySelector("[data-truong='whyNow']");
+	const chu = o?.textContent?.trim() ?? "";
+	return chu === "" ? null : chu;
+}
+
 function docSheet() {
 	const b = document.body;
-	const viSao = b.querySelector("[data-khu='vi-sao']");
+	const viSao = b.querySelector("[data-khu='chi-tiet']");
 	const gopVao = b.querySelector("[data-khu='gop-vao']");
 	const bangKr = b.querySelector("[data-kr]")?.closest("table") ?? null;
 	const tienDoTu = b.querySelector("[data-tien-do-tu]");
@@ -1393,7 +1402,7 @@ function docSheet() {
 		thuTu:
 			[viSao, gopVao].filter((x) => x !== null).length < 2 ||
 			(sau(viSao, gopVao) && sau(gopVao, bangKr) && sau(bangKr, tienDoTu)),
-		viSao: viSao?.querySelector("p[translate='no']")?.textContent ?? null,
+		viSao: giaTriViSao(viSao),
 		gopVao: [...(gopVao?.querySelectorAll("[data-gop-vao]") ?? [])].map(
 			(dong) =>
 				[
@@ -2120,12 +2129,17 @@ const CA_TRANG_THAI = {
 		await dungSheet(mtSheet({ whyNow: "" }));
 		soCa(
 			{
-				viSao: document.body.querySelector("[data-khu='vi-sao']") !== null,
-				chuViSao: document.body.textContent?.includes(m.sheet.khuViSao) ?? true,
+				viSao: giaTriViSao(
+					document.body.querySelector("[data-khu='chi-tiet']"),
+				),
+				chuViSao:
+					document.body.querySelector(
+						`[data-khu='chi-tiet'] button[aria-label="${m.sheet.truongViSao}"]`,
+					) !== null,
 				doiChungGopVao:
 					document.body.querySelector("[data-khu='gop-vao']") !== null,
 			},
-			{ viSao: false, chuViSao: false, doiChungGopVao: true },
+			{ viSao: null, chuViSao: true, doiChungGopVao: true },
 			(truong) => `ST-mtkr-sheet-khong-ly-do sai: ${truong}`,
 		);
 	},
