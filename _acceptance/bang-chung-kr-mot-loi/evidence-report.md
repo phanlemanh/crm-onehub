@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 43a75bc188c4c4f3d2455fca2460c218dbef0707
-human_signoff:
+human_signoff: Phan Le Manh 2026-11-03 — ký Cổng 2 trên S4 lượt 1 (13/13 eval PASS). Ngoài-1 mở hợp đồng mới; Ngoài-2, 3, 4, 5 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: bang-chung-kr-mot-loi

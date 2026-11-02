@@ -5,7 +5,7 @@ slug: bang-chung-kr-mot-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [web]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-11-02
 design_doc: docs/superpowers/specs/2026-11-02-bang-chung-kr-mot-loi-design.md
@@ -88,3 +88,9 @@ xong). Thước CE: `bat_khi` của hàng SV10 [SUY-TỪ-REPO: docs/plan/lo-trin
 - Ngoài-3 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Không ảnh hưởng người dùng ngay; nếu sau này bấm Esc ở khối cập nhật làm mất hay gửi nhầm bản nháp thì bài kiểm này sẽ không báo. — `apps/app/test/bang-chung-mot-loi.dom.tsx`
 - Ngoài-4 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Không ảnh hưởng người dùng ngay; nếu sau này Esc hoặc Huỷ không đóng được dòng nhập thì một ô trong ma trận kiểm vẫn xanh. — `apps/app/test/bang-chung-mot-loi.dom.tsx`
 - Ngoài-5 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Không ảnh hưởng người dùng ngay; nếu khối rỗng vẫn hiện cùng lúc với dòng nhập khi KR chưa có bằng chứng thì bài kiểm sẽ không phát hiện. — `apps/app/test/bang-chung-mot-loi.dom.tsx`
+- Known limits — chọn ở Cổng Bằng chứng 2026-11-03:
+  - Ngoài-2: Người dùng đọc màn hình không được báo ô đường dẫn đang lỗi khi máy chủ từ chối, và viền ô không chuyển
+    sang kiểu lỗi, dù câu lỗi vẫn hiện bên dưới.
+  - Ngoài-3: Bài kiểm không báo nếu sau này bấm Esc ở khối cập nhật làm mất hay gửi nhầm bản nháp.
+  - Ngoài-4: Bài kiểm vẫn xanh một ô nếu sau này Esc hoặc Huỷ không đóng được dòng nhập.
+  - Ngoài-5: Bài kiểm không phát hiện nếu khối rỗng hiện cùng lúc với dòng nhập khi KR chưa có bằng chứng.
