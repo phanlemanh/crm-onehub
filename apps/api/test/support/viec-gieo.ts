@@ -22,7 +22,11 @@ export type KetGoi = {
 };
 
 const cookie = new Map<string, string>();
-const quaApi = { congTy: [] as string[], lienHe: [] as string[] };
+const quaApi = {
+	congTy: [] as string[],
+	lienHe: [] as string[],
+	thoaThuan: [] as string[],
+};
 
 export function ghiLienHeQuaApi(id: string): string {
 	quaApi.lienHe.push(id);
@@ -100,7 +104,9 @@ export async function thoaThuan(
 		},
 		chuId,
 	);
-	return { congTyId, dealId: (deal.data as { id: string }).id };
+	const dealId = (deal.data as { id: string }).id;
+	quaApi.thoaThuan.push(dealId);
+	return { congTyId, dealId };
 }
 
 export async function keHoachCua(congTyId: string, chuId: string) {
@@ -164,6 +170,7 @@ export async function donViec(): Promise<void> {
 			OR: [
 				{ companyId: { in: quaApi.congTy } },
 				{ contactId: { in: quaApi.lienHe } },
+				{ dealId: { in: quaApi.thoaThuan } },
 			],
 		},
 	});

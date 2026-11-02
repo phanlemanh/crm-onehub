@@ -58,6 +58,7 @@ import {
 
 dungSan();
 
+const BAT_DAU = new Date();
 const GOC = join(import.meta.dir, "..", "..", "..");
 const KIEM_KE = join(
 	GOC,
@@ -491,6 +492,13 @@ describe("cmst-goc", () => {
 		);
 		await db.okrDeXuat.deleteMany({ where: { cuocSoanId: s.cuoc } });
 		await db.okrCuocSoan.deleteMany({ where: { id: s.cuoc } });
+		await db.agentTask.deleteMany({
+			where: {
+				kind: "okr-kiem-san-sang",
+				finishedAt: null,
+				createdAt: { gte: BAT_DAU },
+			},
+		});
 		await donSanKhep();
 	}, SEED_MS);
 

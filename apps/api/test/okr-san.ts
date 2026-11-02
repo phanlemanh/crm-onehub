@@ -339,8 +339,33 @@ export function dungSan(
 			where: { name: { startsWith: TIEN_TO } },
 			select: { id: true },
 		});
+		const thoaThuanXoa = await db.deal.findMany({
+			where: {
+				OR: [
+					{ name: { startsWith: TIEN_TO } },
+					{ companyId: { in: congTyXoa.map((c) => c.id) } },
+				],
+			},
+			select: { id: true },
+		});
+		const lienHeXoa = await db.contact.findMany({
+			where: { firstName: { startsWith: TIEN_TO } },
+			select: { id: true },
+		});
 		await db.agentTask.deleteMany({
-			where: { companyId: { in: congTyXoa.map((c) => c.id) } },
+			where: {
+				OR: [
+					{ companyId: { in: congTyXoa.map((c) => c.id) } },
+					{ dealId: { in: thoaThuanXoa.map((d) => d.id) } },
+					{ contactId: { in: lienHeXoa.map((c) => c.id) } },
+				],
+			},
+		});
+		await db.deal.deleteMany({
+			where: { id: { in: thoaThuanXoa.map((d) => d.id) } },
+		});
+		await db.contact.deleteMany({
+			where: { id: { in: lienHeXoa.map((c) => c.id) } },
 		});
 		await db.company.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
 		await db.department.updateMany({

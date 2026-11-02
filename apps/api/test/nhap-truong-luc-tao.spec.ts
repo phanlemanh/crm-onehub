@@ -22,6 +22,7 @@ import {
 import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
+const BAT_DAU = new Date();
 const TIEN_TO = "ntl";
 const NGAY_MAY_CHU_TRA = "2027-03-31T00:00:00.000Z";
 const THU_MUC_FIXTURE = join(import.meta.dir, "../../app/test/fixtures");
@@ -287,6 +288,13 @@ afterAll(async () => {
 				{ companyId: { in: daTao.congTy } },
 				{ contactId: { in: daTao.caNhan } },
 			],
+		},
+	});
+	await db.agentTask.deleteMany({
+		where: {
+			kind: "field-backfill",
+			finishedAt: null,
+			createdAt: { gte: BAT_DAU },
 		},
 	});
 	await db.contact.deleteMany({ where: { id: { in: daTao.caNhan } } });
