@@ -13,7 +13,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>172 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>197 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>198 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
 ```
 
@@ -183,6 +183,7 @@ flowchart TD
 - Nhân viên quan hệ đối tác sắp danh sách theo bất kỳ trường nào và thấy cột trường tự tạo ở khổ hẹp như cột có sẵn, cả trên thẻ Kanban (`sort-moi-truong`)
 - Người gửi tín hiệu đọc rõ hộp gửi và trang Tín hiệu đã gửi ở mọi khổ màn và mọi ngôn ngữ, thấy lỗi báo đúng chỗ, và đóng biên nhận không bị hỏi lại (`sua-giao-dien-tin-hieu`)
 - Mười hai hạn chế người dùng thấy còn mở trong Kho tài liệu được sửa trong một lượt — đề xuất kẹt trên trang đã lưu trữ, số bản chờ sai, lỗi tải bị nuốt, mục lục ký tự đặc biệt, liên kết http mất khi đọc, trợ lý trả tiếng Việt cho giao diện tiếng Anh, bảng đổi cột rối trên màn duyệt — rồi đo lại trên bộ câu hỏi mẫu (`sua-sau-chay-that`)
+- Trưởng đơn vị sửa tên, mô tả hay người phụ trách của một mục tiêu hoặc KR ngay trong ngăn đang xem, không mở ngăn sửa nào chồng lên (`sua-tai-cho-muc-tieu-va-kr`)
 - Đo Tác nhân bộ dựng trên bốn biến thể model (GLM 5.2 Fast, GLM 5.3, GLM 5.3 hạng nhanh, GLM 5.3 suy luận thấp) bằng số bước, token và giây của phiên con, và nêu nguyên nhân GLM 5.3 chạy quá trần kèm số làm bằng (`tac-nhan-glm-5-3-cham`)
 - Màn tác nhân đọc được trên điện thoại, trạng thái nói tiếng Việt, và bộ dựng không treo im lặng: câu hỏi của bộ dựng ở lượt sau luôn hiện thay ô soạn (`tac-nhan-va`)
 - Nhân viên quan hệ đối tác mở được tệp trong bản ghi mình phụ trách, và khi đổi người phụ trách thì quyền đi theo người mới (`tep-theo-chu-ban-ghi`)

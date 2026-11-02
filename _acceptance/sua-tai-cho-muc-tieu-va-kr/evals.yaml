@@ -1,0 +1,175 @@
+schema_version: 1
+slug: sua-tai-cho-muc-tieu-va-kr
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/fields/kieu-truong.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Ca "mt-ten-enter": dựng ngăn mục tiêu thật với tRPC giả ghi lời gọi; bấm ô Tên, gõ tên mới, Enter → mảng lời gọi
+      updateObjective đúng bằng [{ id, title: "<tên mới>" }]; [data-slot="sheet-header"] hoặc drawer-header chứa tên mới;
+      số phần tử [role="dialog"] trước và sau luồng bằng nhau (chỉ ngăn bản ghi). Đối chứng: không gõ gì mà Enter → 0 lời gọi.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Ca "mt-ten-roi-o": gõ rồi blur → [{ id, title }]. Ca "mt-ten-esc": gõ rồi Esc → 0 lời gọi, ô hiện lại tên cũ.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Ca "mt-vi-sao-rong": mục tiêu whyNow "" → ô «Vì sao» có mặt và bấm được; nhập hai dòng, Ctrl+Enter → [{ id,
+      whyNow: "<dòng 1>\n<dòng 2>" }].
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/fields/kieu-truong.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Ca "mt-nguoi": chọn thành viên khác → [{ id, ownerUserId: "<id mới>" }], ô hiện tên mới. Ca "mt-nguoi-da-roi":
+      owner không có trong danh sách thành viên → ô hiện tên cũ kèm nhãn «đã rời» (chuỗi formerMember của crm messages).
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Ca "kr-ten": người có quyền đơn vị sửa Tên KR, Enter → updateKeyResult [{ id, title }]. Ca "kr-nguoi": đổi người →
+      [{ id, ownerUserId }]. Ca "kr-chi-chu": người chỉ là chủ KR → ô Tên sửa được, Người phụ trách không có ô sửa (không
+      combobox, chỉ tên).
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Ma trận viết trước năm ca × hai ngăn (10 ca): khong-quyen, da-bo, cho-duyet, chu-ky-khoa, chi-doc-kr — mỗi ca 0 ô
+      sửa (không input, textarea, combobox trong khối Chi tiết) và ba giá trị vẫn hiện bằng chữ. Đối chứng dương: ca sửa
+      được có đúng 3 ô (mục tiêu) và 2 ô (KR).
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Năm ca. ten-ngan (gõ «ab», Enter) và vi-sao-dai (501 ký tự): 0 lời gọi mutation, toast đúng chuỗi độ dài của okr
+      messages, ô hiện giá trị cũ. Ba ca lỗi máy chủ, dựng bằng TRPCClientError với data.code thật của service:
+      nguoi-roi (USER, BAD_REQUEST, message «SERVER_MSG_XYZ») → toast chứa câu tuChoi.nguoi; nguoi-cam (USER, FORBIDDEN) →
+      toast «Chưa lưu được Phụ trách. Thử lại sau một lát.»; ten-loi (TEXT, INTERNAL_SERVER_ERROR) → «Chưa lưu được Tên. Thử
+      lại sau một lát.» Mỗi ca toast KHÔNG chứa «SERVER_MSG_XYZ», ô hiện giá trị cũ.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      QueryClient thật, máy chủ giả trả dữ liệu mới sau lần lưu. Ca "lam-moi-mt": lưu tên mục tiêu → đầu ngăn mục tiêu chứa
+      tên mới. Ca "lam-moi-kr": lưu tên KR ở ngăn KR → đầu ngăn KR và dòng KR trong bảng của ngăn mục tiêu (dựng cùng
+      QueryClient) chứa tên mới. Đối chứng: bản sao luồng bỏ cache.okr → hai ca đỏ («khong lam moi»). Ca "sua-menu": chọn
+      «Sửa» ở menu đầu ngăn vẫn đặt hopOkr=muc-tieu và hộp sửa có mặt.
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.sv9_bai_cu
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/okr-sheet.dom.tsx"
+      - "apps/app/test/khung-tao-okr.dom.tsx"
+      - "apps/app/test/sheet-quyen-cap-nhat.dom.tsx"
+      - "apps/app/test/ngan-kr-mot-cho.dom.tsx"
+    expected: |
+      exit 0: bốn bài DOM cũ của ngăn mục tiêu, hộp sửa và ngăn KR vẫn xanh (hộp sửa giữ cho các trường khác).
+
+  - id: E10
+    criterion: AC-9
+    executor: ui-check
+    cmd: config:executors.script.sv9_chup
+    layer: ui-observed
+    paths:
+      - "apps/app/app/proto/_modules/sua-tai-cho-muc-tieu-va-kr/**"
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "_acceptance/sua-tai-cho-muc-tieu-va-kr/rang/chup-proto.mjs"
+    steps:
+      - "Chạy đúng lệnh của eval (bun run do:man dựng API và app của cây đang xét trên cổng tự do, PROTO_ROUTE=1); không gọi thẳng chup-proto.mjs ngoài phiên đo"
+      - "Đọc dòng cuối: «16 anh; xong; tran ngang: 0; khong co ngan: 0» và mã thoát 0"
+      - "Mở ảnh _acceptance/sua-tai-cho-muc-tieu-va-kr/evidence/ST-muc-tieu-dang-sua--desktop-1280--light.png, ST-muc-tieu-loi--mobile-375--light.png, ST-kr-xem--desktop-1280--light.png, ST-kr-dang-luu--mobile-375--light.png"
+      - "Trên mỗi ảnh: ô sửa là hàng nhãn bên trái và ô bấm được bên phải như ngăn deal; chữ dài xuống dòng, không tràn; ảnh lỗi có câu tiếng Việt"
+    expected: |
+      Chạy đúng lệnh khai (qua do:man, không gọi thẳng script). Ảnh _acceptance/sua-tai-cho-muc-tieu-va-kr/evidence/
+      ST-<ngăn>-<trạng thái>--<khổ>--light.png cho 2 ngăn × 4 trạng thái × 2 khổ = 16 ảnh; script in «16 anh», «tran ngang: 0»,
+      «khong co ngan: 0». Nhìn: ô sửa cùng hình ô của ngăn deal; trạng thái lỗi có câu tiếng
+      Việt.
+
+  - id: E11
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.sv9_slop
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - ".oxlintrc.json"
+    expected: |
+      exit 0 và 0 dòng onehub(ngan-trong-khung): vòng không mở lớp chồng thô nào trong thư mục ngăn.
+
+  - id: E12
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.sv9_api
+    layer: backend-effect
+    paths:
+      - "apps/api/src/okr/**"
+      - "apps/api/test/sua-tai-cho-okr.spec.ts"
+    expected: |
+      Bài API trên cơ sở dữ liệu thử, dùng router thật: chu-kr-ten (phiên chủ KR không quyền đơn vị) updateKeyResult({ id,
+      title }) → thành công, tên đổi trong DB; chu-kr-nguoi cùng phiên ({ id, ownerUserId }) → lỗi FORBIDDEN; truong-don-vi
+      updateObjective({ id, title }) → thành công. Quyền phía UI lấy từ cùng cờ canEdit, canEditKr mà detail trả về cho
+      từng phiên (khẳng định cờ khớp kết quả gọi).
+
+  - id: E13
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.sv9_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/sua-tai-cho-okr.dom.tsx"
+    expected: |
+      Ma trận viết trước 13 ô (ngăn × trường × cách kết), mỗi ô một ca «ket: <ô>» ghim mảng lời gọi: mt-ten {enter,
+      roi-o → [{id,title}]; esc → []}, mt-vi-sao {ctrl-enter, roi-o → [{id,whyNow}]; esc → []}, mt-nguoi {chon → [{id,
+      ownerUserId}]; esc → []}, kr-ten {enter, roi-o → [{id,title}]; esc → []}, kr-nguoi {chon → [{id,ownerUserId}];
+      esc → []}. Số ca = 13.

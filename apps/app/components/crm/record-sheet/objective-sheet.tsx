@@ -86,6 +86,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { KhuChiTietMucTieu } from "./chi-tiet-okr";
 import { useMoCapNhatKr } from "./khoi-cap-nhat-kr";
 import { LyDoNoiGop } from "./ly-do-noi-gop";
 import { TabDienBien } from "./objective-dien-bien";
@@ -99,6 +100,7 @@ import {
 import { HopMucHienThi } from "./objective-hien-thi";
 import { TabTraoDoi } from "./objective-trao-doi";
 import { dien } from "./plan-copy";
+import { ghiDuoc, suaNoiDung } from "./quyen-muc-tieu";
 import { RecordSheetFrame } from "./record-parts";
 import { useRecordSheetView, useRecordStack } from "./record-stack";
 
@@ -111,10 +113,6 @@ const TRANG_THAI_SHEET = {
 	"cong-bo": "ST-sheet-congbo",
 	"da-bo": "ST-sheet-dabo",
 } as const satisfies Record<ChiTiet["status"], string>;
-
-const ghiDuoc = (mt: ChiTiet) => mt.canEdit && mt.status !== "da-bo";
-
-const suaNoiDung = (mt: ChiTiet) => ghiDuoc(mt) && mt.choDuyet === null;
 
 function useXong(objectiveId: string, baoXong: string, sau: () => void) {
 	const cache = useCrmCache();
@@ -484,20 +482,6 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 	);
 }
 
-function KhuViSao({ mt }: { mt: ChiTiet }) {
-	const m = okrMessages(useLocale()).sheet;
-	if (mt.whyNow.trim() === "") return null;
-	return (
-		<div data-khu="vi-sao">
-			<DetailSheetSection title={m.khuViSao}>
-				<p className="text-pretty text-sm" translate="no">
-					{mt.whyNow}
-				</p>
-			</DetailSheetSection>
-		</div>
-	);
-}
-
 function KhuGopVao({ mt }: { mt: ChiTiet }) {
 	const m = okrMessages(useLocale()).sheet;
 	if (mt.alignments.length === 0) return null;
@@ -587,7 +571,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 
 	return (
 		<DetailSheetBody>
-			<KhuViSao mt={mt} />
+			<KhuChiTietMucTieu mt={mt} />
 			<KhuGopVao mt={mt} />
 			<DetailSheetTable>
 				<BangKr
