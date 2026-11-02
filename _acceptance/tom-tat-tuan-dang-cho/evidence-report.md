@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bb086916bd4595c75d5d8737732209bfc5593dba
+verified_commit: 14dca9468f28418a35eac69c076379536fcf1c7a
 human_signoff: Phan Le Manh 2026-10-24 — ký Cổng Bằng chứng trên vòng chấm 1 (PASS, 9 eval, 7 suite xanh, không chỗ yếu thước trong hợp đồng); 4 mục ngoài hợp đồng ghi Known limits, Ngoài-3 chấp nhận không sửa
 ---
 
@@ -175,3 +175,7 @@ none — every multi-run eval is uniform
 
 Round 1: all 9 evals (E1-E9) passed, no failed eval, no judgment item pending. Verdict PASS.
 
+
+### Re-pin lần 1 — 2026-11-02, do sua-bom-gio-ttdc: mốc ghi cấu hình neo đồng hồ ghim, không thua hàng ghi theo giờ thật
+run_id: repin-20261102T032604Z-76314
+sha: 14dca9468f28418a35eac69c076379536fcf1c7a · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

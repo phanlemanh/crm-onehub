@@ -260,7 +260,7 @@ describe("ttdc-luat-gio", () => {
 	});
 });
 
-const GHI_CAU_HINH_LUC = new Date("2026-11-02T00:00:00.000Z");
+const GHI_CAU_HINH_LUC = new Date(LUC.getTime() - 10 * NGAY_MS);
 
 let app: NestExpressApplication;
 let phong = "";
@@ -279,6 +279,9 @@ const cauHinhBat = (thay: Partial<OkrProgramSua> = {}): OkrProgramSua => ({
 });
 
 async function datCauHinh(sua: OkrProgramSua): Promise<void> {
+	await db.okrProgramConfig.deleteMany({
+		where: { createdAt: { gt: GHI_CAU_HINH_LUC } },
+	});
 	datDongHo(GHI_CAU_HINH_LUC);
 	await ghiCauHinh(app, await cookieCua(QUAN_TRI), sua);
 	datDongHo(LUC);
