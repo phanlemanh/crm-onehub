@@ -8,6 +8,7 @@ import {
 } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { TU_XU_LY_ESC } from "@crm/ui/lib/tu-xu-ly-esc";
 import { bangChungVao } from "@crm/validation/okr-canh-kr";
 import type { KeyboardEvent } from "react";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
@@ -23,6 +24,7 @@ export type ODuongDanBangChungProps = {
 	disabled?: boolean;
 	autoFocus?: boolean;
 	loiThem?: string | null;
+	tuXuLyEsc?: boolean;
 	onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 };
 
@@ -33,6 +35,7 @@ export function ODuongDanBangChung({
 	disabled,
 	autoFocus,
 	loiThem,
+	tuXuLyEsc,
 	onKeyDown,
 }: ODuongDanBangChungProps) {
 	const t = okrCanhKrMessages(useLocale());
@@ -46,6 +49,7 @@ export function ODuongDanBangChung({
 		>
 			<FieldLabel htmlFor={id}>{t.capNhat.bangChung}</FieldLabel>
 			<Input
+				{...(tuXuLyEsc ? TU_XU_LY_ESC : {})}
 				id={id}
 				name="duong-dan-bang-chung"
 				type="url"

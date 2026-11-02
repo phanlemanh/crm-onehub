@@ -89,6 +89,7 @@ export function DongDinhBangChung({
 						id={`${ma}-url`}
 						value={url}
 						autoFocus
+						tuXuLyEsc
 						disabled={dangDinh}
 						loiThem={loiDinh}
 						onChange={(v) => {
