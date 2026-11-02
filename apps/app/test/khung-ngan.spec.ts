@@ -245,7 +245,7 @@ function frontmatter(nguon: string): string {
 const KHUON_THAT = docTuDia()(DUONG_KHUON) ?? "";
 
 describe("khung-ngan", () => {
-	test("cay-that: khong loi, 14 dong ngoai le, dung 20 cap", () => {
+	test("cay-that: khong loi, 14 dong ngoai le, dung 19 cap", () => {
 		const doc = docTuDia();
 		expect(quet(doc)).toEqual([]);
 		const k = khuonTu(doc);
