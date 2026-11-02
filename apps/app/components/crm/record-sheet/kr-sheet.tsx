@@ -19,6 +19,7 @@ import {
 } from "@crm/ui/components/tooltip";
 import { useSearchInput } from "@crm/ui/hooks/use-search-input";
 import { formatDay } from "@crm/ui/lib/format";
+import type { BangChungVao } from "@crm/validation/okr-canh-kr";
 import {
 	skipToken,
 	useMutation,
@@ -57,7 +58,7 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { TruongTaiChoKr } from "./chi-tiet-okr";
 import { TAB_SO_NGUON } from "./dien-bien-kr";
 import { KhoiCapNhatKr, TAB_CAP_NHAT } from "./khoi-cap-nhat-kr";
-import { type BangChungVao, KrBangChung } from "./kr-bang-chung";
+import { KrBangChung } from "./kr-bang-chung";
 import {
 	type CanhKr,
 	type DuongVe,

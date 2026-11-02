@@ -17,7 +17,7 @@ export const TRANG_MAU: readonly TrangMau[] = [
 	"cap-nhat-moc",
 ];
 
-export const NHAN_TRANG: Record<TrangMau, string> = {
+export const NHAN_TRANG = {
 	rong: "Chưa có bằng chứng",
 	"dang-nhap": "Đang nhập — dòng nhập cuối danh sách",
 	sai: "Đường dẫn sai",
@@ -25,7 +25,7 @@ export const NHAN_TRANG: Record<TrangMau, string> = {
 	loi: "Máy chủ từ chối",
 	co: "Có bằng chứng",
 	"cap-nhat-moc": "Khối cập nhật KR mốc — chọn Xong",
-};
+} satisfies Record<TrangMau, string>;
 
 export const st = (trang: TrangMau) => `ST-bc-${trang}`;
 

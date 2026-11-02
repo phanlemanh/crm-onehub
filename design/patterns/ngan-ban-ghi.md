@@ -50,9 +50,9 @@ ngoai_le:
   - tep: apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx
     khoi: Spinner
     ly_do: nút gửi cập nhật KR đang chạy
-  - tep: apps/app/components/crm/record-sheet/kr-bang-chung.tsx
-    khoi: [Dialog, Spinner]
-    ly_do: nợ — hộp nhỏ một ô dán đường dẫn bằng chứng mở chồng lên ngăn KR, chờ dời sang khối soạn trong ngăn; nút đính đang chạy
+  - tep: apps/app/components/crm/record-sheet/dong-dinh-bang-chung.tsx
+    khoi: Spinner
+    ly_do: nút «Đính» của dòng nhập bằng chứng đang chạy
   - tep: apps/app/components/crm/record-sheet/lich-su-kr.tsx
     khoi: [Skeleton, VungTaiLoi]
     ly_do: chờ tải và lỗi tải mục Lịch sử trong thân ngăn KR đã tải xong

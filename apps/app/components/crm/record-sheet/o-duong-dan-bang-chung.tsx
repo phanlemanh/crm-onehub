@@ -35,12 +35,16 @@ export function ODuongDanBangChung({
 	loiThem,
 	onKeyDown,
 }: ODuongDanBangChungProps) {
-	const m = okrCanhKrMessages(useLocale()).bangChung;
+	const t = okrCanhKrMessages(useLocale());
 	const sai = loiDuongDan(value);
-	const loi = sai ? m.loiDuongDan : (loiThem ?? null);
+	const loi = sai ? t.bangChung.loiDuongDan : (loiThem ?? null);
 	return (
-		<Field data-invalid={loi ? true : undefined} data-o-duong-dan-bang-chung="">
-			<FieldLabel htmlFor={id}>{m.o.nhan}</FieldLabel>
+		<Field
+			data-invalid={loi ? true : undefined}
+			data-o="bang-chung"
+			data-o-duong-dan-bang-chung=""
+		>
+			<FieldLabel htmlFor={id}>{t.capNhat.bangChung}</FieldLabel>
 			<Input
 				id={id}
 				name="duong-dan-bang-chung"
@@ -60,7 +64,7 @@ export function ODuongDanBangChung({
 			{loi ? (
 				<FieldError>{loi}</FieldError>
 			) : (
-				<FieldDescription>{m.o.goiY}</FieldDescription>
+				<FieldDescription>{t.capNhat.goiY}</FieldDescription>
 			)}
 		</Field>
 	);

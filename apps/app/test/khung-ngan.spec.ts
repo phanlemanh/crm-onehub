@@ -26,8 +26,7 @@ const NGOAI_LE_MONG = [
 	"contact-plans/Skeleton",
 	"contact-plans/VungTaiLoi",
 	"khoi-cap-nhat-kr/Spinner",
-	"kr-bang-chung/Dialog",
-	"kr-bang-chung/Spinner",
+	"dong-dinh-bang-chung/Spinner",
 	"lich-su-kr/Skeleton",
 	"lich-su-kr/VungTaiLoi",
 	"objective-duyet/Dialog",
@@ -356,15 +355,11 @@ describe("khung-ngan", () => {
 		]);
 	});
 
-	test("sheet-dialog: khuon cam Sheet, Dialog; ba tep Dialog tho co ly do", () => {
+	test("sheet-dialog: khuon cam Sheet, Dialog; hai tep Dialog tho co ly do", () => {
 		const k = khuonTu(docTuDia());
 		expect(k.cam).toContain("Sheet");
 		expect(k.cam).toContain("Dialog");
-		for (const tep of [
-			"kr-bang-chung.tsx",
-			"objective-duyet.tsx",
-			"objective-hien-thi.tsx",
-		]) {
+		for (const tep of ["objective-duyet.tsx", "objective-hien-thi.tsx"]) {
 			const dong = k.ngoaiLe.find(
 				(n) => basename(n.tep) === tep && n.khoi === "Dialog",
 			);

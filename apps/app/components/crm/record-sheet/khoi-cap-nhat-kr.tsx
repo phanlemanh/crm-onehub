@@ -7,16 +7,9 @@ import UserFollow from "@carbon/icons-react/es/UserFollow";
 import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
-import {
-	Field,
-	FieldDescription,
-	FieldError,
-	FieldGroup,
-	FieldLabel,
-} from "@crm/ui/components/field";
+import { Field, FieldDescription, FieldGroup } from "@crm/ui/components/field";
 import { type LoiHoi, useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { Icon } from "@crm/ui/components/icon";
-import { Input } from "@crm/ui/components/input";
 import {
 	Item,
 	ItemActions,
@@ -58,7 +51,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { loiDuongDan } from "./kr-bang-chung";
+import { loiDuongDan, ODuongDanBangChung } from "./o-duong-dan-bang-chung";
 import { dien } from "./plan-copy";
 import { useOpenRecord } from "./record-stack";
 
@@ -455,7 +448,6 @@ function KhoiDaTai({
 	const dangMo = sessionId === null && !loiMo;
 	const duoc = muc !== null;
 	const hienBangChung = krCn.kind === "moc" && so === 1;
-	const saiBangChung = hienBangChung && loiDuongDan(bangChung);
 	const doi =
 		!coNhap || so === null || loi !== null
 			? null
@@ -574,33 +566,12 @@ function KhoiDaTai({
 							</FieldDescription>
 						)}
 						{hienBangChung ? (
-							<Field
-								data-invalid={saiBangChung ? true : undefined}
-								data-o="bang-chung"
-							>
-								<FieldLabel htmlFor={`${ma}-bang-chung`}>
-									{m.capNhat.bangChung}
-								</FieldLabel>
-								<Input
-									aria-invalid={saiBangChung ? true : undefined}
-									autoComplete="off"
-									disabled={khoa}
-									id={`${ma}-bang-chung`}
-									inputMode="url"
-									name="bang-chung"
-									onChange={(e) => setBangChung(e.target.value)}
-									placeholder="https://…"
-									spellCheck={false}
-									translate="no"
-									type="url"
-									value={bangChung}
-								/>
-								{saiBangChung ? (
-									<FieldError>{m.bangChung.loiDuongDan}</FieldError>
-								) : (
-									<FieldDescription>{m.capNhat.goiY}</FieldDescription>
-								)}
-							</Field>
+							<ODuongDanBangChung
+								disabled={khoa}
+								id={`${ma}-bang-chung`}
+								onChange={setBangChung}
+								value={bangChung}
+							/>
 						) : null}
 						<ChonTuTin
 							datTuTin={(tuTin) => setO({ ...o, tuTin })}
