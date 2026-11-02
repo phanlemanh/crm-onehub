@@ -1,0 +1,191 @@
+schema_version: 1
+slug: bang-chung-kr-mot-loi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.sv10_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/o-duong-dan-bang-chung.tsx"
+      - "apps/app/test/bang-chung-mot-loi.dom.tsx"
+    expected: |
+      Ca "mo-dong-nhap" (có bằng chứng) và "mo-dong-nhap-rong" (chưa có): dựng ngăn KR thật với tRPC giả; bấm
+      [data-nut="dinh-bang-chung"] → [data-hop-dinh-bang-chung] có mặt trong phần Bằng chứng, document.activeElement là
+      input[type="url"] của nó, số [role="dialog"] trước và sau bằng nhau. Đối chứng âm: bản sao dựng lại HopThoaiDinh
+      (Dialog) → số [role="dialog"] tăng 1, ca in «lop chong +1».
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.sv10_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/test/bang-chung-mot-loi.dom.tsx"
+    expected: |
+      Ba ca, mỗi cách kết một ca: "dinh-enter" (Enter ở ô đường dẫn), "dinh-nut" (bấm [data-nut="dinh"]),
+      "dinh-ctrl-enter" (Ctrl+Enter ở ô ghi chú). Mỗi ca: mảng lời gọi okr.themBangChung đúng bằng
+      [{ keyResultId: "kr-moc", url: "https://drive.google.com/bb", ghiChu: "<chuỗi đã gõ hoặc rỗng>" }];
+      [data-hop-dinh-bang-chung] biến mất; ngăn KR còn mở; máy chủ giả trả danh sách mới qua okr.canhKr và
+      [data-bang-chung] [data-ten-mien="drive.google.com"] có mặt. Đối chứng: bản sao không làm mới okr.canhKr → ca đỏ
+      «khong hien bang chung moi».
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.sv10_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/test/bang-chung-mot-loi.dom.tsx"
+    expected: |
+      Ca "huy-esc" và "huy-nut": gõ đường dẫn rồi Esc / bấm «Huỷ» → 0 lời gọi, [data-hop-dinh-bang-chung] biến mất,
+      ngăn KR [data-kr-sheet] vẫn mở và không có câu hỏi bỏ nháp. Ca "giu-nhap": gõ dở rồi đóng ngăn → bộ giữ thay đổi
+      hiện câu hỏi bỏ nháp (dấu của useKhaiThayDoi có mặt) và ngăn chưa đóng. Ca "giu-nhap-chuyen-kr": gõ dở rồi bấm ›
+      sang KR kế → câu hỏi hiện và KR đang mở chưa đổi. Đối chứng: dòng nhập chưa gõ gì → đóng ngăn và bấm › đều không hỏi.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.sv10_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/o-duong-dan-bang-chung.tsx"
+      - "apps/app/test/bang-chung-mot-loi.dom.tsx"
+    expected: |
+      Ma trận viết trước bốn ca. "url-sai" (gõ «drive.google.com/bb»): [data-slot="field-error"] đúng chuỗi
+      bangChung.loiDuongDan, [data-nut="dinh"] disabled, Enter → 0 lời gọi. "ghi-chu-dai" (max+1 ký tự): câu loiGhiChu
+      đã điền max, 0 lời gọi. "may-chu-tu-choi" (TRPCClientError BAD_REQUEST, message «SERVER_MSG_XYZ») và "mat-mang"
+      (TypeError fetch): dưới ô đường dẫn đúng chuỗi bangChung.loiDinh «Chưa đính được bằng chứng. Thử lại sau một lát.»,
+      dòng nhập còn mở, ô đường dẫn còn đúng giá trị đã gõ, cả trang không chứa «SERVER_MSG_XYZ». Số ca = 4.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.sv10_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/components/crm/record-sheet/o-duong-dan-bang-chung.tsx"
+      - "apps/app/test/bang-chung-mot-loi.dom.tsx"
+    expected: |
+      Ca "cung-o": khối cập nhật KR mốc chọn Xong → có đúng một [data-o-duong-dan-bang-chung]; nhãn, câu gợi ý và (khi gõ
+      «drive.google.com/bb») câu lỗi của nó trùng từng chữ với ô trong dòng nhập của phần Bằng chứng; cả hai là cùng hàm
+      ODuongDanBangChung (khoá data-o-duong-dan-bang-chung chỉ do thành phần ấy đặt). Ca "gui-kem-bang-chung": gõ đường dẫn
+      hợp lệ rồi gửi → lời gọi okr.guiCapNhat mang bangChung { url, ghiChu: "" }; đường dẫn sai → 0 lời gọi.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.sv10_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/test/bang-chung-mot-loi.dom.tsx"
+    expected: |
+      Ma trận viết trước bốn ca: "khong-quyen" (quyen.suaDuoc false), "khoa" (khoa true), "cho-duyet" (choDuyet true) →
+      không có [data-nut="dinh-bang-chung"], không có [data-hop-dinh-bang-chung]; "chua-xong" (kr.xong false) → nút có mặt,
+      disabled, câu bangChung.rong.moTaChuaXong hiện. Đối chứng dương: ca sửa được, mốc xong → nút bật.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.sv10_slop
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "design/patterns/ngan-ban-ghi.md"
+      - ".oxlintrc.json"
+    expected: "exit 0; 0 dòng onehub(ngan-trong-khung) và onehub(khong-ve-tay)."
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.sv10_rang
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "design/patterns/ngan-ban-ghi.md"
+      - "apps/app/test/khung-ngan.spec.ts"
+      - "_acceptance/bang-chung-kr-mot-loi/rang/nhap-lai-dialog.mjs"
+    expected: |
+      Script chạy khung-ngan.spec.ts trên cây (xanh), rồi trên một bản sao kho tạm: (a) kr-bang-chung.tsx nhập lại Dialog
+      → oxlint với luật onehub/ngan-trong-khung báo khoiCam gọi tên apps/app/components/crm/record-sheet/kr-bang-chung.tsx;
+      (b) khuôn ngan-ban-ghi.md thêm lại Dialog cho kr-bang-chung.tsx → khung-ngan.spec.ts đỏ «ngoai le thua». In
+      «cay: xanh · nhap-lai: do · ngoai-le-lai: do», exit 0 khi đủ ba; thiếu một chiều thì exit 1 và gọi tên chiều thiếu.
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.sv10_canh_kr
+    layer: backend-effect
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/api/src/okr/**"
+    expected: |
+      Thước đã ký của canh-kr-okr chạy nguyên văn, chỉ hai ca E11, E12, qua phiên đo: bước 7 bấm Đính bằng chứng, gõ
+      đường dẫn sai thấy câu lỗi, «Đính» khoá, gõ đường dẫn đúng, Đính → khối đóng và dòng tên miền drive.google.com hiện;
+      E12 đọc DB: okrBangChung của K2 có đúng một hàng url bằng chuỗi đã gõ, okrBangChung của K4 cùng thời điểm với
+      okrCheckIn mới. Exit 0, không dòng TRUOT.
+
+  - id: E10
+    criterion: AC-9
+    executor: ui-check
+    cmd: config:executors.script.sv10_chup
+    layer: ui-observed
+    paths:
+      - "apps/app/app/proto/_modules/bang-chung-kr-mot-loi/**"
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/o-duong-dan-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "_acceptance/bang-chung-kr-mot-loi/rang/chup-proto.mjs"
+    steps:
+      - "Chạy đúng lệnh của eval (bun run do:man dựng API và app của cây đang xét trên cổng tự do, PROTO_ROUTE=1); không gọi thẳng chup-proto.mjs ngoài phiên đo"
+      - "Đọc dòng cuối: «14 anh; xong; tran ngang: 0; khong co ngan: 0» và mã thoát 0"
+      - "Mở ảnh _acceptance/bang-chung-kr-mot-loi/evidence/ST-bc-dang-nhap--desktop-1280--light.png, ST-bc-sai--mobile-375--light.png, ST-bc-loi--desktop-1280--light.png, ST-bc-cap-nhat-moc--mobile-375--light.png"
+      - "Trên mỗi ảnh: dòng nhập nằm trong danh sách của ngăn, không có lớp phủ hay hộp nổi; ô đường dẫn ở dòng nhập và ở khối cập nhật cùng nhãn, cùng hình; câu lỗi tiếng Việt; chữ dài xuống dòng"
+    expected: |
+      Chạy đúng lệnh khai (qua do:man). Ảnh _acceptance/bang-chung-kr-mot-loi/evidence/ST-bc-<trạng thái>--<khổ>--light.png
+      cho 7 trạng thái × 2 khổ = 14 ảnh; script in «14 anh», «tran ngang: 0», «khong co ngan: 0». Nhìn: dòng nhập không phải
+      lớp chồng; ô đường dẫn cùng hình ở hai chỗ; trạng thái lỗi có câu tiếng Việt.
+
+  - id: E11
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.sv10_bai_cu
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/okr-canh-kr.dom.tsx"
+      - "apps/app/test/cap-nhat-trong-ngan-kr.dom.tsx"
+      - "apps/app/test/ngan-kr-mot-cho.dom.tsx"
+    expected: |
+      exit 0: ba bài DOM cũ của ngăn KR, phần bằng chứng và khối cập nhật vẫn xanh sau khi đổi hộp thoại thành dòng nhập.
+
+  - id: E12
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.sv10_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/kr-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/test/bang-chung-mot-loi.dom.tsx"
+    expected: |
+      Ma trận viết trước 9 ô (lối vào × cách kết), mỗi ô một ca «ket: <ô>» ghim mảng lời gọi: dong-nhap {enter, nut,
+      ctrl-enter → themBangChung [{keyResultId,url,ghiChu}]; esc, huy → []}, cap-nhat-moc {gui → guiCapNhat có bangChung;
+      gui-url-sai → []; bo-xong → guiCapNhat không có bangChung; esc-dong-khoi → []}. Số ca = 9.
+
+  - id: E13
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.sv10_mot_o
+    paths:
+      - "apps/app/components/crm/record-sheet/khoi-cap-nhat-kr.tsx"
+      - "apps/app/components/crm/record-sheet/o-duong-dan-bang-chung.tsx"
+      - "apps/app/components/crm/record-sheet/dong-dinh-bang-chung.tsx"
+      - "_acceptance/bang-chung-kr-mot-loi/rang/mot-o.mjs"
+    expected: |
+      Răng quét mã, ma trận viết trước ba ô trên cây thật: (1) trong apps/app chỉ o-duong-dan-bang-chung.tsx đặt
+      data-o-duong-dan-bang-chung; (2) khoi-cap-nhat-kr.tsx nhập ODuongDanBangChung và không còn type="url";
+      (3) dong-dinh-bang-chung.tsx nhập ODuongDanBangChung. In «o 1/2/3: dat», số ô = 3. Chiều đỏ trên bản sao tạm:
+      khoi-cap-nhat-kr.tsx dựng lại Input type="url" mang dấu data-o-duong-dan-bang-chung → răng đỏ, in «o 1: do» và
+      «o 2: do» kèm tên tệp. Exit 0 khi cây đạt đủ ba ô và bản sao đỏ đúng hai ô.

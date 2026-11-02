@@ -170,6 +170,11 @@ const vi = {
 		},
 		loiDuongDan: "Đường dẫn phải bắt đầu bằng http:// hoặc https://",
 		loiGhiChu: "Ghi chú tối đa {max} ký tự.",
+		loiDinh: "Chưa đính được bằng chứng. Thử lại sau một lát.",
+		o: {
+			nhan: "Đường dẫn bằng chứng",
+			goiY: "Đường dẫn tới văn bản cho thấy mốc đã xong. Lúc chấm cuối kỳ, người chấm sẽ thấy nó.",
+		},
 	},
 	ghiNhan: {
 		cheDo: {
@@ -481,6 +486,11 @@ const en: OkrCanhKrMessages = {
 		},
 		loiDuongDan: "The link must start with http:// or https://",
 		loiGhiChu: "The note can be at most {max} characters.",
+		loiDinh: "Couldn't attach the evidence. Try again in a moment.",
+		o: {
+			nhan: "Evidence link",
+			goiY: "A link to the document showing the milestone is done. Whoever scores the cycle will see it.",
+		},
 	},
 	ghiNhan: {
 		cheDo: {

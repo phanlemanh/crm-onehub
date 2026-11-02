@@ -184,7 +184,7 @@ function HopThoaiDinh({
 	);
 }
 
-function DongBangChung({
+export function DongBangChung({
 	b,
 	goDuoc,
 	onGo,
