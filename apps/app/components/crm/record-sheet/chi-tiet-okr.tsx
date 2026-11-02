@@ -73,8 +73,8 @@ export function KhuChiTietMucTieu({ mt }: { mt: ChiTiet }) {
 	const tieuDe = okrMessages(locale).sheet.khuChiTiet;
 	const trpc = useTRPC();
 	const suaDuoc = suaTaiChoMucTieu(mt);
-	const nguoiDung = useQuery({
-		...trpc.users.list.queryOptions(),
+	const thanhVien = useQuery({
+		...trpc.okr.thanhVien.queryOptions(),
 		enabled: suaDuoc,
 	});
 	const { luu, dangLuu } = useLuuTruongOkr({
@@ -85,10 +85,10 @@ export function KhuChiTietMucTieu({ mt }: { mt: ChiTiet }) {
 	});
 	const truong = truongMucTieu(
 		{ title: mt.title, whyNow: mt.whyNow, owner: coAnh(mt.owner) },
-		{ nhan, nguoiDung: nguoiDung.data, luu, dangLuu },
+		{ nhan, nguoiDung: thanhVien.data?.map(coAnh), luu, dangLuu },
 	);
 	return (
-		<div data-khu="chi-tiet">
+		<div data-khu="vi-sao" data-muc-ngan="chi-tiet">
 			<DetailSheetSection title={tieuDe}>
 				<CacTruong suaDuoc={() => suaDuoc} truong={truong} />
 			</DetailSheetSection>

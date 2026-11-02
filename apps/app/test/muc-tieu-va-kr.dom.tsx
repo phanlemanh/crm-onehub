@@ -1393,7 +1393,7 @@ function giaTriViSao(khu: Element | null): string | null {
 
 function docSheet() {
 	const b = document.body;
-	const viSao = b.querySelector("[data-khu='chi-tiet']");
+	const viSao = b.querySelector("[data-khu='vi-sao']");
 	const gopVao = b.querySelector("[data-khu='gop-vao']");
 	const bangKr = b.querySelector("[data-kr]")?.closest("table") ?? null;
 	const tienDoTu = b.querySelector("[data-tien-do-tu]");
@@ -2129,12 +2129,10 @@ const CA_TRANG_THAI = {
 		await dungSheet(mtSheet({ whyNow: "" }));
 		soCa(
 			{
-				viSao: giaTriViSao(
-					document.body.querySelector("[data-khu='chi-tiet']"),
-				),
+				viSao: giaTriViSao(document.body.querySelector("[data-khu='vi-sao']")),
 				chuViSao:
 					document.body.querySelector(
-						`[data-khu='chi-tiet'] button[aria-label="${m.sheet.truongViSao}"]`,
+						`[data-khu='vi-sao'] button[aria-label="${m.sheet.truongViSao}"]`,
 					) !== null,
 				doiChungGopVao:
 					document.body.querySelector("[data-khu='gop-vao']") !== null,

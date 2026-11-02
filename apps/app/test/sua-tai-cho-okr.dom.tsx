@@ -370,6 +370,7 @@ mock.module("@/lib/trpc/client", () => ({
 			list: thuTuc("users.list", () => [
 				{ ...HUNG, image: null },
 				{ ...LAN, image: null },
+				{ ...TUAN, image: null },
 			]),
 			me: thuTuc("users.me", () => HUNG),
 		},
@@ -466,7 +467,9 @@ async function cho(xong: () => boolean, moTa: string): Promise<void> {
 }
 
 const khuMt = () =>
-	document.body.querySelector<HTMLElement>('[data-khu="chi-tiet"]');
+	document.body.querySelector<HTMLElement>(
+		'[data-okr-sheet] [data-khu="vi-sao"][data-muc-ngan="chi-tiet"]',
+	);
 const khuKr = () =>
 	document.body.querySelector<HTMLElement>(
 		'[data-kr-sheet] [data-muc-ngan="chi-tiet"]',
