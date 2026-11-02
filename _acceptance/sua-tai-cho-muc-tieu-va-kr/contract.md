@@ -5,7 +5,7 @@ slug: sua-tai-cho-muc-tieu-va-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [web]
-status: implemented
+status: machine-cleared
 approved_by: Phan Le Manh
 approved_at: 2026-11-02
 design_doc: docs/superpowers/specs/2026-11-01-sua-tai-cho-muc-tieu-va-kr-design.md
@@ -76,3 +76,8 @@ chối). Thước CE: `bat_khi` của hàng SV9 [SUY-TỪ-REPO: docs/plan/lo-tri
 ## Notes
 
 - Vòng chạm `objective-sheet.tsx`, `kr-sheet.tsx` (vùng record-sheet của M5) — báo M5 trên #375.
+- Ngoài-1 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Khi danh sách thành viên chưa tải xong hoặc tải lỗi, ô Phụ trách trong ngăn mục tiêu và ngăn KR hiện trống, không có tên người phụ trách và không có thông báo lỗi. Tải lại trang thường làm tên hiện lại. — `apps/app/components/crm/record-sheet/chi-tiet-okr.tsx`
+- Ngoài-2 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Hiện giới hạn độ dài tên và «Vì sao» ở ngăn khớp với máy chủ nên người dùng không thấy gì sai. Nếu sau này máy chủ đổi giới hạn mà ngăn không đổi theo, ngăn có thể chặn nhầm hoặc cho qua nhầm. — `apps/app/components/crm/record-sheet/truong-okr.ts`
+- Ngoài-3 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Ở ngăn KR, danh sách người phụ trách lấy từ một nguồn khác với ngăn mục tiêu, và vẫn tải danh sách ngay cả khi người xem không được đổi người. Người dùng không thấy khác biệt rõ ràng, chỉ tốn thêm một lần tải. — `apps/app/components/crm/record-sheet/kr-sheet.tsx`
+- Ngoài-4 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Một trường hợp quyền «KR chỉ đọc nhưng vẫn sửa được mục tiêu» chưa được bài kiểm tự động kiểm riêng. Người dùng chưa gặp lỗi nào, chỉ là một tình huống hiếm có thể hỏng mà không ai báo sớm. — `apps/app/test/sua-tai-cho-okr.dom.tsx`
+- Ngoài-5 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Bài kiểm tự động việc làm mới dữ liệu sau khi lưu dùng bản giả rộng hơn bản thật, nên nếu việc làm mới hỏng ở ngăn KR thì có thể không bị phát hiện. Hiện chưa có dấu hiệu người dùng thấy dữ liệu cũ sau khi lưu. — `apps/app/test/sua-tai-cho-okr.dom.tsx`
