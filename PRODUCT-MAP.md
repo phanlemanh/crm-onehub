@@ -11,7 +11,7 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>8 việc"]
   GD --> DB["Đã bác từ khám phá<br/>3 việc"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>172 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>198 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
@@ -30,6 +30,7 @@ flowchart TD
 
 ## Đang làm
 
+- Người phụ trách KR đính một đường dẫn bằng chứng ngay trong ngăn KR, ở một chỗ duy nhất, và thấy nó trong danh sách bằng chứng của KR (`bang-chung-kr-mot-loi`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
