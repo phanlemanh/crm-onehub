@@ -125,6 +125,11 @@ evals:
       - "apps/app/components/crm/record-sheet/objective-sheet.tsx"
       - "apps/app/components/crm/record-sheet/kr-sheet.tsx"
       - "_acceptance/sua-tai-cho-muc-tieu-va-kr/rang/chup-proto.mjs"
+    steps:
+      - "Chạy đúng lệnh của eval (bun run do:man dựng API và app của cây đang xét trên cổng tự do, PROTO_ROUTE=1); không gọi thẳng chup-proto.mjs ngoài phiên đo"
+      - "Đọc dòng cuối: «16 anh; xong; tran ngang: 0; khong co ngan: 0» và mã thoát 0"
+      - "Mở ảnh _acceptance/sua-tai-cho-muc-tieu-va-kr/evidence/ST-muc-tieu-dang-sua--desktop-1280--light.png, ST-muc-tieu-loi--mobile-375--light.png, ST-kr-xem--desktop-1280--light.png, ST-kr-dang-luu--mobile-375--light.png"
+      - "Trên mỗi ảnh: ô sửa là hàng nhãn bên trái và ô bấm được bên phải như ngăn deal; chữ dài xuống dòng, không tràn; ảnh lỗi có câu tiếng Việt"
     expected: |
       Chạy đúng lệnh khai (qua do:man, không gọi thẳng script). Ảnh _acceptance/sua-tai-cho-muc-tieu-va-kr/evidence/
       ST-<ngăn>-<trạng thái>--<khổ>--light.png cho 2 ngăn × 4 trạng thái × 2 khổ = 16 ảnh; script in «16 anh», «tran ngang: 0»,
