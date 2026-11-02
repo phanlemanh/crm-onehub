@@ -5,7 +5,7 @@ slug: sua-tai-cho-muc-tieu-va-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [web]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-11-02
 design_doc: docs/superpowers/specs/2026-11-01-sua-tai-cho-muc-tieu-va-kr-design.md
