@@ -5,7 +5,7 @@ slug: bang-chung-kr-mot-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [web]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-11-02
 design_doc: docs/superpowers/specs/2026-11-02-bang-chung-kr-mot-loi-design.md
@@ -84,3 +84,7 @@ xong). Thước CE: `bat_khi` của hàng SV10 [SUY-TỪ-REPO: docs/plan/lo-trin
 - Vòng sửa `design/patterns/ngan-ban-ghi.md` và `apps/app/test/khung-ngan.spec.ts`, nằm trong `paths` của hai hồ sơ
   `khung-chung-ngan-ban-ghi` (đã ký) và `rang-giu-khung-ngan` (máy thông): hai hồ sơ ấy cần ghim lại khi gộp. Thước của
   chúng không đổi nghĩa — chỉ một khoản nợ đã ghi «chờ dời sang khối soạn trong ngăn» được trả.
+- Ngoài-2 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Người dùng đọc màn hình không được báo là ô đường dẫn đang lỗi khi máy chủ từ chối, và viền ô không chuyển sang kiểu lỗi, dù câu lỗi vẫn hiện bên dưới. — `apps/app/components/crm/record-sheet/o-duong-dan-bang-chung.tsx`
+- Ngoài-3 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Không ảnh hưởng người dùng ngay; nếu sau này bấm Esc ở khối cập nhật làm mất hay gửi nhầm bản nháp thì bài kiểm này sẽ không báo. — `apps/app/test/bang-chung-mot-loi.dom.tsx`
+- Ngoài-4 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Không ảnh hưởng người dùng ngay; nếu sau này Esc hoặc Huỷ không đóng được dòng nhập thì một ô trong ma trận kiểm vẫn xanh. — `apps/app/test/bang-chung-mot-loi.dom.tsx`
+- Ngoài-5 (máy định tuyến 2026-11-02, đề xuất S4 known-limits): Không ảnh hưởng người dùng ngay; nếu khối rỗng vẫn hiện cùng lúc với dòng nhập khi KR chưa có bằng chứng thì bài kiểm sẽ không phát hiện. — `apps/app/test/bang-chung-mot-loi.dom.tsx`
