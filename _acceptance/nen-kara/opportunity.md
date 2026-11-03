@@ -43,7 +43,7 @@ muốn, dựng tạm ở proto).
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: Sau khi có nền, các lượt AI kế tiếp có dựng đề xuất, dấu và phản hồi của Kara bằng thành phần chung của packages/ui, để người dùng thấy AI cùng một kiểu ở mọi màn không?
-- Kết quả nào là SỐNG: Tới hết timebox, mọi lượt AI gộp sau nen-kara dựng đề xuất, dấu và phản hồi bằng ProposedChange, KaraMark, KaraLabel, AiFeedback chứ không tự dựng, số kiểu dấu nhận diện AI trên màn thật giảm từ bốn xuống tối đa hai, và trong phiên nghiệm thu ít nhất 2 trên 3 người chỉ đúng nút chính của một đề xuất inline.
-- Kết quả nào là CHẾT: Có ít nhất 1 lượt AI gộp sau nen-kara tự dựng thẻ đề xuất hay dấu Kara riêng ngoài packages/ui, hoặc số kiểu dấu nhận diện AI trên màn thật vẫn là bốn.
+- Câu hỏi phép đo trả lời: [đề xuất] Người dùng có nhận ra ngay đâu là đề xuất của Kara và xử lý đúng (nhận hay bỏ) ở mọi màn có AI không?
+- Kết quả nào là SỐNG: [đề xuất] Trong phiên nghiệm thu với ít nhất 3 người qua ít nhất 3 màn có AI, ít nhất 2 trên 3 người chỉ đúng phần do Kara đề xuất ở cả 3 màn và bấm đúng nút nhận hay bỏ ngay lần đầu; và số phản hồi về câu trả lời AI trong 2 tuần sau bật không thấp hơn 2 tuần trước.
+- Kết quả nào là CHẾT: [đề xuất] Trong phiên nghiệm thu, từ 2 trên 3 người trở lên nhầm phần do Kara đề xuất với chữ người viết ở ít nhất 1 màn hay bấm nhầm nút nhận hay bỏ, hoặc số phản hồi về câu trả lời AI trong 2 tuần sau bật giảm quá 30% so với 2 tuần trước.
 - Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

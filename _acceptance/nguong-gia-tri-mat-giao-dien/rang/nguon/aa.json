@@ -29,8 +29,8 @@
 			"Kết quả nào là CHẾT": "Có lượt dựng kết thúc mà không có ThongBao nào hoặc có hai, hoặc dưới một phần tư thông báo Tác nhân được đọc trong 2 tuần, hoặc người dùng trong phiên nghiệm thu nói vẫn không biết lượt dựng đã xong.",
 			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
 		},
-		"nguon_so": "Truy vấn bảng ThongBao (loại tac-nhan-*, docLuc, duongDan) đối chiếu với AgentConversation của bộ dựng; số lượt nền đọc từ sessions_completed và sessions_failed của install_daily trong docs/telemetry.md.",
-		"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux»."
+		"nguon_so": "Bảng thongBao (noiDung.loai là tac-nhan-xong, tac-nhan-can-tra-loi hay tac-nhan-hong; taoLuc, docLuc, moLuc, duongDan) đối chiếu agentConversation của bộ dựng; số lượt nền từ sessions_completed và sessions_failed của install_daily trong docs/telemetry.md; phiên nghiệm thu ít nhất 3 người.",
+		"can_cu": "AC-2, AC-4 và AC-6 (rời trang được, đúng một thông báo mỗi lượt, mở cuộc trò chuyện thì đã đọc) cùng câu giao «trải nghiệm lớn hơn 200s cần được thay đổi ux»; vòng r2 03/11 (chủ kho «Trả lại, sửa»): ThongBao không có cột loai, loại nằm trong noiDung."
 	},
 	{
 		"ho_so": "chu-man-tieng-viet-khong-tran",

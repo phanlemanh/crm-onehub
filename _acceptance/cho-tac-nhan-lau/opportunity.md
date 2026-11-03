@@ -27,6 +27,6 @@ Cổng Đáng: chủ kho gõ «MH3 build; MH4 build; K7 build» ở phiên P6 (l
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: Người dựng Tác nhân có rời màn chờ và quay lại đúng lúc nhờ thông báo của Kara, thay vì ngồi nhìn thẻ «Đang dựng» suốt hơn 200 giây không?
-- Kết quả nào là SỐNG: Trong 2 tuần sau bật, với ít nhất 5 lượt dựng, mọi lượt dựng kết thúc (không tự dừng) có đúng một ThongBao loại tac-nhan-xong, tac-nhan-can-tra-loi hay tac-nhan-hong, và ít nhất một nửa số thông báo đó có docLuc khác null.
-- Kết quả nào là CHẾT: Có lượt dựng kết thúc mà không có ThongBao nào hoặc có hai, hoặc dưới một phần tư thông báo Tác nhân được đọc trong 2 tuần, hoặc người dùng trong phiên nghiệm thu nói vẫn không biết lượt dựng đã xong.
+- Kết quả nào là SỐNG: [đề xuất] Trong 2 tuần sau bật, với ít nhất 5 lượt dựng, mọi lượt dựng kết thúc (không tự dừng) có đúng một thông báo mang noiDung.loai tac-nhan-xong, tac-nhan-can-tra-loi hay tac-nhan-hong, và ít nhất một nửa số thông báo đó có docLuc khác null.
+- Kết quả nào là CHẾT: [đề xuất] Có lượt dựng kết thúc mà không có thông báo Tác nhân nào hoặc có hai, hoặc dưới một phần tư thông báo Tác nhân có docLuc khác null trong 2 tuần, hoặc từ 2 trên 3 người trong phiên nghiệm thu nói vẫn không biết lượt dựng đã xong.
 - Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

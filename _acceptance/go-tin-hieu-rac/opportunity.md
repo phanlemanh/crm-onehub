@@ -27,5 +27,5 @@ Vì sao: Tín hiệu rác (thử, trùng, nhầm) vào thẳng lượt gom và l
 
 - Câu hỏi phép đo trả lời: Sau khi quản trị lưu trữ được tín hiệu rác, đội sản phẩm có còn nhận tín hiệu thử, trùng hay gửi nhầm trong lượt kéo về không?
 - Kết quả nào là SỐNG: Trong 2 tuần sau khi bật, có ít nhất một tín hiệu được lưu trữ trước khi bị kéo về, và bản gom kế tiếp của đội sản phẩm không xếp tín hiệu nào vào lẻ với lý do thử, trùng hay gửi nhầm.
-- Kết quả nào là CHẾT: Trong 2 tuần sau khi bật, bản gom vẫn có tín hiệu lẻ vì thử, trùng hay gửi nhầm mà quản trị đã thấy ở thẻ «Tất cả», hoặc phần lớn lần lưu trữ bị khôi phục lại vì lỡ tay.
+- Kết quả nào là CHẾT: [đề xuất] Trong 2 tuần sau khi bật, bản gom kế tiếp còn ít nhất 1 tín hiệu xếp lẻ vì thử, trùng hay gửi nhầm, hoặc trên 50% lần lưu trữ (tinHieuVet loai luu-tru) có vết khoi-phuc của cùng tín hiệu trong vòng 7 ngày.
 - Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

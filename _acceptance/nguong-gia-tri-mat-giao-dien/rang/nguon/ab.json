@@ -62,8 +62,8 @@
 			"Kết quả nào là CHẾT": "Có ít nhất 1 lượt CI hay pre-push đỏ với dòng panic «infinite loop» của next build, hoặc trang lộ trình lại hiện chữ «CRM» cho người đọc.",
 			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
 		},
-		"nguon_so": "Nhật ký job CI đọc bằng gh run list và gh run view lọc chuỗi «infinite loop», cộng đầu ra của _acceptance/doi-ten-onehub-center/rang/quet-ten.mjs; không có telemetry.",
-		"can_cu": "AC-1 (quét tên 0 SAI), AC-2 (bản dựng xanh khi có symlink vòng) và dòng ngưỡng sẵn có «bốn PR bị chặn đẩy được»."
+		"nguon_so": "Phiên nghiệm thu ít nhất 3 người đọc trang lộ trình; tên hiển thị lấy từ bảng SanPhamLoTrinh (cột ten); docs/telemetry.md không có sự kiện cho trang lộ trình.",
+		"can_cu": "Câu giao đổi tên sản phẩm thành OneHub Center trên trang lộ trình cho người đọc ở các phòng ban; vòng r2 03/11 (chủ kho «Trả lại, sửa»): ô cũ đo CI và phép quét, không đo người đọc."
 	},
 	{
 		"ho_so": "loc-don-vi-khong-tu-dong",
@@ -128,7 +128,7 @@
 			"Kết quả nào là CHẾT": "Có ít nhất 1 lượt AI gộp sau nen-kara tự dựng thẻ đề xuất hay dấu Kara riêng ngoài packages/ui, hoặc số kiểu dấu nhận diện AI trên màn thật vẫn là bốn.",
 			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
 		},
-		"nguon_so": "Đếm bằng git grep trong apps/app chỗ dùng thành phần chung so với chỗ tự dựng, đếm kiểu dấu trên màn thật theo khảo sát mục 1–2, cộng quan sát phiên nghiệm thu N ít nhất 3 người.",
-		"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện; mỗi lượt AI mới tự dựng một kiểu vì packages/ui chưa có thứ để dùng» cùng AC-1, AC-5 và AC-12."
+		"nguon_so": "Phiên nghiệm thu ít nhất 3 người đi qua ít nhất 3 màn có AI; bảng agentConversationFeedback (rating, createdAt) và okrHoiPhanHoi (huuIch, luc) đếm phản hồi về câu trả lời AI.",
+		"can_cu": "Vấn đề «12 bề mặt AI, bảy tên, bốn dấu nhận diện» làm người dùng không nhận ra đâu là AI; vòng r2 03/11 (chủ kho «Trả lại, sửa»): ô cũ đo mã bằng git grep, không đo người dùng."
 	}
 ]
