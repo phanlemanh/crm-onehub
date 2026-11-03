@@ -5,7 +5,7 @@ slug: nguong-gia-tri-mat-giao-dien
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
+status: draft
 design_doc: docs/superpowers/specs/2026-10-31-nguong-gia-tri-mat-giao-dien-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-31
@@ -30,7 +30,7 @@ bảng đề xuất `_acceptance/nguong-gia-tri-mat-giao-dien/bang-de-xuat.md` (
 - AC-3: Given một ô mất nhãn `[đề xuất]` so với gốc hay so với bảng, When đọc sổ quyết định của hồ sơ F39, Then sổ có dòng chốt mang tên người (`decided_by`) phủ hồ sơ ấy; máy không tự bỏ nhãn.
 - AC-4: Given bảng đề xuất, When đọc mọi ô SỐNG và CHẾT máy soạn (cả ô thay đề xuất kit tự sinh), Then mỗi ô đo giá trị cho người dùng (không phải tiêu chí dựng hay eval máy), nêu một con số hay điều quan sát cụ thể, và nguồn số là thứ có thật (sự kiện ở `docs/telemetry.md`, bảng/cột ở `schema.prisma`, hay phiên nghiệm thu có số người). (judgment)
 - AC-6: Given 51 hồ sơ sau khi áp bảng, When đọc Timebox bằng `timeboxDate` của kit, Then mỗi hồ sơ có một ngày không trước ngày chạy, trừ hồ sơ có tên trong dòng sổ `mien_timebox` mang tên người.
-- AC-5: Given F37 đã gộp và lượt ghim lại đã chạy, When đọc dòng `repin` cuối của 51 hồ sơ, Then dòng ấy trùng `verified_commit`, có sau lần sửa `opportunity.md` của hồ sơ, và mọi bộ kiểm cùng eval máy thoát 0.
+- AC-5: Given nhánh F39 đã gộp `onehub` mang lớp CI của kit 2.37, When chạy `pre-merge-check` của kho với `--base origin/onehub` và `--slug` cho đúng 51 hồ sơ, Then không hồ sơ nào trong 51 bị báo bằng chứng cũ (sửa 03/11, chủ kho «Theo khuyên»: kit 2.37 thôi coi sửa `opportunity.md` là đổi vật, nên lượt ghim 51 hồ sơ không thêm bảo đảm nào).
 
 ## Coverage
 

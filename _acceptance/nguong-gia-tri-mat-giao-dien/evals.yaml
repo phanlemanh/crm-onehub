@@ -281,6 +281,8 @@ evals:
     cmd: config:executors.script.f39_ghim
     paths:
       - "_acceptance/nguong-gia-tri-mat-giao-dien/rang/**"
+      - "scripts/pre-merge-check.sh"
+      - "lib/evidence-core.cjs"
       - "_acceptance/bo-cuc-hep-ngan-va-kanban/run-log.jsonl"
       - "_acceptance/cap-nhat-trong-ngan-kr/run-log.jsonl"
       - "_acceptance/cay-can-chinh-co-ly-do/run-log.jsonl"
@@ -333,7 +335,8 @@ evals:
       - "_acceptance/viec-rieng-chi-nguoi-trong-cuoc/run-log.jsonl"
       - "_acceptance/zalo-gui-hong-ghi-ly-do/run-log.jsonl"
     expected: |
-      Doi chung duong cung luot: dong repin co truoc lan sua -> bat; khac -> thoat 2. Moi ho so: opportunity.md da doi so
-      voi ed4e85288; dong repin cuoi co sha = verified_commit, la hau due cua commit cuoi sua opportunity.md, suites_exit va
-      evals_exit toan 0 -> "DUNG <ho so>".
-      CHIEU DO: tren onehub ed4e85288 ca 51 SAI «chua doi so voi goc»; sau S3, truoc luot ghim, ca 51 SAI «co truoc lan sua».
+      Doi chung duong cung luot: bo loc doc ba dong mau (bang chung cu trong danh sach, thieu bao cao, bang chung cu ngoai
+      danh sach) -> chi bat ho so dau; lech -> thoat 2. Chay pre-merge-check.sh cua kho (lop CI chep tu kit 2.37) voi
+      --base origin/onehub (hay PRE_MERGE_BASE) va --slug cho dung 51 ho so cua bang-de-xuat.json: khong ho so nao bi bao
+      «evidence is stale» -> "KET LUAN F39 ghim: 51 ho so, 0 bang chung cu", thoat 0; con -> "SAI <ho so>", thoat 1.
+      CHIEU DO: tren e204faa32 (truoc luot ghim zalo-gui-hong-ghi-ly-do, 03/11) in "SAI zalo-gui-hong-ghi-ly-do", thoat 1.

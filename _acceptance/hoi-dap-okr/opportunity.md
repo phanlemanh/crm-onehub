@@ -25,4 +25,4 @@ Tôi hỏi về OKR trên web hoặc Zalo và nhận câu trả lời theo quy�
 - Câu hỏi phép đo trả lời: Người dùng có quay lại hỏi Kara về OKR trên web và thấy câu trả lời hữu ích không?
 - Kết quả nào là SỐNG: Trong 2 tuần sau khi bật, ít nhất 5 người khác nhau hỏi ít nhất một câu, ít nhất 3 người hỏi ở cả hai tuần, và trong các phản hồi đã bấm thì phần «không hữu ích» dưới 30%.
 - Kết quả nào là CHẾT: Trong 2 tuần sau khi bật, không quá 2 người hỏi hay không ai hỏi lại ở tuần thứ hai, hoặc từ 50% phản hồi đã bấm trở lên là «không hữu ích».
-- Timebox: 2026-10-31 (mốc R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11))
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

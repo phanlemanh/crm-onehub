@@ -21,7 +21,9 @@
 		"va-lo-ro-vai-chi-okr",
 		"ve-khung-muc-tieu-dung-kr"
 	],
-	"hoi": ["loc-don-vi-khong-tu-dong"],
+	"hoi": [
+		"loc-don-vi-khong-tu-dong"
+	],
 	"de_xuat": [
 		{
 			"ho_so": "bo-cuc-hep-ngan-va-kanban",
@@ -582,6 +584,16 @@
 			"nguon_so": "Bảng okrLuotHoi (userId, ngay, cuocHoiId) đếm người và lượt hỏi, okrHoiPhanHoi (huuIch, userId) cho phần hữu ích, okrCuocHoi (nguoiHoiUserId) và aiChiPhi với tinhNang okr.hoi-dap cho chi phí; zalo_questions của docs/telemetry.md thuộc hàng C2 nên không dùng.",
 			"can_cu": "AC-10 hứa người dùng hỏi trong cột Kara và mỗi câu có một AiFeedback; AC-6 đặt trần 40 câu mỗi người mỗi ngày đếm qua lượt hỏi.",
 			"cu": "chưa đạt «Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production» khi hết timebox"
+		},
+		{
+			"ho_so": "hoi-dap-okr",
+			"nhan": "Timebox",
+			"loai": "timebox-b7",
+			"gia_tri": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)",
+			"de_xuat": true,
+			"nguon_so": "Lịch đọc số chung của B7",
+			"can_cu": "Hỏi-4 mở rộng 03/11 (chủ kho «Theo khuyên»): timebox cũ «2026-10-31 (mốc R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11))» đã qua hay không ra ngày",
+			"cu": "2026-10-31 (mốc R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11))"
 		},
 		{
 			"ho_so": "kara-mot-ten",
