@@ -35,10 +35,10 @@ Trưởng phòng soạn OKR cùng Kara trên trang riêng (K2, #312). Phản bi�
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] trưởng phòng soạn OKR có còn bị lạc chỗ (nhảy tab, tưởng đã hoàn tác, tưởng Kara đã nộp) không.
-- Kết quả nào là SỐNG: [đề xuất] ở lái-thử người-lạ trước R1, kịch bản chủ động gây đủ ba điều kiện (mở/đóng bản ghi ở 390 px, tắt mạng trước khi hoàn tác nhóm, một cuộc mà lần nộp kế bị từ chối); 0 lần vấp «nhảy tab», «tưởng đã hoàn tác» hay «mốc không có thật». Loại nào không gây được điều kiện thì không tính.
-- Kết quả nào là CHẾT: [đề xuất] ≥ 1 lần vấp cùng loại ở cả hai người thử. Một người vấp một lần là vùng giữa — iterate.
-- Timebox: [đề xuất] lái-thử người-lạ kế tiếp của dãy Kara OKR.
+- Câu hỏi phép đo trả lời: trưởng phòng soạn OKR có còn bị lạc chỗ (nhảy tab, tưởng đã hoàn tác, tưởng Kara đã nộp) không.
+- Kết quả nào là SỐNG: ở lái-thử người-lạ trước R1, kịch bản chủ động gây đủ ba điều kiện (mở/đóng bản ghi ở 390 px, tắt mạng trước khi hoàn tác nhóm, một cuộc mà lần nộp kế bị từ chối); 0 lần vấp «nhảy tab», «tưởng đã hoàn tác» hay «mốc không có thật». Loại nào không gây được điều kiện thì không tính.
+- Kết quả nào là CHẾT: ≥ 1 lần vấp cùng loại ở cả hai người thử. Một người vấp một lần là vùng giữa — iterate.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Nguồn ngoài & phạm vi kế thừa
 

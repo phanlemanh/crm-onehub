@@ -38,10 +38,9 @@ Bản mẫu: `/proto/gop-y-dung-cho`, bốn trạng thái. Dựng trên nền c�
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: góp ý của Kara có được quyết (nhận, sửa, bỏ qua) thay vì nằm im không?
-- SỐNG: 30 ngày sau khi lên, ít hơn 30% góp ý còn `cho` quá 7 ngày; tỉ lệ bỏ qua của góp ý về KR
-  không cao hơn góp ý về Mục tiêu quá 15 điểm.
-- CHẾT: tỉ lệ góp ý nằm im không giảm so với mốc đo trước lượt.
-- Timebox: 30 ngày sau khi lên production.
+- Kết quả nào là SỐNG: 30 ngày sau khi lên, ít hơn 30% góp ý còn `cho` quá 7 ngày; tỉ lệ bỏ qua của góp ý về KR không cao hơn góp ý về Mục tiêu quá 15 điểm.
+- Kết quả nào là CHẾT: tỉ lệ góp ý nằm im không giảm so với mốc đo trước lượt.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Đụng hạt giống khác
 

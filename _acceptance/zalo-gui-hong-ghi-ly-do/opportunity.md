@@ -51,9 +51,10 @@ Nếu giả thuyết ở câu 1 đúng, tin của chủ kho rơi vào nhánh «c
 ## Ngưỡng chết / ngưỡng UAT
 
 [đề xuất] Việc nội bộ, không có người dùng.
-- SỐNG: lần «Gửi thử» kế tiếp sau khi gộp in một dòng nhật ký có mã HTTP và `description`/`error_code` của Zalo; mỗi tin webhook không sinh phiên in đúng một dòng mã nhánh; sự kiện `webhook-test` không còn ghi «sai khuon».
-- CHẾT: sau khi gộp còn một lần `sendMessage` hỏng mà nhật ký vẫn không có lý do của Zalo.
-- Timebox: hàng sửa nóng, trong ngày 08–09/10.
+- Kết quả nào là SỐNG: lần «Gửi thử» kế tiếp sau khi gộp in một dòng nhật ký có mã HTTP và `description`/`error_code` của Zalo; mỗi tin webhook không sinh phiên in đúng một dòng mã nhánh; sự kiện `webhook-test` không còn ghi «sai khuon».
+- Kết quả nào là CHẾT: sau khi gộp còn một lần `sendMessage` hỏng mà nhật ký vẫn không có lý do của Zalo.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
+- Câu hỏi phép đo trả lời: Sau khi bật, mỗi lần Zalo gửi hỏng hay tin vào bị bỏ qua, người vận hành có đọc được lý do từ đúng một dòng nhật ký để nối lại cho người dùng, và người hỏi qua Zalo có nhận lại được trả lời không?
 
 ## Câu hỏi mở cho Cổng Phạm vi
 

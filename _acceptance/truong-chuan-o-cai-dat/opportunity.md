@@ -30,6 +30,6 @@ Vì sao: Cài đặt › Trường hứa «chỉ sắp lại thứ tự và ẩn
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: quản trị có tự sắp được phiếu theo cách đội mình đọc (đổi chỗ, ẩn trường chuẩn, bắt buộc một trường) mà không phải hỏi người dựng không, và danh sách ở Cài đặt có khớp đúng phiếu không.
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu, giao quản trị ba việc — đưa một trường tự tạo lên trên Ngày chốt, ẩn một trường chuẩn, bắt buộc một trường — thì ít nhất bốn trên năm người làm xong cả ba không cần trợ giúp, và mở phiếu thấy đúng thứ tự vừa đặt.
-- Kết quả nào là CHẾT: [đề xuất] đa số người không tìm ra cách đổi chỗ hay ẩn trường chuẩn, hoặc phiếu hiện khác thứ tự đã đặt ở Cài đặt.
-- Timebox: [đề xuất] phiên nghiệm thu đầu tiên sau khi DA15 lên production, gộp chung buổi đọc số của gói truong-hop-dong sau DA17, DA18.
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, giao quản trị ba việc — đưa một trường tự tạo lên trên Ngày chốt, ẩn một trường chuẩn, bắt buộc một trường — thì ít nhất bốn trên năm người làm xong cả ba không cần trợ giúp, và mở phiếu thấy đúng thứ tự vừa đặt.
+- Kết quả nào là CHẾT: đa số người không tìm ra cách đổi chỗ hay ẩn trường chuẩn, hoặc phiếu hiện khác thứ tự đã đặt ở Cài đặt.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

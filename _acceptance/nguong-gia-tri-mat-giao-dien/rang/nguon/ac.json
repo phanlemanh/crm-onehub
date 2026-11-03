@@ -1,0 +1,115 @@
+[
+	{
+		"ho_so": "ngan-ban-ghi-giu-danh-tinh",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Người dùng mở và đóng ngăn bản ghi trong việc hằng ngày có thấy ngăn trượt ra vào liền mạch, không biến mất, không chớp, không trễ, mà dữ liệu trong ngăn vẫn đúng ngay khi mở không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu chung với ít nhất 5 người, mỗi người mở rồi đóng ngăn ít nhất 5 lần trên Thoả thuận và Mục tiêu ở cả máy tính lẫn điện thoại, 0 người nói ngăn «biến mất», «chớp» hay «mở chậm», và 0 lần ngăn vừa mở hiện ô trống hay số cũ phải tải lại mới đúng.",
+			"Kết quả nào là CHẾT": "Có từ 2 trên 5 người trở lên tự nêu ngăn biến mất, chớp hay chậm khi mở đóng, hoặc có ít nhất 1 lần ngăn vừa mở hiện dữ liệu trống hay cũ phải tải lại mới đúng.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N=5 người (ghi lại lời người thử và số lần ngăn mở trống); telemetry không có sự kiện phía trình duyệt cho ngăn nên không có số máy.",
+		"can_cu": "AC-3, AC-4 (ngăn trượt ra vào, vào trong 150 ms, không bị gỡ) và AC-6, AC-7 (đọc được dữ liệu ngay lượt vẽ đầu, không bị bản cũ đè)."
+	},
+	{
+		"ho_so": "okr-cua-toi-tach-theo-doi",
+		"o": {
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với 5 người dùng OKR có theo dõi mục tiêu của đơn vị khác, ít nhất 4 trên 5 người chỉ đúng đâu là mục tiêu của mình và tự tìm được mục đang theo dõi qua «Đang theo dõi» khi được hỏi, và có 0 báo cáo «thấy OKR người khác trong Của tôi» trong 2 tuần sau khi bật.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 báo cáo thấy OKR không phải của mình lẫn trong danh sách chính của «Của tôi», hoặc từ 2 trên 5 người trở lên không tìm được mục mình đang theo dõi trong phiên nghiệm thu."
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N=5 người cộng số báo cáo người dùng gửi trong 2 tuần sau khi bật; telemetry không có sự kiện cho tab Của tôi.",
+		"can_cu": "Gộp lại ba gạch SỐNG và hai gạch CHẾT anh đã duyệt 08/10 trong opportunity.md thành một câu mỗi ô, dựa trên AC-5 (bảng chính chỉ có mục tiêu của U, «Đang theo dõi (n)» tách riêng)."
+	},
+	{
+		"ho_so": "okr-loai-hoc-tap",
+		"o": {
+			"Kết quả nào là SỐNG": "Khi kỳ OKR kế đóng, truy vấn bảng mục tiêu cho thấy có ít nhất 1 mục tiêu loại hoc-tap đã công bố, 100% mục tiêu học tập đã công bố có «Điều học được», và có 0 báo cáo nhãn «Trượt» trên mục tiêu học tập.",
+			"Kết quả nào là CHẾT": "Hết kỳ OKR kế mà truy vấn bảng mục tiêu ra 0 mục tiêu học tập đã công bố, hoặc người duyệt hay Kara ghi nhận ít nhất 2 mục tiêu chọn «Học tập» để né «Trượt» cho một việc thực chất là cam kết."
+		},
+		"nguon_so": "Truy vấn bảng mục tiêu theo loại hoc-tap và ô Điều học được lúc kỳ kế đóng, cộng báo cáo của người duyệt và câu hỏi Kara bắt được; telemetry không có sự kiện cho loại mục tiêu.",
+		"can_cu": "Gộp ba gạch SỐNG và hai gạch CHẾT anh đã duyệt 08/10 thành một câu mỗi ô, dựa trên AC-2 (giữa kỳ đọc như tham vọng, không Trượt) và AC-4, AC-5 (không đóng kỳ khi còn mục tiêu học tập đã công bố chưa ghi điều học được)."
+	},
+	{
+		"ho_so": "quyet-gop-y-noi-dung-ly-do",
+		"o": {
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người, mỗi người quyết một Căn chỉnh tới đích chưa công bố, cả 3 người tự nói được lý do «đích chưa công bố» và không ai bấm thử lại quá một lần.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 người trong phiên nghiệm thu bấm thử lại từ hai lần trở lên hoặc gọi lỗi đó là «lỗi mạng» hay «thử lại sau»."
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người (đếm số lần bấm thử lại và ghi nguyên lời người thử kể lý do); telemetry không có sự kiện cho việc quyết góp ý.",
+		"can_cu": "Câu SỐNG và CHẾT sẵn có trong opportunity.md (nhãn «SỐNG:» và «CHẾT:» chưa đúng khuôn), thêm số người, dựa trên AC-3 (dòng lỗi dưới góp ý là câu lý do của mã) và Thước đo thành công «mỗi lý do cố định hiện đúng câu lý do»."
+	},
+	{
+		"ho_so": "sua-sau-chay-that",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, người viết và người duyệt Kho tài liệu có hết vấp các hạn chế đã gom (số bản chờ sai, ô chọn rỗng khi tải lỗi, mục lục lỗi ký tự, liên kết http lọt, câu tiếng Việt trên giao diện tiếng Anh) mà trợ lý kho vẫn trả lời đúng không kém trước không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người viết hoặc duyệt trang Kho tài liệu, 0 người vấp lại mục nào trong G1–G12, và đo lại bộ 50 câu hỏi mẫu bằng do-bo-mau.ts trên bản đã bật không có câu đạt nào thành không đạt so với lượt đo đã ký (câu lỗi gọi model tách riêng).",
+			"Kết quả nào là CHẾT": "Có từ 2 người trở lên vấp lại cùng một mục trong G1–G12, hoặc bộ 50 câu hỏi mẫu có từ 2 câu trở lên chuyển từ đạt sang không đạt so với lượt đo đã ký (không kể câu lỗi gọi model).",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người đối chiếu bảng G1–G12 của design.md, cộng bảng kết quả do-bo-mau.ts so với _acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md.",
+		"can_cu": "Context (danh sách góp ý là các hạn chế còn mở của tám hồ sơ Kho, đo lại trên bộ câu hỏi mẫu sau khi sửa) và AC-2, AC-3, AC-5, AC-6, AC-7, AC-9, AC-13."
+	},
+	{
+		"ho_so": "tac-nhan-va",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Người dùng mở màn tác nhân trên điện thoại có đọc được trạng thái và kết quả lượt chạy bằng tiếng Việt, và bộ dựng tác nhân có hỏi lại đúng lúc thay vì đứng im chờ một câu không ai được hỏi không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người dựng hoặc xem tác nhân ở khổ điện thoại, 0 người gặp chữ máy tiếng Anh hay phải cuộn ngang, và trong 2 tuần sau khi bật truy vấn hội thoại dựng cho 0 hội thoại có phiên con đang chờ trả lời mà pendingQuestion rỗng.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 hội thoại dựng thật treo im lặng vì câu hỏi lượt sau bị bỏ (phiên con chờ mà màn mở ô soạn), hoặc từ 2 người trở lên trong phiên nghiệm thu không đọc được kết quả lượt chạy trên điện thoại.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người ở khổ 375 px, cộng truy vấn bảng hội thoại dựng đối chiếu câu hỏi đang chờ của phiên con với pendingQuestion của conversations.builderById; telemetry chỉ có sessions_failed và agent_error, không tách được ca treo im lặng.",
+		"can_cu": "Câu giao của hàng E5 trong Context («đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng») cùng AC-1, AC-2, AC-4 và AC-5, AC-9."
+	},
+	{
+		"ho_so": "the-gop-y-okr",
+		"o": {
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người chưa làm vòng này, mỗi người quyết đủ ba đề xuất của Kara trong hộp sửa mục tiêu và KR trong một lượt mà không hỏi «bấm nút nào», và hộp đóng ngoài ý 0 lần.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 người bấm nhầm «Bác» thay «Nhận», hoặc hộp đóng ngoài ý ít nhất 1 lần, hoặc từ 2 trên 3 người trở lên phải hỏi nút nào là nút chính.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người lạ (đếm lần hỏi nút, lần bấm nhầm, lần hộp đóng ngoài ý); telemetry không có sự kiện cho thẻ góp ý.",
+		"can_cu": "Câu hỏi đã có trong opportunity.md cùng ba gạch «[đề xuất]» SỐNG, CHẾT, Timebox của nó, dựa trên AC-5 (một nút tô màu duy nhất), AC-8 (bấm trong cột không đóng hộp) và AC-14 (người không làm lượt chỉ ra ngay nút chính)."
+	},
+	{
+		"ho_so": "them-buoc-bao-dung",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Người lập và theo dõi kế hoạch có biết vì sao không thêm được bước khi danh sách phòng ban tải lỗi, và có tin con số việc quá hạn trên Tổng quan khớp với danh sách bước của mình không?",
+			"Kết quả nào là SỐNG": "Trong phiên nghiệm thu với ít nhất 3 người quản lý kế hoạch, cả 3 xác nhận số «việc quá hạn» ở Tổng quan khớp danh sách bước của mình, và trong 2 tuần sau khi bật có 0 báo cáo «form thêm bước trống không biết vì sao» kể cả ngày có sự kiện api_error route /trpc/onboarding.listDepartments.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 người chỉ ra số việc quá hạn ở Tổng quan lệch danh sách bước, hoặc có báo cáo form thêm bước trống không lý do trong ngày có api_error route /trpc/onboarding.listDepartments.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Quan sát trong phiên nghiệm thu với N=3 người, cộng sự kiện api_error (route, status_code) có thật trong docs/telemetry.md để biết ngày danh sách phòng ban tải lỗi, đối chiếu báo cáo người dùng.",
+		"can_cu": "AC-3, AC-4 (vùng lỗi kèm thử lại thay ô chọn trống) và AC-6, AC-7, AC-9 (số quá hạn trên Tổng quan đếm theo ngày Việt Nam như máy chủ)."
+	},
+	{
+		"ho_so": "trang-lo-trinh-mo-hinh-hien-thi",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Người xem trang Lộ trình trong CRM có thấy cùng một bức tranh mốc, việc chưa hẹn mốc và tên việc như LO-TRINH.html, đủ để không phải mở tệp kia ra đối chiếu không?",
+			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi bật, mỗi lần LO-TRINH.html được vẽ lại sau một lần gộp, đối chiếu kiểu xem «Mốc» trên production cho 0 lệch về tập mốc, việc dưới mốc, tên hiển thị và nhóm «Chưa hẹn mốc», và ít nhất 2 trên 3 người xem trong phiên nghiệm thu trả lời đúng «mốc kế còn bao nhiêu việc» chỉ từ trang CRM.",
+			"Kết quả nào là CHẾT": "Có ít nhất 1 lần trang CRM và LO-TRINH.html nói khác nhau về mốc hay việc của cùng một lộ trình, hoặc cờ «khối chưa mang mô hình hiển thị» hay hộp «Trang có thể thiếu một phần» còn hiện trên production.",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Đối chiếu tay hoặc bằng ca đối chiếu của AC-5 giữa trang production và khối dữ liệu của LO-TRINH.html sau mỗi lần vẽ lại, cộng quan sát trong phiên nghiệm thu với N=3 người.",
+		"can_cu": "Context («để trang CRM và LO-TRINH.html không bao giờ nói hai điều khác nhau về cùng một lộ trình») và AC-2, AC-5 (dòng số và tập hiển thị khớp khối thật, không hộp «Trang có thể thiếu một phần»)."
+	},
+	{
+		"ho_so": "truong-tep",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Nhân viên quan hệ đối tác có thật sự gắn hợp đồng vào bản ghi CRM và dùng bộ lọc «Chưa có tệp» để tìm bản ghi còn thiếu hợp đồng không?",
+			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi quản trị tạo một trường kiểu Tệp, truy vấn bảng FieldFile cho thấy ít nhất 10 tệp gắn vào ít nhất 5 bản ghi thoả thuận, công ty hay cá nhân khác nhau do ít nhất 2 người tải lên, và trong phiên nghiệm thu ít nhất 2 trên 3 người tự lọc ra được bản ghi «Chưa có tệp» mà không cần chỉ.",
+			"Kết quả nào là CHẾT": "Hết timebox mà chưa quản trị nào tạo trường kiểu Tệp, hoặc bảng FieldFile có dưới 3 tệp hay chỉ một người tải, hoặc từ 2 trên 3 người trở lên trong phiên nghiệm thu không tìm được bộ lọc «Chưa có tệp».",
+			"Timebox": "2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)"
+		},
+		"nguon_so": "Truy vấn bảng FieldFile (đếm tệp, bản ghi, người tải) và bảng trường theo kiểu FILE trên production, cộng quan sát trong phiên nghiệm thu với N=3 người; telemetry không có sự kiện cho trường Tệp.",
+		"can_cu": "Câu giao DA19 trong opportunity.md («gắn tệp hợp đồng… và lọc được bản ghi nào chưa có») cùng AC-2 (mỗi tệp thành một hàng FieldFile) và AC-5, AC-10 (lọc some, none và «Chưa có tệp (n)»)."
+	},
+	{
+		"ho_so": "zalo-gui-hong-ghi-ly-do",
+		"o": {
+			"Câu hỏi phép đo trả lời": "Sau khi bật, mỗi lần Zalo gửi hỏng hay tin vào bị bỏ qua, người vận hành có đọc được lý do từ đúng một dòng nhật ký để nối lại cho người dùng, và người hỏi qua Zalo có nhận lại được trả lời không?",
+			"Kết quả nào là SỐNG": "Mọi dòng [zalo] sendMessage hỏng trên nhật ký production của crm-onehub-agent sau khi gộp đều mang mã HTTP cùng description hay error_code của Zalo, và khoá gui-hong của zalo_questions trong install_daily chiếm không quá 10% số câu hỏi Zalo của mỗi tuần.",
+			"Kết quả nào là CHẾT": "Còn ít nhất 1 dòng sendMessage hỏng trên nhật ký production sau khi gộp mà không có lý do của Zalo, hoặc khoá gui-hong của zalo_questions vượt 10% câu hỏi trong một tuần mà nhật ký không chỉ ra được vì sao."
+		},
+		"nguon_so": "Nhật ký production qua vercel logs -p crm-onehub-agent (dòng [zalo]) và thuộc tính zalo_questions theo kết quả (có khoá gui-hong) của sự kiện install_daily trong docs/telemetry.md.",
+		"can_cu": "Câu SỐNG và CHẾT sẵn có trong opportunity.md (nhãn chưa đúng khuôn) cùng AC-1, AC-3 (dòng [zalo] mang lý do của Zalo) và AC-4 (tin bị bỏ qua có đúng một dòng ly_do)."
+	}
+]

@@ -26,7 +26,7 @@ Vì sao: Ngoài-4 ở Cổng Bằng chứng của HT2 hop-tuan-tren-bang (28/10)
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Mở ngăn KR từ bảng Họp tuần, đi › sang KR của mục tiêu khác, bấm «Về khung mục tiêu»: khung mở đúng mục tiêu của KR đang xem» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Mở ngăn KR từ bảng Họp tuần, đi › sang KR của mục tiêu khác, bấm «Về khung mục tiêu»: khung mở đúng mục tiêu của KR đang xem
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Mở ngăn KR từ bảng Họp tuần, đi › sang KR của mục tiêu khác, bấm «Về khung mục tiêu»: khung mở đúng mục tiêu của KR đang xem» khi hết timebox
-- Timebox: …
+- Câu hỏi phép đo trả lời: Trưởng đơn vị đi ‹ › qua KR của nhiều mục tiêu trong buổi Họp tuần có quay về đúng mục tiêu của KR đang xem mà không phải đóng ngăn và mở lại không?
+- Kết quả nào là SỐNG: Trong buổi Họp tuần thật đầu tiên sau khi bật, quan sát ít nhất 2 trưởng đơn vị đi ‹ › qua KR của từ hai mục tiêu trở lên, mọi lần bấm «Về khung mục tiêu» hay tên mục tiêu ở dòng phụ đề đều mở đúng mục tiêu và không ai phải đóng ngăn mở lại.
+- Kết quả nào là CHẾT: Trong buổi Họp tuần quan sát có ít nhất một lần nút về hay tên mục tiêu mở nhầm mục tiêu hoặc chồng thêm khung, hoặc người chủ trì phải đóng ngăn để tìm lại mục tiêu.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

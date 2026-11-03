@@ -40,3 +40,10 @@ muốn, dựng tạm ở proto).
 
 - Lượt này chỉ dựng nền (thành phần + bài kiểm + mục `/proto`), không đổi màn nào — đồng ý?
 - Giữ `Confirmation` làm thân của bản `card`, hay bỏ hẳn cho cả hai độ dày?
+
+## Ngưỡng chết / ngưỡng UAT
+
+- Câu hỏi phép đo trả lời: Người dùng có nhận ra ngay đâu là đề xuất của Kara và xử lý đúng (nhận hay bỏ) ở mọi màn có AI không?
+- Kết quả nào là SỐNG: Trong phiên nghiệm thu với ít nhất 3 người qua ít nhất 3 màn có AI, ít nhất 2 trên 3 người chỉ đúng phần do Kara đề xuất ở cả 3 màn và bấm đúng nút nhận hay bỏ ngay lần đầu; và số phản hồi về câu trả lời AI trong 2 tuần sau bật không thấp hơn 2 tuần trước.
+- Kết quả nào là CHẾT: Trong phiên nghiệm thu, từ 2 trên 3 người trở lên nhầm phần do Kara đề xuất với chữ người viết ở ít nhất 1 màn hay bấm nhầm nút nhận hay bỏ, hoặc số phản hồi về câu trả lời AI trong 2 tuần sau bật giảm quá 30% so với 2 tuần trước.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

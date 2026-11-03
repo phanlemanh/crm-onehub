@@ -25,7 +25,7 @@ Vì sao: Người gửi không được báo khi tín hiệu đổi chỗ, phả
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Một tháng sau khi giao, người gửi nhận thông báo cho mọi lần tín hiệu đổi chỗ trong vòng một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Một tháng sau khi giao, người gửi nhận thông báo cho mọi lần tín hiệu đổi chỗ trong vòng một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Một tháng sau khi giao, người gửi nhận thông báo cho mọi lần tín hiệu đổi chỗ trong vòng một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox
-- Timebox: [đề xuất] 2026-10-29 (mốc Tín hiệu và trang Lộ trình theo kit 2.33)
+- Câu hỏi phép đo trả lời: Người gửi tín hiệu có biết trong ngày khi tín hiệu của mình đổi chỗ và mở thông báo ra xem không?
+- Kết quả nào là SỐNG: Trong 2 tuần sau khi bật, mọi lần tín hiệu có người nhận hợp lệ đổi chỗ trên nhánh chính đều có thông báo trong vòng một ngày tính từ giờ commit, và ít nhất một nửa số thông báo đổi chỗ được người nhận mở.
+- Kết quả nào là CHẾT: Trong 2 tuần sau khi bật, có lần đổi chỗ thiếu thông báo hay trễ quá một ngày, hoặc dưới một phần tư số thông báo đổi chỗ được mở.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

@@ -28,4 +28,4 @@ Vì sao: Nút «Gửi» của Lấy ý kiến ở 390×812 nằm 927px trên one
 - Câu hỏi phép đo trả lời: đã đạt «Ở 390×812 nút «Gửi» của Lấy ý kiến nằm trọn trong màn đầu; dot-hoi-y-tuong-okr E12 bước 5 xanh lại mà không đổi hình đã ký của hồ sơ khác» chưa?
 - Kết quả nào là SỐNG: Ở 390×812 nút «Gửi» của Lấy ý kiến nằm trọn trong màn đầu; dot-hoi-y-tuong-okr E12 bước 5 xanh lại mà không đổi hình đã ký của hồ sơ khác
 - Kết quả nào là CHẾT: chưa đạt «Ở 390×812 nút «Gửi» của Lấy ý kiến nằm trọn trong màn đầu; dot-hoi-y-tuong-okr E12 bước 5 xanh lại mà không đổi hình đã ký của hồ sơ khác» khi hết timebox
-- Timebox: …
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

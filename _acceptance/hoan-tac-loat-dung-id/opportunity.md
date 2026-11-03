@@ -33,13 +33,10 @@ Lưu trữ hàng loạt (`bulkArchive` của ba service, qua `runBulk` ở `apps
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: sau khi lưu trữ hàng loạt rồi «Hoàn tác», có đúng những bản mình vừa cất quay lại — không
-  hơn, không kém — và toast có nói thật số bản không về được, bằng tiếng của người dùng, không?
-- [đề xuất] Kết quả nào là SỐNG: trên máy chủ thật, bản đã cất từ trước không bao giờ bị «Hoàn tác» khôi phục; toast «Hoàn tác»
-  ghi đúng số đã khôi phục và số không khôi phục được; 0 toast lưu trữ hay hoàn tác chứa câu lỗi tiếng Anh thô của máy chủ.
-- [đề xuất] Kết quả nào là CHẾT: «Hoàn tác» còn khôi phục một bản người khác đã cất trước; hoặc còn toast xanh khi có bản không
-  khôi phục được; hoặc còn câu lỗi máy chủ thô trên toast.
-- [đề xuất] Timebox: 1 ngày máy.
+- Câu hỏi phép đo trả lời: sau khi lưu trữ hàng loạt rồi «Hoàn tác», có đúng những bản mình vừa cất quay lại — không hơn, không kém — và toast có nói thật số bản không về được, bằng tiếng của người dùng, không?
+- Kết quả nào là SỐNG: trên máy chủ thật, bản đã cất từ trước không bao giờ bị «Hoàn tác» khôi phục; toast «Hoàn tác» ghi đúng số đã khôi phục và số không khôi phục được; 0 toast lưu trữ hay hoàn tác chứa câu lỗi tiếng Anh thô của máy chủ.
+- Kết quả nào là CHẾT: «Hoàn tác» còn khôi phục một bản người khác đã cất trước; hoặc còn toast xanh khi có bản không khôi phục được; hoặc còn câu lỗi máy chủ thô trên toast.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Đường đo
 

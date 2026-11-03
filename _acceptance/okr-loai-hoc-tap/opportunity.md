@@ -34,11 +34,6 @@ Chủ kho chốt ngày 07/10:
 Ngưỡng soạn sau khi gộp, anh duyệt 08/10 trong phiên giám sát.
 
 - Câu hỏi phép đo trả lời: đơn vị có dùng loại «Học tập» đúng chỗ, cho mục tiêu kiểm giả thuyết, và có ghi được điều học được khi đóng kỳ không?
-- Kết quả nào là SỐNG:
-  - kỳ OKR kế có ≥ 1 mục tiêu học tập đã công bố;
-  - 100% mục tiêu học tập có «Điều học được» khi kỳ đóng;
-  - không ai báo nhãn «Trượt» trên mục tiêu học tập.
-- Kết quả nào là CHẾT:
-  - sau một kỳ không đơn vị nào dùng loại này; hoặc
-  - ≥ 2 trường hợp (Kara hoặc người duyệt bắt được) chọn «Học tập» để né «Trượt» cho một mục tiêu thực chất là cam kết.
-- Timebox: một vòng feature-loop T2 (đã giao 08/10). Đo ở kỳ OKR kế.
+- Kết quả nào là SỐNG: kỳ OKR kế có ≥ 1 mục tiêu học tập đã công bố; 100% mục tiêu học tập có «Điều học được» khi kỳ đóng; không ai báo nhãn «Trượt» trên mục tiêu học tập.
+- Kết quả nào là CHẾT: sau một kỳ không đơn vị nào dùng loại này; hoặc ≥ 2 trường hợp (Kara hoặc người duyệt bắt được) chọn «Học tập» để né «Trượt» cho một mục tiêu thực chất là cam kết.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)

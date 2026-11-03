@@ -22,6 +22,10 @@ Nguồn: giám sát đợt `sau-14-10` mở hàng H6 (ưu tiên 0, ngoại lệ 
 ## Ngưỡng chết / ngưỡng UAT
 
 - Không đo bằng người dùng. Phép thử: quét tên 0 SAI; `next build` xanh khi có symlink vòng; bản dựng của trang lộ trình vẫn mang `LO-TRINH.html` và không kéo theo cả kho; bốn PR bị chặn đẩy được.
+- Câu hỏi phép đo trả lời: Người đọc trang lộ trình có nhận ra đúng sản phẩm OneHub Center và tìm được hàng của phòng mình mà không phải hỏi lại tên không?
+- Kết quả nào là SỐNG: Trong phiên nghiệm thu với ít nhất 3 người, ít nhất 2 trên 3 người gọi đúng tên «OneHub Center» khi được hỏi trang nói về sản phẩm nào, không ai gọi là «CRM», và ít nhất 2 trên 3 người tìm ra hàng của phòng mình trong dưới 60 giây.
+- Kết quả nào là CHẾT: Trong phiên nghiệm thu, từ 2 trên 3 người trở lên gọi sản phẩm là «CRM» hay hỏi lại trang nói về sản phẩm nào, hoặc từ 2 trên 3 người trở lên không tìm ra hàng của phòng mình trong 60 giây.
+- Timebox: 2026-11-14 — phiên nghiệm thu chung sau khi BK và SV gộp (theo B7)
 
 ## Out of scope từ khám phá
 
