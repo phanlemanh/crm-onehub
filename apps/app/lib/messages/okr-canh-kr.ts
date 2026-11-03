@@ -159,9 +159,6 @@ const vi = {
 		thaoTac: "Thao tác với bằng chứng {ten}",
 		go: "Gỡ",
 		hop: {
-			tieuDe: "Đính bằng chứng",
-			moTa: "Dán đường dẫn tới văn bản, biên bản hay trang cho thấy mốc đã xong.",
-			duongDan: "Đường dẫn",
 			ghiChu: "Ghi chú (tuỳ chọn)",
 			ghiChuGoiY: "Bằng chứng này cho thấy gì…",
 			toiDa: "Tối đa {max} ký tự.",
@@ -170,6 +167,7 @@ const vi = {
 		},
 		loiDuongDan: "Đường dẫn phải bắt đầu bằng http:// hoặc https://",
 		loiGhiChu: "Ghi chú tối đa {max} ký tự.",
+		loiDinh: "Chưa đính được bằng chứng. Thử lại sau một lát.",
 	},
 	ghiNhan: {
 		cheDo: {
@@ -287,7 +285,7 @@ const vi = {
 		},
 	},
 	capNhat: {
-		bangChung: "Bằng chứng (tuỳ chọn)",
+		bangChung: "Đường dẫn bằng chứng",
 		goiY: "Đường dẫn tới văn bản cho thấy mốc đã xong. Lúc chấm cuối kỳ, người chấm sẽ thấy nó.",
 	},
 	khoiCapNhat: {
@@ -470,9 +468,6 @@ const en: OkrCanhKrMessages = {
 		thaoTac: "Actions for evidence {ten}",
 		go: "Remove",
 		hop: {
-			tieuDe: "Attach evidence",
-			moTa: "Paste a link to the document, minutes or page that shows the milestone is done.",
-			duongDan: "Link",
 			ghiChu: "Note (optional)",
 			ghiChuGoiY: "What this evidence shows…",
 			toiDa: "Up to {max} characters.",
@@ -481,6 +476,7 @@ const en: OkrCanhKrMessages = {
 		},
 		loiDuongDan: "The link must start with http:// or https://",
 		loiGhiChu: "The note can be at most {max} characters.",
+		loiDinh: "Couldn't attach the evidence. Try again in a moment.",
 	},
 	ghiNhan: {
 		cheDo: {
@@ -599,7 +595,7 @@ const en: OkrCanhKrMessages = {
 		},
 	},
 	capNhat: {
-		bangChung: "Evidence (optional)",
+		bangChung: "Evidence link",
 		goiY: "A link to the document showing the milestone is done. Whoever scores the cycle will see it.",
 	},
 	khoiCapNhat: {

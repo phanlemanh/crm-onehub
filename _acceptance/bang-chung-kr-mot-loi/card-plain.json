@@ -1,0 +1,28 @@
+{
+  "feature_plain": "Người phụ trách KR đính một đường dẫn bằng chứng ngay trong ngăn KR bằng một dòng nhập cuối danh sách, không còn hộp thoại che ngăn; khối cập nhật của KR mốc dùng đúng ô đường dẫn ấy.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ mở một dòng nhập ngay trong phần Bằng chứng khi bấm «Đính bằng chứng», con trỏ nằm sẵn trong ô đường dẫn, không hộp thoại nào bật lên."},
+    {"id": "AC-2", "p": "Sẽ đính bằng chứng khi bấm Enter, nút «Đính» hay Ctrl/⌘+Enter, rồi đóng dòng nhập và hiện bằng chứng mới trong danh sách mà ngăn vẫn mở."},
+    {"id": "AC-4", "p": "Sẽ báo bằng tiếng người khi đường dẫn sai, ghi chú quá dài hay máy chủ từ chối, giữ nguyên chữ đã gõ, không hiện câu máy chủ."},
+    {"id": "AC-5", "p": "Sẽ dùng đúng một ô đường dẫn cho cả dòng nhập và khối cập nhật của KR mốc, và vẫn gửi bằng chứng kèm cập nhật như trước."},
+    {"id": "AC-6", "p": "Sẽ giấu nút đính với người không sửa được KR, KR khoá hay đang chờ duyệt; mốc chưa xong thì nút khoá kèm câu vì sao."},
+    {"id": "AC-7", "p": "Sẽ gỡ hộp thoại cũ và ô tự dựng, trả khoản nợ «hộp thoại trong ngăn KR» trong khuôn ngăn để răng BK2 canh luôn tệp này."},
+    {"id": "AC-8", "p": "Sẽ ghi đúng một bằng chứng vào cơ sở dữ liệu thật, và thước đã ký của vòng «chi tiết KR» vẫn chạy xanh mà không phải sửa."},
+    {"id": "AC-9", "p": "Sẽ có bản mẫu bấm được với bảy trạng thái ở khổ 1280 và 375."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Sẽ KHÔNG gửi gì khi bấm Esc hay «Huỷ», và KHÔNG để mất chữ đang gõ dở khi đóng ngăn hay sang KR khác mà không hỏi lại."},
+    {"id": "OOS-1", "p": "KHÔNG đổi luật «chỉ đính khi mốc đã xong»."},
+    {"id": "OOS-2", "p": "KHÔNG làm sửa hay đính lại bằng chứng đã có, cũng không đính nhiều đường dẫn một lần."},
+    {"id": "OOS-3", "p": "KHÔNG làm bằng chứng cho KR không phải mốc."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Đã quét hai lối vào (dòng nhập, khối cập nhật KR mốc) × bốn cách kết × bốn kết quả × ba mức quyền; mỗi ô có một ca kiểm (E1–E6, E12, E13)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chọn dòng nhập hay khối soạn thu một dòng là việc của người, vì hai câu luật trong docs/design.md trỏ hai hình — đã đưa thành Hỏi-1, máy khuyên dòng nhập."},
+    {"i": 1, "p": "Lời hứa «một ô cho hai chỗ» trước chỉ đo bằng chữ trùng — đã thêm răng quét mã E13 có chiều đỏ."},
+    {"i": 2, "p": "Esc có thể đóng cả ngăn và chuyển KR có thể mất nháp mà không ca nào bắt — đã thêm hai kiểm vào E3."},
+    {"i": 3, "p": "Chưa có ảnh dòng nhập trong ngăn kéo thật ở khổ điện thoại — hoãn, ghi điều kiện mở lại trong sổ."}
+  ]
+}

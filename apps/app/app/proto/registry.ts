@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { BamKrMoChiTietKrMau } from "./_modules/bam-kr-mo-chi-tiet-kr";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
+import { BangChungKrMotLoiMau } from "./_modules/bang-chung-kr-mot-loi";
 import { BoOkrChiDonViMau } from "./_modules/bo-okr-chi-don-vi";
 import { BoOkrCoSoMau } from "./_modules/bo-okr-co-so";
 import { CamXucTrenCapNhatMau } from "./_modules/cam-xuc-tren-cap-nhat";
@@ -86,6 +87,7 @@ const BANG_GHEP = {
 	"canh-kr-okr": CanhKrOkrMau,
 	"khung-chung-ngan-ban-ghi": KhungChungNganBanGhiMau,
 	"sua-tai-cho-muc-tieu-va-kr": SuaTaiChoMucTieuVaKrMau,
+	"bang-chung-kr-mot-loi": BangChungKrMotLoiMau,
 	"cap-nhat-trong-ngan-kr": CapNhatTrongNganKrMau,
 	"cau-truc-to-chuc": CauTrucToChucMau,
 	"cua-vao-dang-nhap": CuaVaoDangNhapMau,
