@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>8 việc"]
   GD --> DB["Đã bác từ khám phá<br/>3 việc"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>172 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>199 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>200 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
 ```
 
@@ -30,7 +30,6 @@ flowchart TD
 
 ## Đang làm
 
-- Mỗi hồ sơ có mặt giao diện chờ Cổng Giá trị có ngưỡng điền xong, để phiên nghiệm thu mở được (`nguong-gia-tri-mat-giao-dien`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -162,6 +161,7 @@ flowchart TD
 - «Tôi bấm một việc đã giao trong trang Lộ trình và đọc trong một phút: vì sao làm, đã lên chưa, sẽ đo gì, còn thiếu gì, ai quyết» (`ngan-ho-so-trong-lo-trinh`)
 - Trưởng đơn vị bấm một KR ở bất kỳ đâu và mở cùng một ngăn KR, bấm Cập nhật ở đầu ngăn hay ngay trên dòng KR, thấy điểm mới nằm đâu so với đích, rồi sang KR kế mà không đóng ngăn (`ngan-kr-mot-cho`)
 - «Ngoại lệ telemetry của bảy mã giai đoạn gốc được khai trong tài liệu và có thước canh» (`ngoai-le-telemetry-giai-doan`)
+- Mỗi hồ sơ có mặt giao diện chờ Cổng Giá trị có ngưỡng điền xong, để phiên nghiệm thu mở được (`nguong-gia-tri-mat-giao-dien`)
 - Nhân viên quan hệ đối tác nhập đủ các trường cần thiết ngay lúc tạo công ty, liên hệ hay thoả thuận, không phải mở lại phiếu (`nhap-truong-luc-tao`)
 - Tách «Đang theo dõi» khỏi tab «Của tôi» của OKR (`okr-cua-toi-tach-theo-doi`)
 - Loại mục tiêu thứ ba «Học tập» cho OKR (`okr-loai-hoc-tap`)

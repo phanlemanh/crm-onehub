@@ -5,7 +5,7 @@ slug: nguong-gia-tri-mat-giao-dien
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-31-nguong-gia-tri-mat-giao-dien-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-11-03
@@ -57,3 +57,13 @@ bảng đề xuất `_acceptance/nguong-gia-tri-mat-giao-dien/bang-de-xuat.md` (
 
 - Sửa `opportunity.md` của hồ sơ đã ký làm hồ sơ hoá cũ (thử 31/10 bằng pre-merge-check trên bản sao: VIOLATION [gon-dau-trang-lay-y-kien] evidence is stale). 51 hồ sơ đi chung lượt ghim sau F37 với F38 và nhánh dot-2.
 - `va-lo-ro-vai-chi-okr`: nhánh dot-2 sửa dòng Timebox ngay cạnh ba ô F39 bỏ nhãn — F39 gộp sau dot-2.
+- Known limits — chọn ở Cổng Bằng chứng 2026-11-03:
+  - Ngoài-1: Tệp nguồn của bộ dựng bảng còn chữ vòng 1 của 10 ô vừa chốt; ai chạy lại công cụ dựng bảng sẽ đưa chữ đã bị trả trở lại, khi đó phép đối chiếu báo đỏ.
+  - Ngoài-2: Hồ sơ lo-trinh-ten-va-build còn câu «Không đo bằng người dùng» ngay trên ba ô ngưỡng đo bằng phiên nghiệm thu với người dùng.
+  - Ngoài-3: Phép đối chiếu so hồ sơ với chính bảng đã sửa tay, nên không kiểm được bảng có khớp tệp nguồn của nó.
+  - Ngoài-4: Nếu có người sửa tay làm hỏng một dòng trong sổ quyết định, các phép kiểm sẽ báo là chưa có quyết định thay vì báo sổ đọc không được.
+  - Ngoài-5: Người đọc hồ sơ zalo-gui-hong-ghi-ly-do ở Cổng Giá trị sẽ thấy một dòng vẫn ghi đề xuất và nói không có người dùng, trong khi ngưỡng đã được chốt cho người dùng.
+  - Ngoài-7: Một lần sửa nhầm ở mục khác của hồ sơ có thể không bị phát hiện bởi phép đối chiếu.
+  - Ngoài-8: Hồ sơ zalo-gui-hong-ghi-ly-do vừa nói không có người dùng vừa có ngưỡng người dùng đã chốt, nên người đọc có thể bối rối.
+  - Ngoài-9: Sau 14/11/2026 phép kiểm hạn sẽ báo đỏ cho cả 51 hồ sơ dù không có gì đổi, buộc người phải gia hạn hoặc ghi miễn.
+  - Ngoài-10: Màu xanh của phép kiểm ghim không phân biệt được hồ sơ đã được xét và còn mới với hồ sơ không bị xét.
