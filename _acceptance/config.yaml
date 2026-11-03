@@ -1791,6 +1791,8 @@ executors:
     sv9_api: 'bun run test -- "cd apps/api && bun test test/sua-tai-cho-okr.spec.ts"'
     sv9_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/sua-tai-cho-okr.dom.tsx"
     sv9_bai_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-sheet.dom.tsx ./test/khung-tao-okr.dom.tsx ./test/sheet-quyen-cap-nhat.dom.tsx ./test/ngan-kr-mot-cho.dom.tsx"
+    sv10_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-chung-mot-loi.dom.tsx"
+    sv10_bai_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-canh-kr.dom.tsx ./test/cap-nhat-trong-ngan-kr.dom.tsx ./test/ngan-kr-mot-cho.dom.tsx"
     cmt_breadcrumb: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/breadcrumb-nhan.dom.tsx"
     cmt_quet: "cd apps/app && bun test ./test/chu-man-tieng-viet.spec.ts"
     cmt_nhan_kieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/chu-man-tieng-viet.dom.tsx -t nhan-kieu"
@@ -2459,6 +2461,11 @@ executors:
     bk5_app_test: "cd apps/app && bun test -t 'dau-hieu-ve-tay cay-that'"
     sv9_chup: PROTO_ROUTE=1 bun run do:man --chay "PROTO_URL=$APP_URL node _acceptance/sua-tai-cho-muc-tieu-va-kr/rang/chup-proto.mjs"
     sv9_slop: "bun run lint:slop"
+    sv10_slop: "bun run lint:slop"
+    sv10_rang: "node _acceptance/bang-chung-kr-mot-loi/rang/nhap-lai-dialog.mjs"
+    sv10_mot_o: "node _acceptance/bang-chung-kr-mot-loi/rang/mot-o.mjs"
+    sv10_canh_kr: 'EVAL=E11,E12 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/man-canh-kr.mjs"'
+    sv10_chup: PROTO_ROUTE=1 bun run do:man --chay "PROTO_URL=$APP_URL node _acceptance/bang-chung-kr-mot-loi/rang/chup-proto.mjs"
     bcd_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/bo-okr-chi-don-vi/rang/man-bo-okr-chi-don-vi.mjs"'
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs

@@ -13,7 +13,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>172 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>198 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>199 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
 ```
 
@@ -39,6 +39,7 @@ flowchart TD
 - Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do (`ba-ho-so-do-san`)
 - Người dùng bấm một KR ở Của tôi, Cây căn chỉnh, Việc OKR hay trong chi tiết mục tiêu thì mở chi tiết KR, không mở chi tiết mục tiêu; chữ «Cập nhật tuần» dùng như danh từ thành «Cập nhật» (`bam-kr-mo-chi-tiet-kr`)
 - Bàn gieo góp ý dùng chung chạy lại được sau khi công cụ nộp của Trợ lý OKR tự đóng việc, để ba bàn đo màn OKR đo được lại (`ban-gieo-gop-y-sau-nop`)
+- Người phụ trách KR đính một đường dẫn bằng chứng ngay trong ngăn KR, ở một chỗ duy nhất, và thấy nó trong danh sách bằng chứng của KR (`bang-chung-kr-mot-loi`)
 - Tác nhân hỏng trong lúc dựng thì người dùng nhận đúng một thông báo, kể cả khi đã trả lời một câu hỏi giữa chừng (`bao-loi-tac-nhan-sau-cau-hoi`)
 - Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố (`bo-ca-mau-quy-4`)
 - Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp (`bo-cuc-hep-ngan-va-kanban`)
