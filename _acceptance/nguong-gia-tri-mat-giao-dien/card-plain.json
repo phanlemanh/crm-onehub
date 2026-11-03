@@ -92,11 +92,5 @@
       "p": "Tiêu chí chưa rẽ nhánh theo câu trả lời của anh — nay hồ sơ anh chọn để ngoài được đọc từ sổ, và việc bỏ nhãn chạy sau chốt."
     }
   ],
-  "decisions": [
-    {
-      "id": "E4",
-      "q": "Các ô SỐNG/CHẾT máy soạn có đủ để mở phiên nghiệm thu không?",
-      "why": "Ba người chấm đều chê: lo-trinh-ten-va-build và nen-kara đo việc dựng chứ không đo giá trị cho người dùng; cap-nhat-trong-ngan-kr và go-tin-hieu-rac có ô CHẾT không có con số; cho-tac-nhan-lau trỏ tới một cột không có trong ThongBao."
-    }
-  ]
+  "decisions": []
 }
