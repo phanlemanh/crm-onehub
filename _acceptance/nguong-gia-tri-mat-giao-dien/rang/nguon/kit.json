@@ -16,7 +16,7 @@
 			"Kết quả nào là SỐNG": "Trong 2 tuần sau khi bật, có ít nhất một tín hiệu được lưu trữ trước khi bị kéo về, và bản gom kế tiếp của đội sản phẩm không xếp tín hiệu nào vào lẻ với lý do thử, trùng hay gửi nhầm.",
 			"Kết quả nào là CHẾT": "Trong 2 tuần sau khi bật, bản gom vẫn có tín hiệu lẻ vì thử, trùng hay gửi nhầm mà quản trị đã thấy ở thẻ «Tất cả», hoặc phần lớn lần lưu trữ bị khôi phục lại vì lỡ tay."
 		},
-		"nguon_so": "Bảng tinHieu (archivedAt, archivedById, keoVeLuc) và tinHieuVet (loai luu-tru hay khoi-phuc, nguoiId, luc), cộng bản gom của lượt gom tín hiệu trong kho; docs/telemetry.md không có sự kiện cho tín hiệu.",
+		"nguon_so": "Bảng tinHieu (archivedAt, archivedById, keoVeLuc) và tinHieuVet (loai luu-tru hay khoi-phuc, nguoiId, luc), cộng các dòng «- lẻ <id> — <lý do>» của bản gom trong thư mục tin-hieu/gom/ (bản 31/10: gom-tin-hieu-3110.md); docs/telemetry.md không có sự kiện cho tín hiệu.",
 		"can_cu": "Context nói rác đi thẳng vào lượt gom và làm nhiễu con số ngưỡng sống; AC-2 hứa lượt kéo về bỏ qua tín hiệu đang lưu trữ, AC-5 hứa khôi phục để lại vết."
 	},
 	{
