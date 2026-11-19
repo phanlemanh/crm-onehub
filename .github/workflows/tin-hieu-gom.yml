@@ -48,12 +48,12 @@ jobs:
           GIT_CONFIG_COUNT: "1"
           GIT_CONFIG_KEY_0: url.https://x-access-token:${{ secrets.TIN_HIEU_TOKEN }}@github.com/.insteadOf
           GIT_CONFIG_VALUE_0: https://github.com/
-          KIT_REF: v2.36.0
+          KIT_REF: v3.0.0
         run: |
           npm install -g @anthropic-ai/claude-code@2.1.304
-          git clone --depth 1 --branch "$KIT_REF" https://github.com/phanlemanh/acceptance-gate-kit "$RUNNER_TEMP/acceptance-gate-kit"
-          claude plugin marketplace add "$RUNNER_TEMP/acceptance-gate-kit"
-          claude plugin install acceptance-gate@acceptance-gate-kit
+          git clone --depth 1 --branch "$KIT_REF" https://github.com/phanlemanh/delivery-loop "$RUNNER_TEMP/delivery-loop"
+          claude plugin marketplace add "$RUNNER_TEMP/delivery-loop"
+          claude plugin install acceptance-gate@delivery-loop
 
       - name: Gom tín hiệu chưa có chỗ, mở hay dựng lại PR đề xuất
         env:
