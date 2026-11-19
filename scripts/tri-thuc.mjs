@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // tri-thuc.mjs — lint và đường trỏ của kho tri thức (tầng tri thức theo LLM Wiki). Hồ sơ kho-tri-thuc-va-lint (TT1),
-// thiết kế docs/superpowers/specs/2026-10-24-kho-tri-thuc-va-lint-design.md. CHỈ ĐỌC: không ghi tệp nào.
+// thiết kế https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-24-kho-tri-thuc-va-lint-design.md. CHỈ ĐỌC: không ghi tệp nào.
 //
 // Khuôn một nguồn: skills/acceptance/references/tri-thuc-template.md (khối TRI-THUC-TRANG, -LOAI, -RAW-DONG, -CON-TRO)
 // rút LÚC CHẠY, suy từ vị trí script. Bản phạm vi đọc bằng docPhamVi của scripts/cat-luot.mjs — không bộ đọc thứ hai.

@@ -3784,9 +3784,13 @@ risk_tiers:
     - "lib/do-san-tren-nen.cjs"
     # Bốn tệp cuối của INIT-CI-COPY-LIST 2.28.0, «chỉ khi khai tin_hieu»: kho khai cửa tín hiệu từ LT2
     # (gui-tin-hieu-trong-crm) nên bước bản đồ nạp tin-hieu.mjs, và thiếu chúng là ERR_MODULE_NOT_FOUND.
-    - "dieu-phoi/scripts/hinh-dang.mjs"
-    - "dieu-phoi/scripts/cau-hinh.mjs"
-    - "dieu-phoi/scripts/dot.mjs"
+    - "scripts/hop-thu/hinh-dang.mjs"
+    - "scripts/hop-thu/cau-hinh.mjs"
+    - "scripts/hop-thu/dot.mjs"
+    # Kit 3.0.0 (delivery-loop): tin-hieu.mjs nạp bốn tệp dùng chung từ scripts/hop-thu/ thay dieu-phoi/scripts/, tìm skill qua
+    # tim-skill.cjs; chan-lo-trinh.cjs tra tên gói lộ trình qua bảng lib/ho-goi.cjs (lớp chép 35 → 38 tệp).
+    - "scripts/tim-skill.cjs"
+    - "lib/ho-goi.cjs"
     - "skills/acceptance/references/tin-hieu-template.md"
     # Tầng tri thức (kit TT1–TT4): cat-luot.mjs nạp tri-thuc-khoa.cjs mỗi lần chạy; khi kho khai tri_thuc, lệnh mở ô
     # và răng nguồn của bản phạm vi nạp thêm tri-thuc-nguon.cjs, tri-thuc.mjs và khuôn tri-thuc-template.md.

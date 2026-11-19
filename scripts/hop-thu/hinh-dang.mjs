@@ -107,7 +107,7 @@ export function kiemCauHinh(du, { canGocKho = false } = {}) {
   return du;
 }
 
-const KHOA_HANG_VIEC = ['dot', 'day', 'hang', 'ngoai_hang_merge'];
+const KHOA_HANG_VIEC = ['dot', 'day', 'hang', 'ngoai_hang_merge', 'muc_tieu'];
 const KHOA_DAY = ['id', 'worktree', 'link', 'nghi'];
 const KHOA_HANG = ['ma', 'tep', 'slug', 'day', 'sau', 'moc', 'uu_tien', 'ranh_gioi', 'chung_chi_them', 's4'];
 
@@ -118,6 +118,8 @@ export function kiemHangViec(du) {
   if (!laObject(du)) sai('phải là một object');
   kiemKhoaLa(du, KHOA_HANG_VIEC, TEP_HANG_VIEC, '');
   if (typeof du.dot !== 'string') sai('dot phải là chuỗi');
+  // Hồ sơ khung-dot-dinh-vi: mục tiêu đợt cho dòng đầu của khung định vị. Vắng = đợt cũ, khung hiện cờ vàng.
+  if (du.muc_tieu !== undefined && typeof du.muc_tieu !== 'string') sai('muc_tieu phải là chuỗi');
   if (!Array.isArray(du.day)) sai('day phải là danh sách');
   const ids = new Set();
   du.day.forEach((d, i) => {

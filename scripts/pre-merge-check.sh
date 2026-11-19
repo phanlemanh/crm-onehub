@@ -12,7 +12,7 @@
 # Dùng CHÍNH bộ khớp, bộ đọc danh sách và khối «Phân loại diff-chịu-cổng» bên
 # dưới. Không chứng minh được thì `cham_vat=true` (nghi ngờ thì chạy đủ). Mọi
 # dòng của chế độ nằm giữa cặp marker HANG-PR: cắt hết các vùng ấy là được đúng
-# cổng không cờ (ca AC-8 của tests/scripts/hang-pr.test.mjs canh).
+# cổng không cờ (ca AC-8 của https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/tests/scripts/hang-pr.test.mjs canh).
 # <<<HANG-PR-KHOA
 # hang: T1 ho-so T2 T3 khong-ro
 # cham_vat: true false
@@ -799,6 +799,76 @@ slug_vat_in_diff() { # <slug> <evals.yaml>
   return 0
 }
 
+# ── Hồ sơ nào được tính là «kèm hồ sơ» cho code t3_paths (t3-can-ho-so-arm) ──
+# Răng T1-escape từng coi MỌI thay đổi dưới _acceptance/ là PR có hồ sơ, trong khi vòng per-slug bỏ qua
+# đúng các hồ sơ không khai đủ hoặc khai hạng ngoài required_for: code t3_paths qua cổng mà không luật nào
+# chấm (kiểm cài kit ở onehub-inventory, 2.38.0). Chỉ siết cho code t3_paths: ở code thường, hồ sơ T1 tự
+# khai và hạt giống chưa frontmatter là cách dùng thật (ARM12; đo trên 11 kho, onehub-invest và crm).
+# Hồ sơ draft/approved hạng trong required_for vẫn được tính, vì per-slug đã chặn nó bằng thông điệp riêng.
+# Đọc risk_tier/status bằng fm_field như vòng per-slug: bộ này phải cùng kết luận «hồ sơ nào được chấm».
+NGHI_SLUGS=""
+t3_co_ho_so_arm() { # 0 iff có hồ sơ trong diff được cổng chấm cho code t3_paths; 1 thì đặt T3_HO_SO_LY_DO
+  local f rest s ly t st d seen=" "
+  T3_HO_SO_LY_DO=""
+  # PR cài kit: đỉnh nhánh đích chưa có cổng thì chưa có hồ sơ nào để đòi. Đọc đỉnh, không đọc merge-base:
+  # nhánh cắt trước lần cài không được miễn. Không đọc được commit đích thì cũng không miễn.
+  if git -C "$ROOT" cat-file -e "$BASE_SHA^{commit}" 2>/dev/null && ! git -C "$ROOT" cat-file -e "$BASE_SHA:./_acceptance/config.yaml" 2>/dev/null; then return 0; fi # T3-CAI-KIT-GUARD
+  while IFS= read -r f; do
+    case "$f" in _acceptance/*|*/_acceptance/*) ;; *) continue ;; esac
+    rest="${f##*_acceptance/}"
+    case "$rest" in */*) s="${rest%%/*}" ;; *) continue ;; esac
+    case "$seen" in *" $s "*) continue ;; esac
+    seen="$seen$s "
+    d="$ACC/$s"; ly=""
+    if [ ! -f "$d/contract.md" ]; then
+      ly="không có contract.md"
+    else
+      t="$(fm_field "$d/contract.md" risk_tier)"; st="$(fm_field "$d/contract.md" status)"
+      if [ -z "$t" ] && [ -z "$st" ]; then ly="contract thiếu status, risk_tier"
+      elif [ -z "$t" ]; then ly="contract thiếu risk_tier"
+      elif [ -z "$st" ]; then ly="contract thiếu status"
+      else
+        case "$REQUIRED_FOR" in
+          *"$t"*) ;;
+          *) ly="risk_tier=$t ngoài signoff.required_for ($REQUIRED_FOR) — code t3_paths không khai hạng thấp được" ;;
+        esac
+      fi
+      if [ -z "$ly" ]; then
+        case "$NGHI_SLUGS" in *" $s "*) ly="hồ sơ đã cho nghỉ, không còn bị chấm" ;; esac
+      fi
+      [ -z "$ly" ] && [ "$st" = "da-cham-boi-thuc-te" ] && ly="hồ sơ đã chấm bởi thực tế đã đóng, không nhận code mới"
+      if [ -z "$ly" ] && ! slug_vat_in_diff "$s" "${d%/}/evals.yaml"; then
+        ly="chỉ đổi tệp chữ (${SLUG_TEP_CHU:-tệp ghi chép}), hồ sơ không bị chấm lại"
+      fi
+      if [ -z "$ly" ] && [ "$(printf '%s' "$t" | tr '[:lower:]' '[:upper:]')" != "T3" ] \
+         && command -v node >/dev/null 2>&1 && [ -f "$CHU_KY_LIB" ]; then
+        case "$st" in
+          implemented|verified|signed-off|machine-cleared)
+            signoff_that "$d" || ly="hạng $t chưa có chữ ký người — code t3_paths phải có người ký" ;;
+        esac
+      fi
+      # Vế chữ ký không chạy được thì hồ sơ dưới T3 KHÔNG được tính (t3-arm-chu-ky-khong-im): không đọc được chữ ký
+      # thì không biết có người ký hay không. Hai lý do riêng để người đọc biết phải cài node hay chép lib.
+      if [ -z "$ly" ] && [ "$(printf '%s' "$t" | tr '[:lower:]' '[:upper:]')" != "T3" ]; then
+        case "$st" in
+          implemented|verified|signed-off|machine-cleared)
+            if ! command -v node >/dev/null 2>&1; then
+              ly="hạng $t không kiểm được chữ ký người — thiếu node (cài node trên máy chạy cổng)"
+            elif [ ! -f "$CHU_KY_LIB" ]; then
+              ly="hạng $t không kiểm được chữ ký người — thiếu lib/evidence-core.cjs (mang cổng vào repo phải copy CẢ lib/)"
+            fi ;;
+        esac
+      fi
+    fi
+    [ -z "$ly" ] && return 0
+    T3_HO_SO_LY_DO="${T3_HO_SO_LY_DO}    $s: $ly"$'\n'
+  done <<T3HOSO
+$DIFF_FILES
+T3HOSO
+  [ -n "$T3_HO_SO_LY_DO" ] || T3_HO_SO_LY_DO="    không có thư mục hồ sơ nào trong PR (chỉ đổi tệp khác dưới _acceptance/)"$'\n'
+  return 1
+}
+
 # AC-12 nửa sau: không có base thì luật không xác định được phạm vi, nên bỏ qua
 # — nhưng bỏ qua phải THẤY ĐƯỢC (cùng lối với răng T1-escape bên dưới).
 if [ "$GAP_PROBE_MODE" != "off" ] && [ "$DIFF_READY" -eq 0 ]; then
@@ -957,6 +1027,7 @@ for dir in "$ACC"/*/; do
       process.exit(0);
     ' "$HERE/../lib/workspace-record.cjs" "$dir" "$slug" 2>&1)"; nghi_rc=$?
     [ -n "$nghi_out" ] && printf '%s\n' "$nghi_out"
+    [ "$nghi_rc" -eq 9 ] && NGHI_SLUGS="$NGHI_SLUGS $slug "
     if [ "$nghi_rc" -eq 9 ]; then continue; fi
   else
     echo "NOTE [$slug]: luật nghỉ NOT ENFORCED — node hoặc lib/workspace-record.cjs vắng; một hồ sơ đã cho nghỉ vẫn bị chấm như đang sống"
@@ -1842,7 +1913,7 @@ if command -v node >/dev/null 2>&1 && [ -f "$CLT_LIB" ]; then
     [ "$_clt_n" -eq 0 ] && { echo "VIOLATION [chan-lo-trinh]: bộ đọc chặn lộ trình thoát $_clt_rc mà không gọi tên hồ sơ — xem dòng trên"; _clt_n=1; }
     violations=$((violations + _clt_n))
   fi
-elif grep -qs '"road-map@' "$ROOT/.claude/settings.json" && grep -qs '^  chan:' "$ACC/config.yaml"; then
+elif grep -qs '"roadmap@' "$ROOT/.claude/settings.json" && grep -qs '^  chan:' "$ACC/config.yaml"; then
   echo "NOTE: luật chặn lộ trình NOT ENFORCED — thiếu node hoặc lib/chan-lo-trinh.cjs (chép lại lớp CI theo đợt phát hành)"
 fi
 
@@ -1874,6 +1945,14 @@ else
       printf '%s' "$nont1_hits" | head -10 | sed 's/^/    /'
       violations=$((violations+1))
     fi
+  # Riêng code t3_paths: có tệp dưới _acceptance/ chưa đủ, phải có hồ sơ thật sự bị chấm (xem t3_co_ho_so_arm).
+  elif [ -n "$t3_hits" ] && ! t3_co_ho_so_arm; then # T3-CAN-HO-SO-GUARD
+    echo "VIOLATION [PR]: T3 paths (t3_paths) changed and the PR touches _acceptance/, but no record in it is judged by the gate — critical code changed and no rule judged it. Changed:"
+    printf '%s' "$t3_hits" | head -10 | sed 's/^/    /'
+    echo "  Hồ sơ trong PR và vì sao không tính:"
+    printf '%s' "$T3_HO_SO_LY_DO"
+    echo "  Cách gỡ: kèm hồ sơ khai risk_tier trong signoff.required_for (hạng dưới T3 thì phải có chữ ký người) và status từ implemented trở lên, đã qua Cổng Bằng chứng; hoặc tách phần t3_paths sang PR khác."
+    violations=$((violations+1))
   fi
   ledger_mark ran t1-escape
 fi

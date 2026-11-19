@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 // tri-thuc-tra.cjs — dòng «đã tra tri thức» của bước thiết kế (hồ sơ thiet-ke-nap-tri-thuc, TT4, đợt tri-thuc-2410;
-// thiết kế docs/superpowers/specs/2026-10-24-thiet-ke-nap-tri-thuc-design.md). CJS để thẻ Cổng Phạm vi và bộ xếp căn cứ
+// thiết kế https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-24-thiet-ke-nap-tri-thuc-design.md). CJS để thẻ Cổng Phạm vi và bộ xếp căn cứ
 // nạp được. Kho không khai `tri_thuc` → mọi hàm trả null, bên gọi giữ nguyên hành vi trước vòng.
 //
 // Không có bộ so băm thứ hai: mỗi đường trỏ kiểm bằng `scripts/tri-thuc.mjs --con-tro` (0 khớp · 1 lệch/không có ·
@@ -9,7 +9,7 @@
 //
 //   node scripts/tri-thuc-tra.cjs --root <kho> --clone   0 đã clone / đã có / trong kho · 2 không chạy được · 3 không đọc được ở đây
 //
-// Hồ sơ vong-don-le-tra-tri-thuc (TT5, thiết kế docs/superpowers/specs/2026-10-25-vong-don-le-tra-tri-thuc-design.md):
+// Hồ sơ vong-don-le-tra-tri-thuc (TT5, thiết kế https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-25-vong-don-le-tra-tri-thuc-design.md):
 // tra sổ quyết định của hồ sơ trước theo câu mô tả (`traSo`, lệnh `tri-thuc.mjs --tra`), khoá `so` của dòng tra và thẻ
 // kiểm nó. Phép khớp chữ (`thuatNgu`, `diem`) dùng chung cho tra trang và tra sổ.
 const fs = require('fs');

@@ -1,5 +1,5 @@
 // gio-may.mjs — ước giờ máy và % hạn mức tuần cho lộ trình (hồ sơ lo-trinh-gio-may, hàng RM6).
-// Design: docs/superpowers/specs/2026-10-15-lo-trinh-gio-may-design.md.
+// Design: https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-15-lo-trinh-gio-may-design.md.
 //
 // Mô-đun THUẦN: không đọc «hôm nay», không gọi git. Bên gọi (scripts/lo-trinh.mjs) đưa vào hàng đã suy trạng thái,
 // danh sách vòng đã đo (`docDoVong`) và — chỉ cho lớp ngày — ngày hôm nay. Ba lớp:
