@@ -245,8 +245,8 @@ async function kiemDeXuat(fn: Chay): Promise<string[]> {
 	);
 	const loiDan = lay(av, "-p") ?? "";
 	can(
-		loiDan.includes("acceptance-gate:gom-tin-hieu") &&
-			loiDan.includes("acceptance-gate:cat-luot"),
+		loiDan.includes("acceptance-gate:signal-intake") &&
+			loiDan.includes("acceptance-gate:scope-slice"),
 		"8 loi dan thieu ten skill",
 		loi,
 	);

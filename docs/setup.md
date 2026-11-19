@@ -492,9 +492,9 @@ Việc cài một lần trước lượt thật đầu tiên (sau khi `gia-co-go
 
 1. Đặt bí mật kho `ANTHROPIC_API_KEY` — một khoá API riêng cho lịch gom, có trần chi tiêu tháng đặt
    ở bảng điều khiển của nhà cung cấp mô hình. Nội dung tín hiệu đi tới nhà cung cấp mô hình từ đây.
-2. Cấp cho bí mật `TIN_HIEU_TOKEN` (đã có từ lịch kéo về) quyền đọc kho `phanlemanh/acceptance-gate-kit`
-   — lịch cài gói kit từ đó. Token chỉ cần ghi nội dung và PR của `phanlemanh/crm-onehub` cộng đọc kho kit — một token
-   fine-grained hai kho, không quyền `workflow`.
+2. Lịch cài gói kit từ kho `phanlemanh/delivery-loop` theo thẻ `KIT_REF`. Kho ấy công khai, nên bí mật `TIN_HIEU_TOKEN`
+   (đã có từ lịch kéo về) chỉ cần ghi nội dung và PR của `phanlemanh/crm-onehub` — token fine-grained đọc được kho công
+   khai, không quyền `workflow`. Kho kit chuyển sang riêng tư thì cấp thêm cho token quyền đọc nó.
 3. Chạy tay lịch «Tín hiệu gom» một lần ở tab Actions và mở PR nó tạo.
 
 ## Secrets hygiene

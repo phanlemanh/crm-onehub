@@ -11,12 +11,12 @@ export const KIEM_CHEO = {
 	thuMuc: ".acceptance-runs/kiem-cheo",
 	tep: { moc: "moc.json", cay: "cay", log: "launchd.log", tienDo: "tien-do.json" },
 	goiDieuPhoi: {
-		plugin: "dieu-phoi",
+		plugin: "dispatch",
 		can: ["scripts/dot.mjs", "scripts/hook-nhip.mjs", "scripts/hinh-dang.mjs"],
 		bien: "KIEM_CHEO_GOI_DIEU_PHOI",
 		giaiBang: "resolve-plugin.mjs",
 		lenhCai:
-			"claude plugin install dieu-phoi@acceptance-gate-kit --scope project",
+			"claude plugin install dispatch@delivery-loop --scope project",
 	},
 	khoa: {
 		phien: "kiem-cheo",
