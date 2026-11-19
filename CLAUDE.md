@@ -74,7 +74,7 @@ strict`. Đường T3 gồm `packages/auth`, `packages/db/prisma`, và các modu
 API — chạm vào đó là T3, thêm một cổng duyệt kế hoạch.
 
 Lỗi của bộ kit nghiệm thu phát hiện ở đây thì mở chip riêng sang
-`~/dev/acceptance-gate-kit`, không sửa tại chỗ — phiên ở kho này chỉ làm tính
+`~/dev/delivery-loop`, không sửa tại chỗ — phiên ở kho này chỉ làm tính
 năng của kho này.
 
 ## Lộ trình là việc dựng; thiếu dữ liệu thì dùng dữ liệu mẫu

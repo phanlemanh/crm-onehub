@@ -2,7 +2,7 @@
 
 Làn M5 trong lộ trình ba làn (#487, chủ kho 19/10): Việc–Dự án và Kho tài liệu, cộng VS8. Gói theo khuôn §4.1 của kit:
 `dieu-phoi.config.json`, `hang-viec.json`, `LUAT-rieng.md`. Hàng lấy từ lộ trình qua `nguon_hang`. Chủ kho duyệt hàng,
-Cổng Đáng (`build`) và quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot viec-du-an-kho-tai-lieu`, không phải ở đây.
+Cổng Đáng (`build`) và quyền tự merge ở thẻ khởi tạo của `/dispatch:open viec-du-an-kho-tai-lieu`, không phải ở đây.
 
 ## Mở đợt
 
