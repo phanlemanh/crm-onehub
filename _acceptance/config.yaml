@@ -3726,6 +3726,10 @@ executors:
     f38_ghim: bun _acceptance/paths-chet-chin-ho-so/rang/ghim.mjs
     htg_hex: bun _acceptance/hex-trang-gioi-thieu/rang/hex.mjs
     htg_man: 'IS_MARKETING=true EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hex-trang-gioi-thieu/rang/man.mjs"'
+    cc30_thu: node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
+    cc30_chuyen_kho: node _acceptance/chuyen-cho-delivery-loop-3-0/rang/chuyen-kho.mjs
+    cc30_doi_chung: node _acceptance/chuyen-cho-delivery-loop-3-0/rang/doi-chung.mjs
+    cc30_ban_do: node scripts/product-map.mjs --root . --check
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
