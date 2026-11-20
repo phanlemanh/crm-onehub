@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..", "..");
+const HO_SO = resolve(HERE, "..");
 const SLUG = "sua-bom-gio-test-api";
 const NEN = "74a29a68d28df9a8a08daf9a5e94b8dab364dd96";
 const NHANH_CHINH = "origin/onehub";
@@ -80,8 +81,12 @@ function phamVi(argv) {
 
 function khongHa(argv) {
 	const gia = mot(argv, "--patch");
+	if (gia && !existsSync(resolve(HO_SO, gia))) {
+		console.error(`pham-vi: khong co mau va ${resolve(HO_SO, gia)}`);
+		process.exit(2);
+	}
 	const patch = gia
-		? readFileSync(resolve(gia), "utf8")
+		? readFileSync(resolve(HO_SO, gia), "utf8")
 		: git(["diff", "--unified=0", NEN, "HEAD", "--", ...TEP_KIEM]);
 	const cacDong = patch.split("\n");
 	const bot = cacDong.filter((d) => d.startsWith("-") && !d.startsWith("---"));

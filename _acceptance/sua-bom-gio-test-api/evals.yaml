@@ -89,15 +89,19 @@ evals:
   - id: E6
     criterion: AC-5
     executor: script
-    cmd: config:executors.script.vvc_ca_goi_api
+    cmd: config:executors.script.bom_gio_viec_sot
     paths:
       - "apps/api/test/**"
       - "apps/api/src/**"
       - "_acceptance/test-api-khong-de-viec-vo-chu/rang/**"
     expected: |
-      Thước E5 của hồ sơ đã ký test-api-khong-de-viec-vo-chu (#616), dùng lại nguyên lệnh: trong CÙNG một CSDL của
-      lượt, `rang/dem-sot.ts gieo-le` gieo liên hệ mồi, chạy trọn suite api (`cd apps/api && bun test`, phải thoát 0),
-      rồi `rang/dem-sot.ts ca-goi` đếm. Số dòng AgentTask chưa xong, số liên hệ khác mồi, số công ty đều 0; thoát 0.
+      Ba bước của thước E5 hồ sơ đã ký test-api-khong-de-viec-vo-chu (#616), cùng tệp `rang/dem-sot.ts` của hồ sơ ấy:
+      trong CÙNG một CSDL của lượt, `dem-sot.ts gieo-le` gieo liên hệ mồi, chạy trọn suite api đúng như lệnh test của
+      apps/api (`cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts`, phải thoát 0), rồi
+      `dem-sot.ts ca-goi` đếm. Khác lệnh gốc `vvc_ca_goi_api` đúng một chỗ: bước giữa nạp ./test/setup.ts — lệnh gốc chạy
+      `bun test` trần nên auth.e2e «lets the sign-in page read what it may offer» và listing-body-limit «nhận một lô
+      đúng 500 mục» đọc thẳng .env của máy và đỏ (đo 20/11: hai tệp ấy trần 5 pass · 2 fail, có setup 7 pass · 0 fail),
+      khiến bước đếm không bao giờ chạy. Số dòng AgentTask chưa xong, số liên hệ khác mồi, số công ty đều 0; thoát 0.
       Trên cây của vòng điều này nói: lần ghi chương trình thứ hai ở gieoCuocSoan (aiOn đã true, program() đọc theo
       version) không sinh việc okr-kiem-san-sang nào lọt bước dọn createdAt ≥ BAT_DAU, và gop-y-dung-cho trả lại đủ hàng
       cấu hình đã gỡ (suite thoát 0 trong cùng lượt).

@@ -3730,6 +3730,7 @@ executors:
     bom_gio_doi_chung: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --doi-chung 74a29a68d
     bom_gio_pham_vi: bun _acceptance/sua-bom-gio-test-api/rang/pham-vi.mjs
     bom_gio_khong_ha: bun _acceptance/sua-bom-gio-test-api/rang/pham-vi.mjs --khong-ha
+    bom_gio_viec_sot: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts ca-goi"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
