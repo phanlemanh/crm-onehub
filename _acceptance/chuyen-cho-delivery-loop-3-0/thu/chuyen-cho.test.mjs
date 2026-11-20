@@ -315,7 +315,7 @@ describe("Thước của vòng sau khi gộp", () => {
 	git(GOC, "clone", "-q", "--shared", "--no-checkout", GOC, kho);
 	const dinh = CAP.dinh;
 	const cay = git(kho, "rev-parse", `${dinh}^{tree}`).trim();
-	const truoc = git(kho, "commit-tree", git(kho, "rev-parse", `${NEN}^{tree}`).trim(), "-p", NEN, "-m", "pr khac").trim();
+	const truoc = git(kho, "commit-tree", git(kho, "rev-parse", `${CAP.nen}^{tree}`).trim(), "-p", CAP.nen, "-m", "pr khac").trim();
 	const gop = git(kho, "commit-tree", cay, "-p", truoc, "-p", dinh, "-m", "gop vong").trim();
 	const sau = git(kho, "commit-tree", cay, "-p", gop, "-m", "pr sau").trim();
 
