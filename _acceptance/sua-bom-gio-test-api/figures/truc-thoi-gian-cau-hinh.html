@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trục thời gian cấu hình · Hỏi-1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-paper:  #171717;
+        --color-ink:    #fafafa;
+        --color-muted:  #b4b4b4;
+        --color-rule:   rgba(250,250,250,0.12);
+        --color-accent: #2f9b7a;
+      }
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 64ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình · Trục thời gian · sua-bom-gio-test-api · Hỏi-1</p>
+    <h1>Giờ thật vượt mốc ghim</h1>
+    <p class="sub">Bài kiểm ghim đồng hồ về 10/11 và 12/11, còn hàng cấu hình được ghi ở giờ thật 20/11. Trước 10/11 thứ tự ấy vẫn đúng. Từ khi giờ thật vượt hai mốc ghim, hai chỗ đọc cấu hình đọc sai hàng.</p>
+
+    <svg viewBox="0 0 1080 652" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>
+          @media (prefers-color-scheme: dark) {
+            .p  { fill: #171717; }
+            .ti { fill: #fafafa; }
+            .tm { fill: #b4b4b4; }
+            .ta { fill: #2f9b7a; }
+            .si { stroke: #fafafa; }
+            .sm { stroke: #b4b4b4; }
+            .sa { stroke: #2f9b7a; }
+            .sr { stroke: rgba(250,250,250,0.12); }
+            .sz { stroke: rgba(250,250,250,0.24); }
+            .fa { fill: rgba(47,155,122,0.12); }
+            .fb { fill: rgba(250,250,250,0.08); }
+          }
+        </style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon class="tm" points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+      </defs>
+
+      <rect class="p" width="100%" height="100%" fill="#fafafa"/>
+
+      <text class="tm" x="40" y="36" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">TRỤC NGÀY 03/11 → 20/11/2026 · KHOẢNG CÁCH THEO NGÀY THẬT</text>
+
+      <line class="sr" x1="464" y1="140" x2="464" y2="492" stroke="rgba(23,23,23,0.12)" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line class="sr" x1="568" y1="140" x2="568" y2="492" stroke="rgba(23,23,23,0.12)" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line class="sr" x1="984" y1="140" x2="984" y2="492" stroke="rgba(23,23,23,0.12)" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+      <line class="sm" x1="80" y1="132" x2="1004" y2="132" stroke="#575757" stroke-width="1"/>
+      <line class="sz" x1="100" y1="128" x2="100" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="152" y1="128" x2="152" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="204" y1="128" x2="204" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="256" y1="128" x2="256" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="308" y1="128" x2="308" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="360" y1="128" x2="360" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="412" y1="128" x2="412" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="464" y1="128" x2="464" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="516" y1="128" x2="516" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="568" y1="128" x2="568" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="620" y1="128" x2="620" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="672" y1="128" x2="672" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="724" y1="128" x2="724" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="776" y1="128" x2="776" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="828" y1="128" x2="828" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="880" y1="128" x2="880" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="932" y1="128" x2="932" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <line class="sz" x1="984" y1="128" x2="984" y2="136" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+
+      <line class="sz" x1="100" y1="56" x2="100" y2="132" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <circle class="ti" cx="100" cy="132" r="4" fill="#171717"/>
+      <text class="tm" x="108" y="68" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">6561F724 · THOÁT 0</text>
+      <text class="ti" x="108" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">suite xanh</text>
+
+      <line class="sz" x1="464" y1="56" x2="464" y2="132" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <circle class="ti" cx="464" cy="132" r="4" fill="#171717"/>
+      <text class="tm" x="456" y="68" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.14em">LUC_DOC</text>
+      <text class="ti" x="456" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">cmst-goc đọc ở đây</text>
+
+      <line class="sz" x1="568" y1="56" x2="568" y2="132" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <circle class="ti" cx="568" cy="132" r="4" fill="#171717"/>
+      <text class="tm" x="576" y="68" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MOC_MAU</text>
+      <text class="ti" x="576" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">gop-y-dung-cho đọc ở đây</text>
+
+      <line class="sa" x1="984" y1="56" x2="984" y2="132" stroke="#006B4F" stroke-width="1.4"/>
+      <circle class="ta" cx="984" cy="132" r="6" fill="#006B4F"/>
+      <text class="ta" x="976" y="68" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.14em">GIỜ THẬT</text>
+      <text class="ti" x="976" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">hàng cấu hình ghi ở đây</text>
+
+      <text class="tm" x="100" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">03/11</text>
+      <text class="tm" x="464" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">10/11</text>
+      <text class="tm" x="568" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">12/11</text>
+      <text class="ta" x="984" y="156" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">20/11</text>
+      <text class="tm" x="776" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GIỜ THẬT ĐÃ QUA CẢ HAI MỐC GHIM</text>
+
+      <rect class="sz" x="40" y="176" width="1000" height="140" rx="8" fill="none" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text class="tm" x="56" y="196" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CMST-GOC · chu-may-sinh-ten-moi-goc.spec.ts</text>
+      <text class="tm" x="56" y="232" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">GHI</text>
+      <text class="tm" x="56" y="268" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐỌC</text>
+
+      <rect class="fb" x="100" y="256" width="364" height="16" rx="2" fill="rgba(23,23,23,0.06)"/>
+      <text class="tm" x="112" y="268" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">soanMo đọc createdAt ≤ 10/11</text>
+      <path class="sm" d="M476 264 H976 Q984 264 984 256 V236" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <rect class="p" x="684" y="238" width="72" height="16" rx="2" fill="#fafafa"/>
+      <text class="tm" x="720" y="251" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔNG THẤY</text>
+      <polygon class="p si" points="464,256 472,264 464,272 456,264" fill="#fafafa" stroke="#171717" stroke-width="1.2"/>
+      <rect class="ti" x="980" y="224" width="8" height="8" fill="#171717"/>
+      <text class="ti" x="968" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">2 hàng · v2 aiOn true</text>
+      <text class="ti" x="100" y="300" fill="#171717" font-size="12" font-family="'Geist', sans-serif">→ không thấy hàng nào → <tspan font-family="'Geist Mono', monospace" font-size="11">don-vi-chua-bat</tspan></text>
+
+      <rect class="sz" x="40" y="332" width="1000" height="160" rx="8" fill="none" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text class="tm" x="56" y="352" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">GOP-Y-DUNG-CHO · gop-y-dung-cho.spec.ts</text>
+      <text class="tm" x="56" y="388" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">GHI</text>
+      <text class="tm" x="56" y="428" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐỌC</text>
+
+      <path class="sm" d="M576 424 H976 Q984 424 984 416 V396" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect class="p" x="724" y="400" width="104" height="16" rx="2" fill="#fafafa"/>
+      <text class="tm" x="776" y="413" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐỌC «MỚI NHẤT»</text>
+      <polygon class="p si" points="568,416 576,424 568,432 560,424" fill="#fafafa" stroke="#171717" stroke-width="1.2"/>
+      <rect class="p sm" x="564" y="380" width="8" height="8" fill="#fafafa" stroke="#575757" stroke-width="1"/>
+      <text class="tm" x="580" y="388" fill="#575757" font-size="12" font-family="'Geist', sans-serif">hàng của bài · AI bật</text>
+      <rect class="ti" x="980" y="380" width="8" height="8" fill="#171717"/>
+      <text class="ti" x="968" y="388" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">hàng sót · aiOn false</text>
+      <text class="ti" x="100" y="468" fill="#171717" font-size="12" font-family="'Geist', sans-serif">→ hàng sót thắng → chip đếm 0</text>
+
+      <rect class="fa sa" x="40" y="512" width="1000" height="76" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text class="ta" x="56" y="532" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">KẾT LUẬN · HỎI-1 · AC-1 · AC-2 · AC-3</text>
+      <text class="ti" x="56" y="556" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif">Ở production createdAt ≤ giờ thật luôn đúng → đọc «mới nhất» = đọc «tại now».</text>
+      <text class="tm" x="56" y="576" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Lệch chỉ khi bài ghim đồng hồ về quá khứ.</text>
+
+      <line class="sr" x1="40" y1="608" x2="1040" y2="608" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text class="tm" x="40" y="624" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect class="ti" x="40" y="632" width="8" height="8" fill="#171717"/>
+      <text class="tm" x="58" y="641" fill="#575757" font-size="9" font-family="'Geist', sans-serif">hàng cấu hình ghi ở giờ thật</text>
+      <rect class="p sm" x="208" y="632" width="8" height="8" fill="#fafafa" stroke="#575757" stroke-width="1"/>
+      <text class="tm" x="226" y="641" fill="#575757" font-size="9" font-family="'Geist', sans-serif">hàng cấu hình ghi dưới đồng hồ ghim</text>
+      <polygon class="p si" points="424,632 428,636 424,640 420,636" fill="#fafafa" stroke="#171717" stroke-width="1.2"/>
+      <text class="tm" x="436" y="641" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỗ đọc cấu hình (đồng hồ đang ghim)</text>
+      <circle class="ta" cx="644" cy="636" r="4" fill="#006B4F"/>
+      <text class="tm" x="656" y="641" fill="#575757" font-size="9" font-family="'Geist', sans-serif">giờ thật lúc chạy</text>
+      <line class="sm" x1="760" y1="636" x2="784" y2="636" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text class="tm" x="792" y="641" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỗ đọc không với tới</text>
+    </svg>
+
+    <footer>sua-bom-gio-test-api · trục thời gian cấu hình · Hỏi-1 · AC-1 AC-2 AC-3 · đo 2026-11-20</footer>
+  </div>
+</body>
+</html>
