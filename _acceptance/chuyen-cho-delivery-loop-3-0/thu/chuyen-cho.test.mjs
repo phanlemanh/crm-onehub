@@ -18,7 +18,9 @@ import {
 	docTai,
 	git,
 	giaiNenKit,
-	mergeBase,
+	NEN,
+	capVong,
+	tepCuaVong,
 	thuMucTam,
 } from "../rang/kit.mjs";
 import {
@@ -38,7 +40,8 @@ import {
 } from "../rang/luat.mjs";
 import { kiemDiff, kiemGhim, kiemPhanLoai, docMucGhim } from "../rang/ghim.mjs";
 
-const MB = mergeBase();
+const CAP = capVong();
+const MB = CAP.nen;
 const DS = danhSachChep();
 const docKhoTru = (thay) => (d) => (d in thay ? thay[d] : docKho(d));
 
@@ -72,7 +75,7 @@ describe("AC-1", () => {
 	test("AC-1 «resolve-plugin.mjs khớp bản feature-loop v3.0.0»", () => {
 		const kit = docKit("plugins/feature-loop/scripts/resolve-plugin.mjs");
 		assert.equal(docKho("scripts/resolve-plugin.mjs"), kit);
-		assert.notEqual(docTai(MB, "scripts/resolve-plugin.mjs"), kit, "đối chứng: bản nhánh chính khác bản 3.0.0");
+		assert.notEqual(docTai(NEN, "scripts/resolve-plugin.mjs"), kit, "đối chứng: bản nhánh chính khác bản 3.0.0");
 	});
 
 	test("AC-1 «không còn tệp chép cũ dưới dieu-phoi/, oxlint thôi trỏ nó»: vật thật xanh, bản phá đỏ", () => {
@@ -80,7 +83,7 @@ describe("AC-1", () => {
 		assert.deepEqual(kiemConChepCu(theoDoi), []);
 		assert.deepEqual(kiemConChepCu([...theoDoi, "dieu-phoi/scripts/dot.mjs"]), ["còn tệp chép cũ: dieu-phoi/scripts/dot.mjs"]);
 		assert.ok(!docKho(".oxlintrc.json").includes("dieu-phoi/"), ".oxlintrc.json còn trỏ dieu-phoi/");
-		assert.ok(docTai(MB, ".oxlintrc.json").includes("dieu-phoi/scripts/**"), "đối chứng: nhánh chính có dòng ấy");
+		assert.ok(docTai(NEN, ".oxlintrc.json").includes("dieu-phoi/scripts/**"), "đối chứng: nhánh chính có dòng ấy");
 	});
 
 	test("AC-1 «kit đọc đúng commit của thẻ v3.0.0, không phải đối tượng thẻ»", () => {
@@ -176,7 +179,7 @@ describe("AC-3 và AC-4", () => {
 	});
 
 	test("AC-3 «phần còn lại của .claude/settings.json giữ nguyên so với nhánh chính»: vật thật xanh, bản phá đỏ", () => {
-		const cu = JSON.parse(docTai(MB, ".claude/settings.json"));
+		const cu = JSON.parse(docTai(NEN, ".claude/settings.json"));
 		assert.deepEqual(kiemPhanConLai(st, cu), []);
 		const a = structuredClone(st);
 		a.permissions = { ...(a.permissions ?? {}), allow: [...(a.permissions?.allow ?? []), "Bash(rm:*)"] };
@@ -224,7 +227,7 @@ describe("AC-5", () => {
 describe("AC-6", () => {
 	test("AC-6 «tệp mẫu lo-trinh-kit.html chỉ đổi tên lệnh theo bảng»: vật thật xanh, bản phá đỏ", () => {
 		const duong = "apps/agent/test/mau/lo-trinh-kit.html";
-		const cu = docTai(MB, duong);
+		const cu = docTai(NEN, duong);
 		const moi = docKho(duong);
 		const kq = kiemMau(cu, moi);
 		assert.deepEqual(kq.loi, []);
@@ -238,7 +241,7 @@ describe("AC-6", () => {
 		const doan = phang(docKho("CLAUDE.md"));
 		assert.ok(doan.includes("mở chip riêng sang `~/dev/delivery-loop`"), "CLAUDE.md chưa chỉ sang ~/dev/delivery-loop");
 		assert.ok(!doan.includes("`~/dev/acceptance-gate-kit`"), "CLAUDE.md còn chỉ ~/dev/acceptance-gate-kit");
-		assert.ok(phang(docTai(MB, "CLAUDE.md")).includes("mở chip riêng sang `~/dev/acceptance-gate-kit`"), "đối chứng: nhánh chính chỉ kho cũ");
+		assert.ok(phang(docTai(NEN, "CLAUDE.md")).includes("mở chip riêng sang `~/dev/acceptance-gate-kit`"), "đối chứng: nhánh chính chỉ kho cũ");
 	});
 });
 
@@ -262,25 +265,25 @@ describe("AC-8 và AC-9", () => {
 	test("AC-8 «phân loại ghim lại khớp tệp chạy khô, trên đúng cây HEAD»: vật thật xanh, ba bản phá đỏ", () => {
 		const pl = JSON.parse(docKho(`_acceptance/${SLUG}/evidence/phan-loai-ghim.json`));
 		const muc = docMucGhim(hopDong);
-		const doi = git(GOC, "diff", "--name-only", `${MB}...HEAD`).split("\n").filter(Boolean);
-		assert.deepEqual(kiemPhanLoai({ pl, muc, doi, mb: MB, slug: SLUG }), []);
+		const doi = tepCuaVong(CAP);
+		assert.deepEqual(kiemPhanLoai({ pl, muc, doi, mb: MB, dinh: CAP.dinh, slug: SLUG }), []);
 		const e = pl.ung_vien.find((x) => pl.nhanh_chinh[x] === undefined && pl.tip[x].dat);
 		const a = structuredClone(pl);
 		a.tip[e] = { ma: 1, dat: false };
 		a.lop[e] = "do-ca-hai";
-		assert.deepEqual(kiemPhanLoai({ pl: a, muc, doi, mb: MB, slug: SLUG }), [`${e}: xếp đỏ cả hai bên mà nhánh chính xanh`]);
-		assert.ok(kiemPhanLoai({ pl, muc: { ghim: [...muc.ghim, "khong-co-ho-so"] }, doi, mb: MB, slug: SLUG }).includes("ba tập ghim (tệp phân loại, hợp đồng, run-log đổi) không bằng nhau"));
-		assert.ok(kiemPhanLoai({ pl: { ...pl, sha_tip: MB }, muc, doi, mb: MB, slug: SLUG }).includes("phân loại không chạy trên cây HEAD"));
+		assert.deepEqual(kiemPhanLoai({ pl: a, muc, doi, mb: MB, dinh: CAP.dinh, slug: SLUG }), [`${e}: xếp đỏ cả hai bên mà nhánh chính xanh`]);
+		assert.ok(kiemPhanLoai({ pl, muc: { ghim: [...muc.ghim, "khong-co-ho-so"] }, doi, mb: MB, dinh: CAP.dinh, slug: SLUG }).includes("ba tập ghim (tệp phân loại, hợp đồng, run-log đổi) không bằng nhau"));
+		assert.ok(kiemPhanLoai({ pl: { ...pl, sha_tip: MB }, muc, doi, mb: MB, dinh: CAP.dinh, slug: SLUG }).includes("phân loại không chạy trên cây HEAD"));
 		for (const g of muc.gioiHan) {
-			assert.ok(kiemPhanLoai({ pl, muc: { ...muc, gioiHan: muc.gioiHan.filter((x) => x !== g) }, doi, mb: MB, slug: SLUG }).includes(`${g}: đỏ vì vòng mà hợp đồng không khai «gioi-han»`));
+			assert.ok(kiemPhanLoai({ pl, muc: { ...muc, gioiHan: muc.gioiHan.filter((x) => x !== g) }, doi, mb: MB, dinh: CAP.dinh, slug: SLUG }).includes(`${g}: đỏ vì vòng mà hợp đồng không khai «gioi-han»`));
 		}
 		const xanh = pl.ung_vien.find((x) => pl.tip[x].dat);
-		assert.ok(kiemPhanLoai({ pl, muc: { ...muc, gioiHan: [...muc.gioiHan, xanh] }, doi, mb: MB, slug: SLUG }).includes(`${xanh}: hợp đồng khai «gioi-han» mà eval không đỏ vì vòng`));
+		assert.ok(kiemPhanLoai({ pl, muc: { ...muc, gioiHan: [...muc.gioiHan, xanh] }, doi, mb: MB, dinh: CAP.dinh, slug: SLUG }).includes(`${xanh}: hợp đồng khai «gioi-han» mà eval không đỏ vì vòng`));
 	});
 
 	test("AC-8 «hồ sơ ghim lại khớp hợp đồng, giữ chữ ký, dòng ghim khớp verified_commit»: vật thật xanh, ba bản phá đỏ", () => {
 		const muc = docMucGhim(hopDong);
-		const doi = git(GOC, "diff", "--name-only", `${MB}...HEAD`).split("\n").filter(Boolean);
+		const doi = tepCuaVong(CAP);
 		const kq = kiemGhim({ muc, doi, mb: MB, slug: SLUG });
 		assert.deepEqual(kq.loi, []);
 		assert.ok(kq.so >= 0);
@@ -297,12 +300,44 @@ describe("AC-8 và AC-9", () => {
 	});
 
 	test("AC-9 «diff từ nhánh chính chỉ chạm tệp của việc chuyển chợ»: vật thật 0 tệp lạ, bản cấy đỏ", () => {
-		const doi = git(GOC, "diff", "--name-only", `${MB}...HEAD`).split("\n").filter(Boolean);
+		const doi = tepCuaVong(CAP);
 		const muc = docMucGhim(hopDong);
 		assert.deepEqual(kiemDiff(doi, DS, muc, SLUG), []);
 		assert.deepEqual(
 			kiemDiff([...doi, "packages/core/src/agreements.ts", "_acceptance/hop-tuan-mo-dung-bo/contract.md"], DS, muc, SLUG),
 			["tệp ngoài danh sách: packages/core/src/agreements.ts", "tệp ngoài danh sách: _acceptance/hop-tuan-mo-dung-bo/contract.md"],
 		);
+	});
+});
+
+describe("Thước của vòng sau khi gộp", () => {
+	const kho = thuMucTam("sau-gop");
+	git(GOC, "clone", "-q", "--shared", "--no-checkout", GOC, kho);
+	const dinh = CAP.dinh;
+	const cay = git(kho, "rev-parse", `${dinh}^{tree}`).trim();
+	const truoc = git(kho, "commit-tree", git(kho, "rev-parse", `${NEN}^{tree}`).trim(), "-p", NEN, "-m", "pr khac").trim();
+	const gop = git(kho, "commit-tree", cay, "-p", truoc, "-p", dinh, "-m", "gop vong").trim();
+	const sau = git(kho, "commit-tree", cay, "-p", gop, "-m", "pr sau").trim();
+
+	test("sau gộp, cặp của vòng là hai cha của commit gộp, tệp của vòng giữ nguyên", () => {
+		for (const dau of [gop, sau]) {
+			const cap = capVong({ goc: kho, dau });
+			assert.equal(cap.daGop, true);
+			assert.equal(cap.dinh, dinh);
+			assert.equal(cap.nen, git(kho, "merge-base", truoc, dinh).trim());
+			assert.deepEqual(tepCuaVong(cap, kho), tepCuaVong(CAP));
+		}
+	});
+
+	test("đối chứng: merge-base với nhánh chính sau gộp không còn thấy tệp nào của vòng", () => {
+		const mbCu = git(kho, "merge-base", sau, gop).trim();
+		assert.equal(mbCu, gop);
+		assert.deepEqual(git(kho, "diff", "--name-only", `${mbCu}...${sau}`).split("\n").filter(Boolean), []);
+		assert.ok(tepCuaVong(CAP).length > 0);
+	});
+
+	test("nhánh còn mở thì không có commit gộp nào của vòng", () => {
+		assert.equal(CAP.daGop, false);
+		assert.equal(CAP.dinh, git(GOC, "rev-parse", "HEAD").trim());
 	});
 });

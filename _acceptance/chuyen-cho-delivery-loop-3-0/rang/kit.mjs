@@ -93,8 +93,39 @@ export function docKho(duong) {
 	return readFileSync(join(GOC, duong), "utf8");
 }
 
-export function mergeBase() {
-	return git(GOC, "merge-base", "HEAD", "origin/onehub").trim();
+export const NEN = "74a29a68d28df9a8a08daf9a5e94b8dab364dd96";
+export const MOC_VONG = "dd7ea3178af32733021070199232d9d114508f0f";
+export const NHANH_CHINH = "origin/onehub";
+
+function laTo(goc, a, b) {
+	try {
+		git(goc, "merge-base", "--is-ancestor", a, b);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+export function capVong({ goc = GOC, dau = "HEAD" } = {}) {
+	const gop = git(goc, "rev-list", "--first-parent", "--merges", "--reverse", `${NEN}..${dau}`)
+		.split("\n")
+		.filter(Boolean);
+	for (const m of gop) {
+		if (!laTo(goc, MOC_VONG, m)) continue;
+		const [, cha1, cha2] = git(goc, "rev-list", "--parents", "-n", "1", m).trim().split(" ");
+		if (cha2 && !laTo(goc, MOC_VONG, cha1)) {
+			return { nen: git(goc, "merge-base", cha1, cha2).trim(), dinh: cha2, daGop: true };
+		}
+	}
+	return {
+		nen: git(goc, "merge-base", dau, NHANH_CHINH).trim(),
+		dinh: git(goc, "rev-parse", dau).trim(),
+		daGop: false,
+	};
+}
+
+export function tepCuaVong(cap = capVong(), goc = GOC) {
+	return git(goc, "diff", "--name-only", `${cap.nen}...${cap.dinh}`).split("\n").filter(Boolean);
 }
 
 export function docTai(sha, duong) {

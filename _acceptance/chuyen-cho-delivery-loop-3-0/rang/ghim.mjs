@@ -96,9 +96,9 @@ export function kiemGhim({ muc, doi, mb, slug, docTru = {} }) {
 	return { loi, so: muc.ghim.length };
 }
 
-export function kiemPhanLoai({ pl, muc, doi, mb, slug }) {
+export function kiemPhanLoai({ pl, muc, doi, mb, dinh = "HEAD", slug }) {
 	const loi = [];
-	const tep = git(GOC, "diff", "--name-only", pl.sha_tip, "HEAD").split("\n").filter(Boolean);
+	const tep = git(GOC, "diff", "--name-only", pl.sha_tip, dinh).split("\n").filter(Boolean);
 	const sauTip = (t) =>
 		t.startsWith(`_acceptance/${slug}/`) ||
 		["PRODUCT-MAP.md", "LO-TRINH.html"].includes(t) ||

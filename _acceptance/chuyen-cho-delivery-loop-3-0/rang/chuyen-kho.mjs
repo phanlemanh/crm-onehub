@@ -1,6 +1,6 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { join } from "node:path";
-import { CONG_CU_SHA, GOC, git, kitGit, mergeBase, thuMucTam } from "./kit.mjs";
+import { CONG_CU_SHA, GOC, NEN, git, kitGit, thuMucTam } from "./kit.mjs";
 
 const kho = kitGit();
 try {
@@ -26,12 +26,11 @@ for (const k of ["K1", "K2", "K3", "K4", "K5"]) {
 }
 if (!dong.includes("KẾT: ĐẠT") || cay.status !== 0) loi.push(`cây: KẾT không ĐẠT (mã ${cay.status})`);
 
-const mb = mergeBase();
-const nen = chay("--ref", mb);
+const nen = chay("--ref", NEN);
 const dongNen = nen.stdout.split("\n");
 const chuaNen = ["K1", "K2", "K3", "K4", "K5"].filter((k) => dongNen.some((d) => d.startsWith(`${k}: CHƯA`)));
-if (nen.status !== 1 || chuaNen.length !== 5) loi.push(`đối chứng merge-base phải CHƯA đủ K1–K5 (mã ${nen.status}, CHƯA ${chuaNen.join(",")})`);
-else console.log(`chuyen-kho: đối chứng — merge-base ${mb.slice(0, 8)} CHƯA ${chuaNen.join(", ")} (mã 1)`);
+if (nen.status !== 1 || chuaNen.length !== 5) loi.push(`đối chứng nhánh chính ${NEN.slice(0, 8)} phải CHƯA đủ K1–K5 (mã ${nen.status}, CHƯA ${chuaNen.join(",")})`);
+else console.log(`chuyen-kho: đối chứng — nhánh chính ${NEN.slice(0, 8)} CHƯA ${chuaNen.join(", ")} (mã 1)`);
 
 if (loi.length) {
 	for (const l of loi) console.log(`DO chuyen-kho: ${l}`);

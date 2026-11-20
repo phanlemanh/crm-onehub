@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { GOC, SLUG, git } from "./kit.mjs";
+import { GOC, SLUG, git, tepCuaVong } from "./kit.mjs";
 import { ungVien } from "./ung-vien.mjs";
 
 const lay = (co) => {
@@ -13,8 +13,7 @@ const ra = lay("--ra");
 const chi = lay("--chi");
 const songSong = Number(lay("--song-song") ?? 3);
 if (!ra) throw new Error("cần --ra <tệp kết quả>");
-const mb = git(GOC, "merge-base", "HEAD", "origin/onehub").trim();
-const doi = git(GOC, "diff", "--name-only", `${mb}...HEAD`).split("\n").filter(Boolean);
+const doi = tepCuaVong();
 let ds = ungVien(GOC, doi, SLUG).ungVien;
 if (chi) {
 	const chon = new Set(readFileSync(chi, "utf8").split("\n").filter(Boolean));
