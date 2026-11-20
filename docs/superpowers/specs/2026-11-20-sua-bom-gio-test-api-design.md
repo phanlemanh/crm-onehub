@@ -61,3 +61,18 @@ Phương án đã loại:
 ## Đặc tả UX
 
 Không chạm giao diện (entry `bỏ đặc-tả-UX`).
+
+## Mở lại sau S4 (20/11): các ca CI `test (api)` đỏ trên Linux
+
+Chủ kho, qua phiên giữ đợt: «Kiểm tra và điều phối sửa pr 621». Hai lượt CI trên PR #621 (`104b29c0b`, `7ae40f624`) đỏ ở
+những ca ngoài chín ca gốc. Thứ tự tệp trên Linux đổi theo máy chạy (`gop-y-dung-cho` thứ 151 ở lượt một, 220 ở lượt
+hai), nên bộ ca đỏ khác nhau giữa hai lượt. Trên Mac không dựng lại được thứ tự ấy (`bun test --randomize` trộn cả ca
+trong tệp: 119 fail), nên mỗi lớp được tái hiện bằng một cặp «tệp gây bẩn → tệp bị hại».
+
+| Lớp | Ca trên CI | Nguyên nhân gốc (đã tái hiện) | Sửa |
+| --- | --- | --- | --- |
+| A — tên không gian làm việc | `htmb-toan-canh`, `bkr-cay-api` | CSDL mới tinh; tệp dựng tổ chức đầu tiên quyết tên gốc (`bao-loi` dựng «OneHub Center», `dungKho` dựng «CRM»); hai tệp mẫu ghim «CRM». `bao-loi` → `htmb`/`bam-kr` đỏ, diff đúng một trường `ten` | Hai bài so mẫu thay tên không gian làm việc thật (`readTenGoc`) bằng nhãn «CRM» trước khi so; tệp mẫu không đổi |
+| B — thế giới mẫu | `soan-okr-so-do` | Đọc cấu hình ở `luc(22)` = `MOC_MAU` + 22 ngày, sau giờ thật; hàng giờ thật của tệp khác chen vào. Có hàng sót: 0 pass 1 fail `don-vi-chua-bat` | `batDauMau` chụp, tạm gỡ hàng `createdAt > MOC_MAU`; `ketThucMau` trả lại — cho cả 37 tệp dùng bộ mẫu |
+| C — dữ liệu rò | `vai-chi-okr gan-vai` | `cua-vao-va` để lại người dùng, thành viên, phiên `cvv-doc-phien`; `ensureWorkspace` dựng lại tổ chức thì người dùng đầu tiên thành owner | `cua-vao-va` dọn phiên, thành viên, người dùng của mình |
+| D — thứ tự hoà khoá | `l3-canh` | `docMucTieu` sắp `position, createdAt`, không khoá phân định; bộ mẫu cùng `createdAt` | Hỏi-2: (a) thêm `{ id: "asc" }` (mã sản phẩm) · (b) Known limits |
+| E — chậm | `quyen-ban-ghi` (5000 ms) | Chưa rõ; lượt hai chậm 2,2 lần | Chạy lại đúng job một lần sau A–D, đo rồi mới quyết |

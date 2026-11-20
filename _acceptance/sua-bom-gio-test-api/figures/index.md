@@ -3,6 +3,7 @@
 | Điểm | Đếm | Hình |
 | --- | --- | --- |
 | Hỏi-1 (d-20261120T093823Z-9): sửa mã kiểm hay coi chỗ đọc cấu hình bất nhất của sản phẩm là nguyên nhân | 2 nhánh rẽ | `truc-thoi-gian-cau-hinh` |
+| Hỏi-2 (d-20261120T134225Z-25): thêm khoá phân định id vào sắp xếp hay ghi Known limits | 2 nhánh rẽ | `hoi-2-thu-tu` |
 | d-7 gop-y-dung-cho chụp rồi trả lại | dưới ngưỡng: 1 bước, 0 nhánh rẽ | — |
 | d-8 cmst-goc ghi lại dưới đồng hồ ghim | dưới ngưỡng: 1 bước, 0 nhánh rẽ | — |
 

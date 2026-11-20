@@ -5,10 +5,10 @@ slug: sua-bom-gio-test-api
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: machine-cleared
+status: draft
 design_doc: docs/superpowers/specs/2026-11-20-sua-bom-gio-test-api-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-11-20
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: sua-bom-gio-test-api
@@ -37,16 +37,33 @@ Source input: prompt (phiên giữ đợt II.2, chủ kho «Duyệt cả hai»)
   cấu hình ghi ở giờ thật còn sót (cùng hình hàng đã đo: người tạo ngoài mẫu, `aiOn: false`), When chạy trên cây
   của vòng, Then cả hai tệp xanh; và cùng lệnh ấy chạy trên hai tệp của `74a29a68` thì đỏ đúng dấu
   (`don-vi-chua-bat` ở `cmst-goc`, `dem sai` ở `gop-y-dung-cho`).
-- AC-3: Given diff của vòng so với `onehub`, When liệt kê tệp đổi, Then mã đổi chỉ là đúng hai tệp
-  `apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts` và `apps/api/test/gop-y-dung-cho.spec.ts`; còn lại là hồ sơ của
-  vòng, `_acceptance/config.yaml`, `docs/superpowers/**` hoặc bản đồ máy vẽ — không tệp mã sản phẩm hay tệp hỗ trợ
-  kiểm nào khác.
-- AC-4: Given hai tệp kiểm đã sửa, When so với `74a29a68`, Then chỉ có dòng thêm — không bớt khẳng định nào,
-  không thêm `skip`/`todo`/`only` — nên 9 ca vẫn đo đúng điều chúng hứa.
+- AC-3: Given diff của vòng so với `onehub`, When liệt kê tệp đổi, Then mã đổi chỉ nằm trong danh sách tệp kiểm kê ở
+  Notes («Tệp mã được đổi») — cộng đúng một tệp sản phẩm `apps/api/src/okr/okr.service.ts` khi Hỏi-2 chọn lối (a);
+  còn lại là hồ sơ của vòng, `_acceptance/config.yaml`, `docs/superpowers/**` hoặc bản đồ máy vẽ.
+- AC-4: Given các tệp kiểm đã sửa, When so với `74a29a68`, Then không dòng bớt nào chứa khẳng định (`expect`,
+  `toBe`, `toEqual`, `throw new Error`, `loi.push`), không dòng thêm nào mang `skip`/`todo`/`only`, và không tệp mẫu
+  (`fixtures/`) nào đổi — các ca vẫn đo đúng điều chúng hứa.
 - AC-5: Given cây của vòng, When chạy trọn suite api trên một CSDL có mồi việc máy, Then suite không để lại việc
   máy (`AgentTask`) chưa xong, liên hệ hay công ty nào — lần ghi chương trình thứ hai của `cmst-goc` (dưới đồng hồ
   ghim) không sinh việc `okr-kiem-san-sang` vô chủ; và `gop-y-dung-cho` trả lại đúng các hàng cấu hình nó đã tạm
   gỡ.
+
+- AC-6: Given một hàng cấu hình OKR ghi ở giờ thật còn sót trước khi bài chạy (hình hàng đã đo), When
+  `soan-okr-so-do.spec.ts` và `gop-y-dung-cho.spec.ts` chạy, Then cả hai xanh vì bộ dựng chung `batDauMau` tạm gỡ
+  mọi hàng cấu hình ghi sau `MOC_MAU` và `ketThucMau` trả lại đúng các hàng ấy; cùng lệnh trên tệp của `74a29a68`
+  đỏ đúng dấu (`don-vi-chua-bat` ở `soan-okr-so-do`, `dem sai` ở `gop-y-dung-cho`).
+- AC-7: Given `bao-loi-sau-cau-hoi.spec.ts` chạy trước và dựng không gian làm việc tên «OneHub Center», When
+  `hop-tuan-mo-dung-bo.spec.ts` và `bam-kr-mo-chi-tiet-kr.spec.ts` chạy ngay sau, Then `htmb-toan-canh` và
+  `bkr-cay-api` xanh — hai bài so mẫu thay đúng tên không gian làm việc thật bằng nhãn «CRM» của mẫu trước khi so;
+  trên tệp của `74a29a68` cùng lệnh đỏ «fixture lech dau ra that».
+- AC-8: Given `cua-vao-va.spec.ts` chạy xong, When đếm người dùng, thành viên và phiên của `cvv-doc-phien`, Then cả
+  ba bằng 0; trên tệp của `74a29a68` còn người dùng và thành viên ấy.
+- AC-9: Given hai mục tiêu cùng `position` và `createdAt` trong một chu kỳ, When đọc cây căn chỉnh nhiều lần
+  (`okr.alignmentTree`, `okr.cayCanChinh`), Then thứ tự con giống nhau ở mọi lần đọc. (Hỏi-2: lối (a) thêm khoá
+  phân định `id` vào sắp xếp của `docMucTieu` — đổi mã sản phẩm; lối (b) ghi Known limits và để `l3-canh` chập chờn.
+  AC-9 chỉ áp khi chọn (a); chọn (b) thì AC-9 sang Known limits.)
+- AC-10: Given đầu nhánh cuối của PR, When CI chạy `test (api)` trên máy Linux, Then job xanh; mọi ca được coi là
+  chập chờn (vd `quyen-ban-ghi` hết giờ 5000 ms) có số đo của một lượt chạy lại đúng job ấy, không thử lại tới khi xanh.
 
 ## Coverage
 
@@ -55,15 +72,33 @@ Source input: prompt (phiên giữ đợt II.2, chủ kho «Duyệt cả hai»)
 
 ## Out of scope
 
-- Không đổi mã sản phẩm. `demGopYCho` đọc cấu hình mới nhất không kèm `luc`, còn `soanMo` đọc «tại `now`»; ở
+- Không đổi mã sản phẩm, trừ đúng một dòng sắp xếp khi Hỏi-2 chọn lối (a). `demGopYCho` đọc cấu hình mới nhất không kèm `luc`, còn `soanMo` đọc «tại `now`»; ở
   production `createdAt` luôn ≤ giờ thật nên hai cách đọc trùng nhau — chỉ lệch trong thế giới đồng hồ ghim của bài.
 - Không truy tệp cụ thể đã để lại hàng cấu hình giờ thật: mọi tệp gọi `okr.setProgram` không ghim đồng hồ đều
-  sinh ra hàng như vậy; bài `gop-y-dung-cho` phải chịu được nó, như tiền lệ `tom-tat-tuan-dang-cho`.
+  sinh ra hàng như vậy; bộ dựng chung của thế giới mẫu phải chịu được nó.
+- Không thống nhất tên tổ chức ở hơn chục chỗ tự dựng không gian làm việc trong mã kiểm («CRM» và «OneHub Center»):
+  vòng này chỉ sửa hai bài so mẫu ghim tên ấy — chỉ hai tệp mẫu của kho ghim nó.
 - Không quét các mốc ghim cứng khác trong suite (`MOC_MAU` 12/11 và các `LUC_*`): bom giờ chưa nổ ở tệp khác là
   việc riêng.
 - Không đổi hành vi kit hay lượt chấm S4 (kế hoạch giai đoạn 2 cấm); không chạm vòng chuyển kit.
 
 ## Notes
+
+- Mở lại 20/11 sau S4 (lời chủ kho qua phiên giữ đợt: «Kiểm tra và điều phối sửa pr 621»): CI `test (api)` trên
+  Linux đỏ ở các ca ngoài chín ca gốc. Tái hiện trên máy bằng cặp tệp: `bao-loi` → `htmb`/`bam-kr` đỏ (tên gốc
+  «OneHub Center» thay «CRM»); hàng cấu hình giờ thật → `soan-okr-so-do` đỏ `don-vi-chua-bat`. Thứ tự tệp trên CI
+  đổi theo máy chạy (`gop-y-dung-cho` thứ 151 ở lượt một, 220 ở lượt hai).
+- Tệp mã được đổi: `apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts`, `apps/api/test/gop-y-dung-cho.spec.ts`,
+  `apps/api/test/tro-ly-okr-san.ts`, `apps/api/test/hop-tuan-mo-dung-bo.spec.ts`,
+  `apps/api/test/bam-kr-mo-chi-tiet-kr.spec.ts`, `apps/api/test/cua-vao-va.spec.ts`, và (Hỏi-2 lối a)
+  `apps/api/src/okr/okr.service.ts`, kèm một bài kiểm thứ tự trong `apps/api/test/okr-cay-ly-do.spec.ts`.
+- Lớp C chưa tái hiện trọn trên máy: sau `cua-vao-va` còn người dùng, thành viên, phiên `cvv-doc-phien` (đo), nhưng
+  tệp nào nâng người ấy lên owner trên CI thì chưa tìm ra (bộ ba với `thanh-vien-vao-dung`, `go-thanh-vien` đều xanh);
+  E14 trên CI là phép thử cuối của `vai-chi-okr gan-vai`.
+- Hỏi-2 (Cổng Phạm vi, mở lại): `l3-canh` so hai thủ tục đọc cây và đòi cùng thứ tự con; `docMucTieu` sắp
+  `position, createdAt` không có khoá phân định, bộ mẫu nạp các mục tiêu cùng `createdAt`, nên hai lần đọc có thể
+  trả hai mục tiêu anh em theo thứ tự khác nhau — người dùng cũng thấy được. Khuyến nghị (a): thêm `{ id: "asc" }` cuối
+  sắp xếp (đổi mã sản phẩm, một dòng). Lối khác (b): ghi Known limits, `test (api)` có thể còn đỏ chập chờn ở ca này.
 
 - Hỏi-1 (Cổng Phạm vi): chỗ đỏ nằm ở mã kiểm. Sản phẩm có một chỗ đọc cấu hình bất nhất (`demGopYCho` đọc bản mới
   nhất, `soanMo` đọc tại `now`), nhưng ở production hai cách đọc trùng nhau. Khuyến nghị: sửa mã kiểm ở vòng này;

@@ -46,9 +46,9 @@ evals:
       - "apps/api/test/**"
       - "_acceptance/sua-bom-gio-test-api/rang/**"
     expected: |
-      `rang/bom-gio.mjs --doi-chung 74a29a68d` dựng một lớp phủ ngoài kho (thư mục tạm trong $TMPDIR: liên kết mọi
-      mục của kho, chỉ thay đúng hai tệp kiểm bằng bản ở 74a29a68d qua `git show`), chạy hai lượt như E2 trên lớp
-      phủ, rồi xoá lớp phủ. Cả hai lượt phải đỏ đúng dấu: cmst-goc thoát ≠ 0 và đầu ra có «don-vi-chua-bat»;
+      `rang/bom-gio.mjs --nhom AC-2 --doi-chung 74a29a68d` dựng một lớp phủ ngoài kho (thư mục tạm trong $TMPDIR:
+      liên kết mọi mục của kho, thay MỌI tệp dưới apps/ mà vòng đổi bằng bản ở 74a29a68d qua `git show`, in dòng «lop
+      phu 74a29a68d: N tep lay ban cu (…)»), chạy hai lượt như E2 trên lớp phủ, rồi xoá lớp phủ. Cả hai lượt phải đỏ đúng dấu: cmst-goc thoát ≠ 0 và đầu ra có «don-vi-chua-bat»;
       gop-y-dung-cho thoát ≠ 0, 8 fail, đầu ra có «dem sai». Lệnh in «DOI CHUNG DUONG» và thoát 0. Không ghi tệp
       nào vào cây; sau lệnh không còn thư mục bom-gio-* trong $TMPDIR.
       CHIỀU ĐỎ: một lượt không đỏ đúng dấu (thước không bắt được bom giờ) → in «DOI CHUNG HONG: … <tên ca> khong do
@@ -62,29 +62,37 @@ evals:
       - "**"
     expected: |
       `rang/pham-vi.mjs` lấy hợp của diff merge-base(HEAD, origin/onehub)..HEAD và tệp của các commit không gộp mang
-      «(sua-bom-gio-test-api)» từ 74a29a68d tới HEAD; mọi tệp khớp vùng cho phép: đúng hai tệp
-      apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts và apps/api/test/gop-y-dung-cho.spec.ts, hồ sơ của vòng,
+      «(sua-bom-gio-test-api)» từ 74a29a68d tới HEAD; mọi tệp khớp vùng cho phép: bảy tệp kiểm kê trong TEP_KIEM
+      (chu-may-sinh-ten-moi-goc, gop-y-dung-cho, tro-ly-okr-san, hop-tuan-mo-dung-bo, bam-kr-mo-chi-tiet-kr, cua-vao-va,
+      okr-cay-ly-do), tệp sản phẩm apps/api/src/okr/okr.service.ts (Hỏi-2 lối a), hồ sơ của vòng,
       _acceptance/config.yaml, docs/superpowers/, PRODUCT-MAP.md, LO-TRINH.html. In «PHAM VI XANH», thoát 0.
-      CHIỀU ĐỎ (cùng lệnh, danh sách giả): `--tep apps/api/test/gop-y-dung-cho.spec.ts,apps/api/test/tro-ly-okr-san.ts`
-      in «PHAM VI DO: 1 tep ngoai hai tep kiem va ho so: apps/api/test/tro-ly-okr-san.ts», thoát 1;
-      `--tep apps/api/src/okr/dem-gop-y.ts` đỏ cùng thông điệp với tệp ấy; vòng không đổi tệp nào (cây 74a29a68) in
-      «PHAM VI DO: vong khong doi tep nao», thoát 1.
+      CHIỀU ĐỎ (cùng lệnh, danh sách giả): `--tep apps/api/test/vai-chi-okr.spec.ts` in «PHAM VI DO: 1 tep ngoai danh
+      sach tep kiem va ho so: apps/api/test/vai-chi-okr.spec.ts», thoát 1; vòng không đổi tệp nào (cây 74a29a68) in
+      «PHAM VI DO: vong khong doi tep nao», thoát 1. Tệp sản phẩm okr.service.ts: diff -U0 với 74a29a68d phải rỗng
+      (Hỏi-2 lối b) hoặc đúng một dòng bớt và một dòng thêm, dòng thêm bằng dòng bớt với `{ createdAt: "asc" }]` thay
+      bằng `{ createdAt: "asc" }, { id: "asc" }]` (lối a), in «pham-vi: tep san pham doi dung mot dong sap xep»; chiều
+      đỏ `--patch-sp rang/mau/doi-san-pham-khac.patch` in «PHAM VI DO: tep san pham doi ngoai dong sap xep cua
+      docMucTieu (1 dong bot, 1 dong them)», thoát 1; `--patch-sp rang/mau/sap-xep-dung.patch` thoát 0.
 
   - id: E5
     criterion: AC-4
     executor: script
     cmd: config:executors.script.bom_gio_khong_ha
     paths:
-      - "apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts"
-      - "apps/api/test/gop-y-dung-cho.spec.ts"
+      - "apps/api/test/**"
+      - "apps/app/test/fixtures/**"
       - "_acceptance/sua-bom-gio-test-api/rang/**"
     expected: |
-      `rang/pham-vi.mjs --khong-ha` đọc `git diff --unified=0 74a29a68d HEAD` của đúng hai tệp kiểm: có ít nhất một
-      dòng thêm, 0 dòng bớt, 0 dòng thêm khớp skip/todo/only/skipIf/if/xit/xdescribe. In «KHONG HA XANH», thoát 0.
-      CHIỀU ĐỎ (cùng lệnh, mẫu vá trong rang/mau/): `--patch rang/mau/bot-khang-dinh.patch` in «KHONG HA DO: hai tep
-      kiem bot 1 dong …» kèm dòng «-	expect(a).toBe(3);», thoát 1; `--patch rang/mau/them-skip.patch` in «KHONG HA
-      DO: … them 1 dong ha thuoc» kèm dòng test.skip, thoát 1; `--patch rang/mau/chi-them.patch` in «KHONG HA XANH»,
-      thoát 0.
+      `rang/pham-vi.mjs --khong-ha` đọc `git diff --unified=0 74a29a68d HEAD` của bảy tệp kiểm trong TEP_KIEM: có ít
+      nhất một dòng thêm, 0 dòng bớt mang khẳng định (expect, .toBe(, .toEqual(, throw new Error, loi.push(), 0 dòng
+      thêm khớp skip/todo/only/skipIf/if/xit/xdescribe, và `git diff --name-only 74a29a68d HEAD -- apps/**/fixtures/**`
+      rỗng. In «KHONG HA XANH», thoát 0.
+      CHIỀU ĐỎ (cùng lệnh, mẫu trong rang/mau/, đường tính từ thư mục hồ sơ): `--patch rang/mau/bot-khang-dinh.patch` in
+      «KHONG HA DO: cac tep kiem bot 1 dong khang dinh …» kèm dòng «-	expect(a).toBe(3);», thoát 1;
+      `--patch rang/mau/them-skip.patch` in «… them 1 dong ha thuoc» kèm dòng test.skip, thoát 1;
+      `--patch rang/mau/chi-them.patch --mau-doi apps/app/test/fixtures/bkr-cay.json` in «KHONG HA DO: tep mau doi
+      apps/app/test/fixtures/bkr-cay.json», thoát 1; `--patch rang/mau/chi-them.patch` in «KHONG HA XANH», thoát 0;
+      mẫu vắng (`--patch rang/mau/khong-co.patch`) thoát 2 «pham-vi: khong co mau va».
 
   - id: E6
     criterion: AC-5
@@ -108,3 +116,121 @@ evals:
       CHIỀU ĐỎ: một việc okr-kiem-san-sang chưa xong còn lại → thước in «goi api de lai hang» kèm kind okr-kiem-san-sang,
       thoát 1 (chiều đỏ gốc của thước: gỡ spyOn(BackfillService.auto) ở go-la-cat-quyen.spec.ts → «agentTask chua
       xong=1 (cua lien he le=1)»).
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.bom_gio_the_gioi_mau
+    paths:
+      - "apps/api/test/tro-ly-okr-san.ts"
+      - "apps/api/test/gop-y-dung-cho.spec.ts"
+      - "apps/api/test/soan-okr-so-do.spec.ts"
+      - "_acceptance/sua-bom-gio-test-api/rang/**"
+    expected: |
+      `rang/bom-gio.mjs --nhom AC-6` chạy soan-okr-so-do.spec.ts với preload `rang/hang-sot.ts` (hàng okrProgramConfig
+      giờ thật, người tạo bom-gio-hang-sot-admin, aiOn false), một CSDL riêng: thoát 0, «0 fail», pass > 0. Ca thứ hai
+      «tra-lai-hang-sot» chạy gop-y-dung-cho.spec.ts rồi soan-okr-so-do.spec.ts với cùng preload, rồi trong CÙNG CSDL
+      `NODE_ENV=test bun rang/dem-hang-sot.ts`: «dem-hang-sot: bom-gio-hang-sot=1 (crm_<id>_test)» — hàng sót đã bị
+      ketThucMau trả lại. In «XANH bom-gio: soan-okr-so-do, tra-lai-hang-sot …», thoát 0. dem-hang-sot tự kiểm tên CSDL
+      (không _test → thoát 2).
+      CHIỀU ĐỎ: cây 74a29a68 (trước sửa) cùng lệnh in «soan-okr-so-do: ma 1 · 0 pass · 1 fail · (unnamed)» rồi «DO
+      bom-gio: soan-okr-so-do …», thoát 1.
+
+  - id: E8
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.bom_gio_the_gioi_mau_doi_chung
+    paths:
+      - "apps/api/test/**"
+      - "_acceptance/sua-bom-gio-test-api/rang/**"
+    expected: |
+      `rang/bom-gio.mjs --nhom AC-6 --doi-chung 74a29a68d`: trên lớp phủ có tệp apps/ bản 74a29a68d, soan-okr-so-do với
+      hàng sót thoát ≠ 0 và đầu ra có «don-vi-chua-bat»; in «DOI CHUNG DUONG», thoát 0, không còn thư mục bom-gio-* trong
+      $TMPDIR. CHIỀU ĐỎ: lượt không đỏ đúng dấu → «DOI CHUNG HONG: … soan-okr-so-do khong do dung dau», thoát 1.
+
+  - id: E9
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bom_gio_ten_goc
+    paths:
+      - "apps/api/test/hop-tuan-mo-dung-bo.spec.ts"
+      - "apps/api/test/bam-kr-mo-chi-tiet-kr.spec.ts"
+      - "apps/api/test/bao-loi-sau-cau-hoi.spec.ts"
+      - "apps/api/test/fixtures/htmb-toan-canh.json"
+      - "apps/app/test/fixtures/bkr-cay.json"
+      - "_acceptance/sua-bom-gio-test-api/rang/**"
+    expected: |
+      `rang/bom-gio.mjs --nhom AC-7` chạy hai lượt, mỗi lượt một CSDL: (a) bao-loi-sau-cau-hoi.spec.ts rồi
+      hop-tuan-mo-dung-bo.spec.ts; (b) bao-loi-sau-cau-hoi.spec.ts rồi bam-kr-mo-chi-tiet-kr.spec.ts. bao-loi dựng
+      không gian làm việc tên «OneHub Center» trước. Cả hai lượt thoát 0, «0 fail»; in «XANH bom-gio: htmb-toan-canh,
+      bkr-cay-api …», thoát 0. Hai tệp mẫu không đổi (E5).
+      CHIỀU ĐỎ: cây 74a29a68 cùng lệnh in «htmb-toan-canh: ma 1 · 10 pass · 1 fail · htmb-toan-canh > …» và
+      «bkr-cay-api: ma 1 · 8 pass · 1 fail · bkr-cay-api > …», rồi «DO bom-gio: htmb-toan-canh, bkr-cay-api …», thoát 1.
+
+  - id: E10
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bom_gio_ten_goc_doi_chung
+    paths:
+      - "apps/api/test/**"
+      - "_acceptance/sua-bom-gio-test-api/rang/**"
+    expected: |
+      `rang/bom-gio.mjs --nhom AC-7 --doi-chung 74a29a68d`: trên lớp phủ bản 74a29a68d cả hai lượt thoát ≠ 0, đầu ra có
+      «htmb-toan-canh: fixture lech dau ra that» và «bkr-cay-api: fixture lech dau ra that»; in «DOI CHUNG DUONG», thoát 0.
+      CHIỀU ĐỎ: lượt không đỏ đúng dấu → «DOI CHUNG HONG …», thoát 1.
+
+  - id: E11
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.bom_gio_cvv
+    paths:
+      - "apps/api/test/cua-vao-va.spec.ts"
+      - "_acceptance/sua-bom-gio-test-api/rang/**"
+    expected: |
+      `rang/bom-gio.mjs --nhom AC-8` chạy cua-vao-va.spec.ts rồi, trong CÙNG CSDL của lượt, `NODE_ENV=test bun
+      rang/dem-cvv.ts`: tệp kiểm thoát 0, dòng «dem-cvv: nguoi=0 thanh-vien=0 phien=0 (cvv-doc-phien, crm_<id>_test)»,
+      thoát 0; in «XANH bom-gio: cua-vao-va …». dem-cvv tự kiểm tên CSDL: không kết thúc _test thì thoát 2 «dem-cvv: dang
+      doc nham co so du lieu <tên>».
+      CHIỀU ĐỎ: cây 74a29a68 cùng lệnh in «dem-cvv: nguoi=1 thanh-vien=1 phien=1 …» rồi «DO bom-gio: cua-vao-va …», thoát 1.
+
+  - id: E12
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.bom_gio_cvv_doi_chung
+    paths:
+      - "apps/api/test/**"
+      - "_acceptance/sua-bom-gio-test-api/rang/**"
+    expected: |
+      `rang/bom-gio.mjs --nhom AC-8 --doi-chung 74a29a68d`: trên lớp phủ bản 74a29a68d đầu ra có «dem-cvv: nguoi=1» và
+      lượt thoát ≠ 0; in «DOI CHUNG DUONG», thoát 0. CHIỀU ĐỎ: «DOI CHUNG HONG …», thoát 1.
+
+  - id: E13
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.bom_gio_thu_tu
+    paths:
+      - "apps/api/src/okr/okr.service.ts"
+      - "apps/api/test/okr-cay-ly-do.spec.ts"
+    expected: |
+      Trọn tệp okr-cay-ly-do.spec.ts (CSDL riêng) thoát 0 gồm ca mới «l3-thu-tu»: trong một chu kỳ mới, hai mục tiêu cùng
+      position và createdAt, chèn theo thứ tự id lớn trước rồi id nhỏ; okr.alignmentTree và okr.cayCanChinh mỗi thủ tục
+      đọc hai lần đều trả hai mục tiêu theo thứ tự id tăng dần, thông điệp ghim «l3-thu-tu: thu tu con theo id».
+      CHIỀU ĐỎ: bỏ khoá { id: "asc" } khỏi sắp xếp của docMucTieu (bản 74a29a68) thì ca đỏ đúng thông điệp ấy — đo một
+      lần ở S3, ghi vào sổ; nếu bản cũ không đỏ được thì ca này khai giới hạn ở Cổng Bằng chứng, không lặng.
+      Chỉ áp khi Hỏi-2 chọn lối (a); lối (b) thì E13 khai status: not-run và AC-9 sang Known limits.
+
+  - id: E14
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.bom_gio_ci
+    paths:
+      - "**"
+    expected: |
+      `rang/ci-api.mjs` đi lùi từ HEAD (tối đa 20 commit, dừng khi gặp đổi dưới apps/ hay packages/) tới commit gần
+      nhất có lần chạy job «test (api)» trên GitHub (`gh api …/commits/<sha>/check-runs`): in mỗi lần chạy một dòng (id,
+      status, conclusion, giờ); tối đa hai lần chạy; có hai lần mà lần đầu không success thì evidence/ci-chay-lai.md phải
+      ghi id lần đầu kèm số đo (tên ca, thời lượng hai lần, kết luận chậm hay sai), thiếu thì «CI API THU LAI KHONG SO
+      DO», thoát 1; lần cuối completed và success → «CI API XANH: lan <id> tren <sha> ket thuc success», thoát 0.
+      CHIỀU ĐỎ: `--sha 7ae40f624` in «CI API DO: lan 136285442165 ket thuc failure», thoát 1; quá hai lần chạy → «CI API
+      THU LAI QUA», thoát 1; chưa có lần chạy → «CI API CHUA CO», thoát 1. Đối chứng dương: `--sha 6561f7241` in «CI API
+      XANH: lan 125948405080 …», thoát 0.
