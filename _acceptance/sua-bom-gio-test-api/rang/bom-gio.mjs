@@ -163,7 +163,7 @@ function chay(ca, gocApi) {
 	const preload = ["./test/setup.ts", ...ca.preload]
 		.map((p) => `--preload '${p}'`)
 		.join(" ");
-	const tep = ca.tep.map((t) => `test/${t}`).join(" ");
+	const tep = ca.tep.map((t) => `./test/${t}`).join(" ");
 	const sau = ca.sau ? ` && NODE_ENV=test bun '${ca.sau}'` : "";
 	const lenh = `cd '${gocApi}' && CRM_TELEMETRY_DISABLED=1 bun test ${preload} ${tep}${sau}`;
 	const r = spawnSync(
