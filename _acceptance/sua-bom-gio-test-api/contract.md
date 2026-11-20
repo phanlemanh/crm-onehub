@@ -5,7 +5,7 @@ slug: sua-bom-gio-test-api
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-11-20-sua-bom-gio-test-api-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-11-20
@@ -90,12 +90,15 @@ Source input: prompt (phiên giữ đợt II.2, chủ kho «Duyệt cả hai»)
   đổi theo máy chạy (`gop-y-dung-cho` thứ 151 ở lượt một, 220 ở lượt hai).
 - Tệp mã được đổi: `apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts`, `apps/api/test/gop-y-dung-cho.spec.ts`,
   `apps/api/test/tro-ly-okr-san.ts`, `apps/api/test/hop-tuan-mo-dung-bo.spec.ts`,
-  `apps/api/test/bam-kr-mo-chi-tiet-kr.spec.ts`, `apps/api/test/cua-vao-va.spec.ts`, ba tệp agent
-  `apps/agent/test/tro-ly-okr-{nop,lich,nhac}-tom-tat.integration.spec.ts` (thêm ở S3, dòng sổ fix), và (Hỏi-2 lối a)
+  `apps/api/test/bam-kr-mo-chi-tiet-kr.spec.ts`, `apps/api/test/cua-vao-va.spec.ts`, và (Hỏi-2 lối a)
   `apps/api/src/okr/okr.service.ts`, kèm một bài kiểm thứ tự trong `apps/api/test/okr-cay-ly-do.spec.ts`.
 - Lớp C chưa tái hiện trọn trên máy: sau `cua-vao-va` còn người dùng, thành viên, phiên `cvv-doc-phien` (đo), nhưng
   tệp nào nâng người ấy lên owner trên CI thì chưa tìm ra (bộ ba với `thanh-vien-vao-dung`, `go-thanh-vien` đều xanh);
   E14 trên CI là phép thử cuối của `vai-chi-okr gan-vai`.
+- CHƯA duyệt — chờ chủ kho phê ở Cổng Bằng chứng (dòng sổ fix S3): ba tệp agent
+  `apps/agent/test/tro-ly-okr-{nop,lich,nhac}-tom-tat.integration.spec.ts` ngoài danh sách tệp của AC-3. Chúng ghi cấu
+  hình ở mốc cứng 2026-11-20 00:00+07 và đọc ở 24/11, nên `pre-push` (mọi gói trên một CSDL) đỏ 2 ca agent sau bản sửa
+  lớp B; sửa bằng gỡ hàng của người khác có `createdAt` sau mốc ghi. Không phê thì hoàn lại ba tệp ấy.
 - Hỏi-2 (Cổng Phạm vi, mở lại): `l3-canh` so hai thủ tục đọc cây và đòi cùng thứ tự con; `docMucTieu` sắp
   `position, createdAt` không có khoá phân định, bộ mẫu nạp các mục tiêu cùng `createdAt`, nên hai lần đọc có thể
   trả hai mục tiêu anh em theo thứ tự khác nhau — người dùng cũng thấy được. Khuyến nghị (a): thêm `{ id: "asc" }` cuối
