@@ -365,7 +365,7 @@ async function traCauHinhSauMoc(): Promise<void> {
 		await db.$executeRaw`
 			INSERT INTO "okrProgramConfig"
 			SELECT * FROM jsonb_populate_record(NULL::"okrProgramConfig", ${dong}::jsonb)
-			ON CONFLICT (id) DO NOTHING`;
+			ON CONFLICT DO NOTHING`;
 	cauHinhSauMoc = [];
 }
 
