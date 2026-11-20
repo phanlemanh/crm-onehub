@@ -5,7 +5,7 @@ slug: sua-bom-gio-test-api
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: implemented
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-11-20-sua-bom-gio-test-api-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-11-20
@@ -75,3 +75,10 @@ Source input: prompt (phiên giữ đợt II.2, chủ kho «Duyệt cả hai»)
 - Đo đỏ trước khi sửa (20/11, cây `74a29a68`): trọn suite api 2159 pass / 9 fail (09:03–09:10Z); lượt có đầu dò
   tạm in bảng `okrProgramConfig` ngay trước ca đỏ (bản vá đầu dò ở scratchpad, không commit).
 - Phiên vòng chuyển kit đo `6561f724` hôm 20/11: 2159 pass / 9 fail, cùng 9 ca; ngày 03/11 chính commit ấy thoát 0.
+- Ngoài-1 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Nếu sau này cách chạy kiểm thử của phần API đổi, bước đo việc máy sót có thể chạy lệch so với lệnh thật mà không ai hay. Người dùng cuối không thấy gì; chỉ làm kết quả nghiệm thu về sau kém đáng tin. — `_acceptance/config.yaml`
+- Ngoài-3 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Nếu ai đó gõ thiếu đối số khi chạy bước kiểm, nó có thể báo xanh giả thay vì báo lỗi. Hiện không lệnh nào của hồ sơ bị ảnh hưởng. — `_acceptance/sua-bom-gio-test-api/rang/pham-vi.mjs`
+- Ngoài-4 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Bước kiểm xác nhận không còn việc máy sót chưa từng được thử trên một ca sót cố ý, nên chưa chứng minh được nó sẽ báo đỏ khi có sót thật. Hiện chưa có dấu hiệu dữ liệu sót. — `_acceptance/sua-bom-gio-test-api/evals.yaml`
+- Ngoài-5 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Chỉ ảnh hưởng bài kiểm nội bộ, không ảnh hưởng người dùng sản phẩm. Nếu bước dọn hỏng giữa chừng, một số cấu hình mẫu trong bài kiểm có thể mất và làm các bài sau đỏ khó hiểu. — `apps/api/test/gop-y-dung-cho.spec.ts`
+- Ngoài-6 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Một bài kiểm để lại cấu hình mang ngày cũ, có thể làm một bài kiểm viết sau này đọc ra trạng thái AI bật ngoài ý muốn. Hiện toàn bộ suite vẫn xanh và người dùng sản phẩm không bị ảnh hưởng. — `apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts`
+- Ngoài-7 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Công cụ canh giữ bài kiểm có thể bỏ sót vài cách lách hiếm gặp, như đảo nghĩa một ca kiểm. Hai tệp kiểm hiện tại không dính cách nào như vậy nên người dùng không bị ảnh hưởng. — `_acceptance/sua-bom-gio-test-api/rang/pham-vi.mjs`
+- Ngoài-8 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Chưa có phép đo trực tiếp cho việc bài kiểm trả lại đủ cấu hình đã gỡ, nên nếu bước trả lại thiếu hàng thì có thể không ai thấy. Người dùng sản phẩm không bị ảnh hưởng. — `_acceptance/sua-bom-gio-test-api/evals.yaml`
