@@ -5,7 +5,7 @@ slug: sua-bom-gio-test-api
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-11-20-sua-bom-gio-test-api-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-11-20
