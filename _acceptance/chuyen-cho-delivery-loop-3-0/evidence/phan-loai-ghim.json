@@ -1,5 +1,5 @@
 {
- "sha_tip": "dd7ea3178af32733021070199232d9d114508f0f",
+ "sha_tip": "3a7519d85a2dedff0321d20360bbd128f5ca0df4",
  "sha_nhanh_chinh": "74a29a68d28df9a8a08daf9a5e94b8dab364dd96",
  "sha_gop_gia": "183ae1670ec45fbd64e71dba2e6d7efb1bf31016",
  "ung_vien": [
@@ -370,7 +370,7 @@
    "dat": false
   },
   "hinh-cua-luoi/E3": {
-   "ma": "sig-SIGKILL",
+   "ma": "sig-SIGTERM",
    "dat": false
   },
   "hinh-cua-luoi/E7": {
@@ -478,8 +478,8 @@
    "dat": true
   },
   "luoi-day-do-that/E7": {
-   "ma": 0,
-   "dat": true
+   "ma": 1,
+   "dat": false
   },
   "ly-do-tu-choi-nop-theo-locale/E8": {
    "ma": 2,
@@ -750,7 +750,7 @@
    "dat": false
   },
   "thu-paths-e15-giai-doan/E7": {
-   "ma": "sig-SIGKILL",
+   "ma": 1,
    "dat": false
   },
   "thuoc-cache-het-doi-tuong/E2": {
@@ -1038,6 +1038,10 @@
   "mau/app-dom": {
    "ma": 1,
    "dat": false
+  },
+  "luoi-day-do-that/E7": {
+   "ma": 1,
+   "dat": false
   }
  },
  "gop_gia": {
@@ -1123,6 +1127,7 @@
   "lenh-chung-khong-an-cache-doi/E2": "do-ca-hai",
   "lenh-dung-do-khong-ai-thay/E5": "do-ca-hai",
   "luoi-day-do-that/E1": "do-ca-hai",
+  "luoi-day-do-that/E7": "do-ca-hai",
   "ly-do-tu-choi-nop-theo-locale/E8": "do-ca-hai",
   "mot-duong-ghi-phong-ban/E10": "do-ca-hai",
   "ngan-ho-so-trong-lo-trinh/E7": "do-ca-hai",
