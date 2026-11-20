@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: a8d9aca50927b61342bed3219e029a250bc1b623
-human_signoff:
+human_signoff: Phan Le Manh 2026-11-21 — ký Cổng Bằng chứng trên S4 vòng 4 PASS (14/14 eval; vòng 3 REJECT vì thước ci-api thiếu filter=all, đã sửa và đo ba chiều; lượt đầu vòng 4 BLOCKED vì CI chưa xong, thử lại một lần). CI test (api) xanh trên 50bc4ee1f (2171 pass · 18 skip · 0 fail). Ngoài-1 đến Ngoài-7 ghi Known limits; đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi, gồm hai mục CHƯA duyệt (ba bài agent; khoa-api-ghi-thua và go-thanh-vien).
 ---
 
 # Evidence Report: sua-bom-gio-test-api

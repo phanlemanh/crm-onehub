@@ -5,7 +5,7 @@ slug: sua-bom-gio-test-api
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-11-20-sua-bom-gio-test-api-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-11-20
@@ -129,3 +129,11 @@ Source input: prompt (phiên giữ đợt II.2, chủ kho «Duyệt cả hai»)
 - Ngoài-6 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Một bài kiểm để lại cấu hình mang ngày cũ, có thể làm một bài kiểm viết sau này đọc ra trạng thái AI bật ngoài ý muốn. Hiện toàn bộ suite vẫn xanh và người dùng sản phẩm không bị ảnh hưởng. — `apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts`
 - Ngoài-7 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Công cụ canh giữ bài kiểm có thể bỏ sót vài cách lách hiếm gặp, như đảo nghĩa một ca kiểm. Hai tệp kiểm hiện tại không dính cách nào như vậy nên người dùng không bị ảnh hưởng. — `_acceptance/sua-bom-gio-test-api/rang/pham-vi.mjs`
 - Ngoài-8 (máy định tuyến 2026-11-20, đề xuất S4 known-limits): Chưa có phép đo trực tiếp cho việc bài kiểm trả lại đủ cấu hình đã gỡ, nên nếu bước trả lại thiếu hàng thì có thể không ai thấy. Người dùng sản phẩm không bị ảnh hưởng. — `_acceptance/sua-bom-gio-test-api/evals.yaml`
+- Known limits — chọn ở Cổng Bằng chứng 2026-11-21:
+  - Ngoài-1: Lời khai E13 hứa ca l3-thu-tu tự dựng cặp mục tiêu hoà khoá, nhưng ca chỉ đọc cặp có sẵn trong dữ liệu mẫu.
+  - Ngoài-2: cmst-goc để lại một hàng cấu hình chương trình OKR mang giờ 10/11 với AI bật, không bước dọn nào xoá.
+  - Ngoài-3: Bước trả lại cấu hình đã tạm gỡ bỏ qua hàng trùng version mà không báo, nên có thể thiếu hàng mà không ai thấy.
+  - Ngoài-4: Hàng sót của thước bom giờ cố định version 1, nên chưa thử đúng ca trùng version của suite thật.
+  - Ngoài-5: Danh sách tệp kiểm của thước phạm vi chép tay (12 tệp), lời khai E4 và AC-3 còn ghi bảy.
+  - Ngoài-6: Đối chứng E3 kiểm chuỗi dấu đỏ chứ không kiểm đúng số «8 fail» của gop-y-dung-cho.
+  - Ngoài-7: Chiều đỏ của l3-thu-tu dựa vào thứ tự vật lý của dữ liệu mẫu; dữ liệu mẫu đổi thì ca có thể xanh mà không bắt được lỗi.
