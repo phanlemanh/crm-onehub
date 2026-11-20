@@ -34,9 +34,14 @@ const chay = (c, i) =>
 		p.stderr.on("data", (d) => (o += d));
 		const het = setTimeout(() => {
 			try {
-				process.kill(-p.pid, "SIGKILL");
+				process.kill(-p.pid, "SIGTERM");
 			} catch {}
-		}, 20 * 60_000);
+			setTimeout(() => {
+				try {
+					process.kill(-p.pid, "SIGKILL");
+				} catch {}
+			}, 10_000).unref();
+		}, 40 * 60_000);
 		p.on("close", (ma, sig) => {
 			clearTimeout(het);
 			const log = join(nhat, `${i}.log`);
