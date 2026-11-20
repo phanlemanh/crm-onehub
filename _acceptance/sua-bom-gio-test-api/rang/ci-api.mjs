@@ -26,14 +26,24 @@ function chay(lenh, args) {
 const argv = process.argv.slice(2);
 const i = argv.indexOf("--sha");
 
+const CHUA_DAY = /HTTP 422|No commit found/;
+
 function lanCua(sha) {
-	return chay("gh", [
+	const args = [
 		"api",
 		"--paginate",
 		`repos/${KHO}/commits/${sha}/check-runs?per_page=100`,
 		"--jq",
 		`.check_runs[] | select(.name == "${JOB}") | [.id, .status, (.conclusion // ""), .started_at, (.completed_at // "")] | @tsv`,
-	]);
+	];
+	const r = spawnSync("gh", args, { cwd: ROOT, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+	if (r.status === 0) return r.stdout;
+	if (CHUA_DAY.test(r.stderr)) {
+		console.error(`ci-api: ${sha.slice(0, 9)} chua day len ${KHO}, coi nhu chua co lan chay`);
+		return "";
+	}
+	console.error(`ci-api: gh ${args.join(" ")} hong: ${r.stderr.trim()}`);
+	process.exit(2);
 }
 
 let sha = "";

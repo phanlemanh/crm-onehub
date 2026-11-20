@@ -18,6 +18,8 @@ const TEP_KIEM = [
 	"apps/api/test/bam-kr-mo-chi-tiet-kr.spec.ts",
 	"apps/api/test/cua-vao-va.spec.ts",
 	"apps/api/test/okr-cay-ly-do.spec.ts",
+	"apps/api/test/khoa-api-ghi-thua.spec.ts",
+	"apps/api/test/go-thanh-vien.spec.ts",
 	"apps/agent/test/tro-ly-okr-nop-tom-tat.integration.spec.ts",
 	"apps/agent/test/tro-ly-okr-lich-tom-tat.integration.spec.ts",
 	"apps/agent/test/tro-ly-okr-nhac-tom-tat.integration.spec.ts",

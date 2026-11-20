@@ -99,6 +99,14 @@ Source input: prompt (phiên giữ đợt II.2, chủ kho «Duyệt cả hai»)
   `apps/agent/test/tro-ly-okr-{nop,lich,nhac}-tom-tat.integration.spec.ts` ngoài danh sách tệp của AC-3. Chúng ghi cấu
   hình ở mốc cứng 2026-11-20 00:00+07 và đọc ở 24/11, nên `pre-push` (mọi gói trên một CSDL) đỏ 2 ca agent sau bản sửa
   lớp B; sửa bằng gỡ hàng của người khác có `createdAt` sau mốc ghi. Không phê thì hoàn lại ba tệp ấy.
+- CHƯA duyệt — chờ chủ kho phê ở Cổng Bằng chứng (dòng sổ fix S3, cùng lớp AC-8): hai tệp
+  `apps/api/test/khoa-api-ghi-thua.spec.ts` và `apps/api/test/go-thanh-vien.spec.ts` ngoài danh sách tệp của AC-3.
+  Cả hai sót người dùng thử từ trước vòng này. `go-thanh-vien` xoá mọi thành viên rồi `ensureWorkspaceMembership`
+  kết nạp lại mọi người dùng đang có trong một lệnh, cùng một `createdAt`. Khi AC-8 dọn `cvv-doc-phien` đi,
+  `gieoBangMau` của `viec-bang-do-nguong` chọn `kagt-…@thu.test` giao việc cha và `…-mt-chu@onemount.com` tạo việc
+  con; `donViec` vỡ `viec_chaId_fkey`, kéo đỏ 29 ca trên CI (lượt 3). Sửa bằng dọn session, member, user ở
+  `afterAll` của hai tệp ấy; ca `nguoi-thu-sot` của `rang/bom-gio.mjs` đo hai chiều. Không phê thì hoàn lại hai tệp
+  ấy, và AC-8 phải mở lại.
 - Hỏi-2 (Cổng Phạm vi, mở lại): `l3-canh` so hai thủ tục đọc cây và đòi cùng thứ tự con; `docMucTieu` sắp
   `position, createdAt` không có khoá phân định, bộ mẫu nạp các mục tiêu cùng `createdAt`, nên hai lần đọc có thể
   trả hai mục tiêu anh em theo thứ tự khác nhau — người dùng cũng thấy được. Khuyến nghị (a): thêm `{ id: "asc" }` cuối

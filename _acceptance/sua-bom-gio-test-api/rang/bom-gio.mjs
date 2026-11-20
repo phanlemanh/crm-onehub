@@ -75,6 +75,17 @@ const CA = [
 		sau: DEM_CVV,
 		dauDo: "dem-cvv: nguoi=1",
 	},
+	{
+		ten: "nguoi-thu-sot",
+		nhom: "AC-8",
+		tep: [
+			"khoa-api-ghi-thua.spec.ts",
+			"go-thanh-vien.spec.ts",
+			"viec-bang-do-nguong.spec.ts",
+		],
+		preload: [],
+		dauDo: "viec_chaId_fkey",
+	},
 ];
 
 function mot(argv, co) {

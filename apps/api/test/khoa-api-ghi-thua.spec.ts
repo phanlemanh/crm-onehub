@@ -67,6 +67,9 @@ beforeAll(async () => {
 afterAll(async () => {
 	await db.apikey.deleteMany({ where: { referenceId: NGUOI } });
 	await app.close();
+	await db.session.deleteMany({ where: { userId: NGUOI } });
+	await db.member.deleteMany({ where: { userId: NGUOI } });
+	await db.user.deleteMany({ where: { id: NGUOI } });
 });
 
 describe("khoa-api-ghi-thua", () => {
