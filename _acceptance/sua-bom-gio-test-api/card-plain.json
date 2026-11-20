@@ -1,38 +1,116 @@
 {
-  "feature_plain": "Bộ kiểm phần máy chủ xanh trên cả máy anh lẫn máy CI: ngoài chín ca bom giờ đã sửa, vòng mở lại để sửa thêm bốn lớp lỗi mà chỉ thứ tự tệp trên Linux mới lộ ra.",
+  "feature_plain": "Bộ kiểm phần máy chủ xanh cả trên máy lẫn trên CI: chín ca bom giờ, bốn lớp chỉ thứ tự tệp trên Linux mới lộ ra, và hồi quy 27 ca do chính lần mở lại gây ra đều đã sửa và đo hai chiều.",
   "will_do": [
-    { "id": "AC-1", "p": "Sẽ cho trọn bộ kiểm phần máy chủ ra 0 ca đỏ trên máy, đủ số ca qua và đúng số ca bỏ qua như trước." },
-    { "id": "AC-2", "p": "Sẽ giữ hai bài từng đỏ vì bom giờ xanh, kể cả khi bài khác để lại cấu hình ghi theo giờ thật." },
-    { "id": "AC-3", "p": "Sẽ chỉ sửa các bài kiểm đã kê, cộng đúng một dòng sắp xếp của sản phẩm nếu anh chọn (a) ở Hỏi-2." },
-    { "id": "AC-6", "p": "Sẽ cho mọi bài dùng bộ OKR mẫu chịu được cấu hình giờ thật do bài khác để lại, rồi trả lại đúng các hàng ấy." },
-    { "id": "AC-7", "p": "Sẽ cho hai bài so mẫu thôi phụ thuộc tên không gian làm việc mà bài chạy trước đặt." },
-    { "id": "AC-8", "p": "Sẽ cho bài kiểm cửa vào dọn người dùng thử của chính nó, để không thành chủ sở hữu thừa ở bài sau." },
-    { "id": "AC-9", "p": "Sẽ cho cây căn chỉnh trả hai mục tiêu cùng vị trí theo một thứ tự cố định ở mọi lần đọc (nếu anh chọn (a))." },
-    { "id": "AC-10", "p": "Sẽ chỉ coi là xong khi job kiểm phần máy chủ trên CI xanh; ca nào bị coi là chập chờn phải có số đo của một lần chạy lại." }
+    {
+      "id": "AC-1",
+      "p": "Sẽ cho trọn bộ kiểm phần máy chủ ra 0 ca đỏ trên máy, đủ số ca qua và đúng số ca bỏ qua như trước."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ giữ hai bài từng đỏ vì bom giờ xanh, kể cả khi bài khác để lại cấu hình ghi theo giờ thật."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ chỉ sửa các bài kiểm đã kê, cộng đúng một dòng sắp xếp của sản phẩm nếu anh chọn (a) ở Hỏi-2."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ cho mọi bài dùng bộ OKR mẫu chịu được cấu hình giờ thật do bài khác để lại, rồi trả lại đúng các hàng ấy."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ cho hai bài so mẫu thôi phụ thuộc tên không gian làm việc mà bài chạy trước đặt."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ cho bài kiểm cửa vào dọn người dùng thử của chính nó, để không thành chủ sở hữu thừa ở bài sau."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ cho cây căn chỉnh trả hai mục tiêu cùng vị trí theo một thứ tự cố định ở mọi lần đọc (nếu anh chọn (a))."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ chỉ coi là xong khi job kiểm phần máy chủ trên CI xanh; ca nào bị coi là chập chờn phải có số đo của một lần chạy lại."
+    }
   ],
   "wont_do": [
-    { "id": "AC-4", "p": "Sẽ KHÔNG làm nhẹ bài kiểm: không bớt khẳng định, không tắt ca, không sửa tệp mẫu." },
-    { "id": "AC-5", "p": "Sẽ KHÔNG để lại việc máy treo hay dữ liệu rác sau trọn bộ kiểm." },
-    { "id": "OOS-1", "p": "Không đổi mã sản phẩm, trừ đúng một dòng sắp xếp nếu anh chọn (a) ở Hỏi-2." },
-    { "id": "OOS-2", "p": "Không truy bài nào để lại cấu hình giờ thật — bộ OKR mẫu phải tự chịu được." },
-    { "id": "OOS-3", "p": "Không thống nhất tên tổ chức ở hơn chục chỗ tự dựng trong bài kiểm — chỉ hai bài so mẫu ghim tên ấy." },
-    { "id": "OOS-4", "p": "Không quét các mốc giờ ghim cứng khác chưa nổ." },
-    { "id": "OOS-5", "p": "Không đổi bộ kit hay cách chấm, không đụng vòng chuyển kit." }
+    {
+      "id": "AC-4",
+      "p": "Sẽ KHÔNG làm nhẹ bài kiểm: không bớt khẳng định, không tắt ca, không sửa tệp mẫu."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ KHÔNG để lại việc máy treo hay dữ liệu rác sau trọn bộ kiểm."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không đổi mã sản phẩm, trừ đúng một dòng sắp xếp nếu anh chọn (a) ở Hỏi-2."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không truy bài nào để lại cấu hình giờ thật — bộ OKR mẫu phải tự chịu được."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không thống nhất tên tổ chức ở hơn chục chỗ tự dựng trong bài kiểm — chỉ hai bài so mẫu ghim tên ấy."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không quét các mốc giờ ghim cứng khác chưa nổ."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không đổi bộ kit hay cách chấm, không đụng vòng chuyển kit."
+    }
   ],
   "scope_plain": "Năm việc cố ý để ngoài vòng này:",
   "coverage_plain": [
-    { "i": 0, "p": "Không quét không gian tiêu chí: mỗi lớp lỗi đã tái hiện bằng một cặp bài cụ thể; đổi lại không có bảng độ phủ." }
+    {
+      "i": 0,
+      "p": "Không quét không gian tiêu chí: mỗi lớp lỗi đã tái hiện bằng một cặp bài cụ thể; đổi lại không có bảng độ phủ."
+    }
   ],
   "gap_probe_plain": [
-    { "i": 0, "p": "Lý do chọn cách sửa bài góp ý dựa vào tiền lệ của việc khác — đã đổi sang tạm gỡ rồi trả lại cấu hình." },
-    { "i": 1, "p": "Câu «đề bài cấm sửa sản phẩm» không nằm trong kho — đã thành câu hỏi cho anh (Hỏi-1, anh đã duyệt)." },
-    { "i": 2, "p": "Chưa có thước cho việc máy treo — đã thêm AC-5 và đo lý do không dời lần ghi đầu." },
-    { "i": 3, "p": "Vùng được phép sửa quá rộng — đã thu về danh sách bài đã kê, ghim số ca qua và bỏ qua." },
-    { "i": 4, "p": "Cấu hình giả trong thước không ghi qua đường thật — đã bác: trên bản cũ nó làm đỏ đúng các ca thật đỏ." },
-    { "i": 5, "p": "Nhánh Hỏi-2 chưa có thước — đã khoá tệp sản phẩm vào đúng một dòng sắp xếp, và AC-9 chỉ áp khi anh chọn (a)." },
-    { "i": 6, "p": "Chưa đo việc trả lại cấu hình đã tạm gỡ — đã thêm một bước đếm đúng hàng sót còn nguyên sau bài." },
-    { "i": 7, "p": "Thiếu cặp «bài cửa vào → bài vai trò» — đã bác: cặp ấy xanh ở bản cũ, chưa tìm ra bài thứ ba gây lỗi; CI là phép thử cuối." },
-    { "i": 8, "p": "Thước CI cho chạy lại không cần số đo và gắn nhầm commit — đã đòi tệp số đo và tự lùi về commit có lần chạy." },
-    { "i": 9, "p": "Bước thay tên gốc có thể thay rộng quá — đã bác: chỉ thay đúng chuỗi tên thật, mọi trường khác vẫn so từng byte." }
+    {
+      "i": 0,
+      "p": "Lý do chọn cách sửa bài góp ý dựa vào tiền lệ của việc khác — đã đổi sang tạm gỡ rồi trả lại cấu hình."
+    },
+    {
+      "i": 1,
+      "p": "Câu «đề bài cấm sửa sản phẩm» không nằm trong kho — đã thành câu hỏi cho anh (Hỏi-1, anh đã duyệt)."
+    },
+    {
+      "i": 2,
+      "p": "Chưa có thước cho việc máy treo — đã thêm AC-5 và đo lý do không dời lần ghi đầu."
+    },
+    {
+      "i": 3,
+      "p": "Vùng được phép sửa quá rộng — đã thu về danh sách bài đã kê, ghim số ca qua và bỏ qua."
+    },
+    {
+      "i": 4,
+      "p": "Cấu hình giả trong thước không ghi qua đường thật — đã bác: trên bản cũ nó làm đỏ đúng các ca thật đỏ."
+    },
+    {
+      "i": 5,
+      "p": "Nhánh Hỏi-2 chưa có thước — đã khoá tệp sản phẩm vào đúng một dòng sắp xếp, và AC-9 chỉ áp khi anh chọn (a)."
+    },
+    {
+      "i": 6,
+      "p": "Chưa đo việc trả lại cấu hình đã tạm gỡ — đã thêm một bước đếm đúng hàng sót còn nguyên sau bài."
+    },
+    {
+      "i": 7,
+      "p": "Thiếu cặp «bài cửa vào → bài vai trò» — đã bác: cặp ấy xanh ở bản cũ, chưa tìm ra bài thứ ba gây lỗi; CI là phép thử cuối."
+    },
+    {
+      "i": 8,
+      "p": "Thước CI cho chạy lại không cần số đo và gắn nhầm commit — đã đòi tệp số đo và tự lùi về commit có lần chạy."
+    },
+    {
+      "i": 9,
+      "p": "Bước thay tên gốc có thể thay rộng quá — đã bác: chỉ thay đúng chuỗi tên thật, mọi trường khác vẫn so từng byte."
+    }
   ]
 }
