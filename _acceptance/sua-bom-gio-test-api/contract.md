@@ -90,7 +90,8 @@ Source input: prompt (phiên giữ đợt II.2, chủ kho «Duyệt cả hai»)
   đổi theo máy chạy (`gop-y-dung-cho` thứ 151 ở lượt một, 220 ở lượt hai).
 - Tệp mã được đổi: `apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts`, `apps/api/test/gop-y-dung-cho.spec.ts`,
   `apps/api/test/tro-ly-okr-san.ts`, `apps/api/test/hop-tuan-mo-dung-bo.spec.ts`,
-  `apps/api/test/bam-kr-mo-chi-tiet-kr.spec.ts`, `apps/api/test/cua-vao-va.spec.ts`, và (Hỏi-2 lối a)
+  `apps/api/test/bam-kr-mo-chi-tiet-kr.spec.ts`, `apps/api/test/cua-vao-va.spec.ts`, ba tệp agent
+  `apps/agent/test/tro-ly-okr-{nop,lich,nhac}-tom-tat.integration.spec.ts` (thêm ở S3, dòng sổ fix), và (Hỏi-2 lối a)
   `apps/api/src/okr/okr.service.ts`, kèm một bài kiểm thứ tự trong `apps/api/test/okr-cay-ly-do.spec.ts`.
 - Lớp C chưa tái hiện trọn trên máy: sau `cua-vao-va` còn người dùng, thành viên, phiên `cvv-doc-phien` (đo), nhưng
   tệp nào nâng người ấy lên owner trên CI thì chưa tìm ra (bộ ba với `thanh-vien-vao-dung`, `go-thanh-vien` đều xanh);

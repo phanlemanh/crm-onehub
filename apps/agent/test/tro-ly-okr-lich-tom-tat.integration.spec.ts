@@ -79,6 +79,9 @@ const tenPhong = (id: string) => id.replace(idMau("pb", ""), "");
 const khoaO = (o: O) => `${tenKy(o.ky)}|${tenPhong(o.phong)}|${o.nac}`;
 
 async function ghiCauHinh(sua: OkrProgramSua, lucGhi: Date): Promise<void> {
+	await db.okrProgramConfig.deleteMany({
+		where: { createdAt: { gt: lucGhi }, createdById: { not: NGUOI_GHI } },
+	});
 	const cu = await db.okrProgramConfig.findFirst({
 		orderBy: { version: "desc" },
 	});

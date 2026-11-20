@@ -160,6 +160,12 @@ function nhanMuc(m: MucNhac): string {
 const laMay = (m: MucNhac) => MAY.includes(m.loai);
 
 async function ghiCauHinh(sua: OkrProgramSua, lucGhi: Date): Promise<void> {
+	await db.okrProgramConfig.deleteMany({
+		where: {
+			createdAt: { gt: lucGhi },
+			createdById: { not: nguoi(bo.nguoi[0]?.ma ?? "") },
+		},
+	});
 	const cu = await db.okrProgramConfig.findFirst({
 		orderBy: { version: "desc" },
 	});
