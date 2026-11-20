@@ -38,7 +38,7 @@ const CHO_PHEP = [
 	/^LO-TRINH\.html$/,
 ];
 const KHANG_DINH =
-	/\bexpect\b|\.toBe\(|\.toEqual\(|throw new Error|loi\.push\(/;
+	/\bexpect\s*\(|\.toBe\(|\.toEqual\(|throw new Error|loi\.push\(/;
 const HA_THUOC = /\.(skip|todo|only|skipIf|if)\s*\(|\bxit\(|\bxdescribe\(/;
 
 function git(args) {
