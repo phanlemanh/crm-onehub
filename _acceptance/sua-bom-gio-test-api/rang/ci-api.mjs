@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..", "..");
 const KHO = "phanlemanh/crm-onehub";
-const SO_DO = resolve(HERE, "..", "evidence", "ci-chay-lai.md");
+const SO_DO_MAC_DINH = resolve(HERE, "..", "evidence", "ci-chay-lai.md");
 const JOB = "test (api)";
 
 function chay(lenh, args) {
@@ -25,6 +25,12 @@ function chay(lenh, args) {
 
 const argv = process.argv.slice(2);
 const i = argv.indexOf("--sha");
+const iSoDo = argv.indexOf("--so-do");
+if (iSoDo >= 0 && !argv[iSoDo + 1]) {
+	console.error("ci-api: --so-do can mot duong dan");
+	process.exit(2);
+}
+const SO_DO = iSoDo >= 0 ? resolve(argv[iSoDo + 1]) : SO_DO_MAC_DINH;
 
 const CHUA_DAY = /HTTP 422|No commit found/;
 
@@ -32,7 +38,7 @@ function lanCua(sha) {
 	const args = [
 		"api",
 		"--paginate",
-		`repos/${KHO}/commits/${sha}/check-runs?per_page=100`,
+		`repos/${KHO}/commits/${sha}/check-runs?per_page=100&filter=all`,
 		"--jq",
 		`.check_runs[] | select(.name == "${JOB}") | [.id, .status, (.conclusion // ""), .started_at, (.completed_at // "")] | @tsv`,
 	];
