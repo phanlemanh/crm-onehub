@@ -1,0 +1,4 @@
+--- a/apps/api/src/okr/okr.service.ts
++++ b/apps/api/src/okr/okr.service.ts
+-		const ct = await cauHinhAiLuc(client);
++		const ct = await cauHinhAiLuc(client, now);

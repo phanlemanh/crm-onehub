@@ -3732,6 +3732,19 @@ executors:
     cc30_ban_do: node scripts/product-map.mjs --root . --check
     t127_scripts: bun test scripts/tin-hieu/test scripts/ban-chup-lo-trinh/test
     kcs_don_vi: 'node --test "scripts/kiem-cheo/test/*.test.mjs"'
+    bom_gio: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --nhom AC-2
+    bom_gio_doi_chung: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --nhom AC-2 --doi-chung 74a29a68d
+    bom_gio_pham_vi: bun _acceptance/sua-bom-gio-test-api/rang/pham-vi.mjs
+    bom_gio_khong_ha: bun _acceptance/sua-bom-gio-test-api/rang/pham-vi.mjs --khong-ha
+    bom_gio_viec_sot: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts ca-goi"'
+    bom_gio_the_gioi_mau: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --nhom AC-6
+    bom_gio_the_gioi_mau_doi_chung: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --nhom AC-6 --doi-chung 74a29a68d
+    bom_gio_ten_goc: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --nhom AC-7
+    bom_gio_ten_goc_doi_chung: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --nhom AC-7 --doi-chung 74a29a68d
+    bom_gio_cvv: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --nhom AC-8
+    bom_gio_cvv_doi_chung: bun _acceptance/sua-bom-gio-test-api/rang/bom-gio.mjs --nhom AC-8 --doi-chung 74a29a68d
+    bom_gio_thu_tu: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/okr-cay-ly-do.spec.ts"'
+    bom_gio_ci: bun _acceptance/sua-bom-gio-test-api/rang/ci-api.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

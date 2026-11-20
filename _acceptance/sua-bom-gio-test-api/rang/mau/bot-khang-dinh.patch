@@ -1,0 +1,4 @@
+--- a/x
++++ b/x
+-	expect(a).toBe(3);
++	expect(a).toBe(0);

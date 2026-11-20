@@ -1725,7 +1725,7 @@ export class OkrService {
 				followers: { where: { userId: viewerId }, select: { userId: true } },
 				_count: { select: { followers: true, nguoiXem: true } },
 			},
-			orderBy: [{ position: "asc" }, { createdAt: "asc" }],
+			orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
 		});
 		const dem =
 			soGopY ??

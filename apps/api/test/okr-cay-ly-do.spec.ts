@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { z } from "zod";
 import { idMau } from "../scripts/okr-mau/nap";
@@ -288,6 +289,90 @@ describe("l3-man-doc-lai", () => {
 				throw new Error(
 					`ba ca thieu loai dich: kr ${denKr}, muc tieu ${denMt}`,
 				);
+		},
+		CHO_DB,
+	);
+});
+
+describe("l3-thu-tu", () => {
+	test(
+		"l3-thu-tu: muc tieu anh em hoa vi tri va gio tao xep theo id, moi lan doc nhu nhau",
+		async () => {
+			const docCu = async () =>
+				alignmentTreeOutput.parse(
+					ok(
+						await goi(
+							app,
+							"okr.alignmentTree",
+							"query",
+							{ cycleId: CHU_KY_Q4 },
+							await cookie(QUAN_TRI),
+						),
+						"alignmentTree",
+					),
+				) as Cay;
+			const lan = [
+				await cay(QUAN_TRI),
+				await cay(QUAN_TRI),
+				await docCu(),
+				await docCu(),
+			];
+			const ids = [
+				...new Set(
+					lan
+						.flatMap(moiNut)
+						.filter((n) => n.loai === "muc-tieu")
+						.map((n) => n.objectiveId),
+				),
+			];
+			const hang = new Map(
+				(
+					await db.$queryRaw<{ id: string; hang: number }[]>`
+						SELECT id, (row_number() OVER (ORDER BY id))::int AS hang
+						FROM "okrObjective" WHERE id = ANY(${ids})`
+				).map((r) => [r.id, r.hang]),
+			);
+			const khoa = new Map(
+				(
+					await db.okrObjective.findMany({
+						where: { id: { in: ids } },
+						select: { id: true, position: true, createdAt: true },
+					})
+				).map((m) => [m.id, `${m.position}|${m.createdAt.toISOString()}`]),
+			);
+			const loi: string[] = [];
+			let soCapHoa = 0;
+			const xet = (ds: Nut[]) => {
+				const muc = ds
+					.filter((n) => n.loai === "muc-tieu")
+					.map((n) => n.objectiveId);
+				for (let i = 1; i < muc.length; i += 1) {
+					const a = muc[i - 1] ?? "";
+					const b = muc[i] ?? "";
+					if (khoa.get(a) !== khoa.get(b)) continue;
+					soCapHoa += 1;
+					if ((hang.get(a) ?? 0) > (hang.get(b) ?? 0))
+						loi.push(`${a} truoc ${b}`);
+				}
+				for (const n of ds) xet(n.children);
+			};
+			for (const c of lan) {
+				xet(c.roots);
+				xet(c.chuaCanChinh);
+			}
+			const thuTu = (c: Cay) =>
+				moiNut(c)
+					.filter((n) => n.loai === "muc-tieu")
+					.map((n) => n.objectiveId)
+					.join(",");
+			if (thuTu(lan[0] as Cay) !== thuTu(lan[1] as Cay))
+				loi.push("cayCanChinh hai lan doc khac thu tu");
+			if (thuTu(lan[2] as Cay) !== thuTu(lan[3] as Cay))
+				loi.push("alignmentTree hai lan doc khac thu tu");
+			expect(soCapHoa > 0 ? "co cap hoa" : "khong co cap hoa").toBe(
+				"co cap hoa",
+			);
+			expect(loi.join("; "), "l3-thu-tu: thu tu con theo id").toBe("");
 		},
 		CHO_DB,
 	);
