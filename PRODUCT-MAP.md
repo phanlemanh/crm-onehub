@@ -11,8 +11,8 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>8 việc"]
   GD --> DB["Đã bác từ khám phá<br/>3 việc"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>173 việc"]
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>172 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>200 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
 ```
@@ -30,6 +30,7 @@ flowchart TD
 
 ## Đang làm
 
+- Sửa 9 ca đỏ sẵn của suite api — bom giờ trong mã kiểm (cmst-goc, gop-y-dung-cho) (`sua-bom-gio-test-api`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -367,7 +368,6 @@ flowchart TD
 - Các bài so-moi của nop-ban-nhap chọn số thử bằng cách đọc chính gói gửi mô hình — hết đỏ ngẫu nhiên khi tên gieo tình cờ mang chữ số (`so-moi-khong-chap-chon`)
 - Soạn OKR khi chưa cấu hình cầu nối — nút không mời mở cuộc, màn nói thẳng chưa bật, cuộc chưa có lượt không bị tính vào trần, có hướng dẫn dựng apps/agent-okr trên Vercel (`soan-okr-song-lai`)
 - Sửa và ẩn chu kỳ OKR tạo nhầm — chu kỳ trống ở lập kế hoạch sửa được mọi ô, chu kỳ chưa đóng sửa được tên, chu kỳ trống gỡ được, chu kỳ có dữ liệu ẩn được có lý do và hiện lại được; chu kỳ ẩn vắng khỏi mọi ô chọn, kỳ mặc định, kiểm quý chồng, mang sang, nhắc và ghi mới; vết luôn còn (`sua-an-chu-ky-okr`)
-- Sửa 9 ca đỏ sẵn của suite api — bom giờ trong mã kiểm (cmst-goc, gop-y-dung-cho) (`sua-bom-gio-test-api`) — đã giao — máy thông, bằng chứng xanh-sạch
 - Người quản trị sửa, sắp xếp, lưu trữ và khôi phục bộ phận và khuôn; người điều phối đóng, mở lại kế hoạch và đánh dấu bậc phễu — chỉ quản trị được đổi cấu hình (`sua-luu-tru-dieu-phoi`)
 - Sửa hai paths chết (E5, E17) trong evals.yaml của hồ sơ đã ký soan-okr-cung-tro-ly để lưới hoá cũ lọc theo paths được, rồi ghim lại hồ sơ một lần (`sua-paths-e5-soan-okr`) — đã giao — không đo, khai ở Cổng Đáng
 - Sửa hai lỗi môi trường làm suite test đỏ, và nối dây cổng nghiệm thu vào bản kit đang cài (`sua-test-do-thu-tu-nap`)
