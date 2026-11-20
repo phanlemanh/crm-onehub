@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thứ tự mục tiêu · Hỏi-2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-paper:  #171717;
+        --color-ink:    #fafafa;
+        --color-muted:  #b4b4b4;
+        --color-rule:   rgba(250,250,250,0.12);
+        --color-accent: #2f9b7a;
+      }
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 64ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình · Sơ đồ quyết định · sua-bom-gio-test-api · Hỏi-2</p>
+    <h1>Hai mục tiêu anh em đổi chỗ</h1>
+    <p class="sub">Hai mục tiêu cùng vị trí, cùng giờ tạo, nên mỗi lần đọc cây căn chỉnh Postgres được tự chọn thứ tự. Hỏi-2 chọn giữa sửa một dòng sắp xếp và ghi vào giới hạn đã biết.</p>
+
+    <svg viewBox="0 64 1080 424" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>
+          @media (prefers-color-scheme: dark) {
+            .p  { fill: #171717; }
+            .ti { fill: #fafafa; }
+            .tm { fill: #b4b4b4; }
+            .ta { fill: #2f9b7a; }
+            .si { stroke: #fafafa; }
+            .sm { stroke: #b4b4b4; }
+            .sa { stroke: #2f9b7a; }
+            .sr { stroke: rgba(250,250,250,0.12); }
+            .fa { fill: rgba(47,155,122,0.12); }
+          }
+        </style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon class="tm" points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon class="ta" points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect class="p" y="64" width="100%" height="100%" fill="#fafafa"/>
+
+      <line class="sm" x1="320" y1="248" x2="348" y2="248" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path class="sa" d="M392 208 V148 Q392 140 400 140 H476" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path class="sm" d="M392 288 V348 Q392 356 400 356 H476" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line class="sa" x1="720" y1="140" x2="756" y2="140" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line class="sm" x1="720" y1="356" x2="756" y2="356" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect class="p" x="416" y="112" width="48" height="12" rx="2" fill="#fafafa"/>
+      <text class="ta" x="440" y="121" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SỬA</text>
+      <rect class="p" x="404" y="328" width="68" height="12" rx="2" fill="#fafafa"/>
+      <text class="tm" x="438" y="337" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">GIỮ NGUYÊN</text>
+
+      <rect class="p" x="32" y="152" width="288" height="192" rx="6" fill="#fafafa"/>
+      <rect class="p si" x="32" y="152" width="288" height="192" rx="6" fill="#fafafa" stroke="#171717" stroke-width="1"/>
+      <rect class="sm" x="44" y="164" width="72" height="12" rx="2" fill="none" stroke="#575757" stroke-opacity="0.6" stroke-width="0.8"/>
+      <text class="tm" x="80" y="173" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HIỆN TẠI</text>
+      <text class="ti" x="48" y="200" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hai mục tiêu anh em</text>
+      <text class="tm" x="48" y="218" fill="#575757" font-size="9" font-family="'Geist', sans-serif">cùng vị trí · cùng giờ tạo</text>
+      <line class="sr" x1="48" y1="232" x2="304" y2="232" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text class="tm" x="48" y="256" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LẦN ĐỌC 1</text>
+      <text class="ti" x="48" y="274" fill="#171717" font-size="12" font-family="'Geist', sans-serif">Kho vận 2 → Điều phối 2</text>
+      <text class="tm" x="48" y="300" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LẦN ĐỌC 2</text>
+      <text class="ti" x="48" y="318" fill="#171717" font-size="12" font-family="'Geist', sans-serif">Điều phối 2 → Kho vận 2</text>
+
+      <text class="tm" x="32" y="376" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">Khoá sắp xếp bằng nhau, nên</text>
+      <text class="tm" x="32" y="394" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">Postgres được tự chọn thứ tự.</text>
+
+      <polygon class="p si" points="392,208 432,248 392,288 352,248" fill="#fafafa" stroke="#171717" stroke-width="1.2"/>
+      <text class="ti" x="392" y="252" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hỏi-2</text>
+
+      <rect class="p" x="480" y="100" width="240" height="80" rx="6" fill="#fafafa"/>
+      <rect class="fa sa" x="480" y="100" width="240" height="80" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect class="sa" x="492" y="112" width="96" height="12" rx="2" fill="none" stroke="#006B4F" stroke-opacity="0.6" stroke-width="0.8"/>
+      <text class="ta" x="540" y="121" fill="#006B4F" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">(A) MÁY KHUYÊN</text>
+      <text class="ti" x="496" y="148" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thêm khoá phân định theo id</text>
+      <text class="tm" x="496" y="166" fill="#575757" font-size="9" font-family="'Geist', sans-serif">một dòng mã sản phẩm, ở hàm đọc mục tiêu</text>
+
+      <rect class="p" x="480" y="316" width="240" height="80" rx="6" fill="#fafafa"/>
+      <rect class="p si" x="480" y="316" width="240" height="80" rx="6" fill="#fafafa" stroke="#171717" stroke-width="1"/>
+      <rect class="sm" x="492" y="328" width="28" height="12" rx="2" fill="none" stroke="#575757" stroke-opacity="0.6" stroke-width="0.8"/>
+      <text class="tm" x="506" y="337" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">(B)</text>
+      <text class="ti" x="496" y="364" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Không đổi sản phẩm</text>
+      <text class="tm" x="496" y="382" fill="#575757" font-size="9" font-family="'Geist', sans-serif">ghi vào giới hạn đã biết</text>
+
+      <rect class="p" x="760" y="84" width="288" height="112" rx="6" fill="#fafafa"/>
+      <rect class="p si" x="760" y="84" width="288" height="112" rx="6" fill="#fafafa" stroke="#171717" stroke-width="1"/>
+      <text class="tm" x="776" y="104" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">KẾT QUẢ</text>
+      <text class="ti" x="776" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thứ tự cây xác định</text>
+      <text class="tm" x="776" y="146" fill="#575757" font-size="12" font-family="'Geist', sans-serif">· Mọi lần đọc ra cùng một thứ tự</text>
+      <text class="tm" x="776" y="164" fill="#575757" font-size="12" font-family="'Geist', sans-serif">· Người dùng không thấy mục tiêu đổi chỗ</text>
+      <text class="tm" x="776" y="182" fill="#575757" font-size="12" font-family="'Geist', sans-serif">· Ca <tspan font-family="'Geist Mono', monospace" font-size="11">l3-canh</tspan> trên CI thôi chập chờn</text>
+
+      <rect class="p" x="760" y="300" width="288" height="112" rx="6" fill="#fafafa"/>
+      <rect class="p sm" x="760" y="300" width="288" height="112" rx="6" fill="#fafafa" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text class="tm" x="776" y="320" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">KẾT QUẢ</text>
+      <text class="ti" x="776" y="340" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thứ tự vẫn do Postgres chọn</text>
+      <text class="tm" x="776" y="362" fill="#575757" font-size="12" font-family="'Geist', sans-serif">· Ca <tspan font-family="'Geist Mono', monospace" font-size="11">l3-canh</tspan> vẫn có thể đỏ trên CI</text>
+      <text class="tm" x="776" y="380" fill="#575757" font-size="12" font-family="'Geist', sans-serif">· Hai mục tiêu có thể đổi chỗ</text>
+      <text class="tm" x="784" y="398" fill="#575757" font-size="12" font-family="'Geist', sans-serif">giữa hai lần tải trang</text>
+
+      <line class="sr" x1="32" y1="440" x2="1048" y2="440" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text class="tm" x="32" y="460" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect class="fa sa" x="128" y="452" width="12" height="8" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text class="tm" x="148" y="460" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nhánh máy khuyên</text>
+      <polygon class="p si" points="276,450 282,456 276,462 270,456" fill="#fafafa" stroke="#171717" stroke-width="1.2"/>
+      <text class="tm" x="292" y="460" fill="#575757" font-size="9" font-family="'Geist', sans-serif">điểm người chọn</text>
+      <rect class="p sm" x="408" y="452" width="12" height="8" rx="2" fill="#fafafa" stroke="#575757" stroke-width="1" stroke-dasharray="3,2"/>
+      <text class="tm" x="428" y="460" fill="#575757" font-size="9" font-family="'Geist', sans-serif">rủi ro còn lại</text>
+    </svg>
+
+    <footer>sua-bom-gio-test-api · thứ tự mục tiêu anh em · Hỏi-2 · vẽ 2026-11-20</footer>
+  </div>
+</body>
+</html>

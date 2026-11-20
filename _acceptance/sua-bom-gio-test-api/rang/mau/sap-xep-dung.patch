@@ -1,0 +1,4 @@
+--- a/apps/api/src/okr/okr.service.ts
++++ b/apps/api/src/okr/okr.service.ts
+-			orderBy: [{ position: "asc" }, { createdAt: "asc" }],
++			orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],

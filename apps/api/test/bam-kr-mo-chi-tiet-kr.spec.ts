@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
+import { readTenGoc } from "@crm/db/workspace";
 import {
 	type CayCanChinhOutput,
 	cayCanChinhOutput,
@@ -25,6 +26,7 @@ const TEP_FIXTURE = join(
 	"../../app/test/fixtures/bkr-cay.json",
 );
 const TEN_O = "BKR · mục tiêu O";
+const TEN_GOC_MAU = "CRM";
 const KR_MA_TRAN = [
 	{ nhan: "K1", ten: "BKR · kết quả K1", hienTai: 20 },
 	{ nhan: "K2", ten: "BKR · kết quả K2", hienTai: 35 },
@@ -88,12 +90,14 @@ function moiNut(cay: CayCanChinhOutput): NutCayDayDu[] {
 function chuanHoa(
 	cay: CayCanChinhOutput,
 	nhan: ReadonlyMap<string, string>,
+	tenGoc: string,
 ): CayCanChinhOutput {
 	const doi = (id: string) => nhan.get(id) ?? `la:${id}`;
 	const nut = (n: NutCayDayDu): NutCayDayDu => ({
 		...n,
 		id: doi(n.id),
 		objectiveId: doi(n.objectiveId),
+		unitName: n.unitName === tenGoc ? TEN_GOC_MAU : n.unitName,
 		expected: null,
 		children: n.children.map(nut),
 	});
@@ -159,7 +163,8 @@ describe("bkr-cay-api", () => {
 			expect(
 				`bkr-cay-api: nut muc-tieu mang objectiveId O: ${nutO.length}`,
 			).toBe("bkr-cay-api: nut muc-tieu mang objectiveId O: 1");
-			const ra = `${JSON.stringify(chuanHoa(cay, nhan), null, "\t")}\n`;
+			const tenGoc = await readTenGoc(db);
+			const ra = `${JSON.stringify(chuanHoa(cay, nhan, tenGoc), null, "\t")}\n`;
 			soFixture(ra);
 		},
 		CHO_MS,

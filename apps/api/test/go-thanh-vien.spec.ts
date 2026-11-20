@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "bun:test";
+import { afterAll, beforeEach, describe, expect, it } from "bun:test";
 import {
 	ALLOWANCE_WITHOUT_EXPIRY,
 	AUTH_COOKIE_PREFIX,
@@ -89,6 +89,8 @@ async function don() {
 	});
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
 }
+
+afterAll(don);
 
 async function nem(chay: () => Promise<unknown>) {
 	try {

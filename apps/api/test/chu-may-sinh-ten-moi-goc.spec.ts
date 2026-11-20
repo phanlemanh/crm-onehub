@@ -436,6 +436,14 @@ async function gieoHoiY(): Promise<void> {
 }
 
 async function gieoCuocSoan(): Promise<void> {
+	ok(
+		await goi("okr.setProgram", {
+			...CHUONG_TRINH_RONG,
+			aiOn: true,
+			aiSoanPhamVi: "toan-cong-ty",
+		}),
+		"chuong trinh luc doc",
+	);
 	s.kySoan = await taoNam("cmst-soan", 2028);
 	const mo = ok<SoanMoOutput>(
 		await goi("okr.soanMo", {

@@ -3,7 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
-import { WORKSPACE_ID } from "@crm/db/workspace";
+import { readTenGoc, WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	boHopTuan,
 	type CayChonBo,
@@ -287,6 +287,7 @@ const NGAY_MS = 24 * 60 * 60 * 1000;
 const GIO_GIEO = new Date("2026-10-05T03:00:00.000Z");
 const GIO_DO = new Date("2026-10-21T05:00:00.000Z");
 const GIO_TUAN_TRUOC = new Date(GIO_DO.getTime() - 7 * NGAY_MS);
+const TEN_GOC_MAU = "CRM";
 const TEP_TOAN_CANH = join(import.meta.dir, "fixtures", "htmb-toan-canh.json");
 
 type HienThi = "cong-khai" | "gioi-han";
@@ -430,10 +431,12 @@ async function demSqlBoPhan(
 function latToanCanh(
 	tc: ToanCanhOutput,
 	khoaNhan: ReadonlyMap<string, string>,
+	tenGoc: string,
 ): ToanCanhOutput {
 	const tenNhan = new Map<string, string>();
 	const hang = tc.hang.flatMap((h) => {
-		if (h.key === "goc") return [h];
+		if (h.key === "goc")
+			return [h.ten === tenGoc ? { ...h, ten: TEN_GOC_MAU } : h];
 		const nhanK = khoaNhan.get(h.key);
 		if (nhanK === undefined) return [];
 		const ten = nhanK.slice(nhanK.indexOf(":") + 1);
@@ -578,7 +581,7 @@ describe("htmb-toan-canh", () => {
 						`htmb-toan-canh: khoa co soKr > 0 la ${coKr}, can bp:B,pb:P,pb:X`,
 					);
 
-				const lat = latToanCanh(tc, khoaNhan);
+				const lat = latToanCanh(tc, khoaNhan, await readTenGoc(db));
 				if (process.env.HTMB_GHI === "1")
 					writeFileSync(TEP_TOAN_CANH, `${JSON.stringify(lat, null, "\t")}\n`);
 				const daGhi = existsSync(TEP_TOAN_CANH)

@@ -97,6 +97,9 @@ let lanA2 = "";
 let lanNgoai = "";
 
 async function ghiCauHinh(sua: OkrProgramSua, lucGhi: Date): Promise<void> {
+	await db.okrProgramConfig.deleteMany({
+		where: { createdAt: { gt: lucGhi }, createdById: { not: NGUOI_GHI } },
+	});
 	const cu = await db.okrProgramConfig.findFirst({
 		orderBy: { version: "desc" },
 	});
