@@ -1,0 +1,27 @@
+{
+  "feature_plain": "Bộ kiểm phần máy chủ xanh trở lại: chín ca đỏ từ 12/11 chỉ vì ngày tháng trôi qua mốc giờ mà bài kiểm ghim cứng, nên vòng chuyển kit chấm lại được.",
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ cho trọn bộ kiểm phần máy chủ chạy ra 0 ca đỏ, đủ số ca qua và đúng số ca bỏ qua như trước — chín ca đỏ sẵn đều qua." },
+    { "id": "AC-2", "p": "Sẽ giữ hai bài từng đỏ xanh cả khi một bài khác để lại cấu hình ghi theo giờ thật; và thước chứng được bản cũ của hai bài đỏ đúng lý do." },
+    { "id": "AC-3", "p": "Sẽ chỉ sửa đúng hai bài kiểm cùng hồ sơ của việc này — không đụng mã sản phẩm hay bài kiểm nào khác." }
+  ],
+  "wont_do": [
+    { "id": "AC-4", "p": "Sẽ KHÔNG làm nhẹ bài kiểm: chỉ thêm dòng, không bớt điều bài kiểm khẳng định, không tắt hay bỏ qua ca nào." },
+    { "id": "AC-5", "p": "Sẽ KHÔNG để lại việc máy treo hay dữ liệu rác sau khi chạy bộ kiểm, và trả lại đúng cấu hình đã tạm gỡ." },
+    { "id": "OOS-1", "p": "Không sửa cách sản phẩm đọc cấu hình trợ lý OKR — ở môi trường thật hai cách đọc cho cùng kết quả (đây là Hỏi-1)." },
+    { "id": "OOS-2", "p": "Không truy bài kiểm nào đã để lại cấu hình giờ thật — mọi bài bật trợ lý mà không ghim giờ đều để lại, nên bài phải chịu được." },
+    { "id": "OOS-3", "p": "Không quét các mốc giờ ghim cứng khác trong bộ kiểm — ca chưa nổ là việc riêng." },
+    { "id": "OOS-4", "p": "Không đổi bộ kit hay cách chấm, không đụng vòng chuyển kit." }
+  ],
+  "scope_plain": "Bốn việc cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    { "i": 0, "p": "Không quét không gian tiêu chí: lỗi đã đo tới gốc — chín ca, hai cơ chế, bảng cấu hình chụp ngay lúc đỏ; đổi lại không có bảng độ phủ." }
+  ],
+  "gap_probe_plain": [
+    { "i": 0, "p": "Lý do chọn cách sửa bài góp ý dựa vào tiền lệ của một việc khác, không thật sự quyết cho bài này — đã đổi sang cách an toàn hơn: tạm gỡ rồi trả lại cấu hình, để các bài chạy sau thấy y như cũ." },
+    { "i": 1, "p": "Máy ghi là đề bài cấm sửa sản phẩm, nhưng câu cấm không nằm trong kho — đã đưa thành câu hỏi cho anh (Hỏi-1)." },
+    { "i": 2, "p": "Chưa có thước cho rủi ro lần ghi cấu hình thứ hai để lại việc máy treo — đã thêm AC-5 dùng thước việc treo của vòng #616, và đo xác nhận lý do không dời lần ghi đầu." },
+    { "i": 3, "p": "Vùng được phép sửa quá rộng, có thể lách bằng cách tắt ca ở bài khác — đã thu về đúng hai bài, và ghim số ca qua và bỏ qua so với trước." },
+    { "i": 4, "p": "Cấu hình giả trong thước không ghi qua đường thật — đã bác: trên bản cũ nó làm đỏ đúng tám ca mà bộ kiểm thật đỏ, tức tái hiện đúng lỗi." }
+  ]
+}
