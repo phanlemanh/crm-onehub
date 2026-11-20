@@ -17,7 +17,6 @@ import {
 	goi,
 	ketThucMau,
 	kr,
-	MOC_MAU,
 	mt,
 	NAC_CAU_HINH,
 	ok,
@@ -56,7 +55,6 @@ type DanhSach = {
 };
 
 let app: NestExpressApplication;
-let cauHinhSauMoc: string[] = [];
 let cycleId = "";
 const cookie = {
 	truong: "",
@@ -191,17 +189,6 @@ async function clone(
 
 beforeAll(async () => {
 	await batDauMau();
-	const sauMoc = await db.okrProgramConfig.findMany({
-		where: { createdAt: { gt: MOC_MAU } },
-		select: { id: true },
-	});
-	const idSauMoc = sauMoc.map((r) => r.id);
-	cauHinhSauMoc = (
-		await db.$queryRaw<{ dong: string }[]>`
-			SELECT to_jsonb(t)::text AS dong FROM "okrProgramConfig" t
-			WHERE id = ANY(${idSauMoc}) ORDER BY id`
-	).map((r) => r.dong);
-	await db.okrProgramConfig.deleteMany({ where: { id: { in: idSauMoc } } });
 	app = await dungUngDung();
 	for (const k of Object.keys(NGUOI) as Nguoi[])
 		cookie[k] = await phienMau(NGUOI[k]);
@@ -297,10 +284,6 @@ beforeAll(async () => {
 
 afterAll(async () => {
 	await ketThucMau(app);
-	for (const dong of cauHinhSauMoc)
-		await db.$executeRaw`
-			INSERT INTO "okrProgramConfig"
-			SELECT * FROM jsonb_populate_record(NULL::"okrProgramConfig", ${dong}::jsonb)`;
 }, CHO_DB);
 
 describe("dem-chip", () => {

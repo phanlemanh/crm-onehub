@@ -344,11 +344,37 @@ export async function donTroLy(): Promise<void> {
 	});
 }
 
+let cauHinhSauMoc: string[] = [];
+
+async function goCauHinhSauMoc(): Promise<void> {
+	const sauMoc = await db.okrProgramConfig.findMany({
+		where: { createdAt: { gt: MOC_MAU } },
+		select: { id: true },
+	});
+	if (sauMoc.length === 0) return;
+	const ids = sauMoc.map((r) => r.id);
+	const dong = await db.$queryRaw<{ dong: string }[]>`
+		SELECT to_jsonb(t)::text AS dong FROM "okrProgramConfig" t
+		WHERE id = ANY(${ids}) ORDER BY id`;
+	cauHinhSauMoc = [...cauHinhSauMoc, ...dong.map((r) => r.dong)];
+	await db.okrProgramConfig.deleteMany({ where: { id: { in: ids } } });
+}
+
+async function traCauHinhSauMoc(): Promise<void> {
+	for (const dong of cauHinhSauMoc)
+		await db.$executeRaw`
+			INSERT INTO "okrProgramConfig"
+			SELECT * FROM jsonb_populate_record(NULL::"okrProgramConfig", ${dong}::jsonb)
+			ON CONFLICT (id) DO NOTHING`;
+	cauHinhSauMoc = [];
+}
+
 export async function batDauMau(): Promise<void> {
 	datDongHo(MOC_MAU);
 	await lamSachOkr();
 	await xoaBoOkrMau(db);
 	await donTroLy();
+	await goCauHinhSauMoc();
 	await dungKho();
 	await napMau(MOC_MAU);
 	await db.agentTask.create({
@@ -370,6 +396,7 @@ export async function ketThucMau(app: NestExpressApplication): Promise<void> {
 	});
 	await lamSachOkr();
 	await xoaBoOkrMau(db);
+	await traCauHinhSauMoc();
 	await app.close();
 	setSystemTime();
 }

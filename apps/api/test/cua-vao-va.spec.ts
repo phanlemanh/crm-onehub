@@ -8,6 +8,7 @@ import {
 	spyOn,
 } from "bun:test";
 import { auth } from "@crm/auth";
+import { db } from "@crm/db";
 import { type INestApplication, Logger } from "@nestjs/common";
 import { APIError } from "better-auth/api";
 import request from "supertest";
@@ -40,6 +41,9 @@ beforeAll(async () => {
 
 afterAll(async () => {
 	await app.close();
+	await db.session.deleteMany({ where: { userId: NGUOI } });
+	await db.member.deleteMany({ where: { userId: NGUOI } });
+	await db.user.deleteMany({ where: { id: NGUOI } });
 });
 
 const dangGia: { mockRestore(): void }[] = [];
