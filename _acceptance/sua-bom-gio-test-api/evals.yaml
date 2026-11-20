@@ -47,7 +47,8 @@ evals:
       - "_acceptance/sua-bom-gio-test-api/rang/**"
     expected: |
       `rang/bom-gio.mjs --nhom AC-2 --doi-chung 74a29a68d` dựng một lớp phủ ngoài kho (thư mục tạm trong $TMPDIR:
-      liên kết mọi mục của kho, thay MỌI tệp dưới apps/ mà vòng đổi bằng bản ở 74a29a68d qua `git show`, in dòng «lop
+      liên kết mọi mục của kho, thay mọi tệp dưới apps/api/test và apps/app/test mà vòng đổi bằng bản ở 74a29a68d qua
+      `git show`, chép (không liên kết) các tệp khác trong thư mục bị thay để import tương đối giải trong lớp phủ, in dòng «lop
       phu 74a29a68d: N tep lay ban cu (…)»), chạy hai lượt như E2 trên lớp phủ, rồi xoá lớp phủ. Cả hai lượt phải đỏ đúng dấu: cmst-goc thoát ≠ 0 và đầu ra có «don-vi-chua-bat»;
       gop-y-dung-cho thoát ≠ 0, 8 fail, đầu ra có «dem sai». Lệnh in «DOI CHUNG DUONG» và thoát 0. Không ghi tệp
       nào vào cây; sau lệnh không còn thư mục bom-gio-* trong $TMPDIR.

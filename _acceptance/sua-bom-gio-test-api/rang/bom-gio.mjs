@@ -119,7 +119,15 @@ function phu(nguon, dich, thay, tienTo) {
 }
 
 function dungLopPhu(ref) {
-	const doi = git(["diff", "--name-only", ref, "HEAD", "--", "apps"])
+	const doi = git([
+		"diff",
+		"--name-only",
+		ref,
+		"HEAD",
+		"--",
+		"apps/api/test",
+		"apps/app/test",
+	])
 		.split("\n")
 		.filter(Boolean);
 	const coTrongRef = new Set(
