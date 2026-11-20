@@ -3730,6 +3730,8 @@ executors:
     cc30_chuyen_kho: node _acceptance/chuyen-cho-delivery-loop-3-0/rang/chuyen-kho.mjs
     cc30_doi_chung: node _acceptance/chuyen-cho-delivery-loop-3-0/rang/doi-chung.mjs
     cc30_ban_do: node scripts/product-map.mjs --root . --check
+    t127_scripts: bun test scripts/tin-hieu/test scripts/ban-chup-lo-trinh/test
+    kcs_don_vi: 'node --test "scripts/kiem-cheo/test/*.test.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
