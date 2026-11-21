@@ -5,9 +5,9 @@ slug: chuyen-cho-delivery-loop-3-0
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, config]
-status: implemented
+status: approved
 approved_by: Phan Le Manh
-approved_at: 2026-11-20
+approved_at: 2026-11-21
 design_doc: docs/superpowers/specs/2026-11-20-chuyen-cho-delivery-loop-3-0-design.md
 ---
 
@@ -88,7 +88,18 @@ Làn khô 20/11 trên `29fa0598` (157 ứng viên, 50 đỏ) với đối chứn
 `183ae167`: 35 đỏ cả hai bên, 14 xanh sau gộp, 1 đỏ vì vòng. Chạy lại ở tip cuối trước Cổng Bằng chứng
 (`evidence/phan-loai-ghim.json`).
 
+Làn khô 21/11 trên `25053cbd` (46 đỏ) với đối chứng nhánh chính `5e2c0b39` và bản sau gộp giả `185fc4bc`: 33 đỏ cả
+hai bên, 8 xanh sau gộp, 5 đỏ vì vòng. Bốn dòng `gioi-han` sau `E6` mở lại hợp đồng theo lời chủ kho 21/11 «Lối A»:
+ba eval chạy `pre-merge-check` toàn kho và đếm hồ sơ của chính vòng này khi nó chưa ở trạng thái gộp được
+(`VIOLATION [chuyen-cho-delivery-loop-3-0]: verdict=REJECT`, và khi bỏ báo cáo ấy:
+`status=implemented but no evidence-report.md`); `sua-bom-gio-test-api/E14` đòi một lần chạy CI `test (api)` trên
+GitHub mà bản gộp giả không có.
+
 - gioi-han: `chuyen-goi-dieu-phoi/E6`
+- gioi-han: `do-man-tren-kho-rieng/E13`
+- gioi-han: `don-ho-so-cu/E9`
+- gioi-han: `sua-paths-e5-soan-okr/E5`
+- gioi-han: `sua-bom-gio-test-api/E14`
 
 ## Out of scope
 
