@@ -23,8 +23,7 @@
 		"packages/validation/src/doc-du-lieu-lo-trinh.js",
 		"tools/oxlint/anti-slop/**",
 		"lib/**",
-		"scripts/**",
-		"dieu-phoi/scripts/**"
+		"scripts/**"
 	],
 	"rules": {
 		"anti-slop/no-chained-type-assertions": "error",

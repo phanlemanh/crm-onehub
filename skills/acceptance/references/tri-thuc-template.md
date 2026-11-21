@@ -1,8 +1,8 @@
 # Kho tri thức — khuôn (tầng tri thức theo LLM Wiki)
 
-> Khuôn MỘT nguồn của kho tri thức: bên ghi (`/tri-thuc:ghi`, người) và bên đọc (`scripts/tri-thuc.mjs`, dòng
+> Khuôn MỘT nguồn của kho tri thức: bên ghi (`/knowledge:ingest`, người) và bên đọc (`scripts/tri-thuc.mjs`, dòng
 > «Nguồn:» của ô, bước thiết kế) cùng rút các khối marker dưới đây lúc chạy. Đổi một khối là đổi cả hai bên.
-> Thiết kế: `docs/findings/2026-10-24-tang-tri-thuc-llm-wiki.md` (lượt cắt `tri-thuc-2410`, hàng TT1).
+> Thiết kế: `https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/findings/2026-10-24-tang-tri-thuc-llm-wiki.md` (lượt cắt `tri-thuc-2410`, hàng TT1).
 >
 > Kho khai một lần trong `_acceptance/config.yaml`:
 >
@@ -70,7 +70,7 @@ Dòng tệp của `nguon.md` (biểu thức bên đọc dùng):
 ```
 <!-- TRI-THUC-RAW-DONG>>> -->
 
-## Năm loại nguồn — bên ghi `/tri-thuc:ghi`
+## Năm loại nguồn — bên ghi `/knowledge:ingest`
 
 Giá trị `loai` của `nguon.md`, mỗi dòng một loại kèm luật hình dạng bên ghi kiểm trước khi ghi: `goc-khong-rong` (gốc
 không rỗng) · `goc-https` (gốc mở đầu `https://`) · `goc-url-hoac-issue` (URL `https://` hay `<chủ>/<kho>#<số>`) ·
@@ -103,7 +103,7 @@ Ghim theo băm nội dung, không theo sha commit (sha mất sau gộp squash; s
 ```
 # Tri thức của <kho>
 
-Gốc tri thức theo khuôn của acceptance-gate-kit (skills/acceptance/references/tri-thuc-template.md).
+Gốc tri thức theo khuôn của delivery-loop (skills/acceptance/references/tri-thuc-template.md).
 
 - raw/<YYYY-MM-DD>-<tên>/ — bất biến; nguon.md liệt mọi tệp kèm băm git hash-object.
 - wiki/nen/ — nền chung mọi vòng đọc. wiki/chu-de/ — chủ đề. wiki/dot/<đợt>.md — mã → trang.

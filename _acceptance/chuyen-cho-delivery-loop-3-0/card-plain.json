@@ -1,0 +1,93 @@
+{
+ "feature_plain": "Phiên và máy của crm thôi dùng bộ kit nghiệm thu cũ đã đóng băng, chuyển sang bộ kit mới ở kho delivery-loop bản 3.0.0 — cổng chấm PR, luồng gom tín hiệu hằng ngày, kiểm chéo đêm và lệnh gợi ý đều gọi đúng tên mới; không đổi cách chấm nào.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ chấm PR bằng đúng bản lưới của kit 3.0.0 — 38 tệp chép khớp từng byte, bản chép cũ của gói điều phối được gỡ, không mã nào còn nạp nó (lớp CI chép)."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ để luồng gom tín hiệu hằng ngày cài kit 3.0.0 từ kho delivery-loop và gọi hai skill theo tên mới, nên job không chết ở bước giải kit (tin-hieu-gom.yml)."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ để mọi phiên mở ở crm nạp sáu plugin của chợ delivery-loop, ghim ở bản 3.0.0, các cài đặt khác giữ nguyên (.claude/settings.json)."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ tắt đích danh sáu plugin của chợ cũ, để máy còn cài chợ cũ cũng không nạp nhầm hai bản cùng lúc."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ để kiểm chéo đêm tìm gói điều phối theo tên mới (dispatch) và gợi đúng lệnh cài mới khi máy chưa cài."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ để công cụ kiểm chuyển kho của delivery-loop báo «ĐẠT» trên crm — không tệp sống nào còn gọi lệnh tên cũ; tệp mẫu chỉ đổi đúng 14 tên lệnh (Hỏi-1), CLAUDE.md chỉ đường báo lỗi kit sang kho mới (Hỏi-2)."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ KHÔNG đổi phán quyết của hồ sơ đã ký nào — lưới cũ và lưới 3.0.0 cho cùng một tập hồ sơ đạt trên cùng cây."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ xếp mỗi bài kiểm của hồ sơ cũ mà vòng này chạm vào đúng một lớp — đỏ sẵn từ trước, chỉ đỏ khi còn là nhánh, hay đỏ vì vòng — và bài đỏ vì vòng hoặc được ghim lại, hoặc được khai giới hạn có tên (Hỏi-4)."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ chỉ đổi đúng các tệp đã liệt trước trong thiết kế; bộ kiểm của kho xanh, hoặc đỏ đúng các ca đã đỏ sẵn trên nhánh chính."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "OOS-1",
+   "p": "Chưa đo phiên thật nạp đủ sáu plugin trong hợp đồng — máy chạy phép thử phiên trước và sau khi gộp, ghi vào mô tả PR."
+  },
+  {
+   "id": "OOS-2",
+   "p": "Không cài plugin lên máy, không gỡ chợ cũ khỏi máy — việc của anh (lệnh cài kèm ở dưới)."
+  },
+  {
+   "id": "OOS-3",
+   "p": "Không bật luật hay khoá mới nào của kit 3.0 ngoài đúng bản lưới chép (Hỏi-3)."
+  },
+  {
+   "id": "OOS-4",
+   "p": "Không đổi dữ liệu mẫu của trang lộ trình lấy kho kit cũ làm ví dụ — đó là ví dụ, không phải chỗ kéo kit."
+  },
+  {
+   "id": "OOS-5",
+   "p": "Không sửa sổ kể lại, hồ sơ đã ký, hay khoá chấm chết của hồ sơ cũ."
+  }
+ ],
+ "scope_plain": "Năm thứ cố ý để ngoài vòng này:",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Không quét chống sót riêng: phạm vi do kế hoạch giai đoạn 2 đã duyệt chốt sẵn năm phần, và công cụ kiểm chuyển kho liệt sẵn các điểm phải đạt; chín tiêu chí phủ: lưới chấm PR (AC-1) · luồng gom tín hiệu (AC-2) · phiên (AC-3) · tắt chợ cũ (AC-4) · kiểm chéo đêm (AC-5) · tên lệnh cũ (AC-6) · không đổi phán quyết (AC-7) · ghim lại (AC-8) · không đổi hành vi (AC-9)."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Tiêu chí ghim lại từng hứa «ghim mọi hồ sơ lưới đòi» trong khi sổ chỉ ghim hồ sơ đỏ vì vòng, và bài đo so với chính danh sách người điền — đã viết lại theo ba lớp đỏ, bài đo đọc tệp kết quả chạy khô thật; sau làn khô thêm lớp «giới hạn đã duyệt» (Hỏi-4)."
+  },
+  {
+   "i": 1,
+   "p": "Hai mã khác nhau cho cùng thẻ v3.0.0 — đã ghi rõ mã nào là commit, mã nào là thẻ, và bài đo so đúng commit."
+  },
+  {
+   "i": 2,
+   "p": "Câu «bộ kiểm của kho xanh» chưa có bài đo, nên một tệp còn nạp bản chép cũ có thể lọt — đã thêm bài quét mọi import và đọc bộ kiểm theo lượt chấm, đỏ sẵn tính theo nhãn của kho."
+  },
+  {
+   "i": 3,
+   "p": "Lưới 3.0 mang theo luật chặn mới của kit 2.38 cho đường T3 mà hợp đồng không nói — đã ghi là khác biệt luật duy nhất và đưa lên anh quyết (Hỏi-3)."
+  },
+  {
+   "i": 4,
+   "p": "Bài đo phía chợ chỉ dò chuỗi chữ, chưa đối chiếu tên chợ và danh sách plugin thật của thẻ — đã thêm ca đối chiếu; chạy thật bước cài trong CI cần mạng nên để phép thử phiên trước và sau gộp."
+  }
+ ],
+ "analyst_plain": "Hai bài đo xanh cả trước lẫn sau thay đổi: bộ kiểm chéo đêm (E5b) và kiểm bản đồ sản phẩm (E9b). Chúng chỉ chứng minh không có gì hỏng, không chứng minh phần mới — đó là chủ ý: vòng này hứa không đổi hành vi."
+}

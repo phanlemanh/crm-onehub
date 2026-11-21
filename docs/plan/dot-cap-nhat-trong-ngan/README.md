@@ -2,7 +2,7 @@
 
 Mở 30/10 theo lời chủ kho «Duyệt hướng, thêm hàng và mở đợt mới». Gói theo khuôn §4.1 của kit: `dieu-phoi.config.json`,
 `hang-viec.json`, `LUAT-rieng.md`. Hàng lấy từ lộ trình qua `nguon_hang`. Chủ kho duyệt hàng, Cổng Đáng và quyền tự
-merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot cap-nhat-trong-ngan`.
+merge ở thẻ khởi tạo của `/dispatch:open cap-nhat-trong-ngan`.
 
 ## Dãy
 

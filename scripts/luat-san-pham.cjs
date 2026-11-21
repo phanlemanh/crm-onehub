@@ -5,7 +5,7 @@
 // Khuôn tệp: khối marker PRODUCT-INVARIANTS-TEMPLATE trong skills/acceptance/references/product-invariants-template.md
 // (bộ kiểm rút đúng khối đó để dựng tệp thử — đổi nhãn một phía là ca LS-01 đỏ).
 // Người dùng: bộ xếp lớp căn cứ (can-cu-s1.cjs) · thẻ (gate-card.js) · vị từ còn-cần-người (khong-can-nguoi.mjs,
-// start-scan.mjs) · bộ kiểm (tests/scripts/luat-san-pham.ca.mjs).
+// start-scan.mjs) · bộ kiểm (https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/tests/scripts/luat-san-pham.ca.mjs).
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');

@@ -104,7 +104,7 @@ if (!found.length) {
     (skipped.length
       ? `  found but UNUSABLE (missing the files above): ${skipped.map(s => s.version).join(', ')}\n`
       : '') +
-    `  fix: claude plugin install ${plugin}@acceptance-gate-kit\n`);
+    `  fix: claude plugin install ${plugin}@delivery-loop\n`);
   process.exit(1);
 }
 

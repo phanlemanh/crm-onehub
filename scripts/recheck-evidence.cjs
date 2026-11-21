@@ -197,7 +197,54 @@ if (configPath) {
   try { configText = fs.readFileSync(configPath, 'utf8'); } catch { /* config unreadable — evaluate without it */ }
 }
 
+// ── Verifier trong GỐC GÓI LÕI (hồ sơ phan-du-bo-cuc-moi, AC-6) ─────────────
+// Kho đặt lõi ở thư mục con (`plugins/acceptance-gate/`) thì báo cáo đã ký trỏ `verifier: scripts/x.mjs` theo
+// đường phẳng không còn giải được ở ba ứng viên của lõi (thư mục tệp · gốc git · cwd). Ứng viên THỨ TƯ, ở CUỐI:
+// gốc gói lõi đọc từ `<gốc git>/.claude-plugin/marketplace.json`. Vắng tệp, hoặc lõi ở chính gốc kho → null →
+// báo cáo đi đúng đường cũ từng byte. Bộ giải ba ứng viên nằm ở lib/evidence-core.cjs (isAuthenticVerifier);
+// ứng viên thứ tư chỉ xét các lỗi «verifier script not found» mà ba ứng viên kia đã trượt.
+function gocGoiLoi(gitRoot) {
+  if (!gitRoot) return null;
+  const mkPath = path.join(gitRoot, '.claude-plugin', 'marketplace.json');
+  let mk;
+  try {
+    mk = JSON.parse(fs.readFileSync(mkPath, 'utf8'));
+  } catch (e) {
+    if (e.code !== 'ENOENT') process.stderr.write(`recheck-evidence: NOTE không đọc được ${mkPath} (${e.message}) — bỏ ứng viên gốc gói lõi\n`);
+    return null;
+  }
+  const ds = Array.isArray(mk && mk.plugins) ? mk.plugins : [];
+  const muc = ds.find(p => p && p.name === 'acceptance-gate')
+    || ds.find(p => p && typeof p.source === 'string' && p.source.includes('acceptance-gate'));
+  if (!muc || typeof muc.source !== 'string') return null;
+  const goc = path.resolve(gitRoot, muc.source);
+  return goc === path.resolve(gitRoot) ? null : goc;
+}
+
+const NOT_FOUND_RE = /^verifier script not found\. raw: (.+?); tried:\n/;
+
+function timTrongGocGoiLoi(r0, goc) {
+  if (!goc) return r0;
+  const cuuDuoc = [];
+  const authFailures = r0.authFailures.map((reason) => {
+    const m = reason.match(NOT_FOUND_RE);
+    if (!m || path.isAbsolute(m[1])) return reason;
+    const c = path.resolve(goc, m[1]);
+    let co = false;
+    try { co = fs.existsSync(c) && fs.statSync(c).isFile(); } catch (_) { co = false; }
+    if (!co) return `${reason}\n      ${c}`;
+    cuuDuoc.push(`verifier ${m[1]} giải trong gốc gói lõi: ${c}`);
+    return null;
+  }).filter((x) => x !== null);
+  if (!cuuDuoc.length) return { ...r0, authFailures };
+  const anyFailure = r0.missing.length > 0 || authFailures.length > 0 || !!r0.judgmentFailure
+    || !!r0.consistencyFailure || !!r0.runLogFailure || (r0.observedFailures || []).length > 0;
+  return { ...r0, authFailures, anyFailure, notes: [...(r0.notes || []), ...cuuDuoc] };
+}
+
 const r = core.evaluateEvidence(payload, { fileDir, configText, configPath });
+// Chỉ thêm (luật additive-only của tệp T3, ca DV5): kết quả xét lại gán vào chính `r`, dòng gốc ở trên giữ nguyên.
+Object.assign(r, timTrongGocGoiLoi(r, gocGoiLoi(core.findGitRoot(fileDir))));
 for (const n of r.notes || []) process.stderr.write(`recheck-evidence: NOTE ${reportPath} — ${n}\n`);
 if (!r.anyFailure) process.exit(0);
 

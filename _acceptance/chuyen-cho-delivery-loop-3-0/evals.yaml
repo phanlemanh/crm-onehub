@@ -1,0 +1,119 @@
+schema_version: 1
+feature_slug: chuyen-cho-delivery-loop-3-0
+# Bài đo của vòng: tệp node:test `thu/chuyen-cho.test.mjs` (executors.script.cc30_thu), công cụ kiểm chuyển kho chạy tại
+# commit ghim (cc30_chuyen_kho), đối chứng lưới trên merge-base và HEAD (cc30_doi_chung). Kit đọc theo thẻ v3.0.0 và kiểm
+# commit c16d25db của thẻ — đối tượng thẻ là 228f9b64 (rang/kit.mjs): bản kéo ~/dev/delivery-loop hay KHO_DELIVERY_LOOP, vắng thì clone kho công khai.
+# exit 0 của lệnh chung KHÔNG đủ: mỗi eval đòi `output`, người chấm đối chiếu tên ca nêu trong `expected` — có mặt, «ok»,
+# không «# SKIP»/«# TODO». Mỗi ca là một cặp hai chiều trên cùng hàm đọc: vật thật xanh, bản phá đỏ đúng thông điệp ghim.
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    expected: "exit 0; bốn ca ok: «AC-1 «lớp CI chép khớp từng byte bản v3.0.0»: vật thật xanh, hai bản phá đỏ» — danh sách rút từ khối INIT-CI-COPY-LIST của thẻ có đúng 38 mục, kiemLopChep ra rỗng; bản phá thêm một byte vào scripts/pre-merge-check.sh → đúng «lệch bản v3.0.0: scripts/pre-merge-check.sh», bản phá xoá lib/ho-goi.cjs → đúng «thiếu: lib/ho-goi.cjs». «AC-1 «resolve-plugin.mjs khớp bản feature-loop v3.0.0»» — khớp từng byte, và bản merge-base khác bản thẻ (đối chứng). «AC-1 «không còn tệp chép cũ dưới dieu-phoi/, oxlint thôi trỏ nó»: vật thật xanh, bản phá đỏ» — git ls-files không có dieu-phoi/, bản cấy dieu-phoi/scripts/dot.mjs → «còn tệp chép cũ: dieu-phoi/scripts/dot.mjs», .oxlintrc.json không còn dieu-phoi/ mà bản merge-base có. «AC-1 «t1_skip_globs liệt đủ 38 đích, không còn đích cũ»: vật thật xanh, hai bản phá đỏ» — bỏ lib/ho-goi.cjs → «t1_skip_globs thiếu: lib/ho-goi.cjs»; thêm dieu-phoi/scripts/dot.mjs → «t1_skip_globs còn đích cũ: dieu-phoi/scripts/dot.mjs». «AC-1 «kit đọc đúng commit của thẻ v3.0.0, không phải đối tượng thẻ»» — rev-parse v3.0.0^{commit} bằng c16d25db, rev-parse v3.0.0 (đối tượng thẻ) khác. «AC-1 «không mã nào nạp bản chép cũ dieu-phoi/scripts/»: vật thật xanh, bản cấy đỏ» — quét > 500 tệp .mjs/.cjs/.js/.ts/.tsx được theo dõi ngoài _acceptance/, giải từng import/require tương đối theo thư mục tệp, 0 đích dưới dieu-phoi/scripts/; bản cấy import ../dieu-phoi/scripts/dot.mjs vào scripts/tin-hieu.mjs → đúng «nạp bản chép cũ: scripts/tin-hieu.mjs -> ../dieu-phoi/scripts/dot.mjs»."
+    paths: [scripts/**, lib/**, skills/**, dieu-phoi/**, .oxlintrc.json, _acceptance/config.yaml, _acceptance/chuyen-cho-delivery-loop-3-0/thu/**, _acceptance/chuyen-cho-delivery-loop-3-0/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    expected: "exit 0; ba ca ok: «AC-2 «tin-hieu-gom.yml kéo delivery-loop v3.0.0»: vật thật xanh, bốn bản phá đỏ» — thẻ cũ → «KIT_REF phải đúng một dòng v3.0.0 (thấy v2.36.0)», kho cũ và chú thích tên kho cũ → có «còn chữ acceptance-gate-kit», khoá cài lạ → «thiếu dòng: claude plugin install acceptance-gate@delivery-loop». «AC-2 «không tệp nào dưới .github/ còn tên kho kit cũ»» — quét ≥ 9 tệp, 0 tệp có chữ. «AC-2 «bộ giải kit của phiên gom tìm được acceptance-gate 3.0.0, hai skill tên mới có trên kit»: vật thật xanh, đối chứng đỏ» — scripts/resolve-plugin.mjs với đúng đối số của GOM.kit.giai trên cache dựng từ thẻ (delivery-loop/acceptance-gate/3.0.0) thoát 0 và in đúng thư mục ấy; thay --require skills/signal-intake/SKILL.md bằng tên cũ skills/gom-tin-hieu/SKILL.md → thoát 1, stderr «no usable install of \"acceptance-gate\"»; kiemSkillGom trên GOM.moHinh.skill và lời dặn thật ra rỗng; danh sách tên cũ → «skill không có trên kit v3.0.0: acceptance-gate:gom-tin-hieu» và «lời dặn còn tên cũ: acceptance-gate:gom-tin-hieu»."
+    paths: [.github/**, scripts/tin-hieu/**, scripts/resolve-plugin.mjs, _acceptance/chuyen-cho-delivery-loop-3-0/thu/**, _acceptance/chuyen-cho-delivery-loop-3-0/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2b
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.t127_scripts
+    expected: "exit 0; bun test scripts/tin-hieu/test scripts/ban-chup-lo-trinh/test xanh trọn, 0 fail — gồm gom-gia-co.test.ts (gcg-loi-goi: bản sao skill signal-intake tự cấp quyền và bảo chạy lệnh chưa phép đều bị bắt) và gom-lich.test.ts (lời dặn mang tên acceptance-gate:signal-intake và acceptance-gate:scope-slice)."
+    paths: [scripts/tin-hieu/**, scripts/ban-chup-lo-trinh/**, scripts/resolve-plugin.mjs, scripts/tin-hieu.mjs, scripts/cat-luot.mjs]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    expected: "exit 0; ba ca ok: «AC-3 «chợ của thẻ mang tên delivery-loop và đủ sáu plugin đã bật»: vật thật xanh, bản phá đỏ» — .claude-plugin/marketplace.json đọc tại commit thẻ có name delivery-loop và chứa sáu tên plugin bật @delivery-loop của settings; bản sao đổi tên chợ → «tên chợ ở marketplace.json của thẻ là acceptance-gate-kit, không phải delivery-loop», bỏ knowledge → «chợ của thẻ không có plugin knowledge». «AC-3 «phiên khai chợ delivery-loop v3.0.0, bật sáu plugin»: vật thật xanh, bốn bản phá đỏ» — còn chợ cũ → «chợ khai phải đúng delivery-loop (thấy delivery-loop,acceptance-gate-kit)», ref v2.39.0 → «ref của chợ phải là v3.0.0 (thấy v2.39.0)», thiếu knowledge → «knowledge@delivery-loop chưa bật», roadmap false → «roadmap@delivery-loop chưa bật». «AC-3 «phần còn lại của .claude/settings.json giữ nguyên so với nhánh chính»: vật thật xanh, bản phá đỏ» — mọi khoá ngoài enabledPlugins/extraKnownMarketplaces bằng bản merge-base; thêm một quyền → «khoá permissions đổi so với nhánh chính»; tắt superpowers → «plugin ngoài kit superpowers@claude-plugins-official đổi»."
+    paths: [.claude/settings.json, _acceptance/chuyen-cho-delivery-loop-3-0/thu/**, _acceptance/chuyen-cho-delivery-loop-3-0/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    expected: "exit 0; ca «AC-4 «tắt đích danh đúng sáu plugin chợ cũ»: vật thật xanh, ba bản phá đỏ» ok — sáu khoá @acceptance-gate-kit đều false; một khoá true → «road-map@acceptance-gate-kit phải là false (thấy true)», xoá một khoá → «thiếu dòng tắt: tri-thuc@acceptance-gate-kit», khoá lạ → «khoá chợ cũ lạ: la@acceptance-gate-kit»."
+    paths: [.claude/settings.json, _acceptance/chuyen-cho-delivery-loop-3-0/thu/**, _acceptance/chuyen-cho-delivery-loop-3-0/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    expected: "exit 0; ca «AC-5 «kiểm chéo đêm giải gói dispatch của kit 3.0.0 và nạp được ba hàm»: vật thật xanh, đối chứng đỏ» ok — KIEM_CHEO.goiDieuPhoi.plugin là dispatch, lệnh cài đúng «claude plugin install dispatch@delivery-loop --scope project»; resolve-plugin trên cache dựng từ thẻ (delivery-loop/dispatch/3.0.0) với ba --require của cấu hình thoát 0 và in đúng thư mục; nhập ba tệp ra ba hàm timThuMucDot, chamNhip, kiemDon; cùng cache với --plugin dieu-phoi thoát 1, stderr «no usable install of \"dieu-phoi\"»; làn ghim lại plugins/feature-loop/scripts/repin-lane.mjs có trên thẻ."
+    paths: [scripts/kiem-cheo/**, scripts/resolve-plugin.mjs, _acceptance/chuyen-cho-delivery-loop-3-0/thu/**, _acceptance/chuyen-cho-delivery-loop-3-0/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5b
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.kcs_don_vi
+    expected: "exit 0; node --test scripts/kiem-cheo/test/*.test.mjs xanh trọn, 0 fail — gồm ca «goi dieu-phoi khong giai duoc» của dem.test.mjs nay khớp lệnh cài claude plugin install dispatch@delivery-loop."
+    paths: [scripts/kiem-cheo/**, scripts/resolve-plugin.mjs]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cc30_chuyen_kho
+    expected: "exit 0; công cụ lấy từ kho delivery-loop tại commit 469e5ba4 (git archive, không đọc bản đang sửa); in K1–K5 đều «ĐẠT», dòng «K6: không đo (thiếu --phien)», «KẾT: ĐẠT»; rồi «chuyen-kho: đối chứng — merge-base <sha> CHƯA K1, K2, K3, K4, K5 (mã 1)» và «chuyen-kho: công cụ 469e5ba4 — cây làm việc K1–K5 ĐẠT, KẾT: ĐẠT»."
+    paths: [.claude/settings.json, .github/**, scripts/**, lib/**, skills/**, apps/agent/test/mau/**, docs/**, CLAUDE.md, AGENTS.md, _acceptance/config.yaml, _acceptance/chuyen-cho-delivery-loop-3-0/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6b
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    expected: "exit 0; hai ca ok: «AC-6 «tệp mẫu lo-trinh-kit.html chỉ đổi tên lệnh theo bảng»: vật thật xanh, bản phá đỏ» — áp bảng 14 tên cũ → mới lên bản merge-base ra đúng bản HEAD, đếm đúng 14 lần thay, bản HEAD 0 tên cũ; thêm một dấu cách → «tệp mẫu đổi ngoài bảng tên»; giữ nguyên bản cũ → «tệp mẫu đổi ngoài bảng tên» và «tệp mẫu còn tên lệnh cũ». «AC-6 «CLAUDE.md chỉ đường báo lỗi kit sang delivery-loop»» — có «mở chip riêng sang `~/dev/delivery-loop`», không còn «`~/dev/acceptance-gate-kit`», bản merge-base có câu cũ (đối chứng)."
+    paths: [apps/agent/test/mau/**, CLAUDE.md, _acceptance/chuyen-cho-delivery-loop-3-0/thu/**, _acceptance/chuyen-cho-delivery-loop-3-0/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cc30_doi_chung
+    expected: "exit 0; in «doi-chung: merge-base <sha> --recheck-all — lớp chép của nhánh chính và kit v3.0.0 cùng 0 VIOLATION, cùng <n> hồ sơ OK» với n ≥ 366 và «doi-chung: HEAD <sha> --recheck-all lớp chép của HEAD — <m> hồ sơ OK (đủ <n> của nền), VIOLATION ngoài vòng 0, của vòng <k>»; ba lượt chạy song song, nhật ký ở .acceptance-runs/chuyen-cho-delivery-loop-3-0/doi-chung/. Hàm so ở chiều đỏ: ca của E7b."
+    paths: [scripts/pre-merge-check.sh, scripts/recheck-evidence.cjs, lib/**, _acceptance/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7b
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    expected: "exit 0; ca «AC-7 «hàm so đối chứng»: cùng tập OK xanh; lệch, VIOLATION, thiếu luật, hồ sơ thôi OK, VIOLATION ngoài vòng đều đỏ đúng thông điệp» ok — trên văn bản tổng hợp: «tập OK của hai kit trên merge-base lệch», «merge-base có VIOLATION», «nền kit cũ: lưới không chạy đủ luật», «hồ sơ thôi OK trên HEAD: b», «VIOLATION ngoài vòng trên HEAD: 1»; VIOLATION của chính vòng và VIOLATION [PR] không làm đỏ."
+    paths: [_acceptance/chuyen-cho-delivery-loop-3-0/rang/**, _acceptance/chuyen-cho-delivery-loop-3-0/thu/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    expected: "exit 0; hai ca ok: «AC-8 «phân loại ghim lại khớp tệp chạy khô, trên đúng cây HEAD»: vật thật xanh, ba bản phá đỏ» — evidence/phan-loai-ghim.json mang sha tip mà cây ngoài _acceptance/ bằng cây HEAD, sha nhánh chính bằng merge-base, sha bản sau gộp giả; ứng viên của tệp bằng ứng viên suy lại từ evals.yaml và diff (không chép tay); mỗi eval đỏ trên tip có đúng một lớp: «do-ca-hai» chỉ khi cũng đỏ trên nhánh chính, «doi-nhanh» chỉ khi xanh trên bản sau gộp giả, «ghim» chỉ khi hồ sơ nằm trong tập ghim; ba tập ghim (tệp, mục «Ghim lại — kết quả», run-log đổi trong diff) bằng nhau; bản phá xếp một eval xanh-ở-nhánh-chính vào «do-ca-hai» → «<hồ sơ>/<eval>: xếp đỏ cả hai bên mà nhánh chính xanh», thêm một hồ sơ không có vào tập ghim của mục → «ba tập ghim (tệp phân loại, hợp đồng, run-log đổi) không bằng nhau», đổi sha tip về merge-base → «phân loại không chạy trên cây HEAD». «AC-8 «hồ sơ ghim lại khớp hợp đồng, giữ chữ ký, dòng ghim khớp verified_commit»: vật thật xanh, ba bản phá đỏ» ok — mỗi hồ sơ ghim: dòng repin cuối có sha bằng verified_commit, evals_exit khác rỗng, suites_exit toàn 0, báo cáo nêu run_id, human_signoff bằng bản merge-base, verified_commit khác bản merge-base; bản sao đổi verified_commit → «<slug>: dòng ghim cuối không khớp verified_commit», bản sao đổi human_signoff → «<slug>: human_signoff đổi so với nhánh chính», thêm tên hồ sơ không có → «khong-co-ho-so: hợp đồng nói ghim mà PR không chạm run-log.jsonl»."
+    paths: ["_acceptance/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cc30_thu
+    paths: ["**"]
+    expected: "exit 0; ca «AC-9 «diff từ nhánh chính chỉ chạm tệp của việc chuyển chợ»: vật thật 0 tệp lạ, bản cấy đỏ» ok — mọi tệp của git diff merge-base...HEAD khớp danh sách viết trước (38 đích lớp chép, ba tệp chép cũ bị gỡ, TEP_RIENG của rang/ghim.mjs, hồ sơ này, thiết kế và kế hoạch của slug, run-log.jsonl và evidence-report.md của hồ sơ ghim); bản cấy packages/core/src/agreements.ts và contract.md của hồ sơ khác → đúng hai dòng «tệp ngoài danh sách: …»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9b
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cc30_ban_do
+    expected: "exit 0; node scripts/product-map.mjs --root . --check (lớp chép 3.0.0 của HEAD) in «PRODUCT-MAP.md khớp hồ sơ xưởng.» và «LO-TRINH.html khớp tệp ý định và hồ sơ.»"
+    paths: [PRODUCT-MAP.md, LO-TRINH.html, docs/plan/**, scripts/**, lib/**, _acceptance/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

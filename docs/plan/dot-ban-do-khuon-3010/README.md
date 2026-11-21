@@ -3,7 +3,7 @@
 Mở 31/10 theo việc giao MBP-3110-1 (MacBook Pro → Mac Studio trên #375): chủ kho muốn Mac Studio chạy thử bản đồ khuôn
 ở crm. Chủ kho chọn «BK chạy trước» 31/10: BK1 → BK2 đi trước SV9, SV10 của bản phạm vi `okr-ghi-trong-ngan-3010`. Gói
 theo khuôn §4.1 của kit: `dieu-phoi.config.json`, `hang-viec.json`, `LUAT-rieng.md`. Hàng lấy từ lộ trình qua
-`nguon_hang`. Chủ kho duyệt hàng, Cổng Đáng và quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot ban-do-khuon-3010`.
+`nguon_hang`. Chủ kho duyệt hàng, Cổng Đáng và quyền tự merge ở thẻ khởi tạo của `/dispatch:open ban-do-khuon-3010`.
 
 Bối cảnh: `docs/plan/pham-vi-ban-do-khuon-3010.md`, trang tri thức `crm-onehub-nguon:wiki/chu-de/ban-do-khuon.md`.
 

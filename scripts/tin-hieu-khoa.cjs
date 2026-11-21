@@ -1,6 +1,6 @@
 // tin-hieu-khoa.cjs — MỘT hàm đọc khoá ổ cắm cửa tín hiệu (`tin_hieu.nguon`, `tin_hieu.gom`) cho mọi
 // bên đọc: bộ vẽ bản đồ (biết «cửa vắng» mà KHÔNG nạp scripts/tin-hieu.mjs) và chính tin-hieu.mjs.
-// Hồ sơ cua-tin-hieu-gom-nhom (hàng L3), design docs/superpowers/specs/2026-10-11-cua-tin-hieu-gom-nhom-design.md §3.2.
+// Hồ sơ cua-tin-hieu-gom-nhom (hàng L3), design https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-11-cua-tin-hieu-gom-nhom-design.md §3.2.
 //
 // Cùng nếp với lo-trinh-khoa.cjs: bộ đọc danh sách chung khớp mọi khoá thụt ở bất cứ khối nào, nên ở
 // đây cắt đúng khối `tin_hieu:` ở cột 0 rồi mới đọc `nguon` và `gom` trong khối.

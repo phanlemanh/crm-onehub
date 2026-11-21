@@ -3,7 +3,7 @@
 Làn MacBook Pro trong lộ trình ba làn (#487, chủ kho 19/10): trang Lộ trình đọc kit 2.33, cụm Tín hiệu – Thông báo, và
 nhóm giữ tươi hồ sơ đã ký. Gói theo khuôn §4.1 của kit: `dieu-phoi.config.json`, `hang-viec.json`, `LUAT-rieng.md`. Hàng
 lấy từ lộ trình qua `nguon_hang`. Chủ kho duyệt hàng, Cổng Đáng (`build`) và quyền tự merge ở thẻ khởi tạo của
-`/dieu-phoi:mo-dot lo-trinh-tin-hieu`, không phải ở đây.
+`/dispatch:open lo-trinh-tin-hieu`, không phải ở đây.
 
 ## Mở đợt
 

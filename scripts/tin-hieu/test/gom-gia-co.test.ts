@@ -240,7 +240,7 @@ function kiemSkill(
 	loTrinh: string[],
 ): string[] {
 	const loi: string[] = [];
-	for (const s of ["gom-tin-hieu", "cat-luot"]) {
+	for (const s of ["signal-intake", "scope-slice"]) {
 		const txt = readFileSync(
 			path.join(gocDoc, "skills", s, "SKILL.md"),
 			"utf8",
@@ -387,7 +387,7 @@ async function kiemLoiGoi(fn: Chay): Promise<{
 		) &&
 			bang(
 				[...GOM.moHinh.skill],
-				["acceptance-gate:gom-tin-hieu", "acceptance-gate:cat-luot"],
+				["acceptance-gate:signal-intake", "acceptance-gate:scope-slice"],
 			),
 		"11 luat skill sai",
 		loi,
@@ -398,7 +398,7 @@ async function kiemLoiGoi(fn: Chay): Promise<{
 
 function banSaoKit(sua: (ten: string, txt: string) => string): string {
 	const d = thuMuc("kit");
-	for (const s of ["gom-tin-hieu", "cat-luot"]) {
+	for (const s of ["signal-intake", "scope-slice"]) {
 		mkdirSync(path.join(d, "skills", s), { recursive: true });
 		const txt = readFileSync(path.join(AG, "skills", s, "SKILL.md"), "utf8");
 		writeFileSync(path.join(d, "skills", s, "SKILL.md"), sua(s, txt));
@@ -433,7 +433,7 @@ describe("gcg-loi-goi", () => {
 			expect((await kiemLoiGoi(fnHook)).loi).toContain("phiên gom chạy hook");
 			const { allow, banGom } = await kiemLoiGoi(chayGom);
 			const tuCap = banSaoKit((s, txt) =>
-				s === "gom-tin-hieu"
+				s === "signal-intake"
 					? txt.replace(/^---\n/, "---\nallowed-tools: Bash(node:*)\n")
 					: txt,
 			);
@@ -441,7 +441,7 @@ describe("gcg-loi-goi", () => {
 				"skill tự cấp quyền ngoài danh sách",
 			);
 			const lenhMoi = banSaoKit((s, txt) =>
-				s === "gom-tin-hieu"
+				s === "signal-intake"
 					? `${txt}\n\`\`\`bash\nAG="\${AG:-\${CLAUDE_PLUGIN_ROOT}}" && node "$AG/scripts/tin-hieu.mjs" --root . --moi\n\`\`\`\n`
 					: txt,
 			);

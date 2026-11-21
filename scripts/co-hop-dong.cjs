@@ -1,7 +1,7 @@
 'use strict';
 // co-hop-dong.cjs — cỡ hợp đồng: MỘT bộ đọc cho khoảng cỡ (khối CAT-LUOT-CO của SKILL cắt lượt), số tiêu
 // chí và dòng sổ «giữ cỡ». Hồ sơ _acceptance/vong-mo-thang-bang-feature-loop/ (hàng S3c), design
-// docs/superpowers/specs/2026-10-12-vong-mo-thang-bang-feature-loop-design.md.
+// https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-12-vong-mo-thang-bang-feature-loop-design.md.
 //
 // Ba bên đọc cùng nạp mô-đun này: thẻ Cổng Phạm vi (gate-card.js, CJS), đồng hồ cỡ (cat-luot.mjs, ESM qua
 // createRequire) và ca đo. Không số nào của khoảng, không bản sao nào của chuỗi giữ nằm ở bên đọc khác.
@@ -14,7 +14,10 @@ const { parseACBlock } = require(path.join(__dirname, '..', 'lib', 'ac-line.cjs'
 // Chính sách của chủ kho (10/10): mục tiêu · cho phép tới · tách từ · trần lượt chấm · ngưỡng ít dữ liệu.
 // Bên viết là người sửa khối; bên đọc là hàm dưới — mã không mang số nào của khoảng.
 const KHOA_CO = ['muc_tieu', 'cho_phep_den', 'tach_tu', 'tran_luot_cham', 'it_du_lieu_duoi'];
-const TEP_SKILL = path.join(__dirname, '..', 'skills', 'cat-luot', 'SKILL.md');
+// Skill cắt lượt tìm theo khối CAT-LUOT-CO nó mang, không theo tên thư mục (hồ sơ goi-cheo-loi-dieu-phoi: kịch bản chuyển
+// nhà đổi tên thư mục skill); không thấy thì giữ đường cũ.
+const TEP_SKILL = require(path.join(__dirname, 'tim-skill.cjs')).timSkill(path.join(__dirname, '..'), 'CAT-LUOT-CO',
+  path.join(__dirname, '..', 'skills', 'scope-slice', 'SKILL.md'));
 const KHOI_CO_RE = /<!-- <<<CAT-LUOT-CO -->\r?\n```[a-z]*\r?\n([\s\S]*?)```\r?\n<!-- CAT-LUOT-CO>>> -->/;
 function docKhoang(txt) {
   const m = String(txt ?? '').match(KHOI_CO_RE);

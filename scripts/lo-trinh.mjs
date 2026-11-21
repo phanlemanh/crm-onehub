@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // lo-trinh.mjs — ổ cắm ĐỌC tệp ý định của kho (lộ trình) + suy trạng thái từ hồ sơ + vẽ trang.
-// Hồ sơ: _acceptance/viec-ke-theo-plan/ · design: docs/superpowers/specs/2026-10-02-viec-ke-theo-plan-design.md
+// Hồ sơ: _acceptance/viec-ke-theo-plan/ · design: https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-02-viec-ke-theo-plan-design.md
 // Vòng sửa trên dữ liệu thật: _acceptance/lo-trinh-tren-du-lieu-that/ · design 2026-10-03-…-design.md —
 // so lời khai theo NHÓM, nối hai chiều hàng ↔ hồ sơ (`lo_trinh_ma`), nhiều lộ trình mỗi kho, mở ô
 // cơ hội từ hàng (`--mo-o`), dòng thẻ start dựng sẵn.
@@ -38,7 +38,7 @@ export const CHUA_MO = 'Chưa mở';
 export const KHONG_SUY = 'Không suy được';
 export const TIN_THEO_LOI = 'tin theo lời';
 // Dòng «Hàng kế» của thẻ khởi động khi lộ trình chưa có việc nào — một nguồn cho thẻ và bước khởi tạo lộ trình.
-export const CHUA_CO_VIEC = 'Lộ trình chưa có việc nào — thêm việc bằng skill cắt lượt (/acceptance-gate:cat-luot), rồi mở bằng /feature-loop:feature-loop <mã>';
+export const CHUA_CO_VIEC = 'Lộ trình chưa có việc nào — thêm việc bằng skill cắt lượt (/acceptance-gate:scope-slice), rồi mở bằng /feature-loop:feature-loop <mã>';
 // Ô bản đồ nào là «đã giao» và «chưa làm» — tra bằng KHOÁ ô, chữ rút từ SECTIONS của bản đồ.
 export const DA_GIAO_O = ['cho-nghiem-thu', 'da-ship', 'da-nghiem-thu'];
 export const DANG_LAM_O = ['cho-duyet', 'dang-dung'];
@@ -1340,7 +1340,7 @@ export function phatLai(dong) {
 const congNgay = (d, n) => new Date(Date.UTC(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8, 10) + n)).toISOString().slice(0, 10);
 const laObj = m => (m && typeof m === 'object' && !Array.isArray(m) ? m : {});
 const KHOI_DICH = { 'cho-dieu-kien': 'chan_troi', bac: 'da_bac' };
-export const LENH_TRA_LAI = ma => `/road-map:tra-lai ${ma}`;
+export const LENH_TRA_LAI = ma => `/roadmap:undo ${ma}`;
 // Mục máy chuyển vào `chan_troi` / `da_bac`: hàng gốc + lý do (câu căn cứ) + mở lại khi + dấu `tu_ap`. MỘT hàm dựng cho lúc áp
 // và lúc trả lại kiểm «mục đã bị sửa chưa».
 function mucMay(hangGoc, e, ngay, khoi) {
@@ -1457,9 +1457,9 @@ export function apChinhSach({ root, cacTep, sections, today, ghi = false, hangMo
   });
 }
 
-// Bản đồ của lệnh xem (/road-map:xem): xong · đang dở · kế, rà soát, tự áp. Chỉ đọc — không ghi tệp nào.
+// Bản đồ của lệnh xem (/roadmap:status): xong · đang dở · kế, rà soát, tự áp. Chỉ đọc — không ghi tệp nào.
 const soHoac = v => (v == null ? '—' : String(v));
-// Khối «Giờ máy theo mốc» của /road-map:xem (hồ sơ lo-trinh-gio-may): mỗi mốc còn hàng chưa giao một dòng khuôn luật 15/10,
+// Khối «Giờ máy theo mốc» của /roadmap:status (hồ sơ lo-trinh-gio-may): mỗi mốc còn hàng chưa giao một dòng khuôn luật 15/10,
 // xếp theo ngày mục tiêu. Kho không mốc nào còn việc → không in gì.
 export function duBaoLoTrinh(kq, nhom, today) {
   const dong = hangGioMay(kq, nhom);
@@ -1562,7 +1562,7 @@ export function dongMocXem(kq) {
   return ra.length ? ['Mốc:', ...ra] : [];
 }
 
-// Trả lại MỘT lần áp (lệnh khoá /road-map:tra-lai): hoàn tác đúng lần áp cuối của mã về vị trí cũ, ghi dòng `tra-lai`.
+// Trả lại MỘT lần áp (lệnh khoá /roadmap:undo): hoàn tác đúng lần áp cuối của mã về vị trí cũ, ghi dòng `tra-lai`.
 // Chỉ chặn ĐÚNG đề xuất ấy tới khi đề xuất đổi (B′ §11 «Veto một lần tự áp») — hàng không bị ghim.
 export function traLai({ root, tep, ma, today, boi }) {
   const p = path.join(root, tep); const goc = readFileSync(p, 'utf8');
@@ -1590,7 +1590,7 @@ export function traLai({ root, tep, ma, today, boi }) {
   ghiLoTrinh(p, data);
   return { thoat: 0, thong_diep: `đã trả lại ${ma} — máy không đề xuất lại «${DE_XUAT_CHU[d.de_xuat]}» cho tới khi căn cứ đổi` };
 }
-// Ghim / bỏ ghim (lệnh khoá /road-map:ghim, /road-map:bo-ghim): CHỈ ghi sổ — tệp lộ trình không đổi, nên tuổi hàng không bị
+// Ghim / bỏ ghim (lệnh khoá /roadmap:pin, /roadmap:unpin): CHỈ ghi sổ — tệp lộ trình không đổi, nên tuổi hàng không bị
 // đặt lại (luật tuổi coi mọi lần sửa hàng là một lần chạm).
 export function ghimHang({ root, tep, ma, today, boi, bo = false }) {
   const { dong, hong } = docSo(root, tep);
@@ -1701,7 +1701,7 @@ if (isMain) {
     process.stdout.write((dong.length ? dong : ['Chưa có mốc nào khép — chưa có gì để đo lệch.']).join('\n') + '\n');
     process.exit(0);
   }
-  // Bản đồ của /road-map:xem: chỉ đọc — 0 = in · 1 = kho chưa khai / tệp không đọc được · 2 = lỗi dùng.
+  // Bản đồ của /roadmap:status: chỉ đọc — 0 = in · 1 = kho chưa khai / tệp không đọc được · 2 = lỗi dùng.
   if (xemCo) {
     if (ref != null || moO || raSoatCo || apCo || jsonCo || ghiCo || lenhNguoi) bail('--xem chỉ đi với --root');
     const today = process.env.ACCEPTANCE_TODAY || new Date().toISOString().slice(0, 10);

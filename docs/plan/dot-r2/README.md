@@ -6,7 +6,7 @@ cũng là lần đo «chạy được mà không sửa lõi».
 
 Gói theo khuôn §4.1 của kit: `dieu-phoi.config.json`, `hang-viec.json`, `LUAT-rieng.md`. Hàng lấy từ lộ trình qua
 `nguon_hang` (`<tệp>:<mã>`), nên `slug` luôn khớp lộ trình. Đây là bản nháp: chủ kho duyệt hàng, Cổng Đáng (`build`) và
-quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot r2`, không phải ở đây.
+quyền tự merge ở thẻ khởi tạo của `/dispatch:open r2`, không phải ở đây.
 
 ## Mở đợt khi đủ bốn điều kiện
 

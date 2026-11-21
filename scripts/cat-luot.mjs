@@ -1,26 +1,26 @@
 #!/usr/bin/env node
 // cat-luot.mjs — răng phủ của skill cắt lượt + nhịp đo từ hồ sơ. Hồ sơ _acceptance/lo-trinh-cat-luot/,
-// design docs/superpowers/specs/2026-10-08-lo-trinh-cat-luot-design.md.
+// design https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-08-lo-trinh-cat-luot-design.md.
 //
 // CHỈ ĐỌC: không ghi tệp nào, không gọi mô hình. Bản phạm vi (khuôn
 // skills/acceptance/references/pham-vi-template.md, khối PHAM-VI-MA) và tệp lộ trình phải là tệp git
 // theo dõi trong kho. Răng chỉ xét mục mang cùng `dot` với bản phạm vi; cờ khuôn và lệch ngày của hàng
 // ngoài đợt thành dòng «cảnh báo:», không đổi mã thoát.
 //
-// Hồ sơ _acceptance/vong-la-mot-ket-qua/ (hàng S3, design docs/superpowers/specs/2026-10-11-vong-la-mot-ket-qua-design.md)
+// Hồ sơ _acceptance/vong-la-mot-ket-qua/ (hàng S3, design https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-11-vong-la-mot-ket-qua-design.md)
 // thêm: khoảng cỡ đọc từ khối CAT-LUOT-CO của SKILL cạnh script (không số nào của khoảng nằm trong mã),
 // tám cờ có tên cho cỡ dự kiến và dáng câu giao (`kiemCo`), và đồng hồ cỡ chỉ đọc (`--co`).
 //
-// Hồ sơ _acceptance/lo-trinh-chi-viec-phat-trien/ (hàng S3b, design docs/superpowers/specs/2026-10-11-lo-trinh-chi-viec-phat-trien-design.md)
+// Hồ sơ _acceptance/lo-trinh-chi-viec-phat-trien/ (hàng S3b, design https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-11-lo-trinh-chi-viec-phat-trien-design.md)
 // thêm: MỐC NGOÀI (`moc` có `loai: "ngoai"`, mang `dot` + `phu` + `ai`) là chỗ thứ ba của bảng phủ — việc vận
 // hành của người, không thành hàng; bốn cờ: hàng đứng chờ mốc vận hành · `du_lieu` sai giá trị · hàng đo trên
 // dữ liệu giả không đứng trên hàng sinh · mốc vận hành lặp lại chưa trỏ tự phục vụ.
 //
-// Hồ sơ _acceptance/o-mo-viec-mang-nguon/ (hàng TT3, design docs/superpowers/specs/2026-10-24-o-mo-viec-mang-nguon-design.md)
+// Hồ sơ _acceptance/o-mo-viec-mang-nguon/ (hàng TT3, design https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-24-o-mo-viec-mang-nguon-design.md)
 // thêm: kho khai `tri_thuc` → khoá `nguon` của bản phạm vi phải là đường trỏ băm tới trang tri thức (`kiemNguonPhamVi` của
 // scripts/tri-thuc.mjs, nạp lười); kho không khai → răng không đổi một byte.
 //
-// Hồ sơ _acceptance/vung-giao-viec-tu-cat-luot/ (design docs/superpowers/specs/2026-10-28-vung-giao-viec-tu-cat-luot-design.md)
+// Hồ sơ _acceptance/vung-giao-viec-tu-cat-luot/ (design https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-28-vung-giao-viec-tu-cat-luot-design.md)
 // thêm: trường lượt cắt `vung` (vùng mã dự kiến theo màn) và năm cờ vùng chỉ ở hàng trong đợt — glob không thư mục tĩnh,
 // sai kiểu, thiếu, chỉ thư mục hồ sơ, và từ ba hàng mà mọi cặp chồng. Phép so chồng là bản chép của gói dieu-phoi.
 //

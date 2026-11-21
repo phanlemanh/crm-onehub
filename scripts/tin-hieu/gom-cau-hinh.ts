@@ -21,7 +21,7 @@ export const GOM = {
 			"--require",
 			"scripts/tin-hieu.mjs",
 			"--require",
-			"skills/gom-tin-hieu/SKILL.md",
+			"skills/signal-intake/SKILL.md",
 			"--require",
 			"scripts/cat-luot.mjs",
 		],
@@ -89,7 +89,7 @@ export const GOM = {
 		bienBanGom: "TIN_HIEU_BAN_GOM",
 		congCu: ["Read", "Glob", "Grep", "Edit", "Write", "Skill", "Bash"],
 		camCongCu: ["WebFetch", "WebSearch", "mcp__*"],
-		skill: ["acceptance-gate:gom-tin-hieu", "acceptance-gate:cat-luot"],
+		skill: ["acceptance-gate:signal-intake", "acceptance-gate:scope-slice"],
 		docDuoc: ["Read", "Glob", "Grep"],
 		cam: [
 			"Edit(**/.git/**)",
@@ -112,7 +112,7 @@ export const GOM = {
 			o: { banGom: string; lenh: readonly string[] },
 		): string =>
 			[
-				"Chạy skill /acceptance-gate:gom-tin-hieu cho mọi tín hiệu chưa có chỗ, rồi skill /acceptance-gate:cat-luot với chính bản gom vừa ghi làm bản phạm vi.",
+				"Chạy skill /acceptance-gate:signal-intake cho mọi tín hiệu chưa có chỗ, rồi skill /acceptance-gate:scope-slice với chính bản gom vừa ghi làm bản phạm vi.",
 				`Ghi bản gom vào đúng tệp ${o.banGom} (lượt đã tạo sẵn tệp rỗng và đưa nó vào index, răng phủ chạy được ngay), ghi hàng đề xuất vào tệp lộ trình. Không commit, không đẩy, không mở PR, không sửa tệp nào khác — lượt lịch tự commit, kiểm và giao.`,
 				'Lệnh chỉ được chạy đúng nguyên văn một trong các dòng dưới — không biến, không nháy, không nối lệnh; skill viết `AG=… && node "$AG/…"` thì chạy dòng tương ứng ở đây:',
 				...o.lenh.map((l) => `- ${l}`),

@@ -12,7 +12,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>3 việc"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>173 việc"]
+  GB --> DG["Đã giao<br/>174 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>200 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
 ```
@@ -259,6 +259,7 @@ flowchart TD
 - Đưa danh sách ai-được-vào CRM từ biến môi trường vào bảng lời cho phép, quản trên màn Members với hai khối tách bạch — gỡ thành viên là cắt quyền thật, rút lời cho phép chỉ chặn người chưa có tài khoản (`cho-phep-ai-vao-o-man-hinh`)
 - Ca «chủ cuối cùng» của api xanh bất kể trong workspace còn chủ lạ từ tệp khác — tiền đề «chu là chủ duy nhất» được lập tường minh trong ca và trả lại sau ca (`chu-cuoi-cung-tien-de`)
 - Chữ mặc định của thư viện ngoài — dựng thước cho lớp chữ mà mọi bộ quét tĩnh đều mù, rồi vá cái nó tìm ra (`chu-mac-dinh-thu-vien-ngoai`)
+- crm chuyển kit nghiệm thu từ chợ cũ acceptance-gate-kit sang chợ delivery-loop v3.0.0 — lớp CI chép lại từ thẻ 3.0.0, luồng gom tín hiệu kéo kho mới, phiên bật sáu plugin chợ mới và tắt đích danh sáu plugin chợ cũ, tệp sống thôi gọi tên lệnh cũ, hồ sơ cần thì ghim lại; không đổi hành vi (`chuyen-cho-delivery-loop-3-0`)
 - crm thôi mang bộ điều phối tự viết — gỡ scripts/dieu-phoi, hook trong settings và test:dieu-phoi ở cổng; kiểm chéo đêm nạp gói dieu-phoi của kit và thôi khai mốc; eval đã ký mất vật đo khai thay bởi; khoá dieu_phoi.goi_dot (`chuyen-goi-dieu-phoi`)
 - Bài test claimDue chỉ thấy dòng AgentTask của chính nó — hết đỏ khi lượt test api để lại việc nghiên cứu đến hạn (`claimdue-chi-thay-dong-cua-minh`)
 - Lịch chạy nền của API phải theo bản khai apps/api/vercel.json, không theo một dòng ghim cứng trong script dựng — bốn trong năm việc nền hiện không bao giờ chạy (`cron-theo-ban-khai`)

@@ -3,19 +3,26 @@
     "bgIsolation": "none"
   },
   "enabledPlugins": {
-    "acceptance-gate@acceptance-gate-kit": true,
-    "feature-loop@acceptance-gate-kit": true,
-    "diagram-design@acceptance-gate-kit": true,
+    "acceptance-gate@delivery-loop": true,
+    "feature-loop@delivery-loop": true,
+    "diagram-design@delivery-loop": true,
     "superpowers@claude-plugins-official": true,
-    "dieu-phoi@acceptance-gate-kit": true,
-    "road-map@acceptance-gate-kit": true,
-    "tri-thuc@acceptance-gate-kit": true
+    "dispatch@delivery-loop": true,
+    "roadmap@delivery-loop": true,
+    "knowledge@delivery-loop": true,
+    "acceptance-gate@acceptance-gate-kit": false,
+    "feature-loop@acceptance-gate-kit": false,
+    "diagram-design@acceptance-gate-kit": false,
+    "dieu-phoi@acceptance-gate-kit": false,
+    "road-map@acceptance-gate-kit": false,
+    "tri-thuc@acceptance-gate-kit": false
   },
   "extraKnownMarketplaces": {
-    "acceptance-gate-kit": {
+    "delivery-loop": {
       "source": {
         "source": "github",
-        "repo": "phanlemanh/acceptance-gate-kit"
+        "repo": "phanlemanh/delivery-loop",
+        "ref": "v3.0.0"
       }
     }
   }

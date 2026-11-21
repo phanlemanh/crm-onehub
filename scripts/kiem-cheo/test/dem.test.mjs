@@ -95,8 +95,8 @@ describe("kcs-dem", () => {
 		const rong = mkdtempSync(join(os.tmpdir(), "kcs-goi-rong-"));
 		const r = chay(kho, ["--tu", T], { KIEM_CHEO_GOI_DIEU_PHOI: rong });
 		assert.equal(r.ket?.ket_qua, KIEM_CHEO.ketQua.khongChayDuoc, r.ra);
-		assert.match(r.ket.ly_do, /dieu-phoi/);
-		assert.match(r.ket.ly_do, /claude plugin install dieu-phoi@acceptance-gate-kit/);
+		assert.match(r.ket.ly_do, /dispatch/);
+		assert.match(r.ket.ly_do, /claude plugin install dispatch@delivery-loop/);
 		assert.equal(r.thongBao.length, 1, "phai bao nguoi mot lan");
 		assert.equal(r.moc, null, "moc khong duoc ghi khi goi vang");
 		assert.equal(r.khoa, false);

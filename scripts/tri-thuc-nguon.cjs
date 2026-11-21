@@ -1,5 +1,5 @@
 // tri-thuc-nguon.cjs — bên ghi và bên đọc dòng «Nguồn:» của ô cơ hội (hồ sơ o-mo-viec-mang-nguon, TT3, đợt
-// tri-thuc-2410; thiết kế docs/superpowers/specs/2026-10-24-o-mo-viec-mang-nguon-design.md). CJS để thẻ của TT4 nạp được.
+// tri-thuc-2410; thiết kế https://github.com/phanlemanh/acceptance-gate-kit/blob/0fe48c145d7ff6d230a736b1852dfbe3ecc0295b/docs/superpowers/specs/2026-10-24-o-mo-viec-mang-nguon-design.md). CJS để thẻ của TT4 nạp được.
 //
 // Một nguồn: tiền tố dòng là khối OPP-NGUON-PREFIX của khuôn ô cơ hội, biểu thức đường trỏ là khối TRI-THUC-CON-TRO của
 // khuôn tri thức; cả hai rút LÚC CHẠY, suy từ vị trí tệp. Bên ghi (`lo-trinh.mjs --mo-o`) và bên đọc cùng dùng mô-đun này.
