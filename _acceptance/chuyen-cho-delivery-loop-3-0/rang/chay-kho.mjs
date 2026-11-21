@@ -22,7 +22,14 @@ if (chi) {
 const lenh = [...new Set(ds.map((r) => r.lenh))];
 const nhat = `${ra}.log.d`;
 mkdirSync(nhat, { recursive: true });
-const NANG = /dot-bien|tien-de|do:man|bun run test|build/;
+const NANG = /dot-bien|rang-hinh|rang-hook|tien-de|do:man|bun run test|build/;
+let ban = null;
+const trangThai = () => git(goc, "status", "--porcelain", "--untracked-files=all").trim();
+const banDau = trangThai();
+const cayBan = () => {
+	const t = trangThai();
+	return t === banDau ? "" : t;
+};
 const kq = {};
 const chay = (c, i) =>
 	new Promise((xong) => {
@@ -47,6 +54,8 @@ const chay = (c, i) =>
 			writeFileSync(log, `$ ${c}\n${o}`);
 			kq[c] = { ma: ma ?? `sig-${sig}`, giay: Math.round((Date.now() - t0) / 1000), log };
 			process.stderr.write(`${i}/${lenh.length} ma=${kq[c].ma} ${kq[c].giay}s ${c.slice(0, 90)}\n`);
+			const b = cayBan();
+			if (b && !ban) ban = { lenh: c, tep: b.split("\n").slice(0, 5) };
 			xong();
 		});
 	});
@@ -55,13 +64,21 @@ const nang = lenh.map((c, i) => [c, i]).filter(([c]) => NANG.test(c));
 let k = 0;
 await Promise.all(
 	Array.from({ length: songSong }, async () => {
-		while (k < nhe.length) {
+		while (k < nhe.length && !ban) {
 			const [c, i] = nhe[k++];
 			await chay(c, i);
 		}
 	}),
 );
-for (const [c, i] of nang) await chay(c, i);
+for (const [c, i] of nang) {
+	if (ban) break;
+	await chay(c, i);
+}
+if (ban) {
+	console.log(`chay-kho: DUNG — cây bẩn sau lệnh: ${ban.lenh}`);
+	for (const t of ban.tep) console.log(`  ${t}`);
+	process.exit(3);
+}
 const sha = git(goc, "rev-parse", "HEAD").trim();
 const ketQua = Object.fromEntries(ds.map((r) => [`${r.ho_so}/${r.eval}`, { ma: kq[r.lenh].ma, dat: r.mong.includes(kq[r.lenh].ma) }]));
 writeFileSync(ra, `${JSON.stringify({ sha, ketQua }, null, 1)}\n`);
