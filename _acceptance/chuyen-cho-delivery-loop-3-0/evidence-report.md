@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: chuyen-cho-delivery-loop-3-0
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 80c69e481298ff9d3803f85d07eaf8fbdce8a870
+verified_commit: cdab934964f45a60d8db3af6d7a9985db68a89f7
 human_signoff:
 ---
 
 # Evidence Report: chuyen-cho-delivery-loop-3-0
-
-REJECT vì một lệnh suite hồi quy đỏ: `bun run test -- --filter=api` (18 ca đỏ trên 2186, khối api không gắn eval nào). Cả 14 eval của hồ sơ đều xanh.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -35,188 +33,178 @@ REJECT vì một lệnh suite hồi quy đỏ: `bun run test -- --filter=api` (1
 ## Evidence
 
 - eval: E1
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E1-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E2
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E2-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E2b
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E2b-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E2b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.t127_scripts
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     bun test scripts/tin-hieu/test scripts/ban-chup-lo-trinh/test
-    Ran 137 tests across 10 files. [194.49s]
+    Ran 137 tests across 10 files. [205.59s]
 
 - eval: E3
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E3-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E4
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E4-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E5
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E5-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E5-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E5b
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E5b-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E5b-r3
   exit_code: 0
   baseline: green
   verifier: config:executors.script.kcs_don_vi
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test "scripts/kiem-cheo/test/*.test.mjs"
-    ℹ duration_ms 27647.013333
+    duration_ms 29558.356167
 
 - eval: E6
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E6-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E6-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_chuyen_kho
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     chuyen-kho: công cụ 469e5ba4 — cây làm việc K1–K5 ĐẠT, KẾT: ĐẠT
 
 - eval: E6b
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E6b-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E6b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E7
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E7-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E7-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_doi_chung
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
-    doi-chung: HEAD 80c69e48 --recheck-all lớp chép của HEAD — 366 hồ sơ OK (đủ 366 của nền), VIOLATION ngoài vòng 0, của vòng 1
+    doi-chung: HEAD cdab9349 --recheck-all lớp chép của HEAD — 367 hồ sơ OK (đủ 366 của nền), VIOLATION ngoài vòng 0, của vòng 1
 
 - eval: E7b
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E7b-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E7b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E8
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E8-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E8-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E9
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E9-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E9-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cc30_thu
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
     node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs
-    ℹ duration_ms 5247.480041
+    duration_ms 7647.408167
 
 - eval: E9b
-  run_id: minted-chuyen-cho-delivery-loop-3-0-E9b-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-E9b-r3
   exit_code: 0
   baseline: green
   verifier: config:executors.script.cc30_ban_do
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
   output: |
-    node scripts/product-map.mjs --root . --check
     LO-TRINH.html khớp tệp ý định và hồ sơ.
 
 ### Lệnh suite (hồi quy)
 
-Lệnh suite đỏ không gắn eval nào (nguyên nhân của REJECT):
-
 - cmd: bun run test -- --filter=api
-  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_test_filter_api-r2
-  exit_code: 1
-  verified_at: 2026-11-20T08:15:21Z
-  output: |
-    2150 pass, 18 skip, 18 fail; Ran 2186 tests across 279 files. [409.05s]
-    Ca đỏ: cmst-goc; dem-chip (4 ca); loc-gop-y; dong-bo; bo-qua; dem-chip kr-da-xoa;
-    ttp-tao-truong, ttp-tai-len, ttp-tu-choi, ttp-quyen, ttp-ghi-chu, ttp-xoa, ttp-vong-doi, ttp-loc, ttp-tat.
-    api#test: command exited with code 1; Failed: api#test
+  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_test_filter_api-r3
+  exit_code: 0
+  verified_at: 2026-11-21T07:55:41Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: b8eiyb7br
   exit_code: 0
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
 
 - cmd: bun run lint:slop
-  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_lint_slop-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-11-20T08:15:21Z
-  output: |
-    Finished in 2.2s on 4393 files with 13 rules using 14 threads.
+  verified_at: 2026-11-21T07:55:41Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-chuyen-cho-delivery-loop-3-0-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-11-20T08:15:21Z
+  verified_at: 2026-11-21T07:55:41Z
 
 ## Known limits
 
@@ -224,21 +212,22 @@ Lệnh suite đỏ không gắn eval nào (nguyên nhân của REJECT):
 
 ## Analyst
 
-Eval không phân biệt (xanh cả trên HEAD lẫn baseline; chứng minh harness, chưa chứng minh tính năng — cần viết lại để khẳng định hành vi mới, hoặc xác nhận là regression-guard có chủ ý):
-- E5b: `node --test "scripts/kiem-cheo/test/*.test.mjs"`
-- E9b: `node scripts/product-map.mjs --root . --check`
+Eval không phân biệt (xanh cả trên HEAD lẫn baseline; chứng minh bộ đo, không chứng minh tính năng — nên viết lại để khẳng định hành vi mới, hoặc xác nhận là regression-guard có chủ ý):
+- E5b: node --test "scripts/kiem-cheo/test/*.test.mjs"
+- E9b: node scripts/product-map.mjs --root . --check
 
-Baseline khong do:
-- node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs: bo qua baseline: tep _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs co o cay dang kiem nhung chua co o merge-base 74a29a68d28df9a8a08daf9a5e94b8dab364dd96 — eval moi, chay tren code cu khong phan biet gi
+Baseline không đo:
+- node --test _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs: bo qua baseline: tep _acceptance/chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs co o cay dang kiem nhung chua co o merge-base 5e2c0b39deb60e47ba3aff6d600e7bef598e1d88 — eval moi, chay tren code cu khong phan biet gi
 - bun test scripts/tin-hieu/test scripts/ban-chup-lo-trinh/test: baseline vuot tran 180 giay/lenh — da dung ca cay tien trinh; BLOCKED ha tang, khong phai ket qua cua code cu
-- node _acceptance/chuyen-cho-delivery-loop-3-0/rang/chuyen-kho.mjs: bo qua baseline: tep _acceptance/chuyen-cho-delivery-loop-3-0/rang/chuyen-kho.mjs co o cay dang kiem nhung chua co o merge-base 74a29a68d28df9a8a08daf9a5e94b8dab364dd96 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/chuyen-cho-delivery-loop-3-0/rang/doi-chung.mjs: bo qua baseline: tep _acceptance/chuyen-cho-delivery-loop-3-0/rang/doi-chung.mjs co o cay dang kiem nhung chua co o merge-base 74a29a68d28df9a8a08daf9a5e94b8dab364dd96 — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/chuyen-cho-delivery-loop-3-0/rang/chuyen-kho.mjs: bo qua baseline: tep _acceptance/chuyen-cho-delivery-loop-3-0/rang/chuyen-kho.mjs co o cay dang kiem nhung chua co o merge-base 5e2c0b39deb60e47ba3aff6d600e7bef598e1d88 — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/chuyen-cho-delivery-loop-3-0/rang/doi-chung.mjs: bo qua baseline: tep _acceptance/chuyen-cho-delivery-loop-3-0/rang/doi-chung.mjs co o cay dang kiem nhung chua co o merge-base 5e2c0b39deb60e47ba3aff6d600e7bef598e1d88 — eval moi, chay tren code cu khong phan biet gi
+
+Các phát hiện ngoài hợp đồng của vòng này nằm ở review-findings.md, không lặp ở đây.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval nhiều lần chạy đều đồng nhất (không eval nào có runs > 1).
 
 ## Iterations
 
-Round 1: lượt chấm S4 vòng 1 ra REJECT (sổ chạy ở commit 3a7519d85; phân loại lập trước commit cấu hình), trả về dựng lại.
-Round 2: cả 14 eval xanh; REJECT vì lệnh suite `bun run test -- --filter=api` đỏ (18 ca trên 2186), không gắn eval nào. Cần phân loại: đỏ sẵn trên nền hay do diff này.
+Round 3: 14 eval và 7 lệnh suite đều xanh trên cây cdab934964f45a60d8db3af6d7a9985db68a89f7; verdict PASS. Lịch sử round 1 và 2 không có trong dữ liệu đầu vào của lượt này.
