@@ -5,7 +5,7 @@ slug: chuyen-cho-delivery-loop-3-0
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, config]
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-11-21
 design_doc: docs/superpowers/specs/2026-11-20-chuyen-cho-delivery-loop-3-0-design.md
@@ -128,3 +128,7 @@ GitHub mà bản gộp giả không có.
   `api#test` với 9 ca (`cmst-goc`, sáu ca `dem-chip`, `loc-gop-y`, `dong-bo`, `bo-qua`), 2159 ca qua — đỏ sẵn trên nền.
 - Bản vá K1–K3 lấy từ `chuyen-kho.mjs --soan`; công cụ không biết lớp CI chép của crm (K3 chỉ đọc workflow kéo kit) —
   phần ấy làm theo `INIT-CI-COPY-LIST` của thẻ, báo lại cho phiên giữ đợt.
+- Known limits — chọn ở Cổng Bằng chứng 2026-11-21:
+  - Ngoài-2: việc kiểm hồ sơ ghim lại chưa từng bị thử với dữ liệu sai, vì vòng này không có hồ sơ nào cần ghim.
+  - Ngoài-3: phép so với nhánh chính neo mốc cố định `74a29a68`, không neo merge-base thật; nhánh chính đổi cấu hình
+    phiên sau mốc ấy thì bài kiểm có thể báo sai.
