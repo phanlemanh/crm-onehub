@@ -70,7 +70,30 @@ Source input: lời giao của phiên giữ việc nâng kit 24/11 · thiết k�
 
 ## Làn khô — kết quả
 
-Điền ở S3 từ `evidence/phan-loai.json`. Mỗi eval «đỏ vì vòng» là một dòng `- gioi-han: <hồ sơ>/<eval>`.
+Làn khô 24/11 trên tip `c61973fe` (96 ứng viên, 36 đỏ), chạy lại 36 eval đỏ trên nhánh chính `4aebb767`: 29 đỏ cả hai
+bên, 7 đỏ vì vòng. Bảy eval ấy chạy thêm trên một bản sao có `origin/onehub` trỏ vào tip (trạng thái sau gộp):
+sáu xanh, một đỏ (`evidence/phan-loai.json`, khoá `gop_gia`).
+
+Sáu eval đo diff của nhánh đang mở, nên coi tệp của vòng này là «ngoài ranh giới»; sau gộp diff ấy rỗng và chúng xanh:
+
+- gioi-han: `do-man-tren-kho-rieng/E11` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `sua-bom-gio-test-api/E4` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `sua-paths-e5-soan-okr/E6` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `thu-paths-e15-giai-doan/E4` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `thu-paths-e15-giai-doan/E8` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `thuoc-mot-cho-khai-quet-man/E6` — đo diff của nhánh, xanh sau gộp
+
+Một eval đếm hồ sơ này là vi phạm ngoài vòng của nó, vì hồ sơ này chưa ký (`VIOLATION [nang-kit-3-1-1]: … status=approved`):
+
+- gioi-han: `chuyen-cho-delivery-loop-3-0/E7` — đỏ tới khi hồ sơ này ký Cổng Bằng chứng
+
+Ba ca mới đỏ vì vòng nằm trong một lệnh đã đỏ sẵn trên nhánh chính, nên lớp theo mã thoát xếp eval của chúng «đỏ cả hai
+bên». Tệp `chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs` trên nhánh chính đỏ một ca («nhánh còn mở thì không có
+commit gộp nào của vòng»); trên tip đỏ thêm ba ca viết cứng thẻ `v3.0.0` — đây là Hỏi-1, giữ là giới hạn đã biết:
+
+- ca-moi-do: `chuyen-cho-delivery-loop-3-0/E1` — «AC-1 «lớp CI chép khớp từng byte bản v3.0.0»»
+- ca-moi-do: `chuyen-cho-delivery-loop-3-0/E2` — «AC-2 «tin-hieu-gom.yml kéo delivery-loop v3.0.0»»
+- ca-moi-do: `chuyen-cho-delivery-loop-3-0/E3` — «AC-3 «phiên khai chợ delivery-loop v3.0.0, bật sáu plugin»»
 
 ## Out of scope
 

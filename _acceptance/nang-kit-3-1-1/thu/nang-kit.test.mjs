@@ -212,7 +212,11 @@ describe("AC-5", () => {
 describe("AC-6", () => {
 	test("AC-6 «làn khô khớp diff, xếp lớp đúng, gioi-han khớp đỏ vì vòng»: vật thật xanh, bốn bản phá đỏ", () => {
 		const pl = JSON.parse(docKho(`_acceptance/${SLUG}/evidence/phan-loai.json`));
-		const cay = (sha) => git(GOC, "ls-tree", "-r", sha, "--", ".", ":(exclude)_acceptance").trim();
+		const cay = (sha) =>
+			git(GOC, "ls-tree", "-r", sha)
+				.split("\n")
+				.filter((d) => d && !d.split("\t")[1].startsWith("_acceptance/"))
+				.join("\n");
 		const suy = ungVien(GOC, tepCuaVong(CAP), SLUG).ungVien.map((r) => `${r.ho_so}/${r.eval}`);
 		const gioiHan = docGioiHan(docKho(`_acceptance/${SLUG}/contract.md`));
 		const goc = { pl, ungVienSuy: suy, gioiHan, cayTip: cay(pl.sha_tip), cayDau: cay("HEAD"), nen: MB };
