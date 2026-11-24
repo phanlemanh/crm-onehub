@@ -69,7 +69,9 @@ export function kiemPhien(moi, cu) {
 	for (const k of [...new Set([...Object.keys(ban), ...Object.keys(cu)])]) {
 		if (JSON.stringify(ban[k]) !== JSON.stringify(cu[k])) loi.push(`settings đổi ngoài ref chợ: ${k}`);
 	}
-	if (JSON.stringify(Object.keys(ban)) !== JSON.stringify(Object.keys(cu))) loi.push("settings đổi thứ tự khoá");
+	const kb = Object.keys(ban);
+	const kc = Object.keys(cu);
+	if (kb.length === kc.length && kb.every((k) => kc.includes(k)) && JSON.stringify(kb) !== JSON.stringify(kc)) loi.push("settings đổi thứ tự khoá");
 	return loi;
 }
 

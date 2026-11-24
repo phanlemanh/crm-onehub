@@ -45,7 +45,8 @@ function kiemKhoaLa(du, cho, tep, tienTo) {
   if (la.length > 0) throw new Error(`${tep}: khoá lạ ${la.map((k) => `${tienTo}${k}`).join(', ')}`);
 }
 
-const KHOA_CAU_HINH = ['nhanh_chinh', 'tick_giay', 'han_thue_phut', 'nhip_cu_phut', 'suc_khoe', 's4_tran_gom_phut', 'bao_ve', 'goc_kho', 'nguon_hang', 'kiem_moi_truong', 'han_muc', 'gop_khong_chay_lai_ci'];
+const KHOA_CAU_HINH = ['nhanh_chinh', 'tick_giay', 'han_thue_phut', 'nhip_cu_phut', 'suc_khoe', 's4_tran_gom_phut', 'bao_ve', 'goc_kho', 'nguon_hang', 'kiem_moi_truong', 'han_muc', 'gop_khong_chay_lai_ci', 'chuyen_gop'];
+const KHOA_CHUYEN_GOP = ['bat', 'cua_so_phut', 'lenh_kiem'];
 const KHOA_HAN_MUC = ['bao_truoc_pct', 'ban_giao_pct', 'cho_ban_giao_phut', 'cho_dat_lai_phut'];
 const KHOA_SUC_KHOE = ['ap_luc_muc'];
 const KHOA_SUC_KHOE_CU = ['swap_gb', 'rss_gb'];
@@ -95,6 +96,15 @@ export function kiemCauHinh(du, { canGocKho = false } = {}) {
   }
   // Hồ sơ ky-den-gop (hạng I): kho bật gộp không chạy lại CI khi PR không trùng tệp với nhánh chính. Vắng = tắt.
   if (du.gop_khong_chay_lai_ci !== undefined && typeof du.gop_khong_chay_lai_ci !== 'boolean') sai('gop_khong_chay_lai_ci phải là true/false');
+  // Hồ sơ chuyen-gop: chuyến gộp — gom PR đã đạt bằng chứng trong một cửa sổ, kiểm một lần trên ngọn. Vắng = tắt.
+  if (du.chuyen_gop !== undefined) {
+    const c = du.chuyen_gop;
+    if (!laObject(c)) sai('chuyen_gop phải là object');
+    kiemKhoaLa(c, KHOA_CHUYEN_GOP, TEP_CAU_HINH, 'chuyen_gop.');
+    if (typeof c.bat !== 'boolean') sai('chuyen_gop.bat phải là true/false');
+    if (c.cua_so_phut !== undefined && !laSoDuong(c.cua_so_phut)) sai('chuyen_gop.cua_so_phut phải là số phút dương');
+    if (c.bat && !laChuoi(c.lenh_kiem)) sai('chuyen_gop.lenh_kiem phải là chuỗi không rỗng khi bat: true');
+  }
   // DP4: ngưỡng hạn mức của đợt (spec workflow §4.3, §4.5). Vắng khoá → bộ phát lịch không xét hạn mức (đợt cũ).
   if (du.han_muc !== undefined) {
     const h = du.han_muc;

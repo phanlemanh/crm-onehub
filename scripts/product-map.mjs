@@ -11,7 +11,7 @@
 // fence thứ hai (tiền lệ start-command S4-r1 — parser riêng chặt hơn reader
 // chuẩn thì báo hỏng oan những hồ sơ mọi cổng khác đọc được).
 import { readFileSync, readdirSync, existsSync, writeFileSync, realpathSync, statSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,7 +25,7 @@ const { frontmatterField } = require(path.join(__dirname, '..', 'lib', 'evidence
 // cùng hồ sơ cho hai kết luận trái nhau).
 const { recordProblem, navValues, consumedTexts, usesUat, usesOpportunity, usesEvidence,
         missingArtifact, readRecord, ioReason, configList, NAV_RULES, mapState, MAP_LABELS,
-        mapTracked, DA_THONG_CONG_2, conflictProblem, hoSoNghi, DA_DONG_THUC_TE, coTepTrongCay } =
+        mapTracked, DA_THONG_CONG_2, conflictProblem, hoSoNghi, DA_DONG_THUC_TE, coTepTrongCay, banDo } =
   require(path.join(__dirname, '..', 'lib', 'workspace-record.cjs'));
 
 export { NAV_RULES };
@@ -407,6 +407,71 @@ export async function veTrangLoTrinh(root) {
   return { trang, LT };
 }
 
+// ── Hai view rời git (hồ sơ tep-chung-khong-chan-gop) ─────────────────────────────────────────────────────────
+// Kho khai `ban_do.ngoai_git: true` thì hai view KHÔNG được theo dõi trong git: --check đo đúng vật của chế độ ấy —
+// trạng thái theo dõi của từng view và việc vẽ được từ nguồn — chứ không so bản commit (không còn bản nào để so).
+const gitRc = (root, args) => spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' });
+const boThe = s => String(s).replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+export function kiemNgoaiGit(root, { trang = null, nhanhVe = null } = {}) {
+  const views = ['PRODUCT-MAP.md', ...(trang != null ? ['LO-TRINH.html'] : [])];
+  const loi = [];
+  // Lỗi tệp ý định: trang in nó thành đoạn `class="loi"` — cùng thông điệp, nay làm lệnh đỏ vì không còn bản
+  // commit nào để «lệch» thay cho nó.
+  for (const m of (trang || '').matchAll(/<p class="loi">([\s\S]*?)<\/p>/g)) loi.push(`LO-TRINH.html không vẽ được từ nguồn — ${boThe(m[1])}`);
+  for (const v of views) {
+    const theoDoi = gitRc(root, ['ls-files', '--error-unmatch', '--', v]);
+    if (theoDoi.status === 0) { loi.push(`${v} còn được git theo dõi trong khi kho khai ban_do.ngoai_git — gỡ: git rm --cached -- ${v}`); continue; }
+    if (theoDoi.status !== 1) { loi.push(`không hỏi được git về ${v} (${(theoDoi.stderr || '').trim() || `mã ${theoDoi.status}`})`); continue; }
+    if (gitRc(root, ['check-ignore', '-q', '--', v]).status !== 0) loi.push(`${v} chưa được .gitignore bỏ qua — thêm dòng «${v}» vào .gitignore (kho khai ban_do.ngoai_git)`);
+  }
+  if (loi.length) return { code: 1, ra: [], loi };
+  const ra = [`${MAP_LABELS['ve-tai-cho']} — ${views.join(' và ')} vẽ được từ nguồn.`];
+  if (!nhanhVe) ra.push('Cảnh báo: kho bật ban_do.ngoai_git mà không khai ban_do.nhanh_ve — bên đọc trang qua git (forge, bản chụp) sẽ mất nguồn; khai nhánh view nếu kho có bên đọc ấy.');
+  return { code: 0, ra, loi: [] };
+}
+
+// `--day-nhanh-ve`: vẽ hai view từ cây hiện tại và đẩy chúng thành MỘT commit lên nhánh `ban_do.nhanh_ve` của origin,
+// không đổi nhánh đang đứng hay cây làm việc (hash-object · mktree · commit-tree). View không đổi thì không đẩy.
+const DANH_TINH = ['GIT_AUTHOR_NAME', 'GIT_COMMITTER_NAME'].reduce((o, k) => ({ ...o, [k]: process.env[k] || 'ban-do' }),
+  ['GIT_AUTHOR_EMAIL', 'GIT_COMMITTER_EMAIL'].reduce((o, k) => ({ ...o, [k]: process.env[k] || 'ban-do@localhost' }), {}));
+export async function dayNhanhVe(root) {
+  const bd = banDo(readPlain(path.join(root, '_acceptance', 'config.yaml')) || '');
+  if (bd.loi) return { code: 2, loi: `product-map: ${bd.loi}` };
+  if (!bd.ngoaiGit) return { code: 2, loi: 'product-map: --day-nhanh-ve cần ban_do.ngoai_git: true' };
+  // Nhánh mặc định: origin/HEAD của bản kéo, không có (checkout của job CI không đặt nó) thì hỏi origin. Không biết thì
+  // dừng — rơi lặng về một tên đoán là để phép chặn «trùng nhánh mặc định» thủng đúng ở job sau gộp.
+  const sr = gitRc(root, ['symbolic-ref', '--short', 'refs/remotes/origin/HEAD']);
+  let macDinh = sr.status === 0 ? sr.stdout.trim().replace(/^origin\//, '') : null;
+  if (!macDinh) { const lr = gitRc(root, ['ls-remote', '--symref', 'origin', 'HEAD']); const m = (lr.stdout || '').match(/^ref: refs\/heads\/(\S+)\s+HEAD/m); macDinh = m ? m[1] : null; }
+  if (!macDinh) return { code: 2, loi: 'product-map: không xác định được nhánh mặc định của origin (origin/HEAD vắng, ls-remote --symref không trả) — ban_do.nhanh_ve chưa kiểm được' };
+  if (!bd.nhanhVe) return { code: 2, loi: 'product-map: ban_do.nhanh_ve vắng hoặc rỗng — khai tên nhánh view (khác nhánh mặc định) rồi chạy lại' };
+  if (bd.nhanhVe === macDinh) return { code: 2, loi: `product-map: ban_do.nhanh_ve trùng nhánh mặc định «${macDinh}» — nhánh view phải là nhánh riêng` };
+  const vt = await veTrangLoTrinh(root);
+  if (vt.loi) return { code: 1, loi: vt.loi };
+  const tep = [['PRODUCT-MAP.md', renderProductMap(root)], ...(vt.trang != null ? [['LO-TRINH.html', vt.trang]] : [])];
+  const g = (args, input) => {
+    const x = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8', input, env: { ...process.env, ...DANH_TINH } });
+    if (x.status !== 0) throw new Error(`git ${args[0]}: ${(x.stderr || '').trim()}`);
+    return x.stdout.trim();
+  };
+  try {
+    const dong = tep.map(([ten, noi]) => `100644 blob ${g(['hash-object', '-w', '--stdin'], noi)}\t${ten}`)
+      .sort((a, b) => (a.split('\t')[1] < b.split('\t')[1] ? -1 : 1));
+    const cay = g(['mktree'], dong.join('\n') + '\n');
+    const tu = gitRc(root, ['ls-remote', '--heads', 'origin', bd.nhanhVe]);
+    if (tu.status !== 0) return { code: 1, loi: `product-map: không đọc được origin (${(tu.stderr || '').trim()})` };
+    const dinh = tu.stdout.trim().split(/\s+/)[0] || null;
+    if (dinh) {
+      g(['fetch', '-q', 'origin', `refs/heads/${bd.nhanhVe}`]);
+      if (g(['rev-parse', `${dinh}^{tree}`]) === cay) return { code: 0, ra: `không đẩy: hai view trên nhánh ${bd.nhanhVe} đã khớp nguồn hiện tại` };
+    }
+    const nguon = g(['rev-parse', '--short=12', 'HEAD']);
+    const c = g(['commit-tree', cay, ...(dinh ? ['-p', dinh] : []), '-m', `ve: hai view từ ${nguon}`]);
+    g(['push', '-q', 'origin', `${c}:refs/heads/${bd.nhanhVe}`]);
+    return { code: 0, ra: `đã đẩy hai view lên nhánh ${bd.nhanhVe} (${c.slice(0, 12)}, nguồn ${nguon})` };
+  } catch (e) { return { code: 1, loi: `product-map: ${e.message}` }; }
+}
+
 const isMain = (() => {
   if (!process.argv[1]) return false;
   const same = (a, b) => { try { return realpathSync(a) === realpathSync(b); } catch { return false; } };
@@ -423,7 +488,7 @@ if (isMain) {
   // `--check` làm cổng độc lập DUY NHẤT biện minh cho miễn trừ t1 của bản đồ,
   // nên `--check` fail-open là cả miễn trừ mất căn cứ.
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--check') continue;
+    if (args[i] === '--check' || args[i] === '--day-nhanh-ve') continue;
     if (args[i] === '--root') {
       const v = args[i + 1];
       if (!v || v.startsWith('--')) {
@@ -434,13 +499,15 @@ if (isMain) {
       i++;
       continue;
     }
-    console.error(`product-map: tham số lạ ${args[i]} — chỉ nhận \`--root <thư-mục>\` và \`--check\``);
+    console.error(`product-map: tham số lạ ${args[i]} — chỉ nhận \`--root <thư-mục>\`, \`--check\` và \`--day-nhanh-ve\``);
     process.exit(2);
   }
   const rootIx = args.indexOf('--root');
   const root = path.resolve(rootIx >= 0 && args[rootIx + 1] ? args[rootIx + 1] : '.');
   const mapPath = path.join(root, 'PRODUCT-MAP.md');
   const check = args.includes('--check');
+  const dayNhanh = args.includes('--day-nhanh-ve');
+  if (check && dayNhanh) { console.error('product-map: `--check` và `--day-nhanh-ve` không đi cùng nhau'); process.exit(2); }
   // Gợi ý lệnh phải chạy được ở CHÍNH repo đang đỏ, nên suy từ vị trí script
   // thật: tự host → `scripts/product-map.mjs`; repo tiêu thụ → đường dẫn
   // plugin. Ghim một đường dẫn self-host vào đây là đưa consumer một lệnh
@@ -462,6 +529,10 @@ if (isMain) {
     console.log('Repo chưa dựng cổng nghiệm thu — chưa có gì để vẽ bản đồ.');
     process.exit(0);
   }
+  // Khoá ban_do (hồ sơ tep-chung-khong-chan-gop): chỉ hai lối kiểm và đẩy đọc khoá; lối ghi vẽ tại chỗ như cũ.
+  const bd = banDo(readPlain(path.join(root, '_acceptance', 'config.yaml')) || '');
+  if ((check || dayNhanh) && bd.loi) { console.error(`product-map: ${bd.loi}`); process.exit(2); }
+  if (dayNhanh) { const d = await dayNhanhVe(root); if (d.ra) console.log(d.ra); if (d.loi) console.error(d.loi); process.exit(d.code); }
   const rendered = renderProductMap(root);
   // Trang lộ trình (hồ sơ viec-ke-theo-plan): cùng lượt, cùng `--check` với bản đồ. Khoá đọc bằng
   // hàm chung TRƯỚC, mô-đun lộ trình chỉ được nạp khi kho khai ổ cắm — kho không khai thì mã lộ
@@ -471,6 +542,12 @@ if (isMain) {
   const vt = await veTrangLoTrinh(root);
   if (vt.loi) { console.error(vt.loi); process.exit(1); }
   const trang = vt.trang; const LT_ = vt.LT;
+  if (check && bd.ngoaiGit) {
+    const k = kiemNgoaiGit(root, { trang, nhanhVe: bd.nhanhVe });
+    for (const l of k.ra) console.log(l);
+    for (const l of k.loi) console.error(l);
+    process.exit(k.code);
+  }
   if (!check) {
     writeFileSync(mapPath, rendered);
     console.log(mapPath);

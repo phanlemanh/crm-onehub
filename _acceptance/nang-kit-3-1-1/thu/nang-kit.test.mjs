@@ -138,6 +138,8 @@ describe("AC-3", () => {
 		const tat = structuredClone(moi);
 		tat.enabledPlugins["knowledge@delivery-loop"] = false;
 		assert.deepEqual(kiemPhien(tat, cu), ["settings đổi ngoài ref chợ: enabledPlugins"]);
+		const dao = Object.fromEntries(Object.entries(moi).reverse());
+		assert.deepEqual(kiemPhien(dao, cu), ["settings đổi thứ tự khoá"]);
 	});
 
 	test("AC-3 «chợ của thẻ mang tên delivery-loop và đủ sáu plugin đang bật»: vật thật xanh, bản phá đỏ", () => {

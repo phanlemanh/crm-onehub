@@ -37,6 +37,9 @@ const LY_DO = {
 let TTT = null; try { TTT = require('./tri-thuc-tra.cjs'); } catch (_) { TTT = null; }
 // Luật sản phẩm của kho (bat-bien-san-pham): ba luật đỏ của pham_luat. Vắng mô-đun (bản sao đứng một mình) →
 // dòng mang pham_luat ĐỎ luat-vang (đóng an toàn), mọi dòng khác xếp như cũ.
+// Trợ lý quyết định (hồ sơ mac-ky-co-phu-quyet): câu chỉ-người đã có dòng máy «đi theo khuyến nghị» và VẪN đủ điều kiện
+// lúc đọc ra lớp mac-ky, không đếm là câu hỏi. Vắng mô-đun hay kho tắt cờ → mọi câu chỉ-người là câu hỏi như cũ.
+let TLQ = null; try { TLQ = require('./tro-ly-quyet-dinh.cjs'); } catch (_) { TLQ = null; }
 let luatSP = null; try { luatSP = require('./luat-san-pham.cjs'); Object.assign(LY_DO, luatSP.LY_DO_LUAT); } catch (_) { LY_DO['luat-vang'] = 'mã luật không có trong tệp luật sản phẩm'; }
 const GHI_CHU = { 'chua-kiem-goc': 'chưa kiểm câu trích có từ trước vòng' };
 // Chữ cờ trên thẻ Cổng Phạm vi — một nguồn cho thẻ và bộ kiểm.
@@ -148,6 +151,16 @@ function phanLoaiSo(entries, ctx) {
     else if (d.lop === 'da-quyet') out.da_quyet.push(d);
     else out.do.push(d);
   });
+  let tl = null; try { tl = TLQ ? TLQ.apSo(entries, { root: ctx.root || '.', slug: ctx.slug, dot: ctx.dot || null, base: ctx.base || null }) : null; } catch (e) { tl = null; out.tlq_loi = String(e && e.message || e).split('\n')[0]; }
+  if (tl) {
+    out.mac_ky = []; out.kiem_mau = tl.kiem_mau; out.kiem_mau_moi = tl.kiem_mau_moi;
+    out.cau_hoi = out.cau_hoi.filter(d => {
+      const x = tl.dong.get(d.id);
+      if (x && x.mac_ky_ghi && x.lop !== 'hoi') { d.lop = 'mac-ky'; d.mac_ky = x; out.mac_ky.push(d); return false; }
+      if (x && x.mac_ky_ghi) d.giang = x.ly_do; // dòng máy đã theo khuyến nghị mà nay không còn đủ điều kiện: giáng về câu hỏi
+      return true;
+    });
+  }
   out.cau_hoi.forEach((d, k) => { d.nhan = `Hỏi-${k + 1}`; });
   return out;
 }
@@ -197,10 +210,10 @@ if (require.main === module) {
   const t = docDia(root)(`_acceptance/${slug}/decisions.jsonl`);
   if (t === null) { process.stderr.write(`can-cu-s1: hồ sơ «${slug}» không có decisions.jsonl\n`); process.exit(2); }
   const kq = phanLoaiSo(docSo(t).entries, { root, slug, base: opt('--base') });
-  const tom = { cau_hoi: kq.cau_hoi.length, da_quyet: kq.da_quyet.length, do: kq.do.length, doi_truoc: kq.doi_truoc, bi_thay: kq.bi_thay, goc: kq.goc };
+  const tom = { cau_hoi: kq.cau_hoi.length, da_quyet: kq.da_quyet.length, do: kq.do.length, doi_truoc: kq.doi_truoc, bi_thay: kq.bi_thay, goc: kq.goc , ...(kq.mac_ky ? { mac_ky: kq.mac_ky.length } : {}) };
   if (json) process.stdout.write(JSON.stringify(Object.assign({}, tom, { dong: kq.dong.map(({ e, ...r }) => r) }), null, 2) + '\n');
   else {
-    process.stdout.write(`${slug} · câu hỏi ${tom.cau_hoi} · máy đã quyết ${tom.da_quyet} · đỏ ${tom.do} · đời trước ${tom.doi_truoc} · bị thay ${tom.bi_thay} · gốc ${tom.goc}\n`);
+    process.stdout.write(`${slug} · câu hỏi ${tom.cau_hoi} · máy đã quyết ${tom.da_quyet} · đỏ ${tom.do} · đời trước ${tom.doi_truoc} · bị thay ${tom.bi_thay} · gốc ${tom.goc}${tom.mac_ky !== undefined ? ` · mặc-ký ${tom.mac_ky}` : ''}\n`);
     for (const d of kq.do) process.stdout.write(`  đỏ ${d.id}: ${d.thong_diep}\n`);
   }
   process.exit(kq.do.length ? 1 : 0);
