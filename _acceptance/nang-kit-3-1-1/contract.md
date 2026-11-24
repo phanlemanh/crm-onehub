@@ -5,7 +5,7 @@ slug: nang-kit-3-1-1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, config]
-status: implemented
+status: machine-cleared
 approved_by: Phan Le Manh
 approved_at: 2026-11-24
 design_doc: docs/superpowers/specs/2026-11-24-nang-kit-3-1-1-design.md
@@ -109,3 +109,13 @@ commit gộp nào của vòng»); trên tip đỏ thêm ba ca viết cứng th�
 
 - Không chạm bất biến nào của AGENTS.md: không mã sản phẩm, không cơ sở dữ liệu.
 - Nhánh PR là `onehub` (kho không có `main`); `CONTRIBUTING.md` nói `main`, vòng theo thứ kho thật dùng.
+- Ngoài-1 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Sau khi gộp, một kiểm tra của lần nâng kit này sẽ báo đỏ giả khi có thay đổi khác vào kho. Người dùng không bị ảnh hưởng, chỉ người làm bản sau thấy một dấu đỏ không có thật. — `_acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs`
+- Ngoài-2 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Lần nâng kit tiếp theo sẽ làm vài kiểm tra của hồ sơ này đỏ, và phải ghi chú lại như lần trước. Người dùng cuối không bị ảnh hưởng. — `_acceptance/nang-kit-3-1-1/rang/luat.mjs`
+- Ngoài-3 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Sau khi gộp, một kiểm tra lưới PR có thể báo vi phạm của hồ sơ khác dù không có lỗi thật. Chỉ gây nhiễu cho người làm bản sau. — `_acceptance/nang-kit-3-1-1/rang/luoi-pr.mjs`
+- Ngoài-4 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Nếu trang lộ trình sau này nhắc đến phiên bản cũ trong tên một hồ sơ, một kiểm tra sẽ báo đỏ dù được phép. Không ảnh hưởng người dùng. — `_acceptance/nang-kit-3-1-1/rang/luat.mjs`
+- Ngoài-5 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Chỉ cần một thay đổi khác vào kho sau khi gộp là cả nhóm kiểm tra của lần nâng kit này báo đỏ cùng lúc. Chỉ gây nhiễu cho người làm. — `_acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs`
+- Ngoài-6 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Khi có hồ sơ khác được ký sau này, kiểm tra của lần nâng kit này có thể báo lệch dù không đổi gì. Người dùng không bị ảnh hưởng. — `_acceptance/nang-kit-3-1-1/rang/ung-vien.mjs`
+- Ngoài-7 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Nếu bộ kiểm tra lưới PR bị hỏng, kiểm tra này vẫn có thể báo xanh nhầm. Hiện lần chạy thật đã đủ nên chưa có sai lệch. — `_acceptance/nang-kit-3-1-1/rang/luoi-pr.mjs`
+- Ngoài-9 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Lần nâng kit kế tiếp sẽ làm các kiểm tra phiên bản của hồ sơ này đỏ. Không ảnh hưởng người dùng cuối. — `_acceptance/nang-kit-3-1-1/rang/kit.mjs`
+- Ngoài-10 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Kiểm tra lưới PR có thể báo xanh nhầm nếu công cụ chạy dở hoặc ra kết quả rỗng. Lần chạy hiện tại đã đủ nên chưa có sai lệch. — `_acceptance/nang-kit-3-1-1/rang/luat.mjs`
+- Ngoài-11 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Kiểm tra chưa thật sự xác nhận tên phiên bản do kit tự đặt, nên nếu thẻ mang phiên bản khác thì vẫn báo xanh. Hiện tại phiên bản đúng. — `_acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs`
