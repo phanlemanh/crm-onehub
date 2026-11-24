@@ -22,7 +22,7 @@ if (chi) {
 const lenh = [...new Set(ds.map((r) => r.lenh))];
 const nhat = `${ra}.log.d`;
 mkdirSync(nhat, { recursive: true });
-const NANG = /dot-bien|rang-hinh|rang-hook|tien-de|do:man|bun run test|build/;
+const NANG = /dot-bien|rang-hinh|rang-hook|tien-de|do:man|ba-ban-do|bun run test|build/;
 let ban = null;
 const trangThai = () => git(goc, "status", "--porcelain", "--untracked-files=all").trim();
 const banDau = trangThai();
