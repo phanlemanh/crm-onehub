@@ -1,0 +1,82 @@
+schema_version: 1
+feature_slug: nang-kit-3-1-1
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: node --test _acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs
+    expected: "exit 0; ba ca ok, không «# SKIP»/«# TODO». «AC-1 «lớp CI chép khớp từng byte bản v3.1.1»: vật thật xanh, hai bản phá đỏ» — danh sách rút từ khối INIT-CI-COPY-LIST của commit 1193bc22 có đúng 39 đích, kiemLopChep ra rỗng; bản phá thêm một byte vào scripts/product-map.mjs → đúng «lệch bản v3.1.1: scripts/product-map.mjs»; bản phá xoá scripts/tro-ly-quyet-dinh.cjs → đúng «thiếu: scripts/tro-ly-quyet-dinh.cjs»; và đối chứng: bản merge-base của lib/workspace-record.cjs lệch bản thẻ. «AC-1 «resolve-plugin.mjs khớp bản feature-loop v3.1.1»» — khớp từng byte. «AC-1 «t1_skip_globs liệt đủ 39 đích»: vật thật xanh, bản phá đỏ» — bỏ scripts/tro-ly-quyet-dinh.cjs khỏi danh sách → «t1_skip_globs thiếu: scripts/tro-ly-quyet-dinh.cjs»; bản merge-base của config.yaml đỏ đúng thông điệp ấy (đối chứng). Kèm ca «kit đọc đúng commit của thẻ v3.1.1, không phải đối tượng thẻ» — rev-parse v3.1.1^{commit} bằng 1193bc22, rev-parse v3.1.1 khác."
+    paths: [scripts/**, lib/**, skills/**, _acceptance/config.yaml, _acceptance/nang-kit-3-1-1/thu/**, _acceptance/nang-kit-3-1-1/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: node --test _acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs
+    expected: "exit 0; hai ca ok. «AC-2 «tin-hieu-gom.yml kéo thẻ v3.1.1, phần còn lại bằng nhánh chính»: vật thật xanh, ba bản phá đỏ» — bản merge-base → «KIT_REF phải đúng một dòng v3.1.1 (thấy v3.0.0)»; thêm dòng KIT_REF thứ hai → «KIT_REF phải đúng một dòng v3.1.1 (thấy v3.1.1,v3.1.1)»; đổi một dòng khác → «tin-hieu-gom.yml đổi ngoài dòng KIT_REF». «AC-2 «bộ giải kit của phiên gom và của kiểm chéo đêm ra bản 3.1.1»: vật thật xanh, đối chứng đỏ» — scripts/resolve-plugin.mjs với đúng GOM.kit.giai trên cache dựng từ commit thẻ (delivery-loop/acceptance-gate/3.1.1) thoát 0, in đúng thư mục ấy; với KIEM_CHEO.goiDieuPhoi (dispatch, ba --require) ra delivery-loop/dispatch/3.1.1; đối chứng: cùng đối số GOM.kit.giai trên một cache rỗng thoát 1, stderr «no usable install of \"acceptance-gate\"»."
+    paths: [.github/**, scripts/tin-hieu/**, scripts/kiem-cheo/**, scripts/resolve-plugin.mjs, _acceptance/nang-kit-3-1-1/thu/**, _acceptance/nang-kit-3-1-1/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: node --test _acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs
+    expected: "exit 0; hai ca ok. «AC-3 «settings chỉ đổi ref chợ sang v3.1.1»: vật thật xanh, ba bản phá đỏ» — ref v3.0.0 → «ref của chợ delivery-loop phải là v3.1.1 (thấy v3.0.0)»; thêm một quyền vào permissions → «settings đổi ngoài ref chợ: permissions»; tắt knowledge@delivery-loop → «settings đổi ngoài ref chợ: enabledPlugins». «AC-3 «chợ của thẻ mang tên delivery-loop và đủ sáu plugin đang bật»: vật thật xanh, bản phá đỏ» — đọc .claude-plugin/marketplace.json tại commit thẻ; bỏ roadmap → «chợ của thẻ không có plugin roadmap»."
+    paths: [.claude/settings.json, _acceptance/nang-kit-3-1-1/thu/**, _acceptance/nang-kit-3-1-1/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: node --test _acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs
+    expected: "exit 0; ca «AC-4 «không tệp sống nào còn chữ v3.0.0»: vật thật xanh, bản cấy đỏ» ok — git grep -l v3.0.0 trên cây trừ sổ kể lại ra rỗng; danh sách sổ kể lại có ít nhất _acceptance/chuyen-cho-delivery-loop-3-0/contract.md (đối chứng: bộ lọc thấy chữ); bản cấy chữ v3.0.0 vào .github/workflows/tin-hieu-gom.yml và CLAUDE.md → đúng hai dòng «tệp sống còn v3.0.0: …»; trên cây merge-base bộ lọc ra .claude/settings.json và .github/workflows/tin-hieu-gom.yml; đối chứng của chính vòng: git grep thấy chữ trong _acceptance/nang-kit-3-1-1/contract.md mà bộ lọc không báo tệp ấy."
+    paths: ["**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: node _acceptance/nang-kit-3-1-1/rang/doi-chung.mjs
+    expected: "exit 0; in «doi-chung: merge-base <sha> --recheck-all — lớp chép của nhánh chính và kit v3.1.1 cùng 0 VIOLATION, cùng <n> hồ sơ OK» với n ≥ 366 và «doi-chung: HEAD <sha> --recheck-all lớp chép của HEAD — <m> hồ sơ OK (đủ <n> của nền), VIOLATION ngoài vòng 0, của vòng <k>»; nhật ký ở .acceptance-runs/nang-kit-3-1-1/doi-chung/. Chiều đỏ của hàm so: ca E5b."
+    paths: [scripts/pre-merge-check.sh, scripts/recheck-evidence.cjs, lib/**, _acceptance/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5b
+    criterion: AC-5
+    executor: script
+    cmd: node --test _acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs
+    expected: "exit 0; ca «AC-5 «hàm so đối chứng»: cùng tập OK xanh; lệch, VIOLATION, thiếu luật, hồ sơ thôi OK, VIOLATION ngoài vòng đều đỏ đúng thông điệp» ok — trên văn bản tổng hợp: «tập OK của hai lớp chép trên merge-base lệch», «merge-base có VIOLATION», «lớp chép nhánh chính: lưới không chạy đủ luật», «hồ sơ thôi OK trên HEAD: b», «VIOLATION ngoài vòng trên HEAD: 1»; chỉ dòng VIOLATION mang [nang-kit-3-1-1] không làm đỏ — một dòng VIOLATION [PR] trên HEAD → «VIOLATION ngoài vòng trên HEAD: 1». Kèm ca «AC-5 «lưới chế độ PR chỉ báo hồ sơ của vòng»» chiều đỏ: văn bản có VIOLATION [chuyen-cho-delivery-loop-3-0] → «lưới PR báo hồ sơ khác vòng: chuyen-cho-delivery-loop-3-0»."
+    paths: [_acceptance/nang-kit-3-1-1/rang/**, _acceptance/nang-kit-3-1-1/thu/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5c
+    criterion: AC-5
+    executor: script
+    cmd: node _acceptance/nang-kit-3-1-1/rang/luoi-pr.mjs
+    expected: "exit 0; chạy bash scripts/pre-merge-check.sh . --base <merge-base> trên HEAD như bước của acceptance.yml, nhật ký ở .acceptance-runs/nang-kit-3-1-1/luoi-pr.log; in «luoi-pr: HEAD <sha> base <sha> — mã <m>, VIOLATION khác vòng 0, của vòng <k>»; hàm xét dùng chung với ca chiều đỏ của E5b."
+    paths: [scripts/pre-merge-check.sh, scripts/recheck-evidence.cjs, lib/**, .claude/settings.json, .github/**, _acceptance/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: node --test _acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs
+    expected: "exit 0; ca «AC-6 «làn khô khớp diff, xếp lớp đúng, gioi-han khớp đỏ vì vòng»: vật thật xanh, bốn bản phá đỏ» ok — evidence/phan-loai.json có sha tip mà cây ngoài _acceptance/ bằng cây HEAD và sha nhánh chính bằng merge-base; ung_vien bằng tập suy lại từ evals.yaml của hồ sơ đã ký và diff (không chép tay); bản phá: đổi sha tip về merge-base → «làn khô không chạy trên cây HEAD»; xếp một eval xanh-ở-nhánh-chính vào do-ca-hai → «<hồ sơ>/<eval>: xếp đỏ cả hai bên mà nhánh chính xanh»; bỏ một ứng viên → «ứng viên lệch tập suy từ diff»; thêm một dòng gioi-han không đỏ vì vòng → «gioi-han không khớp đỏ vì vòng»."
+    paths: ["_acceptance/**", scripts/**, lib/**, .claude/settings.json, .github/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: node --test _acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs
+    expected: "exit 0; ca «AC-7 «diff từ nhánh chính chỉ chạm tệp viết trước»: vật thật 0 tệp lạ, bản cấy đỏ» ok — mọi tệp của git diff merge-base...HEAD khớp danh sách viết trước (tám tệp của thiết kế mục 2, hồ sơ này, thiết kế, kế hoạch, PRODUCT-MAP.md, LO-TRINH.html); bản cấy packages/core/src/agreements.ts và _acceptance/chuyen-cho-delivery-loop-3-0/evals.yaml → đúng hai dòng «tệp ngoài danh sách: …»."
+    paths: ["**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7b
+    criterion: AC-7
+    executor: script
+    cmd: node scripts/product-map.mjs --root . --check
+    expected: "exit 0; in «PRODUCT-MAP.md khớp hồ sơ xưởng.» và «LO-TRINH.html khớp tệp ý định và hồ sơ.»"
+    paths: [PRODUCT-MAP.md, LO-TRINH.html, docs/plan/**, scripts/**, lib/**, _acceptance/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
