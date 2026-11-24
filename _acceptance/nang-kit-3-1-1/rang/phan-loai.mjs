@@ -23,8 +23,11 @@ const ra = {
 	tip: tip.ketQua,
 	nhanh_chinh: chinh.ketQua,
 	lop,
-	...(gia ? { sha_gop_gia: gia.sha, gop_gia: gia.ketQua } : {}),
 };
+if (gia) {
+	ra.sha_gop_gia = gia.sha;
+	ra.gop_gia = gia.ketQua;
+}
 writeFileSync(join(GOC, "_acceptance", SLUG, "evidence", "phan-loai.json"), `${JSON.stringify(ra, null, 1)}\n`);
 const dem = Object.values(lop).reduce((a, l) => ({ ...a, [l]: (a[l] ?? 0) + 1 }), {});
 console.log(`phan-loai: tip ${tip.sha.slice(0, 8)} · ${ra.ung_vien.length} ứng viên · ${JSON.stringify(dem)}`);
