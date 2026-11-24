@@ -1,28 +1,4 @@
 {
  "feature_plain": "Phiên máy, CI và luồng gom tín hiệu của crm cùng chạy kit nghiệm thu bản 3.1.1, thay cho bản 3.0.0; người dùng crm không thấy gì đổi.",
- "will_do": [
-  {"id": "AC-1", "p": "Sẽ chép lại bộ kiểm cổng gộp mà kho giữ bản sao (39 tệp, thêm một tệp mới) cho khớp từng byte bản 3.1.1, và khai tệp mới là tệp thước đo."},
-  {"id": "AC-2", "p": "Sẽ cho luồng gom tín hiệu hằng ngày cài kit bản 3.1.1; bộ tìm kit của phiên gom và của kiểm chéo đêm tìm ra đúng bản 3.1.1."},
-  {"id": "AC-3", "p": "Sẽ cho phiên mở kho nạp kit bản 3.1.1, và không đổi gì khác trong cài đặt phiên."},
-  {"id": "AC-5", "p": "Sẽ chứng cổng gộp cho cùng kết luận trên mọi hồ sơ đã ký, trước và sau khi nâng, ở cả chế độ quét toàn kho lẫn chế độ chấm một PR."},
-  {"id": "AC-6", "p": "Sẽ chạy thử các bài kiểm của hồ sơ đã ký có dính tệp vòng này đổi, và gọi tên từng bài đỏ vì vòng này."},
-  {"id": "AC-7", "p": "Sẽ giữ thay đổi trong đúng danh sách tệp đã viết trước, và bản đồ sản phẩm vẫn vẽ được."}
- ],
- "wont_do": [
-  {"id": "AC-4", "p": "Sẽ KHÔNG để tệp đang dùng nào còn nhắc bản 3.0.0; chỉ sổ lịch sử (hồ sơ, tài liệu kể lại, hai trang máy vẽ) còn giữ chữ ấy."},
-  {"id": "OOS-1", "p": "KHÔNG bật tính năng mới nào của kit 3.1.1 — mỗi tính năng là một vòng riêng."},
-  {"id": "OOS-2", "p": "KHÔNG sửa bài kiểm hay tệp nào của hồ sơ nâng kit lần trước — hồ sơ ấy giữ chữ ký."},
-  {"id": "OOS-3", "p": "KHÔNG đụng cài đặt trên máy — đã xong trước vòng."},
-  {"id": "OOS-4", "p": "KHÔNG sửa sổ lịch sử còn nhắc bản 3.0.0."}
- ],
- "coverage_plain": [
-  {"i": 0, "p": "Bỏ quét không gian tiêu chí vì phạm vi đã đếm đủ từ chênh lệch giữa hai bản kit; bảy trục được phủ: bản sao bộ kiểm (AC-1), luồng gom tín hiệu (AC-2), phiên máy (AC-3), chữ phiên bản trong tệp đang dùng (AC-4), kết luận cổng gộp không đổi (AC-5), bài kiểm hồ sơ đã ký không đỏ ngầm (AC-6), diff đúng danh sách (AC-7). Bộ kiểm cả kho chạy ở mỗi lượt chấm."}
- ],
- "gap_probe_plain": [
-  {"i": 0, "p": "Lý do chọn «làm chung một PR» trích câu của hồ sơ khác, câu ấy không quyết cho vòng này — đã ghi lại lý do riêng: tách PR thì kho chạy hai bộ luật trong khoảng giữa và tốn thêm một vòng."},
-  {"i": 1, "p": "Tiêu chí «không còn chữ 3.0.0» sẽ tự đỏ vì chính hồ sơ này nhắc chữ ấy — đã miễn mọi hồ sơ và hai trang máy vẽ, kèm phép đối chứng."},
-  {"i": 2, "p": "Chưa có phép chạy cổng gộp đúng như trên PR thật, nên lời «gộp được ngay» chưa có bằng chứng — đã thêm phép chạy ấy, và nó đỏ nếu cổng báo một hồ sơ khác."},
-  {"i": 3, "p": "Vế «bộ kiểm cả kho xanh» không có phép đo riêng — đã bỏ vế ấy khỏi tiêu chí, vì lượt chấm luôn chạy bộ kiểm cả kho và chấm theo nó."},
-  {"i": 4, "p": "Bốn mục bỏ ngoài chưa có lý do trong sổ — đã thêm bốn dòng lý do."}
- ]
+ "scope_plain": "Vòng này không bật tính năng mới nào của kit 3.1.1, không sửa hồ sơ nâng kit lần trước, không đụng cài đặt máy và sổ lịch sử."
 }

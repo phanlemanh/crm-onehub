@@ -5,7 +5,7 @@ slug: nang-kit-3-1-1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, config]
-status: machine-cleared
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-11-24
 design_doc: docs/superpowers/specs/2026-11-24-nang-kit-3-1-1-design.md
@@ -119,3 +119,14 @@ commit gộp nào của vòng»); trên tip đỏ thêm ba ca viết cứng th�
 - Ngoài-9 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Lần nâng kit kế tiếp sẽ làm các kiểm tra phiên bản của hồ sơ này đỏ. Không ảnh hưởng người dùng cuối. — `_acceptance/nang-kit-3-1-1/rang/kit.mjs`
 - Ngoài-10 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Kiểm tra lưới PR có thể báo xanh nhầm nếu công cụ chạy dở hoặc ra kết quả rỗng. Lần chạy hiện tại đã đủ nên chưa có sai lệch. — `_acceptance/nang-kit-3-1-1/rang/luat.mjs`
 - Ngoài-11 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Kiểm tra chưa thật sự xác nhận tên phiên bản do kit tự đặt, nên nếu thẻ mang phiên bản khác thì vẫn báo xanh. Hiện tại phiên bản đúng. — `_acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs`
+- Known limits — chọn ở Cổng Bằng chứng 2026-11-25:
+  - Ngoài-1: sau khi gộp, kiểm tra làn khô của vòng này báo đỏ giả khi kho có thay đổi khác, vì nó so với cây đang sống.
+  - Ngoài-2: lần nâng kit sau sẽ làm đỏ các kiểm tra viết cứng v3.1.1 của hồ sơ này, như lần này với hồ sơ chuyển chợ.
+  - Ngoài-3: sau khi gộp, kiểm tra lưới PR có thể báo vi phạm của hồ sơ khác dù không có lỗi thật.
+  - Ngoài-4: bộ lọc sổ kể lại bỏ sót trang lộ trình, nên nó nhắc tên phiên bản cũ thì kiểm tra báo đỏ dù được phép.
+  - Ngoài-5: chỉ một commit khác vào kho sau khi gộp là cả nhóm kiểm tra của vòng này báo đỏ cùng lúc.
+  - Ngoài-6: một hồ sơ khác được ký sau này có thể làm tập ứng viên của làn khô lệch dù vòng này không đổi gì.
+  - Ngoài-7: lưới PR hỏng giữa chừng thì kiểm tra của vòng này vẫn có thể báo xanh nhầm.
+  - Ngoài-9: lần nâng kit kế tiếp sẽ làm đỏ các kiểm tra phiên bản của hồ sơ này.
+  - Ngoài-10: kiểm tra lưới PR không có đối chứng rằng lưới đã thật sự chạy, nên kết quả rỗng vẫn có thể ra xanh.
+  - Ngoài-11: kiểm tra cache của AC-2 tự đặt tên thư mục «3.1.1», nên chưa thật sự xác nhận phiên bản kit tự đặt.
