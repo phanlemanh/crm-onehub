@@ -1,0 +1,132 @@
+---
+schema_version: 1
+feature: crm nâng kit nghiệm thu delivery-loop từ v3.0.0 lên v3.1.1 — ref chợ của phiên, KIT_REF của luồng gom tín hiệu, lớp CI chép lại từ thẻ 3.1.1; không đổi hành vi
+slug: nang-kit-3-1-1
+owner: phanlemanh@gmail.com
+risk_tier: T2
+surfaces: [ci, config]
+status: signed-off
+approved_by: Phan Le Manh
+approved_at: 2026-11-24
+design_doc: docs/superpowers/specs/2026-11-24-nang-kit-3-1-1-design.md
+---
+
+# Acceptance Contract: nang-kit-3-1-1
+
+## Context
+
+Kit v3.1.1 «Bản vá chữ ký giữ chỗ» ra ngày 23/11. Chủ kho đưa mọi kho trên máy lên bản này; phía máy đã xong (chợ
+`delivery-loop` trỏ v3.1.1, plugin mức dự án của crm đã cập nhật). crm còn ghim v3.0.0 ở ba chỗ: ref chợ trong
+`.claude/settings.json`, `KIT_REF` của `.github/workflows/tin-hieu-gom.yml`, và lớp CI chép từ kit (bốn tệp lệch byte,
+thiếu đích thứ 39). Kit đọc theo commit `1193bc22` của thẻ v3.1.1; đối tượng thẻ là `f0b675ea`. Hạng T2: không tệp nào
+thuộc `t3_paths`. Mẫu: vòng `chuyen-cho-delivery-loop-3-0` (PR #622).
+
+Source input: lời giao của phiên giữ việc nâng kit 24/11 · thiết kế
+`docs/superpowers/specs/2026-11-24-nang-kit-3-1-1-design.md`
+
+## Criteria
+
+- AC-1: Given PR này, When so mọi đích của khối `INIT-CI-COPY-LIST` trong `plugins/acceptance-gate/commands/acceptance-init.md`
+  tại commit `1193bc22` với tệp cùng đường trong kho, Then danh sách có đúng 39 đích, mỗi đích khớp từng byte
+  `plugins/acceptance-gate/<nguồn>` của commit ấy; `scripts/resolve-plugin.mjs` khớp từng byte
+  `plugins/feature-loop/scripts/resolve-plugin.mjs` của commit ấy; `risk_tiers.t1_skip_globs` liệt đủ 39 đích, gồm
+  `scripts/tro-ly-quyet-dinh.cjs`.
+- AC-2: Given `.github/workflows/tin-hieu-gom.yml`, When luồng gom tín hiệu cài kit, Then tệp có đúng một dòng
+  `KIT_REF: v3.1.1` và mọi dòng khác bằng bản merge-base; trong một cache dựng từ commit của thẻ, bộ giải kit chạy với
+  đúng đối số của phiên gom (`GOM.kit.giai`) ra thư mục `delivery-loop/acceptance-gate/3.1.1`, và với gói điều phối của
+  kiểm chéo đêm (`KIEM_CHEO.goiDieuPhoi`) ra `delivery-loop/dispatch/3.1.1`.
+- AC-3: Given `.claude/settings.json`, When đọc tệp, Then `extraKnownMarketplaces.delivery-loop.source.ref` là `v3.1.1` và
+  đặt lại đúng khoá ấy về `v3.0.0` thì tệp bằng bản merge-base; `.claude-plugin/marketplace.json` của commit thẻ mang tên
+  `delivery-loop` và có đủ sáu plugin đang bật `@delivery-loop`.
+- AC-4: Given các tệp được theo dõi của kho, When tìm chữ `v3.0.0`, Then không tệp sống nào còn nó; chữ ấy chỉ còn ở sổ
+  kể lại: thư mục hồ sơ `_acceptance/<slug>/` (kể cả hồ sơ này, nơi chữ ấy tả việc đổi), `docs/superpowers/**`,
+  `docs/findings/**`, và hai view máy vẽ từ hồ sơ `PRODUCT-MAP.md`, `LO-TRINH.html`. `_acceptance/config.yaml` là tệp
+  sống.
+- AC-5: Given merge-base với nhánh chính, When lớp chép của nhánh chính và lớp chép của thẻ 3.1.1 cùng chạy
+  `pre-merge-check.sh --recheck-all` trên cây merge-base, Then cả hai 0 VIOLATION và cùng tập hồ sơ OK; và trên HEAD,
+  lớp chép của HEAD chạy `--recheck-all` vẫn OK mọi hồ sơ ấy, dòng VIOLATION nếu có chỉ mang tên hồ sơ của vòng; và
+  lưới chế độ PR đúng như `acceptance.yml` chạy (`pre-merge-check.sh . --base <merge-base>`) trên HEAD không báo
+  VIOLATION nào mang tên một hồ sơ khác vòng này.
+- AC-6: Given ứng viên suy từ diff — mọi eval `test`/`script` của hồ sơ `signed-off` hay `machine-cleared` mà `paths`
+  khớp một tệp PR đổi ngoài hồ sơ này — When chạy khô đúng các eval ấy trên tip, rồi chạy lại eval đỏ trên nhánh chính,
+  Then `evidence/phan-loai.json` mang sha tip có cây ngoài `_acceptance/` bằng cây HEAD, tập ứng viên bằng tập suy lại,
+  mỗi eval đỏ trên tip có đúng một lớp («đỏ cả hai bên» khi cũng đỏ trên nhánh chính, «đỏ vì vòng» khi xanh trên nhánh
+  chính); tập «đỏ vì vòng» bằng tập dòng `- gioi-han:` của mục «Làn khô — kết quả» (Hỏi-1).
+- AC-7: Given PR này, When so diff với nhánh chính, Then mọi tệp đổi thuộc danh sách viết trước của thiết kế mục 2
+  (cộng hồ sơ này, thiết kế, kế hoạch, `PRODUCT-MAP.md`, `LO-TRINH.html`); và `product-map.mjs --check` của lớp chép
+  xanh.
+
+## Coverage
+
+- bỏ coverage-scan — phạm vi là diff của kit giữa hai thẻ cộng ba chỗ kho ghim phiên bản, đã đếm hết ở thiết kế mục 2;
+  trục được phủ: lớp CI chép (AC-1) · luồng kéo kit lúc chạy (AC-2) · phía phiên (AC-3) · tên phiên bản trong tệp sống
+  (AC-4) · không đổi phán quyết của lưới, ở cả chế độ toàn kho lẫn chế độ PR (AC-5) · không đổi kết quả eval của hồ sơ
+  đã ký (AC-6) · diff đúng danh sách và bản đồ vẽ được (AC-7). Bộ suite của kho (`feature_loop.suite_keys`) do lượt chấm
+  S4 chạy mỗi lượt, không thành AC riêng. Dòng sổ «bỏ coverage-scan» trong `decisions.jsonl`.
+
+## Đường đo
+
+- bỏ đường-đo — việc vận hành kho, không có ô cơ hội và ngưỡng nghiệm thu.
+
+## Làn khô — kết quả
+
+Làn khô 24/11 trên tip `c61973fe` (96 ứng viên, 36 đỏ), chạy lại 36 eval đỏ trên nhánh chính `4aebb767`: 29 đỏ cả hai
+bên, 7 đỏ vì vòng. Bảy eval ấy chạy thêm trên một bản sao có `origin/onehub` trỏ vào tip (trạng thái sau gộp):
+sáu xanh, một đỏ (`evidence/phan-loai.json`, khoá `gop_gia`).
+
+Sáu eval đo diff của nhánh đang mở, nên coi tệp của vòng này là «ngoài ranh giới»; sau gộp diff ấy rỗng và chúng xanh:
+
+- gioi-han: `do-man-tren-kho-rieng/E11` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `sua-bom-gio-test-api/E4` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `sua-paths-e5-soan-okr/E6` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `thu-paths-e15-giai-doan/E4` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `thu-paths-e15-giai-doan/E8` — đo diff của nhánh, xanh sau gộp
+- gioi-han: `thuoc-mot-cho-khai-quet-man/E6` — đo diff của nhánh, xanh sau gộp
+
+Một eval đếm hồ sơ này là vi phạm ngoài vòng của nó, vì hồ sơ này chưa ký (`VIOLATION [nang-kit-3-1-1]: … status=approved`):
+
+- gioi-han: `chuyen-cho-delivery-loop-3-0/E7` — đỏ tới khi hồ sơ này ký Cổng Bằng chứng
+
+Ba ca mới đỏ vì vòng nằm trong một lệnh đã đỏ sẵn trên nhánh chính, nên lớp theo mã thoát xếp eval của chúng «đỏ cả hai
+bên». Tệp `chuyen-cho-delivery-loop-3-0/thu/chuyen-cho.test.mjs` trên nhánh chính đỏ một ca («nhánh còn mở thì không có
+commit gộp nào của vòng»); trên tip đỏ thêm ba ca viết cứng thẻ `v3.0.0` — đây là Hỏi-1, giữ là giới hạn đã biết:
+
+- ca-moi-do: `chuyen-cho-delivery-loop-3-0/E1` — «AC-1 «lớp CI chép khớp từng byte bản v3.0.0»»
+- ca-moi-do: `chuyen-cho-delivery-loop-3-0/E2` — «AC-2 «tin-hieu-gom.yml kéo delivery-loop v3.0.0»»
+- ca-moi-do: `chuyen-cho-delivery-loop-3-0/E3` — «AC-3 «phiên khai chợ delivery-loop v3.0.0, bật sáu plugin»»
+
+## Out of scope
+
+- Bật khoá mới nào của kit 3.1.1 (`ban_do.ngoai_git`, `dieu_phoi.chuyen_gop`, `tro_ly_quyet_dinh.mac_ky`) — mỗi khoá là
+  một vòng riêng.
+- Sửa thước, `evals.yaml` hay bất cứ tệp nào của `chuyen-cho-delivery-loop-3-0` — hồ sơ ấy giữ chữ ký.
+- Cài đặt mức người dùng và plugin trên máy — đã xong trước vòng.
+- Sổ kể lại còn nhắc `v3.0.0` (hồ sơ đã ký, `docs/superpowers/**`, `docs/findings/**`) — không sửa.
+
+> Out of scope = scope-truth (Gate 1 duyệt mục này). Rationale/trade-off từng mục → 1 entry `descope` trong `decisions.jsonl`.
+
+## Notes
+
+- Không chạm bất biến nào của AGENTS.md: không mã sản phẩm, không cơ sở dữ liệu.
+- Nhánh PR là `onehub` (kho không có `main`); `CONTRIBUTING.md` nói `main`, vòng theo thứ kho thật dùng.
+- Ngoài-1 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Sau khi gộp, một kiểm tra của lần nâng kit này sẽ báo đỏ giả khi có thay đổi khác vào kho. Người dùng không bị ảnh hưởng, chỉ người làm bản sau thấy một dấu đỏ không có thật. — `_acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs`
+- Ngoài-2 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Lần nâng kit tiếp theo sẽ làm vài kiểm tra của hồ sơ này đỏ, và phải ghi chú lại như lần trước. Người dùng cuối không bị ảnh hưởng. — `_acceptance/nang-kit-3-1-1/rang/luat.mjs`
+- Ngoài-3 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Sau khi gộp, một kiểm tra lưới PR có thể báo vi phạm của hồ sơ khác dù không có lỗi thật. Chỉ gây nhiễu cho người làm bản sau. — `_acceptance/nang-kit-3-1-1/rang/luoi-pr.mjs`
+- Ngoài-4 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Nếu trang lộ trình sau này nhắc đến phiên bản cũ trong tên một hồ sơ, một kiểm tra sẽ báo đỏ dù được phép. Không ảnh hưởng người dùng. — `_acceptance/nang-kit-3-1-1/rang/luat.mjs`
+- Ngoài-5 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Chỉ cần một thay đổi khác vào kho sau khi gộp là cả nhóm kiểm tra của lần nâng kit này báo đỏ cùng lúc. Chỉ gây nhiễu cho người làm. — `_acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs`
+- Ngoài-6 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Khi có hồ sơ khác được ký sau này, kiểm tra của lần nâng kit này có thể báo lệch dù không đổi gì. Người dùng không bị ảnh hưởng. — `_acceptance/nang-kit-3-1-1/rang/ung-vien.mjs`
+- Ngoài-7 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Nếu bộ kiểm tra lưới PR bị hỏng, kiểm tra này vẫn có thể báo xanh nhầm. Hiện lần chạy thật đã đủ nên chưa có sai lệch. — `_acceptance/nang-kit-3-1-1/rang/luoi-pr.mjs`
+- Ngoài-9 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Lần nâng kit kế tiếp sẽ làm các kiểm tra phiên bản của hồ sơ này đỏ. Không ảnh hưởng người dùng cuối. — `_acceptance/nang-kit-3-1-1/rang/kit.mjs`
+- Ngoài-10 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Kiểm tra lưới PR có thể báo xanh nhầm nếu công cụ chạy dở hoặc ra kết quả rỗng. Lần chạy hiện tại đã đủ nên chưa có sai lệch. — `_acceptance/nang-kit-3-1-1/rang/luat.mjs`
+- Ngoài-11 (máy định tuyến 2026-11-24, đề xuất S4 known-limits): Kiểm tra chưa thật sự xác nhận tên phiên bản do kit tự đặt, nên nếu thẻ mang phiên bản khác thì vẫn báo xanh. Hiện tại phiên bản đúng. — `_acceptance/nang-kit-3-1-1/thu/nang-kit.test.mjs`
+- Known limits — chọn ở Cổng Bằng chứng 2026-11-25:
+  - Ngoài-1: sau khi gộp, kiểm tra làn khô của vòng này báo đỏ giả khi kho có thay đổi khác, vì nó so với cây đang sống.
+  - Ngoài-2: lần nâng kit sau sẽ làm đỏ các kiểm tra viết cứng v3.1.1 của hồ sơ này, như lần này với hồ sơ chuyển chợ.
+  - Ngoài-3: sau khi gộp, kiểm tra lưới PR có thể báo vi phạm của hồ sơ khác dù không có lỗi thật.
+  - Ngoài-4: bộ lọc sổ kể lại bỏ sót trang lộ trình, nên nó nhắc tên phiên bản cũ thì kiểm tra báo đỏ dù được phép.
+  - Ngoài-5: chỉ một commit khác vào kho sau khi gộp là cả nhóm kiểm tra của vòng này báo đỏ cùng lúc.
+  - Ngoài-6: một hồ sơ khác được ký sau này có thể làm tập ứng viên của làn khô lệch dù vòng này không đổi gì.
+  - Ngoài-7: lưới PR hỏng giữa chừng thì kiểm tra của vòng này vẫn có thể báo xanh nhầm.
+  - Ngoài-9: lần nâng kit kế tiếp sẽ làm đỏ các kiểm tra phiên bản của hồ sơ này.
+  - Ngoài-10: kiểm tra lưới PR không có đối chứng rằng lưới đã thật sự chạy, nên kết quả rỗng vẫn có thể ra xanh.
+  - Ngoài-11: kiểm tra cache của AC-2 tự đặt tên thư mục «3.1.1», nên chưa thật sự xác nhận phiên bản kit tự đặt.

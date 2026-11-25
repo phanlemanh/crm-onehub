@@ -1,0 +1,4 @@
+{
+ "feature_plain": "Phiên máy, CI và luồng gom tín hiệu của crm cùng chạy kit nghiệm thu bản 3.1.1, thay cho bản 3.0.0; người dùng crm không thấy gì đổi.",
+ "scope_plain": "Vòng này không bật tính năng mới nào của kit 3.1.1, không sửa hồ sơ nâng kit lần trước, không đụng cài đặt máy và sổ lịch sử."
+}

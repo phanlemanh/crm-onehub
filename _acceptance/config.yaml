@@ -3821,6 +3821,8 @@ risk_tiers:
     - "scripts/tri-thuc-tra.cjs"
     - "scripts/can-cu-s1.cjs"
     - "scripts/luat-san-pham.cjs"
+    # Kit 3.1.1: can-cu-s1.cjs nạp trợ lý quyết định tro-ly-quyet-dinh.cjs (khoan dung, cùng lối --tra; lớp chép 38 → 39 tệp).
+    - "scripts/tro-ly-quyet-dinh.cjs"
     # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
     # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
     # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và

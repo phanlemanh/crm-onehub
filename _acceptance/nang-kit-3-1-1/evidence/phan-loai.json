@@ -1,0 +1,703 @@
+{
+ "sha_tip": "c61973fe18c92fdb98c7f7002dc5bf727d6a87f3",
+ "sha_nhanh_chinh": "4aebb767d0b09239d56d556d6e0f184804cbe5fa",
+ "ung_vien": [
+  "ba-ho-so-do-san/E3",
+  "ban-gieo-gop-y-sau-nop/E3",
+  "ban-gieo-gop-y-sau-nop/E4",
+  "chat-duong-day-ban-chup/E9b",
+  "chuyen-cho-delivery-loop-3-0/E1",
+  "chuyen-cho-delivery-loop-3-0/E2",
+  "chuyen-cho-delivery-loop-3-0/E3",
+  "chuyen-cho-delivery-loop-3-0/E4",
+  "chuyen-cho-delivery-loop-3-0/E6",
+  "chuyen-cho-delivery-loop-3-0/E7",
+  "chuyen-cho-delivery-loop-3-0/E8",
+  "chuyen-cho-delivery-loop-3-0/E9",
+  "chuyen-cho-delivery-loop-3-0/E9b",
+  "chuyen-goi-dieu-phoi/E1",
+  "chuyen-goi-dieu-phoi/E10",
+  "chuyen-goi-dieu-phoi/E3",
+  "chuyen-goi-dieu-phoi/E8",
+  "chuyen-goi-dieu-phoi/E9",
+  "dau-trang-okr-cho-nut-hoi-kara/E3",
+  "do-man-tren-kho-rieng/E11",
+  "duong-ly-do-muc-tieu/E12",
+  "duong-proto-cho-design-pass/E16",
+  "duong-proto-cho-design-pass/E9",
+  "ghim-thuoc-soi-xem-okr/E4",
+  "gia-co-gom-tin-hieu/E4",
+  "giam-phut-ci-nhap-t1/E1",
+  "giam-phut-ci-nhap-t1/E2",
+  "gom-tin-hieu-tu-chay/E1",
+  "gop-y-dung-cho/E25",
+  "ho-so-do-kiem-cheo/E2",
+  "hydrat-giai-doan-deals/E8",
+  "kara-gop-y-luot-2/E15b",
+  "khong-do-them-chay-gh/E6",
+  "kiem-cheo-sau-gop/E4",
+  "lenh-chung-khong-an-cache-doi/E1",
+  "lenh-chung-khong-an-cache-doi/E2",
+  "lenh-dung-do-khong-ai-thay/E5",
+  "lenh-dung-do-khong-ai-thay/E6",
+  "lo-trinh-dong-bo-ho-so/E7",
+  "lo-trinh-hien-ngay-du-kien/E10",
+  "luoi-day-do-that/E4",
+  "ly-do-tu-choi-nop-theo-locale/E8",
+  "man-chu-theo-khoa-kho-nguon/E4",
+  "mot-duong-ghi-phong-ban/E10",
+  "nen-chat-ai-elements/E15",
+  "neo-dan-so-khong-cung/E6",
+  "neo-dan-so-khong-cung/E7",
+  "ngay-lich-test-tao-ke-hoach/E3",
+  "o-cam-chay-duoc-that/E1",
+  "o-cam-chay-duoc-that/E2",
+  "o-cam-chay-duoc-that/E3",
+  "o-cam-chay-duoc-that/E4",
+  "o-cam-chay-duoc-that/E5",
+  "o-cam-chay-duoc-that/E6",
+  "o-cam-chay-duoc-that/E7",
+  "pre-push-phan-rieng-pr/E6",
+  "pre-push-t1/E1",
+  "pre-push-t1/E2",
+  "push-ghim-lai-t1/E1",
+  "push-ghim-lai-t1/E2",
+  "push-ghim-lai-t1/E3",
+  "push-ghim-lai-t1/E4",
+  "push-ghim-lai-t1/E5",
+  "push-ghim-lai-t1/E6",
+  "push-ghim-lai-t1/E8",
+  "quyet-gop-y-noi-dung-ly-do/E7",
+  "soan-okr-khong-lac/E9",
+  "sua-bom-gio-test-api/E14",
+  "sua-bom-gio-test-api/E4",
+  "sua-paths-e5-soan-okr/E6",
+  "sua-test-do-thu-tu-nap/E5",
+  "sua-test-do-thu-tu-nap/E7",
+  "sua-test-do-thu-tu-nap/E8",
+  "sua-test-do-thu-tu-nap/E9",
+  "t1-ma-doc/E1",
+  "t1-ma-doc/E2",
+  "t1-ma-doc/E3",
+  "t1-ma-doc/E4",
+  "t1-ma-doc/E8",
+  "t1-ma-doc/E8a",
+  "thu-paths-e15-giai-doan/E3",
+  "thu-paths-e15-giai-doan/E4",
+  "thu-paths-e15-giai-doan/E5",
+  "thu-paths-e15-giai-doan/E8",
+  "thuoc-cache-het-doi-tuong/E2",
+  "thuoc-cache-het-doi-tuong/E8",
+  "thuoc-mot-cho-khai-quet-man/E5",
+  "thuoc-mot-cho-khai-quet-man/E6",
+  "thuoc-o-soan-don-dep/E8",
+  "tin-hieu-tu-ve-kho/E11",
+  "tran-cho-app-rieng/E3",
+  "trang-lo-trinh-mo-hinh-hien-thi/E5",
+  "trang-lo-trinh-trong-crm/E1",
+  "trang-lo-trinh-trong-crm/E16",
+  "trang-ve-gop-va-dau-cay/E1",
+  "trang-ve-gop-va-dau-cay/E2"
+ ],
+ "tip": {
+  "ba-ho-so-do-san/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "ban-gieo-gop-y-sau-nop/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "ban-gieo-gop-y-sau-nop/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "chat-duong-day-ban-chup/E9b": {
+   "ma": 0,
+   "dat": true
+  },
+  "chuyen-cho-delivery-loop-3-0/E1": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E2": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E4": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "chuyen-cho-delivery-loop-3-0/E7": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E8": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E9": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E9b": {
+   "ma": 0,
+   "dat": true
+  },
+  "chuyen-goi-dieu-phoi/E1": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-goi-dieu-phoi/E3": {
+   "ma": 0,
+   "dat": true
+  },
+  "chuyen-goi-dieu-phoi/E8": {
+   "ma": 0,
+   "dat": true
+  },
+  "chuyen-goi-dieu-phoi/E9": {
+   "ma": 0,
+   "dat": true
+  },
+  "chuyen-goi-dieu-phoi/E10": {
+   "ma": 2,
+   "dat": false
+  },
+  "dau-trang-okr-cho-nut-hoi-kara/E3": {
+   "ma": 0,
+   "dat": true
+  },
+  "do-man-tren-kho-rieng/E11": {
+   "ma": 1,
+   "dat": false
+  },
+  "duong-ly-do-muc-tieu/E12": {
+   "ma": 0,
+   "dat": true
+  },
+  "duong-proto-cho-design-pass/E9": {
+   "ma": 0,
+   "dat": true
+  },
+  "duong-proto-cho-design-pass/E16": {
+   "ma": 0,
+   "dat": true
+  },
+  "ghim-thuoc-soi-xem-okr/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "gia-co-gom-tin-hieu/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "giam-phut-ci-nhap-t1/E1": {
+   "ma": 0,
+   "dat": true
+  },
+  "giam-phut-ci-nhap-t1/E2": {
+   "ma": 1,
+   "dat": false
+  },
+  "gom-tin-hieu-tu-chay/E1": {
+   "ma": 0,
+   "dat": true
+  },
+  "gop-y-dung-cho/E25": {
+   "ma": 0,
+   "dat": true
+  },
+  "ho-so-do-kiem-cheo/E2": {
+   "ma": 1,
+   "dat": false
+  },
+  "hydrat-giai-doan-deals/E8": {
+   "ma": 0,
+   "dat": true
+  },
+  "kara-gop-y-luot-2/E15b": {
+   "ma": 0,
+   "dat": true
+  },
+  "khong-do-them-chay-gh/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "kiem-cheo-sau-gop/E4": {
+   "ma": 1,
+   "dat": false
+  },
+  "lenh-chung-khong-an-cache-doi/E1": {
+   "ma": 2,
+   "dat": false
+  },
+  "lenh-chung-khong-an-cache-doi/E2": {
+   "ma": 2,
+   "dat": false
+  },
+  "lenh-dung-do-khong-ai-thay/E5": {
+   "ma": 2,
+   "dat": false
+  },
+  "lenh-dung-do-khong-ai-thay/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "lo-trinh-dong-bo-ho-so/E7": {
+   "ma": 0,
+   "dat": true
+  },
+  "lo-trinh-hien-ngay-du-kien/E10": {
+   "ma": 0,
+   "dat": true
+  },
+  "luoi-day-do-that/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "ly-do-tu-choi-nop-theo-locale/E8": {
+   "ma": 2,
+   "dat": false
+  },
+  "man-chu-theo-khoa-kho-nguon/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "mot-duong-ghi-phong-ban/E10": {
+   "ma": 2,
+   "dat": false
+  },
+  "nen-chat-ai-elements/E15": {
+   "ma": 0,
+   "dat": true
+  },
+  "neo-dan-so-khong-cung/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "neo-dan-so-khong-cung/E7": {
+   "ma": 0,
+   "dat": true
+  },
+  "ngay-lich-test-tao-ke-hoach/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E1": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E2": {
+   "ma": 0,
+   "dat": true
+  },
+  "o-cam-chay-duoc-that/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E4": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E5": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E6": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E7": {
+   "ma": 1,
+   "dat": false
+  },
+  "pre-push-phan-rieng-pr/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "pre-push-t1/E1": {
+   "ma": 0,
+   "dat": true
+  },
+  "pre-push-t1/E2": {
+   "ma": 0,
+   "dat": true
+  },
+  "push-ghim-lai-t1/E1": {
+   "ma": 0,
+   "dat": true
+  },
+  "push-ghim-lai-t1/E2": {
+   "ma": 0,
+   "dat": true
+  },
+  "push-ghim-lai-t1/E3": {
+   "ma": 0,
+   "dat": true
+  },
+  "push-ghim-lai-t1/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "push-ghim-lai-t1/E5": {
+   "ma": 0,
+   "dat": true
+  },
+  "push-ghim-lai-t1/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "push-ghim-lai-t1/E8": {
+   "ma": 0,
+   "dat": true
+  },
+  "quyet-gop-y-noi-dung-ly-do/E7": {
+   "ma": 0,
+   "dat": true
+  },
+  "soan-okr-khong-lac/E9": {
+   "ma": 0,
+   "dat": true
+  },
+  "sua-bom-gio-test-api/E4": {
+   "ma": 1,
+   "dat": false
+  },
+  "sua-bom-gio-test-api/E14": {
+   "ma": 0,
+   "dat": true
+  },
+  "sua-paths-e5-soan-okr/E6": {
+   "ma": 1,
+   "dat": false
+  },
+  "sua-test-do-thu-tu-nap/E5": {
+   "ma": 0,
+   "dat": true
+  },
+  "sua-test-do-thu-tu-nap/E7": {
+   "ma": 0,
+   "dat": true
+  },
+  "sua-test-do-thu-tu-nap/E8": {
+   "ma": 0,
+   "dat": true
+  },
+  "sua-test-do-thu-tu-nap/E9": {
+   "ma": 0,
+   "dat": true
+  },
+  "t1-ma-doc/E1": {
+   "ma": 0,
+   "dat": true
+  },
+  "t1-ma-doc/E2": {
+   "ma": 0,
+   "dat": true
+  },
+  "t1-ma-doc/E3": {
+   "ma": 0,
+   "dat": true
+  },
+  "t1-ma-doc/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "t1-ma-doc/E8a": {
+   "ma": 0,
+   "dat": true
+  },
+  "t1-ma-doc/E8": {
+   "ma": 0,
+   "dat": true
+  },
+  "thu-paths-e15-giai-doan/E3": {
+   "ma": 0,
+   "dat": true
+  },
+  "thu-paths-e15-giai-doan/E4": {
+   "ma": 1,
+   "dat": false
+  },
+  "thu-paths-e15-giai-doan/E5": {
+   "ma": 0,
+   "dat": true
+  },
+  "thu-paths-e15-giai-doan/E8": {
+   "ma": 1,
+   "dat": false
+  },
+  "thuoc-cache-het-doi-tuong/E2": {
+   "ma": 2,
+   "dat": false
+  },
+  "thuoc-cache-het-doi-tuong/E8": {
+   "ma": 2,
+   "dat": false
+  },
+  "thuoc-mot-cho-khai-quet-man/E5": {
+   "ma": 0,
+   "dat": true
+  },
+  "thuoc-mot-cho-khai-quet-man/E6": {
+   "ma": 1,
+   "dat": false
+  },
+  "thuoc-o-soan-don-dep/E8": {
+   "ma": 0,
+   "dat": true
+  },
+  "tin-hieu-tu-ve-kho/E11": {
+   "ma": 0,
+   "dat": true
+  },
+  "tran-cho-app-rieng/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "trang-lo-trinh-mo-hinh-hien-thi/E5": {
+   "ma": 0,
+   "dat": true
+  },
+  "trang-lo-trinh-trong-crm/E1": {
+   "ma": 0,
+   "dat": true
+  },
+  "trang-lo-trinh-trong-crm/E16": {
+   "ma": 1,
+   "dat": false
+  },
+  "trang-ve-gop-va-dau-cay/E1": {
+   "ma": 0,
+   "dat": true
+  },
+  "trang-ve-gop-va-dau-cay/E2": {
+   "ma": 0,
+   "dat": true
+  }
+ },
+ "nhanh_chinh": {
+  "ba-ho-so-do-san/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "ban-gieo-gop-y-sau-nop/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E1": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E2": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E4": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E7": {
+   "ma": 0,
+   "dat": true
+  },
+  "chuyen-cho-delivery-loop-3-0/E8": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-cho-delivery-loop-3-0/E9": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-goi-dieu-phoi/E1": {
+   "ma": 1,
+   "dat": false
+  },
+  "chuyen-goi-dieu-phoi/E10": {
+   "ma": 2,
+   "dat": false
+  },
+  "do-man-tren-kho-rieng/E11": {
+   "ma": 0,
+   "dat": true
+  },
+  "giam-phut-ci-nhap-t1/E2": {
+   "ma": 1,
+   "dat": false
+  },
+  "ho-so-do-kiem-cheo/E2": {
+   "ma": 1,
+   "dat": false
+  },
+  "kiem-cheo-sau-gop/E4": {
+   "ma": 1,
+   "dat": false
+  },
+  "lenh-chung-khong-an-cache-doi/E1": {
+   "ma": 2,
+   "dat": false
+  },
+  "lenh-chung-khong-an-cache-doi/E2": {
+   "ma": 2,
+   "dat": false
+  },
+  "lenh-dung-do-khong-ai-thay/E5": {
+   "ma": 2,
+   "dat": false
+  },
+  "ly-do-tu-choi-nop-theo-locale/E8": {
+   "ma": 2,
+   "dat": false
+  },
+  "mot-duong-ghi-phong-ban/E10": {
+   "ma": 2,
+   "dat": false
+  },
+  "ngay-lich-test-tao-ke-hoach/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E1": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E4": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E5": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E6": {
+   "ma": 1,
+   "dat": false
+  },
+  "o-cam-chay-duoc-that/E7": {
+   "ma": 1,
+   "dat": false
+  },
+  "sua-bom-gio-test-api/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "sua-paths-e5-soan-okr/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "thu-paths-e15-giai-doan/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "thu-paths-e15-giai-doan/E8": {
+   "ma": 0,
+   "dat": true
+  },
+  "thuoc-cache-het-doi-tuong/E2": {
+   "ma": 2,
+   "dat": false
+  },
+  "thuoc-cache-het-doi-tuong/E8": {
+   "ma": 2,
+   "dat": false
+  },
+  "thuoc-mot-cho-khai-quet-man/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "tran-cho-app-rieng/E3": {
+   "ma": 1,
+   "dat": false
+  },
+  "trang-lo-trinh-trong-crm/E16": {
+   "ma": 1,
+   "dat": false
+  }
+ },
+ "lop": {
+  "ba-ho-so-do-san/E3": "do-ca-hai",
+  "ban-gieo-gop-y-sau-nop/E3": "do-ca-hai",
+  "chuyen-cho-delivery-loop-3-0/E1": "do-ca-hai",
+  "chuyen-cho-delivery-loop-3-0/E2": "do-ca-hai",
+  "chuyen-cho-delivery-loop-3-0/E3": "do-ca-hai",
+  "chuyen-cho-delivery-loop-3-0/E4": "do-ca-hai",
+  "chuyen-cho-delivery-loop-3-0/E7": "do-vi-vong",
+  "chuyen-cho-delivery-loop-3-0/E8": "do-ca-hai",
+  "chuyen-cho-delivery-loop-3-0/E9": "do-ca-hai",
+  "chuyen-goi-dieu-phoi/E1": "do-ca-hai",
+  "chuyen-goi-dieu-phoi/E10": "do-ca-hai",
+  "do-man-tren-kho-rieng/E11": "do-vi-vong",
+  "giam-phut-ci-nhap-t1/E2": "do-ca-hai",
+  "ho-so-do-kiem-cheo/E2": "do-ca-hai",
+  "kiem-cheo-sau-gop/E4": "do-ca-hai",
+  "lenh-chung-khong-an-cache-doi/E1": "do-ca-hai",
+  "lenh-chung-khong-an-cache-doi/E2": "do-ca-hai",
+  "lenh-dung-do-khong-ai-thay/E5": "do-ca-hai",
+  "ly-do-tu-choi-nop-theo-locale/E8": "do-ca-hai",
+  "mot-duong-ghi-phong-ban/E10": "do-ca-hai",
+  "ngay-lich-test-tao-ke-hoach/E3": "do-ca-hai",
+  "o-cam-chay-duoc-that/E1": "do-ca-hai",
+  "o-cam-chay-duoc-that/E3": "do-ca-hai",
+  "o-cam-chay-duoc-that/E4": "do-ca-hai",
+  "o-cam-chay-duoc-that/E5": "do-ca-hai",
+  "o-cam-chay-duoc-that/E6": "do-ca-hai",
+  "o-cam-chay-duoc-that/E7": "do-ca-hai",
+  "sua-bom-gio-test-api/E4": "do-vi-vong",
+  "sua-paths-e5-soan-okr/E6": "do-vi-vong",
+  "thu-paths-e15-giai-doan/E4": "do-vi-vong",
+  "thu-paths-e15-giai-doan/E8": "do-vi-vong",
+  "thuoc-cache-het-doi-tuong/E2": "do-ca-hai",
+  "thuoc-cache-het-doi-tuong/E8": "do-ca-hai",
+  "thuoc-mot-cho-khai-quet-man/E6": "do-vi-vong",
+  "tran-cho-app-rieng/E3": "do-ca-hai",
+  "trang-lo-trinh-trong-crm/E16": "do-ca-hai"
+ },
+ "sha_gop_gia": "c61973fe18c92fdb98c7f7002dc5bf727d6a87f3",
+ "gop_gia": {
+  "chuyen-cho-delivery-loop-3-0/E7": {
+   "ma": 1,
+   "dat": false
+  },
+  "do-man-tren-kho-rieng/E11": {
+   "ma": 0,
+   "dat": true
+  },
+  "sua-bom-gio-test-api/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "sua-paths-e5-soan-okr/E6": {
+   "ma": 0,
+   "dat": true
+  },
+  "thu-paths-e15-giai-doan/E4": {
+   "ma": 0,
+   "dat": true
+  },
+  "thu-paths-e15-giai-doan/E8": {
+   "ma": 0,
+   "dat": true
+  },
+  "thuoc-mot-cho-khai-quet-man/E6": {
+   "ma": 0,
+   "dat": true
+  }
+ }
+}
